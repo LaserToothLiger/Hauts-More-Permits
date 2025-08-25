@@ -53,9 +53,9 @@
           <TradersGuild_Elite MayRequire="Ludeon.RimWorld.Odyssey">5</TradersGuild_Elite>
 		  <Drone_Wasp MayRequire="Ludeon.RimWorld.Odyssey">9</Drone_Wasp>
 		  <Drone_Sentry MayRequire="Ludeon.RimWorld.Odyssey">27</Drone_Sentry>
-          <!--<HVMP_GhoulBasic MayRequire="Ludeon.RimWorld.Anomaly">5</HVMP_GhoulBasic>
+          <HVMP_GhoulBasic MayRequire="Ludeon.RimWorld.Anomaly">5</HVMP_GhoulBasic>
           <HVMP_GhoulCyber MayRequire="Ludeon.RimWorld.Anomaly">2</HVMP_GhoulCyber>
-          <HVMP_GhoulBionic MayRequire="Ludeon.RimWorld.Anomaly">2</HVMP_GhoulBionic>-->
+          <HVMP_GhoulBionic MayRequire="Ludeon.RimWorld.Anomaly">2</HVMP_GhoulBionic>
         </options>
       </li>
       <li>
@@ -70,8 +70,8 @@
           <HVMP_PsionMaster MayRequire="Hautarche.HVPAA">1</HVMP_PsionMaster>
           <HVMP_BattlePsion MayRequire="Hautarche.HVPAA">5</HVMP_BattlePsion>
           <HVMP_WarPsion MayRequire="Hautarche.HVPAA">2</HVMP_WarPsion>
-          <!--<HVMP_GhoulBasic MayRequire="Ludeon.RimWorld.Anomaly">4</HVMP_GhoulBasic>
-          <HVMP_GhoulCyber MayRequire="Ludeon.RimWorld.Anomaly">1</HVMP_GhoulCyber>-->
+          <HVMP_GhoulBasic MayRequire="Ludeon.RimWorld.Anomaly">4</HVMP_GhoulBasic>
+          <HVMP_GhoulCyber MayRequire="Ludeon.RimWorld.Anomaly">1</HVMP_GhoulCyber>
         </options>
       </li>
       <li>
