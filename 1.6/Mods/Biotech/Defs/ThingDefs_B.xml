@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--QUESTS-->
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>HVMP_PreserveMarker</defName>
+    <label>preserve marker</label>
+    <description>Marks the place where you intend to establish a nature preserve. There must be no pollution, flooring, artificial structures, or other nature preserve markers within its radius. Cannot be placed such that it overlaps with the center of another preserve. Once placed, this cannot be moved.</description>
+    <thingClass>HautsPermits_Biotech.NaturePreserve</thingClass>
+    <thingCategories>
+      <li>BuildingsSpecial</li>
+    </thingCategories>
+    <altitudeLayer>Building</altitudeLayer>
+    <statBases>
+      <Mass>0</Mass>
+    </statBases>
+    <useSameGraphicForGhost>true</useSameGraphicForGhost>
+    <tickerType>Normal</tickerType>
+    <rotatable>true</rotatable>
+    <selectable>true</selectable>
+    <hasCustomRectForSelector>true</hasCustomRectForSelector>
+    <drawerType>RealtimeOnly</drawerType>
+    <drawOffscreen>true</drawOffscreen>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <drawPlaceWorkersWhileInstallBlueprintSelected>true</drawPlaceWorkersWhileInstallBlueprintSelected>
+    <canLoadIntoCaravan>false</canLoadIntoCaravan>
+    <graphicData>
+      <graphicClass>Graphic_Single</graphicClass>
+      <texPath>Things/Ethereal/MonumentMarkerBlueprint</texPath>
+      <shaderType>Transparent</shaderType>
+      <drawRotated>false</drawRotated>
+      <allowFlip>false</allowFlip>
+    </graphicData>
+    <building>
+      <blueprintGraphicData>
+        <graphicClass>Graphic_Single</graphicClass>
+        <texPath>Things/Ethereal/MonumentMarkerBlueprint</texPath>
+        <shaderType>Transparent</shaderType>
+        <drawRotated>false</drawRotated>
+        <allowFlip>false</allowFlip>
+      </blueprintGraphicData>
+      <artificialForMeditationPurposes>false</artificialForMeditationPurposes>
+    </building>
+    <placeWorkers>
+      <li>HautsPermits_Biotech.PlaceWorker_NoPollutionFloorsStructuresOrOtherPreserves</li>
+    </placeWorkers>
+  </ThingDef>
+  <ThingDef ParentName="ResourceBase">
+    <defName>HVMP_RetroviralPackage</defName>
+    <label>gene-engineering package</label>
+    <description>An encrypted hermetic container small enough to fit in one's hands. It contains a gene-altering agent of unknown effect and potency, formatted for use on humans. It can be studied at a research bench to determine its effects, but you can also learn about its effects much quicker by just injecting it into someone.</description>
+    <graphicData>
+      <texPath>Things/Item/Resource/NanostructuringChip</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <soundInteract>Metal_Drop</soundInteract>
+    <soundDrop>Standard_Drop</soundDrop>
+    <stackLimit>1</stackLimit>
+	<tradeability>None</tradeability>
+    <statBases>
+      <Flammability>0</Flammability>
+      <Mass>1.5</Mass>
+      <MaxHitPoints>200</MaxHitPoints>
+      <Beauty>1</Beauty>
+      <MarketValue>500</MarketValue>
+      <DeteriorationRate>2.0</DeteriorationRate>
+    </statBases>
+    <comps>
+      <li Class="HautsPermits.CompProperties_StudiableQuestItem">
+        <totalRequiredProgressHours>288~720</totalRequiredProgressHours><!--12d to 30d-->
+        <activateTexPath>UI/Icons/Study</activateTexPath>
+        <activateLabelString>Decipher...</activateLabelString>
+        <activateDescString>Decipher the gene-engineering package.</activateDescString>
+        <jobString>Decipher gene-engineering package</jobString>
+        <guiLabelString>Choose who should decipher this</guiLabelString>
+        <inspectString>Can be deciphered by a colonist.</inspectString>
+        <targetingParameters>
+          <canTargetBuildings>false</canTargetBuildings>
+          <canTargetAnimals>false</canTargetAnimals>
+          <canTargetMechs>false</canTargetMechs>
+          <onlyTargetControlledPawns>true</onlyTargetControlledPawns>
+        </targetingParameters>
+		<requiredSkillDefs><li>Intellectual</li></requiredSkillDefs>
+		<requiredStatDefs><li>HackingSpeed</li></requiredStatDefs>
+		<progressInspectStringSkills>HVMP_RASkills</progressInspectStringSkills>
+		<progressInspectStringStats>HVMP_RASkills</progressInspectStringStats>
+      </li>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Inject {0_label}</useLabel>
+        <useDuration>0</useDuration>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+      <li Class="CompProperties_Targetable">
+        <compClass>HautsPermits_Biotech.CompTargetable_AnyHumanlikeWillDo</compClass>
+      </li>
+      <li Class="HautsPermits_Biotech.CompProperties_RetroviralInjection">
+        <chanceForInjectionEffect>0.65</chanceForInjectionEffect>
+		<possibleInjectionEffects>
+		  <li>HVMP_RED_Heal</li>
+		  <li>HVMP_RED_GeneAlteration</li>
+		  <li>HVMP_RED_GeneAlteration</li>
+		  <li>HVMP_RED_Disease</li>
+		  <li>HVMP_RED_Disease</li>
+		  <li>HVMP_RED_Disease</li>
+		  <li>HVMP_RED_Disease</li>
+		  <li>HVMP_RED_Coma</li>
+		  <li>HVMP_RED_Toxins</li>
+		  <li>HVMP_RED_Chronic</li>
+		  <li>HVMP_RED_Chronic</li>
+		  <li>HVMP_RED_Decay</li>
+		  <li>HVMP_RED_ScariaPrecursor</li>
+		</possibleInjectionEffects>
+      </li>
+    </comps>
+  </ThingDef>
+	<HautsPermits_Biotech.RetroviralEffectDef>
+	  <defName>HVMP_RED_Heal</defName>
+	  <healWorstInjury>true</healWorstInjury>
+	</HautsPermits_Biotech.RetroviralEffectDef>
+	<HautsPermits_Biotech.RetroviralEffectDef>
+	  <defName>HVMP_RED_GeneAlteration</defName>
+	  <addXenogene>true</addXenogene>
+	  <removeXenogeneIfOverComplexity>60</removeXenogeneIfOverComplexity>
+	</HautsPermits_Biotech.RetroviralEffectDef>
+	<HautsPermits_Biotech.RetroviralEffectDef>
+	  <defName>HVMP_RED_Disease</defName>
+	  <inflictedHediffPool>
+		<li>Flu</li>
+		<li>SleepingSickness</li>
+		<li>FoodPoisoning</li>
+	  </inflictedHediffPool>
+	</HautsPermits_Biotech.RetroviralEffectDef>
+	<HautsPermits_Biotech.RetroviralEffectDef>
+	  <defName>HVMP_RED_Coma</defName>
+	  <inflictedHediffPool>
+		<li>CatatonicBreakdown</li>
+	  </inflictedHediffPool>
+	</HautsPermits_Biotech.RetroviralEffectDef>
+	<HautsPermits_Biotech.RetroviralEffectDef>
+	  <defName>HVMP_RED_Decay</defName>
+	  <inflictedDisease>Disease_OrganDecay</inflictedDisease>
+	</HautsPermits_Biotech.RetroviralEffectDef>
+	<HautsPermits_Biotech.RetroviralEffectDef>
+	  <defName>HVMP_RED_ScariaPrecursor</defName>
+	  <inflictedHediffPool>
+		<li>ScariaInfection</li>
+	  </inflictedHediffPool>
+	</HautsPermits_Biotech.RetroviralEffectDef>
+	<HautsPermits_Biotech.RetroviralEffectDef>
+	  <defName>HVMP_RED_Toxins</defName>
+	  <inflictedHediffPool>
+		<li>ToxicBuildup</li>
+	  </inflictedHediffPool>
+	</HautsPermits_Biotech.RetroviralEffectDef>
+	<HautsPermits_Biotech.RetroviralEffectDef>
+	  <defName>HVMP_RED_Chronic</defName>
+	  <inflictedChronicHediffPool>OrganicStandard</inflictedChronicHediffPool>
+	</HautsPermits_Biotech.RetroviralEffectDef>
+  
+  <!--PERMITS-->
+  <!--chargecell-->
+  <ThingDef ParentName="ResourceBase">
+    <defName>HVMP_Chargecell</defName>
+    <label>chargecell</label>
+    <description>A single-use hand-sized device that stores energy for later injection into a mechanoid or battery. Restores 100% energy to a mech of 1 body size, or 350Wd to a battery.</description>
+    <graphicData>
+      <texPath>Things/Item/Resource/Medicine/MedicineIndustrial</texPath>
+      <graphicClass>Graphic_StackCount</graphicClass>
+      <drawSize>0.85</drawSize>
+	  <color>(95,95,95)</color>
+    </graphicData>
+    <techLevel>Industrial</techLevel>
+    <statBases>
+      <MarketValue>20</MarketValue>
+      <Mass>0.2</Mass>
+      <Flammability>1</Flammability>
+      <DeteriorationRate>2</DeteriorationRate>
+      <MaxHitPoints>50</MaxHitPoints>
+    </statBases>
+    <allowedArchonexusCount>100</allowedArchonexusCount>
+    <stackLimit>50</stackLimit>
+    <uiIconForStackCount>1</uiIconForStackCount>
+    <soundInteract>Standard_Drop</soundInteract>
+    <soundDrop>Standard_Drop</soundDrop>
+    <thingCategories>
+      <li>Manufactured</li>
+    </thingCategories>
+    <tradeability>Sellable</tradeability>
+    <comps>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Use {0_label}</useLabel>
+        <useDuration>10</useDuration>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+      <li Class="HautsPermits.CompProperties_Chargecell" />
+      <li Class="HautsPermits.CompProperties_TargetEffectChargecell">
+		<batteryWatts>350</batteryWatts>
+		<energyForOneBodySizeMech>100</energyForOneBodySizeMech>
+        <sound>EnergyShield_Reset</sound>
+      </li>
+    </comps>
+  </ThingDef>
+  
+  <!--blighticide-->
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_AntiBlightDispenser</defName>
+    <label>blightspray dispenser</label>
+    <description>A stationary device which periodically emits blasts of a gas which kills off blight, with a small chance to kill the infected plants as well. Self-destructs after 15 days.</description>
+    <size>(1,1)</size>
+    <receivesSignals>true</receivesSignals>
+    <statBases>
+      <MaxHitPoints>200</MaxHitPoints>
+      <Flammability>0</Flammability>
+      <MarketValue>1000</MarketValue>
+      <WorkToBuild>300</WorkToBuild>
+      <Beauty>-20</Beauty>
+    </statBases>
+    <graphicData>
+      <texPath>Things/Building/Mech/ActivatorCountdown</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <shadowData>
+        <volume>(0.6, 0.4, 0.6)</volume>
+      </shadowData>
+      <damageData>
+        <rect>(0.2, 0.2, 0.6, 0.6)</rect>
+      </damageData>
+    </graphicData>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Small</destroySound>
+      <roofCollapseDamageMultiplier>0.2</roofCollapseDamageMultiplier>
+      <claimable>false</claimable>
+    </building>
+    <repairEffect>ConstructMetal</repairEffect>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <placeWorkers>
+      <li>PlaceWorker_ShowProjectileInterceptorRadius</li>
+    </placeWorkers>
+    <altitudeLayer>Building</altitudeLayer>
+    <pathCost>50</pathCost>
+    <blockWind>true</blockWind>
+    <passability>PassThroughOnly</passability>
+    <fillPercent>1.0</fillPercent>
+    <tickerType>Normal</tickerType>
+    <rotatable>true</rotatable>
+    <selectable>true</selectable>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+    <damageMultipliers>
+      <li>
+        <damageDef>Flame</damageDef>
+        <multiplier>0</multiplier>
+      </li>
+    </damageMultipliers>
+    <comps>
+      <li Class="HautsPermits.CompProperties_BlightBlast">
+        <radius>7.49</radius>
+		<periodicity>2000</periodicity>
+		<damageToPlant>12</damageToPlant>
+        <effecter>HVMP_BlightSprayMist</effecter>
+		<sound>JumpPackLaunch</sound>
+      </li>
+      <li Class="CompProperties_DestroyAfterDelay">
+        <delayTicks>900000</delayTicks>
+        <destroyMode>KillFinalize</destroyMode>
+        <countdownLabel>Self-destruct in</countdownLabel>
+      </li>
+	  <li Class="HautsFramework.CompProperties_FactionColored">
+		<colorFactor>0.85</colorFactor>
+	  </li>
+    </comps>
+	<modExtensions>
+	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+	</modExtensions>
+  </ThingDef>
+  <EffecterDef>
+		<defName>HVMP_BlightSprayMist</defName>
+		<maintainTicks>40</maintainTicks>
+		<children>
+		  <li>
+			<subEffecterClass>SubEffecter_SprayerChance</subEffecterClass>
+			<fleckDef>HVMP_BlightSprayNoise</fleckDef>
+			<burstCount>1~2</burstCount>
+			<spawnLocType>OnSource</spawnLocType>
+			<positionRadius>.75</positionRadius>
+			<positionOffset>(0, 0, 0)</positionOffset>
+			<scale>4~10</scale>
+			<angle>0~360</angle>
+			<fleckUsesAngleForVelocity>True</fleckUsesAngleForVelocity>
+			<absoluteAngle>false</absoluteAngle>
+			<rotationRate>30~50</rotationRate>
+			<rotation>0</rotation>
+			<speed>-3~3</speed>
+		  </li>
+		</children>
+	  </EffecterDef>
+	  <FleckDef ParentName="FleckBase_Thrown">
+		<defName>HVMP_BlightSprayNoise</defName>
+		<graphicData>
+		  <texPath>Things/Mote/WaterChurnNoise</texPath>
+		  <renderInstanced>true</renderInstanced>
+		  <shaderParameters>
+			<_Color2>(0.7373, 0.9765, 1, 0.6)</_Color2>
+		  </shaderParameters>
+		</graphicData>
+		<altitudeLayer>MoteOverhead</altitudeLayer>
+		<fadeInTime>0.04</fadeInTime>
+		<solidTime>1</solidTime>
+		<fadeOutTime>2</fadeOutTime>
+	  </FleckDef>
+  
+  <!--Autohatchery-->
+  <ThingDef ParentName="BuildingBase" MayRequire="Ludeon.RimWorld.Odyssey">
+    <defName>HVMP_AutoHatchery</defName>
+    <label>auto-hatchery</label>
+    <description>A stationary device which generates fertilized fish eggs from semi-randomized DNA samples, selecting species and strains best adapted to the local water.</description>
+    <size>(1,1)</size>
+    <receivesSignals>true</receivesSignals>
+    <statBases>
+      <MaxHitPoints>200</MaxHitPoints>
+      <Flammability>0</Flammability>
+      <MarketValue>1000</MarketValue>
+      <WorkToBuild>300</WorkToBuild>
+      <Beauty>-20</Beauty>
+    </statBases>
+    <graphicData>
+      <texPath>Things/Building/Mech/ActivatorCountdown</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <shadowData>
+        <volume>(0.6, 0.4, 0.6)</volume>
+      </shadowData>
+      <damageData>
+        <rect>(0.2, 0.2, 0.6, 0.6)</rect>
+      </damageData>
+    </graphicData>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Small</destroySound>
+      <roofCollapseDamageMultiplier>0.2</roofCollapseDamageMultiplier>
+      <claimable>false</claimable>
+    </building>
+    <repairEffect>ConstructMetal</repairEffect>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <placeWorkers>
+      <li>PlaceWorker_ShowProjectileInterceptorRadius</li>
+    </placeWorkers>
+    <altitudeLayer>Building</altitudeLayer>
+    <pathCost>50</pathCost>
+    <blockWind>true</blockWind>
+    <passability>PassThroughOnly</passability>
+    <fillPercent>1.0</fillPercent>
+    <tickerType>Normal</tickerType>
+    <rotatable>true</rotatable>
+    <selectable>true</selectable>
+    <terrainAffordanceNeeded>Bridgeable</terrainAffordanceNeeded>
+    <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+    <damageMultipliers>
+      <li>
+        <damageDef>Flame</damageDef>
+        <multiplier>0</multiplier>
+      </li>
+    </damageMultipliers>
+    <comps>
+      <li Class="HautsPermits.CompProperties_FishGenerator">
+		<periodicity>2500</periodicity>
+		<fishPerTrigger>1</fishPerTrigger>
+      </li>
+	  <li Class="HautsFramework.CompProperties_FactionColored">
+		<colorFactor>0.85</colorFactor>
+	  </li>
+    </comps>
+	<modExtensions>
+	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+	</modExtensions>
+  </ThingDef>
+  
+  <!--Geothermal Drill-->
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_GTDrill</defName>
+    <label>geothermal drill</label>
+    <description>A self-powered drill which bores a hole deep into the earth, creating a steam geyser. This process takes 1 year, after which the drill self-destructs.</description>
+	<stealable>false</stealable>
+    <graphicData>
+      <texPath>Things/Building/Misc/MoisturePump</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2, 2)</drawSize>
+      <shadowData>
+        <volume>(1.5,0.35,1.4)</volume>
+        <offset>(0,0,-0.05)</offset>
+      </shadowData>
+      <damageData>
+        <rect>(0.4,0.4,1.2,1.2)</rect>
+      </damageData>
+    </graphicData>
+    <size>(2,2)</size>
+    <comps>
+      <li Class="HautsPermits_Biotech.CompProperties_GTDrill">
+        <soundWorking>ScannerGroundPenetrating_Ambience</soundWorking>
+		<ticksToFinish>3600000</ticksToFinish>
+      </li>
+	  <li Class="HautsFramework.CompProperties_FactionColored">
+		<colorFactor>0.85</colorFactor>
+	  </li>
+    </comps>
+    <tickerType>Rare</tickerType>
+    <altitudeLayer>Building</altitudeLayer>
+    <statBases>
+      <MaxHitPoints>550</MaxHitPoints>
+      <Flammability>0.1</Flammability>
+      <Beauty>-20</Beauty>
+    </statBases>
+	<damageMultipliers>
+      <li>
+        <damageDef>Flame</damageDef>
+        <multiplier>0.2</multiplier>
+      </li>
+    </damageMultipliers>
+    <fillPercent>1</fillPercent>
+    <building>
+      <ai_chillDestination>false</ai_chillDestination>
+      <destroySound>BuildingDestroyed_Metal_Medium</destroySound>
+      <claimable>false</claimable>
+    </building>
+    <passability>Impassable</passability>
+    <rotatable>false</rotatable>
+	<modExtensions>
+	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+	</modExtensions>
+    <hasTooltip>true</hasTooltip>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <blockWind>true</blockWind>
+    <scatterableOnMapGen>false</scatterableOnMapGen>
+    <canOverlapZones>false</canOverlapZones>
+  </ThingDef>
+
+  
+</Defs>

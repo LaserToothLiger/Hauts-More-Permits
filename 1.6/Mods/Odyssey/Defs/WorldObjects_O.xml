@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--for raiding-->
+  <WorldObjectDef ParentName="SpaceBase">
+    <defName>HVMP_BranchPlatform</defName>
+    <label>branch platform</label>
+    <description>An orbital staging area temporarily being used by the Enterprise. They won't appreciate visitors.\n\nThese platforms have long-range automatic weapon systems capable of destroying incoming ships. They can only safely be approached by a gravship with a signal jammer.</description>
+    <worldObjectClass>HautsPermits.BranchPlatform</worldObjectClass>
+    <canBePlayerHome>false</canBePlayerHome>
+    <expandingIconDrawSize>1.1</expandingIconDrawSize>
+    <mapGenerator>HVMP_BranchPlatformer</mapGenerator>
+    <requiresSignalJammerToReach>true</requiresSignalJammerToReach>
+    <expandingIconTexture>World/WorldObjects/Expanding/SettlementPlatform</expandingIconTexture>
+    <expandingIconColor IsNull="True" />
+    <overrideMapSize>(250, 1, 250)</overrideMapSize>
+  </WorldObjectDef>
+  
+  <MapGeneratorDef ParentName="SpaceMapGenerator">
+    <defName>HVMP_BranchPlatformer</defName>
+    <label>branch platform</label>
+    <defeatRequiresCantReachUnfogged>false</defeatRequiresCantReachUnfogged>
+    <genSteps>
+      <li>HVMP_BranchPlatformer</li>
+      <li>HVMP_BranchPlatformerLoot</li>
+    </genSteps>
+  </MapGeneratorDef>
+
+  <GenStepDef>
+    <defName>HVMP_BranchPlatformer</defName>
+    <order>200</order>
+    <genStep Class="HautsPermits.GenStep_BigassPlatform">
+      <platformTerrain>OrbitalPlatform</platformTerrain>
+      <useSiteFaction>true</useSiteFaction>
+      <layoutDef>HVMP_BranchPlatformLayout</layoutDef>
+      <cannonDef>GaussCannon</cannonDef>
+      <temperature>20</temperature>
+	  <spawnSentryDrones>true</spawnSentryDrones>
+    </genStep>
+  </GenStepDef>
+	  <StructureLayoutDef ParentName="OrbitalAncientPlatformBase">
+		<defName>HVMP_BranchPlatformLayout</defName>
+		<clearDoorFaction>false</clearDoorFaction>
+		<ensureOneDoorUnlocked>true</ensureOneDoorUnlocked>
+		<wallAttachments>
+		  <LifeSupportUnit>
+			<countRange>1~1</countRange>
+		  </LifeSupportUnit>
+		</wallAttachments>
+		<roomDefs>
+		  <HVMP_BranchRewardVault>
+			<countRange>3~3</countRange>
+		  </HVMP_BranchRewardVault>
+		  <RecRoom>
+			<countRange>1~1</countRange>
+		  </RecRoom>
+		  <OrbitalNursery MayRequire="Ludeon.RimWorld.Biotech">
+			<countRange>1~1</countRange>
+		  </OrbitalNursery>
+		  <OrbitalTransportRoom>1</OrbitalTransportRoom>
+		  <OrbitalHydroponics>1</OrbitalHydroponics>
+		  <OrbitalDiningRoom>1</OrbitalDiningRoom>
+		  <OrbitalBarracks>1</OrbitalBarracks>
+		  <NarrowHalls>1</NarrowHalls>
+		  <OrbitalStoreroom>2</OrbitalStoreroom>
+		  <OrbitalComputerRoom>1</OrbitalComputerRoom>
+	  
+	  </roomDefs>
+	  </StructureLayoutDef>
+	  <LayoutRoomDef>
+		<defName>HVMP_BranchRewardVault</defName>
+		<roomContentsWorkerType>HautsPermits.RoomContents_HVMP_RewardVault</roomContentsWorkerType>
+		<floorTypes>
+		  <li>SterileTile</li>
+		</floorTypes>
+		<edgeTerrain>AncientTile</edgeTerrain>
+	  </LayoutRoomDef>
+
+  <GenStepDef>
+    <defName>HVMP_BranchPlatformerLoot</defName>
+    <order>700</order>
+    <genStep Class="HautsPermits.GenStep_BigassPawnLoot">
+      <requiresRoof>true</requiresRoof>
+	  <defenderMulti>1</defenderMulti>
+	  <addedCombatants>1~3</addedCombatants>
+	  <pointsPerPawnGen>2000~6000</pointsPerPawnGen>
+    </genStep>
+  </GenStepDef>
+
+</Defs>

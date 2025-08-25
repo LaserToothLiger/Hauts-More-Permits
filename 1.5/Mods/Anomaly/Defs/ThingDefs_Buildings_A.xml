@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--permits-->
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_EltexInhibitor</defName>
+    <label>eltex inhibitor</label>
+    <description>A device with inlaid psychic focusing materials which numb the neural activity of captured entities. It improves the containment strength of any holding platform that it is pointed at. The numbing effect does not work on humans or normal animals.</description>
+    <tickerType>Normal</tickerType>
+    <size>(1,2)</size>
+    <graphicData>
+      <texPath>Things/Building/ElectricInhibitor/ElectricInhibitor</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(1,2)</drawSize>
+      <damageData>
+        <rect>(0, 0.3, 1, 1.7)</rect>
+      </damageData>
+      <shadowData>
+        <volume>(0.6, 0.5, 1.8)</volume>
+        <offset>(0, 0, 0.1)</offset>
+      </shadowData>
+	  <color>(176,212,208)</color>
+    </graphicData>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <fillPercent>0.9</fillPercent>
+    <pathCost>50</pathCost>
+    <defaultPlacingRot>East</defaultPlacingRot>
+    <uiOrder>105</uiOrder>
+    <canOverlapZones>false</canOverlapZones>
+    <thingCategories>
+      <li>BuildingsMisc</li>
+    </thingCategories>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <statBases>
+      <MaxHitPoints>100</MaxHitPoints>
+      <Flammability>0.7</Flammability>
+      <Mass>20</Mass>
+    </statBases>
+    <costList>
+      <ComponentIndustrial>1</ComponentIndustrial>
+      <Steel>25</Steel>
+    </costList>
+    <placeWorkers>
+      <li>PlaceWorker_ElectricInhibitor</li>
+    </placeWorkers>
+    <drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
+    <building>
+      <buildingTags>
+        <li>Anomaly</li>
+      </buildingTags>
+    </building>
+    <comps>
+      <li Class="CompProperties_Facility">
+        <maxSimultaneous>6</maxSimultaneous>
+        <maxDistance>4</maxDistance>
+        <minDistance>1</minDistance>
+        <mustBePlacedFacingThingLinear>true</mustBePlacedFacingThingLinear>
+        <statOffsets>
+          <ContainmentStrength>10</ContainmentStrength>
+        </statOffsets>
+      </li>
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="TorchBase">
+    <defName>HVMP_EltexBeacon</defName>
+    <label>eltex beacon</label>
+    <description>A device with inlaid psychic focusing materials. When placed near a psychic ritual spot, it improves the ritual quality.\n\nA ritual can benefit from up to four eltex beacons.</description>
+    <graphicData>
+      <texPath>Things/Building/ShardBeacon</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+	  <color>(176,212,208)</color>
+    </graphicData>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <thingCategories>
+      <li>BuildingsMisc</li>
+    </thingCategories>
+    <statBases>
+      <MaxHitPoints>100</MaxHitPoints>
+      <Mass>10</Mass>
+    </statBases>
+    <costList Inherit="False">
+      <ComponentIndustrial>1</ComponentIndustrial>
+      <Steel>25</Steel>
+    </costList>
+    <placeWorkers>
+      <li>PlaceWorker_ShowFacilitiesConnections</li>
+    </placeWorkers>
+    <drawPlaceWorkersWhileSelected>false</drawPlaceWorkersWhileSelected>
+    <building>
+      <buildingTags>
+        <li>Anomaly</li>
+      </buildingTags>
+    </building>
+    <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
+    <resourcesFractionWhenDeconstructed>1</resourcesFractionWhenDeconstructed>
+    <comps Inherit="False">
+      <li Class="CompProperties_Facility">
+        <statOffsets>
+          <PsychicRitualQuality>0.08</PsychicRitualQuality>
+        </statOffsets>
+        <maxSimultaneous>4</maxSimultaneous>
+        <maxDistance>10</maxDistance>
+      </li>
+    </comps>
+  </ThingDef>
+  
+</Defs>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  
+  <!--Lovecraft-->
+  <IncidentDef>
+    <defName>HVMP_LovecraftAlignment</defName>
+    <label>psychic alignment</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>HautsPermits_Occult.IncidentWorker_Align</workerClass>
+    <gameCondition>HVMP_LovecraftAlignmentCond</gameCondition>
+    <baseChance>0</baseChance>
+    <minRefireDays>0.01</minRefireDays>
+    <durationDays>1~1.1</durationDays>
+  </IncidentDef>
+	  <GameConditionDef>
+		<defName>HVMP_LovecraftAlignmentCond</defName>
+		<conditionClass>HautsPermits_Occult.GameCondition_Alignment</conditionClass>
+		<label>psychic alignment</label>
+		<description>Particular confluences in the psychic field enhance the invocation of psychic forces. Psycasters will meditate more effectively, and psychic ritualists will be more effective.</description>
+		<endMessage>The psychic alignment is ending.</endMessage>
+		<letterText>Particular confluences in the psychic field will enhance the invocation of psychic forces for the next 24 hours. Psycasters will meditate more effectively, and psychic ritualists will be more effective.</letterText>
+		<letterDef>PositiveEvent</letterDef>
+		<canBePermanent>true</canBePermanent>
+		<allowUnderground>true</allowUnderground>
+	  </GameConditionDef>
+  <IncidentDef>
+    <defName>HVMP_LovecraftHypnoticLight</defName>
+    <label>hypnotic light</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>HautsPermits_Occult.IncidentWorker_Hypnolight</workerClass>
+    <!--<gameCondition>PsychicSuppression</gameCondition>-->
+    <baseChance>0</baseChance>
+    <minRefireDays>5</minRefireDays>
+    <durationDays>0.75~1.75</durationDays>
+  </IncidentDef>
+	  <GameConditionDef>
+		<defName>HVMP_LovecraftHypnoLight</defName>
+		<conditionClass>HautsPermits_Occult.GameCondition_HypnoLight</conditionClass>
+		<label>hypnotic lights</label>
+		<description>The sky is covered in strange, mesmerizing lights. Anyone who enjoys being outside will feel a pull to go out, and anyone can see the sky for too long will eventually fall into a vegetative trance. Exposure fades briefly - but not instantaneously - after one stops seeing the light.</description>
+		<endMessage>The hypnotic lights are fading.</endMessage>
+		<letterText>A beautiful, mesmerizing light pattern is lighting up the sky.\n\nAnyone who enjoys being outside will feel a pull to go out, and anyone can see the sky for too long will eventually fall into a vegetative trance. Exposure fades briefly - but not instantaneously - after one stops seeing the light.</letterText>
+		<letterDef>NegativeEvent</letterDef>
+		<canBePermanent>true</canBePermanent>
+		<allowUnderground>false</allowUnderground>
+	  </GameConditionDef>
+	  <HediffDef>
+		<defName>HVMP_LightHypnotized</defName>
+		<label>photo-hypnosis</label>
+		<description>Continued exposure to hypnotic lights in the sky will cause a trance, and eventually a coma.</description>
+		<hediffClass>HautsPermits_Occult.Hediff_HypnoLight</hediffClass>
+		<initialSeverity>0.001</initialSeverity>
+		<maxSeverity>1</maxSeverity>
+		<alwaysShowSeverity>true</alwaysShowSeverity>
+		<stages>
+		  <li>
+			<label>very mild</label>
+			<becomeVisible>false</becomeVisible>
+		  </li>
+		  <li>
+			<minSeverity>0.05</minSeverity>
+			<label>mild</label>
+			<capMods><li><capacity>Consciousness</capacity><setMax>1</setMax></li></capMods>
+			<mentalStateGivers><li><mentalState>WanderConfused</mentalState><mtbDays>4</mtbDays></li></mentalStateGivers>
+		  </li>
+		  <li>
+			<minSeverity>0.4</minSeverity>
+			<label>moderate</label>
+			<capMods><li><capacity>Consciousness</capacity><setMax>0.9</setMax></li></capMods>
+			<mentalStateGivers><li><mentalState>WanderConfused</mentalState><mtbDays>3</mtbDays></li></mentalStateGivers>
+		  </li>
+		  <li>
+			<minSeverity>0.6</minSeverity>
+			<label>severe</label>
+			<capMods><li><capacity>Consciousness</capacity><setMax>0.75</setMax></li></capMods>
+			<mentalStateGivers><li><mentalState>WanderConfused</mentalState><mtbDays>2</mtbDays></li></mentalStateGivers>
+		  </li>
+		  <li>
+			<minSeverity>0.8</minSeverity>
+			<label>extreme</label>
+			<capMods><li><capacity>Consciousness</capacity><setMax>0.5</setMax></li></capMods>
+			<mentalStateGivers><li><mentalState>WanderConfused</mentalState><mtbDays>1</mtbDays></li></mentalStateGivers>
+		  </li>
+		  <li>
+			<minSeverity>1</minSeverity>
+			<label>extreme</label>
+			<capMods><li><capacity>Consciousness</capacity><setMax>0.1</setMax></li></capMods>
+		  </li>
+		</stages>
+	  </HediffDef>
+	  <ThoughtDef>
+		<defName>HVMP_BeautifulHypnoLight</defName>
+		<workerClass>ThoughtWorker_Aurora</workerClass>
+		<gameCondition>HVMP_LovecraftHypnoLight</gameCondition>
+		<stages>
+		  <li>
+			<label>beautiful lights</label>
+			<description>The view is amazing.</description>
+			<baseMoodEffect>14</baseMoodEffect>
+		  </li>
+		</stages>
+	  </ThoughtDef>
+  <IncidentDef>
+    <defName>HVMP_LovecraftManhunter</defName>
+    <label>manhunter shockwave</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+	<layerBlacklist>
+	  <li MayRequire="Ludeon.RimWorld.Odyssey">Orbit</li>
+	  <li MayRequire="Broms.DeepOrbit">Orbit2</li>
+	</layerBlacklist>
+    <workerClass>HautsPermits_Occult.IncidentWorker_ManhunterPulse</workerClass>
+    <baseChance>0</baseChance>
+    <minRefireDays>5</minRefireDays>
+  </IncidentDef>
+  <IncidentDef>
+    <defName>HVMP_LovecraftSuppression</defName>
+    <label>psychic drone</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>HautsPermits_Occult.IncidentWorker_Suppression</workerClass>
+    <!--<gameCondition>PsychicSuppression</gameCondition>-->
+    <baseChance>0</baseChance>
+    <minRefireDays>5</minRefireDays>
+    <durationDays>0.75~3.75</durationDays>
+  </IncidentDef>
+  <!--Romero-->
+  <IncidentDef>
+    <defName>HVMP_ShamblerAssault</defName><!--just in case, it needs to be able to fire even if Anomaly is inactive.-->
+    <label>shambler assault</label>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>IncidentWorker_ShamblerAssault</workerClass>
+    <baseChance>2</baseChance>
+    <minAnomalyThreatLevel>0</minAnomalyThreatLevel>
+    <earliestDay>20</earliestDay>
+    <minRefireDays>10</minRefireDays>
+    <category>ThreatBig</category>
+    <minThreatPoints>250</minThreatPoints>
+    <pointsScaleable>true</pointsScaleable>
+    <tale>Raid</tale>
+  </IncidentDef>
+  
+</Defs>

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--Suffusion buff base-->
+  <HediffDef Name="HVMP_OccultSuffusionBase" Abstract="True" ParentName="HVT_TraitHediffBase">
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.61,0.035,0.75)</defaultLabelColor>
+	<initialSeverity>72</initialSeverity>
+	<maxSeverity>72</maxSeverity>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-24</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+    </comps>
+  </HediffDef>
+  
+  <!--Level 1-->
+  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+    <defName>HVMP_SuffusedClosedMind</defName>
+    <label>closed-mind suffusion</label>
+    <description>A distant psychic influence is suppressing certain brain functions.</description>
+    <stages>
+      <li>
+		<statOffsets>
+		  <PsychicSensitivity>-1</PsychicSensitivity>
+		  <MentalBreakThreshold>-0.25</MentalBreakThreshold>
+		  <CertaintyLossFactor MayRequire="Ludeon.RimWorld.Ideology">-0.5</CertaintyLossFactor>
+		  <GlobalLearningFactor>-0.35</GlobalLearningFactor>
+		</statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+    <defName>HVMP_SuffusedOpenMind</defName>
+    <label>open-mind suffusion</label>
+    <description>A distant psychic influence is enhancing certain brain functions, notably those pertaining to psychic sensitivity and emotional volatility.</description>
+    <stages>
+      <li>
+		<statOffsets>
+		  <PsychicSensitivity>0.4</PsychicSensitivity>
+		  <MentalBreakThreshold>0.25</MentalBreakThreshold>
+		  <CertaintyLossFactor MayRequire="Ludeon.RimWorld.Ideology">0.5</CertaintyLossFactor>
+		</statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+    <defName>HVMP_SuffusedProfanity</defName>
+    <label>profanity suffusion</label>
+    <description>A distant psychic influence is enhancing attunement towards the Void.</description>
+    <stages>
+      <li>
+		<statOffsets>
+		  <StudyEfficiency>0.3</StudyEfficiency>
+		  <PsychicRitualQualityOffset>0.1</PsychicRitualQualityOffset>
+		</statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+    <defName>HVMP_SuffusedSanctity</defName>
+    <label>sanctity suffusion</label>
+    <description>A distant psychic influence grants enhanced abilities to rebuke the Void.</description>
+    <stages>
+      <li>
+		<statOffsets>
+		  <ActivitySuppressionRate>0.125</ActivitySuppressionRate>
+		  <Hauts_EntityDamageFactor>0.4</Hauts_EntityDamageFactor>
+		</statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+  
+  <!--Level 2-->
+  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+    <defName>HVMP_SuffusedRehumanizer</defName>
+    <label>rehumanizing suffusion</label>
+    <description>A distant psychic influence is deprogramming the "inhumanity" out of this individual.</description>
+    <hediffClass>HautsPermits_Occult.Hediff_Rehumanizer</hediffClass>
+	<minSeverity>0.001</minSeverity>
+	<initialSeverity>120</initialSeverity>
+	<maxSeverity>120</maxSeverity>
+    <aptitudes>
+      <Animals>6</Animals>
+      <Social>6</Social>
+      <Artistic>6</Artistic>
+    </aptitudes>
+    <stages>
+	  <li>
+        <painOffset>0.25</painOffset>
+        <statOffsets>
+          <ComfyTemperatureMin>8</ComfyTemperatureMin>
+		  <VAEI_SanityLossMultiplier MayRequire="VanillaExpanded.VAnomalyEInsanity">-0.35</VAEI_SanityLossMultiplier>
+		  <VAEI_SanityGainMultiplier MayRequire="VanillaExpanded.VAnomalyEInsanity">0.35</VAEI_SanityGainMultiplier>
+        </statOffsets>
+	  </li>
+    </stages>
+  </HediffDef>
+	  <ThoughtDef>
+		<defName>HVMP_SuffusedRehumanizerMood</defName>
+		<workerClass>ThoughtWorker_Hediff</workerClass>
+		<hediff>HVMP_SuffusedRehumanizer</hediff>
+		<validWhileDespawned>true</validWhileDespawned>
+		<developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+		<stages>
+		  <li>
+			<label>rehumanizing suffusion</label>
+			<description>I am beyond such petty emotions as guilt, or shame, or compassion now. Why must I feel them again? Make it stop!</description>
+			<baseMoodEffect>-16</baseMoodEffect>
+		  </li>
+		</stages>
+	  </ThoughtDef>
+  
+  <!--Level 4-->
+  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+    <defName>HVMP_SuffusedInvisibility</defName>
+    <label>psyfocus suffusion</label>
+    <description>A distant psychic influence prevents others from noticing this individual.</description>
+	<initialSeverity>0.5</initialSeverity>
+	<maxSeverity>0.5</maxSeverity>
+	<comps>
+	  <li Class="HediffCompProperties_Invisibility">
+		<visibleToPlayer>true</visibleToPlayer>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+    <defName>HVMP_SuffusedPsyfocus</defName>
+    <label>psyfocus suffusion</label>
+    <description>A distant psychic influence provides continual psyfocus at the expense of worsened mood.</description>
+	<initialSeverity>24</initialSeverity>
+	<maxSeverity>24</maxSeverity>
+    <stages>
+      <li>
+		<statOffsets>
+		  <Hauts_PsyfocusRegenRate>0.5</Hauts_PsyfocusRegenRate>
+		</statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+	  <ThoughtDef>
+		<defName>HVMP_SuffusedPsyfocusMood</defName>
+		<workerClass>ThoughtWorker_Hediff</workerClass>
+		<hediff>HVMP_SuffusedPsyfocus</hediff>
+		<validWhileDespawned>true</validWhileDespawned>
+		<developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+		<stages>
+		  <li>
+			<label>psyfocus suffusion</label>
+			<description>I can feel something dark, clinical and unfeeling wresting my mind into a different shape.</description>
+			<baseMoodEffect>-24</baseMoodEffect>
+		  </li>
+		</stages>
+	  </ThoughtDef>
+  
+  <!--Level 6-->
+  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+    <defName>HVMP_SuffusedPsylinker</defName>
+    <label>psylink suffusion</label>
+    <description>A distant psychic influence is causing a psylink to gradually form.</description>
+    <hediffClass>HautsPermits_Occult.Hediff_Psylinker</hediffClass>
+	<minSeverity>0.001</minSeverity>
+	<initialSeverity>120</initialSeverity>
+	<maxSeverity>14400</maxSeverity>
+    <stages>
+	  <li>
+		<capMods>
+		  <li>
+			<capacity>Consciousness</capacity>
+			<setMax>0.1</setMax>
+		  </li>
+		</capMods>
+	  </li>
+    </stages>
+  </HediffDef>
+  
+  <!--Level 7-->
+  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+    <defName>HVMP_SuffusedDeghoulizer</defName>
+    <label>deghoulizing suffusion</label>
+    <description>A distant psychic influence is reverting the ghoulizing changes done to this individual's body.</description>
+    <hediffClass>HautsPermits_Occult.Hediff_Deghoulizer</hediffClass>
+	<minSeverity>0.001</minSeverity>
+    <stages>
+	  <li>
+		<capMods>
+		  <li>
+			<capacity>Manipulation</capacity>
+			<setMax>0.1</setMax>
+		  </li>
+		  <li>
+			<capacity>Moving</capacity>
+			<setMax>0.1</setMax>
+		  </li>
+		</capMods>
+	  </li>
+    </stages>
+  </HediffDef>
+  
+  <!--Level 8-->
+  <HediffDef ParentName="HVMP_OccultSuffusionBase" MayRequire="Hautarche.HautsTraits">
+    <defName>HVMP_SuffusedAscender</defName>
+    <label>ascension suffusion</label>
+    <description>A distant psychic influence is enriching the intrinsic psychic talents of this individual. This reshaping of psychic presence is both debilitating to the body and calorically intensive.</description>
+    <hediffClass>HVMP_HAT.Hediff_Ascender</hediffClass>
+	<minSeverity>0.001</minSeverity>
+	<initialSeverity>24</initialSeverity>
+	<maxSeverity>14400</maxSeverity>
+    <stages>
+	  <li>
+		<capMods>
+		  <li>
+			<capacity>Consciousness</capacity>
+			<setMax>0.1</setMax>
+		  </li>
+		</capMods>
+		<statFactors>
+		  <IncomingDamageFactor>4</IncomingDamageFactor>
+		</statFactors>
+		<statOffsets>
+		  <CancerRate MayRequire="Ludeon.RimWorld.Biotech">1</CancerRate>
+		</statOffsets>
+		<hungerRateFactor>1.5</hungerRateFactor>
+	  </li>
+    </stages>
+  </HediffDef>
+  
+</Defs>

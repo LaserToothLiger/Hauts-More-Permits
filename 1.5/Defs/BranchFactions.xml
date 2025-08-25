@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <FactionDef Name="HVMP_EBranchFactionBase" Abstract="True">
+    <isPlayer>false</isPlayer>
+    <settlementNameMaker>NamerSettlementOutlander</settlementNameMaker>
+	<humanlikeFaction>true</humanlikeFaction>
+	<hidden>false</hidden>
+	<listOrderPriority>9019</listOrderPriority>
+    <dropPodActive>ActiveDropPodMechanoid</dropPodActive>
+    <dropPodIncoming>DropPodIncomingMechanoid</dropPodIncoming>
+	<pawnGroupMakers>
+      <li>
+        <kindDef>Combat</kindDef>
+        <commonality>20</commonality>
+        <options>
+          <Grenadier_EMP>0.25</Grenadier_EMP>
+          <Grenadier_Smoke>0.25</Grenadier_Smoke>
+          <Grenadier_Destructive>2</Grenadier_Destructive>
+          <Mercenary_Gunner>10</Mercenary_Gunner>
+          <Mercenary_Heavy>6</Mercenary_Heavy>
+          <Mercenary_Sniper>7</Mercenary_Sniper>
+          <Mercenary_Elite>10</Mercenary_Elite>
+          <Town_Councilman>0.1</Town_Councilman>
+        </options>
+      </li>
+      <!--<li> E-branches only have pawn group makers for technical reasons, but they should never actually spawn any pawns. Removing the "Peaceful" group prevents the E-branches from showing up as random passing-by travelers, or as Hospitality guests.
+				Though if you are running Hospitality, you will have one yellow warning message per E-branch faction in your error log on starting up the game, and Hospitality will occasionally send yellow warnings about them not being able to visit.
+        <kindDef>Peaceful</kindDef>
+        <options>
+          <Town_Councilman>10</Town_Councilman>
+        </options>
+      </li>-->
+      <li>
+        <kindDef>Settlement</kindDef>
+        <options>
+          <Town_Councilman>10</Town_Councilman>
+        </options>
+      </li>
+      <li>
+        <kindDef>Trader</kindDef>
+        <traders>
+          <Town_Trader>1</Town_Trader>
+        </traders>
+        <carriers>
+          <Town_Councilman>10</Town_Councilman>
+        </carriers>
+        <guards>
+          <Town_Councilman>10</Town_Councilman>
+        </guards>
+      </li>
+    </pawnGroupMakers>
+    <raidCommonalityFromPointsCurve><points><li>(0, 0)</li></points></raidCommonalityFromPointsCurve>
+	<raidLootValueFromPointsCurve><points><li>(0, 0)</li></points></raidLootValueFromPointsCurve>
+    <canSiege>false</canSiege>
+    <canStageAttacks>false</canStageAttacks>
+	<canPsychicRitualSiege>false</canPsychicRitualSiege>
+	<allowedArrivalTemperatureRange>-1000~1000</allowedArrivalTemperatureRange>
+	<rescueesCanJoin>false</rescueesCanJoin>
+	<pawnSingular>member</pawnSingular>
+    <pawnsPlural>members</pawnsPlural>
+	<leaderTitle>administrator</leaderTitle>
+	<leaderTitleFemale>administrator</leaderTitleFemale>
+    <royalFavorLabel>standing</royalFavorLabel>
+	<royalFavorIconPath>UI/Icons/RoyalFavor</royalFavorIconPath><!--remember to change this later on once art-->
+    <categoryTag>HVMP_EBranch</categoryTag>
+	<raidsForbidden>true</raidsForbidden>
+	<requiredCountAtGameStart>1</requiredCountAtGameStart>
+    <settlementGenerationWeight>0</settlementGenerationWeight>
+	<maxConfigurableAtWorldCreation>1</maxConfigurableAtWorldCreation>
+	<startingCountAtWorldCreation>1</startingCountAtWorldCreation>
+    <configurationListOrderPriority>22222</configurationListOrderPriority>
+    <techLevel>Spacer</techLevel>
+    <backstoryFilters>
+      <li>
+        <categories>
+          <li>Outlander</li>
+        </categories>
+        <commonality>0.1</commonality>
+      </li>
+      <li>
+        <categories>
+          <li>Offworld</li>
+        </categories>
+        <commonality>0.9</commonality>
+      </li>
+    </backstoryFilters>
+    <apparelStuffFilter>
+      <stuffCategoriesToAllow>
+        <li>Metallic</li>
+        <li>Fabric</li>
+      </stuffCategoriesToAllow>
+      <disallowedThingDefs>
+        <li>DevilstrandCloth</li>
+      </disallowedThingDefs>
+    </apparelStuffFilter>
+    <raidLootMaker>OutlanderRaidLootMaker</raidLootMaker>
+    <xenotypeSet>
+      <xenotypeChances>
+        <Hussar MayRequire="Ludeon.RimWorld.Biotech">0.025</Hussar>
+        <Dirtmole MayRequire="Ludeon.RimWorld.Biotech">0.1</Dirtmole>
+        <Genie MayRequire="Ludeon.RimWorld.Biotech">0.1</Genie>
+        <Neanderthal MayRequire="Ludeon.RimWorld.Biotech">0.025</Neanderthal>
+        <Waster MayRequire="Ludeon.RimWorld.Biotech">0.025</Waster>
+		<Pigskin MayRequire="Ludeon.RimWorld.Biotech">0.5</Pigskin><!--solely because of the mod's name-->
+      </xenotypeChances>
+    </xenotypeSet>
+	<mustStartOneEnemy>false</mustStartOneEnemy>
+    <maxPawnCostPerTotalPointsCurve>
+      <points>
+        <li>(0,0)</li>
+      </points>
+    </maxPawnCostPerTotalPointsCurve>
+    <structureMemeWeights>
+      <Structure_TheistEmbodied MayRequire="Ludeon.RimWorld.Ideology">1</Structure_TheistEmbodied>
+      <Structure_TheistAbstract MayRequire="Ludeon.RimWorld.Ideology">2</Structure_TheistAbstract>
+      <Structure_Ideological MayRequire="Ludeon.RimWorld.Ideology">2</Structure_Ideological>
+      <Structure_Archist MayRequire="Ludeon.RimWorld.Ideology">1</Structure_Archist>
+      <Structure_OriginChristian MayRequire="Ludeon.RimWorld.Ideology">1</Structure_OriginChristian>
+      <Structure_OriginIslamic MayRequire="Ludeon.RimWorld.Ideology">1</Structure_OriginIslamic>
+      <Structure_OriginHindu MayRequire="Ludeon.RimWorld.Ideology">1</Structure_OriginHindu>
+      <Structure_OriginBuddhist MayRequire="Ludeon.RimWorld.Ideology">1</Structure_OriginBuddhist>
+	  <AM_Structure_Atheist MayRequire="Sarg.AlphaMemes">1</AM_Structure_Atheist>
+	  <AM_Structure_Jewish MayRequire="Sarg.AlphaMemes">1</AM_Structure_Jewish>
+	  <AM_Structure_Jainism MayRequire="Sarg.AlphaMemes">1</AM_Structure_Jainism>
+	  <AM_Structure_Sikhism MayRequire="Sarg.AlphaMemes">1</AM_Structure_Sikhism>
+	  <AM_Structure_Kemetism MayRequire="Sarg.AlphaMemes">1</AM_Structure_Kemetism>
+	  <AM_Structure_SteampunkRevival MayRequire="Sarg.AlphaMemes">1</AM_Structure_SteampunkRevival>
+	  <VME_Structure_Serketist MayRequire="VanillaExpanded.VMemesE">1</VME_Structure_Serketist>
+	  <VME_Structure_Esotericism MayRequire="VanillaExpanded.VMemesE">1</VME_Structure_Esotericism>
+	  <VME_Structure_Bacchanalianism MayRequire="VanillaExpanded.VMemesE">1</VME_Structure_Bacchanalianism>
+	  <VME_Structure_ChthonianCult MayRequire="VanillaExpanded.VMemesE">1</VME_Structure_ChthonianCult>
+	  <VME_Structure_Eschatologism MayRequire="VanillaExpanded.VMemesE">1</VME_Structure_Eschatologism>
+	  <VME_Structure_Authoritarianism MayRequire="VanillaExpanded.VMemesE">1</VME_Structure_Authoritarianism>
+	  <VME_Structure_CultOfPersonality MayRequire="VanillaExpanded.VMemesE">1</VME_Structure_CultOfPersonality>
+	  <VME_Structure_Pantheism MayRequire="VanillaExpanded.VMemesE">1</VME_Structure_Pantheism>
+	  <VME_Structure_Omnism MayRequire="VanillaExpanded.VMemesE">1</VME_Structure_Omnism>
+	  <VME_Structure_Agnosticism MayRequire="VanillaExpanded.VMemesE">1</VME_Structure_Agnosticism>
+	  <VME_Structure_SecularSpirituality MayRequire="VanillaExpanded.VMemesE">1</VME_Structure_SecularSpirituality>
+	  <VME_Structure_Shintaoism MayRequire="VanillaExpanded.VMemesE">1</VME_Structure_Shintaoism>
+	  <VME_Structure_Corporate MayRequire="VanillaExpanded.VMemesE">1</VME_Structure_Corporate>
+    </structureMemeWeights>
+	<requiredMemes>
+	  <li MayRequire="Ludeon.RimWorld.Ideology">HVMP_Cosmopolitan</li>
+	</requiredMemes>
+    <disallowedMemes>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Structure_Animist</li>
+      <li MayRequire="Sarg.AlphaMemes">AM_Structure_Neolithic</li>
+      <li MayRequire="Sarg.AlphaMemes">AM_Structure_Scavenger</li>
+      <li MayRequire="Sarg.AlphaMemes">AM_Structure_Alienism</li>
+      <li MayRequire="Sarg.AlphaMemes">AM_Structure_Corsair</li>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Blindsight</li>
+      <li MayRequire="Ludeon.RimWorld.Ideology">FleshPurity</li>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Nudism</li>
+      <li MayRequire="Ludeon.RimWorld.Ideology">PainIsVirtue</li>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Supremacist</li>
+      <li MayRequire="Ludeon.RimWorld.Anomaly">Inhuman</li>
+      <li MayRequire="Sarg.AlphaMemes">AM_Madness</li>
+      <li MayRequire="Sarg.AlphaMemes">AM_Sadist</li>
+	  <li MayRequire="VanillaExpanded.VMemesE">VME_Nationalist</li>
+	  <li MayRequire="VanillaExpanded.VMemesE">VME_ViolentConversion</li>
+	  <li MayRequire="VanillaExpanded.VFEA">VFEA_Isolationist</li>
+    </disallowedMemes>
+    <allowedCultures><li>HVMP_Ventrish</li></allowedCultures>
+	<!--customize these per faction
+    <settlementTexturePath>World/WorldObjects/DefaultSettlement</settlementTexturePath>
+    <factionIconPath>World/WorldObjects/Expanding/Town</factionIconPath>-->
+    <settlementTexturePath>World/WorldObjects/DefaultSettlement</settlementTexturePath>
+    <factionIconPath>World/WorldObjects/Expanding/Town</factionIconPath>
+    <royalTitleInheritanceWorkerClass>RoyalTitleInheritanceWorker</royalTitleInheritanceWorkerClass><!--none of the titles are heritable anyways but the game throws a hissy fit if this is undefined-->
+    <royalTitleInheritanceRelations>
+      <li>Child</li>
+      <li>Grandchild</li>
+      <li>GreatGrandchild</li>
+      <li>NephewOrNiece</li>
+      <li>Spouse</li>
+      <li>Sibling</li>
+      <li>HalfSibling</li>
+      <li>Cousin</li>
+      <li>Parent</li>
+      <li>UncleOrAunt</li>
+    </royalTitleInheritanceRelations>
+  </FactionDef>
+  
+  <FactionDef ParentName="HVMP_EBranchFactionBase">
+    <defName>HVMP_CommerceBranch</defName>
+    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch lays the foundation for healthy, wide-reaching trade networks.\n\nIt offers jobs to defeat bandits, fulfill trade requests, and manipulate nascent markets. Those in good standing with this e-branch may solicit them for investment opportunities, valuable materials, and traders, as well as to influence others by leaning on their massive wealth.</description>
+	<fixedName>Commerce Branch</fixedName>
+    <label>commerce branch</label>
+    <royalTitleTags>
+      <li>HVMP_CommerceTitle</li>
+    </royalTitleTags>
+	<colorSpectrum>
+      <li>(0.6824,0.6589,0.0745)</li>
+      <li>(0.6,0.6,0.62)</li>
+    </colorSpectrum>
+	<requiredMemes>
+	  <li MayRequire="VanillaExpanded.VMemesE">VME_Trader</li>
+	</requiredMemes>
+	<modExtensions>
+		<li Class="HautsPermits.EBranchQuests">
+			<quests>
+				<li>HVMP_CommerceFortification</li>
+				<li>HVMP_CommerceIntervention</li>
+				<li>HVMP_CommerceMastermind</li>
+				<li>HVMP_CommerceResearch</li>
+				<li>HVMP_CommerceTransportation</li>
+			</quests>
+			<donationTraderKind>HVMP_CommerceDonations</donationTraderKind>
+		</li>
+	</modExtensions>
+  </FactionDef>
+  
+  <FactionDef ParentName="HVMP_EBranchFactionBase">
+    <defName>HVMP_PaxBranch</defName>
+    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch focuses on the cessation of hostilities across the world.\n\nIt offers jobs to fight mechanoids, facilitate orbital weapons testing, protect refugees from conflict, and strengthen relations with other factions. Those in good standing with this e-branch may solicit them to deploy defensive structures, provide combat resources, use destructive or climate-changing weaponry, and incite the appearance of non-humanoid enemies.</description>
+	<fixedName>Pax Branch</fixedName>
+    <label>pax branch</label>
+    <royalTitleTags>
+      <li>HVMP_PaxTitle</li>
+    </royalTitleTags>
+	<colorSpectrum>
+      <li>(1,0.5804,0.5804)</li>
+      <li>(1,0.97,0.97)</li>
+    </colorSpectrum>
+	<requiredMemes>
+	  <li MayRequire="seti.millitarism">Seti_Militarism</li><!--we will teach the world of our peaceful ways. by FORCE-->
+	</requiredMemes>
+    <disallowedMemes>
+      <li MayRequire="VanillaExpanded.VMemesE">VME_MechanoidSupremacy</li><!--solely 'cause of their "beat machines up for us" quest-->
+    </disallowedMemes>
+	<modExtensions>
+		<li Class="HautsPermits.EBranchQuests">
+			<quests>
+				<li>HVMP_PaxCaelum</li>
+				<li>HVMP_PaxMachina</li>
+				<li>HVMP_PaxMundi</li>
+				<li>HVMP_PaxPopulus</li>
+				<li>HVMP_PaxVox</li>
+			</quests>
+			<donationTraderKind>HVMP_PaxDonations</donationTraderKind>
+		</li>
+	</modExtensions>
+  </FactionDef>
+  
+  <FactionDef ParentName="HVMP_EBranchFactionBase">
+    <defName>HVMP_RoverBranch</defName>
+    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch is concerned with matters of travel and navigation.\n\nIt offers jobs to visit sites of interest, update older maps, erect landmarks, find crashed shuttles, and join up with their scouting parties. Those in good standing with this e-branch may solicit them to assist with long-distance travel, deliver survival resources, and share the locations of sites of interest.</description>
+	<fixedName>Rover Branch</fixedName>
+    <label>rover branch</label>
+    <royalTitleTags>
+      <li>HVMP_RoverTitle</li>
+    </royalTitleTags>
+	<colorSpectrum>
+      <li>(0.6039, 0.4941, 0.4941)</li>
+      <li>(0.9216, 0.9137, 0.7294)</li>
+    </colorSpectrum>
+	<requiredMemes>
+	  <li MayRequire="VanillaExpanded.VMemesE">VME_Nomad</li>
+	</requiredMemes>
+	<modExtensions>
+		<li Class="HautsPermits.EBranchQuests">
+			<quests>
+				<li>HVMP_RoverAtlas</li>
+				<li>HVMP_RoverColossus</li>
+				<li>HVMP_RoverLaelaps</li>
+				<li>HVMP_RoverOdyssey</li>
+				<li>HVMP_RoverTheseus</li>
+			</quests>
+			<donationTraderKind>HVMP_RoverDonations</donationTraderKind>
+		</li>
+	</modExtensions>
+  </FactionDef>
+  
+  <FactionDef ParentName="HVMP_EBranchFactionBase" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_ArchiveBranch</defName>
+    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch focuses on the recording and preservation of human cultures.\n\nIt offers jobs to study artifacts and find data from ancient civilizations, as well as to consent to anthropological and geological studies. Those in good standing with this e-branch may solicit them to repair and enhance items; share ideoligious, technical, or philosophical knowledge; employ their scanning technology; or provide powerful items.</description>
+	<fixedName>Archive Branch</fixedName>
+    <label>archive branch</label>
+    <royalTitleTags>
+      <li>HVMP_ArchiveTitle</li>
+    </royalTitleTags>
+	<colorSpectrum>
+      <li>(0.7647,0.6314,0.7373)</li>
+      <li>(0.898,0.6,0.6)</li>
+    </colorSpectrum>
+	<requiredMemes>
+      <li MayRequire="VanillaExpanded.VMemesE">VME_CraftCulture</li>
+	</requiredMemes>
+    <disallowedMemes>
+      <li MayRequire="Sarg.AlphaMemes">AM_Iconoclast</li>
+    </disallowedMemes>
+	<modExtensions>
+		<li Class="HautsPermits.EBranchQuests">
+			<quests>
+				<li>HVMP_ArchiveEnigma</li>
+				<li>HVMP_ArchiveEntrant</li>
+				<li>HVMP_ArchiveEthnography</li>
+				<li>HVMP_ArchiveExcavation</li>
+				<li>HVMP_ArchiveExtraterrestrial</li>
+			</quests>
+			<donationTraderKind>HVMP_ArchiveDonations</donationTraderKind>
+		</li>
+	</modExtensions>
+  </FactionDef>
+  
+  <FactionDef ParentName="HVMP_EBranchFactionBase" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_EcosphereBranch</defName>
+    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch focuses on the maintenance of human-friendly terrestrial environments and, by extension, human healthcare.\n\nIt offers jobs to study new diseases, stabilize the climate, cull scaria-infected animals, and maintain or observe open spaces for wildlife. Those in good standing with this e-branch may solicit them for medical resources and technology, genetics, animals, clean energy, and temporary mechanite-based augmentations.</description>
+	<fixedName>Ecosphere Branch</fixedName>
+    <label>Ecosphere Branch</label>
+    <royalTitleTags>
+      <li>HVMP_EcosphereTitle</li>
+    </royalTitleTags>
+	<colorSpectrum>
+      <li>(0.4706,0.6157,0.749)</li>
+      <li>(0.3412,0.7529,0.4235)</li>
+    </colorSpectrum>
+	<requiredMemes>
+	  <li MayRequire="MortStrudel.MortIdeologyEnv">MI_Environmentalist</li>
+      <li MayRequire="VanillaExpanded.VMemesE">VME_Healthcare</li>
+	</requiredMemes>
+    <disallowedMemes>
+      <li MayRequire="MortStrudel.MortIdeologyEnv">MI_Industrialist</li>
+      <li MayRequire="Sarg.AlphaMemes">AM_BiologicalDefilers</li>
+      <li MayRequire="Sarg.AlphaMemes">AM_Deforestation</li>
+      <li MayRequire="VanillaExpanded.VMemesE">VME_HolyDiseases</li>
+    </disallowedMemes>
+	<modExtensions>
+		<li Class="HautsPermits.EBranchQuests">
+			<quests>
+				<li>HVMP_EcosphereCaseStudy</li>
+				<li>HVMP_EcosphereControlledEnvirons</li>
+				<li>HVMP_EcosphereFieldWork</li>
+				<li>HVMP_EcosphereHazardDisposal</li>
+				<li>HVMP_EcosphereRetroviralAgent</li>
+			</quests>
+			<donationTraderKind>HVMP_EcosphereDonations</donationTraderKind>
+		</li>
+	</modExtensions>
+  </FactionDef>
+  
+  <FactionDef ParentName="HVMP_EBranchFactionBase" MayRequire="Ludeon.RimWorld.Anomaly">
+    <defName>HVMP_OccultBranch</defName>
+    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch focuses on minimizing the danger of psychic phenomena.\n\nIt offers jobs to dispatch unnatural entities, weather psychic storms, and investigate or suppress powerful artifacts. Those in good standing with this e-branch may solicit them for psychic equipment, teleportation effects, infusions of psychic energy, and even the assistance of their archotech-influenced transhumans.</description>
+	<fixedName>Occult Branch</fixedName>
+    <label>Occult Branch</label>
+    <royalTitleTags>
+      <li>HVMP_OccultTitle</li>
+    </royalTitleTags>
+	<colorSpectrum>
+      <li>(0.7019,0,0.5843)</li>
+      <li>(0.0471,0,0.7019)</li>
+    </colorSpectrum>
+	<requiredMemes>
+	  <li>Ritualist</li>
+      <li MayRequire="VanillaExpanded.VMemesE">VME_PsychicFocus</li>
+	</requiredMemes>
+    <disallowedMemes>
+      <li MayRequire="Sarg.AlphaMemes">AM_PsychicVampirism</li>
+    </disallowedMemes>
+	<attackersDownPercentageRangeForAutoFlee>2</attackersDownPercentageRangeForAutoFlee><!--ghouls do not run in fear. they are ghouls.-->
+	<modExtensions>
+		<li Class="HautsPermits.EBranchQuests">
+			<quests>
+				<li>HVMP_OccultBarker</li><!--hey look, a mysterious object! I sure hope no malevolent monolithic entity from a lifeless hell dimension serviced by posthuman monstrosities is waiting for us to tamper with it-->
+				<li>HVMP_OccultFuller</li><!--til Hannibal in the show is not actually in prison, he's just like around.-->
+				<li>HVMP_OccultLovecraft</li><!--for the Nic Cage movie-->
+				<li>HVMP_OccultRomero</li><!--quintessential 'zombies'-->
+				<li>HVMP_OccultNatali</li><!--not the cube your colonists are thinking of, but a golden one nonetheless-->
+			</quests>
+			<donationTraderKind>HVMP_OccultDonations</donationTraderKind>
+			<tiedToAnomalyThreatFraction>true</tiedToAnomalyThreatFraction><!--WON'T ISSUE QUESTS IF the Anomaly playstyle is set to disabled. If set to your regularly scheduled monolith, it only starts offering quests once the thing activates; if in Ambient Horror, likelihood of offering quests is tied to the current Anomaly threat fraction.-->
+		</li>
+	</modExtensions>
+  </FactionDef>
+  
+</Defs>

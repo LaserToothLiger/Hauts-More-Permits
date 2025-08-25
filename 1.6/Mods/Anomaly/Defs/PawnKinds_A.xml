@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  
+  <PawnKindDef Name="HVMP_GhoulBase" ParentName="MutantBase" Abstract="True">
+    <defaultFactionType>HVMP_OccultBranch</defaultFactionType>
+    <mutant>Ghoul</mutant>
+    <generateInitialNonFamilyRelations>false</generateInitialNonFamilyRelations>
+    <combatPower>90</combatPower>
+    <gearHealthRange>0.2~0.4</gearHealthRange>
+    <itemQuality>Poor</itemQuality>
+    <apparelMoney>0~100</apparelMoney>
+    <apparelAllowHeadgearChance>0</apparelAllowHeadgearChance>
+    <apparelTags>
+      <li>IndustrialBasic</li>
+      <li>Neolithic</li>
+    </apparelTags>
+    <techHediffsTags>
+      <li>Ghoul</li>
+    </techHediffsTags>
+    <techHediffsChance>0.2</techHediffsChance>
+    <techHediffsMoney>9999~9999</techHediffsMoney>
+    <techHediffsMaxAmount>3</techHediffsMaxAmount>
+    <useFactionXenotypes>false</useFactionXenotypes>
+    <xenotypeSet>
+      <xenotypeChances>
+        <Hussar MayRequire="Ludeon.RimWorld.Biotech">0.1</Hussar>
+        <Neanderthal MayRequire="Ludeon.RimWorld.Biotech">0.075</Neanderthal>
+        <Yttakin MayRequire="Ludeon.RimWorld.Biotech">0.075</Yttakin>
+        <AG_Efreet MayRequire="sarg.alphagenes">0.075</AG_Efreet>
+        <Barkkin MayRequire="biotexpans.mammalia">0.075</Barkkin>
+        <Bonecrown MayRequire="biotexpans.mammalia">0.075</Bonecrown>
+        <Haytankard MayRequire="biotexpans.mammalia">0.075</Haytankard>
+        <RF_Rotfish MayRequire="Gene.Rotfish">0.075</RF_Rotfish>
+        <DV_Bogleg MayRequire="det.boglegs">0.075</DV_Bogleg>
+        <DV_Keshig MayRequire="det.keshig">0.075</DV_Keshig>
+        <RBM_Minotaur MayRequire="Rooboid.Minotaur">0.075</RBM_Minotaur>
+      </xenotypeChances>
+    </xenotypeSet>
+    <startingHediffs>
+      <li>
+        <def>HVMP_KickForAFK</def><!--my TEMPERATE SWAMP-->
+      </li>
+    </startingHediffs>
+	<modExtensions>
+	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+	</modExtensions>
+  </PawnKindDef>
+  <PawnKindDef ParentName="HVMP_GhoulBase">
+    <defName>HVMP_GhoulBasic</defName>
+    <label>ghoul</label>
+  </PawnKindDef>
+  <PawnKindDef ParentName="HVMP_GhoulBase">
+    <defName>HVMP_GhoulCyber</defName>
+    <label>cyber-ghoul</label>
+    <combatPower>120</combatPower>
+    <techHediffsChance>1</techHediffsChance>
+    <techHediffsMaxAmount>8</techHediffsMaxAmount>
+  </PawnKindDef>
+  <PawnKindDef ParentName="HVMP_GhoulBase">
+    <defName>HVMP_GhoulBionic</defName>
+    <label>bionic ghoul</label>
+    <combatPower>180</combatPower>
+    <techHediffsTags>
+      <li>Ghoul</li>
+      <li>Advanced</li>
+      <li>AdvancedWeapon</li>
+    </techHediffsTags>
+    <techHediffsChance>1</techHediffsChance>
+    <techHediffsMoney>12999~19999</techHediffsMoney>
+    <techHediffsMaxAmount>15</techHediffsMaxAmount>
+  </PawnKindDef>
+  <PawnKindDef ParentName="HVMP_GhoulBase">
+    <defName>HVMP_GhoulSuper</defName>
+    <label>super-ghoul</label>
+    <combatPower>1001</combatPower>
+    <techHediffsChance>1</techHediffsChance>
+    <techHediffsMoney>9999~9999</techHediffsMoney>
+    <techHediffsMaxAmount>8</techHediffsMaxAmount>
+    <startingHediffs>
+      <li>
+        <def>JuggernautSerum</def>
+        <durationTicksRange>600000</durationTicksRange> <!-- 10 days -->
+      </li>
+	  <li>
+	    <def>RapidRegeneration</def>
+	  </li>
+	  <li>
+	    <def>GoJuiceHigh</def>
+		<severity>1</severity>
+	  </li>
+	  <li>
+	    <def>YayoHigh</def>
+		<severity>1</severity>
+	  </li>
+	  <li>
+		<def>HVMP_OccultInvisibility</def>
+	  </li>
+      <li>
+        <def>DeathRefusal</def>
+      </li>
+    </startingHediffs>
+  </PawnKindDef>
+  
+  <PawnKindDef Name="NociosphereKindInstantEvil">
+    <defName>HVMP_PrimedNociosphere</defName>
+    <label>nociosphere</label>
+    <race>Nociosphere</race>
+    <canMeleeAttack>false</canMeleeAttack>
+    <hostileToAll>true</hostileToAll>
+    <allowOldAgeInjuries>false</allowOldAgeInjuries>
+    <defaultFactionType>Entities</defaultFactionType>
+    <immuneToGameConditionEffects>true</immuneToGameConditionEffects>
+    <preventIdeo>true</preventIdeo>
+    <canStrip>false</canStrip>
+    <immuneToTraps>true</immuneToTraps>
+    <collidesWithPawns>false</collidesWithPawns>
+    <ignoresPainShock>true</ignoresPainShock>
+    <minGenerationAge>200</minGenerationAge>
+    <useFixedRotation>true</useFixedRotation>
+    <fixedRotation>South</fixedRotation>
+    <overrideDebugActionCategory>Entity</overrideDebugActionCategory>
+    <abilities>
+      <li>EntitySkip</li>
+      <li>Heatspikes</li>
+      <li>FleshmelterBolt</li>
+      <li>AgonyPulse</li>
+    </abilities>
+    <combatPower>800</combatPower>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Things/Pawn/Nociosphere/Nociosphere_Center</texPath>
+          <graphicClass>Graphic_Single</graphicClass>
+          <drawSize>2</drawSize>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+    <startingHediffs>
+      <li>
+        <def>HVMP_ArentYouTiredOfBeingNice</def>
+      </li>
+    </startingHediffs>
+  </PawnKindDef>
+  
+</Defs>

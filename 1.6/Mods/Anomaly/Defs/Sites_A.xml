@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!--pax branch quests-->
+  <WorldObjectDef>
+    <defName>HVMP_Hypercube</defName>
+    <label>spatial anomaly</label>
+    <description>An extra volume of space that can only be accessed from this particular spot. The Occult Branch wants you to enter it and discover what lies inside.</description>
+    <worldObjectClass>HautsPermits_Occult.WorldObject_Hypercube</worldObjectClass>
+    <texture>Things/Building/Obelisk_Warped/WarpedObelisk</texture>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>Things/Building/Obelisk_Warped/WarpedObelisk</expandingIconTexture>
+    <expandingIconPriority>70</expandingIconPriority>
+    <comps>
+      <li Class="WorldObjectCompProperties_Timeout" />
+    </comps>
+  </WorldObjectDef>
+  <MapGeneratorDef Name="HVMP_Hypercube">
+    <defName>HVMP_Hypercube</defName>
+    <label>labyrinth</label>
+    <ignoreAreaRevealedLetter>true</ignoreAreaRevealedLetter>
+    <disableShadows>true</disableShadows>
+    <disableCallAid>true</disableCallAid>
+    <customMapComponents>
+      <li>HautsPermits_Occult.HVMP_HypercubeMapComponent</li>
+    </customMapComponents>
+    <pocketMapProperties>
+      <biome>Labyrinth</biome>
+      <temperature>25</temperature>
+    </pocketMapProperties>
+    <genSteps>
+      <li>HVMP_ImSOUpset</li>
+    </genSteps>
+  </MapGeneratorDef>
+  <GenStepDef>
+    <defName>HVMP_ImSOUpset</defName><!--MY FATHER'S HERE-->
+    <order>10</order>
+    <genStep Class="HautsPermits_Occult.GenStep_ImTiredOfBeinCalmAllTheGaddamnTime" />
+  </GenStepDef>
+  <LayoutDef>
+    <defName>HVMP_HypercubeLayout</defName>
+    <workerClass>HautsPermits_Occult.HVMP_LayoutWorkerHypercube</workerClass>
+    <canHaveMultipleLayoutsInRoom>true</canHaveMultipleLayoutsInRoom>
+    <multipleLayoutRoomChance>0.15</multipleLayoutRoomChance>
+    <roomDefs>
+      <li>LabyrinthEmpty</li>
+      <li>LabyrinthEndlessPit</li>
+      <li>HVMP_HypercubeObelisk</li>
+      <li>LabyrinthFloorEtchings</li>
+      <li>LabyrinthDeadBody</li>
+      <li>LabyrinthCorpseRoom</li>
+      <li>LabyrinthStatueDeadlife</li>
+      <li>LabyrinthStatueTeleporter</li>
+      <li>LabyrinthSleepingFleshbeast</li>
+      <li>LabyrinthAbandonedCamp</li>
+      <li>LabyrinthAnimalCorpses</li>
+      <li>LabyrinthHarbinger</li>
+      <li>LabyrinthTrees</li>
+      <li>LabyrinthAnimals</li>
+      <li>LabyrinthGrayBox</li>
+      <li>LabyrinthLargeGrayBox</li>
+      <li>LabyrinthLargeEmptyGrayBox</li>
+      <li>LabyrinthFloorRamblings</li>
+      <li MayRequire="Ludeon.RimWorld.Biotech">LabyrinthChildRoom</li>
+    </roomDefs>
+  </LayoutDef>
+  <LayoutRoomDef>
+    <defName>HVMP_HypercubeObelisk</defName>
+    <roomContentsWorkerType>HautsPermits_Occult.HVMP_RoomContentsObelisk</roomContentsWorkerType>
+    <dontPlaceRandomly>true</dontPlaceRandomly>
+    <isValidPlayerSpawnRoom>false</isValidPlayerSpawnRoom>
+  </LayoutRoomDef>
+  
+  <ThingDef ParentName="WarpedObelisk">
+    <defName>HVMP_WarpedObelisk_Hypercube</defName>
+    <label>warped obelisk</label>
+    <description>A large metallic pillar that emanates a psychic energy. It can be activated to return home.</description>
+    <destroyable>false</destroyable>
+    <useHitPoints>false</useHitPoints>
+    <drawerType>MapMeshOnly</drawerType>
+    <graphicData>
+      <texPath>Things/Building/Obelisk_Warped/WarpedObelisk</texPath>
+    </graphicData>
+    <statBases>
+      <Flammability>0</Flammability>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="HautsPermits_Occult.CompProperties_ObeliskHypercube">
+        <messageActivating>The obelisk has begun to activate.</messageActivating>
+        
+        <activeTicks>1</activeTicks>
+        <ticksToActivate>600</ticksToActivate>
+        <activateTexPath>UI/Commands/TriggerAbductorObelisk</activateTexPath>
+        
+        <activateLabelString>Activate...</activateLabelString>
+        <activateDescString>Activate the obelisk.</activateDescString>
+        <guiLabelString>Choose who should do this</guiLabelString>
+        <jobString>Activate obelisk</jobString>
+        <activatingStringPending>activating obelisk</activatingStringPending>
+        <activatingString>activating obelisk: {1}s</activatingString>
+        
+        <targetingParameters>
+          <canTargetBuildings>false</canTargetBuildings>
+          <canTargetAnimals>false</canTargetAnimals>
+          <canTargetMechs>false</canTargetMechs>
+          <onlyTargetControlledPawns>true</onlyTargetControlledPawns>
+        </targetingParameters>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--quests-->
+  <JobDef>
+    <defName>HVMP_InjectRetroviralPackage</defName>
+    <driverClass>HautsPermits_Biotech.JobDriver_InjectRpackage</driverClass>
+    <reportString>injecting gene-engineering package into TargetA.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+  
+  <!--permits-->
+  <JobDef>
+    <defName>HVMP_InjectChargecellBattery</defName>
+    <driverClass>HautsPermits.JobDriver_ChargecellBattery</driverClass>
+    <reportString>charging TargetA.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+  
+  <JobDef>
+    <defName>HVMP_InjectChargecellMech</defName>
+    <driverClass>HautsPermits.JobDriver_ChargecellMech</driverClass>
+    <reportString>charging TargetA.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+  
+</Defs>

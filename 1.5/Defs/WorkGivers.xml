@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <WorkGiverDef>
+    <defName>HVMP_StudyQuestItem</defName>
+    <label>study curio</label>
+    <giverClass>HautsPermits.WorkGiver_StudyQuestItem</giverClass>
+    <workType>Research</workType><!--although someone who is incapable of Commoner or All Work can still be made to study quest items by right clicking them or using such an item's magnifying glass gizmo on such a pawn-->
+    <verb>study curio</verb>
+    <gerund>studying curio at</gerund>
+    <priorityInType>104</priorityInType>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+	<fixedBillGiverDefs><!--they don't literally give bills, but this field is a List of ThingDefs, which suits our purposes-->
+	  <li>HVMP_DatedAtlas</li>
+	  <li MayRequire="Ludeon.RimWorld.Ideology">HVMP_StrangeArtifact</li>
+	  <li MayRequire="Ludeon.RimWorld.Biotech">HVMP_RetroviralPackage</li>
+	</fixedBillGiverDefs>
+    <canBeDoneByMechs>false</canBeDoneByMechs>
+  </WorkGiverDef>
+  
+</Defs>

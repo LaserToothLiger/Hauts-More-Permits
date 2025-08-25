@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!--super-ghoul invisibility-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_OccultInvisibility</defName>
+	<label>occult invisibility</label>
+	<description>A temporary state of psychic invisibility, specially devised for use by ghouls.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<isBad>false</isBad>
+	<initialSeverity>0.35</initialSeverity>
+	<comps>
+	  <li Class="HediffCompProperties_Invisibility">
+		<visibleToPlayer>true</visibleToPlayer>
+	  </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-24</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	</comps>
+  </HediffDef>
+  
+  <!--nociosphere instantly activates-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_ArentYouTiredOfBeingNice</defName>
+	<label>aren't you tired of being nice?</label>
+	<description>don't you just want to go apeshit?</description><!--internal timer of 5s to activate-->
+	<hediffClass>HautsPermits_Occult.Hediff_InstantKillMode</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+	    <becomeVisible>false</becomeVisible>
+	  </li>
+	</stages>
+  </HediffDef>
+  
+</Defs>

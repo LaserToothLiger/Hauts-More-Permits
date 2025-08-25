@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--Ghouls that get downed and then regenerate just... stick around indefinitely. We need them to leave.-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_KickForAFK</defName>
+	<label>eviction notice</label>
+	<description>Get out of my (temperate) swamp!</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+	    <becomeVisible>false</becomeVisible>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HautsPermits.HediffCompProperties_GetOffMyMap">
+		<minDuration>120000</minDuration><!--doesn't start trying to get them to leave until 2d has elapsed-->
+		<periodicity>2500</periodicity>
+	  </li>
+	</comps>
+  </HediffDef>
+  
+  <!--Pawns given to you for safekeeping get this temporary implant so that you can receive them in any conditions-->
+  <HediffDef ParentName="ImplantHediffBase">
+    <defName>HVMP_HostileEnvironmentFilm</defName>
+    <label>hostile environment film</label>
+	<hediffClass>HediffWithComps</hediffClass>
+    <description>A biodegradable ultratech film that protects against all manner of environmental conditions, including temperature extremes, toxic fallout, and vacuum. It breaks down after a while.</description>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statOffsets>
+		  <ToxicEnvironmentResistance>2</ToxicEnvironmentResistance>
+		  <VacuumResistance MayRequire="Ludeon.RimWorld.Odyssey">2</VacuumResistance>
+		  <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+		  <ComfyTemperatureMax>100</ComfyTemperatureMax>
+		  <P42_AllergicSensitivity MayRequire="phil42.allergies">-2</P42_AllergicSensitivity>
+		  <Mashed_Ashlands_AshResistance MayRequire="SirMashedPotato.Ashlands">2</Mashed_Ashlands_AshResistance>
+		  <Radiation MayRequire="Dubwise.Rimatomics">-2</Radiation>
+		</statOffsets>
+		<statFactors>
+		  <IncomingDamageFactor>0.5</IncomingDamageFactor>
+		</statFactors>
+        <totalBleedFactor>0.025</totalBleedFactor>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-1</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  
+  <!--Pax combat assist-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CombatAssistProgram</defName>
+    <label>pax combat assistance</label>
+    <description>A radio link to an automated live combat assistance program.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.9333,0.5961,0.5961)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statOffsets>
+		  <ShootingAccuracyPawn>3</ShootingAccuracyPawn>
+		  <MeleeHitChance>3</MeleeHitChance>
+		  <MeleeDodgeChance>3</MeleeDodgeChance>
+		  <VEF_VerbRangeFactor>0.2</VEF_VerbRangeFactor>
+		</statOffsets>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-6</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  <!--Pax scalpel-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_OrbitalScalpelMarker</defName>
+    <label>pax orbital scalpel</label>
+    <description>Get down, Mr. President!</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,0.2,0.2)</defaultLabelColor>
+    <stages>
+      <li>
+		<becomeVisible>false</becomeVisible>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	  <li Class="HautsPermits.HediffCompProperties_Flashlight"> <!--red light, neon light, stop light/everybody's got a little light under the sun-->
+		<ticksDelay>60</ticksDelay>
+		<damageType>Bomb</damageType>
+		<damage>30</damage>
+		<numHits>3</numHits>
+		<impactSound>Shot_TurretSniper</impactSound>
+		<mote>HVMP_DirectLineToHeaven</mote>
+		<scale>1</scale>
+	  </li>
+    </comps>
+  </HediffDef>
+  
+  <!--Rover caravan buffs-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CaravanForageAura</defName>
+    <label>rover route assist (foraging)</label>
+    <description>While on a caravan, everyone in the caravan forages twice the amount of food.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <comps>
+      <li Class="HautsPermits.HediffCompProperties_CaravanHediffAura">
+        <hediffs>
+		  <li>HVMP_CaravanForage</li>
+		</hediffs>
+		<affectsSelf>true</affectsSelf>
+		<affectsAllies>true</affectsAllies>
+		<affectsHostiles>true</affectsHostiles>
+      </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_CaravanForage</defName>
+		<label>foraging route assist</label>
+		<description>Information on best spots and practices for foraging, courtesy of real-time advisement from Rover Branch navigational services.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(1,1,1)</defaultLabelColor>
+		<initialSeverity>0.1001</initialSeverity>
+		<maxSeverity>0.1001</maxSeverity>
+		<stages>
+		  <li>
+			<statFactors>
+			  <ForagedNutritionPerDay>2</ForagedNutritionPerDay>
+			</statFactors>
+		  </li>
+		</stages>
+		<comps>
+		  <li Class="HediffCompProperties_SeverityPerDay">
+			<severityPerDay>-24</severityPerDay>
+		  </li>
+		  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+		</comps>
+	  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CaravanComfortAura</defName>
+    <label>rover route assist (comfort)</label>
+    <description>While on a caravan, everyone in the caravan rests easier, feels better, and gets bored slower.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <comps>
+      <li Class="HautsPermits.HediffCompProperties_CaravanHediffAura">
+        <hediffs>
+		  <li>HVMP_CaravanComfort</li>
+		</hediffs>
+		<affectsSelf>true</affectsSelf>
+		<affectsAllies>true</affectsAllies>
+		<affectsHostiles>true</affectsHostiles>
+      </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_CaravanComfort</defName>
+		<label>comforting route assist</label>
+		<description>Access to a plethora of radio chanenls for the road, courtesy of Rover Branch navigational services.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(1,1,1)</defaultLabelColor>
+		<initialSeverity>0.1001</initialSeverity>
+		<maxSeverity>0.1001</maxSeverity>
+		<stages>
+		  <li>
+			<statFactors>
+			  <JoyFallRateFactor>0.5</JoyFallRateFactor>
+			  <RestRateMultiplier>1.25</RestRateMultiplier>
+			</statFactors>
+			<statOffsets>
+			  <Hauts_BoredomDropPerDay>0.04</Hauts_BoredomDropPerDay>
+			</statOffsets>
+		  </li>
+		</stages>
+		<comps>
+		  <li Class="HediffCompProperties_SeverityPerDay">
+			<severityPerDay>-24</severityPerDay>
+		  </li>
+		  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+		</comps>
+	  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CaravanStealthAura</defName>
+    <label>rover route assist (stealth)</label>
+    <description>While on a caravan, its visibility is reduced to a twentieth its normal value.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <comps>
+      <li Class="HautsPermits.HediffCompProperties_CaravanHediffAura">
+        <hediffs>
+		  <li>HVMP_CaravanStealth</li>
+		</hediffs>
+		<affectsSelf>true</affectsSelf>
+		<affectsAllies>true</affectsAllies>
+		<affectsHostiles>true</affectsHostiles>
+      </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_CaravanStealth</defName>
+		<label>concealing route assist</label>
+		<description>Following a route optimized for evading detection, courtesy of real-time advisement from Rover Branch navigational services.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(1,1,1)</defaultLabelColor>
+		<initialSeverity>0.1001</initialSeverity>
+		<maxSeverity>0.1001</maxSeverity>
+		<stages>
+		  <li>
+			<statOffsets>
+			  <Hauts_PersonalCaravanVisibilityFactor>-0.95</Hauts_PersonalCaravanVisibilityFactor>
+			</statOffsets>
+		  </li>
+		</stages>
+		<comps>
+		  <li Class="HediffCompProperties_SeverityPerDay">
+			<severityPerDay>-24</severityPerDay>
+		  </li>
+		  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+		</comps>
+	  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CaravanSpeedAura</defName>
+    <label>rover route assist (stealth)</label>
+    <description>While on a caravan, its speed is increased.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <comps>
+      <li Class="HautsPermits.HediffCompProperties_CaravanHediffAura">
+        <hediffs>
+		  <li>HVMP_CaravanSpeed</li>
+		</hediffs>
+		<affectsSelf>true</affectsSelf>
+		<affectsAllies>true</affectsAllies>
+		<affectsHostiles>true</affectsHostiles>
+      </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_CaravanSpeed</defName>
+		<label>hastening route assist</label>
+		<description>Following a route optimized for speed, courtesy of real-time advisement from Rover Branch navigational services.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(1,1,1)</defaultLabelColor>
+		<initialSeverity>0.1001</initialSeverity>
+		<maxSeverity>0.1001</maxSeverity>
+		<stages>
+		  <li>
+			<statOffsets>
+			  <CaravanBonusSpeedFactor>0.2</CaravanBonusSpeedFactor>
+			</statOffsets>
+		  </li>
+		</stages>
+		<comps>
+		  <li Class="HediffCompProperties_SeverityPerDay">
+			<severityPerDay>-24</severityPerDay>
+		  </li>
+		  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+		</comps>
+	  </HediffDef>
+  
+</Defs>

@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!--Commerce-->
+  <RoyalTitleDef Abstract="True" Name="HVMP_BaseCommerceTitle" >
+    <tags>
+      <li>HVMP_CommerceTitle</li>
+    </tags>
+    <allowDignifiedMeditationFocus>False</allowDignifiedMeditationFocus>
+	<canBeInherited>false</canBeInherited>
+    <awardWorkerClass>RoyalTitleAwardWorker_Instant</awardWorkerClass>
+    <changeHeirQuestPoints>1000</changeHeirQuestPoints>
+  </RoyalTitleDef>
+  
+  <RoyalTitleDef ParentName="HVMP_BaseCommerceTitle">
+    <defName>HVMP_Commerce0</defName>
+    <label>commfriend</label>
+    <description>This individual has shown a willingness to work with the Commerce Branch.</description>
+    <seniority>0</seniority>
+    <favorCost>1</favorCost>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseCommerceTitle">
+    <defName>HVMP_CommerceI</defName>
+    <label>obverse (1)</label>
+    <description>This individual has the trust of the Commerce Branch, and as such has limited access to its economic tools.</description>
+    <seniority>100</seniority>
+    <favorCost>6</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseCommerceTitle">
+    <defName>HVMP_CommerceII</defName>
+    <label>exchanger (2)</label>
+    <description>This individual has the trust of the Commerce Branch, and may prevail upon it for occasional lesser favors.</description>
+    <seniority>200</seniority>
+    <favorCost>7</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseCommerceTitle">
+    <defName>HVMP_CommerceIII</defName>
+    <label>barterer (3)</label>
+    <description>This individual has the trust of the Commerce Branch, and may prevail upon it for occasional favors, such as making investments or bribes.</description>
+    <seniority>300</seniority>
+    <favorCost>8</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseCommerceTitle">
+    <defName>HVMP_CommerceIV</defName>
+    <label>trader (4)</label>
+    <description>This individual has the esteem of the Commerce Branch, and may prevail upon it for occasional favors, such as making investments, offering bribes, or obtaining resources.</description>
+    <seniority>400</seniority>
+    <favorCost>9</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseCommerceTitle">
+    <defName>HVMP_CommerceV</defName>
+    <label>investor (5)</label>
+    <description>This individual has the esteem of the Commerce Branch, and may prevail upon it for favors, such as making investments, offering bribes, or obtaining resources.</description>
+    <seniority>500</seniority>
+    <favorCost>10</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseCommerceTitle">
+    <defName>HVMP_CommerceVI</defName>
+    <label>financier (6)</label>
+    <description>This individual has the esteem of the Commerce Branch, and may prevail upon it for many favors, such as making investments, offering bribes to other factions, or obtaining resources.</description>
+    <seniority>600</seniority>
+    <favorCost>11</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseCommerceTitle">
+    <defName>HVMP_CommerceVII</defName>
+    <label>marketeer (7)</label>
+    <description>This individual has the high regard of the Commerce Branch, and may prevail upon it for many favors, such as making investments, offering bribes en masse, obtaining resources, or signaling traders.</description>
+    <seniority>700</seniority>
+    <favorCost>12</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseCommerceTitle">
+    <defName>HVMP_CommerceVIII</defName>
+    <label>bankroller (8)</label>
+    <description>This individual has the high regard of the Commerce Branch, and may prevail upon it for all manner of economic favors.</description>
+    <seniority>800</seniority>
+    <favorCost>13</favorCost>
+    <permitPointsAwarded>2</permitPointsAwarded>
+  </RoyalTitleDef>
+  
+  <!--Pax-->
+  <RoyalTitleDef Abstract="True" Name="HVMP_BasePaxTitle" >
+    <tags>
+      <li>HVMP_PaxTitle</li>
+    </tags>
+    <allowDignifiedMeditationFocus>False</allowDignifiedMeditationFocus>
+	<canBeInherited>false</canBeInherited>
+    <awardWorkerClass>RoyalTitleAwardWorker_Instant</awardWorkerClass>
+    <changeHeirQuestPoints>1000</changeHeirQuestPoints>
+  </RoyalTitleDef>
+  
+  <RoyalTitleDef ParentName="HVMP_BasePaxTitle">
+    <defName>HVMP_Pax0</defName>
+    <label>paxfriend</label>
+    <description>This individual has shown a willingness to work with the Pax Branch.</description>
+    <seniority>0</seniority>
+    <favorCost>1</favorCost>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BasePaxTitle">
+    <defName>HVMP_PaxI</defName>
+    <label>buckler (1)</label>
+    <description>This individual has the trust of the Pax Branch, and may prevail upon it for the occasional lesser favor, such as deploying automated defense turrets or soliciting mortar shells.</description>
+    <seniority>100</seniority>
+    <favorCost>6</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BasePaxTitle">
+    <defName>HVMP_PaxII</defName>
+    <label>targe (2)</label>
+    <description>This individual has the trust of the Pax Branch, and may prevail upon it for occasional lesser favors, such as deploying automated defense turrets or soliciting combat resources.</description>
+    <seniority>200</seniority>
+    <favorCost>7</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BasePaxTitle">
+    <defName>HVMP_PaxIII</defName>
+    <label>adarga (3)</label>
+    <description>This individual has the trust of the Pax Branch, and may prevail upon it for various occasional lesser favors, such as deploying automated defense turrets or soliciting combat resources.</description>
+    <seniority>300</seniority>
+    <favorCost>8</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BasePaxTitle">
+    <defName>HVMP_PaxIV</defName>
+    <label>aspis (4)</label>
+    <description>This individual has the esteem of the Pax Branch, and may prevail upon it for various occasional favors, such as deploying automated defense turrets, deploying shields, or soliciting combat resources.</description>
+    <seniority>400</seniority>
+    <favorCost>9</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BasePaxTitle">
+    <defName>HVMP_PaxV</defName>
+    <label>isihlangu (5)</label>
+    <description>This individual has the esteem of the Pax Branch, and may prevail upon it for various favors, such as deploying automated defenses, soliciting combat resources, or requisitioning the use of climate-affecting weapons.</description>
+    <seniority>500</seniority>
+    <favorCost>10</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BasePaxTitle">
+    <defName>HVMP_PaxVI</defName>
+    <label>scutum (6)</label>
+    <description>This individual has the esteem of the Pax Branch, and may prevail upon it for many favors, such as deploying automated defenses, soliciting combat resources, or requisitioning the use of climate-affecting weapons.</description>
+    <seniority>600</seniority>
+    <favorCost>11</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BasePaxTitle">
+    <defName>HVMP_PaxVII</defName>
+    <label>pavise (7)</label>
+    <description>This individual has the high regard of the Pax Branch, and may prevail upon it for many favors, such as deploying automated defenses, soliciting dangerously potent combat resources, requisitioning the use of climate-affecting weapons, or even calling down mech clusters.</description>
+    <seniority>700</seniority>
+    <favorCost>12</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BasePaxTitle">
+    <defName>HVMP_PaxVIII</defName>
+    <label>fortress (8)</label>
+    <description>This individual has the high regard of the Pax Branch, and may prevail upon it for a vast breadth of favors.</description>
+    <seniority>800</seniority>
+    <favorCost>13</favorCost>
+    <permitPointsAwarded>2</permitPointsAwarded>
+  </RoyalTitleDef>
+  
+  <!--Rover-->
+  <RoyalTitleDef Abstract="True" Name="HVMP_BaseRoverTitle" >
+    <tags>
+      <li>HVMP_RoverTitle</li>
+    </tags>
+    <allowDignifiedMeditationFocus>False</allowDignifiedMeditationFocus>
+	<canBeInherited>false</canBeInherited>
+    <awardWorkerClass>RoyalTitleAwardWorker_Instant</awardWorkerClass>
+    <changeHeirQuestPoints>1000</changeHeirQuestPoints>
+  </RoyalTitleDef>
+  
+  <RoyalTitleDef ParentName="HVMP_BaseRoverTitle">
+    <defName>HVMP_Rover0</defName>
+    <label>roverfriend</label>
+    <description>This individual has shown a willingness to work with the Rover Branch.</description>
+    <seniority>0</seniority>
+    <favorCost>1</favorCost>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseRoverTitle">
+    <defName>HVMP_RoverI</defName>
+    <label>roamling (1)</label>
+    <description>This individual has the trust of the Rover Branch, and may prevail upon it for the occasional lesser favor.</description>
+    <seniority>100</seniority>
+    <favorCost>6</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseRoverTitle">
+    <defName>HVMP_RoverII</defName>
+    <label>itinerant (2)</label>
+    <description>This individual has the trust of the Rover Branch, and may prevail upon it for occasional lesser favors.</description>
+    <seniority>200</seniority>
+    <favorCost>7</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseRoverTitle">
+    <defName>HVMP_RoverIII</defName>
+    <label>traveler (3)</label>
+    <description>This individual has the trust of the Rover Branch, and may prevail upon it for occasional favors, such as locating sites of interest or calling transportation.</description>
+    <seniority>300</seniority>
+    <favorCost>8</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseRoverTitle">
+    <defName>HVMP_RoverIV</defName>
+    <label>wayfarer (4)</label>
+    <description>This individual has the esteem of the Rover Branch, and may prevail upon it for occasional favors, such as locating sites of interest or calling transportation.</description>
+    <seniority>400</seniority>
+    <favorCost>9</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseRoverTitle">
+    <defName>HVMP_RoverV</defName>
+    <label>voyager (5)</label>
+    <description>This individual has the esteem of the Rover Branch, and may prevail upon it for favors, such as locating sites of interest or calling transportation.</description>
+    <seniority>500</seniority>
+    <favorCost>10</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseRoverTitle">
+    <defName>HVMP_RoverVI</defName>
+    <label>globetrotter (6)</label>
+    <description>This individual has the esteem of the Rover Branch, and may prevail upon it for many favors, such as locating multiple or unusual sites.</description>
+    <seniority>600</seniority>
+    <favorCost>11</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseRoverTitle">
+    <defName>HVMP_RoverVII</defName>
+    <label>surveyor (7)</label>
+    <description>This individual has the high regard of the Rover Branch, and may prevail upon it for many favors, such as locating multiple unusual sites.</description>
+    <seniority>700</seniority>
+    <favorCost>12</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseRoverTitle">
+    <defName>HVMP_RoverVIII</defName>
+    <label>cartographer (8)</label>
+    <description>This individual has the high regard of the Rover Branch, and may prevail upon it for a vast breadth of favors, such as locating multiple unusual sites.</description>
+    <seniority>800</seniority>
+    <favorCost>13</favorCost>
+    <permitPointsAwarded>2</permitPointsAwarded>
+  </RoyalTitleDef>
+  
+  <!--Archive-->
+  <RoyalTitleDef Abstract="True" Name="HVMP_BaseArchiveTitle" >
+    <tags>
+      <li>HVMP_ArchiveTitle</li>
+    </tags>
+    <allowDignifiedMeditationFocus>False</allowDignifiedMeditationFocus>
+	<canBeInherited>false</canBeInherited>
+    <awardWorkerClass>RoyalTitleAwardWorker_Instant</awardWorkerClass>
+    <changeHeirQuestPoints>1000</changeHeirQuestPoints>
+  </RoyalTitleDef>
+  
+  <RoyalTitleDef ParentName="HVMP_BaseArchiveTitle" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_Archive0</defName>
+    <label>archivefriend</label>
+    <description>This individual has shown a willingness to work with the Archive Branch.</description>
+    <seniority>0</seniority>
+    <favorCost>1</favorCost>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseArchiveTitle" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_ArchiveI</defName>
+    <label>recordkeeper (1)</label>
+    <description>This individual has the trust of the Archive Branch, and may prevail upon it for the occasional lesser favor, such as obtaining dossiers of information or improving items.</description>
+    <seniority>100</seniority>
+    <favorCost>6</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseArchiveTitle" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_ArchiveII</defName>
+    <label>archivist (2)</label>
+    <description>This individual has the trust of the Archive Branch, and may prevail upon it for occasional lesser favors, such as obtaining dossiers of information, improving items, or scanning the terrain.</description>
+    <seniority>200</seniority>
+    <favorCost>7</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseArchiveTitle" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_ArchiveIII</defName>
+    <label>preservationist (3)</label>
+    <description>This individual has the trust of the Archive Branch, and may prevail upon it for occasional lesser favors, such as obtaining unique kinds of ideoligious knowledge, improving items, or scanning the terrain.</description>
+    <seniority>300</seniority>
+    <favorCost>8</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseArchiveTitle" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_ArchiveIV</defName>
+    <label>anthropologist (4)</label>
+    <description>This individual has the esteem of the Archive Branch, and may prevail upon it for occasional favors, such as obtaining valuable forms of information, improving and restoring items, or scanning the terrain.</description>
+    <seniority>400</seniority>
+    <favorCost>9</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseArchiveTitle" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_ArchiveV</defName>
+    <label>docent (5)</label>
+    <description>This individual has the esteem of the Archive Branch, and may prevail upon it for favors, such as obtaining valuable forms of information, improving and restoring items, or scanning the terrain.</description>
+    <seniority>500</seniority>
+    <favorCost>10</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseArchiveTitle" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_ArchiveVI</defName>
+    <label>reliquarian (6)</label>
+    <description>This individual has the esteem of the Archive Branch, and may prevail upon it for many favors, such as obtaining valuable forms of information, improving and restoring items, or scanning the terrain.</description>
+    <seniority>600</seniority>
+    <favorCost>11</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseArchiveTitle" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_ArchiveVII</defName>
+    <label>antiquarian (7)</label>
+    <description>This individual has the high regard of the Archive Branch, and may prevail upon it for many favors, such as obtaining exotic items and artifacts, obtaining valuable forms of information, improving and restoring items, or scanning the terrain.</description>
+    <seniority>700</seniority>
+    <favorCost>12</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseArchiveTitle" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_ArchiveVIII</defName>
+    <label>akashic (8)</label>
+    <description>This individual has the high regard of the Archive Branch, and may prevail upon it for all manner of favors pertaining to knowledge and craftsmanship.</description>
+    <seniority>800</seniority>
+    <favorCost>13</favorCost>
+    <permitPointsAwarded>2</permitPointsAwarded>
+  </RoyalTitleDef>
+  
+  <!--Ecosphere-->
+  <RoyalTitleDef Abstract="True" Name="HVMP_BaseEcosphereTitle" >
+    <tags>
+      <li>HVMP_EcosphereTitle</li>
+    </tags>
+    <allowDignifiedMeditationFocus>False</allowDignifiedMeditationFocus>
+	<canBeInherited>false</canBeInherited>
+    <awardWorkerClass>RoyalTitleAwardWorker_Instant</awardWorkerClass>
+    <changeHeirQuestPoints>1000</changeHeirQuestPoints>
+  </RoyalTitleDef>
+  
+  <RoyalTitleDef ParentName="HVMP_BaseEcosphereTitle" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_Ecosphere0</defName>
+    <label>ecofriend</label>
+    <description>This individual has shown a willingness to work with the Ecosphere Branch.</description>
+    <seniority>0</seniority>
+    <favorCost>1</favorCost>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseEcosphereTitle" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_EcosphereI</defName>
+    <label>tender (1)</label>
+    <description>This individual has the trust of the Ecosphere Branch, and may prevail upon it for the occasional lesser favor, such as the delivery of small animals or cheap medical equipment.</description>
+    <seniority>100</seniority>
+    <favorCost>6</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseEcosphereTitle" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_EcosphereII</defName>
+    <label>gardener (2)</label>
+    <description>This individual has the trust of the Ecosphere Branch, and may prevail upon it for occasional lesser favors, such as the delivery of animals or direct medical aid.</description>
+    <seniority>200</seniority>
+    <favorCost>7</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseEcosphereTitle" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_EcosphereIII</defName>
+    <label>naturalist (3)</label>
+    <description>This individual has the trust of the Ecosphere Branch, and may prevail upon it for occasional favors, such as the delivery of animals, medical technology, or direct medical aid.</description>
+    <seniority>300</seniority>
+    <favorCost>8</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseEcosphereTitle" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_EcosphereIV</defName>
+    <label>environmentalist (4)</label>
+    <description>This individual has the esteem of the Ecosphere Branch, and may prevail upon it for occasional favors, such as the delivery of animals, medical aid, genetic manipulation, terraforming, or climate adjustment.</description>
+    <seniority>400</seniority>
+    <favorCost>9</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseEcosphereTitle" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_EcosphereV</defName>
+    <label>terraformer (5)</label>
+    <description>This individual has the esteem of the Ecosphere Branch, and may prevail upon it for favors, such as the delivery of animals, medical aid, genetic manipulation, terraforming, or climate adjustment.</description>
+    <seniority>500</seniority>
+    <favorCost>10</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseEcosphereTitle" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_EcosphereVI</defName>
+    <label>worldshaper (6)</label>
+    <description>This individual has the esteem of the Ecosphere Branch, and may prevail upon it for many favors, such as the delivery of animals, medical aid, genetic manipulation, terraforming, or climate adjustment.</description>
+    <seniority>600</seniority>
+    <favorCost>11</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseEcosphereTitle" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_EcosphereVII</defName>
+    <label>edenite (7)</label>
+    <description>This individual has the high regard of the Ecosphere Branch, and may prevail upon it for many advanced favors, such as the delivery of animals, medical aid, genetic manipulation, terraforming, or climate adjustment.</description>
+    <seniority>700</seniority>
+    <favorCost>12</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseEcosphereTitle" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_EcosphereVIII</defName>
+    <label>gaean (8)</label>
+    <description>This individual has the high regard of the Ecosphere Branch, and may prevail upon it for all manner of favors pertaining to medicine, health, flora, fauna, and the environment.</description>
+    <seniority>800</seniority>
+    <favorCost>13</favorCost>
+    <permitPointsAwarded>2</permitPointsAwarded>
+  </RoyalTitleDef>
+  
+  <!--Occult-->
+  <RoyalTitleDef Abstract="True" Name="HVMP_BaseOccultTitle" >
+    <tags>
+      <li>HVMP_OccultTitle</li>
+    </tags>
+    <allowDignifiedMeditationFocus>False</allowDignifiedMeditationFocus>
+	<canBeInherited>false</canBeInherited>
+    <awardWorkerClass>RoyalTitleAwardWorker_Instant</awardWorkerClass>
+    <changeHeirQuestPoints>1000</changeHeirQuestPoints>
+  </RoyalTitleDef>
+  
+  <RoyalTitleDef ParentName="HVMP_BaseOccultTitle" MayRequire="Ludeon.RimWorld.Anomaly">
+    <defName>HVMP_Occult0</defName>
+    <label>occultfriend</label>
+    <description>This individual has shown a willingness to work with the Occult Branch.</description>
+    <seniority>0</seniority>
+    <favorCost>1</favorCost>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseOccultTitle" MayRequire="Ludeon.RimWorld.Anomaly">
+    <defName>HVMP_OccultI</defName>
+    <label>aware (1)</label>
+    <description>This individual has the trust of the Occult Branch, and may prevail upon it for the occasional lesser favor, such as _.</description>
+    <seniority>100</seniority>
+    <favorCost>6</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseOccultTitle" MayRequire="Ludeon.RimWorld.Anomaly">
+    <defName>HVMP_OccultII</defName>
+    <label>neophyte (2)</label>
+    <description>This individual has the trust of the Occult Branch, and may prevail upon it for occasional lesser favors, such as _.</description>
+    <seniority>200</seniority>
+    <favorCost>7</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseOccultTitle" MayRequire="Ludeon.RimWorld.Anomaly">
+    <defName>HVMP_OccultIII</defName>
+    <label>dabbler (3)</label>
+    <description>This individual has the trust of the Occult Branch, and may prevail upon it for occasional favors, such as _.</description>
+    <seniority>300</seniority>
+    <favorCost>8</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseOccultTitle" MayRequire="Ludeon.RimWorld.Anomaly">
+    <defName>HVMP_OccultIV</defName>
+    <label>tamperer (4)</label>
+    <description>This individual has the esteem of the Occult Branch, and may prevail upon it for occasional favors, such as _.</description>
+    <seniority>400</seniority>
+    <favorCost>9</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseOccultTitle" MayRequire="Ludeon.RimWorld.Anomaly">
+    <defName>HVMP_OccultV</defName>
+    <label>practitioner (5)</label>
+    <description>This individual has the esteem of the Occult Branch, and may prevail upon it for favors, such as _.</description>
+    <seniority>500</seniority>
+    <favorCost>10</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseOccultTitle" MayRequire="Ludeon.RimWorld.Anomaly">
+    <defName>HVMP_OccultVI</defName>
+    <label>convoker (6)</label>
+    <description>This individual has the esteem of the Occult Branch, and may prevail upon it for many favors, such as _.</description>
+    <seniority>600</seniority>
+    <favorCost>11</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseOccultTitle" MayRequire="Ludeon.RimWorld.Anomaly">
+    <defName>HVMP_OccultVII</defName>
+    <label>thaumaturge (7)</label>
+    <description>This individual has the high regard of the Occult Branch, and may prevail upon it for many favors, such as _.</description>
+    <seniority>700</seniority>
+    <favorCost>12</favorCost>
+    <permitPointsAwarded>1</permitPointsAwarded>
+  </RoyalTitleDef>
+  <RoyalTitleDef ParentName="HVMP_BaseOccultTitle" MayRequire="Ludeon.RimWorld.Anomaly">
+    <defName>HVMP_OccultVIII</defName>
+    <label>revelantor (8)</label>
+    <description>This individual has the high regard of the Occult Branch, and may prevail upon it for all manner of favors pertaining to psychic phenomena and related technology.</description>
+    <seniority>800</seniority>
+    <favorCost>13</favorCost>
+    <permitPointsAwarded>2</permitPointsAwarded>
+  </RoyalTitleDef>
+  
+</Defs>

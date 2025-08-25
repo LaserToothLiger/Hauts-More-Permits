@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <ThingDef ParentName="MoteBase">
+	<defName>HVMP_DirectLineToHeaven</defName>
+	<thingClass>HautsPermits.MoteScalpel</thingClass>
+	<altitudeLayer>MoteOverhead</altitudeLayer>
+	<mote>
+		<fadeInTime>1.05</fadeInTime>
+		<fadeOutTime>1.05</fadeOutTime>
+		<solidTime>1.05</solidTime>
+		<needsMaintenance>true</needsMaintenance>
+	</mote>
+	<graphicData>
+	  <graphicClass>Graphic_Single</graphicClass>
+	  <color>(1,0.3,0.12,0.01)</color>
+	  <texPath>Things/Ethereal/Tornado</texPath>
+	  <drawSize>3</drawSize>
+	</graphicData>
+  </ThingDef>
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>HVMP_BribeGlow</defName>
+    <graphicData>
+      <texPath>UI/Buttons/TradeMode</texPath>
+      <shaderType>MoteGlow</shaderType>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0.08</fadeInTime>
+    <solidTime>0.08</solidTime>
+    <fadeOutTime>0.35</fadeOutTime>
+  </FleckDef>
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>HVMP_RepairGlow</defName>
+    <graphicData>
+      <texPath>Things/Mote/HealingCross</texPath>
+      <shaderType>MoteGlow</shaderType>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0.08</fadeInTime>
+    <solidTime>0.08</solidTime>
+    <fadeOutTime>0.35</fadeOutTime>
+  </FleckDef>
+  
+</Defs>

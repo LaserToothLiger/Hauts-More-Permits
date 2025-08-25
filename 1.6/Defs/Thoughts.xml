@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThoughtDef>
+    <defName>HVMP_CaravanComfortMood</defName>
+    <workerClass>ThoughtWorker_Hediff</workerClass>
+    <hediff>HVMP_CaravanComfort</hediff>
+    <validWhileDespawned>true</validWhileDespawned>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <stages>
+      <li>
+        <label>rover radio</label>
+        <description>Entertainment on the go! Rover Radio is the new hotness.</description>
+        <baseMoodEffect>5</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+</Defs>

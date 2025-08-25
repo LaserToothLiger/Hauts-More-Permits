@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--quest hediffs-->
+  <HediffDef ParentName="DiseaseBase">
+    <defName>HVMP_Neopathy</defName>
+    <label>neopathy</label>
+    <description>A new disease of unknown cause and nature. Though superficially similar to blood rot, it may possess unknown properties which will reveal themselves over time.\n\nThe Ecosphere Branch has tasked you with studying it and, if possible, curing the patient. Every tending attempt has a chance to discover the methodology for a cure, but the longer it takes the more symptoms the disease can display.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+	<scenarioCanAdd>false</scenarioCanAdd>
+    <lethalSeverity>1</lethalSeverity>
+    <makesSickThought>true</makesSickThought>
+    <minSeverity>0.001</minSeverity>
+    <initialSeverity>0.001</initialSeverity>
+    <stages>
+      <li>
+        <label>minor</label>
+        <capMods>
+          <li>
+            <capacity>BloodFiltration</capacity>
+            <offset>-0.05</offset>
+          </li>
+          <li>
+            <capacity>BloodPumping</capacity>
+            <offset>-0.05</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <minSeverity>0.6</minSeverity>
+        <label>major</label>
+        <vomitMtbDays>1.5</vomitMtbDays>
+        <capMods>
+            <li>
+            <capacity>BloodFiltration</capacity>
+            <offset>-0.1</offset>
+          </li>
+          <li>
+            <capacity>BloodPumping</capacity>
+            <offset>-0.1</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <minSeverity>0.85</minSeverity>
+        <label>extreme</label>
+        <lifeThreatening>true</lifeThreatening>
+        <vomitMtbDays>0.75</vomitMtbDays>
+        <painOffset>0.05</painOffset>
+        <capMods>
+            <li>
+            <capacity>BloodFiltration</capacity>
+            <offset>-0.15</offset>
+          </li>
+          <li>
+            <capacity>BloodPumping</capacity>
+            <offset>-0.15</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+    <tendable>true</tendable>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>0.4</severityPerDay>
+      </li>
+      <li Class="HautsPermits_Biotech.HediffCompProperties_NeopathyComplications">
+		<complicationCount>2~5</complicationCount>
+        <nextComplicationTimer>60000~420000</nextComplicationTimer><!--1-7d-->
+		<possibleComplications>
+		  <li>HVMP_ComplicationArterialTears</li>
+		  <li>HVMP_ComplicationAudiovisualHallucinations</li>
+		  <li>HVMP_ComplicationBurningMetabolism</li>
+		  <li>HVMP_ComplicationConstantLethargy</li>
+		  <li>HVMP_ComplicationFibrosis</li>
+		  <li>HVMP_ComplicationFragility</li>
+		  <li>HVMP_ComplicationInternalDecay</li>
+		  <li>HVMP_ComplicationLockjaw</li>
+		  <li>HVMP_ComplicationMiasmaticRot</li>
+		  <li>HVMP_ComplicationProgressiveFever</li>
+		  <li>HVMP_ComplicationSporadicStupor</li>
+		  <li>HVMP_ComplicationUncontrollableEmesis</li>
+		</possibleComplications>
+		<chanceTendRevealsCureMethod>10.1</chanceTendRevealsCureMethod>
+		<tendDiscoveryRange>3~40</tendDiscoveryRange><!--tends can only reveal the cure from the 3rd tend onward. However, if you somehow fail a 10% chance 36 times in a row you will succeed on the 37th.
+															Assuming you somehow tend the patient instantly every time, this procs on day 35-->
+        <severityPerDayTended>-1</severityPerDayTended>
+        <baseTendDurationHours>24</baseTendDurationHours>
+      </li>
+    </comps>
+  </HediffDef>
+	  <HediffDef Name="HVMP_NCBase" ParentName="HVT_TraitHediffBase" Abstract="True">
+		<isBad>true</isBad>
+		<defaultLabelColor>(1, 1, 0.92)</defaultLabelColor>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationArterialTears</defName>
+		<label>arterial tears</label>
+		<description>A neopathic complication which weakens the arterial walls. This results in occasional tears, leading to frequent heart attacks.</description>
+		<stages>
+		  <li>
+			<hediffGivers>
+			  <li Class="HediffGiver_Random">
+				<hediff>HeartAttack</hediff>
+				<mtbDays>6</mtbDays>
+			  </li>
+			</hediffGivers>
+		  </li>
+		</stages>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationAudiovisualHallucinations</defName>
+		<label>audiovisual hallucinations</label>
+		<description>A neopathic complication that plays havoc with the occipital lobe and auditory cortex, resulting in intrusive, surreal hallucinations. Though it may be easy to tell they are fake, they nevertheless obfuscate the actual sight-and-soundscape.</description>
+		<stages>
+		  <li>
+			<capMods>
+			  <li>
+				<capacity>Sight</capacity>
+				<postFactor>0.35</postFactor>
+			  </li>
+			  <li>
+				<capacity>Hearing</capacity>
+				<postFactor>0.35</postFactor>
+			  </li>
+			</capMods>
+		  </li>
+		</stages>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationBurningMetabolism</defName>
+		<label>burning metabolism</label>
+		<description>A neopathic complication which rapidly burns up stored calories, raising body temperature and increasing the need for food.</description>
+		<stages>
+		  <li>
+			<hungerRateFactor>2</hungerRateFactor>
+		    <statOffsets>
+				<ComfyTemperatureMin>-6</ComfyTemperatureMin>
+				<ComfyTemperatureMax>-6</ComfyTemperatureMax>
+			</statOffsets>
+		  </li>
+		</stages>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationConstantLethargy</defName>
+		<label>constant lethargy</label>
+		<description>A neopathic complication which induces a state of perpetual tiredness. Even at the peak of alertness, the patient's movements are sluggish.</description>
+		<stages>
+		  <li>
+			<label>initial</label>
+		    <statFactors>
+				<MoveSpeed>0.7</MoveSpeed>
+				<CrawlSpeed>0.7</CrawlSpeed>
+			</statFactors>
+			<statOffsets>
+			  <RestFallRateFactor>2</RestFallRateFactor>
+			</statOffsets>
+		  </li>
+		</stages>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationFibrosis</defName>
+		<label>fibrosis</label>
+		<description>A neopathic complication which makes the joints difficult and painful to move.</description>
+		<stages>
+		  <li>
+			<painOffset>0.1</painOffset>
+			<capMods>
+			  <li>
+				<capacity>Moving</capacity>
+				<offset>-0.3</offset>
+			  </li>
+			  <li>
+				<capacity>Manipulation</capacity>
+				<offset>-0.3</offset>
+			  </li>
+			</capMods>
+		  </li>
+		</stages>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationFragility</defName>
+		<label>fragility</label>
+		<description>A neopathic complication which embrittles much of the body's connective tissues. It makes even the slightest motions painful.</description>
+		<stages>
+		  <li>
+			<painOffset>0.1</painOffset>
+			<label>initial</label>
+		    <statFactors><IncomingDamageFactor>1.4</IncomingDamageFactor></statFactors>
+		  </li>
+		</stages>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationInternalDecay</defName>
+		<label>internal decay</label>
+		<description>A neopathic complication. The disease is producing toxic protein isoforms. These isoforms will semi-randomly aggregate in different internal organs, causing them to slowly but irreversibly decay.</description>
+		<stages>
+		  <li>
+			<hediffGivers>
+			  <li Class="HediffGiver_Random">
+				<hediff>OrganDecay</hediff>
+				<mtbDays>10</mtbDays>
+				<partsToAffect>
+				  <li>Heart</li>
+				  <li>Lung</li>
+				  <li>Kidney</li>
+				</partsToAffect>
+			  </li>
+			</hediffGivers>
+		  </li>
+		</stages>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationLockjaw</defName>
+		<label>lockjaw</label>
+		<description>A neopathic complication that seizes up the jaw muscles, preventing speech and making eating a difficult proposition.</description>
+		<stages>
+		  <li>
+			<capMods>
+			  <li>
+				<capacity>Eating</capacity>
+				<postFactor>0.1</postFactor>
+			  </li>
+			  <li>
+				<capacity>Talking</capacity>
+				<postFactor>0</postFactor>
+			  </li>
+			</capMods>
+		  </li>
+		</stages>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationMiasmaticRot</defName>
+		<label>miasmatic rot</label>
+		<description>A neopathic complication that exudes a foul, rotting stench.</description>
+		<hediffClass>HautsPermits_Biotech.Hediff_MiasmaticRot</hediffClass>
+		<stages>
+		  <li>
+			<capMods>
+			  <li>
+				<capacity>BloodFiltration</capacity>
+				<postFactor>0.95</postFactor>
+			  </li>
+			</capMods>
+		  </li>
+		</stages>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationProgressiveFever</defName>
+		<label>progressive fever</label>
+		<description>A neopathic complication in which the body's internal temperatures run haywire. It would be best to keep the patient in a temperature-controlled facility to avoid heatstroke.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<initialSeverity>0.001</initialSeverity>
+		<maxSeverity>4</maxSeverity>
+		<stages>
+		  <li>
+			<label>initial</label>
+		    <statOffsets><ComfyTemperatureMax>-2</ComfyTemperatureMax></statOffsets>
+		  </li>
+		  <li>
+			<minSeverity>1</minSeverity>
+			<label>minor</label>
+		    <statOffsets><ComfyTemperatureMax>-5</ComfyTemperatureMax></statOffsets>
+		  </li>
+		  <li>
+			<minSeverity>2</minSeverity>
+			<label>medium</label>
+		    <statOffsets><ComfyTemperatureMax>-9</ComfyTemperatureMax></statOffsets>
+		  </li>
+		  <li>
+			<minSeverity>3</minSeverity>
+			<label>major</label>
+		    <statOffsets><ComfyTemperatureMax>-14</ComfyTemperatureMax></statOffsets>
+		  </li>
+		  <li>
+			<minSeverity>4</minSeverity>
+			<label>extreme</label>
+		    <statOffsets><ComfyTemperatureMax>-20</ComfyTemperatureMax></statOffsets>
+		  </li>
+		</stages>
+		<comps>
+		  <li Class="HediffCompProperties_SeverityPerDay">
+			<severityPerDay>0.5</severityPerDay>
+		  </li>
+		</comps>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationSporadicStupor</defName>
+		<label>sporadic stupor</label>
+		<description>A neopathic complication which afflicts the brain, occasionally resulting in a laconic state of total disconnect from present circumstances. While in a stupor, the patient will wander aimlessly.</description>
+		<stages>
+		  <li>
+			<mentalStateGivers>
+			  <li>
+				<mentalState>WanderConfused</mentalState>
+				<mtbDays>1</mtbDays>
+			  </li>
+			</mentalStateGivers>
+		  </li>
+		</stages>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationUncontrollableEmesis</defName>
+		<label>uncontrollable emesis</label>
+		<description>A neopathic complication which causes random bouts of vomiting and weakens the digestive system.</description>
+		<stages>
+		  <li>
+			<vomitMtbDays>0.2</vomitMtbDays>
+			<capMods>
+			  <li>
+				<capacity>Metabolism</capacity>
+				<postFactor>0.9</postFactor>
+			  </li>
+			</capMods>
+		  </li>
+		</stages>
+	  </HediffDef>
+  
+  <RecipeDef ParentName="SurgeryFlesh">
+    <defName>HVMP_CureNeopathy</defName>
+    <label>cure neopathy</label>
+    <description>This special medical operation cures the patient's neopathy.</description>
+    <workerClass>HautsPermits_Biotech.Recipe_RemoveNeopathy</workerClass>
+    <jobString>Curing neopathy.</jobString>
+    <workAmount>4500</workAmount>
+    <hideBodyPartNames>true</hideBodyPartNames>
+    <isViolation>false</isViolation>
+    <targetsBodyPart>false</targetsBodyPart>
+    <removesHediff>HVMP_Neopathy</removesHediff>
+    <successfullyRemovedHediffMessage>{0} has successfully cured {1}'s neopathy.</successfullyRemovedHediffMessage>
+    <skillRequirements>
+      <Medicine>8</Medicine>
+    </skillRequirements>
+    <ingredients>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>3</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <categories>
+        <li>Medicine</li>
+      </categories>
+    </fixedIngredientFilter>
+  </RecipeDef>
+  
+</Defs>

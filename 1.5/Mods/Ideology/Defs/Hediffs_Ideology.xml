@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--Archive book-granted buffs-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_EsotericBookBuff</defName>
+    <label>ideoligious esoterica</label>
+    <description>A state of increased faith in one's ideoligion.\n\nCaused by reading an "ideoligious esoterica" book.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>0.001</initialSeverity>
+	<maxSeverity>5</maxSeverity>
+    <stages>
+      <li>
+		<minSeverity>1</minSeverity>
+		<statFactors>
+		  <CertaintyLossFactor>0.75</CertaintyLossFactor>
+		  <ConversionPower>1.2</ConversionPower>
+		  <Hauts_IdeoThoughtFactor>1.25</Hauts_IdeoThoughtFactor>
+		  <Hauts_IdeoAbilityDurationSelf>1.25</Hauts_IdeoAbilityDurationSelf>
+		</statFactors>
+      </li>
+      <li>
+		<minSeverity>2</minSeverity>
+		<statFactors>
+		  <CertaintyLossFactor>0.5</CertaintyLossFactor>
+		  <ConversionPower>1.4</ConversionPower>
+		  <Hauts_IdeoThoughtFactor>1.5</Hauts_IdeoThoughtFactor>
+		  <Hauts_IdeoAbilityDurationSelf>1.5</Hauts_IdeoAbilityDurationSelf>
+		</statFactors>
+      </li>
+      <li>
+		<minSeverity>3</minSeverity>
+		<statFactors>
+		  <CertaintyLossFactor>0.25</CertaintyLossFactor>
+		  <ConversionPower>1.6</ConversionPower>
+		  <Hauts_IdeoThoughtFactor>1.75</Hauts_IdeoThoughtFactor>
+		  <Hauts_IdeoAbilityDurationSelf>1.75</Hauts_IdeoAbilityDurationSelf>
+		</statFactors>
+      </li>
+      <li>
+		<minSeverity>4</minSeverity>
+		<statFactors>
+		  <CertaintyLossFactor>0.1</CertaintyLossFactor>
+		  <ConversionPower>1.8</ConversionPower>
+		  <Hauts_IdeoThoughtFactor>2</Hauts_IdeoThoughtFactor>
+		  <Hauts_IdeoAbilityDurationSelf>2</Hauts_IdeoAbilityDurationSelf>
+		</statFactors>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>300</disappearsAfterTicks><!--to ensure it can't get removed if you're continuously reading-->
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_MeditativeBookBuff</defName>
+    <label>ideoligious mantra</label>
+    <description>A calmer, more focused mental state.\n\nCaused by reading an "ideoligious meditations" book.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>0.001</initialSeverity>
+	<maxSeverity>5</maxSeverity>
+    <stages>
+      <li>
+		<minSeverity>1</minSeverity>
+		<statFactors>
+		  <MeditationFocusGain MayRequireAnyOf="Ludeon.RimWorld.Royalty,Ludeon.RimWorld.Biotech">1.1</MeditationFocusGain>
+		  <RestFallRateFactor>0.9</RestFallRateFactor>
+		  <JoyFallRateFactor>0.9</JoyFallRateFactor>
+		</statFactors>
+		<statOffsets><Hauts_PsyfocusRegenRate MayRequire="Ludeon.RimWorld.Royalty">0.015</Hauts_PsyfocusRegenRate><MentalBreakThreshold>-0.04</MentalBreakThreshold></statOffsets>
+      </li>
+      <li>
+		<minSeverity>2</minSeverity>
+		<statFactors>
+		  <MeditationFocusGain MayRequireAnyOf="Ludeon.RimWorld.Royalty,Ludeon.RimWorld.Biotech">1.2</MeditationFocusGain>
+		  <RestFallRateFactor>0.8</RestFallRateFactor>
+		  <JoyFallRateFactor>0.8</JoyFallRateFactor>
+		</statFactors>
+		<statOffsets><Hauts_PsyfocusRegenRate MayRequire="Ludeon.RimWorld.Royalty">0.03</Hauts_PsyfocusRegenRate><MentalBreakThreshold>-0.08</MentalBreakThreshold></statOffsets>
+      </li>
+      <li>
+		<minSeverity>3</minSeverity>
+		<statFactors>
+		  <MeditationFocusGain MayRequireAnyOf="Ludeon.RimWorld.Royalty,Ludeon.RimWorld.Biotech">1.3</MeditationFocusGain>
+		  <RestFallRateFactor>0.7</RestFallRateFactor>
+		  <JoyFallRateFactor>0.7</JoyFallRateFactor>
+		</statFactors>
+		<statOffsets><Hauts_PsyfocusRegenRate MayRequire="Ludeon.RimWorld.Royalty">0.045</Hauts_PsyfocusRegenRate><MentalBreakThreshold>-0.12</MentalBreakThreshold></statOffsets>
+      </li>
+      <li>
+		<minSeverity>4</minSeverity>
+		<statFactors>
+		  <MeditationFocusGain MayRequireAnyOf="Ludeon.RimWorld.Royalty,Ludeon.RimWorld.Biotech">1.4</MeditationFocusGain>
+		  <RestFallRateFactor>0.6</RestFallRateFactor>
+		  <JoyFallRateFactor>0.6</JoyFallRateFactor>
+		</statFactors>
+		<statOffsets><Hauts_PsyfocusRegenRate MayRequire="Ludeon.RimWorld.Royalty">0.06</Hauts_PsyfocusRegenRate><MentalBreakThreshold>-0.16</MentalBreakThreshold></statOffsets>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>300</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+  </HediffDef>
+  
+</Defs>

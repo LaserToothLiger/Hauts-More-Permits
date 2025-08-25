@@ -1,0 +1,670 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--Archive level 1-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_RefineToGood</defName>
+    <label>good refinement</label>
+    <description>Delivers a dose of short-lived mechanites to the target non-artifact, non-artwork, non-building item, improving its quality by 1 stage. This can't bring an item above Good-quality.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_AlterItemQuality</workerClass>
+    <minTitle>HVMP_ArchiveI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>10</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(0,0)</uiPosition>
+    <royalAid>
+      <favorCost>1</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<invalidTargetMessage>HVMP_TargetToGood</invalidTargetMessage>
+			<soundDef>NeuralSupercharger_Injection</soundDef>
+			<extraNumber>0~2</extraNumber><!--can target items of Awful through Normal quality-->
+			<gambaFactorRange>0</gambaFactorRange><!--chance to poof item-->
+			<onUseMessage>HVMP_QualityBoost</onUseMessage>
+			<forbiddenThingCategories>
+			  <li>Artifacts</li>
+			  <li>Books</li>
+			  <li>BuildingsArt</li>
+			</forbiddenThingCategories>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_RestoreItem</defName>
+    <label>restore item</label>
+    <description>Delivers a dose of short-lived mechanites to the target building or item, instantly repairing it for 100 hit points.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_RestoreItemHP</workerClass>
+    <minTitle>HVMP_ArchiveI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>10</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(0,1)</uiPosition>
+    <royalAid>
+      <favorCost>1</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<invalidTargetMessage>HVMP_TargetDamaged</invalidTargetMessage>
+			<soundDef>NeuralSupercharger_Injection</soundDef>
+			<extraNumber>100</extraNumber>
+			<onUseMessage>HVMP_RestoredItem</onUseMessage>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_SchematicDrop</defName>
+    <label>schematic drop</label>
+    <description>Call for a random schematic from the Archive Branch, which can be read to gain progress towards a research project.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropBook_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <uiPosition>(0,2)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<phenomenonCount>1</phenomenonCount>
+			<bookDef>Schematic</bookDef>
+			<bookSuperQualityChance>0</bookSuperQualityChance>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_TextbookDrop</defName>
+    <label>textbook drop</label>
+    <description>Call for an instructional textbook from the Archive Branch.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropBook_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <uiPosition>(0,3)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<phenomenonCount>1</phenomenonCount>
+			<bookDef>TextBook</bookDef>
+			<bookSuperQualityChance>0</bookSuperQualityChance>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ObscureScriptureDrop</defName>
+    <label>obscure scripture drop</label>
+    <description>Call for a random ideoligious tract from the Archive Branch, which can be read to learn about an ideoligion from a distant world and time. Non-believers will slowly be converted while reading the scripture, while believers will gain certainty from reading it.</description>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <uiPosition>(0,5)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<extraNumber>0</extraNumber><!--in this case, this is the chance the generated book is of the caller's ideo-->
+			<phenomenonCount>1</phenomenonCount>
+			<bookDef>HVMP_ObscureScripture</bookDef>
+			<bookSuperQualityChance>0.1</bookSuperQualityChance>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="DimonSever000.FactionLanguages">
+		<defName>HVMP_LanguageBookDrop</defName>
+		<label>language book drop</label>
+		<description>Call for a language-teaching book from the Archive Branch.</description>
+		<workerClass>HautsPermits.RoyalTitlePermitWorker_DropBook_PTargFriendly</workerClass>
+		<minTitle>HVMP_ArchiveI</minTitle>
+		<faction>HVMP_ArchiveBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>15</cooldownDays>
+		<uiPosition>(0,6)</uiPosition>
+		<royalAid>
+		  <favorCost>3</favorCost>
+		</royalAid>
+		<modExtensions>
+			<li Class="HautsFramework.PermitMoreEffects">
+				<phenomenonCount>1</phenomenonCount>
+				<bookDef>LanguageBook</bookDef>
+				<bookSuperQualityChance>0</bookSuperQualityChance>
+			</li>
+		</modExtensions>
+	  </RoyalTitlePermitDef>
+  <!--Archive level 2-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ScannerSweep</defName>
+    <label>revealing scan</label>
+    <description>Reveals the targeted hidden cell. If it is inside of a room, the rest of the room will be revealed as well.</description>
+	<workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_ScannerSweep</workerClass>
+    <minTitle>HVMP_ArchiveII</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>1</cooldownDays>
+    <uiPosition>(1,3)</uiPosition>
+    <royalAid>
+      <favorCost>1</favorCost>
+	  <targetingRequireLOS>false</targetingRequireLOS>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ScannerDeep</defName>
+    <label>crust deepscan</label>
+    <description>Finds a node of resources hidden beneath the ground, which can be excavated via deep drills.\n\nA ground-penetrating scanner will still be necessary to more directly view the node.</description>
+	<workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_ScannerDeep</workerClass>
+    <minTitle>HVMP_ArchiveII</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>3</cooldownDays>
+    <uiPosition>(1,4)</uiPosition>
+    <royalAid>
+      <favorCost>1</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_EsotericVerseDrop</defName>
+    <label>esoteric treatise drop</label>
+    <description>Call for a collection of writings relevant to the caller's ideoligion from the Archive Branch which educate the reader on the ideoligion's deeper mysteries. Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that improves multiple ideoligious stats.</description>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveII</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(1,5)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<extraNumber>1</extraNumber>
+			<phenomenonCount>1</phenomenonCount>
+			<bookDef>HVMP_EsotericTract</bookDef>
+			<bookSuperQualityChance>0.1</bookSuperQualityChance>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_InspiringVerseDrop</defName>
+    <label>inspiring verses drop</label>
+    <description>Call for a collection of writings relevant to the caller's ideoligion from the Archive Branch, which have an inspiring effect. Believers can read it to gain certainty and possibly also gain an inspiration.</description>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveII</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(1,6)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<extraNumber>1</extraNumber>
+			<phenomenonCount>1</phenomenonCount>
+			<bookDef>HVMP_InspiringTract</bookDef>
+			<bookSuperQualityChance>0.1</bookSuperQualityChance>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_MeditativeVerseDrop</defName>
+    <label>meditative mantra drop</label>
+    <description>Call for a collection of writings relevant to the caller's ideoligion from the Archive Branch, which have a calming and focusing effect. Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that lets them stay up longer, need recreation less often, resist stress, and meditate more effectively.</description>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveII</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(1,7)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<extraNumber>1</extraNumber>
+			<phenomenonCount>1</phenomenonCount>
+			<bookDef>HVMP_MeditativeTract</bookDef>
+			<bookSuperQualityChance>0.1</bookSuperQualityChance>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <!--Archive level 3-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_RefineToExc</defName>
+    <label>excellent refinement</label>
+    <description>Delivers a dose of short-lived mechanites to the target non-artifact, non-artwork, non-building item, improving its quality by 1 stage. This can't bring an item above Excellent-quality.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_AlterItemQuality</workerClass>
+    <minTitle>HVMP_ArchiveIII</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(2,0)</uiPosition>
+    <royalAid>
+      <favorCost>2</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<invalidTargetMessage>HVMP_TargetToExc</invalidTargetMessage>
+			<soundDef>NeuralSupercharger_Injection</soundDef>
+			<extraNumber>0~3</extraNumber><!--can target items of Awful through Good quality-->
+			<gambaFactorRange>0</gambaFactorRange>
+			<onUseMessage>HVMP_QualityBoost</onUseMessage>
+			<forbiddenThingCategories>
+			  <li>Artifacts</li>
+			  <li>Books</li>
+			  <li>BuildingsArt</li>
+			</forbiddenThingCategories>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_PerfectRestoreItem</defName>
+    <label>perfectly restore item</label>
+    <description>Delivers a dose of short-lived mechanites to the target building or item, instantly repairing it for 1000 hit points.\n\nAlso removes corpse taint from targeted apparel, and fixes broken-down components in targeted buildings.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_RestoreItemHP_Perfect</workerClass>
+    <minTitle>HVMP_ArchiveIII</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <prerequisite>HVMP_RestoreItem</prerequisite>
+    <cooldownDays>15</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(2,1)</uiPosition>
+    <royalAid>
+      <favorCost>1</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<invalidTargetMessage>HVMP_TargetDamagedOrTainted</invalidTargetMessage>
+			<soundDef>NeuralSupercharger_Injection</soundDef>
+			<extraNumber>1000</extraNumber>
+			<onUseMessage>HVMP_RestoredItem</onUseMessage>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_MassRestoreStructure</defName>
+    <label>mass restore structure</label>
+    <description>Delivers a dose of short-lived mechanites to non-hostile buildings in the area around the target point, instantly repairing them for 100 hit points and fixing any broken components.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_RestoreItemHP_AOE</workerClass>
+    <minTitle>HVMP_ArchiveIII</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <prerequisite>HVMP_RestoreItem</prerequisite>
+    <cooldownDays>15</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(2,2)</uiPosition>
+    <royalAid>
+      <favorCost>2</favorCost>
+      <radius>6</radius>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<soundDef>NeuralSupercharger_Injection</soundDef>
+			<extraNumber>250</extraNumber>
+			<onUseMessage>HVMP_MassRestoredStructure</onUseMessage>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_DecryptBiocoding</defName>
+    <label>decrypt biocoding</label>
+    <description>Resets the biocoding on an item, allowing it to be used by a new wielder.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DecryptBiocoding</workerClass>
+    <minTitle>HVMP_ArchiveIII</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(2,3)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<invalidTargetMessage>HVMP_MustBeBiocoded</invalidTargetMessage>
+			<soundDef>NeuralSupercharger_Injection</soundDef>
+			<gambaFactorRange>0</gambaFactorRange>
+			<onUseMessage>HVMP_UnBioCoded</onUseMessage>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="OskarPotocki.VFE.Deserters">
+		<defName>HVMP_IntelDrop</defName>
+		<label>intel drop</label>
+		<description>Call for a drop of 6 packets of intel on the Shattered Empire.</description>
+		<minTitle>HVMP_ArchiveIII</minTitle>
+		<faction>HVMP_ArchiveBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>15</cooldownDays>
+		<usableOnWorldMap>true</usableOnWorldMap>
+		<uiPosition>(2,4)</uiPosition>
+		<royalAid>
+		  <itemsToDrop>
+			<VFED_Intel>6</VFED_Intel>
+		  </itemsToDrop>
+		  <favorCost>2</favorCost>
+		</royalAid>
+	  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="OskarPotocki.VFE.Deserters">
+		<defName>HVMP_CriticalIntelDrop</defName>
+		<label>critical intel drop</label>
+		<description>Call for a drop of 1 packet of critical intel on the Shattered Empire.</description>
+		<minTitle>HVMP_ArchiveIII</minTitle>
+		<faction>HVMP_ArchiveBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>15</cooldownDays>
+		<usableOnWorldMap>true</usableOnWorldMap>
+		<uiPosition>(2,5)</uiPosition>
+		<royalAid>
+		  <itemsToDrop>
+			<VFED_CriticalIntel>1</VFED_CriticalIntel>
+		  </itemsToDrop>
+		  <favorCost>2</favorCost>
+		</royalAid>
+	  </RoyalTitlePermitDef>
+  <!--Archive level 5-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_RefineToMaster</defName>
+    <label>masterwork refinement</label>
+    <description>Delivers a dose of short-lived mechanites to the target non-artifact, non-artwork, non-building item, improving its quality by 1 stage. This can't bring an item above Masterwork-quality.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_AlterItemQuality</workerClass>
+    <minTitle>HVMP_ArchiveV</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>40</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(3,0)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<invalidTargetMessage>HVMP_TargetToMaster</invalidTargetMessage>
+			<soundDef>NeuralSupercharger_Injection</soundDef>
+			<extraNumber>0~4</extraNumber><!--can target items of Awful through Excellent quality-->
+			<gambaFactorRange>0</gambaFactorRange>
+			<onUseMessage>HVMP_QualityBoost</onUseMessage>
+			<forbiddenThingCategories>
+			  <li>Artifacts</li>
+			  <li>Books</li>
+			  <li>BuildingsArt</li>
+			</forbiddenThingCategories>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_DiscoverRelic</defName>
+    <label>discover relic</label>
+    <description>Plumb the records of the Archive Branch to find hints of an item on this world important to the caller's ideoligion.</description>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DiscoverRelic</workerClass>
+    <minTitle>HVMP_ArchiveV</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>45</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(3,1)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ScannerReveal</defName>
+    <label>revealing scan</label>
+    <description>Disrupt all invisibility on the map for 2 hours.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_CauseCondition_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveV</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(3,3)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<conditionDefs><li>HVMP_RevealingScanEffect</li></conditionDefs>
+			<conditionDuration>5000</conditionDuration>
+			<onUseMessage>HVMP_MessagePermitRScan</onUseMessage>
+			<screenShake>false</screenShake>
+			<soundDef>MortarShieldGenerator_Reactivate</soundDef>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <!--Archive level 6-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_RefineToLegendary</defName>
+    <label>risky ultimate refinement</label>
+    <description>Delivers a dose of short-lived mechanites to the target masterwork non-artifact, non-artwork, non-building item. This has a 50% chance to improve its quality by 1 stage, and a 50% chance to DESTROY it.\n\nCosts two permit points.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_AlterItemQuality</workerClass>
+    <minTitle>HVMP_ArchiveVI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>2</permitPointCost>
+    <cooldownDays>40</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(4,0)</uiPosition>
+    <royalAid>
+      <favorCost>8</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<invalidTargetMessage>HVMP_TargetToLegendary</invalidTargetMessage>
+			<soundDef>NeuralSupercharger_Injection</soundDef>
+			<extraNumber>5</extraNumber><!--can target items of Masterwork quality-->
+			<gambaFactorRange>0.5</gambaFactorRange>
+			<onUseMessage>HVMP_QualityBoostRisky</onUseMessage>
+			<forbiddenThingCategories>
+			  <li>Artifacts</li>
+			  <li>Books</li>
+			  <li>BuildingsArt</li>
+			</forbiddenThingCategories>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+	<defName>HVMP_TechprintDrop</defName>
+	<label>techprint drop</label>
+	<description>Call for a drop of 1 random techprint.\n\nCosts two permit points.</description>
+	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveVI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+	<permitPointCost>2</permitPointCost>
+	<cooldownDays>36</cooldownDays>
+	<uiPosition>(4,1)</uiPosition>
+	<royalAid>
+	  <favorCost>5</favorCost>
+	</royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<thingCategories>
+			  <li>Techprints</li>
+			</thingCategories>
+			<numFromCategory>1</numFromCategory>
+		</li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+	<defName>HVMP_SkilltrainerDrop</defName>
+	<label>skilltrainer drop</label>
+	<description>Call for a drop of 1 random skilltrainer.\n\nCosts two permit points.</description>
+	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveVI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+	<permitPointCost>2</permitPointCost>
+	<cooldownDays>30</cooldownDays>
+	<uiPosition>(4,2)</uiPosition>
+	<royalAid>
+	  <favorCost>5</favorCost>
+	</royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<thingCategories>
+			  <li>NeurotrainersSkill</li>
+			</thingCategories>
+			<numFromCategory>1</numFromCategory>
+		</li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+	<defName>HVMP_PsytrainerDrop</defName>
+	<label>psytrainer drop</label>
+	<description>Call for a drop of 1 random psytrainer.\n\nCosts two permit points.</description>
+	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveVI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+	<permitPointCost>2</permitPointCost>
+	<cooldownDays>30</cooldownDays>
+	<uiPosition>(4,3)</uiPosition>
+	<royalAid>
+	  <favorCost>5</favorCost>
+	</royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<thingCategories>
+			  <li>NeurotrainersPsycast</li>
+			</thingCategories>
+			<numFromCategory>1</numFromCategory>
+		</li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+	<defName>HVMP_ArtifactDrop</defName>
+	<label>artifact drop</label>
+	<description>Call for a drop of 1 random archotech artifact.\n\nCosts two permit points.</description>
+	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveVI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+	<permitPointCost>2</permitPointCost>
+	<cooldownDays>30</cooldownDays>
+	<uiPosition>(4,4)</uiPosition>
+	<royalAid>
+	  <favorCost>5</favorCost>
+	</royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<thingCategories>
+			  <li>Artifacts</li>
+			</thingCategories>
+				<minTechLevelInCategory>Archotech</minTechLevelInCategory>
+				<maxTechLevelInCategory>Archotech</maxTechLevelInCategory>
+			<numFromCategory>1</numFromCategory>
+		</li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+	<defName>HVMP_PersonaWeaponDrop</defName>
+	<label>persona weapon drop</label>
+	<description>Call for a drop of 1 random normal-quality persona weapon.\n\nCosts two permit points.</description>
+	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveVI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+	<permitPointCost>2</permitPointCost>
+	<cooldownDays>40</cooldownDays>
+	<uiPosition>(4,5)</uiPosition>
+	<royalAid>
+	  <favorCost>5</favorCost>
+	</royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<thingCategories>
+			  <li>WeaponsMeleeBladelink</li>
+			</thingCategories>
+			<numFromCategory>1</numFromCategory>
+			<extraNumber>2</extraNumber><!--can create items of Normal quality-->
+		</li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Odyssey">
+	<defName>HVMP_UniqueWeaponDrop</defName>
+	<label>unique weapon drop</label>
+	<description>Call for a drop of 1 random normal-quality unique weapon.\n\nCosts two permit points.</description>
+	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveVI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+	<permitPointCost>2</permitPointCost>
+	<cooldownDays>40</cooldownDays>
+	<uiPosition>(4,6)</uiPosition>
+	<royalAid>
+	  <favorCost>5</favorCost>
+	</royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<thingCategories>
+			  <li>WeaponsUnique</li>
+			</thingCategories>
+			<numFromCategory>1</numFromCategory>
+			<extraNumber>2</extraNumber><!--can create items of Normal quality-->
+		</li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_AnimusStone</defName>
+    <label>animus stone drop</label>
+    <description>Call for a drop of 1 animus stone.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveVI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>40</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(4,7)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <AnimusStone>
+			<count>1</count>
+		</AnimusStone>
+      </itemsToDrop>
+      <favorCost>10</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="notfood.Infused">
+		<defName>HVMP_InfuserDrop</defName>
+		<label>infuser drop</label>
+		<description>Call for a drop of 1 infusion amplifier and 1 empty infusion amplifier.</description>
+		<minTitle>HVMP_ArchiveVI</minTitle>
+		<faction>HVMP_ArchiveBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>30</cooldownDays>
+		<usableOnWorldMap>true</usableOnWorldMap>
+		<uiPosition>(4,8)</uiPosition>
+		<royalAid>
+		  <itemsToDrop>
+			<InfusedAmplifier>1</InfusedAmplifier>
+			<InfusedAmplifierEmpty>1</InfusedAmplifierEmpty>
+		  </itemsToDrop>
+		  <favorCost>5</favorCost>
+		</royalAid>
+	  </RoyalTitlePermitDef>
+  
+  <!--Commerce has a permit that only appears if you have Vanilla Factions Expanded Classical installed. It shouldn't need Ideology to work, but in 1.6 VFEC's own code pertaining to obtaining the support of a senator makes the mistake of assuming you have Ideology installed, so you can't get senator support w/o Ideology. lol!-->
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="OskarPotocki.VFE.Classical">
+		<defName>HVMP_SenatorialBribe</defName>
+		<label>senatorial bribe</label>
+		<description>Issue a bribe through the Commerce Branch to a random senator to attain their support.\n\nCosts two permit points.</description>
+		<workerClass>HVMP_VFEC.RoyalTitlePermitWorker_BribeSenator</workerClass>
+		<minTitle>HVMP_CommerceV</minTitle>
+		<faction>HVMP_CommerceBranch</faction>
+		<permitPointCost>2</permitPointCost>
+		<cooldownDays>60</cooldownDays>
+		<usableOnWorldMap>false</usableOnWorldMap>
+		<uiPosition>(6,1)</uiPosition>
+		<royalAid>
+		  <favorCost>8</favorCost>
+		</royalAid>
+		<modExtensions>
+			<li Class="HautsFramework.PermitMoreEffects">
+			<soundDef>ExecuteTrade</soundDef>
+			<onUseMessage>HVMP_SenatorBribed</onUseMessage>
+			</li>
+		</modExtensions>
+	  </RoyalTitlePermitDef>
+	  
+</Defs>

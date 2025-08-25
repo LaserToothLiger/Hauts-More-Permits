@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--Ghouls that get downed and then regenerate just... stick around indefinitely. We need them to leave.-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_KickForAFK</defName>
+	<label>ghoul eviction notice</label>
+	<description>Get out of my (temperate) swamp!</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+	    <becomeVisible>false</becomeVisible>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HautsPermits.HediffCompProperties_GetOffMyMap">
+		<minDuration>120000</minDuration><!--doesn't start trying to get them to leave until 2d has elapsed-->
+		<periodicity>2500</periodicity>
+	  </li>
+	</comps>
+  </HediffDef>
+  <!--super-ghoul invisibility-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_OccultInvisibility</defName>
+	<label>occult invisibility</label>
+	<description>A temporary state of psychic invisibility, specially devised for use by ghouls.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<isBad>false</isBad>
+	<initialSeverity>0.35</initialSeverity>
+	<comps>
+	  <li Class="HediffCompProperties_Invisibility">
+		<visibleToPlayer>true</visibleToPlayer>
+	  </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-24</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	</comps>
+  </HediffDef>
+  
+  <!--nociosphere instantly activates-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_ArentYouTiredOfBeingNice</defName>
+	<label>aren't you tired of being nice?</label>
+	<description>Don't you just want to go apeshit?</description><!--internal timer of 5s to activate-->
+	<hediffClass>HautsPermits_Occult.Hediff_InstantKillMode</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+	    <becomeVisible>false</becomeVisible>
+	  </li>
+	</stages>
+  </HediffDef>
+  
+</Defs>

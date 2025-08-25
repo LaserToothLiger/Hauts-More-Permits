@@ -1,0 +1,931 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--Ecosphere level 1-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_HerbalMedicineDrop</defName>
+    <label>herbal drop</label>
+    <description>Call for a drop of 4 herbal medicine.</description>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>10</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(0,0)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <MedicineHerbal>4</MedicineHerbal>
+      </itemsToDrop>
+      <favorCost>2</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_SmallLivestockDrop</defName>
+    <label>small livestock drop</label>
+    <description>Call for the delivery of a random, tame, small livestock animal from the Ecosphere Branch.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>6</cooldownDays>
+    <uiPosition>(0,1)</uiPosition>
+    <royalAid>
+      <favorCost>1</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<numFromCategory>1</numFromCategory>
+			<bodySizeCapRange>0~0.75</bodySizeCapRange>
+			<marketValueLimits>0~1000</marketValueLimits>
+			<allowAnimals>true</allowAnimals>
+			<needsPen>true</needsPen>
+			<startsTamed>true</startsTamed>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_LargeLivestockDrop</defName>
+    <label>large livestock drop</label>
+    <description>Call for the delivery of a random, tame, larger livestock animal from the Ecosphere Branch.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(0,2)</uiPosition>
+    <royalAid>
+      <favorCost>2</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<numFromCategory>1</numFromCategory>
+			<bodySizeCapRange>0.8~3.5</bodySizeCapRange>
+			<marketValueLimits>0~1000</marketValueLimits>
+			<allowAnimals>true</allowAnimals>
+			<needsPen>true</needsPen>
+			<startsTamed>true</startsTamed>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_PetDrop</defName>
+    <label>pet drop</label>
+    <description>Call for the delivery of a random, tame, small pet animal from the Ecosphere Branch.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>10</cooldownDays>
+    <uiPosition>(0,3)</uiPosition>
+    <royalAid>
+      <favorCost>1</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<numFromCategory>1</numFromCategory>
+			<bodySizeCapRange>0~1</bodySizeCapRange>
+			<marketValueLimits>0~1000</marketValueLimits>
+			<allowAnimals>true</allowAnimals>
+			<minPetness>0.5</minPetness>
+			<startsTamed>true</startsTamed>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ChargecellDrop</defName>
+    <label>chargecell drop</label>
+    <description>Call for a drop of 10 chargecells, which can be injected into mechanoids or batteries to re-energize them.</description>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(0,4)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_Chargecell>10</HVMP_Chargecell>
+      </itemsToDrop>
+      <favorCost>2</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_GasMaskDrop</defName>
+    <label>gas mask drop</label>
+    <description>Call for a drop of 1 excellent-quality gas mask.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>12</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(0,5)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <Apparel_GasMask>
+			<count>1</count>
+			<quality>Excellent</quality>
+		</Apparel_GasMask>
+      </itemsToDrop>
+      <favorCost>2</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_BlightSprayerDrop</defName>
+    <label>blightsprayer drop</label>
+    <description>Call for a stationary blightspray dispenser, which periodically emits blight-killing vapors. The vapors can remove blight without destroying the plant, but the plant will take some damage. The dispenser lasts for 15 days before breaking down.</description>
+	<workerClass>HautsPermits.RoyalTitlePermitWorker_DropFactionThing</workerClass>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>30</cooldownDays>
+    <uiPosition>(0,6)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_AntiBlightDispenser>1</HVMP_AntiBlightDispenser>
+      </itemsToDrop>
+      <favorCost>4</favorCost>
+      <radius>7.49</radius><!--purely for the targeting graphic-->
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Odyssey">
+    <defName>HVMP_HatcheryDrop</defName>
+    <label>hatchery drop</label>
+    <description>Call for a stationary self-fertilizing fish hatchery, which increases the fish population regeneration rate of the body of water it's in by 1 per hour. Auto-hatcheries cannot be placed within 3 cells of each other.</description>
+	<workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_DropHatchery</workerClass>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>24</cooldownDays>
+    <uiPosition>(0,7)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_AutoHatchery>1</HVMP_AutoHatchery>
+      </itemsToDrop>
+      <favorCost>6</favorCost>
+      <radius>3</radius>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  
+  <!--Ecosphere level 2-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_PredatorDrop</defName>
+    <label>predator drop</label>
+    <description>Call for the delivery of a random, tame, predator animal from the Ecosphere Branch.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereII</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(1,0)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<numFromCategory>1</numFromCategory>
+			<bodySizeCapRange>0.5~3.5</bodySizeCapRange>
+			<marketValueLimits>0~1000</marketValueLimits>
+			<allowAnimals>true</allowAnimals>
+			<mustBePredator>true</mustBePredator>
+			<startsTamed>true</startsTamed>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_MegafaunaDrop</defName>
+    <label>megafauna drop</label>
+    <description>Call for the delivery of a random, tame, huge animal from the Ecosphere Branch.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereII</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>30</cooldownDays>
+    <uiPosition>(1,1)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<numFromCategory>1</numFromCategory>
+			<bodySizeCapRange>2~99999</bodySizeCapRange>
+			<marketValueLimits>0~1000</marketValueLimits>
+			<allowAnimals>true</allowAnimals>
+			<startsTamed>true</startsTamed>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_StimulateHealing</defName>
+    <label>stimulate healing</label>
+    <description>Activate mechanites in and around the target's body to encourage faster healing. Lasts 3 days.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereII</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(1,2)</uiPosition>
+    <royalAid>
+      <favorCost>2</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_StimulatedHealing</li></hediffs>
+			<soundDef>Coagulate_Cast</soundDef>
+			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_StimulateThermotolerance</defName>
+    <label>stimulate thermotolerance</label>
+    <description>Activate mechanites in and around the target's body to maintain homeostasis in a wider variety of temperatures. Lasts 5 days.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereII</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(1,3)</uiPosition>
+    <royalAid>
+      <favorCost>2</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_StimulatedThermotolerance</li></hediffs>
+			<soundDef>Coagulate_Cast</soundDef>
+			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  
+  <!--Ecosphere level 3-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_MedicineDrop</defName>
+    <label>medicine drop</label>
+    <description>Call for a drop of 4 medicine.</description>
+    <minTitle>HVMP_EcosphereIII</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(2,0)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <MedicineIndustrial>4</MedicineIndustrial>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_NeutroamineDrop</defName>
+    <label>neutroamine drop</label>
+    <description>Call for a drop of 30 neutroamine.</description>
+    <minTitle>HVMP_EcosphereIII</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(2,1)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <Neutroamine>30</Neutroamine>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_PenoxycylineDrop</defName>
+    <label>penoxycyline drop</label>
+    <description>Call for a drop of 5 doses of penoxycyline.</description>
+    <minTitle>HVMP_EcosphereIII</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(2,2)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <Penoxycyline>5</Penoxycyline>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="phil42.allergies">
+		<defName>HVMP_AllergyTreatmentDrop</defName>
+		<label>allergy treatment drop</label>
+		<description>Call for a drop of 4 doses of allercure and 1 antishock injector.</description>
+		<minTitle>HVMP_EcosphereIII</minTitle>
+		<faction>HVMP_EcosphereBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>25</cooldownDays>
+		<usableOnWorldMap>true</usableOnWorldMap>
+		<uiPosition>(2,3)</uiPosition>
+		<royalAid>
+		  <itemsToDrop>
+			<P42_Allercure>4</P42_Allercure>
+			<P42_AntishockInjector>1</P42_AntishockInjector>
+		  </itemsToDrop>
+		  <favorCost>3</favorCost>
+		</royalAid>
+	  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+	<defName>HVMP_ProsthesisDrop</defName>
+	<label>prosthesis drop</label>
+	<description>Call for a drop of 1 artificial prosthetic body part.</description>
+	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+	<minTitle>HVMP_EcosphereIII</minTitle>
+	<faction>HVMP_EcosphereBranch</faction>
+	<permitPointCost>1</permitPointCost>
+	<cooldownDays>16</cooldownDays>
+	<uiPosition>(2,4)</uiPosition>
+	<royalAid>
+	  <favorCost>3</favorCost>
+	</royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<thingCategories>
+			  <li>BodyPartsProsthetic</li>
+			</thingCategories>
+			<minTechLevelInCategory>Industrial</minTechLevelInCategory>
+			<maxTechLevelInCategory>Spacer</maxTechLevelInCategory>
+			<numFromCategory>1</numFromCategory>
+		</li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_StimulateImmunity</defName>
+    <label>stimulate immunity</label>
+    <description>Activate mechanites in and around the target's body to encourage a more robust immune response to disease. Lasts 3 days.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereIII</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(2,5)</uiPosition>
+    <royalAid>
+      <favorCost>4</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_StimulatedImmunity</li></hediffs>
+			<soundDef>Coagulate_Cast</soundDef>
+			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_StimulateToxtolerance</defName>
+    <label>stimulate toxtolerance</label>
+    <description>Activate mechanites in and around the target's body to maintain homeostasis in toxic environments. Lasts 10 days.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereIII</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(2,6)</uiPosition>
+    <royalAid>
+      <favorCost>4</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_StimulatedToxtolerance</li></hediffs>
+			<soundDef>Coagulate_Cast</soundDef>
+			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  
+  <!--Ecosphere level 4-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_GlitterMedicineDrop</defName>
+    <label>glitter med drop</label>
+    <description>Call for a drop of 4 glitterworld medicine.</description>
+    <minTitle>HVMP_EcosphereIV</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(3,0)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <MedicineUltratech>4</MedicineUltratech>
+      </itemsToDrop>
+      <favorCost>4</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="sarg.alphagenes">
+		<defName>HVMP_GeneToolDrop</defName>
+		<label>gene tool drop</label>
+		<description>Call for a drop of 2 random gene tools.</description>
+		<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+		<minTitle>HVMP_EcosphereIV</minTitle>
+		<faction>HVMP_EcosphereBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>24</cooldownDays>
+		<uiPosition>(3,1)</uiPosition>
+		<royalAid>
+		  <favorCost>4</favorCost>
+		</royalAid>
+		<modExtensions>
+			<li Class="HautsFramework.PermitMoreEffects">
+				<thingCategories>
+				  <li>AG_GeneTools</li>
+				</thingCategories>
+				<maxTechLevelInCategory>Ultra</maxTechLevelInCategory>
+				<numFromCategory>2</numFromCategory>
+			</li>
+		</modExtensions>
+	  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_TameMechDisease</defName>
+    <label>tame mech disease</label>
+    <description>Correct the wayward programming of a mechanite disease, removing its downsides. However, its remaining duration will be halved and its bonuses will be slightly less potent.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_TMD</workerClass>
+    <minTitle>HVMP_EcosphereIV</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>55</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(4,0)</uiPosition>
+    <royalAid>
+      <favorCost>6</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs>
+			  <li>HVMP_FibrousMechanites</li>
+			  <li>HVMP_SensoryMechanites</li>
+			</hediffs>
+			<soundDef>Coagulate_Cast</soundDef>
+			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>
+			<invalidTargetMessage>HVMP_TargetTMD</invalidTargetMessage>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ChillingDisruption</defName>
+    <label>cooling disruption</label>
+    <description>Activate a targeted climate controller, inducing a cold snap for 3 days.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_CauseCondition_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereIV</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(3,2)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<conditionDefs><li>ColdSnap</li></conditionDefs>
+			<conditionDuration>180000</conditionDuration>
+			<onUseMessage>HVMP_MessagePermitChiller</onUseMessage>
+			<screenShake>true</screenShake>
+			<soundDef>ShipTakeoff</soundDef>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ScorchingDisruption</defName>
+    <label>heating disruption</label>
+    <description>Activate a targeted climate controller, inducing a heat wave for 3 days.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_CauseCondition_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereIV</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(4,2)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<conditionDefs><li>HeatWave</li></conditionDefs>
+			<conditionDuration>180000</conditionDuration>
+			<onUseMessage>HVMP_MessagePermitScorcher</onUseMessage>
+			<screenShake>true</screenShake>
+			<soundDef>ShipTakeoff</soundDef>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_PollutionScoop</defName>
+    <label>pollution scoop</label>
+    <description>Use orbital trade matter-transmission technology to extract stationary toxic particles from the target area, unpolluting the terrain and causing any toxic wastepacks in the area to disappear.\n\nAlso creates a smoke blast in a smaller radius.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_PollutionScoop</workerClass>
+    <minTitle>HVMP_EcosphereIV</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(3,3)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+      <targetingRange>44.9</targetingRange>
+      <radius>5.5</radius>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<onUseMessage>HVMP_TerrainChange</onUseMessage>
+			<soundDef>WastepackAtomizer_Atomized</soundDef>
+			<screenShake>true</screenShake>
+			<thingCategories>
+			  <li MayRequire="VanillaExpanded.Recycling">VRecyclingE_SpecializedPacks</li>
+			</thingCategories>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_SoilEnrichment</defName>
+    <label>soil enrichment</label>
+    <description>Extract stationary toxic particles from the soil and seed it with nutrients, enriching the fertility of sand and soil in a small area around the target point.\n\nCan only create fertile soil in biomes that can naturally have fertile soil.\n\nAlso creates a smoke blast in a smaller radius.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_SoilEnrichment</workerClass>
+    <minTitle>HVMP_EcosphereIV</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(4,3)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+      <targetingRange>44.9</targetingRange>
+      <radius>2</radius>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<onUseMessage>HVMP_TerrainChange</onUseMessage>
+			<soundDef>CocoonDestroyed</soundDef>
+			<screenShake>true</screenShake>
+			<thingCategories>
+			  <li MayRequire="VanillaExpanded.Recycling">VRecyclingE_SpecializedPacks</li>
+			</thingCategories>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  
+  <!--Ecosphere level 5-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ArchiteCapsuleDrop</defName>
+    <label>archite capsule drop</label>
+    <description>Call for a drop of 1 archite capsule.\n\nCosts two permit points.</description>
+    <minTitle>HVMP_EcosphereV</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>2</permitPointCost>
+    <cooldownDays>40</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(5,0)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <ArchiteCapsule>1</ArchiteCapsule>
+      </itemsToDrop>
+      <favorCost>6</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+	<defName>HVMP_BionicDrop</defName>
+	<label>bionic drop</label>
+	<description>Call for a drop of 1 artificial bionic body part.</description>
+	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+	<minTitle>HVMP_EcosphereV</minTitle>
+	<faction>HVMP_EcosphereBranch</faction>
+	<permitPointCost>1</permitPointCost>
+	<cooldownDays>24</cooldownDays>
+	<uiPosition>(5,1)</uiPosition>
+	<royalAid>
+	  <favorCost>5</favorCost>
+	</royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<thingCategories>
+			  <li>BodyPartsBionic</li>
+			</thingCategories>
+			<minTechLevelInCategory>Industrial</minTechLevelInCategory>
+			<maxTechLevelInCategory>Spacer</maxTechLevelInCategory>
+			<numFromCategory>1</numFromCategory>
+		</li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_GenepackDrop</defName>
+    <label>genepack drop</label>
+    <description>Call for a drop of 1 genepack.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropGenePack</workerClass>
+    <minTitle>HVMP_EcosphereV</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>30</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(5,2)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <Genepack>1</Genepack>
+      </itemsToDrop>
+      <favorCost>4</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="sarg.alphagenes">
+		<defName>HVMP_AlphapackDrop</defName>
+		<label>alphapack drop</label>
+		<description>Call for a drop of 1 alphapack.</description>
+		<workerClass>HautsPermits.RoyalTitlePermitWorker_DropGenePack</workerClass>
+		<minTitle>HVMP_EcosphereV</minTitle>
+		<faction>HVMP_EcosphereBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>30</cooldownDays>
+		<usableOnWorldMap>true</usableOnWorldMap>
+		<uiPosition>(5,3)</uiPosition>
+		<royalAid>
+		  <itemsToDrop>
+			<AG_Alphapack>1</AG_Alphapack>
+		  </itemsToDrop>
+		  <favorCost>4</favorCost>
+		</royalAid>
+	  </RoyalTitlePermitDef>
+  
+  <!--Ecosphere level 6-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ExoticCreatureDrop</defName>
+    <label>exotic creature drop</label>
+    <description>Call for the delivery of a random WILD exotic animal from the Ecosphere Branch.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereVI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>40</cooldownDays>
+    <uiPosition>(6,0)</uiPosition>
+    <royalAid>
+      <favorCost>6</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<numFromCategory>1</numFromCategory>
+			<marketValueLimits>590~999999</marketValueLimits>
+			<allowAnimals>true</allowAnimals>
+			<maxWildness>-1</maxWildness>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_PowerCellDrop</defName>
+    <label>power cell drop</label>
+    <description>Call for a drop of 1 unstable power cell.\n\nCosts two permit points.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereVI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>2</permitPointCost>
+    <cooldownDays>40</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(6,1)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <UnstablePowerCell>
+			<count>1</count>
+		</UnstablePowerCell>
+      </itemsToDrop>
+      <favorCost>6</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_OptimizeMechanoid</defName>
+    <label>optimize mechanoid</label>
+    <description>Transmit a proprietary mechanite swarm into the target mechanoid, reducing its energy consumption. This effect is lost if the mechanoid dies.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereVI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(6,2)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_EnergyOptimization</li></hediffs>
+			<soundDef>Coagulate_Cast</soundDef>
+			<onUseMessage>HVMP_MechOptimized</onUseMessage>
+			<allowMechs>true</allowMechs>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_DuplicateEndogenome</defName>
+    <label>duplicate endogenome</label>
+    <description>Scan the target's endogenes to produce a xenogerm containing all non-archite genes from the target's endogenes.\n\nCannot be used on targets whose genes are regrowing.\n\nCosts two permit points.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_MakeXenogermOfEndo</workerClass>
+    <minTitle>HVMP_EcosphereVI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>2</permitPointCost>
+    <cooldownDays>55</cooldownDays>
+    <uiPosition>(6,3)</uiPosition>
+    <royalAid>
+      <favorCost>8</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects" />
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_DuplicateXenogenome</defName>
+    <label>duplicate xenogenome</label>
+    <description>Scan the target's xenogenes to produce a xenogerm containing all non-archite genes from the target's xenogenes.\n\nCannot be used on targets whose genes are regrowing.\n\nCosts two permit points.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_MakeXenogermOfXeno</workerClass>
+    <minTitle>HVMP_EcosphereVI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>2</permitPointCost>
+    <cooldownDays>55</cooldownDays>
+    <uiPosition>(6,4)</uiPosition>
+    <royalAid>
+      <favorCost>8</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects" />
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_GeothermalDrillDrop</defName>
+    <label>geothermal drill drop</label>
+    <description>Call for a geothermal drill, which bores down into the ground to create a steam geyser.\n\nCannot be placed too close to another geothermal drill or existing steam geyser.\n\nCosts three permit points.</description>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_DropGD</workerClass>
+    <minTitle>HVMP_EcosphereVI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>3</permitPointCost>
+    <cooldownDays>80</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(7,0)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_GTDrill>
+			<count>1</count>
+		</HVMP_GTDrill>
+      </itemsToDrop>
+	  <radius>25</radius><!--how far away it must be from other drills or existing geysers-->
+      <favorCost>10</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  
+  
+  
+  <!--Graser turret for Pax level 2-->
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="GoGaTio.LostFactoryMechanoids">
+		<defName>HVMP_GraserTurretDrop</defName>
+		<label>graser turret drop</label>
+		<description>Call for a friendly mini-graser turret, which lasts for 2 days.\nSince it is programmed by the Pax Branch, it will target their enemies and ignore anyone they deem friendly.</description>
+		<workerClass>HautsPermits.RoyalTitlePermitWorker_DropFactionThing</workerClass>
+		<minTitle>HVMP_PaxII</minTitle>
+		<faction>HVMP_PaxBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>14</cooldownDays>
+		<uiPosition>(1,3)</uiPosition>
+		<royalAid>
+		  <itemsToDrop>
+			<HVMP_GraserTurret>1</HVMP_GraserTurret>
+		  </itemsToDrop>
+		  <favorCost>2</favorCost>
+		</royalAid>
+	  </RoyalTitlePermitDef>
+	  <ThingDef ParentName="BuildingBase" MayRequire="GoGaTio.LostFactoryMechanoids">
+		<defName>HVMP_GraserTurret</defName>
+		<label>pax graser turret</label>
+		<description>A self-powered defense turret mounted with a stationary graser gun. May explode when damaged. Self-destructs after 2 days.</description>
+		<thingClass>Building_TurretGun</thingClass>
+		<drawerType>MapMeshAndRealTime</drawerType>
+		<graphicData>
+		  <texPath>Things/Building/Mech/TurretMechMini_Base</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		  <drawSize>(1,1)</drawSize>
+		  <drawOffset>(0,0,-0.11)</drawOffset>
+		  <damageData>
+			<rect>(0.2,0.2,0.6,0.6)</rect>
+		  </damageData>
+		  <shadowData>
+			<volume>(0.27,0.25,0.27)</volume>
+			<offset>(0,0,0)</offset>
+		  </shadowData>
+		  <color>(24,54,211)</color>
+		</graphicData>
+		<receivesSignals>true</receivesSignals>
+		<altitudeLayer>Building</altitudeLayer>
+		<stealable>false</stealable>
+		<rotatable>false</rotatable>
+		<statBases>
+		  <MaxHitPoints>100</MaxHitPoints>
+		  <Flammability>0</Flammability>
+		  <Mass>10</Mass>
+		  <ShootingAccuracyTurret>0.96</ShootingAccuracyTurret>
+		  <Beauty>-20</Beauty>
+		</statBases>
+		<damageMultipliers>
+		  <li>
+			<damageDef>Flame</damageDef>
+			<multiplier>0</multiplier>
+		  </li>
+		</damageMultipliers>
+		<tickerType>Normal</tickerType>
+		<comps>
+		  <li Class="CompProperties_Explosive">
+			<wickTicks>240</wickTicks>
+			<explosiveRadius>3.9</explosiveRadius>
+			<explosiveDamageType>Bomb</explosiveDamageType>
+			<chanceNeverExplodeFromDamage>0.5</chanceNeverExplodeFromDamage>
+		  </li>
+		  <li Class="CompProperties_Stunnable">
+			<affectedDamageDefs>
+			  <li>Stun</li>
+			  <li>EMP</li>
+			</affectedDamageDefs>
+			<adaptableDamageDefs>
+			  <li>EMP</li>
+			</adaptableDamageDefs>
+		  </li>
+		  <li Class="CompProperties_DestroyAfterDelay">
+			<delayTicks>120000</delayTicks>
+			<destroyMode>KillFinalize</destroyMode>
+			<countdownLabel>Self-destruct in</countdownLabel>
+		  </li>
+		  <li Class="HautsFramework.CompProperties_FactionColored">
+			<colorFactor>0.75</colorFactor>
+		  </li>
+		  <li Class="CompProperties_AmbientSound">
+			<sound>MechTurretSmall_Call</sound>
+		  </li>
+		</comps>
+		<modExtensions>
+		  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+		</modExtensions>
+		<passability>PassThroughOnly</passability>
+		<pathCost>50</pathCost>
+		<fillPercent>0.4</fillPercent>
+		<hasTooltip>true</hasTooltip>
+		<terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+		<building>
+		  <combatPower>60</combatPower>
+		  <ai_combatDangerous>true</ai_combatDangerous>
+		  <turretGunDef>HVMP_Gun_GraserTurretMech</turretGunDef>
+		  <turretBurstCooldownTime>2.5</turretBurstCooldownTime>
+		</building>
+	  </ThingDef>
+		  <ThingDef ParentName="BaseWeaponTurret" MayRequire="GoGaTio.LostFactoryMechanoids">
+			<defName>HVMP_Gun_GraserTurretMech</defName>
+			<label>stationary graser</label>
+			<description>A high-energy gamma ray laser which fires a sweeping beam that pierces thick armor and burns targets. This one was made to be mounted on a turret and draw from its power source, that allows to shoot in bigger range.</description>
+			<graphicData>
+			  <texPath>Things/Item/Equipment/WeaponRanged/LFM_StationaryBeamGraser</texPath>
+			  <graphicClass>Graphic_Single</graphicClass>
+			</graphicData>
+			<statBases>
+			  <Mass>4</Mass>
+			  <DeteriorationRate>0</DeteriorationRate>
+			  <AccuracyTouch>0.75</AccuracyTouch>
+			  <AccuracyShort>0.65</AccuracyShort>
+			  <AccuracyMedium>0.60</AccuracyMedium>
+			  <AccuracyLong>0.45</AccuracyLong>
+			<RangedWeapon_Cooldown>2.8</RangedWeapon_Cooldown>
+			</statBases>
+			<verbs>
+			  <li>
+				<verbClass>Verb_ShootBeam</verbClass>
+				<warmupTime>1.0</warmupTime>
+				<range>29.9</range>
+				<minRange>2.7</minRange>
+				<beamFullWidthRange>6.9</beamFullWidthRange>
+				<burstShotCount>5</burstShotCount>
+				<beamWidth>6</beamWidth>
+				<ticksBetweenBurstShots>22</ticksBetweenBurstShots>
+				<beamDamageDef>Beam</beamDamageDef>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>9</muzzleFlashScale>
+				<soundCastBeam>BeamGraser_Shooting</soundCastBeam>
+				<beamGroundFleckDef>Fleck_BeamBurn</beamGroundFleckDef>
+				<beamFleckChancePerTick>0.32</beamFleckChancePerTick>
+				<beamMaxDeviation>1.5</beamMaxDeviation>
+				<beamCurvature>0.6</beamCurvature>
+				<beamMoteDef>Mote_GraserBeamBase</beamMoteDef>
+				<beamEndEffecterDef>GraserBeam_End</beamEndEffecterDef>
+				<beamChanceToStartFire>0.85</beamChanceToStartFire>
+				<beamChanceToAttachFire>0.95</beamChanceToAttachFire>
+				<beamFireSizeRange>0.55~0.85</beamFireSizeRange>
+				<beamLineFleckDef>Fleck_BeamSpark</beamLineFleckDef>
+				<beamStartOffset>0.8</beamStartOffset>
+				<beamLineFleckChanceCurve>
+				  <points>
+					<li>(0, 0)</li>
+					<li>(0.65, 0.4)</li>
+					<li>(1, 0.75)</li>
+				  </points>
+				</beamLineFleckChanceCurve>
+			  </li>
+			</verbs>
+			<weaponTags>
+			  <li>LFM_StationaryGraserGun</li>
+			</weaponTags>
+		  </ThingDef>
+  
+</Defs>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/MemeDef[defName="Supremacist"]/exclusionTags</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/MemeDef[defName="Supremacist"]</xpath>
+			<value>
+				<exclusionTags>
+				  <li>HVMP_Cosmotag0</li>
+				</exclusionTags>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/MemeDef[defName="Supremacist"]/exclusionTags</xpath>
+			<value>
+				<li>HVMP_Cosmotag0</li>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/MemeDef[defName="PainIsVirtue"]/exclusionTags</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/MemeDef[defName="PainIsVirtue"]</xpath>
+			<value>
+				<exclusionTags>
+				  <li>HVMP_Cosmotag1</li>
+				</exclusionTags>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/MemeDef[defName="PainIsVirtue"]/exclusionTags</xpath>
+			<value>
+				<li>HVMP_Cosmotag1</li>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+		  <li>Anomaly</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/MemeDef[defName="Inhuman"]/exclusionTags</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="Inhuman"]</xpath>
+						<value>
+							<exclusionTags>
+							  <li>HVMP_Cosmotag2</li>
+							</exclusionTags>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="Inhuman"]/exclusionTags</xpath>
+						<value>
+							<li>HVMP_Cosmotag2</li>
+						</value>
+					</match>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+		  <li>Alpha Memes</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/MemeDef[defName="AM_Sadist"]/exclusionTags</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="AM_Sadist"]</xpath>
+						<value>
+							<exclusionTags>
+							  <li>HVMP_Cosmotag3</li>
+							</exclusionTags>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="AM_Sadist"]/exclusionTags</xpath>
+						<value>
+							<li>HVMP_Cosmotag3</li>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Anomaly</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<!--Commerce-->
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/FactionDef[@ParentName="HVMP_EBranchFactionBase"]/disallowedMemes</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/FactionDef[@ParentName="HVMP_EBranchFactionBase"]</xpath>
+									<value>
+										<disallowedMemes>
+										  <li>AM_Structure_Cubicism</li>
+										  <li>AM_Structure_FleshCult</li>
+										  <li>AM_Structure_Horaxian</li>
+										</disallowedMemes>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationAdd">
+									<xpath>/Defs/FactionDef[@ParentName="HVMP_EBranchFactionBase"]/disallowedMemes</xpath>
+									<value>
+									  <li>AM_Structure_Cubicism</li>
+									  <li>AM_Structure_FleshCult</li>
+									  <li>AM_Structure_Horaxian</li>
+									</value>
+								</match>
+							</li>
+						</operations>
+					</match>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+		  <li>[AP] Slaveholding</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/MemeDef[defName="AP_Slaveholding_Meme"]/exclusionTags</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="AP_Slaveholding_Meme"]</xpath>
+						<value>
+							<exclusionTags>
+							  <li>HVMP_Cosmotag4</li>
+							</exclusionTags>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="AP_Slaveholding_Meme"]/exclusionTags</xpath>
+						<value>
+							<li>HVMP_Cosmotag4</li>
+						</value>
+					</match>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+		  <li>Vanilla Ideology Expanded - Memes and Structures</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/MemeDef[defName="VME_Nationalist"]/exclusionTags</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="VME_Nationalist"]</xpath>
+						<value>
+							<exclusionTags>
+							  <li>HVMP_Cosmotag5</li>
+							</exclusionTags>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="VME_Nationalist"]/exclusionTags</xpath>
+						<value>
+							<li>HVMP_Cosmotag5</li>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/MemeDef[defName="VME_ViolentConversion"]/exclusionTags</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="VME_ViolentConversion"]</xpath>
+						<value>
+							<exclusionTags>
+							  <li>HVMP_Cosmotag6</li>
+							</exclusionTags>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="VME_ViolentConversion"]/exclusionTags</xpath>
+						<value>
+							<li>HVMP_Cosmotag6</li>
+						</value>
+					</match>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+</Patch>

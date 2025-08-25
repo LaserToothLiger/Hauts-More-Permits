@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--Pax combat assist-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CombatAssistProgram</defName>
+    <label>pax combat assistance</label>
+    <description>A radio link to an automated live combat assistance program.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.9333,0.5961,0.5961)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statOffsets>
+		  <ShootingAccuracyPawn>3</ShootingAccuracyPawn>
+		  <MeleeHitChance>3</MeleeHitChance>
+		  <MeleeDodgeChance>3</MeleeDodgeChance>
+		  <VEF_VerbRangeFactor>0.2</VEF_VerbRangeFactor>
+		</statOffsets>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-6</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  <!--Pax scalpel-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_OrbitalScalpelMarker</defName>
+    <label>pax orbital scalpel</label>
+    <description>Get down, Mr. President!</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,0.2,0.2)</defaultLabelColor>
+    <stages>
+      <li>
+		<becomeVisible>false</becomeVisible>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	  <li Class="HautsPermits.HediffCompProperties_Flashlight"> <!--red light, neon light, stop light/everybody's got a little light under the sun-->
+		<width>0.2</width>
+        <color>(255, 20, 20, 242)</color>
+		<ticksDelay>60</ticksDelay>
+		<damageType>Bomb</damageType>
+		<damage>30</damage>
+		<numHits>3</numHits>
+		<impactSound>Shot_TurretSniper</impactSound>
+	  </li>
+    </comps>
+  </HediffDef>
+  
+  <!--Rover caravan buffs-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CaravanComfort</defName>
+    <label>rover route assist (comfort)</label>
+    <description>Access to a plethora of radio chanenls for the road, courtesy of Rover Branch navigational services.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statFactors>
+		  <JoyFallRateFactor>0.5</JoyFallRateFactor>
+		  <RestRateMultiplier>1.25</RestRateMultiplier>
+		</statFactors>
+		<statOffsets>
+		  <Hauts_BoredomDropPerDay>0.04</Hauts_BoredomDropPerDay>
+		</statOffsets>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HautsFramework.HediffCompProperties_OnCaravanSeverity">
+        <perOnCaravanTick>1</perOnCaravanTick>
+		<whileInMap>-1</whileInMap>
+      </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CaravanForage</defName>
+    <label>rover route assist (foraging)</label>
+    <description>Information on best spots and practices for foraging, courtesy of real-time advisement from Rover Branch navigational services.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statFactors>
+		  <ForagedNutritionPerDay>2</ForagedNutritionPerDay>
+		</statFactors>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HautsFramework.HediffCompProperties_OnCaravanSeverity">
+        <perOnCaravanTick>1</perOnCaravanTick>
+		<whileInMap>-1</whileInMap>
+      </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CaravanSpeed</defName>
+    <label>rover route assist (speed)</label>
+    <description>Following a route optimized for speed, courtesy of real-time advisement from Rover Branch navigational services.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<capMods>
+		  <li>
+			<capacity>Moving</capacity>
+			<postFactor>1.2</postFactor><!--does not actually affect caravan speed... caravan speed only cares about the default humanlike move speed, not the actual speed of the humanlikes on it... what the heck... so we use a Harmony patch to actually boost speed. Hopefully Tynan realizes this change is stupid, it certainly didn't use to work like this before-->
+		  </li>
+		</capMods>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HautsFramework.HediffCompProperties_OnCaravanSeverity">
+        <perOnCaravanTick>1</perOnCaravanTick>
+		<whileInMap>-1</whileInMap>
+      </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CaravanStealth</defName>
+    <label>rover route assist (stealth)</label>
+    <description>Following a route optimized for evading detection, courtesy of real-time advisement from Rover Branch navigational services.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statOffsets>
+		  <Hauts_PersonalCaravanVisibilityFactor>-0.95</Hauts_PersonalCaravanVisibilityFactor>
+		</statOffsets>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HautsFramework.HediffCompProperties_OnCaravanSeverity">
+        <perOnCaravanTick>1</perOnCaravanTick>
+		<whileInMap>-1</whileInMap>
+      </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  
+</Defs>

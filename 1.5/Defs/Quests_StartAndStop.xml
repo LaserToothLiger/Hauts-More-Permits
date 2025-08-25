@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--each e-branch sends you one of these quests after 1-10d. They won't send their normal quests until you accept this one, which is one of two purposes of this quest.-->
+  <QuestScriptDef>
+    <defName>HVMP_BranchIntro</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->Making ties with the [asker_faction_name]</li>
+
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription(asker_factionLeader==True)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], is interested in establishing ties with societies on this world - societies such as yours!\n\nIf you choose to work with the [asker_faction_name], they will regularly send you quests that can be accomplished to earn standing, which grants access to their wide array of permit abilities. However, you will not be able to back out of this partnership without losing access to their permits... and when any of your bases is at a 'sky-high expectations' level of wealth, refusing or failing their quests may cause you to lose some of their goodwill.\n\n\n\n&lt;color=#FFB266&gt;Information on the [asker_faction_name]:&lt;/color&gt;\n[factionDescFromDef]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+        <li Class="QuestNode_GetFactionOf">
+          <thing>$asker</thing>
+          <storeAs>faction</storeAs>
+        </li>
+        <li Class="HautsPermits.QuestNode_GetFactionDesc">
+          <storeAs>factionDescFromDef</storeAs>
+        </li>
+        <li Class="HautsPermits.QuestNode_EstablishBranchTies" />
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--The second purpose is that you will also receive one of these; if you're tired of dealing with a branch, you can disable Goodwill or Standing rewards in your Quest tab's settings, but at Sky-high Expectations (SHE) doing that will still result in goodwill
+	loss whenever they would've given you a quest. This quest is a 'button' that just lets you instantly tank your relationship with them to stop getting bugged by them at SHE.-->
+  <QuestScriptDef>
+    <defName>HVMP_BranchOutro</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->Cutting ties with the [asker_faction_name]</li>
+
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->Accept this quest if, for some reason, you wish to dissolve your relationship with the [asker_faction_name]. This will cause the following effects:\n\n- Your relations with them to drop to &lt;color=#BD0000&gt;-100&lt;/color&gt;.\n- All of their turrets will self-destruct, and all of their people will flee.\n- You will be unable to use their permits until you re-establish a relationship with them.\n- They will send you another Making Ties quest, but until you accept that one they will not send any other quests.</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+        <li Class="QuestNode_GetFactionOf">
+          <thing>$asker</thing>
+          <storeAs>faction</storeAs>
+        </li>
+        <li Class="HautsPermits.QuestNode_ForsakeBranchTies" />
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+</Defs>

@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--Travelogues (novels from Rover Branch)-->
+  <RulePackDef>
+    <defName>HVMP_TravelogueTitle</defName>
+    <include>
+      <li>ArtNameUtility</li>
+	  <li>NamerWorld</li>
+	  <li>WorldFeatureNamerCommon</li>
+    </include>
+    <rulePack>
+      <rulesStrings>
+        <!-- Roots -->
+        <li>title(p=3)->[titleNaked]</li>
+        <li>title->[ANYPAWN_nameIndef]'s [titleNaked]</li>
+        <li>title->[branchAlias] [guide]</li>
+        <li>title->[branchAlias] [guide] to [r_name]</li>
+        <li>title->[Character]'s [guide]</li>
+        <li>title->[Character]'s [guide] to [r_name]</li>
+        <li>title->[Character]'s [branchAlias] [guide]</li>
+        <li>title->[Character]'s [branchAlias] [guide] to [r_name]</li>
+        <li>title->The [adjective] [guide]</li>
+        <li>title->The [adjective] [guide] to [r_name]</li>
+
+        <li>titleNaked->[place]s</li>
+        <li>titleNaked->[adjective] [place]s</li>
+        <li>titleNaked->[place]s and [place]s</li>
+        <li>titleNaked->[place]s [linkage] [r_name]</li>
+        <li>titleNaked->[place]s [linkage] [ConceptAny]</li>
+        <li>titleNaked->[guide] to [r_name]</li>
+        <li>titleNaked->[adjective] [place]s</li>
+        <li>titleNaked->[adjective] [r_name]</li>
+
+        <!-- Content -->
+        <li>branchAlias->Rover Branch</li>
+        <li>branchAlias->Rover</li>
+        <li>branchAlias->Enterprising</li>
+        <li>branchAlias->Roving</li>
+        <li>branchAlias->Wayfarer</li>
+        <li>branchAlias->Itinerant</li>
+        <li>branchAlias->Visitor</li>
+		
+        <li>guide->Guide</li>
+        <li>guide->Atlas</li>
+        <li>guide->Gazetteer</li>
+        <li>guide->Chart</li>
+        <li>guide->Companion</li>
+        <li>guide->Travelogue</li>
+        <li>guide->Travel Guide</li>
+        <li>guide->Encyclopedia</li>
+        <li>guide->Destinations</li>
+
+        <li>linkage->of</li>
+        <li>linkage->in</li>
+        <li>linkage->at</li>
+        <li>linkage->Among</li>
+
+        <li>adjective->[AdjectiveAny]</li>
+        
+        <li>place(p=25)->[TerrainFeature]</li>
+        <li>place->Abyss</li>
+        <li>place->Amphitheater</li>
+        <li>place->Aquarium</li>
+        <li>place->Aqueduct</li>
+        <li>place->Arena</li>
+        <li>place->Asylum</li>
+        <li>place->Barracks</li>
+        <li>place->Base</li>
+        <li>place->Bunker</li>
+        <li>place->Cabin</li>
+        <li>place->Camp</li>
+        <li>place->Castle</li>
+        <li>place->Cathedral</li>
+        <li>place->Cavern</li>
+        <li>place->Citadel</li>
+        <li>place->City</li>
+        <li>place->Coliseum</li>
+        <li>place->Colony</li>
+        <li>place->Depths</li>
+        <li>place->Desert</li>
+        <li>place->Elevator</li>
+        <li>place->Factory</li>
+        <li>place->Festival</li>
+        <li>place->Fortress</li>
+        <li>place->Glade</li>
+        <li>place->Graveyard</li>
+        <li>place->Greenhouse</li>
+        <li>place->Grove</li>
+        <li>place->Harbor</li>
+        <li>place->Heart</li>
+        <li>place->Hive</li>
+        <li>place->Hospital</li>
+        <li>place->Island</li>
+        <li>place->Jungle</li>
+        <li>place->Labor Camp</li>
+        <li>place->Laboratory</li>
+        <li>place->Labyrinth</li>
+        <li>place->Launchpad</li>
+        <li>place->Library</li>
+        <li>place->Lighthouse</li>
+        <li>place->Manor</li>
+        <li>place->Mansion</li>
+        <li>place->Marketplace</li>
+        <li>place->Mine</li>
+        <li>place->Monastery</li>
+        <li>place->Mountain</li>
+        <li>place->Nexus</li>
+        <li>place->Oasis</li>
+        <li>place->Observatory</li>
+        <li>place->Orchard</li>
+        <li>place->Outpost</li>
+        <li>place->Palace</li>
+        <li>place->Plateau</li>
+        <li>place->Prison</li>
+        <li>place->Refinery</li>
+        <li>place->Resort</li>
+        <li>place->Rift</li>
+        <li>place->Ruins</li>
+        <li>place->Sanctuary</li>
+        <li>place->School</li>
+        <li>place->Settlement</li>
+        <li>place->Ship</li>
+        <li>place->Soul</li>
+        <li>place->Space Station</li>
+        <li>place->Spaceport</li>
+        <li>place->Spire</li>
+        <li>place->Swamp</li>
+        <li>place->Tavern</li>
+        <li>place->Temple</li>
+        <li>place->Town</li>
+        <li>place->Tundra</li>
+        <li>place->University</li>
+        <li>place->Village</li>
+        <li>place->Volcano</li>
+        <li>place->Warehouse</li>
+        <li>place->Wasteland</li>
+        <li>place->Wilderness</li>
+        <li>place->Zoo</li>
+
+        <li>story->Adventure</li>
+        <li>story->Adventures</li>
+        <li>story->Allegory</li>
+        <li>story->Anecdote</li>
+        <li>story->Annals</li>
+        <li>story->Ballad</li>
+        <li>story->Biography</li>
+        <li>story->Chapters</li>
+        <li>story->Chronicle</li>
+        <li>story->Chronicles</li>
+        <li>story->Chronology</li>
+        <li>story->Comedy</li>
+        <li>story->Compendium</li>
+        <li>story->Compilation</li>
+        <li>story->Dialogue</li>
+        <li>story->Diary</li>
+        <li>story->Discourse</li>
+        <li>story->Drama</li>
+        <li>story->Dream</li>
+        <li>story->Enigma</li>
+        <li>story->Epic</li>
+        <li>story->Epiphany</li>
+        <li>story->Epistle</li>
+        <li>story->Fable</li>
+        <li>story->Fables</li>
+        <li>story->Fairy Tale</li>
+        <li>story->Fantasia</li>
+        <li>story->Fantasy</li>
+        <li>story->Fantasy</li>
+        <li>story->Fiction</li>
+        <li>story->Folklore</li>
+        <li>story->History</li>
+        <li>story->Imagination</li>
+        <li>story->Imaginings</li>
+        <li>story->Insight</li>
+        <li>story->Jottings</li>
+        <li>story->Journal</li>
+        <li>story->Journey</li>
+        <li>story->Legacy</li>
+        <li>story->Legend</li>
+        <li>story->Legends</li>
+        <li>story->Literature</li>
+        <li>story->Log</li>
+        <li>story->Memoir</li>
+        <li>story->Memoirs</li>
+        <li>story->Memories</li>
+        <li>story->Mind</li>
+        <li>story->Musical</li>
+        <li>story->Musings</li>
+        <li>story->Myth</li>
+        <li>story->Mythology</li>
+        <li>story->Mythos</li>
+        <li>story->Narration</li>
+        <li>story->Narrative</li>
+        <li>story->Novel</li>
+        <li>story->Observations</li>
+        <li>story->Ode</li>
+        <li>story->Pages</li>
+        <li>story->Papers</li>
+        <li>story->Parable</li>
+        <li>story->Prose</li>
+        <li>story->Recollections</li>
+        <li>story->Recount</li>
+        <li>story->Reflection</li>
+        <li>story->Reflections</li>
+        <li>story->Reminiscences</li>
+        <li>story->Revelation</li>
+        <li>story->Rhapsody</li>
+        <li>story->Saga</li>
+        <li>story->Scribblings</li>
+        <li>story->Script</li>
+        <li>story->Sketch</li>
+        <li>story->Sketches</li>
+        <li>story->Story</li>
+        <li>story->Tale</li>
+        <li>story->Tales</li>
+        <li>story->Testament</li>
+        <li>story->Testimony</li>
+        <li>story->Tragedy</li>
+        <li>story->Tribute</li>
+        <li>story->Verse</li>
+        <li>story->Volume</li>
+        <li>story->Whimsy</li>
+
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+  <RulePackDef>
+    <defName>HVMP_TravelogueDesc</defName>
+    <include>
+      <li>ArtNameUtility</li>
+	  <li>NamerWorld</li>
+	  <li>WorldFeatureNamerCommon</li>
+    </include>
+    <rulePack>
+      <rulesStrings>
+        <li>desc->A travelogue to some exotic, distant planet, as compiled by agents of the Rover Branch. Despite most readers being statistically and immeasurably unlikely to actually go to the planets they describe, travelogues like these make for fun reading.</li>
+	  </rulesStrings>
+	</rulePack>
+  </RulePackDef>
+  
+  <!--Obscure Tracts (ideo books from Archive Branch)-->
+  <RulePackDef>
+    <defName>HVMP_Namer_ObscureTract</defName>
+    <include>
+      <li>ArtNameUtility</li>
+    </include>
+    <rulePack>
+      <rulesStrings>
+        <!-- General -->
+        <li>title->[texts] of [memeConcept]</li>
+        <li>title->[memeAdjective] [texts]</li>
+        <li>title->Understanding [memeConcept]</li>
+        <li>title->[maybe_authored_title] [texts]</li>
+        <li>title->[memeConcept] and [lifeEvent]</li>
+        
+		<!--books dont resolve if no subject_-->
+		<li>subject->[title]</li>
+		
+		<!--backups in case the ideo has no meme that fills these text options-->
+        <li>memeAdjective->[randAdjective]</li>
+        <li>memeConcept->faith</li>
+        <li>memeConcept->truth</li>
+        <li>memeConcept->the sect</li>
+        <li>memeConcept->the cult</li>
+        <li>memeConcept->veneration</li>
+        <li>memeConcept->mythology</li>
+        <li>memeConcept->the [memeCreed]</li>
+		<li>memeLeaderNoun->prophet</li>
+		<li>memeLeaderNoun->scribe</li>
+		<li>memeLeaderNoun->yogi</li>
+		<li>memeLeaderNoun->philosopher</li>
+		<li>memeLeaderNoun->revelantor</li>
+		<li>memeLeaderNoun->spirit</li>
+		<li>memeLeaderNoun->visionary</li>
+		<li>memeLeaderNoun->leader</li>
+		<li>memeLeaderNoun->authority</li>
+		<li>memeMoralist->[memeLeaderNoun]</li>
+		
+        <li>texts->faith</li>
+        <li>texts->beliefs</li>
+        <li>texts->truths</li>
+        <li>texts->scriptures</li>
+        <li>texts->histories</li>
+        <li>texts->philosophy</li>
+        <li>texts->ideology</li>
+        <li>texts->practices</li>
+        <li>texts->edicts</li>
+        <li>texts->dogma</li>
+        <li>texts->principles</li>
+        <li>texts->foundation</li>
+        <li>texts->sermon</li>
+        <li>texts->encyclopedia</li>
+        <li>texts->tales</li>
+        <li>texts->mythos</li>
+        <li>texts->ruminations</li>
+        <li>texts->observations</li>
+        <li>texts->commentary</li>
+        <li>texts->epiphanies</li>
+        <li>texts->relevation</li>
+        <li>texts->prophecies</li>
+        <li>texts->manifesto</li>
+        <li>texts->tales</li>
+        <li>texts->epics</li>
+        <li>texts->stories</li>
+        <li>texts->sagas</li>
+        <li>texts->legends</li>
+        <li>texts->controversy</li>
+        <li>texts->heresy</li>
+        <li>texts->schism</li>
+        <li>texts->syncretism</li>
+        <li>texts->mystery</li>
+        
+        <li>lifeEvent->injury</li>
+        <li>lifeEvent->cloning</li>
+        <li>lifeEvent->trauma</li>
+        <li>lifeEvent->separation</li>
+        <li>lifeEvent->landing</li>
+        <li>lifeEvent->revolution</li>
+        <li>lifeEvent->archotech invocation</li>
+        <li>lifeEvent->Horax</li>
+        <li>lifeEvent->childbirth</li>
+        <li>lifeEvent->accident</li>
+        <li>lifeEvent->fleshmelding</li>
+        <li>lifeEvent->deathrest</li>
+        <li>lifeEvent->uprising</li>
+        <li>lifeEvent->chimera</li>
+        <li>lifeEvent->reverie</li>
+        <li>lifeEvent->ripperfall</li>
+        <li>lifeEvent->lobotomy</li>
+        <li>lifeEvent->archite infection</li>
+
+        <!-- Authored Books -->
+        <li>maybe_authored_title->[ANYPAWN_nameIndef]'s</li>
+		<li>maybe_authored_title->[memeCreed]'s</li>
+		<li>maybe_authored_title->[memeMoralist]'s</li>
+
+        <li>randAdjective->Basic</li>
+        <li>randAdjective->Best</li>
+        <li>randAdjective->Glitterworld</li>
+        <li>randAdjective->Medieval</li>
+        <li>randAdjective->Archaic</li>
+        <li>randAdjective->Lurid</li>
+        <li>randAdjective->Twilight</li>
+        <li>randAdjective->Deathworld</li>
+        <li>randAdjective->Grotesque</li>
+        <li>randAdjective->Sepulchral</li>
+        <li>randAdjective->Holy</li>
+        <li>randAdjective->Darkest</li>
+        <li>randAdjective->Subworld</li>
+        <li>randAdjective->Primitive</li>
+        <li>randAdjective->Survival</li>
+        <li>randAdjective->Stygian</li>
+        <li>randAdjective->Morose</li>
+        <li>randAdjective->Haunting</li>
+        <li>randAdjective->Cryptic</li>
+        <li>randAdjective->Cursed</li>
+        <li>randAdjective->Syncretic</li>
+        <li>randAdjective->Sectarian</li>
+        <li>randAdjective->Damned</li>
+        <li>randAdjective->Esteemed</li>
+        <li>randAdjective->Venerable</li>
+        <li>randAdjective->Revolutionary</li>
+        <li>randAdjective->Moral</li>
+        <li>randAdjective->Ethical</li>
+        
+
+        
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+  <RulePackDef>
+    <defName>HVMP_ObscureTractDesc</defName>
+    <include>
+      <li>ArtDescriptionUtility_Global</li>
+    </include>
+    <rulePack>
+      <rulesStrings>
+        
+        <!-- Roots -->
+        <li>desc->This [writingQualityAdjective] [bookType] [covers] the [natureNest] [memeConceptNest]. [writingQualitySentence]. [maybe_date]</li>
+        <li>desc->In this [writingQualityAdjective] [bookType], the [author] [tellsAStoryOf] [memeConceptNest], and of [memeConceptNest]. [writingQualitySentence]. [maybe_date]</li>
+
+        <!-- var1 -->
+		<li>covers->covers</li>
+        <li>covers->goes over</li>
+        <li>covers->explains</li>
+        <li>covers->expounds on</li>
+        <li>covers->preaches about</li>
+		
+		<li>natureNest->[nature]</li>
+		<li>natureNest->[memeAdjective] [nature]</li>
+		
+		<li>nature->nature of</li>
+		<li>nature->essence of</li>
+		<li>nature->truth about</li>
+		<li>nature->many stories about</li>
+		<li>nature->wisdom regarding</li>
+		<li>nature->matter of</li>
+		<li>nature->correct perspective on</li>
+		<li>nature->explanations for</li>
+		<li>nature->meaning of</li>
+		<li>nature->many meanings of</li>
+		<li>nature->importance of</li>
+		<li>nature->understanding of</li>
+		<li>nature->struggle to understand</li>
+		<li>nature->symbolism of</li>
+		<li>nature->impact of</li>
+		<li>nature->necessity of</li>
+		<li>nature->wondrousness of</li>
+		
+		<li>memeConceptNest->[memeAdjective] [memeConcept]</li>
+		<li>memeConceptNest->[memeConcept]</li>
+		<li>memeConceptNest->[memeConcept] and [memeConcept]</li>
+		<li>memeConceptNest->[memeConcept] [relationTo] [reality]</li>
+
+
+        <li>relationTo->in relation to</li>
+        <li>relationTo->in regard to</li>
+        <li>relationTo->and its impact on</li>
+        <li>relationTo->as it affects</li>
+        <li>relationTo->and its influence on</li>
+        <li>relationTo->and how it begets</li>
+
+
+        <li>reality->reality</li>
+        <li>reality->our place in the universe</li>
+        <li>reality->our purpose</li>
+        <li>reality->daily life</li>
+        <li>reality->power</li>
+        <li>reality->truth</li>
+        <li>reality->righteousness</li>
+        <li>reality->ethics</li>
+
+
+        <!-- Root: "Author tells a story of" variant -->
+
+        <li>tellsAStoryOf->tells a tale about</li>
+        <li>tellsAStoryOf->goes into detail about</li>
+        <li>tellsAStoryOf->explores a story about</li>
+        <li>tellsAStoryOf->tells a story about</li>
+        <li>tellsAStoryOf->spins a narrative about</li>
+        <li>tellsAStoryOf->paints a picture of</li>
+        <li>tellsAStoryOf->dives deep into</li>
+        <li>tellsAStoryOf->unravels the tale of</li>
+        <li>tellsAStoryOf->reveals the journey of</li>
+        <li>tellsAStoryOf->captures the essence of</li>
+        <li>tellsAStoryOf->sheds light on</li>
+        <li>tellsAStoryOf->weaves together</li>
+        <li>tellsAStoryOf->portrays the experience of</li>
+        <li>tellsAStoryOf->embarks on the narrative of</li>
+        <li>tellsAStoryOf->depicts the story of</li>
+        <li>tellsAStoryOf->touches upon the tale of</li>
+        <li>tellsAStoryOf->presents the story of</li>
+        <li>tellsAStoryOf->conveys the journey of</li>
+        <li>tellsAStoryOf->delves into the story of</li>
+        <li>tellsAStoryOf->illuminates the narrative of</li>
+        <li>tellsAStoryOf->captures the saga of</li>
+        <li>tellsAStoryOf->paints a vivid picture of</li>
+        <li>tellsAStoryOf->weaves the tapestry of</li>
+        <li>tellsAStoryOf->explores the chronicle of</li>
+
+
+        <li>author->author</li>
+        <li>author->[memeLeaderNoun] [ANYPAWN_nameIndef]</li>
+        <li>author->[memeMoralist] [ANYPAWN_nameIndef]</li>
+        <li>author(p=2)->unnamed [memeLeaderNoun]</li>
+        <li>author(p=2)->unnamed [memeMoralist]</li>
+
+        <li>memeAdjective->[randAdjective]</li>
+        <li>memeConcept->faith</li>
+        <li>memeConcept->truth</li>
+        <li>memeConcept->the sect</li>
+        <li>memeConcept->the cult</li>
+        <li>memeConcept->veneration</li>
+        <li>memeConcept->mythology</li>
+        <li>memeConcept->the [memeCreed]</li>
+		<li>memeLeaderNoun->prophet</li>
+		<li>memeLeaderNoun->scribe</li>
+		<li>memeLeaderNoun->yogi</li>
+		<li>memeLeaderNoun->philosopher</li>
+		<li>memeLeaderNoun->revelantor</li>
+		<li>memeLeaderNoun->founder</li>
+		<li>memeLeaderNoun->visionary</li>
+		<li>memeLeaderNoun->leader</li>
+		<li>memeLeaderNoun->authority</li>
+		<li>memeMoralist->[memeLeaderNoun]</li>
+
+
+        <!-- Writing quality -->
+
+        <li>writingQualityAdjective(quality==6)->remarkably well-written</li>
+        <li>writingQualityAdjective(quality==5)->moving and insightful</li>
+        <li>writingQualityAdjective(quality==4)->thoughtful and eloquent</li>
+        <li>writingQualityAdjective(quality==3)->well-written</li>
+        <li>writingQualityAdjective(quality==2)->mediocre</li>
+        <li>writingQualityAdjective(quality==1)->poorly-written</li>
+        <li>writingQualityAdjective(quality==0)->nearly-incoherent</li>
+
+        <li>writingQualitySentence(quality[greater_than]4)->It is [excellentDesc] [excellentExtra]</li>
+        <li>writingQualitySentence(quality[less_than]5,quality[greater_than]1)->It is [decentDesc] [decentExtra]</li>
+        <li>writingQualitySentence(quality[less_than]2)->It is [awfulDesc] [awfulExtra]</li>
+
+        <li>excellentDesc->a captivating, rousing address</li>
+        <li>excellentDesc->a thoughtful exploration of humanity</li>
+        <li>excellentDesc->deeply insightful about the complexity of the world</li>
+        <li>excellentDesc->tightly-written and rich with emotion</li>
+        <li>excellentDesc->wonderfully adapts ancient wisdom for modern audiences</li>
+        <li>excellentDesc->a fresh re-examination of philosophical cornerstones</li>
+        <li>excellentDesc->eminently relatable to real life</li>
+        <li>excellentExtra->. Each passage flows naturally into the next</li>
+        <li>excellentExtra->. It is a page-turner and very hard to put down</li>
+        <li>excellentExtra->. It blows the reader's mind at least three times</li>
+        <li>excellentExtra->. The presentation of the ideology's core precepts is nearly impossible to find fault with</li>
+        <li>excellentExtra->. The author's fervor is downright contagious</li>
+
+        <li>decentDesc->a decent examination of the ideology</li>
+        <li>decentDesc->interesting and engaging</li>
+        <li>decentDesc->focused on one interesting idea</li>
+        <li>decentDesc->somewhat humorous from time to time</li>
+        <li>decentDesc->gripping during some parts</li>
+        <li>decentDesc->unorthodox enough to grab the attention</li>
+        <li>decentDesc->appealing to a certain type of reader</li>
+        <li>decentExtra-> but highlights some glaring inconsistencies in the dogma</li>
+        <li>decentExtra-> but is often hard to follow</li>
+        <li>decentExtra-> but is riddled with self-contradictions</li>
+        <li>decentExtra-> but lacks any deep emotional appeal</li>
+        <li>decentExtra-> but it is filled with strawmen and obviously fake stereotypes</li>
+        <li>decentExtra-> but the author constantly uses words inappropriately in an attempt to sound smart</li>
+        <li>decentExtra-> but it is obviously meant for an audience whose lifeways are unimaginably different from anything on the rim</li>
+        <li>decentExtra-> but the writing is excessively flowery</li>
+        <li>decentExtra-> but many of the passages are unnecessary and don't relate to the ideoligion in any way</li>
+
+        <li>awfulDesc->very poorly written</li>
+        <li>awfulDesc->terribly written</li>
+        <li>awfulDesc->hard to read</li>
+        <li>awfulDesc->hard to follow</li>
+        <li>awfulDesc->fails to understand the ideoligion</li>
+        <li>awfulDesc->filled with self-contradictions and undefined concepts</li>
+        <li>awfulDesc->dominated by the author's own narcissism and savior complex</li>
+        <li>awfulDesc->so indiosyncratic that no two readers can agree on what it's even describing</li>
+        <li>awfulDesc->far, far too repetitive, long, and repetitive</li>
+        <li>awfulExtra-> and the writing has clearly been edited over in parts by the contradicting beliefs of a different sect</li>
+        <li>awfulExtra-> and is extremely hard to follow</li>
+        <li>awfulExtra-> and fails to assemble a coherent picture of the ideoligion</li>
+        <li>awfulExtra-> and lacks any sense of meaning or relevance</li>
+        <li>awfulExtra-> and doesn't present any interesting ideas at all</li>
+        <li>awfulExtra-> and fills the reader with ennui and boredom</li>
+        <li>awfulExtra-> and there is no identifiable moral perspective at any point</li>
+
+        <!-- Date -->
+
+        <li>maybe_date-></li>
+        <li>maybe_date->The book was published [date_form].</li>
+        <li>maybe_date->The text was first printed [date_form].</li>
+        <li>maybe_date->It's unclear exactly when the book was written.</li>
+
+        <li>date_form->recently</li>
+        <li>date_form->many centuries ago</li>
+        <li>date_form->on the [date]</li>
+        <li>date_form->in [date_season]</li>
+
+        <li>bookType->tract</li>
+        <li>bookType->scripture</li>
+        <li>bookType->parable</li>
+        <li>bookType->essay</li>
+        <li>bookType->narrative</li>
+        <li>bookType->saga</li>
+        <li>bookType->sermon</li>
+        <li>bookType->treatise</li>
+
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+  
+</Defs>

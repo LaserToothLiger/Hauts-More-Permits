@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <PawnKindDef ParentName="BaseDroneKind" MayRequire="Ludeon.RimWorld.Odyssey">
+    <defaultFactionDef>HVMP_PaxBranch</defaultFactionDef>
+    <defName>HVMP_WaspDrone</defName>
+    <label>wasp</label>
+    <labelPlural>wasps</labelPlural>
+    <race>Drone_Wasp</race>
+    <combatPower>25</combatPower>
+    <startingHediffs>
+      <li>
+        <def>HVMP_KickForAFK</def><!--just in case-->
+      </li>
+    </startingHediffs>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Things/Pawn/Drone/Wasp/WaspDrone</texPath>
+          <drawSize>0.95</drawSize>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+	<modExtensions>
+	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+	</modExtensions>
+  </PawnKindDef>
+</Defs>

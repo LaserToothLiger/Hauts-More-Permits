@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--Stimulation buffs-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_StimulatedHealing</defName>
+    <label>stimulated healing</label>
+    <description>Accelerated healing due to reprogrammed mechanites embedded in bodily tissues.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.4157,0.8471,0.6902)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statFactors>
+		  <InjuryHealingFactor>2</InjuryHealingFactor>
+		</statFactors>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.35</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_StimulatedThermotolerance</defName>
+    <label>stimulated thermotolerance</label>
+    <description>Increased resistance to extreme temperatures due to reprogrammed mechanites embedded in bodily tissues.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.4157,0.8471,0.6902)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statOffsets>
+		  <ComfyTemperatureMin>-12</ComfyTemperatureMin>
+		  <ComfyTemperatureMax>12</ComfyTemperatureMax>
+		</statOffsets>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_StimulatedImmunity</defName>
+    <label>stimulated immunity</label>
+    <description>Enhanced - but not more destructive - immunological responses due to reprogrammed mechanites embedded in bodily tissues.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.4157,0.8471,0.6902)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statFactors>
+		  <ImmunityGainSpeed>1.25</ImmunityGainSpeed>
+		</statFactors>
+		<statOffsets>
+		  <P42_AllergicSensitivity MayRequire="phil42.allergies">-0.8</P42_AllergicSensitivity>
+		</statOffsets>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.35</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_StimulatedToxtolerance</defName>
+    <label>stimulated toxtolerance</label>
+    <description>Increased resistance to toxins due to reprogrammed mechanites embedded in bodily tissues.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.4157,0.8471,0.6902)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statOffsets>
+		  <ToxicEnvironmentResistance>0.5</ToxicEnvironmentResistance>
+		  <ToxicResistance>0.1</ToxicResistance>
+		  <Mashed_Ashlands_AshResistance MayRequire="SirMashedPotato.Ashlands">0.6</Mashed_Ashlands_AshResistance>
+		  <P42_AllergicSensitivity MayRequire="phil42.allergies">-0.8</P42_AllergicSensitivity>
+		</statOffsets>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.1</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  
+  <!--Tamed mech diseases-->
+  <HediffDef Abstract="True" ParentName="HVT_TraitHediffBase" Name="HVMP_TameMechanitesBase">
+    <hediffClass>HediffWithComps</hediffClass>
+    <makesAlert>false</makesAlert>
+    <defaultLabelColor>(0.4157,0.8471,0.6902)</defaultLabelColor>
+    <minSeverity>0.001</minSeverity>
+    <maxSeverity>1</maxSeverity>
+    <initialSeverity>0.001</initialSeverity>
+    <tendable>true</tendable>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>900000~1800000</disappearsAfterTicks>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_TameMechanitesBase">
+    <defName>HVMP_FibrousMechanites</defName>
+    <label>fibrous mechanites (tamed)</label>
+    <description>Strength-enhancing mechanites which enhance the tensility, energy efficiency, and responsiveness of muscle tissue.</description>
+    <stages>
+      <li>
+        <capMods>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>0.35</offset>
+          </li>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>0.35</offset>
+          </li>
+          <li>
+            <capacity>BloodPumping</capacity>
+            <offset>0.35</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HautsPermits.HediffCompProperties_TMD">
+		<convertedFrom>FibrousMechanites</convertedFrom>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_TameMechanitesBase">
+    <defName>HVMP_SensoryMechanites</defName>
+    <label>sensory mechanites (tamed)</label>
+    <description>Sense-enhancing mechanites which reside in the nervous system.</description>
+    <stages>
+      <li>
+        <capMods>
+          <li>
+            <capacity>Sight</capacity>
+            <offset>0.35</offset>
+          </li>
+          <li>
+            <capacity>Hearing</capacity>
+            <offset>0.35</offset>
+          </li>
+          <li>
+            <capacity>Talking</capacity>
+            <offset>0.35</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>0.2</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HautsPermits.HediffCompProperties_TMD">
+		<convertedFrom>SensoryMechanites</convertedFrom>
+	  </li>
+    </comps>
+  </HediffDef>
+  
+  <!--mech optimization-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_EnergyOptimization</defName>
+    <label>energy optimization</label>
+    <description>Reduced energy usage. This effect is lost on death.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.4157,0.8471,0.6902)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statFactors>
+		  <MechEnergyUsageFactor>0.6</MechEnergyUsageFactor>
+		</statFactors>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_DisappearsOnDeath"/>
+    </comps>
+  </HediffDef>
+  
+</Defs>

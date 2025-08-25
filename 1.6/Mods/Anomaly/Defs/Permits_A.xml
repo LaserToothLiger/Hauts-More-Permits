@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--Occult level 1-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_TomeDrop</defName>
+    <label>tome drop</label>
+    <description>Call for a random tome from the Occult Branch, which can be read to gain dark knowledge at the expense of potentially driving the reader mad.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropBook_PTargFriendly</workerClass>
+    <minTitle>HVMP_OccultI</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <uiPosition>(0,0)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<phenomenonCount>1</phenomenonCount>
+			<bookDef>Tome</bookDef>
+			<bookSuperQualityChance>0</bookSuperQualityChance>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+	<defName>HVMP_SerumDrop</defName>
+	<label>serum drop</label>
+	<description>Call for a drop of 2 random serums.</description>
+	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+    <minTitle>HVMP_OccultI</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+	<permitPointCost>1</permitPointCost>
+	<cooldownDays>6</cooldownDays>
+	<uiPosition>(0,1)</uiPosition>
+	<royalAid>
+	  <favorCost>1</favorCost>
+	</royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<tradeTags>
+			  <li>Serum</li>
+			</tradeTags>
+			<numFromCategory>2</numFromCategory>
+		</li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_SubcoreBasicDrop</defName>
+    <label>basic subcore drop</label>
+    <description>Call for a drop of 4 basic subcores.</description>
+    <minTitle>HVMP_OccultI</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(0,2)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <SubcoreBasic>4</SubcoreBasic>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_SelfSkip</defName>
+    <label>self-skip</label>
+    <description>Teleport to the target location. Since this process is targeted by a machine on one of the Occult Branch's orbital ships, it does not require line of sight.</description>
+	<workerClass>HautsPermits_Occult.RoyalTitlePermitWorker_SelfSkip</workerClass>
+    <minTitle>HVMP_OccultI</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>3</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(0,3)</uiPosition>
+    <royalAid>
+      <targetingRange>25</targetingRange>
+	  <targetingRequireLOS>false</targetingRequireLOS>
+      <favorCost>2</favorCost>
+	  <radius>10</radius><!--for clamor purposes-->
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ClosedMindSuffusion</defName>
+    <label>closed mind suffusion</label>
+    <description>Suffuse the target with psychic energies which numb the mind, reducing mental break threshold, psychic sensitivity, and learning speed. Lasts 3 days.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_OccultI</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>12</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(0,4)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_SuffusedClosedMind</li></hediffs>
+			<soundDef>AgonyPulse_Cast</soundDef>
+			<onUseMessage>HVMP_PsychicAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_OpenMindSuffusion</defName>
+    <label>open mind suffusion</label>
+    <description>Suffuse the target with psychic energies which increase the volatility of the mind, increasing mental break threshold and psychic sensitivity. Lasts 3 days.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_OccultI</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>12</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(0,5)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_SuffusedOpenMind</li></hediffs>
+			<soundDef>AgonyPulse_Cast</soundDef>
+			<onUseMessage>HVMP_PsychicAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ProfanitySuffusion</defName>
+    <label>profanity suffusion</label>
+    <description>Suffuse the target with psychic energies attuned to the Void, increasing the target's flow of insights into Void entities and their proficiency with psychic rituals. Lasts 3 days.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_OccultI</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>12</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(0,6)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_SuffusedProfanity</li></hediffs>
+			<soundDef>AgonyPulse_Cast</soundDef>
+			<onUseMessage>HVMP_PsychicAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_SanctitySuffusion</defName>
+    <label>sanctity suffusion</label>
+    <description>Suffuse the target with psychic energies which repel those of the Void, increasing damage dealt to unnatural entities and suppression speed. Lasts 3 days.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_OccultI</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>12</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(0,7)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_SuffusedSanctity</li></hediffs>
+			<soundDef>AgonyPulse_Cast</soundDef>
+			<onUseMessage>HVMP_PsychicAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <!--Occult level 2-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_EltexInhibitorDrop</defName>
+    <label>eltex inhibitor drop</label>
+    <description>Call for a drop of 1 eltex inhibitor. This device increases the containment of any holding platform it is pointed towards, and it does not require power.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <minTitle>HVMP_OccultII</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>16</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(1,0)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_EltexInhibitor>
+			<count>1</count>
+		</HVMP_EltexInhibitor>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_EltexBeaconDrop</defName>
+    <label>eltex beacon drop</label>
+    <description>Call for a drop of 1 eltex beacon. This device increases the quality of any psychic ritual performed near it.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <minTitle>HVMP_OccultII</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>30</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(1,1)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_EltexBeacon>
+			<count>1</count>
+		</HVMP_EltexBeacon>
+      </itemsToDrop>
+      <favorCost>5</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_FoilHelmetDrop</defName>
+    <label>foil helmet drop</label>
+    <description>Call for a drop of 1 psychic foil helmet.</description>
+    <minTitle>HVMP_OccultII</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(1,2)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <Apparel_PsychicFoilHelmet>1</Apparel_PsychicFoilHelmet>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_RehumanizingSuffusion</defName>
+    <label>rehumanizing suffusion</label>
+    <description>Suffuse the target "inhumanized" individual with psychic energies which gradually overwrite the inhumanized patterns of thought. Though it has a severe negative impact on mood, after 5 days, the target will have their humanity restored.</description>
+    <workerClass>HautsPermits_Occult.RoyalTitlePermitWorker_Rehumanizer</workerClass>
+    <minTitle>HVMP_OccultII</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(1,3)</uiPosition>
+    <royalAid>
+      <favorCost>4</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_SuffusedRehumanizer</li></hediffs>
+			<soundDef>AgonyPulse_Cast</soundDef>
+			<onUseMessage>HVMP_PsychicAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_CallGhoul</defName>
+    <label>call ghoul</label>
+    <description>Call for 1 ghoul to aid you in battle.</description>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <minTitle>HVMP_OccultII</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(1,7)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+      <pawnKindDef>HVMP_GhoulBasic</pawnKindDef>
+      <pawnCount>1</pawnCount>
+      <targetingRange>39.9</targetingRange>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <!--Occult level 3-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_FlarePackDrop</defName>
+    <label>flare pack drop</label>
+    <description>Call for a drop of 1 disruptor flare pack.</description>
+    <minTitle>HVMP_OccultIII</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(2,0)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <Apparel_DisruptorFlarePack>1</Apparel_DisruptorFlarePack>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_SubcoreStandardDrop</defName>
+    <label>standard subcore drop</label>
+    <description>Call for a drop of 2 standard subcores.</description>
+    <minTitle>HVMP_OccultIII</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(2,2)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <SubcoreRegular>2</SubcoreRegular>
+      </itemsToDrop>
+      <favorCost>4</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="VanillaExpanded.VPsycastsE">
+		<defName>HVMP_EltexDrop</defName>
+		<label>eltex drop</label>
+		<description>Call for a drop of 5 eltex.</description>
+		<minTitle>HVMP_OccultIII</minTitle>
+		<faction>HVMP_OccultBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>15</cooldownDays>
+		<usableOnWorldMap>true</usableOnWorldMap>
+		<uiPosition>(2,1)</uiPosition>
+		<royalAid>
+		  <itemsToDrop>
+			<VPE_Eltex>5</VPE_Eltex>
+		  </itemsToDrop>
+		  <favorCost>4</favorCost>
+		</royalAid>
+	  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_CallGhoulCyber</defName>
+    <label>call cyber-ghoul</label>
+    <description>Call for 1 cybernetically-enhanced ghoul to aid you in battle.</description>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <minTitle>HVMP_OccultIII</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(2,6)</uiPosition>
+	<prerequisite>HVMP_CallGhoul</prerequisite>
+    <royalAid>
+      <favorCost>3</favorCost>
+      <pawnKindDef>HVMP_GhoulCyber</pawnKindDef>
+      <pawnCount>1</pawnCount>
+      <targetingRange>39.9</targetingRange>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_CallGhoulPack</defName>
+    <label>call ghoul pack</label>
+    <description>Call for 3 ghouls to aid you in battle.</description>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <minTitle>HVMP_OccultIII</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(2,7)</uiPosition>
+	<prerequisite>HVMP_CallGhoul</prerequisite>
+    <royalAid>
+      <favorCost>3</favorCost>
+      <pawnKindDef>HVMP_GhoulBasic</pawnKindDef>
+      <pawnCount>3</pawnCount>
+      <targetingRange>39.9</targetingRange>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <!--Occult level 4-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+	<defName>HVMP_EltexGearDrop</defName>
+	<label>psycaster gear drop</label>
+	<description>Call for a drop of 1 random piece of normal-quality psycaster gear.</description>
+	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+    <minTitle>HVMP_OccultIV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+	<permitPointCost>1</permitPointCost>
+	<cooldownDays>30</cooldownDays>
+	<uiPosition>(3,0)</uiPosition>
+	<royalAid>
+	  <favorCost>4</favorCost>
+	</royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<tradeTags>
+			  <li>PsychicApparel</li>
+			  <li>PsychicWeapon</li>
+			</tradeTags>
+			<numFromCategory>1</numFromCategory>
+			<extraNumber>2</extraNumber><!--can create items of Normal quality-->
+		</li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_InvisibilitySuffusion</defName>
+    <label>invisibility suffusion</label>
+    <description>Suffuse the target with a psychic invisibility field. Lasts for half an hour.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_OccultIV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(3,1)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_SuffusedInvisibility</li></hediffs>
+			<soundDef>AgonyPulse_Cast</soundDef>
+			<onUseMessage>HVMP_PsychicAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_PsyfocusSuffusion</defName>
+    <label>psyfocus suffusion</label>
+    <description>Suffuse the target with a continuous inflow of psyfocus, at the expense of worsening their mood. Restores 50% psyfocus over 1 day.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_OccultIV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(3,2)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_SuffusedPsyfocus</li></hediffs>
+			<soundDef>AgonyPulse_Cast</soundDef>
+			<onUseMessage>HVMP_PsychicAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
+    <defName>HVMP_CallPsion</defName>
+    <label>call psion</label>
+    <description>Call a psion to assist you for 4 days. This level 3-4 psycaster can be controlled like one of your own colonists. You are required to keep them safe, though they will be skipped back to safety if ever downed or about to die.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallLaborersPTargFriendly</workerClass>
+    <minTitle>HVMP_OccultIV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <uiPosition>(3,3)</uiPosition>
+    <royalAid>
+      <favorCost>4</favorCost>
+      <pawnKindDef>HVMP_Psion</pawnKindDef>
+      <pawnCount>1</pawnCount>
+      <aidDurationDays>4</aidDurationDays>
+      <targetingRange>44.9</targetingRange>
+      <targetingRequireLOS>false</targetingRequireLOS>
+    </royalAid>
+    <cooldownDays>30</cooldownDays>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
+    <defName>HVMP_CallBattlePsion</defName>
+    <label>call battle-psions</label>
+    <description>Call two shielded, prestige-armored, eltex staff-wielding battle-psion each with 3-4 psylink levels to aid you in battle.</description>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <minTitle>HVMP_OccultIV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <uiPosition>(3,4)</uiPosition>
+    <royalAid>
+      <favorCost>4</favorCost>
+      <pawnKindDef>HVMP_BattlePsion</pawnKindDef>
+      <pawnCount>2</pawnCount>
+      <targetingRange>39.9</targetingRange>
+    </royalAid>
+    <cooldownDays>30</cooldownDays>
+  </RoyalTitlePermitDef>
+  <!--Occult level 5-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_SubcoreHighDrop</defName>
+    <label>high subcore drop</label>
+    <description>Call for a drop of 1 high subcore.</description>
+    <minTitle>HVMP_OccultV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(4,2)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <SubcoreHigh>1</SubcoreHigh>
+      </itemsToDrop>
+      <favorCost>5</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Odyssey">
+    <defName>HVMP_SentienceCatalystDrop</defName>
+    <label>sentience catalyst drop</label>
+    <description>Call for a drop of 1 sentience catalyst.</description>
+    <minTitle>HVMP_OccultV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>12</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(5,2)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <SentienceCatalyst>1</SentienceCatalyst>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
+    <defName>HVMP_CallPsionIIa</defName>
+    <label>call master psion</label>
+    <description>Call a master psion to assist you for 4 days. This level 6 psycaster has many psycasts, and can be controlled like one of your own colonists. You are required to keep them safe, though they will be skipped back to safety if ever downed or about to die.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallLaborersPTargFriendly</workerClass>
+    <minTitle>HVMP_OccultV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <uiPosition>(4,0)</uiPosition>
+	<prerequisite>HVMP_CallPsion</prerequisite>
+    <royalAid>
+      <favorCost>8</favorCost>
+      <pawnKindDef>HVMP_PsionMaster</pawnKindDef>
+      <pawnCount>1</pawnCount>
+      <aidDurationDays>4</aidDurationDays>
+      <targetingRange>44.9</targetingRange>
+      <targetingRequireLOS>false</targetingRequireLOS>
+    </royalAid>
+    <cooldownDays>40</cooldownDays>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
+    <defName>HVMP_CallPsionIIb</defName>
+    <label>call psion cabal</label>
+    <description>Call a group of 4 psions to assist you for 4 days. These level 3-4 psycasters can be controlled like your own colonists. You are required to keep them safe, though they will be skipped back to safety if ever downed or about to die.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallLaborersPTargFriendly</workerClass>
+    <minTitle>HVMP_OccultV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <uiPosition>(4,1)</uiPosition>
+	<prerequisite>HVMP_CallPsion</prerequisite>
+    <royalAid>
+      <favorCost>8</favorCost>
+      <pawnKindDef>HVMP_Psion</pawnKindDef>
+      <pawnCount>4</pawnCount>
+      <aidDurationDays>4</aidDurationDays>
+      <targetingRange>44.9</targetingRange>
+      <targetingRequireLOS>false</targetingRequireLOS>
+    </royalAid>
+    <cooldownDays>40</cooldownDays>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
+    <defName>HVMP_CallBattlePsionIIa</defName>
+    <label>call war-psions</label>
+    <description>Call two shielded, prestige-armored, persona monosword-wielding war-psions each with 6 psylink levels and a multitude of psycasts to aid you in battle.</description>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <minTitle>HVMP_OccultV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <uiPosition>(4,3)</uiPosition>
+	<prerequisite>HVMP_CallBattlePsion</prerequisite>
+    <royalAid>
+      <favorCost>8</favorCost>
+      <pawnKindDef>HVMP_WarPsion</pawnKindDef>
+      <pawnCount>2</pawnCount>
+      <targetingRange>39.9</targetingRange>
+    </royalAid>
+    <cooldownDays>40</cooldownDays>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
+    <defName>HVMP_CallBattlePsionIIb</defName>
+    <label>call battle-cabal</label>
+    <description>Call five shielded, prestige-armored, eltex staff-wielding battle-psions each with 3-4 psylink levels to aid you in battle.</description>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <minTitle>HVMP_OccultV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <uiPosition>(4,4)</uiPosition>
+	<prerequisite>HVMP_CallBattlePsion</prerequisite>
+    <royalAid>
+      <favorCost>8</favorCost>
+      <pawnKindDef>HVMP_BattlePsion</pawnKindDef>
+      <pawnCount>5</pawnCount>
+      <targetingRange>39.9</targetingRange>
+    </royalAid>
+    <cooldownDays>40</cooldownDays>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_CallGhoulCyberIIa</defName>
+    <label>call bionic ghoul</label>
+    <description>Call for 1 extremely heavily cybernetically-enhanced ghoul to aid you in battle.</description>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <minTitle>HVMP_OccultV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>25</cooldownDays>
+    <uiPosition>(4,5)</uiPosition>
+	<prerequisite>HVMP_CallGhoulCyber</prerequisite>
+    <royalAid>
+      <favorCost>3</favorCost>
+      <pawnKindDef>HVMP_GhoulBionic</pawnKindDef>
+      <pawnCount>1</pawnCount>
+      <targetingRange>39.9</targetingRange>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_CallGhoulCyberIIb</defName>
+    <label>call empowered ghoul</label>
+    <description>Call for 1 cybernetically-enhanced ghoul, pumped full of drugs, serums, and psychic energy, to aid you in battle.</description>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <minTitle>HVMP_OccultV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>25</cooldownDays>
+    <uiPosition>(4,6)</uiPosition>
+	<prerequisite>HVMP_CallGhoulCyber</prerequisite>
+    <royalAid>
+      <favorCost>3</favorCost>
+      <pawnKindDef>HVMP_GhoulSuper</pawnKindDef>
+      <pawnCount>1</pawnCount>
+      <targetingRange>39.9</targetingRange>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_CallGhoulPackIIa</defName>
+    <label>call cyber-ghoul pack</label>
+    <description>Call for 3 cybernetically-enhanced ghouls to aid you in battle.</description>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <minTitle>HVMP_OccultV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>25</cooldownDays>
+    <uiPosition>(4,7)</uiPosition>
+	<prerequisite>HVMP_CallGhoulPack</prerequisite>
+    <royalAid>
+      <favorCost>3</favorCost>
+      <pawnKindDef>HVMP_GhoulCyber</pawnKindDef>
+      <pawnCount>3</pawnCount>
+      <targetingRange>39.9</targetingRange>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_CallGhoulPackIIb</defName>
+    <label>call ghoul swarm</label>
+    <description>Call for 9 ghouls to aid you in battle.</description>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <minTitle>HVMP_OccultV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>25</cooldownDays>
+    <uiPosition>(4,8)</uiPosition>
+	<prerequisite>HVMP_CallGhoulPack</prerequisite>
+    <royalAid>
+      <favorCost>3</favorCost>
+      <pawnKindDef>HVMP_GhoulBasic</pawnKindDef>
+      <pawnCount>9</pawnCount>
+      <targetingRange>39.9</targetingRange>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <!--Occult level 6-->
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="RedMattis.SapientAnimals">
+		<defName>HVMP_SapienatorDrop</defName>
+		<label>cogni-fi drop</label>
+		<description>Call for a drop of 1 cogni-fi trinket, which can be used to make an animal sapient.</description>
+		<minTitle>HVMP_OccultVI</minTitle>
+		<faction>HVMP_OccultBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>45</cooldownDays>
+		<usableOnWorldMap>true</usableOnWorldMap>
+		<uiPosition>(6,0)</uiPosition>
+		<royalAid>
+		  <itemsToDrop>
+			<BS_Sapienator>1</BS_Sapienator>
+		  </itemsToDrop>
+		  <favorCost>6</favorCost>
+		</royalAid>
+	  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_CallAberration</defName>
+    <label>signal aberration</label>
+    <description>Send out a signal to attract an eccentric individual both blessed and cursed by the Void. This individual will arrive within 1-2 days.\n\nCosts two permit points.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallRaid</workerClass>
+    <minTitle>HVMP_OccultVI</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>2</permitPointCost>
+    <cooldownDays>40</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(6,1)</uiPosition>
+    <royalAid>
+      <favorCost>6</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<incidentDefs>
+			  <li>CreepJoinerJoin</li>
+			</incidentDefs>
+			<incidentUsesPermitFaction>false</incidentUsesPermitFaction><!--like, what does that even mean in this context-->
+			<incidentDelay>300~1200</incidentDelay>
+			<incidentPoints>350</incidentPoints>
+			<questCount>1</questCount>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_CallNociosphere</defName>
+    <label>deploy nociosphere</label>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <description>Call for the delivery of a primed nociosphere from the Occult Branch. This eldritch weapon will activate shortly after landing, then proceed to randomly kill its way across the landscape. It is not your ally. It is not anyone's ally. Avoidance is advised.\n\nCosts two permit points.</description>
+    <minTitle>HVMP_OccultVI</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>2</permitPointCost>
+    <cooldownDays>40</cooldownDays>
+    <uiPosition>(6,2)</uiPosition>
+    <royalAid>
+      <favorCost>6</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<numFromCategory>1</numFromCategory>
+			<allowedPawnKinds>
+			  <li>HVMP_PrimedNociosphere</li>
+			</allowedPawnKinds>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_PsylinkSuffusion</defName>
+    <label>psylink suffusion</label>
+    <description>Suffuse the target with psychic energies which form a psylink over a long period of time. The process renders the victim unconscious, and takes at least 5 days, plus a further 5 days per psylink level the target already has.\n\nThe target must be psy-sensitive and not hostile to the caller.\n\nCosts two permit points.</description>
+    <workerClass>HautsPermits_Occult.RoyalTitlePermitWorker_Psylinker</workerClass>
+    <minTitle>HVMP_OccultVI</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>2</permitPointCost>
+    <cooldownDays>60</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(6,3)</uiPosition>
+    <royalAid>
+      <favorCost>8</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_SuffusedPsylinker</li></hediffs>
+			<soundDef>AgonyPulse_Cast</soundDef>
+			<onUseMessage>HVMP_PsychicAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_DeghoulizingSuffusion</defName>
+    <label>deghoulizing suffusion</label>
+    <description>Suffuse the target ghoul with psychic energies which gradually revert the changes wrought by the archotech shard within it. The process immobilizes the victim. After 3 days, the ghoul will be restored to a normal, un-ghoulish state.\n\nCosts two permit points.</description>
+    <workerClass>HautsPermits_Occult.RoyalTitlePermitWorker_Deghoulizer</workerClass>
+    <minTitle>HVMP_OccultVI</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>2</permitPointCost>
+    <cooldownDays>60</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(6,4)</uiPosition>
+    <royalAid>
+      <favorCost>8</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_SuffusedDeghoulizer</li></hediffs>
+			<soundDef>AgonyPulse_Cast</soundDef>
+			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Hautarche.HautsTraits">
+		<defName>HVMP_AscensionSuffusion</defName>
+		<label>ascension suffusion</label>
+		<description>Suffuse the target with psychic energies which will grant the target the Latent Psychic trait after 7 days. The process renders the victim unconscious, as well as makes their body weaker and hungrier for its duration.\n\nCosts four permit points.</description>
+		<workerClass>HVMP_HAT.RoyalTitlePermitWorker_Ascender</workerClass>
+		<minTitle>HVMP_OccultVI</minTitle>
+		<faction>HVMP_OccultBranch</faction>
+		<permitPointCost>4</permitPointCost>
+		<cooldownDays>60</cooldownDays>
+		<usableOnWorldMap>false</usableOnWorldMap>
+		<uiPosition>(6,5)</uiPosition>
+		<royalAid>
+		  <favorCost>6</favorCost>
+		</royalAid>
+		<modExtensions>
+			<li Class="HautsFramework.PermitMoreEffects">
+				<hediffs><li>HVMP_SuffusedAscender</li></hediffs>
+				<soundDef>VoidMonolith_ActivateL1L2</soundDef>
+				<onUseMessage>HVMP_PsychicAssistance</onUseMessage>
+				<allowAnyFlesh>true</allowAnyFlesh>
+			</li>
+		</modExtensions>
+	  </RoyalTitlePermitDef>
+  
+</Defs>

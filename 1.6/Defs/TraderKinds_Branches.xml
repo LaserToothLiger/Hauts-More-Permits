@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs><!--these can only be contacted in comms console. They let you trade items of interest to an e-branch in exchange for branch standing-->
+  
+  <TraderKindDef>
+    <defName>HVMP_CommerceDonations</defName>
+    <label>commerce donations office</label>
+    <requestable>False</requestable>
+    <commonality>0</commonality>
+    <category>HVMP_BranchCollector</category>
+    <tradeCurrency>Favor</tradeCurrency>
+    <faction>HVMP_CommerceBranch</faction>
+    <hideThingsNotWillingToTrade>True</hideThingsNotWillingToTrade>
+    <stockGenerators>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>Silver</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>Gold</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>ElephantTusk</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>ThrumboHorn</thingDef>
+      </li>
+    </stockGenerators>
+	<modExtensions>
+	  <li Class="HautsPermits.DonationTypeBeat">
+		<donationString>ivory or gold</donationString>
+	  </li>
+	</modExtensions>
+  </TraderKindDef>
+  <TraderKindDef>
+    <defName>HVMP_PaxDonations</defName>
+    <label>pax donations office</label>
+    <requestable>False</requestable>
+    <commonality>0</commonality>
+    <category>HVMP_BranchCollector</category>
+    <tradeCurrency>Favor</tradeCurrency>
+    <faction>HVMP_PaxBranch</faction>
+    <hideThingsNotWillingToTrade>True</hideThingsNotWillingToTrade>
+    <stockGenerators>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>Luciferium</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>BroadshieldCore</thingDef>
+      </li>
+    </stockGenerators>
+	<modExtensions>
+	  <li Class="HautsPermits.DonationTypeBeat">
+		<donationString>luciferium or shield cores</donationString>
+	  </li>
+	</modExtensions>
+  </TraderKindDef>
+  <TraderKindDef>
+    <defName>HVMP_RoverDonations</defName>
+    <label>rover donations office</label>
+    <requestable>False</requestable>
+    <commonality>0</commonality>
+    <category>HVMP_BranchCollector</category>
+    <tradeCurrency>Favor</tradeCurrency>
+    <faction>HVMP_RoverBranch</faction>
+    <hideThingsNotWillingToTrade>True</hideThingsNotWillingToTrade>
+    <stockGenerators>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>Synthread</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>Hyperweave</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>AIPersonaCore</thingDef>
+      </li>
+    </stockGenerators>
+	<modExtensions>
+	  <li Class="HautsPermits.DonationTypeBeat">
+		<donationString>spacer fabrics, AI persona cores, or shuttle engines</donationString>
+	  </li>
+	</modExtensions>
+  </TraderKindDef>
+  
+  <!--DLC-->
+  <TraderKindDef MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_ArchiveDonations</defName>
+    <label>archive donations office</label>
+    <requestable>False</requestable>
+    <commonality>0</commonality>
+    <category>HVMP_BranchCollector</category>
+    <tradeCurrency>Favor</tradeCurrency>
+    <faction>HVMP_ArchiveBranch</faction>
+    <hideThingsNotWillingToTrade>True</hideThingsNotWillingToTrade>
+    <stockGenerators>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>Urn</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>SculptureSmall</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>SculptureLarge</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>SculptureTerror</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>SculptureGrand</thingDef>
+      </li>
+    </stockGenerators>
+	<modExtensions>
+	  <li Class="HautsPermits.DonationTypeBeat">
+		<donationString>works of art</donationString>
+	  </li>
+	</modExtensions>
+  </TraderKindDef>
+  <TraderKindDef MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>HVMP_EcosphereDonations</defName>
+    <label>ecosphere donations office</label>
+    <requestable>False</requestable>
+    <commonality>0</commonality>
+    <category>HVMP_BranchCollector</category>
+    <tradeCurrency>Favor</tradeCurrency>
+    <faction>HVMP_EcosphereBranch</faction>
+    <hideThingsNotWillingToTrade>True</hideThingsNotWillingToTrade>
+    <stockGenerators>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>Ambrosia</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>HumanOvum</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>HemogenPack</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>PoluxSeed</thingDef>
+      </li>
+    </stockGenerators>
+	<modExtensions>
+	  <li Class="HautsPermits.DonationTypeBeat">
+		<donationString>ova, hemogen, ambrosia, or seeds</donationString>
+	  </li>
+	</modExtensions>
+  </TraderKindDef>
+  <TraderKindDef MayRequire="Ludeon.RimWorld.Anomaly">
+    <defName>HVMP_OccultDonations</defName>
+    <label>occult donations office</label>
+    <requestable>False</requestable>
+    <commonality>0</commonality>
+    <category>HVMP_BranchCollector</category>
+    <tradeCurrency>Favor</tradeCurrency>
+    <faction>HVMP_OccultBranch</faction>
+    <hideThingsNotWillingToTrade>True</hideThingsNotWillingToTrade>
+    <stockGenerators>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>Shard</thingDef>
+      </li>
+      <li Class="StockGenerator_BuySingleDef">
+        <thingDef>PsychicAmplifier</thingDef>
+      </li>
+    </stockGenerators>
+	<modExtensions>
+	  <li Class="HautsPermits.DonationTypeBeat">
+		<donationString>shards or psychic interface artifacts</donationString>
+	  </li>
+	</modExtensions>
+  </TraderKindDef>
+  
+</Defs>

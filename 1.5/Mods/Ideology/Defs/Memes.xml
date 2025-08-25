@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <MemeDef>
+    <defName>HVMP_Cosmopolitan</defName>
+    <label>cosmopolitan</label>
+    <description>People should be willing to help each other, regardless of divisions of nation or creed.\n\nImproves relations with all factions.</description>
+    <iconPath>UI/Memes/Guilty</iconPath>
+    <groupDef>GroupRelation</groupDef>
+    <impact>2</impact>
+    <exclusionTags>
+      <li>HVMP_Cosmotag0</li>
+      <li>HVMP_Cosmotag1</li>
+      <li>HVMP_Cosmotag2</li>
+      <li>HVMP_Cosmotag3</li>
+      <li>HVMP_Cosmotag4</li>
+      <li>HVMP_Cosmotag5</li>
+      <li>HVMP_Cosmotag6</li>
+    </exclusionTags>
+    <requireOne>
+      <li>
+        <li>Charity_Essential</li>
+        <li>Charity_Important</li>
+        <li>Charity_Worthwhile</li>
+      </li>
+	  <li>
+	    <li>HVMP_InterfactionAidImproved</li>
+	  </li>
+    </requireOne>
+    <generalRules>
+      <rulesStrings>
+        <li>memeAdjective->helpful</li>
+        <li>memeAdjective->trustworthy</li>
+        <li>memeAdjective->cooperative</li>
+        <li>memeAdjective->amicable</li>
+        <li>memeAdjective->unifying</li>
+        <li>memeAdjective->generous</li>
+        <li>memeCreed->totality</li>
+        <li>memeCreed->sum</li>
+        <li>memeCreed->alliance</li>
+        <li>memeHyphenPrefix->aid</li>
+        <li>memeHyphenPrefix->bond</li>
+        <li>memeConcept->charity</li>
+        <li>memeConcept->goodwill</li>
+        <li>memeConcept->union</li>
+        <li>memeConcept->partnership</li>
+        <li>memeLeaderNoun->samaritan</li>
+        <li>memeLeaderNoun->partner</li>
+        <li>memeLeaderNoun->collaborator</li>
+        <li>memeLeaderAdjective->global</li>
+        <li>memeMoralist->sharer</li>
+        <li>memeMoralist->friend</li>
+        <li>memeMoralist->supporter</li>
+        <li>memeMoralist->aide</li>
+      </rulesStrings>
+    </generalRules>
+    <descriptionMaker>
+      <rules>
+        <rulesStrings>
+          <!-- theist myth -->
+          <li>creation(tag=meme_HVMP_Cosmopolitan)            ->[deity0_name] created all the peoples of the universe. They all lived under one banner and spoke one language.</li>
+          <li>episode(uses=1,tag=meme_HVMP_Cosmopolitan)      ->[deity0_name] instilled in every person the capacities for reciprocity and generosity.</li>
+          <li>episode(uses=1,tag=meme_HVMP_Cosmopolitan)      ->[deity0_name] brought the leaders of humanity to [deity0_possessive] distant realm, and brought them back only when they had embraced each other as brothers and sisters.</li>
+          <!-- theist founder -->
+          <li>intro(tag=meme_HVMP_Cosmopolitan)               ->The people of the [place_summary] [place_name] worked with their many allies to build a great [altarName] to honor [deity0_name], who taught them the true value of [memeConcept].</li>
+          <li>conflict(tag=meme_HVMP_Cosmopolitan)            ->The [foeLeader], pursuing a strategy of divide and conquer, used [foeLeader_possessive] [foeSoldiers] to cut off the [place_community] from their neighbors.</li>
+          <li>founderJoin(tag=meme_HVMP_Cosmopolitan)         ->A [place_job] named [founderName] traveled in secret to rekindle friendship between [founder_possessive] [memberNamePlural] and the other peoples.</li>
+          <li>victory(tag=meme_HVMP_Cosmopolitan)             ->[founderName]'s actions forged a mighty and harmonious whole. Together, the [foeSoldiers] were no match for them, and they cast off the tyranny of the [foeLeader].</li>
+          <!-- ideological founder-->
+          <li>setup(tag=meme_HVMP_Cosmopolitan)               ->Our movement's founder, [founderName], worked under a myriad of corporations on different continents and worlds, recognizing a shared soul in the many peoples [founder_pronoun] encountered.</li>
+          <li>setup(tag=meme_HVMP_Cosmopolitan)               ->In a world filled with petty divisions, [founderName] traveled among the different peoples for twenty years. [founder_pronoun] came to understand the need for unity and founded our movement.</li>
+          <li>story(uses=1,tag=meme_HVMP_Cosmopolitan)        ->[founderName] instructed all [founder_possessive] followers to greet strangers with hospitality and a willingness to share.</li>
+          <!-- ideological lesson -->
+          <li>lessonIntro(tag=meme_HVMP_Cosmopolitan)         ->The battle had been so long-fought that neither us nor them could muster the will for violence anymore. As we looked at each other across the trenches, something dawned on all of us:</li>
+          <li>lesson(tag=meme_HVMP_Cosmopolitan)              ->no matter the nation, creed, or any other distinction, we all have something to gain from trusting each other</li>
+          <li>lesson(tag=meme_HVMP_Cosmopolitan)              ->each of us needs help now and then, and each of us can step up to help now and then</li>
+          <li>lessonReinforcement(tag=meme_HVMP_Cosmopolitan) ->Deep down, this is a truth that everyone in the universe recognizes.</li>
+          <!-- archist -->
+          <li>archistBasis(tag=meme_HVMP_Cosmopolitan)        ->The archotechs were created by a quorum of minds who designed them for the benefit of all.</li>
+          <li>archistFact(tag=meme_HVMP_Cosmopolitan)         ->The distinctions which we believe divide us have no meaning to the archotechs. To them, those who treat others harshly are morally inferior, and those who act with beneficence resemble the archotechs' ideal humanity.</li>
+          <li>archistProphecy(tag=meme_HVMP_Cosmopolitan)     ->[inTheEnd], the archotechs will take only those who show a willingness to cooperate with others.</li>
+          <!-- animist -->
+          <li>animistBasis(tag=meme_HVMP_Cosmopolitan)        ->While there are many kinds of spirits, all human spirits have the same essence.</li>
+          <li>animistFact(tag=meme_HVMP_Cosmopolitan)         ->Spirits of the same kind feed and strengthen each other. Because all our spirits are kin, we in turn must look out for each other.</li>
+          <li>animistProphecy(tag=meme_HVMP_Cosmopolitan)     ->[itIsSaid] that a great chain of human spirits will one day stretch across the cosmos like a constellation, brightening the lives of all touched by it.</li>
+        </rulesStrings>
+      </rules>
+    </descriptionMaker>
+    <agreeableTraits>
+      <li>Kind</li>
+      <li MayRequire="Hautarche.HautsTraits">HVT_Champion</li>
+      <li MayRequire="Hautarche.HautsTraits">HVT_PeoplePleaser</li>
+      <li MayRequire="Hautarche.HautsTraits">HVT_Tolerant</li>
+    </agreeableTraits>
+    <disagreeableTraits>
+      <li>Abrasive</li>
+      <li>Jealous</li>
+      <li>Psychopath</li>
+      <li MayRequire="Hautarche.HautsTraits">HVT_Sadist</li>
+      <li MayRequire="Hautarche.HautsTraits">HVT_Intolerant</li>
+    </disagreeableTraits>
+    <symbolPacks>
+      <li>
+        <ideoName>Unity</ideoName>
+        <theme>union</theme>
+        <adjective>unionist</adjective>
+        <member>unioneer</member>
+      </li>
+      <li>
+        <ideoName>Cooperative</ideoName>
+        <theme>cooperation</theme>
+        <adjective>cooperatist</adjective>
+        <member>cooperator</member>
+      </li>
+      <li>
+        <ideoName>Charitism</ideoName>
+        <theme>charity</theme>
+        <adjective>charitist</adjective>
+        <member>charitiser</member>
+      </li>
+      <li>
+        <ideoName>Universalism</ideoName>
+        <theme>universality</theme>
+        <adjective>universalist</adjective>
+        <member>universalist</member>
+      </li>
+    </symbolPacks>
+  </MemeDef>
+  
+</Defs>

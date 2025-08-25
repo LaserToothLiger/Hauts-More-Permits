@@ -1,0 +1,5681 @@
+﻿using RimWorld.Planet;
+using RimWorld;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using Verse;
+using UnityEngine;
+using HarmonyLib;
+using RimWorld.QuestGen;
+using System.Collections;
+using HautsFramework;
+using Verse.AI;
+using static System.Collections.Specialized.BitVector32;
+using System.Net.NetworkInformation;
+using Verse.Grammar;
+using RimWorld.BaseGen;
+using Verse.Noise;
+using static UnityEngine.GraphicsBuffer;
+using Verse.Sound;
+using LudeonTK;
+using Verse.AI.Group;
+using static System.Net.Mime.MediaTypeNames;
+using UnityEngine.PlayerLoop;
+using static UnityEngine.Scripting.GarbageCollector;
+using System.Runtime.Remoting.Messaging;
+using static RimWorld.PsychicRitualRoleDef;
+using System.Security.Policy;
+using VFECore.Shields;
+
+namespace HautsPermits
+{
+    [StaticConstructorOnStartup]
+    public class HautsPermits
+    {
+        private static readonly Type patchType = typeof(HautsPermits);
+        static HautsPermits()
+        {
+            Harmony harmony = new Harmony(id: "rimworld.hautarche.hautspermits");
+            harmony.Patch(AccessTools.Method(typeof(Settlement), nameof(Settlement.Tick)),
+                          prefix: new HarmonyMethod(patchType, nameof(HVMPSettlementTick_Prefix)));
+            harmony.Patch(AccessTools.Method(typeof(CaravanTicksPerMoveUtility), nameof(CaravanTicksPerMoveUtility.GetTicksPerMove), new[] { typeof(CaravanTicksPerMoveUtility.CaravanInfo), typeof(StringBuilder) }),
+                          postfix: new HarmonyMethod(patchType, nameof(HVMPGetTicksPerMovePostfix)));
+            MethodInfo methodInfo = typeof(QuestNode_GetFaction).GetMethod("IsGoodFaction", BindingFlags.NonPublic | BindingFlags.Instance);
+            harmony.Patch(methodInfo,
+                          prefix: new HarmonyMethod(patchType, nameof(HVMPIsGoodFactionPrefix)));
+            MethodInfo methodInfo1 = typeof(QuestNode_GetPawn).GetMethod("IsGoodPawn", BindingFlags.NonPublic | BindingFlags.Instance);
+            harmony.Patch(methodInfo1,
+                          prefix: new HarmonyMethod(patchType, nameof(HVMPIsGoodPawnPrefix)));
+            MethodInfo methodInfo2 = typeof(QuestNode_GetPawn).GetMethod("TryFindFactionForPawnGeneration", BindingFlags.NonPublic | BindingFlags.Instance);
+            harmony.Patch(methodInfo2,
+                          postfix: new HarmonyMethod(patchType, nameof(HVMPTryFindFactionForPawnGenerationPostfix)));
+            if (ModsConfig.IdeologyActive)
+            {
+                MethodInfo methodInfo4 = typeof(QuestNode_Root_Mission_AncientComplex).GetMethod("AskerFactionValid", BindingFlags.NonPublic | BindingFlags.Instance);
+                harmony.Patch(methodInfo4,
+                              postfix: new HarmonyMethod(patchType, nameof(HVMPAskerFactionValidPostfix)));
+            }
+            if (ModsConfig.BiotechActive)
+            {
+                MethodInfo methodInfo4 = typeof(QuestNode_Root_PollutionDump).GetMethod("FindAsker", BindingFlags.NonPublic | BindingFlags.Instance);
+                harmony.Patch(methodInfo4,
+                              postfix: new HarmonyMethod(patchType, nameof(HVMPFindAskerPostfix)));
+            }
+            if (ModsConfig.AnomalyActive)
+            {
+                MethodInfo methodInfo4 = typeof(QuestNode_Root_MysteriousCargo).GetMethod("FindAsker", BindingFlags.NonPublic | BindingFlags.Instance);
+                harmony.Patch(methodInfo4,
+                              postfix: new HarmonyMethod(patchType, nameof(HVMPFindAskerPostfix)));
+            }
+            MethodInfo methodInfo5 = typeof(QuestNode_Root_Mission_BanditCamp).GetMethod("GetAsker", BindingFlags.NonPublic | BindingFlags.Instance);
+            harmony.Patch(methodInfo5,
+                          postfix: new HarmonyMethod(patchType, nameof(HVMPFindAskerPostfix)));
+            harmony.Patch(AccessTools.Method(typeof(FactionDialogMaker), nameof(FactionDialogMaker.FactionDialogFor)),
+                          prefix: new HarmonyMethod(patchType, nameof(HVMPFactionDialogForPrefix)));
+            harmony.Patch(AccessTools.Property(typeof(Pawn_TraderTracker), nameof(Pawn_TraderTracker.CanTradeNow)).GetGetMethod(),
+                           prefix: new HarmonyMethod(patchType, nameof(HVMPCanTradeNowPrefix)));
+            MethodInfo methodInfo3 = typeof(TradeDeal).GetMethod("AddAllTradeables", BindingFlags.NonPublic | BindingFlags.Instance);
+            harmony.Patch(methodInfo3,
+                          prefix: new HarmonyMethod(patchType, nameof(HVMPAddAllTradeablesPrefix)));
+            harmony.Patch(AccessTools.Method(typeof(IncidentWorker), nameof(IncidentWorker.TryExecute)),
+                           prefix: new HarmonyMethod(patchType, nameof(HVMPTryExecutePrefix)));
+            harmony.Patch(AccessTools.Method(typeof(Faction), nameof(Faction.Notify_BuildingTookDamage)),
+                          prefix: new HarmonyMethod(patchType, nameof(HVMPNotify_BuildingTookDamagePrefix)));
+            harmony.Patch(AccessTools.Method(typeof(QuestManager), nameof(QuestManager.Add)),
+                          postfix: new HarmonyMethod(patchType, nameof(HVMPQuestManager_AddPostfix)));
+            harmony.Patch(AccessTools.Method(typeof(Faction), nameof(Faction.TryAffectGoodwillWith)),
+                          prefix: new HarmonyMethod(patchType, nameof(HVMPTryAffectGoodwillWithPrefix)));
+            harmony.Patch(AccessTools.Method(typeof(Faction), nameof(Faction.TryAffectGoodwillWith)),
+                          postfix: new HarmonyMethod(patchType, nameof(HVMPTryAffectGoodwillWithPostfix)));
+            harmony.Patch(AccessTools.Method(typeof(WorldComponent_HautsFactionComps), nameof(WorldComponent_HautsFactionComps.ThirdTickEffects)),
+                          postfix: new HarmonyMethod(patchType, nameof(HVMPThirdTickEffectsPostfix)));
+            Log.Message("HVMP_Initialize".Translate().CapitalizeFirst());
+        }
+        internal static object GetInstanceField(Type type, object instance, string fieldName)
+        {
+            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+                | BindingFlags.Static;
+            FieldInfo field = type.GetField(fieldName, bindFlags);
+            return field.GetValue(instance);
+        }
+        public static bool HVMPSettlementTick_Prefix(Settlement __instance)
+        {
+            if (__instance.Faction != null && __instance.Faction.def.HasModExtension<EBranchQuests>())
+            {
+                __instance.Destroy();
+                return false;
+            }
+            return true;
+        }
+        public static void HVMPGetTicksPerMovePostfix(CaravanTicksPerMoveUtility.CaravanInfo caravanInfo, ref int __result)
+        {
+            foreach (Pawn p in caravanInfo.pawns)
+            {
+                if (p.health.hediffSet.HasHediff(HVMPDefOf.HVMP_CaravanSpeed))
+                {
+                    __result = (int)(__result / 1.2f);
+                    return;
+                }
+            }
+        }
+        public static bool HVMPIsGoodFactionPrefix(Faction faction, ref bool __result)
+        {
+            if (faction.def.HasModExtension<EBranchQuests>())
+            {
+                __result = false;
+                return false;
+            }
+            return true;
+        }
+        public static bool HVMPIsGoodPawnPrefix(Pawn pawn, ref bool __result)
+        {
+            if (pawn.Faction != null && pawn.Faction.def.HasModExtension<EBranchQuests>())
+            {
+                __result = false;
+                return false;
+            }
+            return true;
+        }
+        public static void HVMPTryFindFactionForPawnGenerationPostfix(QuestNode_GetPawn __instance, Slate slate, ref Faction faction)
+        {
+            if (faction.def.HasModExtension<EBranchQuests>())
+            {
+                List<Faction> factions = new List<Faction>();
+                foreach (Faction f in Find.FactionManager.GetFactions(false, false, false, TechLevel.Undefined, false))
+                {
+                    if (!f.def.HasModExtension<EBranchQuests>() && (__instance.excludeFactionDefs.GetValue(slate) == null || !__instance.excludeFactionDefs.GetValue(slate).Contains(f.def)) && (!__instance.mustHaveRoyalTitleInCurrentFaction.GetValue(slate) || f.def.HasRoyalTitles) && (!__instance.mustBeNonHostileToPlayer.GetValue(slate) || !f.HostileTo(Faction.OfPlayer)) && ((__instance.allowPermanentEnemyFaction.GetValue(slate) ?? false) || !f.def.permanentEnemy) && f.def.techLevel >= __instance.minTechLevel.GetValue(slate) && (!__instance.factionMustBePermanent.GetValue(slate) || !f.temporary))
+                    {
+                        factions.Add(f);
+                    }
+                }
+                factions.TryRandomElementByWeight(delegate (Faction x)
+                {
+                    if (x.HostileTo(Faction.OfPlayer))
+                    {
+                        float? num = __instance.hostileWeight.GetValue(slate);
+                        if (num == null)
+                        {
+                            return 1f;
+                        }
+                        return num.GetValueOrDefault();
+                    }
+                    else
+                    {
+                        float? num = __instance.nonHostileWeight.GetValue(slate);
+                        if (num == null)
+                        {
+                            return 1f;
+                        }
+                        return num.GetValueOrDefault();
+                    }
+                }, out faction);
+            }
+        }
+        public static void HVMPAskerFactionValidPostfix(ref bool __result, Faction faction)
+        {
+            if (faction.def.HasModExtension<EBranchQuests>())
+            {
+                __result = false;
+            }
+        }
+        public static void HVMPFindAskerPostfix(ref Pawn __result)
+        {
+            if (__result.Faction != null && __result.Faction.def.HasModExtension<EBranchQuests>())
+            {
+                Faction faction;
+                if (Find.FactionManager.AllFactionsVisible.Where((Faction f) => f.def.humanlikeFaction && !f.IsPlayer && !f.HostileTo(Faction.OfPlayer) && f.def.techLevel > TechLevel.Neolithic && f.leader != null && !f.temporary && !f.def.HasModExtension<EBranchQuests>() && !f.Hidden).TryRandomElement(out faction))
+                {
+                    __result = faction.leader;
+                    return;
+                }
+                __result = null;
+            }
+        }
+        public static bool HVMPFactionDialogForPrefix(ref DiaNode __result, Pawn negotiator, Faction faction)
+        {
+            EBranchQuests gq = faction.def.GetModExtension<EBranchQuests>();
+            if (gq != null)
+            {
+                Map map = negotiator.Map;
+                string text;
+                bool isCosmopolitan = HVMP_Utility.NegotiatorIsCosmopolitan(negotiator);
+                if (faction.PlayerRelationKind == FactionRelationKind.Hostile)
+                {
+                    text = "HVMP_RepresentativeHostile".Translate(faction.NameColored);
+                    __result = new DiaNode(text);
+                } else {
+                    text = "HVMP_Representative".Translate(faction.NameColored);
+                    __result = new DiaNode(text);
+                    TaggedString taggedString;
+                    if (gq.donationTraderKind != null)
+                    {
+                        DonationTypeBeat sa3d = gq.donationTraderKind.GetModExtension<DonationTypeBeat>();
+                        taggedString = "HVMP_Donate".Translate(sa3d != null ? sa3d.donationString : "");
+                    }
+                    TaggedString taggedString2 = "HVMP_SolicitQuest".Translate(-Faction.OfPlayer.CalculateAdjustedGoodwillChange(faction, -12));
+                    int cdRefreshCost = isCosmopolitan ? -16 : -20;
+                    TaggedString taggedString3 = "HVMP_RefreshPermitCooldowns".Translate(negotiator.Name.ToStringShort, -Faction.OfPlayer.CalculateAdjustedGoodwillChange(faction, cdRefreshCost));
+                    if (gq.donationTraderKind != null)
+                    {
+                        if (negotiator.GetCurrentTitleIn(faction) == null)
+                        {
+                            string needTitle = "HVMP_NeedTitle".Translate(negotiator.Name.ToStringShort, faction.NameColored);
+                            DiaOption diaOption = new DiaOption(taggedString);
+                            diaOption.Disable(needTitle);
+                            __result.options.Add(diaOption);
+                        } else {
+                            DiaOption diaOption = new DiaOption(taggedString);
+                            diaOption.action = delegate
+                            {
+                                if (faction.leader.trader == null)
+                                {
+                                    faction.leader.trader = new Pawn_TraderTracker(faction.leader);
+                                }
+                                faction.leader.mindState.wantsToTradeWithColony = true;
+                                faction.leader.trader.traderKind = gq.donationTraderKind;
+                                Find.WindowStack.Add(new Dialog_Trade(negotiator, faction.leader, false));
+                            };
+                            __result.options.Add(diaOption);
+                        }
+                    }
+                    if (negotiator.GetCurrentTitleIn(faction) == null)
+                    {
+                        string needTitle = "HVMP_NeedTitle".Translate(negotiator.Name.ToStringShort, faction.NameColored);
+                        DiaOption diaOption2 = new DiaOption(taggedString2);
+                        diaOption2.Disable(needTitle);
+                        __result.options.Add(diaOption2);
+                        DiaOption diaOption3 = new DiaOption(taggedString3);
+                        diaOption3.Disable(needTitle);
+                        __result.options.Add(diaOption3);
+                    } else if (faction.PlayerRelationKind != FactionRelationKind.Ally) {
+                        DiaOption diaOption2 = new DiaOption(taggedString2);
+                        diaOption2.Disable("MustBeAlly".Translate());
+                        __result.options.Add(diaOption2);
+                        DiaOption diaOption3 = new DiaOption(taggedString3);
+                        diaOption3.Disable("MustBeAlly".Translate());
+                        __result.options.Add(diaOption3);
+                    } else {
+                        DiaOption diaOption2 = new DiaOption(taggedString2);
+                        diaOption2.action = delegate
+                        {
+                            if (gq.quests != null)
+                            {
+                                List<QuestScriptDef> qsds = new List<QuestScriptDef>();
+                                foreach (QuestScriptDef qsd in gq.quests)
+                                {
+                                    Slate slate0 = new Slate();
+                                    slate0.Set<Faction>("branchFaction", faction, false);
+                                    slate0.Set<float>("points", 1000f, false);
+                                    slate0.Set<Map>("map", negotiator.Map ?? Find.AnyPlayerHomeMap, false);
+                                    if (qsd.CanRun(slate0))
+                                    {
+                                        qsds.Add(qsd);
+                                    }
+                                }
+                                if (qsds.Count > 0)
+                                {
+                                    QuestScriptDef questDef = qsds.RandomElement();
+                                    BranchQuestProps gqp = questDef.GetModExtension<BranchQuestProps>();
+                                    Slate slate = new Slate();
+                                    slate.Set<Faction>("branchFaction", faction, false);
+                                    slate.Set<float>("points", gqp != null ? gqp.points.RandomInRange : 1000f, false);
+                                    slate.Set<Map>("map", gqp != null ? (gqp.needsPlayerMap ? Find.AnyPlayerHomeMap : null) : null, false);
+                                    Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(questDef, slate);
+                                    if (!quest.hidden && quest.root.sendAvailableLetter)
+                                    {
+                                        QuestUtility.SendLetterQuestAvailable(quest);
+                                    }
+                                    Faction.OfPlayer.TryAffectGoodwillWith(faction, -12, false, true, HVMPDefOf.HVMP_SolicitedQuest, null);
+                                }
+                                else
+                                {
+                                    Log.Error("HVMP_ErrorNoUsableBranchQuests".Translate(faction.NameColored));
+                                }
+                            }
+                            else
+                            {
+                                Log.Error("HVMP_ErrorNoQuestsFoundForBranch".Translate(faction.NameColored));
+                            }
+                        };
+                        diaOption2.link = new DiaNode("HVMP_GotQuest".Translate(faction.NameColored).CapitalizeFirst())
+                        {
+                            options = { new DiaOption("OK".Translate()) { linkLateBind = FactionDialogMaker.ResetToRoot(faction, negotiator) } }
+                        };
+                        __result.options.Add(diaOption2);
+                        if (negotiator.royalty == null || negotiator.royalty.PermitsFromFaction(faction).Count == 0)
+                        {
+                            DiaOption diaOption3 = new DiaOption(taggedString3);
+                            diaOption3.Disable("HVMP_NoPermitsToRefresh".Translate());
+                            __result.options.Add(diaOption3);
+                        } else {
+                            DiaOption diaOption3 = new DiaOption(taggedString3);
+                            diaOption3.action = delegate
+                            {
+                                if (negotiator.royalty != null)
+                                {
+                                    foreach (FactionPermit fp in negotiator.royalty.PermitsFromFaction(faction))
+                                    {
+                                        fp.ResetCooldown();
+                                    }
+                                }
+                                Faction.OfPlayer.TryAffectGoodwillWith(faction, cdRefreshCost, false, true, HVMPDefOf.HVMP_RefreshedPermitCDs, null);
+                            };
+                            diaOption3.link = new DiaNode("HVMP_RefreshedPermitCDs".Translate(faction.NameColored, negotiator.Name.ToStringShort).CapitalizeFirst())
+                            {
+                                options = { new DiaOption("OK".Translate()) { linkLateBind = FactionDialogMaker.ResetToRoot(faction, negotiator) } }
+                            };
+                            __result.options.Add(diaOption3);
+                        }
+                    }
+                }
+                DiaOption diaOptionOuties = new DiaOption("(" + "Disconnect".Translate() + ")")
+                {
+                    resolveTree = true
+                };
+                __result.options.Add(diaOptionOuties);
+                return false;
+            }
+            WorldComponent_HautsFactionComps hfc = Find.World.GetComponent<WorldComponent_HautsFactionComps>();
+            Hauts_FactionCompHolder fch = hfc.FindCompsFor(faction);
+            if (fch != null)
+            {
+                HautsFactionComp_PeriodicBranchQuests pgq = fch.TryGetComp<HautsFactionComp_PeriodicBranchQuests>();
+                if (pgq != null)
+                {
+                    pgq.tmpNegotiatorForInterfactionAid = negotiator;
+                    pgq.interfactionAidTick = Find.TickManager.TicksGame;
+                }
+            }
+            return true;
+        }
+        public static bool HVMPCanTradeNowPrefix(ref bool __result, Pawn_TraderTracker __instance)
+        {
+            Pawn pawn = GetInstanceField(typeof(Pawn_TraderTracker), __instance, "pawn") as Pawn;
+            if (pawn.Faction != null && pawn.Faction.leader == pawn)
+            {
+                EBranchQuests gq = pawn.Faction.def.GetModExtension<EBranchQuests>();
+                if (gq != null)
+                {
+                    __result = true;
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static bool HVMPAddAllTradeablesPrefix(TradeDeal __instance)
+        {
+            if (TradeSession.trader is Pawn pawn && pawn.Faction != null && TradeSession.trader.TraderKind.HasModExtension<DonationTypeBeat>())
+            {
+                EBranchQuests gq = pawn.Faction.def.GetModExtension<EBranchQuests>();
+                if (gq != null)
+                {
+                    MethodInfo AddToTradeables = typeof(TradeDeal).GetMethod("AddToTradeables", BindingFlags.NonPublic | BindingFlags.Instance);
+                    List<Thing> enumerable = TradeSession.playerNegotiator.Map.listerThings.AllThings.Where((Thing x) => x.def.category == ThingCategory.Item && TradeUtility.PlayerSellableNow(x, pawn) && !x.Position.Fogged(x.Map) && (TradeSession.playerNegotiator.Map.areaManager.Home[x.Position] || x.IsInAnyStorage())).ToList();
+                    foreach (Thing thing in enumerable)
+                    {
+                        if (TradeUtility.PlayerSellableNow(thing, TradeSession.trader))
+                        {
+                            AddToTradeables.Invoke(__instance, new object[] { thing, Transactor.Colony });
+                        }
+                    }
+                    IEnumerable<IHaulSource> enumerable2 = TradeSession.playerNegotiator.Map.listerBuildings.AllColonistBuildingsOfType<IHaulSource>();
+                    foreach (IHaulSource haulSource in enumerable2)
+                    {
+                        Building building2 = (Building)haulSource;
+                        foreach (Thing thing2 in haulSource.GetDirectlyHeldThings())
+                        {
+                            AddToTradeables.Invoke(__instance, new object[] { thing2, Transactor.Colony });
+                        }
+                    }
+                    if (TradeSession.TradeCurrency == TradeCurrency.Favor)
+                    {
+                        List<Tradeable> tradeables = (List<Tradeable>)__instance.GetType().GetField("tradeables", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance);
+                        tradeables.Add(new Tradeable_RoyalFavor());
+                        __instance.GetType().GetField("tradeables", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(__instance, tradeables);
+                    }
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static void HVMPResolveRaidStrategyPostfix(IncidentParms parms)
+        {
+            if (parms.raidArrivalModeForQuickMilitaryAid)
+            {
+                WorldComponent_HautsFactionComps hfc = Find.World.GetComponent<WorldComponent_HautsFactionComps>();
+                Hauts_FactionCompHolder fch = hfc.FindCompsFor(parms.faction);
+                if (fch != null)
+                {
+                    HautsFactionComp_PeriodicBranchQuests pgq = fch.TryGetComp<HautsFactionComp_PeriodicBranchQuests>();
+                    if (pgq != null && pgq.tmpNegotiatorForInterfactionAid != null && pgq.interfactionAidTick == Find.TickManager.TicksGame)
+                    {
+                        if (HVMP_Utility.NegotiatorIsCosmopolitan(pgq.tmpNegotiatorForInterfactionAid) || HVMP_Utility.FactionIsCosmopolitan(parms.faction))
+                        {
+                            parms.faction.lastMilitaryAidRequestTick -= 60000;
+                        }
+                    }
+                }
+            }
+        }
+        public static bool HVMPTryExecutePrefix(IncidentWorker __instance, IncidentParms parms)
+        {
+            if (__instance.def == IncidentDefOf.TraderCaravanArrival || __instance.def == IncidentDefOf.OrbitalTraderArrival)
+            {
+                WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
+                if (wcbs != null && wcbs.tradeBlockages > 0)
+                {
+                    wcbs.tradeBlockages--;
+                    TaggedString letterLabel = "HVMP_NoTraderForYou".Translate();
+                    TaggedString letterText = (__instance.def == IncidentDefOf.TraderCaravanArrival ? "HVMP_TraderBlockedCaravan".Translate() : "HVMP_TraderBlockedOrbital".Translate()) + "\n\n" + (wcbs.tradeBlockages == 0 ? "HVMP_TraderBlocksRemainingNone".Translate() : "HVMP_TraderBlocksRemaining".Translate(wcbs.tradeBlockages));
+                    ChoiceLetter notification = LetterMaker.MakeLetter(
+                    letterLabel, letterText, LetterDefOf.NegativeEvent, null, null, null, null);
+                    Find.LetterStack.ReceiveLetter(notification, null);
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static bool HVMPNotify_BuildingTookDamagePrefix(Building building)
+        {
+            if (building.def.HasModExtension<HVMP_ItsOkToHarmThis>())
+            {
+                return false;
+            }
+            return true;
+        }
+        public static void HVMPQuestManager_AddPostfix(Quest quest)
+        {
+            WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
+            if (wcbs != null)
+            {
+                for (int i = 0; i < quest.PartsListForReading.Count; i++)
+                {
+                    QuestPart_PaxOffering qppo = quest.GetFirstPartOfType<QuestPart_PaxOffering>();
+                    if (qppo != null)
+                    {
+                        wcbs.qppos.Add(qppo);
+                        break;
+                    }
+                }
+            }
+        }
+        public static void HVMPTryAffectGoodwillWithPrefix(Faction __instance, Faction other, out int __state)
+        {
+            if (__instance == Faction.OfPlayerSilentFail && other != Faction.OfPlayerSilentFail)
+            {
+                __state = other.GoodwillWith(Faction.OfPlayerSilentFail);
+            }
+            else if (__instance != Faction.OfPlayerSilentFail && other == Faction.OfPlayerSilentFail)
+            {
+                __state = __instance.GoodwillWith(Faction.OfPlayerSilentFail);
+            }
+            else
+            {
+                __state = 0;
+            }
+        }
+        public static void HVMPTryAffectGoodwillWithPostfix(Faction __instance, bool __result, Faction other, HistoryEventDef reason, int __state)
+        {
+            if (reason == null)
+            {
+                return;
+            }
+            if ((other == Faction.OfPlayerSilentFail || __instance == Faction.OfPlayerSilentFail))
+            {
+                Faction nonPlayerFaction = other != Faction.OfPlayerSilentFail ? other : (__instance != Faction.OfPlayerSilentFail ? __instance : null);
+                if (nonPlayerFaction != null && !nonPlayerFaction.def.HasModExtension<EBranchQuests>() && !nonPlayerFaction.def.permanentEnemy && nonPlayerFaction.HasGoodwill && (reason == null || reason != HistoryEventDefOf.ReachNaturalGoodwill))
+                {
+                    int goodwillChange = nonPlayerFaction.GoodwillWith(Faction.OfPlayerSilentFail) - __state;
+                    HVMP_Utility.PaxOfferingInner(goodwillChange);
+                }
+            }
+            if (__instance == Faction.OfPlayerSilentFail && ModsConfig.IdeologyActive)
+            {
+                if (reason == HistoryEventDefOf.RequestedTrader && other.lastTraderRequestTick == Find.TickManager.TicksGame)
+                {
+                    WorldComponent_HautsFactionComps hfc = Find.World.GetComponent<WorldComponent_HautsFactionComps>();
+                    Hauts_FactionCompHolder fch = hfc.FindCompsFor(other);
+                    if (fch != null)
+                    {
+                        HautsFactionComp_PeriodicBranchQuests pgq = fch.TryGetComp<HautsFactionComp_PeriodicBranchQuests>();
+                        if (pgq != null && pgq.tmpNegotiatorForInterfactionAid != null)
+                        {
+                            if (HVMP_Utility.NegotiatorIsCosmopolitan(pgq.tmpNegotiatorForInterfactionAid) || HVMP_Utility.FactionIsCosmopolitan(other))
+                            {
+                                other.lastTraderRequestTick -= 96000;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public static void HVMPThirdTickEffectsPostfix()
+        {
+            List<WorldObject> wosToDestroy = new List<WorldObject>();
+            foreach (WorldObject wo in Find.WorldObjects.AllWorldObjects)
+            {
+                if (wo.Faction != null && wo.Faction.def.HasModExtension<EBranchQuests>())
+                {
+                    wosToDestroy.Add(wo);
+                }
+            }
+            foreach (WorldObject wo in wosToDestroy)
+            {
+                wo.Destroy();
+            }
+        }
+    }
+    [DefOf]
+    public static class HVMPDefOf
+    {
+        static HVMPDefOf()
+        {
+            DefOfHelper.EnsureInitializedInCtor(typeof(HVMPDefOf));
+        }
+        public static FactionDef HVMP_CommerceBranch;
+        public static FactionDef HVMP_PaxBranch;
+        public static FactionDef HVMP_RoverBranch;
+        [MayRequireIdeology]
+        public static FactionDef HVMP_ArchiveBranch;
+        [MayRequireBiotech]
+        public static FactionDef HVMP_EcosphereBranch;
+        [MayRequireAnomaly]
+        public static FactionDef HVMP_OccultBranch;
+
+        public static HediffDef HVMP_CaravanSpeed;
+
+        public static HistoryEventDef HVMP_CutTiesWithBranch;
+        public static HistoryEventDef HVMP_SolicitedQuest;
+        public static HistoryEventDef HVMP_RefreshedPermitCDs;
+        public static HistoryEventDef HVMP_IgnoredQuest;
+        public static HistoryEventDef HVMP_IngratiationAccepted;
+
+        [MayRequireBiotech]
+        public static IncidentDef HVMP_MutantManhunterPack;
+        [MayRequireAnomaly]
+        public static IncidentDef HVMP_ShamblerAssault;
+
+        public static JobDef HVMP_StudyQuestItem;
+        [MayRequireBiotech]
+        public static JobDef HVMP_InjectChargecellBattery;
+        [MayRequireBiotech]
+        public static JobDef HVMP_InjectChargecellMech;
+
+        [MayRequireIdeology]
+        public static PawnKindDef HVMP_Anthropologist;
+
+        [MayRequireIdeology]
+        public static PreceptDef HVMP_InterfactionAidImproved;
+
+        public static QuestScriptDef HVMP_BranchIntro;
+        public static QuestScriptDef HVMP_BranchOutro;
+
+        public static ThingDef HVMP_DropPodOfFaction;
+        public static ThingDef HVMP_DelayedPowerBeam;
+        public static ThingDef HVMP_DatedAtlas;
+
+        [MayRequireIdeology]
+        public static ThoughtDef HVMP_AnthroAnnoyance;
+
+        public static WorldObjectDef HVMP_AtlasPoint;
+        public static WorldObjectDef HVMP_OdysseyPoint;
+    }
+    //world object to handle caravan-blocking
+    public class WorldComponent_BranchStuff : WorldComponent
+    {
+        public WorldComponent_BranchStuff(World world) : base(world)
+        {
+            this.world = world;
+        }
+        public override void WorldComponentTick()
+        {
+            base.WorldComponentTick();
+            if (this.lovecraftEventTimer > 0)
+            {
+                this.lovecraftEventTimer--;
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<int>(ref this.tradeBlockages, "tradeBlockages", 0, false);
+            Scribe_Values.Look<int>(ref this.lovecraftEventTimer, "lovecraftEventTimer", 0, false);
+            /*this breaks PaxOffering quests for reasons I don't quite understand, so the saving to cache actually gets handled by the qppos themselves
+             * Scribe_Collections.Look<QuestPart_PaxOffering>(ref wcbs.qppos, "qppos", LookMode.Deep, Array.Empty<object>());*/
+        }
+        public int tradeBlockages;
+        public int lovecraftEventTimer = 0;
+        public List<QuestPart_PaxOffering> qppos = new List<QuestPart_PaxOffering>();
+    }
+    //basis for branch properties
+    public class EBranchQuests : DefModExtension
+    {
+        public EBranchQuests() { }
+        public List<QuestScriptDef> quests;
+        public TraderKindDef donationTraderKind;
+        public bool tiedToAnomalyThreatFraction;
+    }
+    public class BranchQuestProps : DefModExtension
+    {
+        public BranchQuestProps() { }
+        public FloatRange points;
+        public bool needsPlayerMap;
+    }
+    public class DonationTypeBeat : DefModExtension
+    {
+        public DonationTypeBeat() { }
+        public string donationString;
+    }
+    public class HautsFactionCompProperties_PeriodicBranchQuests : HautsFactionCompProperties
+    {
+        public HautsFactionCompProperties_PeriodicBranchQuests()
+        {
+            this.compClass = typeof(HautsFactionComp_PeriodicBranchQuests);
+        }
+        public IntRange initDelay;
+    }
+    public class HautsFactionComp_PeriodicBranchQuests : HautsFactionComp
+    {
+        public HautsFactionCompProperties_PeriodicBranchQuests Props
+        {
+            get
+            {
+                return (HautsFactionCompProperties_PeriodicBranchQuests)this.props;
+            }
+        }
+        public override void CompPostMake()
+        {
+            base.CompPostMake();
+            EBranchQuests gq = this.ThisFaction.def.GetModExtension<EBranchQuests>();
+            if (gq != null)
+            {
+                this.cooldownTicks = this.Props.initDelay.RandomInRange - Find.TickManager.TicksGame;
+                this.isBranch = true;
+                Pawn leader = this.ThisFaction.leader;
+                if (leader != null)
+                {
+                    if (leader.royalty != null)
+                    {
+                        leader.royalty = new Pawn_RoyaltyTracker(leader);
+                    }
+                    if (leader.Faction.def.HasRoyalTitles)
+                    {
+                        leader.royalty.SetTitle(leader.Faction, leader.Faction.def.RoyalTitlesAllInSeniorityOrderForReading.Last(), false, false, false);
+                    }
+                }
+            } else {
+                this.cooldownTicks = -1;
+            }
+        }
+        public override void CompPostTick()
+        {
+            base.CompPostTick();
+            if (this.isBranch)
+            {
+                if (this.cooldownTicks > 0)
+                {
+                    this.cooldownTicks--;
+                } else {
+                    this.DoCooldowns();
+                    if (this.tiesEstablished)
+                    {
+                        if (this.ThisFaction.allowGoodwillRewards && this.ThisFaction.allowRoyalFavorRewards)
+                        {
+                            this.IssueQuest();
+                        } else {
+                            int ebgl = HVMP_Utility.ExpectationBasedGoodwillLoss(null, true, true, this.ThisFaction);
+                            if (ebgl != 0)
+                            {
+                                Faction.OfPlayer.TryAffectGoodwillWith(this.ThisFaction, ebgl, true, true, HVMPDefOf.HVMP_IgnoredQuest, null);
+                            }
+                        }
+                    } else if (!this.tieQuestOffered && this.AnomalyRequirementsMet()) {
+                        this.tieQuestOffered = true;
+                        this.IssueQuest(true);
+                    }
+                }
+            }
+        }
+        public bool AnomalyRequirementsMet()
+        {
+            if (HVMP_Mod.settings.occultTiedToAnomalyActivityLevel)
+            {
+                return true;
+            }
+            if (ModsConfig.AnomalyActive)
+            {
+                AnomalyPlaystyleDef apsd = Find.Storyteller.difficulty.AnomalyPlaystyleDef;
+                if (apsd != null && apsd.enableAnomalyContent)
+                {
+                    EBranchQuests gq = this.ThisFaction.def.GetModExtension<EBranchQuests>();
+                    if (gq != null && (!gq.tiedToAnomalyThreatFraction || Rand.Value <= Find.Anomaly.AnomalyThreatFractionNow || Find.Anomaly.HighestLevelReached >= 1))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return true;
+        }
+        public void DoCooldowns()
+        {
+            if (HVMP_Mod.settings.maximumChaosMode || !this.AnomalyRequirementsMet())
+            {
+                //this.cooldownTicks = 600;
+                this.cooldownTicks = Rand.RangeInclusive(60000 * (int)HVMP_Mod.settings.minBranchQuestInterval, 60000 * (int)HVMP_Mod.settings.maxBranchQuestInterval);
+            } else {
+                WorldComponent_HautsFactionComps WCFC = (WorldComponent_HautsFactionComps)Find.World.GetComponent(typeof(WorldComponent_HautsFactionComps));
+                foreach (Faction faction in Find.FactionManager.AllFactionsListForReading)
+                {
+                    Hauts_FactionCompHolder fch = WCFC.FindCompsFor(faction);
+                    if (fch != null)
+                    {
+                        HautsFactionComp_PeriodicBranchQuests pgq = fch.TryGetComp<HautsFactionComp_PeriodicBranchQuests>();
+                        if (pgq != null)
+                        {
+                            pgq.cooldownTicks = Rand.RangeInclusive(600 * (int)HVMP_Mod.settings.minBranchQuestInterval, 600 * (int)HVMP_Mod.settings.maxBranchQuestInterval);
+                        }
+                    }
+                }
+            }
+        }
+        public void IssueQuest(bool intro = false)
+        {
+            if (Find.AnyPlayerHomeMap == null)
+            {
+                return;
+            }
+            EBranchQuests gq = this.ThisFaction.def.GetModExtension<EBranchQuests>();
+            if (gq != null && this.AnomalyRequirementsMet())
+            {
+                if (intro)
+                {
+                    Slate slate = new Slate();
+                    slate.Set<Faction>("faction", this.ThisFaction, false);
+                    slate.Set<Thing>("asker", this.ThisFaction.leader, false);
+                    Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(HVMPDefOf.HVMP_BranchIntro, slate);
+                    if (!quest.hidden && quest.root.sendAvailableLetter)
+                    {
+                        QuestUtility.SendLetterQuestAvailable(quest);
+                    }
+                } else if (gq.quests != null) {
+                    List<QuestScriptDef> qsds = new List<QuestScriptDef>();
+                    Slate slate = new Slate();
+                    slate.Set<Faction>("branchFaction", this.ThisFaction, false);
+                    slate.Set<float>("points", 1000f, false);
+                    slate.Set<Map>("map", null, false);
+                    foreach (QuestScriptDef qsd in gq.quests)
+                    {
+                        if (qsd.CanRun(slate))
+                        {
+                            qsds.Add(qsd);
+                        }
+                    }
+                    if (qsds.Count == 0)
+                    {
+                        Log.Error("HVMP_ErrorNoUsableBranchQuests".Translate(this.ThisFaction.NameColored));
+                        return;
+                    }
+                    QuestScriptDef questDef = qsds.RandomElement();
+                    Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(questDef, slate);
+                    if (!quest.hidden && quest.root.sendAvailableLetter)
+                    {
+                        QuestUtility.SendLetterQuestAvailable(quest);
+                    }
+                }
+            }
+        }
+        public override void CompExposeData()
+        {
+            base.CompExposeData();
+            Scribe_Values.Look<bool>(ref this.tieQuestOffered, "tieQuestOffered", false, false);
+            Scribe_Values.Look<bool>(ref this.tiesEstablished, "tiesEstablished", false, false);
+            Scribe_Values.Look<int>(ref this.cooldownTicks, "cooldownTicks", 0, false);
+            Scribe_Values.Look<bool>(ref this.isBranch, "isBranch", false, false);
+            Scribe_Values.Look<int>(ref this.interfactionAidTick, "interfactionAidTick", 0, false);
+        }
+        public bool tieQuestOffered;
+        public bool tiesEstablished;
+        public int cooldownTicks;
+        public bool isBranch;
+        public Pawn tmpNegotiatorForInterfactionAid;
+        public int interfactionAidTick;
+    }
+    public class QuestNode_GetFactionDesc : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return Find.FactionManager.AllFactionsListForReading.Any((Faction f) => f == QuestGen.slate.Get<Faction>("faction", null, false));
+        }
+        protected override void RunInt()
+        {
+            QuestGen.slate.Set<string>(this.storeAs.GetValue(QuestGen.slate), QuestGen.slate.Get<Faction>("faction", null, false).def.description, false);
+        }
+        [NoTranslate]
+        public SlateRef<string> storeAs;
+    }
+    public class QuestNode_EstablishBranchTies : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            QuestPart_EstablishBranchTies qpebt = new QuestPart_EstablishBranchTies();
+            qpebt.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? slate.Get<string>("inSignal", null, false);
+            qpebt.faction = slate.Get<Faction>("faction",null,false);
+            QuestGen.quest.AddPart(qpebt);
+        }
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+    }
+    public class QuestPart_EstablishBranchTies : QuestPart
+    {
+        public override void Notify_QuestSignalReceived(Signal signal)
+        {
+            base.Notify_QuestSignalReceived(signal);
+            if (signal.tag == this.inSignal && faction != null && !faction.defeated)
+            {
+                WorldComponent_HautsFactionComps wcfc = (WorldComponent_HautsFactionComps)Find.World.GetComponent(typeof(WorldComponent_HautsFactionComps));
+                if (wcfc != null)
+                {
+                    Hauts_FactionCompHolder fch = wcfc.FindCompsFor(this.faction);
+                    if (fch != null)
+                    {
+                        HautsFactionComp_PeriodicBranchQuests pbq = fch.TryGetComp<HautsFactionComp_PeriodicBranchQuests>();
+                        if (pbq != null)
+                        {
+                            pbq.tiesEstablished = true;
+                            Slate slate = new Slate();
+                            slate.Set<Faction>("faction", this.faction, false);
+                            slate.Set<Thing>("asker", this.faction.leader, false);
+                            Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(HVMPDefOf.HVMP_BranchOutro, slate);
+                        }
+                    }
+                }
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
+            Scribe_References.Look<Faction>(ref this.faction, "faction", false);
+        }
+        public string inSignal;
+        public Faction faction;
+    }
+    public class QuestNode_ForsakeBranchTies : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            QuestPart_ForsakeBranchTies qpfbt = new QuestPart_ForsakeBranchTies();
+            qpfbt.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? slate.Get<string>("inSignal", null, false);
+            qpfbt.faction = slate.Get<Faction>("faction", null, false);
+            QuestGen.quest.AddPart(qpfbt);
+        }
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+    }
+    public class QuestPart_ForsakeBranchTies : QuestPart
+    {
+        public override void Notify_QuestSignalReceived(Signal signal)
+        {
+            base.Notify_QuestSignalReceived(signal);
+            if (signal.tag == this.inSignal && faction != null && !faction.defeated)
+            {
+                WorldComponent_HautsFactionComps wcfc = (WorldComponent_HautsFactionComps)Find.World.GetComponent(typeof(WorldComponent_HautsFactionComps));
+                if (wcfc != null)
+                {
+                    Hauts_FactionCompHolder fch = wcfc.FindCompsFor(this.faction);
+                    if (fch != null)
+                    {
+                        HautsFactionComp_PeriodicBranchQuests pbq = fch.TryGetComp<HautsFactionComp_PeriodicBranchQuests>();
+                        if (pbq != null)
+                        {
+                            pbq.tiesEstablished = false;
+                            pbq.tieQuestOffered = false;
+                        }
+                    }
+                }
+                Faction.OfPlayer.TryAffectGoodwillWith(this.faction, -100, true, true, HVMPDefOf.HVMP_CutTiesWithBranch, null);
+                if (Faction.OfPlayer.RelationKindWith(this.faction) != FactionRelationKind.Hostile)
+                {
+                    Faction.OfPlayer.TryAffectGoodwillWith(this.faction, -100, true, true, HVMPDefOf.HVMP_CutTiesWithBranch, null);
+                }
+                foreach (Map m in Find.Maps)
+                {
+                    List<Thing> toDestroy = new List<Thing>();
+                    List<Pawn> toFlee = new List<Pawn>();
+                    foreach (Thing t in m.spawnedThings)
+                    {
+                        if (t.Faction != null && t.Faction == this.faction)
+                        {
+                            if (t is Pawn p) {
+                                p.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.PanicFlee,null,true);
+                            } else if (t.def.HasModExtension<HVMP_ItsOkToHarmThis>()) {
+                                toDestroy.Add(t);
+                            }
+                        }
+                    }
+                    foreach (Thing t in toDestroy)
+                    {
+                        t.Destroy();
+                    }
+                }
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
+            Scribe_References.Look<Faction>(ref this.faction, "faction", false);
+        }
+        public string inSignal;
+        public Faction faction;
+    }
+    //permit mechanics: workers
+    [StaticConstructorOnStartup]
+    public class RoyalTitlePermitWorker_DropFactionThing : RoyalTitlePermitWorker_Targeted
+    {
+        public override void DrawHighlight(LocalTargetInfo target)
+        {
+            GenDraw.DrawRadiusRing(this.caller.Position, this.def.royalAid.targetingRange, Color.white, null);
+            if (this.def.royalAid.radius > 0f)
+            {
+                GenDraw.DrawRadiusRing(target.Cell, this.def.royalAid.radius, Color.white, null);
+            }
+            if (target.IsValid)
+            {
+                GenDraw.DrawTargetHighlight(target);
+            }
+        }
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            this.CallResources(target.Cell);
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (map.generatorDef.isUnderground)
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            Action action = null;
+            string text = this.def.LabelCap + ": ";
+            bool free;
+            if (base.FillAidOption(pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.BeginCallResources(pawn, faction, map, free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
+        {
+            yield break;
+        }
+        private void BeginCallResources(Pawn caller, Faction faction, Map map, bool free)
+        {
+            this.targetingParameters = new TargetingParameters();
+            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetBuildings = false;
+            this.targetingParameters.canTargetPawns = false;
+            this.caller = caller;
+            this.map = map;
+            this.faction = faction;
+            this.free = free;
+            this.targetingParameters.validator = (TargetInfo target) => (this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(caller.Position) <= this.def.royalAid.targetingRange) && !target.Cell.Fogged(map) && DropCellFinder.CanPhysicallyDropInto(target.Cell, map, true, true) && target.Cell.GetTerrain(map).affordances.Contains(DefDatabase<TerrainAffordanceDef>.GetNamed("Light"));
+            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+        }
+        private void CallResources(IntVec3 cell)
+        {
+            foreach (ThingDefCountClass tdcc in this.def.royalAid.itemsToDrop)
+            {
+                for (int i = 0; i < tdcc.count; i++)
+                {
+                    IntVec3 intVec;
+                    if (i == 0 || !DropCellFinder.TryFindDropSpotNear(cell, this.map, out intVec, false, false, false, new IntVec2?(new IntVec2(1, 1)), false))
+                    {
+                        intVec = cell;
+                    }
+                    DropPodIncomingOfFaction dp = (DropPodIncomingOfFaction)SkyfallerMaker.MakeSkyfaller(HVMPDefOf.HVMP_DropPodOfFaction);
+                    List<Thing> dummyThingForCompat = new List<Thing>();
+                    Thing thing = ThingMaker.MakeThing(ThingDefOf.ChunkSlagSteel,null);
+                    thing.stackCount = 1;
+                    dummyThingForCompat.Add(thing);
+                    if (dummyThingForCompat.Any())
+                    {
+                        ActiveDropPodInfo activeDropPodInfo = new ActiveDropPodInfo();
+                        activeDropPodInfo.innerContainer.TryAddRangeOrTransfer(dummyThingForCompat, true, false);
+                        ActiveDropPod activeDropPod = (ActiveDropPod)ThingMaker.MakeThing(((faction != null) ? faction.def.dropPodActive : null) ?? ThingDefOf.ActiveDropPod, null);
+                        activeDropPod.Contents = activeDropPodInfo;
+                        dp.innerContainer.TryAdd(activeDropPod);
+                        dp.thing = tdcc.thingDef;
+                        dp.faction = this.faction;
+                        GenSpawn.Spawn(dp, intVec, this.map, WipeMode.Vanish);
+                    }
+                }
+            }
+            Messages.Message("MessagePermitTransportDrop".Translate(this.faction.Named("FACTION")), new LookTargets(cell, this.map), MessageTypeDefOf.NeutralEvent, true);
+            this.caller.royalty.GetPermit(this.def, this.faction).Notify_Used();
+            if (!this.free)
+            {
+                this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
+            }
+        }
+        private Faction faction;
+    }
+    public class DropPodIncomingOfFaction : DropPodIncoming
+    {
+        protected override void SpawnThings()
+        {
+            GenSpawn.Spawn(this.thing, base.Position, base.Map, WipeMode.Vanish).SetFactionDirect(this.faction);
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Defs.Look<ThingDef>(ref this.thing, "thing");
+            Scribe_References.Look<Faction>(ref this.faction, "faction", false);
+        }
+        public ThingDef thing;
+        public Faction faction;
+    }
+    public class HVMP_ItsOkToHarmThis : DefModExtension
+    {
+        public HVMP_ItsOkToHarmThis() { }
+    }
+    public class RoyalTitlePermitWorker_Retreat : RoyalTitlePermitWorker_TargetPawn
+    {
+        public override bool IsGoodPawn(Pawn pawn)
+        {
+            return (pawn.HostileTo(this.CasterPawn.Faction) || pawn.HostileTo(this.CasterPawn)) && !pawn.InMentalState && pawn.Awake() && !pawn.DeadOrDowned && ((pawn.Faction != null && pawn.Faction.def.humanlikeFaction) || pawn.RaceProps.Humanlike);
+        }
+        public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
+        {
+            base.AffectPawnInner(pme, pawn, faction);
+            if (!pawn.InMentalState && pawn.Awake() && !pawn.DeadOrDowned)
+            {
+                pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.PanicFlee, null, false, false, false, null, false, false, false);
+            }
+        }
+    }
+    public class RoyalTitlePermitWorker_Recruit : RoyalTitlePermitWorker_TargetPawn
+    {
+        public override bool IsGoodPawn(Pawn pawn)
+        {
+            return pawn.IsPrisonerOfColony && !pawn.InMentalState && pawn.Awake() && !pawn.DeadOrDowned && pawn.guest.resistance >= float.Epsilon;
+        }
+        public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
+        {
+            base.AffectPawnInner(pme, pawn, faction);
+            if (!pawn.InMentalState && pawn.Awake() && !pawn.DeadOrDowned && pawn.guest != null && pawn.guest.resistance >= float.Epsilon)
+            {
+                pawn.guest.resistance += pme.extraNumber.RandomInRange;
+            }
+        }
+    }
+    public class RoyalTitlePermitWorker_Ingratiate : RoyalTitlePermitWorker_TargetPawn
+    {
+        public override bool IsGoodPawn(Pawn pawn)
+        {
+            return pawn.Faction != null && this.CasterPawn.Faction != null && pawn.Faction != this.CasterPawn.Faction && !pawn.Faction.def.HasModExtension<EBranchQuests>() && !pawn.Faction.def.PermanentlyHostileTo(this.CasterPawn.Faction.def) && !pawn.InMentalState && pawn.Awake() && !pawn.DeadOrDowned && (pawn.Faction.def.humanlikeFaction || pawn.RaceProps.Humanlike);
+        }
+        public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
+        {
+            base.AffectPawnInner(pme, pawn, faction);
+            if (!pawn.InMentalState && pawn.Awake() && !pawn.DeadOrDowned && pawn.Faction != null)
+            {
+                this.CasterPawn.Faction.TryAffectGoodwillWith(pawn.Faction, (int)pme.extraNumber.RandomInRange, true, true, HVMPDefOf.HVMP_IngratiationAccepted, null);
+            }
+        }
+    }
+    public class RoyalTitlePermitWorker_OrbitalScalpel : RoyalTitlePermitWorker_GiveHediffs
+    {
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            if (target.IsValid && !HautsUtility.CanBeHitByAirToSurface(target.Cell, this.caller.Map, false))
+            {
+                if (showMessages)
+                {
+                    Messages.Message(this.def.LabelCap + ": " + "AbilityCannotHitTarget".Translate(), MessageTypeDefOf.RejectInput, true);
+                }
+                return false;
+            }
+            return base.ValidateTarget(target, showMessages);
+        }
+    }
+    public class HediffCompProperties_Flashlight : HediffCompProperties
+    {
+        public HediffCompProperties_Flashlight()
+        {
+            this.compClass = typeof(HediffComp_Flashlight);
+        }
+        public float width;
+        public Color color = Color.white;
+        public int ticksDelay;
+        public DamageDef damageType;
+        public float damage;
+        public int numHits;
+        public SoundDef impactSound;
+    }
+    [StaticConstructorOnStartup]
+    public class HediffComp_Flashlight : HediffComp_Draw
+    {
+        public HediffCompProperties_Flashlight Props
+        {
+            get
+            {
+                return (HediffCompProperties_Flashlight)this.props;
+            }
+        }
+        public override void CompPostPostAdd(DamageInfo? dinfo)
+        {
+            base.CompPostPostAdd(dinfo);
+            this.ticksRemaining = this.Props.ticksDelay;
+        }
+        public override void CompPostTick(ref float severityAdjustment)
+        {
+            base.CompPostTick(ref severityAdjustment);
+            if (this.Pawn.Spawned)
+            {
+                this.ticksRemaining--;
+                if (this.ticksRemaining <= 0)
+                {
+                    this.Props.impactSound?.PlayOneShot(new TargetInfo(this.Pawn.Position, this.Pawn.Map, false));
+                    if (HautsUtility.CanBeHitByAirToSurface(this.Pawn.Position, this.Pawn.Map, false))
+                    {
+                        RoofDef roof = this.Pawn.Position.GetRoof(this.Pawn.Map);
+                        if (roof != null && !roof.isThickRoof && roof.canCollapse)
+                        {
+                            if (!roof.soundPunchThrough.NullOrUndefined())
+                            {
+                                roof.soundPunchThrough.PlayOneShot(new TargetInfo(this.Pawn.Position, this.Pawn.Map, false));
+                            }
+                            RoofCollapserImmediate.DropRoofInCells(this.Pawn.Position, this.Pawn.Map, null);
+                        }
+                        for (int i = this.Props.numHits; i > 0; i--)
+                        {
+                            if (!this.Pawn.Dead)
+                            {
+                                this.Pawn.TakeDamage(new DamageInfo(this.Props.damageType, this.Props.damage));
+                            }
+                        }
+                    }
+                    this.parent.Severity = -1f;
+                }
+            } else {
+                this.parent.Severity = -1f;
+            }
+        }
+        private float BeamEndHeight
+        {
+            get
+            {
+                return this.Props.width * 0.5f;
+            }
+        }
+        private int TicksPassed
+        {
+            get
+            {
+                return this.Props.ticksDelay - this.ticksRemaining;
+            }
+        }
+        public override void DrawAt(Vector3 drawPos)
+        {
+            base.DrawAt(drawPos);
+            if (this.ticksRemaining <= 0)
+            {
+                return;
+            }
+            float num = ((float)this.Pawn.Map.Size.z - drawPos.z) * 1.4142135f;
+            Vector3 vector = Vector3Utility.FromAngleFlat(this.angle - 90f);
+            Vector3 vector2 = drawPos + vector * num * 0.5f;
+            vector2.y = AltitudeLayer.MetaOverlays.AltitudeFor();
+            float num2 = Mathf.Min((float)this.TicksPassed / 10f, 1f);
+            Vector3 vector3 = vector * ((1f - num2) * num);
+            float num3 = 0.975f + Mathf.Sin((float)this.TicksPassed * 0.3f) * 0.025f;
+            if (this.ticksRemaining < this.fadeOutDuration)
+            {
+                num3 *= (float)this.ticksRemaining / (float)this.fadeOutDuration;
+            }
+            Color color = this.Props.color;
+            color.a *= num3;
+            HediffComp_Flashlight.MatPropertyBlock.SetColor(ShaderPropertyIDs.Color, color);
+            Matrix4x4 matrix4x = default(Matrix4x4);
+            matrix4x.SetTRS(vector2 + vector * this.BeamEndHeight * 0.5f + vector3, Quaternion.Euler(0f, this.angle, 0f), new Vector3(this.Props.width, 1f, num));
+            Graphics.DrawMesh(MeshPool.plane10, matrix4x, HediffComp_Flashlight.BeamMat, 0, null, 0, HediffComp_Flashlight.MatPropertyBlock);
+            Vector3 vector4 = drawPos + vector3;
+            vector4.y = AltitudeLayer.MetaOverlays.AltitudeFor();
+            Matrix4x4 matrix4x2 = default(Matrix4x4);
+            matrix4x2.SetTRS(vector4, Quaternion.Euler(0f, this.angle, 0f), new Vector3(this.Props.width, 1f, this.BeamEndHeight));
+            Graphics.DrawMesh(MeshPool.plane10, matrix4x2, HediffComp_Flashlight.BeamEndMat, 0, null, 0, HediffComp_Flashlight.MatPropertyBlock);
+        }
+        public void StartAnimation(int totalDuration, int fadeOutDuration, float angle)
+        {
+            this.fadeOutDuration = fadeOutDuration;
+            this.angle = angle;
+        }
+        public override void CompExposeData()
+        {
+            base.CompExposeData();
+            Scribe_Values.Look<int>(ref this.ticksRemaining, "ticksRemaining", 0, false);
+            Scribe_Values.Look<int>(ref this.fadeOutDuration, "fadeOutDuration", 0, false);
+            Scribe_Values.Look<float>(ref this.angle, "angle", 0f, false);
+        }
+        public int ticksRemaining;
+        private int fadeOutDuration;
+        private float angle;
+        private Sustainer sustainer;
+        private const float AlphaAnimationSpeed = 0.3f;
+        private const float AlphaAnimationStrength = 0.025f;
+        private const float BeamEndHeightRatio = 0.5f;
+        private static readonly Material BeamMat = MaterialPool.MatFrom("Other/OrbitalBeam", ShaderDatabase.MoteGlow, MapMaterialRenderQueues.OrbitalBeam);
+        private static readonly Material BeamEndMat = MaterialPool.MatFrom("Other/OrbitalBeamEnd", ShaderDatabase.MoteGlow, MapMaterialRenderQueues.OrbitalBeam);
+        private static readonly MaterialPropertyBlock MatPropertyBlock = new MaterialPropertyBlock();
+    }
+    [StaticConstructorOnStartup]
+    public class RoyalTitlePermitWorker_EMI : RoyalTitlePermitWorker_CauseCondition
+    {
+        protected override void MakeCondition(Pawn caller, Faction faction, IncidentParms parms, bool free)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            base.MakeCondition(caller, faction, parms, free);
+            if (caller.MapHeld != null && pme != null && pme.extraNumber != null)
+            {
+                foreach (Building b in caller.MapHeld.listerBuildings.allBuildingsNonColonist)
+                {
+                    if (b.Faction == null || b.Faction.RelationKindWith(Faction.OfPlayerSilentFail) == FactionRelationKind.Hostile)
+                    {
+                        CompStunnable stunComp = b.GetComp<CompStunnable>();
+                        if (stunComp != null)
+                        {
+                            stunComp.StunHandler.StunFor((int)pme.extraNumber.RandomInRange, null, false);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    [StaticConstructorOnStartup]
+    public class RoyalTitlePermitWorker_Infestation : RoyalTitlePermitWorker_Targeted
+    {
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            this.BaitInfestation(target.Cell);
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            Action action = null;
+            string text = this.def.LabelCap + ": ";
+            bool free;
+            if (base.FillAidOption(pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.BeginInfestation(pawn, faction, map, free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
+        {
+            yield break;
+        }
+        private void BeginInfestation(Pawn caller, Faction faction, Map map, bool free)
+        {
+            this.targetingParameters = new TargetingParameters();
+            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetBuildings = false;
+            this.targetingParameters.canTargetPawns = false;
+            this.caller = caller;
+            this.map = map;
+            this.faction = faction;
+            this.free = free;
+            this.targetingParameters.validator = (TargetInfo target) => (this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(caller.Position) <= this.def.royalAid.targetingRange) && !target.Cell.Fogged(map) && target.Cell.GetRegion(map, RegionType.Set_Passable) != null && target.Cell.GetTemperature(map) >= -17f;
+            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+        }
+        private void BaitInfestation(IntVec3 cell)
+        {
+            IncidentParms incidentParms = new IncidentParms();
+            incidentParms.target = this.map;
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                incidentParms.points = pme.incidentPoints.RandomInRange;
+            }
+            else
+            {
+                incidentParms.points = 1750;
+            }
+            incidentParms.infestationLocOverride = cell;
+            incidentParms.forced = true;
+            IncidentDefOf.Infestation.Worker.TryExecute(incidentParms);
+            this.caller.royalty.GetPermit(this.def, this.faction).Notify_Used();
+            if (!this.free)
+            {
+                this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
+            }
+        }
+        private Faction faction;
+    }
+    [StaticConstructorOnStartup]
+    public class RoyalTitlePermitWorker_ManhunterPulse : RoyalTitlePermitWorker_Targeted
+    {
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            Action action = null;
+            string text = this.def.LabelCap + ": ";
+            bool free;
+            if (base.FillAidOption(pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.MakeCondition(pawn, faction, new IncidentParms(), this.free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
+        {
+            yield break;
+        }
+        protected virtual void MakeCondition(Pawn caller, Faction faction, IncidentParms parms, bool free)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null && caller.MapHeld != null)
+            {
+                foreach (Pawn p in caller.MapHeld.mapPawns.AllPawnsSpawned)
+                {
+                    if (p.IsNonMutantAnimal && p.GetStatValue(StatDefOf.PsychicSensitivity) > float.Epsilon && (p.Faction == null || p.Faction != Faction.OfPlayerSilentFail) && !p.IsQuestLodger() && !p.Dead)
+                    {
+                        if (!p.Awake())
+                        {
+                            RestUtility.WakeUp(p, true);
+                        }
+                        p.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Manhunter, null, false, false, false, null, false, false, false);
+                    }
+                }
+                Messages.Message(pme.onUseMessage.Translate(faction.Named("FACTION")), null, MessageTypeDefOf.NeutralEvent, true);
+                if (pme.screenShake && caller.MapHeld == Find.CurrentMap)
+                {
+                    Find.CameraDriver.shaker.DoShake(1f);
+                }
+                if (pme.soundDef != null)
+                {
+                    pme.soundDef.PlayOneShot(new TargetInfo(caller.PositionHeld, caller.MapHeld, false));
+                }
+                caller.royalty.GetPermit(this.def, faction).Notify_Used();
+                if (!free)
+                {
+                    caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
+                }
+            }
+        }
+    }
+    public class RoyalTitlePermitWorker_OrbitalBeam : RoyalTitlePermitWorker_Targeted
+    {
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            if (!base.CanHitTarget(target))
+            {
+                if (target.IsValid && showMessages)
+                {
+                    Messages.Message(this.def.LabelCap + ": " + "AbilityCannotHitTarget".Translate(), MessageTypeDefOf.RejectInput, true);
+                }
+                return false;
+            }
+            return true;
+        }
+        public override void DrawHighlight(LocalTargetInfo target)
+        {
+            GenDraw.DrawRadiusRing(this.caller.Position, this.def.royalAid.targetingRange, Color.white, null);
+            GenDraw.DrawRadiusRing(target.Cell, this.def.royalAid.radius + this.def.royalAid.explosionRadiusRange.max, Color.white, null);
+            if (target.IsValid)
+            {
+                GenDraw.DrawTargetHighlight(target);
+            }
+        }
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            this.CallBombardment(target.Cell);
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (map.generatorDef.isUnderground)
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            string text = this.def.LabelCap + ": ";
+            Action action = null;
+            bool free;
+            if (base.FillAidOption(pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.BeginCallBombardment(pawn, faction, map, free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        private void BeginCallBombardment(Pawn caller, Faction faction, Map map, bool free)
+        {
+            this.targetingParameters = new TargetingParameters();
+            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetSelf = true;
+            this.targetingParameters.canTargetFires = true;
+            this.targetingParameters.canTargetItems = true;
+            this.caller = caller;
+            this.map = map;
+            this.faction = faction;
+            this.free = free;
+            this.targetingParameters.validator = delegate (TargetInfo target)
+            {
+                if (this.def.royalAid.targetingRange > 0f && target.Cell.DistanceTo(caller.Position) > this.def.royalAid.targetingRange)
+                {
+                    return false;
+                }
+                if (target.Cell.Fogged(map))
+                {
+                    return false;
+                }
+                RoofDef roof = target.Cell.GetRoof(map);
+                return roof == null || !roof.isThickRoof;
+            };
+            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+        }
+        private void CallBombardment(IntVec3 targetCell)
+        {
+            DelayedPowerBeam dpb = (DelayedPowerBeam)GenSpawn.Spawn(HVMPDefOf.HVMP_DelayedPowerBeam,targetCell,this.map,WipeMode.Vanish);
+            dpb.duration = this.def.royalAid.explosionCount;
+            dpb.instigator = this.caller;
+            SoundDefOf.OrbitalStrike_Ordered.PlayOneShotOnCamera(null);
+            this.caller.royalty.GetPermit(this.def, this.faction).Notify_Used();
+            if (!this.free)
+            {
+                this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
+            }
+        }
+        private Faction faction;
+    }
+    public class DelayedPowerBeam : ThingWithComps
+    {
+        protected override void DrawAt(Vector3 drawLoc, bool flip = false)
+        {
+            base.Comps_PostDraw();
+        }
+        public override void Tick()
+        {
+            base.Tick();
+            if (this.warmupTicks > 0)
+            {
+                this.warmupTicks--;
+                if (this.warmupTicks == 60)
+                {
+                    this.angle = DelayedPowerBeam.AngleRange.RandomInRange;
+                    base.GetComp<CompOrbitalBeam>().StartAnimation(this.duration, 10, this.angle);
+                }
+                if (this.warmupTicks == 0)
+                {
+                    PowerBeam powerBeam = (PowerBeam)GenSpawn.Spawn(ThingDefOf.PowerBeam, this.Position, this.Map, WipeMode.Vanish);
+                    powerBeam.duration = this.duration;
+                    powerBeam.instigator = this.instigator;
+                    powerBeam.weaponDef = null;
+                    if (!powerBeam.Spawned)
+                    {
+                        Log.Error("Called StartStrike() on unspawned thing.");
+                        return;
+                    }
+                    powerBeam.StartStrike();
+                    SoundDefOf.OrbitalStrike_Ordered.PlayOneShotOnCamera(null);
+                    this.Destroy();
+                }
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<int>(ref this.warmupTicks, "warmupTicks", 0, false);
+            Scribe_Values.Look<int>(ref this.duration, "duration", 600, false);
+            Scribe_References.Look<Thing>(ref this.instigator, "instigator", false);
+            Scribe_Values.Look<float>(ref this.angle, "angle", 0f, false);
+        }
+        public int warmupTicks = 120;
+        public int duration;
+        public Thing instigator;
+        private float angle;
+        private static readonly FloatRange AngleRange = new FloatRange(-12f, 12f);
+    }
+    [StaticConstructorOnStartup]
+    public class RoyalTitlePermitWorker_CallRaid : RoyalTitlePermitWorker_GenerateQuest
+    {
+        public override bool FactionCanBeGroupSource(Faction f, Map map, bool desperate = false)
+        {
+            return !f.IsPlayer && !f.defeated && !f.temporary && (desperate || (map != null && f.def.allowedArrivalTemperatureRange.Includes(map.mapTemperature.OutdoorTemp) && f.def.allowedArrivalTemperatureRange.Includes(map.mapTemperature.SeasonalTemp))) && !f.Hidden && f.HostileTo(Faction.OfPlayer);
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
+            if (wcbs != null && wcbs.tradeBlockages > 0)
+            {
+                yield return new FloatMenuOption("HVMP_CommandCallRoyalAidTradersBlocked".Translate(wcbs.tradeBlockages, faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            if (!this.CandidateFactions(map, false).Any<Faction>())
+            {
+                yield return new FloatMenuOption("HVMP_NoFactionCanSendRaids".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            Action action = null;
+            string text = this.def.LabelCap + ": ";
+            bool free;
+            if (base.FillAidOption(pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.GiveQuest(pawn, faction, new IncidentParms(), this.free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
+        {
+            yield break;
+        }
+    }
+    [StaticConstructorOnStartup]
+    public class RoyalTitlePermitWorker_Peacemaking : RoyalTitlePermitWorker_Targeted
+    {
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            Action action = null;
+            string text = this.def.LabelCap + ": ";
+            bool free;
+            if (base.FillAidOption(pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.MakeCondition(pawn, faction, new IncidentParms(), this.free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
+        {
+            yield break;
+        }
+        protected virtual void MakeCondition(Pawn caller, Faction faction, IncidentParms parms, bool free)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null && caller.MapHeld != null)
+            {
+                foreach (Pawn p in caller.MapHeld.mapPawns.AllPawnsSpawned)
+                {
+                    if ((p.HostileTo(caller.Faction) || p.HostileTo(caller)) && !p.InMentalState && p.Awake() && !p.DeadOrDowned && ((p.Faction != null && p.Faction.def.humanlikeFaction) || p.RaceProps.Humanlike) && !p.IsPrisoner)
+                    {
+                        p.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.PanicFlee, null, false, false, false, null, false, false, false);
+                    }
+                }
+                Messages.Message(pme.onUseMessage.Translate(faction.Named("FACTION")), null, MessageTypeDefOf.NeutralEvent, true);
+                if (pme.screenShake && caller.MapHeld == Find.CurrentMap)
+                {
+                    Find.CameraDriver.shaker.DoShake(1f);
+                }
+                if (pme.soundDef != null)
+                {
+                    pme.soundDef.PlayOneShot(new TargetInfo(caller.PositionHeld, caller.MapHeld, false));
+                }
+                caller.royalty.GetPermit(this.def, faction).Notify_Used();
+                if (!free)
+                {
+                    caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
+                }
+            }
+        }
+    }
+
+    [StaticConstructorOnStartup]
+    public class RoyalTitlePermitWorker_CallTrader : RoyalTitlePermitWorker_GenerateQuest
+    {
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
+            if (wcbs != null && wcbs.tradeBlockages > 0)
+            {
+                yield return new FloatMenuOption("HVMP_CommandCallRoyalAidTradersBlocked".Translate(wcbs.tradeBlockages, faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            Action action = null;
+            string text = this.def.LabelCap + ": ";
+            bool free;
+            if (base.FillAidOption(pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.GiveQuest(pawn, faction, new IncidentParms(), this.free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
+        {
+            string text;
+            bool flag;
+            if (!base.FillCaravanAidOption(pawn, faction, out text, out this.free, out flag))
+            {
+                yield break;
+            }
+            WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
+            if (wcbs != null && wcbs.tradeBlockages > 0)
+            {
+                yield break;
+            }
+            Command_Action command_Action = new Command_Action
+            {
+                defaultLabel = this.def.LabelCap + " (" + pawn.LabelShort + ")",
+                defaultDesc = text,
+                icon = RoyalTitlePermitWorker_CallTrader.CommandTex,
+                action = delegate
+                {
+                    this.GiveQuest(pawn, faction, new IncidentParms(), this.free);
+                }
+            };
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                command_Action.Disable("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")));
+            }
+            if (flag)
+            {
+                command_Action.Disable("CommandCallRoyalAidNotEnoughFavor".Translate());
+            }
+            yield return command_Action;
+            yield break;
+        }
+        private static readonly Texture2D CommandTex = ContentFinder<Texture2D>.Get("UI/Commands/CallAid", true);
+    }
+
+    [StaticConstructorOnStartup]
+    public class RoyalTitlePermitWorker_CallTraderCaravan : RoyalTitlePermitWorker_GenerateQuest
+    {
+        public override bool FactionCanBeGroupSource(Faction f, Map map, bool desperate = false)
+        {
+            return !f.IsPlayer && !f.defeated && !f.temporary && (desperate || (map != null && f.def.allowedArrivalTemperatureRange.Includes(map.mapTemperature.OutdoorTemp) && f.def.allowedArrivalTemperatureRange.Includes(map.mapTemperature.SeasonalTemp))) && !f.Hidden && !f.HostileTo(Faction.OfPlayer) && f.def.pawnGroupMakers != null && f.def.pawnGroupMakers.Any((PawnGroupMaker x) => x.kindDef == PawnGroupKindDefOf.Trader) && !NeutralGroupIncidentUtility.AnyBlockingHostileLord(map, f) && f.def.caravanTraderKinds.Count != 0 && f.def.caravanTraderKinds.Any((TraderKindDef t) => t.requestable && this.TraderKindCommonality(t, map, f) > 0f);
+        }
+        public float TraderKindCommonality(TraderKindDef traderKind, Map map, Faction faction)
+        {
+            if (traderKind.faction != null && faction.def != traderKind.faction)
+            {
+                return 0f;
+            }
+            if (ModsConfig.IdeologyActive && faction.ideos != null && traderKind.category == "Slaver")
+            {
+                using (IEnumerator<Ideo> enumerator = faction.ideos.AllIdeos.GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        if (!enumerator.Current.IdeoApprovesOfSlavery())
+                        {
+                            return 0f;
+                        }
+                    }
+                }
+            }
+            if (traderKind.permitRequiredForTrading != null && !map.mapPawns.FreeColonists.Any((Pawn p) => p.royalty != null && p.royalty.HasPermit(traderKind.permitRequiredForTrading, faction)))
+            {
+                return 0f;
+            }
+            return traderKind.CalculatedCommonality;
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
+            if (wcbs != null && wcbs.tradeBlockages > 0)
+            {
+                yield return new FloatMenuOption("HVMP_CommandCallRoyalAidTradersBlocked".Translate(wcbs.tradeBlockages, faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            if (!this.CandidateFactions(map, false).Any<Faction>())
+            {
+                yield return new FloatMenuOption("HVMP_NoFactionCanSendTraders".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            Action action = null;
+            string text = this.def.LabelCap + ": ";
+            bool free;
+            if (base.FillAidOption(pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.GiveQuest(pawn, faction, new IncidentParms(), this.free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
+        {
+            yield break;
+        }
+    }
+    public class RoyalTitlePermitWorker_AlterItemQuality : RoyalTitlePermitWorker_Targeted
+    {
+        public AcceptanceReport IsValidThing(LocalTargetInfo lti)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                TaggedString error = pme.invalidTargetMessage.Translate();
+                if (!lti.IsValid)
+                {
+                    return new AcceptanceReport(error);
+                } else {
+                    if (pme.extraNumber != null)
+                    {
+                        foreach (Thing t in lti.Cell.GetThingList(this.caller.Map))
+                        {
+                            if (t.def.category == ThingCategory.Item && t.TryGetQuality(out QualityCategory qc) && t.def.thingCategories != null && (float)qc >= pme.extraNumber.min && (float)qc <= pme.extraNumber.max && (pme.thingCategories == null || t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.thingCategories.Contains(tcd))) && (pme.forbiddenThingCategories == null || !t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.forbiddenThingCategories.Contains(tcd))))
+                            {
+                                return AcceptanceReport.WasAccepted;
+                            }
+                        }
+                    }
+                }
+                return new AcceptanceReport(error);
+            }
+            return new AcceptanceReport("Hauts_PMEMisconfig".Translate());
+        }
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            if (!base.CanHitTarget(target))
+            {
+                if (target.IsValid && showMessages)
+                {
+                    Messages.Message(this.def.LabelCap + ": " + "AbilityCannotHitTarget".Translate(), MessageTypeDefOf.RejectInput, true);
+                }
+                return false;
+            }
+            AcceptanceReport acceptanceReport = this.IsValidThing(target);
+            if (!acceptanceReport.Accepted)
+            {
+                Messages.Message(acceptanceReport.Reason, new LookTargets(target.Cell, this.map), MessageTypeDefOf.RejectInput, false);
+            }
+            return acceptanceReport.Accepted;
+        }
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null && pme.extraNumber != null)
+            {
+                foreach (Thing t in target.Cell.GetThingList(this.caller.Map))
+                {
+                    if (t.def.category == ThingCategory.Item && t.TryGetQuality(out QualityCategory qc) && (float)qc >= pme.extraNumber.min && (float)qc <= pme.extraNumber.max && (pme.forbiddenThingCategories == null || !t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.forbiddenThingCategories.Contains(tcd))))
+                    {
+                        this.ImproveQuality(t, this.calledFaction);
+                        break;
+                    }
+                }
+            }
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            Action action = null;
+            string text = this.def.LabelCap + ": ";
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
+            {
+                action = delegate
+                {
+                    this.BeginImproveQuality(pawn, map, faction, free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        private void BeginImproveQuality(Pawn pawn, Map map, Faction faction, bool free)
+        {
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                return;
+            }
+            this.targetingParameters = new TargetingParameters();
+            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetSelf = false;
+            this.targetingParameters.canTargetPawns = false;
+            this.targetingParameters.canTargetFires = false;
+            this.targetingParameters.canTargetBuildings = false;
+            this.targetingParameters.canTargetItems = true;
+            this.targetingParameters.validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange;
+            this.caller = pawn;
+            this.map = map;
+            this.calledFaction = faction;
+            this.free = free;
+            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+        }
+        private void ImproveQuality(Thing thing, Faction faction)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                if (Rand.Chance(pme.gambaFactorRange.RandomInRange))
+                {
+                    thing.Destroy();
+                } else {
+                    MinifiedThing minifiedThing = thing as MinifiedThing;
+                    CompQuality coq = ((minifiedThing != null) ? minifiedThing.InnerThing.TryGetComp<CompQuality>() : thing.TryGetComp<CompQuality>());
+                    if (coq != null)
+                    {
+                        coq.SetQuality(coq.Quality + 1, new ArtGenerationContext?(ArtGenerationContext.Outsider));
+                    }
+                }
+                Messages.Message(pme.onUseMessage.Translate(faction.Named("FACTION")), null, MessageTypeDefOf.NeutralEvent, true);
+                this.caller.royalty.GetPermit(this.def, this.calledFaction).Notify_Used();
+                if (!this.free)
+                {
+                    this.caller.royalty.TryRemoveFavor(this.calledFaction, this.def.royalAid.favorCost);
+                }
+            }
+        }
+        private Faction calledFaction;
+    }
+    public class RoyalTitlePermitWorker_RestoreItemHP : RoyalTitlePermitWorker_Targeted
+    {
+        public AcceptanceReport IsValidThing(LocalTargetInfo lti)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                TaggedString error = pme.invalidTargetMessage.Translate();
+                if (!lti.IsValid)
+                {
+                    return new AcceptanceReport(error);
+                } else {
+                    if (pme.extraNumber != null)
+                    {
+                        foreach (Thing t in lti.Cell.GetThingList(this.caller.Map))
+                        {
+                            if (t.def.useHitPoints && (t.HitPoints < t.MaxHitPoints || this.OtherQualifiers(t)) && (t is Building || (t.def.thingCategories != null && (pme.thingCategories == null || t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.thingCategories.Contains(tcd))) && (pme.forbiddenThingCategories == null || !t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.forbiddenThingCategories.Contains(tcd))))))
+                            {
+                                return AcceptanceReport.WasAccepted;
+                            }
+                        }
+                    }
+                }
+                return new AcceptanceReport(error);
+            }
+            return new AcceptanceReport("Hauts_PMEMisconfig".Translate());
+        }
+        public virtual bool OtherQualifiers(Thing t)
+        {
+            return true;
+        }
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            if (!base.CanHitTarget(target))
+            {
+                if (target.IsValid && showMessages)
+                {
+                    Messages.Message(this.def.LabelCap + ": " + "AbilityCannotHitTarget".Translate(), MessageTypeDefOf.RejectInput, true);
+                }
+                return false;
+            }
+            AcceptanceReport acceptanceReport = this.IsValidThing(target);
+            if (!acceptanceReport.Accepted)
+            {
+                Messages.Message(acceptanceReport.Reason, new LookTargets(target.Cell, this.map), MessageTypeDefOf.RejectInput, false);
+            }
+            return acceptanceReport.Accepted;
+        }
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null && pme.extraNumber != null)
+            {
+                foreach (Thing t in target.Cell.GetThingList(this.caller.Map))
+                {
+                    if (t.def.useHitPoints && (t.HitPoints < t.MaxHitPoints || this.OtherQualifiers(t)) && (t is Building || (t.def.thingCategories != null && (pme.thingCategories == null || t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.thingCategories.Contains(tcd))) && (pme.forbiddenThingCategories == null || !t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.forbiddenThingCategories.Contains(tcd))))))
+                    {
+                        this.Heal(t, this.calledFaction);
+                        break;
+                    }
+                }
+            }
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            Action action = null;
+            string text = this.def.LabelCap + ": ";
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
+            {
+                action = delegate
+                {
+                    this.BeginHeal(pawn, map, faction, free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        private void BeginHeal(Pawn pawn, Map map, Faction faction, bool free)
+        {
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                return;
+            }
+            this.targetingParameters = new TargetingParameters();
+            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetSelf = false;
+            this.targetingParameters.canTargetPawns = false;
+            this.targetingParameters.canTargetFires = false;
+            this.targetingParameters.canTargetBuildings = false;
+            this.targetingParameters.canTargetItems = true;
+            this.targetingParameters.validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange;
+            this.caller = pawn;
+            this.map = map;
+            this.calledFaction = faction;
+            this.free = free;
+            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+        }
+        private void Heal(Thing thing, Faction faction)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null && pme.extraNumber != null)
+            {
+                thing.HitPoints += Math.Min((int)Math.Ceiling(pme.extraNumber.RandomInRange),thing.MaxHitPoints-thing.HitPoints);
+                this.OtherEffects(thing);
+                Messages.Message(pme.onUseMessage.Translate(faction.Named("FACTION")), null, MessageTypeDefOf.NeutralEvent, true);
+                this.caller.royalty.GetPermit(this.def, this.calledFaction).Notify_Used();
+                if (!this.free)
+                {
+                    this.caller.royalty.TryRemoveFavor(this.calledFaction, this.def.royalAid.favorCost);
+                }
+            }
+        }
+        public virtual void OtherEffects(Thing thing)
+        {
+
+        }
+        private Faction calledFaction;
+    }
+    public class RoyalTitlePermitWorker_RestoreItemHP_Perfect : RoyalTitlePermitWorker_RestoreItemHP
+    {
+        public override bool OtherQualifiers(Thing t)
+        {
+            return (t is Apparel a && a.WornByCorpse) || t.IsBrokenDown();
+        }
+        public override void OtherEffects(Thing thing)
+        {
+            if (thing is Apparel a)
+            {
+                a.WornByCorpse = false;
+            }
+            CompBreakdownable cbd = thing.TryGetComp<CompBreakdownable>();
+            if (cbd != null && cbd.BrokenDown)
+            {
+                cbd.Notify_Repaired();
+            }
+        }
+    }
+    public class RoyalTitlePermitWorker_DecryptBiocoding : RoyalTitlePermitWorker_Targeted
+    {
+        public AcceptanceReport IsValidThing(LocalTargetInfo lti)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                TaggedString error = pme.invalidTargetMessage.Translate();
+                if (!lti.IsValid)
+                {
+                    return new AcceptanceReport(error);
+                } else {
+                    foreach (Thing t in lti.Cell.GetThingList(this.caller.Map))
+                    {
+                        CompBiocodable comp = t.TryGetComp<CompBiocodable>();
+                        if (comp != null && comp.Biocoded)
+                        {
+                            return AcceptanceReport.WasAccepted;
+                        }
+                    }
+                }
+                return new AcceptanceReport(error);
+            }
+            return new AcceptanceReport("Hauts_PMEMisconfig".Translate());
+        }
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            if (!base.CanHitTarget(target))
+            {
+                if (target.IsValid && showMessages)
+                {
+                    Messages.Message(this.def.LabelCap + ": " + "AbilityCannotHitTarget".Translate(), MessageTypeDefOf.RejectInput, true);
+                }
+                return false;
+            }
+            AcceptanceReport acceptanceReport = this.IsValidThing(target);
+            if (!acceptanceReport.Accepted)
+            {
+                Messages.Message(acceptanceReport.Reason, new LookTargets(target.Cell, this.map), MessageTypeDefOf.RejectInput, false);
+            }
+            return acceptanceReport.Accepted;
+        }
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                foreach (Thing t in target.Cell.GetThingList(this.caller.Map))
+                {
+                    CompBiocodable comp = t.TryGetComp<CompBiocodable>();
+                    if (comp != null && comp.Biocoded)
+                    {
+                        comp.UnCode();
+                        Messages.Message(pme.onUseMessage.Translate(this.calledFaction.Named("FACTION")), null, MessageTypeDefOf.NeutralEvent, true);
+                        this.caller.royalty.GetPermit(this.def, this.calledFaction).Notify_Used();
+                        if (!this.free)
+                        {
+                            this.caller.royalty.TryRemoveFavor(this.calledFaction, this.def.royalAid.favorCost);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            Action action = null;
+            string text = this.def.LabelCap + ": ";
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
+            {
+                action = delegate
+                {
+                    this.BeginHeal(pawn, map, faction, free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        private void BeginHeal(Pawn pawn, Map map, Faction faction, bool free)
+        {
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                return;
+            }
+            this.targetingParameters = new TargetingParameters();
+            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetSelf = false;
+            this.targetingParameters.canTargetPawns = false;
+            this.targetingParameters.canTargetFires = false;
+            this.targetingParameters.canTargetBuildings = false;
+            this.targetingParameters.canTargetItems = true;
+            this.targetingParameters.validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange;
+            this.caller = pawn;
+            this.map = map;
+            this.calledFaction = faction;
+            this.free = free;
+            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+        }
+        private Faction calledFaction;
+    }
+    public class HediffCompProperties_TMD : HediffCompProperties
+    {
+        public HediffCompProperties_TMD()
+        {
+            this.compClass = typeof(HediffComp_TMD);
+        }
+        public HediffDef convertedFrom;
+    }
+    public class HediffComp_TMD : HediffComp
+    {
+        public HediffCompProperties_TMD Props
+        {
+            get
+            {
+                return (HediffCompProperties_TMD)this.props;
+            }
+        }
+    }
+    public class RoyalTitlePermitWorker_TMD : RoyalTitlePermitWorker_TargetPawn
+    {
+        public override bool IsGoodPawn(Pawn pawn)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                foreach (HediffDef h in pme.hediffs)
+                {
+                    HediffCompProperties_TMD compTMD = null;
+                    if (h.comps != null)
+                    {
+                        foreach (HediffCompProperties hcp in h.comps)
+                        {
+                            if (hcp is HediffCompProperties_TMD hcptmd)
+                            {
+                                compTMD = hcptmd;
+                            }
+                        }
+                    }
+                    if (compTMD != null)
+                    {
+                        foreach (Hediff ph in pawn.health.hediffSet.hediffs)
+                        {
+                            if (ph.def == compTMD.convertedFrom)
+                            {
+                                this.toReplace = ph;
+                                this.toGive = h;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
+        {
+            base.AffectPawnInner(pme, pawn, faction);
+            if (this.toReplace != null && this.toGive != null)
+            {
+                HediffComp_Disappears hcd = this.toReplace.TryGetComp<HediffComp_Disappears>();
+                int ticksRemaining = hcd != null ? hcd.ticksToDisappear : 900000;
+                Hediff hediff = HediffMaker.MakeHediff(this.toGive, pawn);
+                pawn.health.AddHediff(hediff);
+                hcd = hediff.TryGetComp<HediffComp_Disappears>();
+                if (hcd != null)
+                {
+                    hcd.ticksToDisappear = ticksRemaining / 2;
+                }
+                pawn.health.RemoveHediff(this.toReplace);
+
+            }
+        }
+        private Hediff toReplace;
+        private HediffDef toGive;
+    }
+    public class RoyalTitlePermitWorker_PollutionScoop : RoyalTitlePermitWorker_Targeted
+    {
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            if (!base.CanHitTarget(target))
+            {
+                if (target.IsValid && showMessages)
+                {
+                    Messages.Message(this.def.LabelCap + ": " + "AbilityCannotHitTarget".Translate(), MessageTypeDefOf.RejectInput, true);
+                }
+                return false;
+            }
+            return true;
+        }
+        public override void DrawHighlight(LocalTargetInfo target)
+        {
+            GenDraw.DrawRadiusRing(this.caller.Position, this.def.royalAid.targetingRange, Color.white, null);
+            GenDraw.DrawRadiusRing(target.Cell, this.def.royalAid.radius, Color.white, null);
+            if (target.IsValid)
+            {
+                GenDraw.DrawTargetHighlight(target);
+            }
+        }
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            this.ScoopPollution(target.Cell);
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (map.generatorDef.isUnderground)
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            string text = this.def.LabelCap + ": ";
+            Action action = null;
+            bool free;
+            if (base.FillAidOption(pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.BeginScoop(pawn, faction, map, free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        private void BeginScoop(Pawn caller, Faction faction, Map map, bool free)
+        {
+            this.targetingParameters = new TargetingParameters();
+            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetSelf = true;
+            this.targetingParameters.canTargetFires = true;
+            this.targetingParameters.canTargetItems = true;
+            this.caller = caller;
+            this.map = map;
+            this.faction = faction;
+            this.free = free;
+            this.targetingParameters.validator = delegate (TargetInfo target)
+            {
+                if (this.def.royalAid.targetingRange > 0f && target.Cell.DistanceTo(caller.Position) > this.def.royalAid.targetingRange)
+                {
+                    return false;
+                }
+                if (target.Cell.Fogged(map))
+                {
+                    return false;
+                }
+                RoofDef roof = target.Cell.GetRoof(map);
+                return roof == null || !roof.isThickRoof;
+            };
+            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+        }
+        private void ScoopPollution(IntVec3 targetCell)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                List<Thing> thingsToDestroy = new List<Thing>();
+                foreach (Thing thing in GenRadial.RadialDistinctThingsAround(targetCell, this.map, 6, true))
+                {
+                    if (thing.def == ThingDefOf.Wastepack || (!thing.def.thingCategories.NullOrEmpty() && !pme.thingCategories.NullOrEmpty() && thing.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.thingCategories.Contains(tcd))))
+                    {
+                        thingsToDestroy.Add(thing);
+                    }
+                }
+                for (int i = thingsToDestroy.Count - 1; i >= 0; i--)
+                {
+                    thingsToDestroy[i].Destroy();
+                }
+                int cells = GenRadial.NumCellsInRadius(this.def.royalAid.radius);
+                for (int i = 0; i < cells; i++)
+                {
+                    IntVec3 c = targetCell + GenRadial.RadialPattern[i];
+                    if (c.InBounds(this.map) && c.IsValid)
+                    {
+                        if (c.CanUnpollute(this.map))
+                        {
+                            this.map.pollutionGrid.SetPolluted(c, false, false);
+                        }
+                    }
+                }
+                if (pme.screenShake && this.map == Find.CurrentMap)
+                {
+                    Find.CameraDriver.shaker.DoShake(1f);
+                }
+                if (pme.soundDef != null)
+                {
+                    pme.soundDef.PlayOneShot(new TargetInfo(targetCell, this.map, false));
+                }
+                GenExplosion.DoExplosion(targetCell, this.map, this.def.royalAid.radius*0.67f, DamageDefOf.Smoke, null, -1, -1f, null, null, null, null, null, 0f, 1, new GasType?(GasType.BlindSmoke), false, null, 0f, 1, 0f, false, null, null, null, true, 1f, 0f, true, null, 1f, null, null);
+                this.caller.royalty.GetPermit(this.def, this.faction).Notify_Used();
+                if (!this.free)
+                {
+                    this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
+                }
+            }
+        }
+        private Faction faction;
+    }
+    public class RoyalTitlePermitWorker_SoilEnrichment : RoyalTitlePermitWorker_Targeted
+    {
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            if (!base.CanHitTarget(target))
+            {
+                if (target.IsValid && showMessages)
+                {
+                    Messages.Message(this.def.LabelCap + ": " + "AbilityCannotHitTarget".Translate(), MessageTypeDefOf.RejectInput, true);
+                }
+                return false;
+            }
+            return true;
+        }
+        public override void DrawHighlight(LocalTargetInfo target)
+        {
+            GenDraw.DrawRadiusRing(this.caller.Position, this.def.royalAid.targetingRange, Color.white, null);
+            GenDraw.DrawRadiusRing(target.Cell, this.def.royalAid.radius, Color.white, null);
+            if (target.IsValid)
+            {
+                GenDraw.DrawTargetHighlight(target);
+            }
+        }
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            this.ScoopPollution(target.Cell);
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (map.generatorDef.isUnderground)
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            string text = this.def.LabelCap + ": ";
+            Action action = null;
+            bool free;
+            if (base.FillAidOption(pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.BeginScoop(pawn, faction, map, free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        private void BeginScoop(Pawn caller, Faction faction, Map map, bool free)
+        {
+            this.targetingParameters = new TargetingParameters();
+            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetSelf = true;
+            this.targetingParameters.canTargetFires = true;
+            this.targetingParameters.canTargetItems = true;
+            this.caller = caller;
+            this.map = map;
+            this.faction = faction;
+            this.free = free;
+            this.targetingParameters.validator = delegate (TargetInfo target)
+            {
+                if (this.def.royalAid.targetingRange > 0f && target.Cell.DistanceTo(caller.Position) > this.def.royalAid.targetingRange)
+                {
+                    return false;
+                }
+                if (target.Cell.Fogged(map))
+                {
+                    return false;
+                }
+                RoofDef roof = target.Cell.GetRoof(map);
+                return roof == null || !roof.isThickRoof;
+            };
+            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+        }
+        private void ScoopPollution(IntVec3 targetCell)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                int cells = GenRadial.NumCellsInRadius(this.def.royalAid.radius);
+                for (int i = 0; i < cells; i++)
+                {
+                    IntVec3 c = targetCell + GenRadial.RadialPattern[i];
+                    if (c.InBounds(this.map) && c.IsValid)
+                    {
+                        TerrainDef td = this.map.terrainGrid.TerrainAt(c);
+                        if (c.CanUnpollute(this.map))
+                        {
+                            this.map.pollutionGrid.SetPolluted(c, false, false);
+                            if (Rand.Chance(0.25f))
+                            {
+                                GenPlace.TryPlaceThing(ThingMaker.MakeThing(ThingDefOf.Wastepack, null), targetCell, this.map, ThingPlaceMode.Near);
+                            }
+                        }
+                        if ((td.fertility > 0f || td.categoryType == TerrainDef.TerrainCategoryType.Sand || td.categoryType == TerrainDef.TerrainCategoryType.Soil) && !td.IsFloor && !td.affordances.Contains(TerrainAffordanceDefOf.SmoothableStone) && !td.IsRiver && !td.IsWater)
+                        {
+                            List<TerrainDef> tdList = HautsUtility.FertilityTerrainDefs(this.map);
+                            IOrderedEnumerable<TerrainDef> source = from e in tdList.FindAll((TerrainDef e) => (double)e.fertility > (double)td.fertility && !td.IsWater && !td.IsRiver)
+                                                                    orderby e.fertility
+                                                                    select e;
+                            if (source.Count<TerrainDef>() != 0)
+                            {
+                                TerrainDef newTerr = source.First<TerrainDef>();
+                                this.map.terrainGrid.SetTerrain(c, newTerr);
+                            }
+                        }
+                    }
+                }
+                if (pme.screenShake && this.map == Find.CurrentMap)
+                {
+                    Find.CameraDriver.shaker.DoShake(1f);
+                }
+                if (pme.soundDef != null)
+                {
+                    pme.soundDef.PlayOneShot(new TargetInfo(targetCell, this.map, false));
+                }
+                GenExplosion.DoExplosion(targetCell, this.map, this.def.royalAid.radius * 0.67f, DamageDefOf.Smoke, null, -1, -1f, null, null, null, null, null, 0f, 1, new GasType?(GasType.BlindSmoke), false, null, 0f, 1, 0f, false, null, null, null, true, 1f, 0f, true, null, 1f, null, null);
+                this.caller.royalty.GetPermit(this.def, this.faction).Notify_Used();
+                if (!this.free)
+                {
+                    this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
+                }
+            }
+        }
+        private Faction faction;
+    }
+    public class CompProperties_Chargecell : CompProperties_Targetable
+    {
+        public CompProperties_Chargecell()
+        {
+            this.compClass = typeof(CompTargetable_Chargecell);
+        }
+    }
+    public class CompTargetable_Chargecell : CompTargetable
+    {
+        public new CompProperties_Chargecell Props
+        {
+            get
+            {
+                return (CompProperties_Chargecell)this.props;
+            }
+        }
+        protected override bool PlayerChoosesTarget
+        {
+            get
+            {
+                return true;
+            }
+        }
+        protected override TargetingParameters GetTargetingParameters()
+        {
+            return new TargetingParameters
+            {
+                canTargetPawns = true,
+                canTargetBuildings = true,
+                canTargetItems = false,
+                canTargetCorpses = false,
+                mapObjectTargetsMustBeAutoAttackable = false
+            };
+        }
+        public override IEnumerable<Thing> GetTargets(Thing targetChosenByPlayer = null)
+        {
+            yield return targetChosenByPlayer;
+            yield break;
+        }
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            return ((target.Thing is Building b && b.HasComp<CompPowerBattery>()) || (target.Thing is Pawn p && p.needs.energy != null)) && base.ValidateTarget(target.Thing, showMessages);
+        }
+    }
+    public class CompProperties_TargetEffectChargecell : CompProperties
+    {
+        public CompProperties_TargetEffectChargecell()
+        {
+            this.compClass = typeof(CompTargetEffect_Chargecell);
+        }
+        public float batteryWatts;
+        public float energyForOneBodySizeMech;
+        public SoundDef sound;
+    }
+    public class CompTargetEffect_Chargecell : CompTargetEffect
+    {
+        public CompProperties_TargetEffectChargecell Props
+        {
+            get
+            {
+                return (CompProperties_TargetEffectChargecell)this.props;
+            }
+        }
+        public override void DoEffectOn(Pawn user, Thing target)
+        {
+            if (!user.IsColonistPlayerControlled)
+            {
+                return;
+            }
+            if (target is Building)
+            {
+                Job job = JobMaker.MakeJob(HVMPDefOf.HVMP_InjectChargecellBattery, target, this.parent);
+                job.count = 1;
+                job.playerForced = true;
+                user.jobs.TryTakeOrderedJob(job, new JobTag?(JobTag.Misc), false);
+            }
+            if (target is Pawn)
+            {
+                Job job = JobMaker.MakeJob(HVMPDefOf.HVMP_InjectChargecellMech, target, this.parent);
+                job.count = 1;
+                job.playerForced = true;
+                user.jobs.TryTakeOrderedJob(job, new JobTag?(JobTag.Misc), false);
+            }
+        }
+    }
+    public class JobDriver_ChargecellBattery : JobDriver
+    {
+        private Building Battery
+        {
+            get
+            {
+                return (Building)this.job.GetTarget(TargetIndex.A).Thing;
+            }
+        }
+        private Thing Item
+        {
+            get
+            {
+                return this.job.GetTarget(TargetIndex.B).Thing;
+            }
+        }
+        public override bool TryMakePreToilReservations(bool errorOnFailed)
+        {
+            return this.pawn.Reserve(this.Battery, this.job, 1, -1, null, errorOnFailed, false) && this.pawn.Reserve(this.Item, this.job, 1, -1, null, errorOnFailed, false);
+        }
+        protected override IEnumerable<Toil> MakeNewToils()
+        {
+            yield return Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.Touch, false).FailOnDespawnedOrNull(TargetIndex.B).FailOnDespawnedOrNull(TargetIndex.A);
+            yield return Toils_Haul.StartCarryThing(TargetIndex.B, false, false, false, true, false);
+            yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch, false).FailOnDespawnedOrNull(TargetIndex.A);
+            Toil toil = Toils_General.Wait(10, TargetIndex.None);
+            toil.WithProgressBarToilDelay(TargetIndex.A, false, -0.5f);
+            toil.FailOnDespawnedOrNull(TargetIndex.A);
+            toil.FailOnCannotTouch(TargetIndex.A, PathEndMode.Touch);
+            toil.tickAction = delegate
+            {
+                Pawn actor = toil.actor;
+                toil.handlingFacing = true;
+                toil.tickAction = delegate
+                {
+                    actor.rotationTracker.FaceTarget(this.job.GetTarget(TargetIndex.A));
+                };
+                CompUsable compUsable = this.Item.TryGetComp<CompUsable>();
+                if (compUsable != null && this.warmupMote == null && compUsable.Props.warmupMote != null)
+                {
+                    this.warmupMote = MoteMaker.MakeAttachedOverlay(this.Battery, compUsable.Props.warmupMote, Vector3.zero, 1f, -1f);
+                }
+                Mote mote = this.warmupMote;
+                if (mote == null)
+                {
+                    return;
+                }
+                mote.Maintain();
+            };
+            yield return toil;
+            yield return Toils_General.Do(new Action(this.ChargeBattery));
+            yield break;
+        }
+        private void ChargeBattery()
+        {
+            CompPowerBattery cpb = this.Battery.GetComp<CompPowerBattery>();
+            CompTargetEffect_Chargecell ctecc = this.Item.TryGetComp<CompTargetEffect_Chargecell>();
+            if (cpb != null && ctecc != null)
+            {
+                cpb.AddEnergy(ctecc.Props.batteryWatts);
+                if (this.Battery.Spawned)
+                {
+                    ctecc.Props.sound.PlayOneShot(new TargetInfo(this.Battery.Position, this.Battery.Map, false));
+                }
+            }
+            this.Item.SplitOff(1).Destroy(DestroyMode.Vanish);
+        }
+        private Mote warmupMote;
+    }
+    public class JobDriver_ChargecellMech : JobDriver
+    {
+        protected Pawn Mech
+        {
+            get
+            {
+                return (Pawn)this.job.GetTarget(TargetIndex.A).Thing;
+            }
+        }
+        private Thing Item
+        {
+            get
+            {
+                return this.job.GetTarget(TargetIndex.B).Thing;
+            }
+        }
+        public override bool TryMakePreToilReservations(bool errorOnFailed)
+        {
+            this.Mech.ClearAllReservations(true);
+            return this.pawn.Reserve(this.Mech, this.job, 1, -1, null, errorOnFailed, false) && this.pawn.Reserve(this.Item, this.job, 1, -1, null, errorOnFailed, false);
+        }
+        protected override IEnumerable<Toil> MakeNewToils()
+        {
+            this.FailOnDestroyedOrNull(TargetIndex.A);
+            this.FailOnDestroyedOrNull(TargetIndex.B);
+            this.FailOnAggroMentalStateAndHostile(TargetIndex.A);
+            this.FailOn(delegate
+            {
+                if (this.Mech.needs.energy == null)
+                {
+                    return true;
+                }
+                return false;
+            });
+            yield return Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.Touch, false).FailOnDespawnedOrNull(TargetIndex.B).FailOnDespawnedOrNull(TargetIndex.A);
+            yield return Toils_Haul.StartCarryThing(TargetIndex.B, false, false, false, true, false);
+            yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch, false).FailOnDespawnedOrNull(TargetIndex.A);
+            yield return Toils_General.Do(new Action(this.ChargeMech));
+            yield break;
+        }
+        private void ChargeMech()
+        {
+            CompTargetEffect_Chargecell ctecc = this.Item.TryGetComp<CompTargetEffect_Chargecell>();
+            if (this.Mech.needs.energy != null && ctecc != null)
+            {
+                this.Mech.needs.energy.CurLevel += ctecc.Props.energyForOneBodySizeMech/this.Mech.BodySize;
+                if (this.Mech.Spawned)
+                {
+                    ctecc.Props.sound.PlayOneShot(new TargetInfo(this.Mech.Position, this.Mech.Map, false));
+                }
+            }
+            this.Item.SplitOff(1).Destroy(DestroyMode.Vanish);
+        }
+        private const TargetIndex TakeeIndex = TargetIndex.A;
+        private const TargetIndex BedIndex = TargetIndex.B;
+    }
+    public class RoyalTitlePermitWorker_MakeXenogermOfEndo : RoyalTitlePermitWorker_TargetPawn
+    {
+        public override bool IsGoodPawn(Pawn pawn)
+        {
+            return pawn.genes != null && pawn.genes.Endogenes.Count > 0 && !pawn.Map.generatorDef.isUnderground && DropCellFinder.CanPhysicallyDropInto(pawn.Position, pawn.Map, true, true) && !pawn.health.hediffSet.HasHediff(HediffDefOf.XenogermReplicating);
+        }
+        public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
+        {
+            base.AffectPawnInner(pme, pawn, faction);
+            Xenogerm xg = this.MakeXenogerm(pawn);
+            List<Thing> list = new List<Thing> {
+                xg
+            };
+            ActiveDropPodInfo activeDropPodInfo = new ActiveDropPodInfo();
+            activeDropPodInfo.innerContainer.TryAddRangeOrTransfer(list, true, false);
+            DropPodUtility.MakeDropPodAt(pawn.Position, pawn.Map, activeDropPodInfo, null);
+            Messages.Message("MessagePermitTransportDrop".Translate(faction.Named("FACTION")), new LookTargets(pawn.Position, pawn.Map), MessageTypeDefOf.NeutralEvent, true);
+            this.caller.royalty.GetPermit(this.def, faction).Notify_Used();
+            if (!this.free)
+            {
+                this.caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
+            }
+        }
+        public Xenogerm MakeXenogerm(Pawn target)
+        {
+            Xenogerm xenogerm = (Xenogerm)ThingMaker.MakeThing(ThingDefOf.Xenogerm, null);
+            List<Genepack> noGenepacks = new List<Genepack>();
+            string name = "HVB_ProgenoidXenogerm".Translate(target.Name.ToStringShort);
+            xenogerm.Initialize(noGenepacks, (target.genes.XenotypeLabel != null) ? target.genes.XenotypeLabel.Trim() : name, (target.genes.iconDef != null) ? target.genes.iconDef : XenotypeIconDefOf.Basic);
+            foreach (Gene g in target.genes.Endogenes)
+            {
+                if (g.def.biostatArc <= 0)
+                {
+                    xenogerm.GeneSet.AddGene(g.def);
+                }
+            }
+            Hediff hediff = HediffMaker.MakeHediff(HediffDefOf.XenogermReplicating, target, null);
+            target.health.AddHediff(hediff, null, null, null);
+            return xenogerm;
+        }
+    }
+    public class RoyalTitlePermitWorker_MakeXenogermOfXeno : RoyalTitlePermitWorker_TargetPawn
+    {
+        public override bool IsGoodPawn(Pawn pawn)
+        {
+            return pawn.genes != null && pawn.genes.Xenogenes.Count > 0 && !pawn.Map.generatorDef.isUnderground && DropCellFinder.CanPhysicallyDropInto(pawn.Position, pawn.Map, true, true) && !pawn.health.hediffSet.HasHediff(HediffDefOf.XenogermReplicating);
+        }
+        public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
+        {
+            base.AffectPawnInner(pme, pawn, faction);
+            Xenogerm xg = this.MakeXenogerm(pawn);
+            List<Thing> list = new List<Thing> {
+                xg
+            };
+            ActiveDropPodInfo activeDropPodInfo = new ActiveDropPodInfo();
+            activeDropPodInfo.innerContainer.TryAddRangeOrTransfer(list, true, false);
+            DropPodUtility.MakeDropPodAt(pawn.Position, pawn.Map, activeDropPodInfo, null);
+            Messages.Message("MessagePermitTransportDrop".Translate(faction.Named("FACTION")), new LookTargets(pawn.Position, pawn.Map), MessageTypeDefOf.NeutralEvent, true);
+            this.caller.royalty.GetPermit(this.def, faction).Notify_Used();
+            if (!this.free)
+            {
+                this.caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
+            }
+        }
+        public Xenogerm MakeXenogerm(Pawn target)
+        {
+            Xenogerm xenogerm = (Xenogerm)ThingMaker.MakeThing(ThingDefOf.Xenogerm, null);
+            List<Genepack> noGenepacks = new List<Genepack>();
+            string name = "HVB_ProgenoidXenogerm".Translate(target.Name.ToStringShort);
+            xenogerm.Initialize(noGenepacks, (target.genes.XenotypeLabel != null) ? target.genes.XenotypeLabel.Trim() : name, (target.genes.iconDef != null) ? target.genes.iconDef : XenotypeIconDefOf.Basic);
+            foreach (Gene g in target.genes.Xenogenes)
+            {
+                if (g.def.biostatArc <= 0)
+                {
+                    xenogerm.GeneSet.AddGene(g.def);
+                }
+            }
+            Hediff hediff = HediffMaker.MakeHediff(HediffDefOf.XenogermReplicating, target, null);
+            target.health.AddHediff(hediff, null, null, null);
+            return xenogerm;
+        }
+    }
+    public class CompProperties_BlightBlast : CompProperties
+    {
+        public CompProperties_BlightBlast()
+        {
+            this.compClass = typeof(CompBlightBlast);
+        }
+        public float radius;
+        public int periodicity;
+        public float damageToPlant;
+        public EffecterDef effecter;
+        public SoundDef sound;
+    }
+    public class CompBlightBlast : ThingComp
+    {
+        public CompProperties_BlightBlast Props
+        {
+            get
+            {
+                return (CompProperties_BlightBlast)this.props;
+            }
+        }
+        public override void CompTick()
+        {
+            base.CompTick();
+            if (this.parent.Spawned)
+            {
+                this.ticksToNextBlast--;
+                if (this.ticksToNextBlast <= 0)
+                {
+                    if (this.Props.effecter != null)
+                    {
+                        this.Props.effecter.SpawnMaintained(this.parent.PositionHeld, this.parent.MapHeld, 1f);
+                    }
+                    bool anyBlightKilled = false;
+                    foreach (Blight blight in GenRadial.RadialDistinctThingsAround(this.parent.PositionHeld, this.parent.MapHeld, this.Props.radius, true).OfType<Blight>().Distinct<Blight>())
+                    {
+                        anyBlightKilled = true;
+                        Plant plant = blight.Plant;
+                        blight.Destroy();
+                        if (plant != null)
+                        {
+                            plant.TakeDamage(new DamageInfo(DamageDefOf.Rotting, this.Props.damageToPlant, 0f, -1f, null, null, null, DamageInfo.SourceCategory.ThingOrUnknown, null, true, true, QualityCategory.Normal, true));
+                        }
+                    }
+                    if (anyBlightKilled)
+                    {
+                        if (this.Props.sound != null)
+                        {
+                            this.Props.sound.PlayOneShot(new TargetInfo(this.parent.PositionHeld, this.parent.MapHeld, false));
+                        }
+                    }
+                    this.ticksToNextBlast = this.Props.periodicity;
+                }
+            }
+        }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look<int>(ref this.ticksToNextBlast, "ticksToNextBlast", 0, false);
+        }
+        public int ticksToNextBlast = 0;
+    }
+    [StaticConstructorOnStartup]
+    public class RoyalTitlePermitWorker_DropGenePack : RoyalTitlePermitWorker_Targeted
+    {
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            this.CallResources(target.Cell);
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (map.generatorDef.isUnderground)
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            Action action = null;
+            string text = this.def.LabelCap + ": ";
+            bool free;
+            if (base.FillAidOption(pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.BeginCallResources(pawn, faction, map, free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
+        {
+            string text;
+            bool flag;
+            if (!base.FillCaravanAidOption(pawn, faction, out text, out this.free, out flag))
+            {
+                yield break;
+            }
+            Command_Action command_Action = new Command_Action
+            {
+                defaultLabel = this.def.LabelCap + " (" + pawn.LabelShort + ")",
+                defaultDesc = text,
+                icon = RoyalTitlePermitWorker_DropGenePack.CommandTex,
+                action = delegate
+                {
+                    Caravan caravan = pawn.GetCaravan();
+                    float num = caravan.MassUsage;
+                    List<ThingDefCountClass> itemsToDrop = this.def.royalAid.itemsToDrop;
+                    for (int i = 0; i < itemsToDrop.Count; i++)
+                    {
+                        num += itemsToDrop[i].thingDef.BaseMass * (float)itemsToDrop[i].count;
+                    }
+                    if (num > caravan.MassCapacity)
+                    {
+                        WindowStack windowStack = Find.WindowStack;
+                        TaggedString taggedString = "DropResourcesOverweightConfirm".Translate();
+                        Action action= delegate
+                        {
+                            this.CallResourcesToCaravan(pawn, faction, this.free);
+                        };
+                        windowStack.Add(Dialog_MessageBox.CreateConfirmation(taggedString, action, true, null, WindowLayer.Dialog));
+                        return;
+                    }
+                    this.CallResourcesToCaravan(pawn, faction, this.free);
+                }
+            };
+            if (pawn.MapHeld != null && pawn.MapHeld.generatorDef.isUnderground)
+            {
+                command_Action.Disable("CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")));
+            }
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                command_Action.Disable("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")));
+            }
+            if (flag)
+            {
+                command_Action.Disable("CommandCallRoyalAidNotEnoughFavor".Translate());
+            }
+            yield return command_Action;
+            yield break;
+        }
+        private void BeginCallResources(Pawn caller, Faction faction, Map map, bool free)
+        {
+            this.targetingParameters = new TargetingParameters();
+            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetBuildings = false;
+            this.targetingParameters.canTargetPawns = false;
+            this.caller = caller;
+            this.map = map;
+            this.faction = faction;
+            this.free = free;
+            this.targetingParameters.validator = (TargetInfo target) => (this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(caller.Position) <= this.def.royalAid.targetingRange) && !target.Cell.Fogged(map) && DropCellFinder.CanPhysicallyDropInto(target.Cell, map, true, true);
+            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+        }
+        private void CallResources(IntVec3 cell)
+        {
+            List<Thing> list = new List<Thing>();
+            for (int i = 0; i < this.def.royalAid.itemsToDrop.Count; i++)
+            {
+                for (int k = 0; k < this.def.royalAid.itemsToDrop[i].count; k++)
+                {
+                    Thing thing = ThingMaker.MakeThing(this.def.royalAid.itemsToDrop[i].thingDef, null);
+                    if (thing is Genepack gp)
+                    {
+                        if (gp.GeneSet.ArchitesTotal > 0)
+                        {
+                            int toReplace = 0;
+                            for (int j = gp.GeneSet.GenesListForReading.Count - 1; j >= 0; j--)
+                            {
+                                if (gp.GeneSet.GenesListForReading[j].biostatArc > 0)
+                                {
+                                    gp.GeneSet.Debug_RemoveGene(gp.GeneSet.GenesListForReading[j]);
+                                    toReplace++;
+                                }
+                            }
+                            while (toReplace > 0)
+                            {
+                                gp.GeneSet.AddGene(DefDatabase<GeneDef>.AllDefsListForReading.Where((GeneDef gd) => gd.canGenerateInGeneSet && (gd.prerequisite == null || gp.GeneSet.GenesListForReading.Contains(gd.prerequisite)) && gd.biostatArc <= 0).RandomElement());
+                                toReplace--;
+                            }
+                        }
+                    }
+                    list.Add(thing);
+                }
+            }
+            if (list.Any<Thing>())
+            {
+                ActiveDropPodInfo activeDropPodInfo = new ActiveDropPodInfo();
+                activeDropPodInfo.innerContainer.TryAddRangeOrTransfer(list, true, false);
+                DropPodUtility.MakeDropPodAt(cell, this.map, activeDropPodInfo, null);
+                Messages.Message("MessagePermitTransportDrop".Translate(this.faction.Named("FACTION")), new LookTargets(cell, this.map), MessageTypeDefOf.NeutralEvent, true);
+                this.caller.royalty.GetPermit(this.def, this.faction).Notify_Used();
+                if (!this.free)
+                {
+                    this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
+                }
+            }
+        }
+        private void CallResourcesToCaravan(Pawn caller, Faction faction, bool free)
+        {
+            Caravan caravan = caller.GetCaravan();
+            for (int i = 0; i < this.def.royalAid.itemsToDrop.Count; i++)
+            {
+                Thing thing = ThingMaker.MakeThing(this.def.royalAid.itemsToDrop[i].thingDef, null);
+                thing.stackCount = this.def.royalAid.itemsToDrop[i].count;
+                CaravanInventoryUtility.GiveThing(caravan, thing);
+            }
+            Messages.Message("MessagePermitTransportDropCaravan".Translate(faction.Named("FACTION"), caller.Named("PAWN")), caravan, MessageTypeDefOf.NeutralEvent, true);
+            caller.royalty.GetPermit(this.def, faction).Notify_Used();
+            if (!free)
+            {
+                caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
+            }
+        }
+        private Faction faction;
+        private static readonly Texture2D CommandTex = ContentFinder<Texture2D>.Get("UI/Commands/CallAid", true);
+    }
+    public class HediffCompProperties_GetOffMyMap : HediffCompProperties
+    {
+        public HediffCompProperties_GetOffMyMap()
+        {
+            this.compClass = typeof(HediffComp_GetOffMyMap);
+        }
+        public int minDuration;
+        public int periodicity;
+    }
+    public class HediffComp_GetOffMyMap : HediffComp
+    {
+        public HediffCompProperties_GetOffMyMap Props
+        {
+            get
+            {
+                return (HediffCompProperties_GetOffMyMap)this.props;
+            }
+        }
+        public override void CompPostPostAdd(DamageInfo? dinfo)
+        {
+            base.CompPostPostAdd(dinfo);
+            this.faction = this.Pawn.Faction;
+            this.timer = this.Props.minDuration;
+        }
+        public override void CompPostTick(ref float severityAdjustment)
+        {
+            base.CompPostTick(ref severityAdjustment);
+            this.timer--;
+            if (this.timer <= 0)
+            {
+                this.timer = this.Props.periodicity;
+                this.JustLeaveAlready();
+            }
+        }
+        public void JustLeaveAlready()
+        {
+            if (!this.Pawn.Spawned)
+            {
+                this.parent.Severity = -1f;
+                return;
+            }
+            if (this.Pawn.Faction != null && this.faction != null)
+            {
+                if (this.Pawn.Faction == Faction.OfPlayerSilentFail)
+                {
+                    this.parent.Severity = -1f;
+                    return;
+                }
+                if (this.Pawn.Faction == this.faction)
+                {
+                    if (this.Pawn.jobs.curJob != null)
+                    {
+                        this.Pawn.jobs.EndCurrentJob(JobCondition.InterruptForced, true, true);
+                    }
+                    Lord lord2 = this.Pawn.GetLord();
+                    bool mustMakeNewLord = true;
+                    if (lord2 != null)
+                    {
+                        if (lord2.LordJob is LordJob_ExitMapBest)
+                        {
+                            mustMakeNewLord = false;
+                        } else {
+                            lord2.Notify_PawnLost(this.Pawn, PawnLostCondition.Undefined);
+                        }
+                    }
+                    if (mustMakeNewLord)
+                    {
+                        List<Pawn> pawn = new List<Pawn>
+                        {
+                            this.Pawn
+                        };
+                        Lord lord = LordMaker.MakeNewLord(this.faction, new LordJob_ExitMapBest(LocomotionUrgency.Jog, false, true), this.Pawn.Map, pawn);
+                    }
+                }
+            }
+        }
+        public override void CompExposeData()
+        {
+            base.CompExposeData();
+            Scribe_Values.Look<int>(ref this.timer, "timer", 2500, false);
+            Scribe_References.Look<Faction>(ref this.faction, "faction", false);
+        }
+        public int timer;
+        public Faction faction;
+    }
+    //branchquest mechanics: basic sets
+    public class QuestNode_CommerceIntermediary : QuestNode_Sequence
+    {
+        protected override void RunInt()
+        {
+            if (HVMP_Utility.TryFindCommerceFaction(out Faction commerceFaction))
+            {
+                Slate slate = QuestGen.slate;
+                slate.Set<Thing>("asker", commerceFaction.leader, false);
+                slate.Set<Faction>("faction", commerceFaction, false);
+                Map map = HVMP_Utility.TryGetMap();
+                slate.Set<Map>("map", map, false);
+                QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
+                qpbgfh.faction = commerceFaction;
+                qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true,commerceFaction);
+                QuestGen.quest.AddPart(qpbgfh);
+                HVMP_Utility.SetSettingScalingRewardValue(slate);
+            }
+            base.RunInt();
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return HVMP_Utility.TryFindCommerceFaction(out Faction commerceFaction);
+        }
+    }
+    public class QuestNode_PaxIntermediary : QuestNode_Sequence
+    {
+        protected override void RunInt()
+        {
+            if (HVMP_Utility.TryFindPaxFaction(out Faction paxFaction))
+            {
+                Slate slate = QuestGen.slate;
+                slate.Set<Thing>("asker", paxFaction.leader, false);
+                QuestGen.slate.Set<Faction>("faction", paxFaction, false);
+                Map map = HVMP_Utility.TryGetMap();
+                slate.Set<Map>("map", map, false);
+                QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
+                qpbgfh.faction = paxFaction;
+                qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true,paxFaction);
+                QuestGen.quest.AddPart(qpbgfh);
+                HVMP_Utility.SetSettingScalingRewardValue(slate);
+            }
+            base.RunInt();
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return HVMP_Utility.TryFindPaxFaction(out Faction paxFaction);
+        }
+    }
+    public class QuestNode_RoverIntermediary : QuestNode_Sequence
+    {
+        protected override void RunInt()
+        {
+            if (HVMP_Utility.TryFindRoverFaction(out Faction roverFaction))
+            {
+                Slate slate = QuestGen.slate;
+                slate.Set<Thing>("asker", roverFaction.leader, false);
+                QuestGen.slate.Set<Faction>("faction", roverFaction, false);
+                Map map = HVMP_Utility.TryGetMap();
+                slate.Set<Map>("map", map, false);
+                QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
+                qpbgfh.faction = roverFaction;
+                qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true,roverFaction);
+                QuestGen.quest.AddPart(qpbgfh);
+                HVMP_Utility.SetSettingScalingRewardValue(slate);
+            }
+            base.RunInt();
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return HVMP_Utility.TryFindRoverFaction(out Faction roverFaction);
+        }
+    }
+    public class QuestNode_GiveRewardsBranch : QuestNode
+    {
+        protected override void RunInt()
+        {
+            this.parms.giverFaction = this.faction.GetValue(QuestGen.slate);
+            this.parms.allowGoodwill = true;
+            this.parms.allowRoyalFavor = true;
+            this.parms.thingRewardDisallowed = true;
+            QuestGen.quest.GiveRewards(this.parms, this.inSignal.GetValue(QuestGen.slate), this.customLetterLabel.GetValue(QuestGen.slate), this.LetterText(), null, null, false, delegate
+            {
+                QuestNode questNode = this.nodeIfChosenPawnSignalUsed;
+                if (questNode == null)
+                {
+                    return;
+                }
+                questNode.Run();
+            }, this.variants.GetValue(QuestGen.slate), false, this.parms.giverFaction.leader);
+        }
+        public virtual string LetterText()
+        {
+            return this.customLetterText.GetValue(QuestGen.slate);
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return this.nodeIfChosenPawnSignalUsed == null || this.nodeIfChosenPawnSignalUsed.TestRun(slate);
+        }
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+        public QuestNode nodeIfChosenPawnSignalUsed;
+        public RewardsGeneratorParams parms;
+        public SlateRef<string> customLetterLabel;
+        public SlateRef<string> customLetterText;
+        public SlateRef<Faction> faction;
+        public SlateRef<int?> variants;
+    }
+    public class QuestPart_BranchGoodwillFailureHandler : QuestPart
+    {
+        public override void Notify_PreCleanup()
+        {
+            base.Notify_PreCleanup();
+            if (this.goodwill < 0 && this.quest.State == QuestState.EndedOfferExpired)
+            {
+                Faction.OfPlayer.TryAffectGoodwillWith(this.faction, this.goodwill, true, true, HVMPDefOf.HVMP_IgnoredQuest, null);
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_References.Look<Faction>(ref this.faction, "faction", false);
+            Scribe_Values.Look<int>(ref this.goodwill, "goodwill", 0, false);
+        }
+        public Faction faction;
+        public int goodwill;
+    }
+    public class QuestNode_GiveRewardsMastermind : QuestNode_GiveRewardsBranch
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            Quest quest = QuestGen.quest;
+            WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
+            if (wcbs != null)
+            {
+                slate.Set<int>(this.tradeBlocksRemaining.GetValue(slate), wcbs.tradeBlockages, false);
+                QuestPart_TradeBlocker qptb = new QuestPart_TradeBlocker();
+                qptb.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(quest.InitiateSignal);
+                quest.AddPart(qptb);
+            }
+            base.RunInt();
+        }
+        public override string LetterText()
+        {
+            WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
+            if (wcbs != null)
+            {
+                return base.LetterText().Translate(wcbs.tradeBlockages);
+            }
+            return base.LetterText();
+        }
+        [NoTranslate]
+        public SlateRef<string> tradeBlocksRemaining;
+    }
+    public class QuestPart_TradeBlocker : QuestPart
+    {
+        public override void Notify_QuestSignalReceived(Signal signal)
+        {
+            base.Notify_QuestSignalReceived(signal);
+            if (signal.tag == this.inSignal)
+            {
+                WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
+                if (wcbs != null)
+                {
+                    wcbs.tradeBlockages++;
+                }
+            }
+        }
+        public string inSignal;
+    }
+    public class QuestNode_HospitalityPawnType : QuestNode
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            PawnKindDef pawnKindDef;
+            if (pawnKinds.TryRandomElement(out pawnKindDef))
+            {
+                slate.Set<PawnKindDef>(this.storePawnKindAs.GetValue(slate), pawnKindDef, false);
+            }
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return !this.pawnKinds.NullOrEmpty();
+        }
+        [NoTranslate]
+        public SlateRef<string> storePawnKindAs;
+        public List<PawnKindDef> pawnKinds;
+    }
+    public class QuestNode_SetRewardValue_BranchSettingScaling : QuestNode_Sequence
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            HVMP_Utility.SetSettingScalingRewardValue(slate, rewardFactor);
+            base.RunInt();
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+        public float rewardFactor = 1f;
+    }
+    public class QuestNode_EndBranch : QuestNode_End
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            Map map = slate.Get<Map>("map");
+            int value = HVMP_Utility.ExpectationBasedGoodwillLoss(map,this.outcome.GetValue(slate) == QuestEndOutcome.Fail,false,slate.Get<Faction>("faction"));
+            if (value != 0 && this.faction != null)
+            {
+                QuestPart_FactionGoodwillChange questPart_FactionGoodwillChange = new QuestPart_FactionGoodwillChange();
+                questPart_FactionGoodwillChange.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
+                questPart_FactionGoodwillChange.faction = Find.FactionManager.FirstFactionOfDef(this.faction);
+                questPart_FactionGoodwillChange.change = value;
+                questPart_FactionGoodwillChange.historyEvent = this.goodwillChangeReason.GetValue(slate);
+                slate.Set<string>("goodwillPenalty", Mathf.Abs(value).ToString(), false);
+                QuestGen.quest.AddPart(questPart_FactionGoodwillChange);
+            }
+            QuestPart_QuestEnd questPart_QuestEnd = new QuestPart_QuestEnd();
+            questPart_QuestEnd.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
+            questPart_QuestEnd.outcome = new QuestEndOutcome?(this.outcome.GetValue(slate));
+            questPart_QuestEnd.signalListenMode = this.signalListenMode.GetValue(slate) ?? QuestPart.SignalListenMode.OngoingOnly;
+            questPart_QuestEnd.sendLetter = this.sendStandardLetter.GetValue(slate) ?? false;
+            QuestGen.quest.AddPart(questPart_QuestEnd);
+        }
+        public FactionDef faction;
+    }
+    public class QuestNode_EndAndDestroySite : QuestNode_End
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            QuestPart_DestroySite qp = new QuestPart_DestroySite();
+            qp.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
+            qp.worldObjects = this.siteToDestroy.GetValue(slate);
+            Map map = slate.Get<Map>("map");
+            int value = HVMP_Utility.ExpectationBasedGoodwillLoss(map, this.outcome.GetValue(slate) == QuestEndOutcome.Fail,false,slate.Get<Faction>("faction"));
+            if (value != 0 && this.faction != null)
+            {
+                QuestPart_FactionGoodwillChange questPart_FactionGoodwillChange = new QuestPart_FactionGoodwillChange();
+                questPart_FactionGoodwillChange.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
+                questPart_FactionGoodwillChange.faction = Find.FactionManager.FirstFactionOfDef(this.faction);
+                questPart_FactionGoodwillChange.change = value;
+                questPart_FactionGoodwillChange.historyEvent = this.goodwillChangeReason.GetValue(slate);
+                slate.Set<string>("goodwillPenalty", Mathf.Abs(value).ToString(), false);
+                QuestGen.quest.AddPart(questPart_FactionGoodwillChange);
+            }
+            qp.outcome = new QuestEndOutcome?(this.outcome.GetValue(slate));
+            qp.signalListenMode = this.signalListenMode.GetValue(slate) ?? QuestPart.SignalListenMode.OngoingOnly;
+            qp.sendLetter = this.sendStandardLetter.GetValue(slate) ?? false;
+            QuestGen.quest.AddPart(qp);
+        }
+        public SlateRef<List<WorldObject>> siteToDestroy;
+        public FactionDef faction;
+    }
+    [StaticConstructorOnStartup]
+    public class QuestPart_DestroySite : QuestPart_QuestEnd
+    {
+        public override void Notify_QuestSignalReceived(Signal signal)
+        {
+            if (signal.tag == this.inSignal && this.worldObjects != null)
+            {
+                QuestEndOutcome questEndOutcome;
+                if (this.outcome != null)
+                {
+                    questEndOutcome = this.outcome.Value;
+                }
+                else if (!signal.args.TryGetArg<QuestEndOutcome>("OUTCOME", out questEndOutcome))
+                {
+                    questEndOutcome = QuestEndOutcome.Unknown;
+                }
+                this.quest.End(questEndOutcome, this.sendLetter, this.playSound);
+                foreach (WorldObject wo in this.worldObjects)
+                {
+                    if (!wo.Destroyed)
+                    {
+                        wo.Destroy();
+                    }
+                }
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Collections.Look<WorldObject>(ref this.worldObjects, "worldObjects", LookMode.Reference, Array.Empty<object>());
+        }
+        public List<WorldObject> worldObjects;
+    }
+    /*public class StudiableQuestItem : DefModExtension
+    {
+        public StudiableQuestItem(){
+        }
+        public JobDef job;
+    }
+    public class WorkGiver_StudyQuestItem : WorkGiver_Scanner
+    {
+        public override ThingRequest PotentialWorkThingRequest
+        {
+            get
+            {
+                return ThingRequest.ForGroup(ThingRequestGroup.ResearchBench);
+            }
+        }
+        public override bool Prioritized
+        {
+            get
+            {
+                return true;
+            }
+        }
+        public override bool ShouldSkip(Pawn pawn, bool forced = false)
+        {
+            List<Thing> list = pawn.Map.listerThings.AllThings.Where((Thing t)=>t.def.HasModExtension<StudiableQuestItem>()).ToList();
+            return list.Count > 0;
+        }
+        public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
+        {
+            StudiableQuestItem sqi = t.def.GetModExtension<StudiableQuestItem>();
+            if (sqi != null)
+            {
+                return JobMaker.MakeJob(sqi.job, sqithing, t, interactioncell);
+            }
+            return null;
+        }
+        public override float GetPriority(Pawn pawn, TargetInfo t)
+        {
+            return t.Thing.GetStatValue(StatDefOf.ResearchSpeedFactor, true, -1);
+        }
+    }*/
+    public class QuestPart_LookAtThis : QuestPart
+    {
+        public QuestPart_LookAtThis() { }
+        public QuestPart_LookAtThis(Thing thing)
+        {
+            this.thing = thing;
+        }
+        public override IEnumerable<GlobalTargetInfo> QuestLookTargets
+        {
+            get
+            {
+                foreach (GlobalTargetInfo globalTargetInfo in base.QuestLookTargets)
+                {
+                    yield return globalTargetInfo;
+                }
+                if (this.thing != null)
+                {
+                    yield return this.thing;
+                }
+                yield break;
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_References.Look<Thing>(ref this.thing, "thing", false);
+        }
+        public override void Cleanup()
+        {
+            base.Cleanup();
+            this.thing = null;
+        }
+        private Thing thing;
+    }
+    public class QuestNode_LookOverHere : QuestNode
+    {
+        protected override void RunInt()
+        {
+            if (this.worldObject != null)
+            {
+                QuestGen.quest.AddPart(new QuestPart_LookOverHere(worldObject));
+            }
+            if (this.worldObjects.GetValue(QuestGen.slate) != null)
+            {
+                foreach (WorldObject wobj in this.worldObjects.GetValue(QuestGen.slate))
+                {
+                    QuestGen.quest.AddPart(new QuestPart_LookOverHere(wobj));
+                }
+            }
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+        private WorldObject worldObject;
+        public SlateRef<IEnumerable<WorldObject>> worldObjects;
+    }
+    public class QuestPart_LookOverHere : QuestPart
+    {
+        public QuestPart_LookOverHere() { }
+        public QuestPart_LookOverHere(WorldObject wo)
+        {
+            this.wo = wo;
+        }
+        public override IEnumerable<GlobalTargetInfo> QuestLookTargets
+        {
+            get
+            {
+                foreach (GlobalTargetInfo globalTargetInfo in base.QuestLookTargets)
+                {
+                    yield return globalTargetInfo;
+                }
+                if (this.wo != null)
+                {
+                    yield return this.wo;
+                }
+                yield break;
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_References.Look<WorldObject>(ref this.wo, "wo", false);
+        }
+        public override void Cleanup()
+        {
+            base.Cleanup();
+            this.wo = null;
+        }
+        private WorldObject wo;
+    }
+    //branchquest mechanics: studiable items
+    public class CompProperties_StudiableQuestItem : CompProperties_Interactable
+    {
+        public CompProperties_StudiableQuestItem()
+        {
+            this.compClass = typeof(CompStudiableQuestItem);
+        }
+        public FloatRange totalRequiredProgressHours;
+        public List<SkillDef> possibleExtraSkillDefs;
+        public List<SkillDef> requiredSkillDefs;
+        public bool extraStat;
+        public List<StatDef> possibleExtraStatDefsLikely;
+        public List<StatDef> possibleExtraStatDefsProbable;
+        public List<StatDef> possibleExtraStatDefsUnlikely;
+        public List<StatDef> requiredStatDefs;
+        public bool canStudyInPlace;
+        public string progressInspectStringSkills;
+        public string progressInspectStringStats;
+        public bool mustBeOnList;
+        public string notOnListstring;
+    }
+    public class CompStudiableQuestItem : CompInteractable
+    {
+        public new CompProperties_StudiableQuestItem Props
+        {
+            get
+            {
+                return (CompProperties_StudiableQuestItem)this.props;
+            }
+        }
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            Building_ResearchBench building_ResearchBench = null;
+            if (base.ValidateTarget(target, false) && (this.Props.canStudyInPlace || StudyUtility.TryFindResearchBench(target.Pawn, out building_ResearchBench)))
+            {
+                target.Pawn.jobs.TryTakeOrderedJob(this.DoStudyJob(building_ResearchBench), new JobTag?(JobTag.Misc), false);
+            }
+        }
+        public Job DoStudyJob(Thing brb)
+        {
+            ThingWithComps parent = this.parent;
+            CompForbiddable compForbiddable = ((parent != null) ? parent.TryGetComp<CompForbiddable>() : null);
+            if (compForbiddable != null)
+            {
+                compForbiddable.Forbidden = false;
+            }
+            return JobMaker.MakeJob(HVMPDefOf.HVMP_StudyQuestItem, this.parent, brb, (brb != null) ? brb.Position : IntVec3.Invalid);
+        }
+        public void Study(Pawn researcher, Thing brb, Thing researchBench)
+        {
+            if (researcher.skills != null)
+            {
+                float toAdd = 0f;
+                foreach (SkillDef sd in this.relevantSkills)
+                {
+                    toAdd += researcher.skills.GetSkill(sd).Level / 4f;
+                }
+                foreach (StatDef sd in this.relevantStats)
+                {
+                    toAdd += researcher.GetStatValue(sd) + 1f - sd.defaultBaseValue;
+                }
+                if (researchBench != null)
+                {
+                    toAdd *= researchBench.GetStatValue(StatDefOf.ResearchSpeedFactor);
+                }
+                this.curProgress += (toAdd / 2500f);
+                if (this.curProgress >= this.RequiredProgress)
+                {
+                    this.curProgress = this.RequiredProgress;
+                }
+            }
+        }
+        public override AcceptanceReport CanInteract(Pawn activateBy = null, bool checkOptionalItems = true)
+        {
+            AcceptanceReport acceptanceReport = base.CanInteract(activateBy, checkOptionalItems);
+            if (!acceptanceReport.Accepted)
+            {
+                return acceptanceReport;
+            }
+            if (activateBy != null && StatDefOf.ResearchSpeed.Worker.IsDisabledFor(activateBy))
+            {
+                return "Incapable".Translate();
+            }
+            Building_ResearchBench building_ResearchBench;
+            if (activateBy != null)
+            {
+                if (!this.Props.canStudyInPlace && !StudyUtility.TryFindResearchBench(activateBy, out building_ResearchBench))
+                {
+                    return "NoResearchBench".Translate();
+                }
+                if (!this.Props.canStudyInPlace && !this.parent.MapHeld.listerBuildings.ColonistsHaveResearchBench())
+                {
+                    return "NoResearchBench".Translate();
+                }
+                if (!this.PawnOnList(activateBy))
+                {
+                    return this.Props.notOnListstring.Translate();
+                }
+                if (this.PawnHasAnyUsableSkill(activateBy))
+                {
+                    return true;
+                }
+                return "HVMP_WrongSkillsToStudy".Translate();
+            }
+            return true;
+        }
+        public bool PawnOnList(Pawn pawn)
+        {
+            return !this.Props.mustBeOnList || this.pawns.Contains(pawn);
+        }
+        public bool PawnHasAnyUsableSkill(Pawn pawn)
+        {
+            if (pawn.skills != null)
+            {
+                foreach (SkillDef sd in this.relevantSkills)
+                {
+                    if (!pawn.skills.GetSkill(sd).TotallyDisabled)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        public void OnAnalyzed(Pawn pawn)
+        {
+            if (!this.parent.questTags.NullOrEmpty())
+            {
+                QuestUtility.SendQuestTargetSignals(this.parent.questTags, "StudiableItemFinished", this.Named("SUBJECT"));
+            }
+        }
+        public override void PostPostMake()
+        {
+            base.PostPostMake();
+            this.relevantSkills = new List<SkillDef>
+            {
+                SkillDefOf.Intellectual
+            };
+            this.reqProgress = this.Props.totalRequiredProgressHours.RandomInRange;
+        }
+        public override void PostDestroy(DestroyMode mode, Map previousMap)
+        {
+            base.PostDestroy(mode, previousMap);
+            if (!this.parent.questTags.NullOrEmpty())
+            {
+                QuestUtility.SendQuestTargetSignals(this.parent.questTags, "StudiableItemDestroyed", this.Named("SUBJECT"), previousMap.Named("MAP"));
+            }
+        }
+        public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        {
+            foreach (Gizmo gizmo in base.CompGetGizmosExtra())
+            {
+                yield return gizmo;
+            }
+            if (DebugSettings.ShowDevGizmos)
+            {
+                yield return new Command_Action
+                {
+                    defaultLabel = "DEV: Finish analysis",
+                    action = delegate
+                    {
+                        this.OnAnalyzed(Find.CurrentMap.mapPawns.FreeColonistsSpawned.First<Pawn>());
+                    }
+                };
+            }
+            foreach (Gizmo gizmo3 in QuestUtility.GetQuestRelatedGizmos(this.parent))
+            {
+                yield return gizmo3;
+            }
+            yield break;
+        }
+        public override string CompInspectStringExtra()
+        {
+            string text = "HVMP_CCProgress".Translate(this.curProgress.ToStringByStyle(ToStringStyle.FloatOne), this.RequiredProgress.ToStringByStyle(ToStringStyle.FloatOne));
+            if (!this.relevantSkills.NullOrEmpty())
+            {
+                text += "\n" + this.Props.progressInspectStringSkills.Translate();
+                for (int i = 0; i < this.relevantSkills.Count; i++)
+                {
+                    text += this.relevantSkills[i].LabelCap;
+                    if (i < this.relevantSkills.Count - 1)
+                    {
+                        text += ", ";
+                    }
+                }
+            }
+            if (!this.relevantStats.NullOrEmpty())
+            {
+                text += "\n" + this.Props.progressInspectStringStats.Translate();
+                for (int i = 0; i < this.relevantStats.Count; i++)
+                {
+                    text += this.relevantStats[i].LabelCap;
+                    if (i < this.relevantStats.Count - 1)
+                    {
+                        text += ", ";
+                    }
+                }
+            }
+            return text;
+        }
+        public float RequiredProgress
+        {
+            get
+            {
+                return this.reqProgress * this.challengeRating;
+            }
+        }
+        public bool Completed
+        {
+            get
+            {
+                return this.curProgress >= this.RequiredProgress;
+            }
+        }
+        public float ProgressPercent
+        {
+            get
+            {
+                return this.curProgress / this.RequiredProgress;
+            }
+        }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look<float>(ref this.curProgress, "curProgress", 0f, false);
+            Scribe_Values.Look<float>(ref this.reqProgress, "reqProgress", 1f, false);
+            Scribe_Values.Look<int>(ref this.challengeRating, "challengeRating", 1, false);
+            Scribe_Collections.Look<SkillDef>(ref this.relevantSkills, "relevantSkills", LookMode.Undefined, LookMode.Undefined);
+            Scribe_Collections.Look<StatDef>(ref this.relevantStats, "relevantStats", LookMode.Undefined, LookMode.Undefined);
+            Scribe_Collections.Look<Pawn>(ref this.pawns, "pawns", LookMode.Reference, Array.Empty<object>());
+        }
+        public float curProgress;
+        public float reqProgress;
+        public int challengeRating = 1;
+        public List<SkillDef> relevantSkills = new List<SkillDef>();
+        public List<StatDef> relevantStats = new List<StatDef>();
+        public List<Pawn> pawns = new List<Pawn>();
+    }
+    public class JobDriver_StudyQuestItem : JobDriver_StudyItem
+    {
+        public CompStudiableQuestItem StudiableComp
+        {
+            get
+            {
+                return base.ThingToStudy.TryGetComp<CompStudiableQuestItem>();
+            }
+        }
+        protected override IEnumerable<Toil> GetStudyToils()
+        {
+            Toil study = ToilMaker.MakeToil("GetStudyToils");
+            study.tickAction = delegate
+            {
+                Pawn actor = study.actor;
+                study.handlingFacing = true;
+                study.tickAction = delegate
+                {
+                    actor.rotationTracker.FaceTarget(this.job.GetTarget(TargetIndex.A));
+                    this.StudiableComp.Study(actor, this.TargetThingB, this.job.GetTarget(TargetIndex.A).Thing ?? null);
+                    if (!this.StudiableComp.relevantSkills.NullOrEmpty())
+                    {
+                        foreach (SkillDef sd in this.StudiableComp.relevantSkills)
+                        {
+                            actor.skills.Learn(sd, 0.1f, false, false);
+                        }
+                    }
+                    actor.GainComfortFromCellIfPossible(true);
+                    if (this.StudiableComp.Completed)
+                    {
+                        this.StudiableComp.OnAnalyzed(actor);
+                        actor.jobs.curDriver.ReadyForNextToil();
+                    }
+                };
+            };
+            study.FailOnCannotTouch(TargetIndex.A, PathEndMode.InteractionCell);
+            study.WithProgressBar(TargetIndex.A, () => this.StudiableComp.ProgressPercent, false, -0.5f, false);
+            study.defaultCompleteMode = ToilCompleteMode.Delay;
+            study.defaultDuration = 2500;
+            study.activeSkill = () => SkillDefOf.Intellectual;
+            yield return study;
+            yield break;
+        }
+    }
+    public class WorkGiver_StudyQuestItem : WorkGiver_Scanner
+    {
+        public override Danger MaxPathDanger(Pawn pawn)
+        {
+            return Danger.Some;
+        }
+        public override ThingRequest PotentialWorkThingRequest
+        {
+            get
+            {
+                return ThingRequest.ForGroup(ThingRequestGroup.ResearchBench);
+            }
+        }
+        public override bool Prioritized
+        {
+            get
+            {
+                return true;
+            }
+        }
+        public override bool ShouldSkip(Pawn pawn, bool forced = false)
+        {
+            if (!pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.ResearchBench).NullOrEmpty())
+            {
+                foreach (Thing t in pawn.Map.listerThings.AllThings)
+                {
+                    if (this.def.fixedBillGiverDefs.Contains(t.def))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        public override Job JobOnThing(Pawn pawn, Thing thing, bool forced = false)
+        {
+            if (pawn.CanReserve(thing, 1, -1, null, forced) && (!thing.def.hasInteractionCell || pawn.CanReserveSittableOrSpot(thing.InteractionCell, forced)))
+            {
+                foreach (Thing t in pawn.Map.listerThings.AllThings)
+                {
+                    if (this.def.fixedBillGiverDefs.Contains(t.def) && pawn.CanReserveAndReach(t, PathEndMode.OnCell, Danger.Deadly) && !t.IsForbidden(pawn) && !t.Fogged())
+                    {
+                        CompStudiableQuestItem cda = t.TryGetComp<CompStudiableQuestItem>();
+                        if (cda != null && cda.PawnOnList(pawn) && cda.PawnHasAnyUsableSkill(pawn))
+                        {
+                            return cda.DoStudyJob(thing);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+    }
+    //branchquest mechanics: books
+    public class HVMP_BookDeets : DefModExtension
+    {
+        public HVMP_BookDeets() { }
+        public string descKey;
+        public List<string> titlesPlace;
+        public List<string> titlesPlanetPlace;
+        public List<string> titlesMarket;
+        public List<string> titlesMarketItem;
+        public List<string> marketTerms;
+    }
+    //commerce branchquest: intervention
+    public class QuestNode_InterventionInner : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return slate.Exists("map", false) && Faction.OfInsects != null;
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            Map map = QuestGen.slate.Get<Map>("map", null, false);
+            float num = QuestGen.slate.Get<float>("points", 0f, false);
+            Faction faction = Faction.OfInsects;
+            QuestPart_Incident questPart_Incident = new QuestPart_Incident();
+            questPart_Incident.debugLabel = "raid";
+            questPart_Incident.incident = this.incidentDef;
+            IncidentParms incidentParms;
+            incidentParms = this.GenerateIncidentParms(map, num, faction, slate, questPart_Incident);
+            questPart_Incident.SetIncidentParmsAndRemoveTarget(incidentParms);
+            questPart_Incident.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
+            QuestGen.quest.AddPart(questPart_Incident);
+        }
+        private IncidentParms GenerateIncidentParms(Map map, float points, Faction faction, Slate slate, QuestPart_Incident questPart)
+        {
+            IncidentParms incidentParms = new IncidentParms();
+            incidentParms.forced = true;
+            incidentParms.target = map;
+            incidentParms.points = slate.Get<float>("points", 0f, false);
+            incidentParms.faction = faction;
+            incidentParms.pawnGroupMakerSeed = new int?(Rand.Int);
+            incidentParms.inSignalEnd = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignalLeave.GetValue(slate));
+            incidentParms.questTag = QuestGenUtility.HardcodedTargetQuestTagWithQuestID(this.tag.GetValue(slate));
+            incidentParms.canTimeoutOrFlee = false;
+            IncidentWorker_InterventionInfestation iwei = (IncidentWorker_InterventionInfestation)questPart.incident.Worker;
+            return incidentParms;
+        }
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+        [NoTranslate]
+        public SlateRef<string> inSignalLeave;
+        [NoTranslate]
+        public SlateRef<string> tag;
+        public IncidentDef incidentDef;
+        private const string RootSymbol = "root";
+    }
+    public class IncidentWorker_InterventionInfestation : IncidentWorker
+    {
+        protected override bool CanFireNowSub(IncidentParms parms)
+        {
+            if (!base.CanFireNowSub(parms))
+            {
+                return false;
+            }
+            if (Faction.OfInsects == null)
+            {
+                return false;
+            }
+            Map map = (Map)parms.target;
+            return true;
+        }
+        protected override bool TryExecuteWorker(IncidentParms parms)
+        {
+            Map map = (Map)parms.target;
+            IntVec3 intVec;
+            Func<IntVec3, bool> validator = delegate (IntVec3 x)
+            {
+                if (!x.Standable(map) || x.Fogged(map))
+                {
+                    return false;
+                }
+                return true;
+            };
+            IntVec3 loc;
+            Faction hostFaction = map.ParentFaction ?? Faction.OfPlayer;
+            IEnumerable<Thing> enumerable = map.mapPawns.FreeHumanlikesSpawnedOfFaction(hostFaction).Cast<Thing>();
+            if (hostFaction == Faction.OfPlayer)
+            {
+                enumerable = enumerable.Concat(map.listerBuildings.allBuildingsColonist.Cast<Thing>());
+            }
+            else
+            {
+                enumerable = enumerable.Concat(from x in map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial)
+                                               where x.Faction == hostFaction
+                                               select x);
+            }
+            int num = 0;
+            float num2 = 65f;
+            for (; ; )
+            {
+                intVec = CellFinder.RandomCell(map);
+                num++;
+                if (!intVec.Fogged(map) && intVec.Standable(map))
+                {
+                    if (num > 300)
+                    {
+                        break;
+                    }
+                    num2 -= 0.2f;
+                    bool flag = false;
+                    foreach (Thing thing in enumerable)
+                    {
+                        if ((float)(intVec - thing.Position).LengthHorizontalSquared < num2 * num2)
+                        {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (!flag && map.reachability.CanReachFactionBase(intVec, hostFaction))
+                    {
+                        loc = intVec;
+                    }
+                }
+            }
+            loc = intVec;
+            TunnelHiveSpawner tunnelHiveSpawner = (TunnelHiveSpawner)ThingMaker.MakeThing(ThingDefOf.TunnelHiveSpawner, null);
+            tunnelHiveSpawner.spawnHive = false;
+            tunnelHiveSpawner.insectsPoints = parms.points * Rand.Range(0.3f, 0.6f);
+            tunnelHiveSpawner.spawnedByInfestationThingComp = true;
+            GenSpawn.Spawn(tunnelHiveSpawner, loc, map, WipeMode.FullRefund);
+            base.SendStandardLetter(parms, new TargetInfo(tunnelHiveSpawner.Position, map, false), Array.Empty<NamedArgument>());
+            return true;
+        }
+    }
+    //commerce branchquest: research
+    public class QuestNode_GenerateChainComputer : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            Thing thing = ThingMaker.MakeThing(this.thingDef, null);
+            int challengeRating = QuestGen.quest.challengeRating;
+            CompChainComputer ccc = thing.TryGetComp<CompChainComputer>();
+            if (ccc != null)
+            {
+                ccc.challengeRating = challengeRating;
+            }
+            string srpa;
+            switch (challengeRating)
+            {
+                case 1:
+                    srpa = "HVMP_InterventionCR1";
+                    break;
+                case 2:
+                    srpa = "HVMP_InterventionCR2";
+                    break;
+                case 3:
+                    srpa = "HVMP_InterventionCR3";
+                    break;
+                default:
+                    srpa = "HVMP_InterventionCR1";
+                    break;
+            }
+            slate.Set<string>(this.storeReqProgressAs.GetValue(slate), srpa.Translate(), false);
+            slate.Set<Thing>(this.storeAs.GetValue(slate), thing, false);
+            QuestGen.quest.AddPart(new QuestPart_LookAtThis(thing));
+        }
+        [NoTranslate]
+        public SlateRef<string> storeAs;
+        public ThingDef thingDef;
+        [NoTranslate]
+        public SlateRef<string> storeReqProgressAs;
+    }
+    public class CompProperties_ChainComputer : CompProperties
+    {
+        public CompProperties_ChainComputer()
+        {
+            this.compClass = typeof(CompChainComputer);
+        }
+        public float maxProgress = 100f;
+		public float baseProgressPerTick;
+		public float powerInterval = 1f;
+		public float maxExternalPower = 1f;
+		public float bonusProgressPerInterval;
+        [NoTranslate]
+        public string texUp = "UI/Commands/TempRaise";
+        [NoTranslate]
+        public string labelUp = "HVMP_CCompToggleUpLabel";
+        [NoTranslate]
+        public string tooltipUp = "HVMP_CCompToggleUpTooltip";
+        [NoTranslate]
+        public string texDown = "UI/Commands/TempLower";
+        [NoTranslate]
+        public string labelDown = "HVMP_CCompToggleDownLabel";
+        [NoTranslate]
+        public string tooltipDown = "HVMP_CCompToggleDownTooltip";
+        public float raidMTBdays;
+        public int minTimeBetweenRaids;
+        public float raidPointFactor;
+    }
+    public class CompChainComputer : ThingComp
+    {
+        private CompProperties_ChainComputer Props
+        {
+            get
+            {
+                return (CompProperties_ChainComputer)this.props;
+            }
+        }
+        public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        {
+            foreach (Gizmo gizmo in base.CompGetGizmosExtra())
+            {
+                yield return gizmo;
+            }
+            yield return new Command_Action
+            {
+                icon = this.TexUp,
+                defaultLabel = this.Props.labelUp.Translate(),
+                defaultDesc = this.Props.tooltipUp.Translate(),
+                action = delegate
+                {
+                    this.curPowerConsumption = Math.Min(this.curPowerConsumption + this.Props.powerInterval, this.Props.maxExternalPower);
+                }
+            };
+            yield return new Command_Action
+            {
+                icon = this.TexDown,
+                defaultLabel = this.Props.labelDown.Translate(),
+                defaultDesc = this.Props.tooltipDown.Translate(),
+                action = delegate
+                {
+                    this.curPowerConsumption = Math.Max(this.curPowerConsumption - this.Props.powerInterval, 0f);
+                }
+            };
+            foreach (Gizmo gizmo3 in QuestUtility.GetQuestRelatedGizmos(this.parent))
+            {
+                yield return gizmo3;
+            }
+            yield break;
+        }
+        public override void PostPostMake()
+        {
+            base.PostPostMake();
+            this.raidCD = 0;
+        }
+        public override void CompTick()
+        {
+            base.CompTick();
+            if (this.PowerTrader != null)
+            {
+                this.PowerTrader.PowerOutput = -this.curPowerConsumption;
+            }
+            if (!this.parent.questTags.NullOrEmpty())
+            {
+                this.curProgress += this.Props.baseProgressPerTick;
+                if (this.PowerTrader.PowerOn)
+                {
+                    this.curProgress += this.Props.bonusProgressPerInterval * (this.curPowerConsumption / this.Props.powerInterval);
+                    if (this.raidCD <= 0 && this.parent.IsHashIntervalTick(2500) && this.parent.Spawned && Rand.MTBEventOccurs(this.Props.raidMTBdays, 60000f, 2500f))
+                    {
+                        this.raidCD = this.Props.minTimeBetweenRaids;
+                        IncidentParms incidentParms = new IncidentParms
+                        {
+                            target = this.parent.Map,
+                            points = StorytellerUtility.DefaultThreatPointsNow(this.parent.Map) * this.Props.raidPointFactor,
+                            raidStrategy = RaidStrategyDefOf.ImmediateAttack
+                        };
+                        IncidentDefOf.RaidEnemy.Worker.TryExecute(incidentParms);
+                    }
+                }
+                if (this.raidCD > 0)
+                {
+                    this.raidCD--;
+                }
+                if (this.curProgress >= this.RequiredProgress)
+                {
+                    this.curProgress = this.RequiredProgress;
+                    if (this.parent.SpawnedOrAnyParentSpawned)
+                    {
+                        GenExplosion.DoExplosion(this.parent.PositionHeld, this.parent.MapHeld, 2.4f, DamageDefOf.Smoke, this.parent, -1, -1f, this.parent.def.building.destroySound ?? null);
+                    }
+                    QuestUtility.SendQuestTargetSignals(this.parent.questTags, "FinishedChainComp", this.Named("SUBJECT"));
+                }
+            }
+        }
+        public override void PostDestroy(DestroyMode mode, Map previousMap)
+        {
+            base.PostDestroy(mode, previousMap);
+            if (!this.parent.questTags.NullOrEmpty())
+            {
+                QuestUtility.SendQuestTargetSignals(this.parent.questTags, "DestroyedChainComp", this.Named("SUBJECT"), previousMap.Named("MAP"));
+            }
+        }
+        public override string CompInspectStringExtra()
+        {
+            return "HVMP_CCProgress".Translate(this.curProgress.ToStringByStyle(ToStringStyle.FloatOne),this.RequiredProgress.ToStringByStyle(ToStringStyle.FloatOne));
+        }
+        private CompPowerTrader PowerTrader
+        {
+            get
+            {
+                CompPowerTrader cpt = this.parent.TryGetComp<CompPowerTrader>();
+                return cpt;
+            }
+        }
+        private Texture2D TexUp
+        {
+            get
+            {
+                if (this.texUp == null)
+                {
+                    this.texUp = ContentFinder<Texture2D>.Get(this.Props.texUp, true);
+                }
+                return this.texUp;
+            }
+        }
+        private Texture2D TexDown
+        {
+            get
+            {
+                if (this.texDown == null)
+                {
+                    this.texDown = ContentFinder<Texture2D>.Get(this.Props.texDown, true);
+                }
+                return this.texDown;
+            }
+        }
+        public float RequiredProgress
+        {
+            get
+            {
+                return this.Props.maxProgress * this.challengeRating;
+            }
+        }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look<float>(ref this.curPowerConsumption, "curPowerConsumption", 0f, false);
+            Scribe_Values.Look<float>(ref this.curProgress, "curProgress", 0f, false);
+            Scribe_Values.Look<int>(ref this.challengeRating, "challengeRating", 0, false);
+            Scribe_Values.Look<int>(ref this.raidCD, "raidCD", 180000, false);
+        }
+        private Texture2D texUp;
+        private Texture2D texDown;
+        public float curPowerConsumption;
+        public float curProgress;
+        public int challengeRating;
+        public int raidCD;
+    }
+    //pax branchquest: pax offering
+    public class QuestNode_PaxOffering : QuestNode
+    {
+        protected override void RunInt()
+        {
+            if (HVMP_Utility.TryFindPaxFaction(out Faction paxFaction))
+            {
+                Slate slate = QuestGen.slate;
+                float points = slate.Get<float>("points", 0f, false);
+                IntRange goodwillAmount;
+                switch (QuestGen.quest.challengeRating)
+                {
+                    case 3:
+                        goodwillAmount = this.goodwillThreeStarRange;
+                        break;
+                    case 2:
+                        goodwillAmount = this.goodwillTwoStarRange;
+                        break;
+                    case 1:
+                        goodwillAmount = this.goodwillOneStarRange;
+                        break;
+                    default:
+                        goodwillAmount = this.goodwillTwoStarRange;
+                        break;
+                }
+                slate.Set<bool>("noGoodwillableFactions", !this.TryFindFaction(out Faction faction), false);
+                slate.Set<int>("goodwillAmount", Rand.Range(goodwillAmount.min, goodwillAmount.max), false);
+                this.DoWork(QuestGen.slate, delegate (QuestNode n)
+                {
+                    n.Run();
+                    return true;
+                });
+            }
+        }
+        private bool DoWork(Slate slate, Func<QuestNode, bool> func)
+        {
+            if (slate.Get<bool>("noGoodwillableFactions", false, false))
+            {
+                if (this.noGoodwillableFactionsNode != null)
+                {
+                    return func(this.noGoodwillableFactionsNode);
+                }
+            }
+            else if (this.elseNode != null)
+            {
+                return func(this.elseNode);
+            }
+            return true;
+        }
+        private bool TryFindFaction(out Faction faction)
+        {
+            return (from x in Find.FactionManager.GetFactions(false, false, false, TechLevel.Undefined, false)
+                    where this.IsGoodFaction(x)
+                    select x).TryRandomElement(out faction);
+        }
+        private bool IsGoodFaction(Faction faction)
+        {
+            if (faction.def.HasModExtension<EBranchQuests>() || faction.IsPlayer || !faction.HasGoodwill || faction.def.permanentEnemy || faction.GoodwillWith(Faction.OfPlayer) >= 100)
+            {
+                return false;
+            }
+            return true;
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return HVMP_Utility.TryFindPaxFaction(out Faction paxFaction);
+        }
+        public IntRange goodwillThreeStarRange;
+        public IntRange goodwillTwoStarRange;
+        public IntRange goodwillOneStarRange;
+        public QuestNode noGoodwillableFactionsNode;
+        public QuestNode elseNode;
+    }
+    public class QuestNode_PaxOfferingTracker : QuestNode
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            Quest quest = QuestGen.quest;
+            QuestPart_PaxOffering qppo;
+            if (!quest.TryGetFirstPartOfType<QuestPart_PaxOffering>(out qppo))
+            {
+                qppo = quest.AddPart<QuestPart_PaxOffering>();
+                qppo.goodwillChangesInt = 0;
+                qppo.denominator = slate.Get<int>("goodwillAmount", 0, false);
+                qppo.inSignalEnable = slate.Get<string>("inSignal", null, false);
+            }
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+    }
+    public class QuestPart_PaxOffering : QuestPartActivable
+    {
+        public override string ExpiryInfoPart
+        {
+            get
+            {
+                return "HVMP_GoodwillCurried".Translate(this.goodwillChangesInt, this.denominator);
+            }
+        }
+        public override void QuestPartTick()
+        {
+            base.QuestPartTick();
+            if (this.goodwillChangesInt >= this.denominator)
+            {
+                base.Complete();
+            }
+            if (this.quest.State == QuestState.Ongoing)
+            {
+                WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
+                if (wcbs != null && wcbs.qppos != null && !wcbs.qppos.Contains(this))
+                {
+                    wcbs.qppos.Add(this);
+                }
+            }
+        }
+        public string OutSignalCompletedPO
+        {
+            get
+            {
+                return string.Concat(new object[]
+                {
+                    "Quest",
+                    this.quest.id,
+                    ".desiredGoodwillReached"
+                });
+            }
+        }
+        protected override void Complete(SignalArgs signalArgs)
+        {
+            base.Complete(signalArgs);
+            Find.SignalManager.SendSignal(new Signal(this.OutSignalCompletedPO, signalArgs, false));
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<int>(ref this.goodwillChangesInt, "goodwillChangesInt", 0, false);
+            Scribe_Values.Look<int>(ref this.denominator, "denominator", 0, false);
+        }
+        public int goodwillChangesInt;
+        public int denominator;
+    }
+    //pax branchquest: pax talks
+    public class WorldObject_PaxTalks : WorldObject
+    {
+        public override Material Material
+        {
+            get
+            {
+                if (this.cachedMat == null)
+                {
+                    Color color;
+                    if (base.Faction != null)
+                    {
+                        color = base.Faction.Color;
+                    }
+                    else
+                    {
+                        color = Color.white;
+                    }
+                    this.cachedMat = MaterialPool.MatFrom(this.def.texture, ShaderDatabase.WorldOverlayTransparentLit, color, WorldMaterials.WorldObjectRenderQueue);
+                }
+                return this.cachedMat;
+            }
+        }
+        public void Notify_CaravanArrived(Caravan caravan)
+        {
+            Pawn pawn = BestCaravanPawnUtility.FindBestDiplomat(caravan);
+            if (pawn == null)
+            {
+                Messages.Message("MessagePeaceTalksNoDiplomat".Translate(), caravan, MessageTypeDefOf.NegativeEvent, false);
+                return;
+            }
+            float badOutcomeWeightFactor = WorldObject_PaxTalks.GetBadOutcomeWeightFactor(pawn, caravan);
+            float num = 1f / badOutcomeWeightFactor;
+            WorldObject_PaxTalks.tmpPossibleOutcomes.Clear();
+            WorldObject_PaxTalks.tmpPossibleOutcomes.Add(new Pair<Action, float>(delegate
+            {
+                this.Outcome_Backfire(caravan);
+            }, 0.15f * badOutcomeWeightFactor));
+            WorldObject_PaxTalks.tmpPossibleOutcomes.Add(new Pair<Action, float>(delegate
+            {
+                this.Outcome_TalksFlounder(caravan);
+            }, 0.15f));
+            WorldObject_PaxTalks.tmpPossibleOutcomes.Add(new Pair<Action, float>(delegate
+            {
+                this.Outcome_Success(caravan);
+            }, 0.55f * num));
+            WorldObject_PaxTalks.tmpPossibleOutcomes.RandomElementByWeight((Pair<Action, float> x) => x.Second).First();
+            pawn.skills.Learn(SkillDefOf.Social, 6000f, true, false);
+            this.Destroy();
+        }
+        public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
+        {
+            foreach (FloatMenuOption floatMenuOption in base.GetFloatMenuOptions(caravan))
+            {
+                yield return floatMenuOption;
+            }
+            foreach (FloatMenuOption floatMenuOption2 in CaravanArrivalAction_VisitPaxTalks.GetFloatMenuOptions(caravan, this))
+            {
+                yield return floatMenuOption2;
+            }
+            yield break;
+        }
+        private void Outcome_Backfire(Caravan caravan)
+        {
+            Find.LetterStack.ReceiveLetter("LetterLabelPeaceTalks_Backfire".Translate(), this.GetLetterText("HVMP_PaxTalksBackfire".Translate(), caravan), LetterDefOf.NegativeEvent, caravan, base.Faction, null, null, null, 0, true);
+            QuestUtility.SendQuestTargetSignals(this.questTags, "Failed", this.Named("SUBJECT"));
+        }
+        private void Outcome_TalksFlounder(Caravan caravan)
+        {
+            Find.LetterStack.ReceiveLetter("LetterLabelPeaceTalks_TalksFlounder".Translate(), this.GetLetterText("HVMP_PaxTalksFlounder".Translate(), caravan), LetterDefOf.NeutralEvent, caravan, base.Faction, null, null, null, 0, true);
+            QuestUtility.SendQuestTargetSignals(this.questTags, "Failed", this.Named("SUBJECT"));
+        }
+        private void Outcome_Success(Caravan caravan)
+        {
+            Find.LetterStack.ReceiveLetter("LetterLabelPeaceTalks_Success".Translate(), this.GetLetterText("HVMP_PaxTalksSuccess".Translate(), caravan), LetterDefOf.PositiveEvent, caravan, base.Faction, null, null, null, 0, true);
+            QuestUtility.SendQuestTargetSignals(this.questTags, "Resolved", this.Named("SUBJECT"));
+        }
+        private string GetLetterText(string baseText, Caravan caravan)
+        {
+            TaggedString taggedString = baseText;
+            Pawn pawn = BestCaravanPawnUtility.FindBestDiplomat(caravan);
+            if (pawn != null)
+            {
+                taggedString += "\n\n" + "PeaceTalksSocialXPGain".Translate(pawn.LabelShort, 6000f.ToString("F0"), pawn.Named("PAWN"));
+            }
+            return taggedString;
+        }
+        private static float GetBadOutcomeWeightFactor(Pawn diplomat, Caravan caravan)
+        {
+            float statValue = diplomat.GetStatValue(StatDefOf.NegotiationAbility, true, -1);
+            float num = 0f;
+            if (ModsConfig.IdeologyActive)
+            {
+                bool flag = false;
+                using (List<Pawn>.Enumerator enumerator = caravan.pawns.GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        if (enumerator.Current == caravan.Faction.leader)
+                        {
+                            flag = true;
+                            break;
+                        }
+                    }
+                }
+                num = (flag ? (-0.05f) : 0.05f);
+            }
+            return WorldObject_PaxTalks.GetBadOutcomeWeightFactor(statValue) * (1f + num);
+        }
+        private static float GetBadOutcomeWeightFactor(float negotationAbility)
+        {
+            return WorldObject_PaxTalks.BadOutcomeChanceFactorByNegotiationAbility.Evaluate(negotationAbility);
+        }
+        private Material cachedMat;
+        private static readonly SimpleCurve BadOutcomeChanceFactorByNegotiationAbility = new SimpleCurve
+        {
+            {
+                new CurvePoint(0f, 4f),
+                true
+            },
+            {
+                new CurvePoint(1f, 1f),
+                true
+            },
+            {
+                new CurvePoint(1.5f, 0.4f),
+                true
+            }
+        };
+        private static List<Pair<Action, float>> tmpPossibleOutcomes = new List<Pair<Action, float>>();
+    }
+    public class CaravanArrivalAction_VisitPaxTalks : CaravanArrivalAction
+    {
+        public override string Label
+        {
+            get
+            {
+                return "VisitPeaceTalks".Translate(this.paxTalks.Label);
+            }
+        }
+        public override string ReportString
+        {
+            get
+            {
+                return "CaravanVisiting".Translate(this.paxTalks.Label);
+            }
+        }
+        public CaravanArrivalAction_VisitPaxTalks()
+        {
+        }
+        public CaravanArrivalAction_VisitPaxTalks(WorldObject_PaxTalks paxTalks)
+        {
+            this.paxTalks = paxTalks;
+        }
+        public override FloatMenuAcceptanceReport StillValid(Caravan caravan, int destinationTile)
+        {
+            FloatMenuAcceptanceReport floatMenuAcceptanceReport = base.StillValid(caravan, destinationTile);
+            if (!floatMenuAcceptanceReport)
+            {
+                return floatMenuAcceptanceReport;
+            }
+            if (this.paxTalks != null && this.paxTalks.Tile != destinationTile)
+            {
+                return false;
+            }
+            return CaravanArrivalAction_VisitPaxTalks.CanVisit(caravan, this.paxTalks);
+        }
+        public override void Arrived(Caravan caravan)
+        {
+            this.paxTalks.Notify_CaravanArrived(caravan);
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_References.Look<WorldObject_PaxTalks>(ref this.paxTalks, "paxTalks", false);
+        }
+        public static FloatMenuAcceptanceReport CanVisit(Caravan caravan, WorldObject_PaxTalks paxTalks)
+        {
+            return paxTalks != null && paxTalks.Spawned;
+        }
+        public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan, WorldObject_PaxTalks paxTalks)
+        {
+            return CaravanArrivalActionUtility.GetFloatMenuOptions<CaravanArrivalAction_VisitPaxTalks>(() => CaravanArrivalAction_VisitPaxTalks.CanVisit(caravan, paxTalks), () => new CaravanArrivalAction_VisitPaxTalks(paxTalks), "VisitPeaceTalks".Translate(paxTalks.Label), caravan, paxTalks.Tile, paxTalks, null);
+        }
+        private WorldObject_PaxTalks paxTalks;
+    }
+    //pax branchquest: pax through
+    public class QuestNode_PaxThrough : QuestNode_PaxIntermediary
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            PawnKindDef pawnKindDef;
+            if (pawnKinds.TryRandomElement(out pawnKindDef))
+            {
+                slate.Set<PawnKindDef>(this.storePawnKindAs.GetValue(slate), pawnKindDef, false);
+            }
+            base.RunInt();
+        }
+        [NoTranslate]
+        public SlateRef<string> storePawnKindAs;
+        public List<PawnKindDef> pawnKinds;
+    }
+    //rover branchquest: atlas
+    public class Book_Atlas : Book
+    {
+        public override void GenerateBook(Pawn author = null, long? fixedDate = null)
+        {
+            base.GenerateBook(author, fixedDate);
+            HVMP_BookDeets bd = this.def.GetModExtension<HVMP_BookDeets>();
+            if (bd != null)
+            {
+                string featureName = "";
+                if (this.wo != null && Find.WorldGrid[this.wo.Tile].feature != null && Rand.Chance(0.9f))
+                {
+                    featureName = Find.WorldGrid[this.wo.Tile].feature.name;
+                }
+                else
+                {
+                    featureName = NameGenerator.GenerateName(DefDatabase<FeatureDef>.AllDefsListForReading.RandomElement().nameMaker, Find.WorldFeatures.features.Select((WorldFeature x) => x.name), false, "r_name");
+                }
+                typeof(Book).GetField("descCanBeInvalidated", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, true);
+                string title = Rand.Chance(bd.titlesPlace.Count / (bd.titlesPlace.Count + bd.titlesPlanetPlace.Count)) ? bd.titlesPlace.RandomElement().Translate(featureName) : bd.titlesPlanetPlace.RandomElement().Translate(Find.World.info.name, featureName);
+                typeof(Book).GetField("title", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, GenText.CapitalizeAsTitle(title));
+                typeof(Book).GetField("description", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, bd.descKey.Translate().CapitalizeFirst().Resolve());
+                typeof(Book).GetField("descCanBeInvalidated", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, false);
+                typeof(Book).GetField("descriptionFlavor", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, bd.descKey.Translate().CapitalizeFirst().Resolve());
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_References.Look<WorldObject>(ref this.wo, "wo", false);
+        }
+        public WorldObject wo;
+    }
+    public class WorldObject_AtlasPoint : WorldObject
+    {
+        public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
+        {
+            foreach (FloatMenuOption o in base.GetFloatMenuOptions(caravan))
+            {
+                yield return o;
+            }
+            foreach (FloatMenuOption f in CaravanArrivalAction_VisitAtlasPoint.GetFloatMenuOptions(caravan, this))
+            {
+                yield return f;
+            }
+            yield break;
+        }
+        public void Notify_CaravanArrived(Caravan caravan)
+        {
+            CompStudiableQuestItem cda = this.book.TryGetComp<CompStudiableQuestItem>();
+            if (cda != null)
+            {
+                foreach (Pawn p in caravan.pawns)
+                {
+                    if (!cda.pawns.Contains(p))
+                    {
+                        cda.pawns.Add(p);
+                    }
+                }
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_References.Look<Book_Atlas>(ref this.book, "book", false);
+        }
+        public Book_Atlas book;
+    }
+    public class CaravanArrivalAction_VisitAtlasPoint : CaravanArrivalAction
+    {
+        public override string Label
+        {
+            get
+            {
+                return "VisitPeaceTalks".Translate(this.atlasPoint.Label);
+            }
+        }
+        public override string ReportString
+        {
+            get
+            {
+                return "CaravanVisiting".Translate(this.atlasPoint.Label);
+            }
+        }
+        public static FloatMenuAcceptanceReport CanVisit(Caravan caravan, WorldObject_AtlasPoint atlasPoint)
+        {
+            return atlasPoint != null && atlasPoint.Spawned;
+        }
+        public CaravanArrivalAction_VisitAtlasPoint()
+        {
+        }
+        public CaravanArrivalAction_VisitAtlasPoint(WorldObject_AtlasPoint atlasPoint)
+        {
+            this.atlasPoint = atlasPoint;
+        }
+        public override FloatMenuAcceptanceReport StillValid(Caravan caravan, int destinationTile)
+        {
+            FloatMenuAcceptanceReport floatMenuAcceptanceReport = base.StillValid(caravan, destinationTile);
+            if (floatMenuAcceptanceReport)
+            {
+                if (this.atlasPoint != null && this.atlasPoint.Tile != destinationTile)
+                {
+                    floatMenuAcceptanceReport = false;
+                }
+                else
+                {
+                    floatMenuAcceptanceReport = CaravanArrivalAction_VisitAtlasPoint.CanVisit(caravan, this.atlasPoint);
+                }
+            }
+            return floatMenuAcceptanceReport;
+        }
+        public override void Arrived(Caravan caravan)
+        {
+            this.atlasPoint.Notify_CaravanArrived(caravan);
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_References.Look<WorldObject_AtlasPoint>(ref this.atlasPoint, "atlasPoint", false);
+        }
+        public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan, WorldObject_AtlasPoint atlasPoint)
+        {
+            return CaravanArrivalActionUtility.GetFloatMenuOptions<CaravanArrivalAction_VisitAtlasPoint>(() => CaravanArrivalAction_VisitAtlasPoint.CanVisit(caravan, atlasPoint), () => new CaravanArrivalAction_VisitAtlasPoint(atlasPoint), "VisitPeaceTalks".Translate(atlasPoint.Label), caravan, atlasPoint.Tile, atlasPoint, null);
+        }
+        private WorldObject_AtlasPoint atlasPoint;
+    }
+    public class QuestNode_Root_Atlas : QuestNode_Sequence
+    {
+        protected override void RunInt()
+        {
+            if (this.TryFindSiteTile(out int num) && HVMP_Utility.TryFindRoverFaction(out Faction roverFaction))
+            {
+                Slate slate = QuestGen.slate;
+                Quest quest = QuestGen.quest;
+                Map map = QuestGen_Get.GetMap(false, null);
+                int num2;
+                this.TryFindSiteTile(out num2);
+                string text = QuestGenUtility.HardcodedSignalWithQuestID("worldObject.Destroyed");
+                WorldObject_AtlasPoint worldObject_AtlasPoint = (WorldObject_AtlasPoint)WorldObjectMaker.MakeWorldObject(HVMPDefOf.HVMP_AtlasPoint);
+                worldObject_AtlasPoint.Tile = num;
+                worldObject_AtlasPoint.SetFaction(roverFaction);
+                worldObject_AtlasPoint.book = (Book_Atlas)ThingMaker.MakeThing(HVMPDefOf.HVMP_DatedAtlas);
+                worldObject_AtlasPoint.book.wo = worldObject_AtlasPoint;
+                CompQuality cq = worldObject_AtlasPoint.book.TryGetComp<CompQuality>();
+                if (cq != null)
+                {
+                    cq.SetQuality(QualityUtility.GenerateQualityTraderItem(), new ArtGenerationContext?(ArtGenerationContext.Outsider));
+                }
+                //worldObject_AtlasPoint.GetComponent<TimeoutComp>().StartTimeout(3600000);
+                quest.SpawnWorldObject(worldObject_AtlasPoint, null, null);
+                quest.End(QuestEndOutcome.Unknown, 0, null, text, QuestPart.SignalListenMode.OngoingOnly, false, false);
+                slate.Set<Map>("map", map, false);
+                QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
+                qpbgfh.faction = roverFaction;
+                qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true,roverFaction);
+                QuestGen.quest.AddPart(qpbgfh);
+                List<WorldObject> wos = new List<WorldObject>
+                {
+                    worldObject_AtlasPoint
+                };
+                int challengeRating = QuestGen.quest.challengeRating;
+                CompStudiableQuestItem cda = worldObject_AtlasPoint.book.TryGetComp<CompStudiableQuestItem>();
+                if (cda != null)
+                {
+                    cda.challengeRating = challengeRating;
+                    cda.relevantSkills = new List<SkillDef>();
+                    if (!cda.Props.requiredSkillDefs.NullOrEmpty())
+                    {
+                        cda.relevantSkills.AddRange(cda.Props.requiredSkillDefs);
+                    }
+                    if (!cda.Props.possibleExtraSkillDefs.NullOrEmpty())
+                    {
+                        SkillDef extraSkill = cda.Props.possibleExtraSkillDefs.RandomElement();
+                        cda.relevantSkills.Add(extraSkill);
+                        slate.Set<string>(this.storeExtraSkillAs.GetValue(slate), extraSkill.label, false);
+                    }
+                    cda.relevantStats = new List<StatDef>();
+                    if (!cda.Props.requiredStatDefs.NullOrEmpty())
+                    {
+                        cda.relevantStats.AddRange(cda.Props.requiredStatDefs);
+                    }
+                    if (cda.Props.extraStat)
+                    {
+                        float secondStatDeterminer = Rand.Value;
+                        StatDef secondStat;
+                        if (secondStatDeterminer <= 0.6f)
+                        {
+                            secondStat = cda.Props.possibleExtraStatDefsLikely.RandomElement();
+                        } else if (secondStatDeterminer <= 0.9f) {
+                            secondStat = cda.Props.possibleExtraStatDefsProbable.NullOrEmpty() ? cda.Props.possibleExtraStatDefsLikely.RandomElement() : cda.Props.possibleExtraStatDefsProbable.RandomElement();
+                        } else {
+                            secondStat = cda.Props.possibleExtraStatDefsUnlikely.NullOrEmpty() ? cda.Props.possibleExtraStatDefsLikely.RandomElement() : cda.Props.possibleExtraStatDefsUnlikely.RandomElement();
+                        }
+                        cda.relevantStats.Add(secondStat);
+                    }
+                }
+                slate.Set<List<WorldObject>>("worldObject", wos, false);
+                HVMP_Utility.SetSettingScalingRewardValue(slate);
+                QuestGenUtility.AddToOrMakeList(slate, "thingsToDrop", worldObject_AtlasPoint.book);
+                QuestGen.slate.Set<Thing>(this.storeBookAs.GetValue(slate), worldObject_AtlasPoint.book, false);
+                QuestGen.slate.Set<Faction>("faction", roverFaction, false);
+                QuestUtility.AddQuestTag(ref worldObject_AtlasPoint.book.questTags, this.storeBookAs.GetValue(slate));
+                quest.AddPart(new QuestPart_LookAtThis(worldObject_AtlasPoint.book));
+            }
+            base.RunInt();
+        }
+        private bool TryFindSiteTile(out int tile)
+        {
+            return TileFinder.TryFindNewSiteTile(out tile, 2, 20, false, TileFinderMode.Near, -1, false);
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return this.TryFindSiteTile(out int num) && HVMP_Utility.TryFindRoverFaction(out Faction roverFaction);
+        }
+        [NoTranslate]
+        public SlateRef<string> storeBookAs;
+        [NoTranslate]
+        public SlateRef<string> storeExtraSkillAs;
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+    }
+    //rover branchquest: colossus
+    public class QuestNode_Root_Colossus  : QuestNode_Sequence
+    {
+        protected override void RunInt()
+        {
+            if (HVMP_Utility.TryFindRoverFaction(out Faction faction))
+            {
+                Slate slate = QuestGen.slate;
+                Quest quest = QuestGen.quest;
+                slate.Set<Faction>("faction", faction, false);
+                slate.Set<Pawn>("asker", faction.leader, false);
+                slate.Set<bool>("punishmentOnDestroy", Rand.Chance(0.5f), false);
+                Map map = HVMP_Utility.TryGetMap();
+                slate.Set<Map>("map", map, false);
+                QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
+                qpbgfh.faction = faction;
+                qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true,faction);
+                QuestGen.quest.AddPart(qpbgfh);
+                HVMP_Utility.SetSettingScalingRewardValue(slate);
+            }
+            base.RunInt();
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return HVMP_Utility.TryFindRoverFaction(out Faction roverFaction);
+        }
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+    }
+    //rover branchquest: odyssey
+    public class QuestNode_Root_Odyssey : QuestNode_Sequence
+    {
+        protected override void RunInt()
+        {
+            if (HVMP_Utility.TryFindRoverFaction(out Faction roverFaction))
+            {
+                Slate slate = QuestGen.slate;
+                Quest quest = QuestGen.quest;
+                Map map = QuestGen_Get.GetMap(false, null);
+                int numSites = Rand.RangeInclusive(3, 5);
+                List<WorldObject> wos = new List<WorldObject>();
+                for (int i = 0; i < numSites; i++)
+                {
+                    if (this.TryFindSiteTile(out int num))
+                    {
+                        int num2;
+                        this.TryFindSiteTile(out num2);
+                        WorldObject_OdysseyPoint wo = (WorldObject_OdysseyPoint)WorldObjectMaker.MakeWorldObject(HVMPDefOf.HVMP_OdysseyPoint);
+                        wo.Tile = num;
+                        wo.SetFaction(roverFaction);
+                        //wo.GetComponent<TimeoutComp>().StartTimeout((numSites - 1) * this.ticksPerSite);
+                        quest.SpawnWorldObject(wo, null, null);
+                        QuestUtility.AddQuestTag(ref wo.questTags, this.storeSitesAs.GetValue(slate));
+                        wo.linkedQuest = quest;
+                        quest.WorldObjectTimeout(wo, (numSites - 1) * this.ticksPerSite, null, null, false, null, true);
+                        wos.Add(wo);
+                    }
+                }
+                slate.Set<List<WorldObject>>("worldObject", wos, false);
+                slate.Set<Map>("map", map, false);
+                slate.Set<int>("numSites", numSites, false);
+                slate.Set<int>("timeoutDays", (numSites - 1) * this.ticksPerSite/60000, false);
+                slate.Set<int>("timeout", (numSites - 1) * this.ticksPerSite, false);
+                slate.Set<Faction>("faction", roverFaction, false);
+                HVMP_Utility.SetSettingScalingRewardValue(slate);
+            }
+            base.RunInt();
+        }
+        private bool TryFindSiteTile(out int tile)
+        {
+            return TileFinder.TryFindNewSiteTile(out tile, 2, 20, false, TileFinderMode.Near, -1, false);
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return this.TryFindSiteTile(out int num) && HVMP_Utility.TryFindRoverFaction(out Faction roverFaction);
+        }
+        [NoTranslate]
+        public SlateRef<string> storeSitesAs;
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+        public int ticksPerSite;
+    }
+    public class WorldObject_OdysseyPoint : WorldObject
+    {
+        public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
+        {
+            foreach (FloatMenuOption o in base.GetFloatMenuOptions(caravan))
+            {
+                yield return o;
+            }
+            foreach (FloatMenuOption f in CaravanArrivalAction_VisitOdysseyPoint.GetFloatMenuOptions(caravan, this))
+            {
+                yield return f;
+            }
+            yield break;
+        }
+        public string OutSignalCompleted
+        {
+            get
+            {
+                return string.Concat(new object[]
+                {
+                    "Quest",
+                    this.linkedQuest.id,
+                    ".allSites.Finished"
+                });
+            }
+        }
+        public void Notify_CaravanArrived(Caravan caravan)
+        {
+            this.Destroy();
+            bool endQuest = true;
+            foreach (WorldObject wo in Find.WorldObjects.AllWorldObjects)
+            {
+                if (wo != this && wo is WorldObject_OdysseyPoint woop && woop.linkedQuest == this.linkedQuest)
+                {
+                    endQuest = false;
+                    break;
+                }
+            }
+            foreach (QuestPart qp in this.linkedQuest.PartsListForReading)
+            {
+                if (qp is QuestPart_DestroySite qpds && qpds.worldObjects.Contains(this))
+                {
+                    qpds.worldObjects.Remove(this);
+                }
+            }
+            if (endQuest)
+            {
+                SignalArgs signalargs = default(SignalArgs);
+                Find.SignalManager.SendSignal(new Signal(this.OutSignalCompleted, signalargs, false));
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_References.Look<Quest>(ref this.linkedQuest, "linkedQuest", false);
+        }
+        public Quest linkedQuest;
+    }
+    public class CaravanArrivalAction_VisitOdysseyPoint : CaravanArrivalAction
+    {
+        public override string Label
+        {
+            get
+            {
+                return "VisitPeaceTalks".Translate(this.odysseyPoint.Label);
+            }
+        }
+        public override string ReportString
+        {
+            get
+            {
+                return "CaravanVisiting".Translate(this.odysseyPoint.Label);
+            }
+        }
+        public static FloatMenuAcceptanceReport CanVisit(Caravan caravan, WorldObject_OdysseyPoint odysseyPoint)
+        {
+            return odysseyPoint != null && odysseyPoint.Spawned;
+        }
+        public CaravanArrivalAction_VisitOdysseyPoint()
+        {
+        }
+        public CaravanArrivalAction_VisitOdysseyPoint(WorldObject_OdysseyPoint odysseyPoint)
+        {
+            this.odysseyPoint = odysseyPoint;
+        }
+        public override FloatMenuAcceptanceReport StillValid(Caravan caravan, int destinationTile)
+        {
+            FloatMenuAcceptanceReport floatMenuAcceptanceReport = base.StillValid(caravan, destinationTile);
+            if (floatMenuAcceptanceReport)
+            {
+                if (this.odysseyPoint != null && this.odysseyPoint.Tile != destinationTile)
+                {
+                    floatMenuAcceptanceReport = false;
+                }
+                else
+                {
+                    floatMenuAcceptanceReport = CaravanArrivalAction_VisitOdysseyPoint.CanVisit(caravan, this.odysseyPoint);
+                }
+            }
+            return floatMenuAcceptanceReport;
+        }
+        public override void Arrived(Caravan caravan)
+        {
+            this.odysseyPoint.Notify_CaravanArrived(caravan);
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_References.Look<WorldObject_OdysseyPoint>(ref this.odysseyPoint, "odysseyPoint", false);
+        }
+        public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan, WorldObject_OdysseyPoint odysseyPoint)
+        {
+            return CaravanArrivalActionUtility.GetFloatMenuOptions<CaravanArrivalAction_VisitOdysseyPoint>(() => CaravanArrivalAction_VisitOdysseyPoint.CanVisit(caravan, odysseyPoint), () => new CaravanArrivalAction_VisitOdysseyPoint(odysseyPoint), "VisitPeaceTalks".Translate(odysseyPoint.Label), caravan, odysseyPoint.Tile, odysseyPoint, null);
+        }
+        private WorldObject_OdysseyPoint odysseyPoint;
+    }
+    //rover branchquest: theseus
+    public class QuestNode_Theseus : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            QuestGenUtility.TestRunAdjustPointsForDistantFight(slate);
+            this.ResolveParameters(slate, out int num, out int num2, out Map map);
+            return num != -1 && HVMP_Utility.TryFindRoverFaction(out Faction roverFaction) && this.TryGetSiteFaction(out Faction faction);
+        }
+        protected override void RunInt()
+        {
+            Quest quest = QuestGen.quest;
+            Slate slate = QuestGen.slate;
+            string text = QuestGenUtility.HardcodedTargetQuestTagWithQuestID("BanditCamp");
+            QuestGenUtility.RunAdjustPointsForDistantFight();
+            int num = slate.Get<int>("points", 0, false);
+            if (num <= 0)
+            {
+                num = Rand.RangeInclusive(200, 2000);
+            }
+            this.ResolveParameters(slate, out int num2, out int num3, out Map map);
+            this.TryFindSiteTile(out int num4, false);
+            HVMP_Utility.TryFindRoverFaction(out Faction roverFaction);
+            slate.Set<Faction>("askerFaction", roverFaction, false);
+            slate.Set<int>("requiredPawnCount", num2, false);
+            slate.Set<Map>("map", map, false);
+            QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
+            qpbgfh.faction = roverFaction;
+            qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true, roverFaction);
+            QuestGen.quest.AddPart(qpbgfh);
+            RimWorld.Planet.Site site = this.GenerateSite(roverFaction.leader, (float)num, num2, num3, num4);
+            string text2 = QuestGenUtility.HardcodedSignalWithQuestID("askerFaction.BecameHostileToPlayer");
+            string text3 = QuestGenUtility.QuestTagSignal(text, "AllEnemiesDefeated");
+            string signalSentSatisfied = QuestGenUtility.HardcodedSignalWithQuestID("shuttle.SentSatisfied");
+            string text4 = QuestGenUtility.QuestTagSignal(text, "MapRemoved");
+            string signalChosenPawn = QuestGen.GenerateNewSignal("ChosenPawnSignal", true);
+            this.parms.giverFaction = roverFaction;
+            this.parms.allowGoodwill = true;
+            this.parms.allowRoyalFavor = true;
+            this.parms.thingRewardDisallowed = true;
+            slate.Set<Thing>("asker", roverFaction.leader, false);
+            HVMP_Utility.SetSettingScalingRewardValue(slate);
+            QuestGen.slate.Set<Faction>("faction", roverFaction, false);
+            quest.GiveRewards(new RewardsGeneratorParams
+            {
+                allowGoodwill = true,
+                allowRoyalFavor = true,
+                giverFaction = roverFaction,
+                thingRewardDisallowed = true,
+                rewardValue = slate.Get<float>("rewardValue", 200f, false),
+                chosenPawnSignal = signalChosenPawn
+            }, text3, null, null, null, null, null, delegate
+            {
+                Quest quest2 = quest;
+                LetterDef choosePawn = LetterDefOf.ChoosePawn;
+                string text8 = null;
+                string royalFavorLabel = roverFaction.def.royalFavorLabel;
+                string text9 = "LetterTextHonorAward_BanditCamp".Translate(roverFaction.def.royalFavorLabel);
+                quest2.Letter(choosePawn, text8, signalChosenPawn, null, null, false, QuestPart.SignalListenMode.OngoingOnly, null, false, text9, null, royalFavorLabel, null, signalSentSatisfied);
+            }, null, true, roverFaction.leader, false, false, null);
+            Thing shuttle = QuestGen_Shuttle.GenerateShuttle(null, null, null, true, true, false, num2, true, true, false, true, site, map.Parent, num2, null, false, false, false, false, true);
+            slate.Set<Thing>("shuttle", shuttle, false);
+            QuestUtility.AddQuestTag(ref shuttle.questTags, text);
+            quest.SpawnWorldObject(site, null, null);
+            TransportShip transportShip = quest.GenerateTransportShip(TransportShipDefOf.Ship_Shuttle, null, shuttle, null).transportShip;
+            slate.Set<TransportShip>("transportShip", transportShip, false);
+            QuestUtility.AddQuestTag(ref transportShip.questTags, text);
+            quest.SendTransportShipAwayOnCleanup(transportShip, true, TransportShipDropMode.None);
+            quest.AddShipJob_Arrive(transportShip, map.Parent, null, null, ShipJobStartMode.Instant, Faction.OfEmpire, null);
+            quest.AddShipJob_WaitSendable(transportShip, site, true, false, null);
+            quest.AddShipJob(transportShip, ShipJobDefOf.Unload, ShipJobStartMode.Queue, null);
+            quest.AddShipJob_WaitSendable(transportShip, map.Parent, true, false, null);
+            quest.AddShipJob(transportShip, ShipJobDefOf.Unload, ShipJobStartMode.Queue, null);
+            quest.AddShipJob_FlyAway(transportShip, -1, null, TransportShipDropMode.None, null);
+            quest.TendPawns(null, shuttle, signalSentSatisfied);
+            quest.RequiredShuttleThings(shuttle, site, QuestGenUtility.HardcodedSignalWithQuestID("transportShip.FlewAway"), true, -1);
+            quest.ShuttleLeaveDelay(shuttle, 60000, null, Gen.YieldSingle<string>(signalSentSatisfied), null, delegate
+            {
+                quest.End(QuestEndOutcome.Fail, 0, null, null, QuestPart.SignalListenMode.OngoingOnly, true, false);
+            });
+            string text5 = QuestGenUtility.HardcodedSignalWithQuestID("shuttle.Killed");
+            quest.FactionGoodwillChange(roverFaction, HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, false, roverFaction), text5, true, true, true, HistoryEventDefOf.ShuttleDestroyed, QuestPart.SignalListenMode.OngoingOnly, true);
+            quest.End(QuestEndOutcome.Fail, 0, null, text5, QuestPart.SignalListenMode.OngoingOnly, true, false);
+            quest.SignalPass(delegate
+            {
+                quest.End(QuestEndOutcome.Fail, 0, null, null, QuestPart.SignalListenMode.OngoingOnly, true, false);
+            }, text2, null);
+            quest.FeedPawns(null, shuttle, signalSentSatisfied);
+            QuestUtility.AddQuestTag(ref site.questTags, text);
+            slate.Set<RimWorld.Planet.Site>("site", site, false);
+            quest.SignalPassActivable(delegate
+            {
+                quest.Message("MessageMissionGetBackToShuttle".Translate(site.Faction.Named("FACTION")), MessageTypeDefOf.PositiveEvent, false, null, new LookTargets(shuttle), null);
+                quest.Notify_PlayerRaidedSomeone(null, site, null);
+            }, signalSentSatisfied, text3, null, null, null, false);
+            quest.SignalPassAllSequence(delegate
+            {
+                quest.End(QuestEndOutcome.Success, 0, null, null, QuestPart.SignalListenMode.OngoingOnly, true, false);
+            }, new List<string> { signalSentSatisfied, text3, text4 }, null);
+            Quest quest3 = quest;
+            Action action = delegate
+            {
+                quest.End(QuestEndOutcome.Fail, 0, null, null, QuestPart.SignalListenMode.OngoingOnly, true, false);
+            };
+            string text6 = null;
+            string text7 = text3;
+            quest3.SignalPassActivable(action, text6, text4, null, null, text7, false);
+            int num5 = (int)(this.timeLimitDays.RandomInRange * 60000f);
+            slate.Set<int>("timeoutTicks", num5, false);
+            quest.WorldObjectTimeout(site, num5, null, null, false, null, true);
+            List<Rule> list = new List<Rule>();
+            list.AddRange(GrammarUtility.RulesForWorldObject("site", site, true));
+            QuestGen.AddQuestDescriptionRules(list);
+        }
+        protected bool TryFindSiteTile(out int tile, bool exitOnFirstTileFound = false)
+        {
+            return TileFinder.TryFindNewSiteTile(out tile, 80, 85, false, TileFinderMode.Near, -1, exitOnFirstTileFound);
+        }
+        private void ResolveParameters(Slate slate, out int requiredPawnCount, out int population, out Map colonyMap)
+        {
+            try
+            {
+                foreach (Map map in Find.Maps)
+                {
+                    if (map.IsPlayerHome)
+                    {
+                        QuestNode_Theseus.tmpMaps.Add(map);
+                    }
+                }
+                colonyMap = QuestNode_Theseus.tmpMaps.RandomElementWithFallback(null);
+                if (colonyMap == null)
+                {
+                    population = -1;
+                    requiredPawnCount = -1;
+                }
+                else
+                {
+                    population = (slate.Exists("population", false) ? slate.Get<int>("population", 0, false) : colonyMap.mapPawns.FreeColonists.Count);
+                    requiredPawnCount = Math.Max(this.GetRequiredPawnCount(population, (float)slate.Get<int>("points", 0, false)), 1);
+                }
+            }
+            finally
+            {
+                QuestNode_Theseus.tmpMaps.Clear();
+            }
+        }
+        protected int GetRequiredPawnCount(int population, float threatPoints)
+        {
+            if (population == 0)
+            {
+                return -1;
+            }
+            int num = -1;
+            for (int i = 1; i <= population; i++)
+            {
+                if (this.GetSiteThreatPoints(threatPoints, population, i) >= 200f)
+                {
+                    num = i;
+                    break;
+                }
+            }
+            if (num == -1)
+            {
+                return -1;
+            }
+            return Math.Max(0, Rand.Range(num, population));
+        }
+        private float GetSiteThreatPoints(float threatPoints, int population, int pawnCount)
+        {
+            return threatPoints * ((float)pawnCount / (float)population) * QuestNode_Theseus.PawnCountToSitePointsFactorCurve.Evaluate((float)pawnCount);
+        }
+        protected RimWorld.Planet.Site GenerateSite(Pawn asker, float threatPoints, int pawnCount, int population, int tile)
+        {
+            this.TryGetSiteFaction(out Faction faction);
+            RimWorld.Planet.Site site = QuestGen_Sites.GenerateSite(new SitePartDefWithParams[]
+            {
+                new SitePartDefWithParams(SitePartDefOf.BanditCamp, new SitePartParams
+                {
+                    threatPoints = Math.Max(this.GetSiteThreatPoints(Math.Max(threatPoints,200), population, pawnCount),500)
+                })
+            }, tile, faction, false, null);
+            site.factionMustRemainHostile = true;
+            site.desiredThreatPoints = site.ActualThreatPoints;
+            return site;
+        }
+        private bool TryGetSiteFaction(out Faction faction)
+        {
+            return Find.FactionManager.AllFactions.Where((Faction f) => !f.temporary && this.siteFactions.Contains(f.def)).TryRandomElement(out faction);
+        }
+        private static readonly SimpleCurve PawnCountToSitePointsFactorCurve = new SimpleCurve
+        {
+            {
+                new CurvePoint(1f, 0.4f),
+                true
+            },
+            {
+                new CurvePoint(3f, 0.5f),
+                true
+            },
+            {
+                new CurvePoint(5f, 0.62f),
+                true
+            },
+            {
+                new CurvePoint(10f, 0.75f),
+                true
+            }
+        };
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+        private static List<Map> tmpMaps = new List<Map>();
+        public List<FactionDef> siteFactions;
+        public SlateRef<string> customLetterLabel;
+        public SlateRef<string> customLetterText;
+        public QuestNode nodeIfChosenPawnSignalUsed;
+        public RewardsGeneratorParams parms;
+        public SlateRef<int?> variants;
+        public FloatRange timeLimitDays = new FloatRange(2f, 5f);
+    }
+    //utility
+    public static class HVMP_Utility
+    {
+        public static bool TryFindCommerceFaction(out Faction commerceFaction)
+        {
+            commerceFaction = Find.FactionManager.FirstFactionOfDef(HVMPDefOf.HVMP_CommerceBranch);
+            return commerceFaction != null;
+        }
+        public static bool TryFindPaxFaction(out Faction paxFaction)
+        {
+            paxFaction = Find.FactionManager.FirstFactionOfDef(HVMPDefOf.HVMP_PaxBranch);
+            return paxFaction != null;
+        }
+        public static bool TryFindRoverFaction(out Faction roverFaction)
+        {
+            roverFaction = Find.FactionManager.FirstFactionOfDef(HVMPDefOf.HVMP_RoverBranch);
+            return roverFaction != null;
+        }
+        public static bool TryFindArchiveFaction(out Faction archiveFaction)
+        {
+            archiveFaction = null;
+            if (ModsConfig.IdeologyActive)
+            {
+                archiveFaction = Find.FactionManager.FirstFactionOfDef(HVMPDefOf.HVMP_ArchiveBranch);
+            }
+            return archiveFaction != null;
+        }
+        public static bool TryFindEcosphereFaction(out Faction ecosphereBranch)
+        {
+            ecosphereBranch = null;
+            if (ModsConfig.BiotechActive)
+            {
+                ecosphereBranch = Find.FactionManager.FirstFactionOfDef(HVMPDefOf.HVMP_EcosphereBranch);
+            }
+            return ecosphereBranch != null;
+        }
+        public static bool TryFindOccultFaction(out Faction occultBranch)
+        {
+            occultBranch = null;
+            if (ModsConfig.AnomalyActive)
+            {
+                occultBranch = Find.FactionManager.FirstFactionOfDef(HVMPDefOf.HVMP_OccultBranch);
+            }
+            return occultBranch != null;
+        }
+        public static Map TryGetMap()
+        {
+            List<Map> mapCandidates = new List<Map>();
+            foreach (Map map in Find.Maps)
+            {
+                if (map.IsPlayerHome)
+                {
+                    mapCandidates.Add(map);
+                }
+            }
+            return mapCandidates.RandomElementWithFallback(null);
+        }
+        public static int ExpectationBasedGoodwillLoss(Map map, bool loss, bool refusalNotFailure, Faction faction)
+        {
+            int value = 0;
+            if (loss)
+            {
+                bool lossFromExpectation = false;
+                if (HVMP_Mod.settings.bratBehaviorMinExpectationLvl < 999)
+                {
+                    int highestExpectationOrder = -1;
+                    foreach (Map m in Find.Maps)
+                    {
+                        if (m.IsPlayerHome)
+                        {
+                            ExpectationDef ed = ExpectationsUtility.CurrentExpectationFor(map);
+                            highestExpectationOrder = Math.Max(highestExpectationOrder,ed.order);
+                        }
+                    }
+                    if (highestExpectationOrder < 0)
+                    {
+                        if (map == null)
+                        {
+                            map = Find.CurrentMap;
+                        }
+                        if (map != null)
+                        {
+                            ExpectationDef ed = ExpectationsUtility.CurrentExpectationFor(map);
+                            highestExpectationOrder = Math.Max(highestExpectationOrder, ed.order);
+                        }
+                    }
+                    lossFromExpectation = highestExpectationOrder >= HVMP_Mod.settings.bratBehaviorMinExpectationLvl;
+                    if (HVMP_Mod.settings.bratBehaviorMinSeniorityLvl >= 9999)
+                    {
+                        value = lossFromExpectation ? (refusalNotFailure ? HVMP_Mod.settings.goodwillQuestRefusalLoss : HVMP_Mod.settings.goodwillQuestFailureLoss) : 0;
+                        return -value;
+                    }
+                }
+                bool lossFromSeniority = false;
+                if (HVMP_Mod.settings.bratBehaviorMinSeniorityLvl < 9999)
+                {
+                    List<Pawn> colonists = new List<Pawn>();
+                    foreach (Map m in Find.Maps)
+                    {
+                        colonists.AddRange(m.mapPawns.AllPawns.Where((Pawn p)=>!p.Dead && p.IsColonist));
+                    }
+                    foreach (Caravan c in Find.WorldObjects.Caravans)
+                    {
+                        colonists.AddRange(c.PawnsListForReading.Where((Pawn p)=> p.IsColonist));
+                    }
+                    foreach (Pawn col in colonists)
+                    {
+                        if (col.royalty != null)
+                        {
+                            RoyalTitle rt = col.royalty.GetCurrentTitleInFaction(faction);
+                            if (rt != null && rt.def.seniority >= HVMP_Mod.settings.bratBehaviorMinSeniorityLvl)
+                            {
+                                lossFromSeniority = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (HVMP_Mod.settings.bratBehaviorMinExpectationLvl >= 999)
+                    {
+                        value = lossFromSeniority ? (refusalNotFailure ? HVMP_Mod.settings.goodwillQuestRefusalLoss : HVMP_Mod.settings.goodwillQuestFailureLoss) : 0;
+                        return -value;
+                    }
+                }
+                if (lossFromSeniority && lossFromExpectation)
+                {
+                    value = refusalNotFailure ? HVMP_Mod.settings.goodwillQuestRefusalLoss : HVMP_Mod.settings.goodwillQuestFailureLoss;
+                }
+            }
+            return -value;
+        }
+        public static bool NegotiatorIsCosmopolitan(Pawn negotiator)
+        {
+            return ModsConfig.IdeologyActive && negotiator.ideo != null && negotiator.Ideo.HasPrecept(HVMPDefOf.HVMP_InterfactionAidImproved);
+        }
+        public static bool FactionIsCosmopolitan(Faction faction)
+        {
+            return ModsConfig.IdeologyActive && faction.ideos != null && faction.ideos.PrimaryIdeo != null && faction.ideos.PrimaryIdeo.HasPrecept(HVMPDefOf.HVMP_InterfactionAidImproved);
+        }
+        public static void SetSettingScalingRewardValue(Slate slate, float factor = 1f)
+        {
+            slate.Set<float>("rewardValue", factor * Rand.RangeInclusive(700, 1200) * HVMP_Mod.settings.questRewardFactor);
+        }
+        public static bool CanReadAtlas(Book book, Pawn reader, List<SkillDef> skillDefs, out string reason)
+        {
+            reason = "";
+            CompStudiableQuestItem cda = book.GetComp<CompStudiableQuestItem>();
+            if (cda != null)
+            {
+                if (!cda.pawns.Contains(reader))
+                {
+                    reason = "HVMP_NeverBeenToAtlasPoint".Translate();
+                    return false;
+                }
+                if (reader.skills != null)
+                {
+                    foreach (SkillDef sd in skillDefs)
+                    {
+                        if (!reader.skills.GetSkill(sd).TotallyDisabled)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                reason = "HVMP_WrongSkillsToStudy".Translate();
+                return false;
+            }
+            return true;
+        }
+        public static void PaxOfferingInner(int goodwillChange)
+        {
+            WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
+            if (wcbs != null)
+            {
+                QuestPart_PaxOffering qppo = null;
+                for (int i = wcbs.qppos.Count - 1; i >= 0; i--)
+                {
+                    if (wcbs.qppos[i].quest.Historical || wcbs.qppos[i].denominator <= wcbs.qppos[i].goodwillChangesInt)
+                    {
+                        wcbs.qppos.Remove(wcbs.qppos[i]);
+                    } else if (wcbs.qppos[i].quest.State == QuestState.Ongoing) {
+                        if (qppo == null || qppo.quest.TicksSinceAccepted <= wcbs.qppos[i].quest.TicksSinceAccepted)
+                        {
+                            qppo = wcbs.qppos[i];
+                        }
+                    }
+                }
+                if (qppo != null)
+                {
+                    int functionalChange = Math.Min(goodwillChange, qppo.denominator);
+                    int leftovers = goodwillChange - functionalChange;
+                    qppo.goodwillChangesInt += functionalChange;
+                    if (leftovers >= 0)
+                    {
+                        bool goodwillMaxedOut = true;
+                        foreach (Faction f in Find.FactionManager.AllFactions)
+                        {
+                            if (f != Faction.OfPlayerSilentFail && !f.def.HasModExtension<EBranchQuests>() && !f.def.permanentEnemy && f.HasGoodwill && f.GoodwillWith(Faction.OfPlayerSilentFail) < 100)
+                            {
+                                goodwillMaxedOut = false;
+                                break;
+                            }
+                        }
+                        if (goodwillMaxedOut)
+                        {
+                            qppo.goodwillChangesInt = qppo.denominator;
+                            return;
+                        }
+                        if (leftovers > 0)
+                        {
+                            HVMP_Utility.PaxOfferingInner(leftovers);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    //settings
+    public class HVMP_Settings : ModSettings
+    {
+        public bool maximumChaosMode = false;
+        public bool occultTiedToAnomalyActivityLevel = false;
+        public float minBranchQuestInterval = 11f;
+        public float maxBranchQuestInterval = 15f;
+        public float questRewardFactor = 1f;
+        public int bratBehaviorMinExpectationLvl = 999;
+        public int bratBehaviorMinSeniorityLvl = 99999;
+        public int goodwillQuestRefusalLoss = 0;
+        public int goodwillQuestFailureLoss = 4;
+        public override void ExposeData()
+        {
+            Scribe_Values.Look(ref maximumChaosMode, "maximumChaosMode", false);
+            Scribe_Values.Look(ref occultTiedToAnomalyActivityLevel, "occultTiedToAnomalyActivityLevel", false);
+            Scribe_Values.Look(ref minBranchQuestInterval, "minBranchQuestInterval", 11f);
+            if (maxBranchQuestInterval < minBranchQuestInterval)
+            {
+                maxBranchQuestInterval = minBranchQuestInterval;
+            }
+            Scribe_Values.Look(ref maxBranchQuestInterval, "maxBranchQuestInterval", 15f);
+            Scribe_Values.Look(ref questRewardFactor, "questRewardFactor", 1f);
+            Scribe_Values.Look(ref bratBehaviorMinExpectationLvl, "bratBehaviorMinExpectationLvl", 999);
+            Scribe_Values.Look(ref bratBehaviorMinSeniorityLvl, "bratBehaviorMinSeniorityLvl", 99999);
+            Scribe_Values.Look(ref goodwillQuestRefusalLoss, "goodwillQuestRefusalLoss", 0);
+            Scribe_Values.Look(ref goodwillQuestFailureLoss, "goodwillQuestFailureLoss", 4);
+            base.ExposeData();
+        }
+    }
+    public class HVMP_Mod : Mod
+    {
+        public HVMP_Mod(ModContentPack content) : base(content)
+        {
+            HVMP_Mod.settings = GetSettings<HVMP_Settings>();
+        }
+        public override void DoSettingsWindowContents(Rect inRect)
+        {
+            //toggles chaos mode on or off: off by default, but if on every branch will offer quests on their own timer, leading to A LOT more quests
+            Listing_Standard listingStandard = new Listing_Standard();
+            listingStandard.Begin(inRect);
+            listingStandard.CheckboxLabeled("HVMP_SettingChaosMode".Translate(), ref settings.maximumChaosMode, "HVMP_TooltipChaosMode".Translate());
+            if (ModsConfig.AnomalyActive)
+            {
+                listingStandard.CheckboxLabeled("HVMP_SettingAnomalyActivityLevel".Translate(), ref settings.occultTiedToAnomalyActivityLevel, "HVMP_TooltipAnomalyActivityLevel".Translate());
+            }
+            listingStandard.End();
+            //time in between branch quests
+            displayMin = ((int)settings.minBranchQuestInterval).ToString();
+            displayMax = ((int)settings.maxBranchQuestInterval).ToString();
+            float x = inRect.xMin, y = inRect.yMin + 70, halfWidth = inRect.width * 0.5f;
+            float orig = settings.minBranchQuestInterval;
+            Rect questDaysMinRect = new Rect(x + 10, y, halfWidth - 15, 32);
+            settings.minBranchQuestInterval = Widgets.HorizontalSlider(questDaysMinRect, settings.minBranchQuestInterval, 1f, 60f, true, "HVMP_SettingMinDays".Translate(), "1", "60", 1f);
+            TooltipHandler.TipRegion(questDaysMinRect.LeftPart(1f), "HVMP_TooltipMinDays".Translate());
+            if (orig != settings.minBranchQuestInterval)
+            {
+                displayMin = ((int)settings.minBranchQuestInterval).ToString();
+            }
+            y += 32;
+            string origString = displayMin;
+            displayMin = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayMin);
+            if (!displayMin.Equals(origString))
+            {
+                this.ParseInput(displayMin, settings.minBranchQuestInterval, out settings.minBranchQuestInterval, 1f, 60f);
+            }
+            if (settings.minBranchQuestInterval > settings.maxBranchQuestInterval)
+            {
+                settings.maxBranchQuestInterval = settings.minBranchQuestInterval;
+                displayMax = ((int)settings.maxBranchQuestInterval).ToString();
+            }
+            y -= 32;
+            orig = settings.maxBranchQuestInterval;
+            Rect questDaysMaxRect = new Rect(x + 5 + halfWidth, y, halfWidth - 15, 32);
+            settings.maxBranchQuestInterval = Widgets.HorizontalSlider(questDaysMaxRect, settings.maxBranchQuestInterval, 1f, 60f, true, "HVMP_SettingMaxDays".Translate(), "1", "60", 1f);
+            TooltipHandler.TipRegion(questDaysMaxRect.LeftPart(1f), "HVMP_TooltipMaxDays".Translate());
+            if (orig != settings.maxBranchQuestInterval)
+            {
+                displayMax = ((int)settings.maxBranchQuestInterval).ToString();
+            }
+            y += 32;
+            origString = displayMax;
+            displayMax = Widgets.TextField(new Rect(x + 5 + halfWidth, y, 50, 32), displayMax);
+            if (!displayMax.Equals(origString))
+            {
+                this.ParseInput(displayMax, settings.maxBranchQuestInterval, out settings.maxBranchQuestInterval, 1f, 60f);
+            }
+            if (settings.maxBranchQuestInterval < settings.minBranchQuestInterval)
+            {
+                settings.minBranchQuestInterval = settings.maxBranchQuestInterval;
+                displayMin = ((int)settings.minBranchQuestInterval).ToString();
+            }
+            //set how rewarding you want quests to be
+            y += 50;
+            displayQuestRewardFactor = (settings.questRewardFactor).ToStringByStyle(ToStringStyle.FloatOne);
+            float origR = settings.questRewardFactor;
+            Rect rewardFactorRect = new Rect(x + 10, y, halfWidth - 15, 32);
+            settings.questRewardFactor = Widgets.HorizontalSlider(rewardFactorRect, settings.questRewardFactor, 0.2f, 2f, true, "HVMP_SettingRewardFactor".Translate(), "0.2x", "2x", 0.1f);
+            TooltipHandler.TipRegion(rewardFactorRect.LeftPart(1f), "HVMP_TooltipRewardFactor".Translate());
+            if (origR != settings.questRewardFactor)
+            {
+                displayQuestRewardFactor = ((int)settings.questRewardFactor).ToString() + "x";
+            }
+            y += 32;
+            string origStringR = displayQuestRewardFactor;
+            displayQuestRewardFactor = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayQuestRewardFactor);
+            if (!displayQuestRewardFactor.Equals(origStringR))
+            {
+                this.ParseInput(displayQuestRewardFactor, settings.questRewardFactor, out settings.questRewardFactor, 0.2f, 2f);
+            }
+            //set whether you should be punished for failing or foregoing a quest, and if so, when that should start happening
+            y += 50;
+            Rect bratBehaviorRect = new Rect(halfWidth*0.05f,y, halfWidth * 0.8f, 32);
+            this.ExpectationLevelSelector(bratBehaviorRect);
+            bb1 = this.ExpectationLabel;
+            TooltipHandler.TipRegion(bratBehaviorRect.LeftPart(1f), "HVMP_TooltipExpectationLevel".Translate());
+            Rect bratBehaviorRect2 = new Rect(halfWidth*0.95f, y, halfWidth*0.8f, 32);
+            bb2 = this.SeniorityLabel;
+            TooltipHandler.TipRegion(bratBehaviorRect2.LeftPart(1f), "HVMP_TooltipSeniorityLevel".Translate());
+            this.SeniorityLevelSelector(bratBehaviorRect2);
+            //set how punishing failing or foregoing a quest should be
+            y += 50;
+            if (settings.bratBehaviorMinSeniorityLvl < 999 || settings.bratBehaviorMinExpectationLvl < 999)
+            {
+                refusalLoss = ((int)settings.goodwillQuestRefusalLoss).ToString();
+                failureLoss = ((int)settings.goodwillQuestFailureLoss).ToString();
+                float orig2 = settings.goodwillQuestRefusalLoss;
+                Rect refusalGwRect = new Rect(x + 10, y, halfWidth - 15, 32);
+                settings.goodwillQuestRefusalLoss = (int)Widgets.HorizontalSlider(refusalGwRect, settings.goodwillQuestRefusalLoss, 0, 100, true, "HVMP_SettingGoodwillRefusal".Translate(), "0", "100", 1);
+                TooltipHandler.TipRegion(refusalGwRect.LeftPart(1f), "HVMP_TooltipGoodwillRefusal".Translate());
+                if (orig2 != settings.goodwillQuestRefusalLoss)
+                {
+                    refusalLoss = ((int)settings.goodwillQuestRefusalLoss).ToString();
+                }
+                y += 32;
+                string origString2 = refusalLoss;
+                refusalLoss = Widgets.TextField(new Rect(x + 10, y, 50, 32), refusalLoss);
+                if (!refusalLoss.Equals(origString2))
+                {
+                    this.ParseInput(refusalLoss, settings.goodwillQuestRefusalLoss, out settings.goodwillQuestRefusalLoss, 0, 120);
+                }
+                y -= 32;
+                orig = settings.goodwillQuestFailureLoss;
+                Rect failureGwRect = new Rect(x + 5 + halfWidth, y, halfWidth - 15, 32);
+                settings.goodwillQuestFailureLoss = (int)Widgets.HorizontalSlider(failureGwRect, settings.goodwillQuestFailureLoss, 0, 100, true, "HVMP_SettingGoodwillFailure".Translate(), "0", "100", 1);
+                TooltipHandler.TipRegion(failureGwRect.LeftPart(1f), "HVMP_TooltipGoodwillFailure".Translate());
+                if (orig != settings.goodwillQuestFailureLoss)
+                {
+                    failureLoss = ((int)settings.goodwillQuestFailureLoss).ToString();
+                }
+                y += 32;
+                origString2 = failureLoss;
+                failureLoss = Widgets.TextField(new Rect(x + 5 + halfWidth, y, 50, 32), failureLoss);
+                if (!failureLoss.Equals(origString2))
+                {
+                    this.ParseInput(failureLoss, settings.goodwillQuestFailureLoss, out settings.goodwillQuestFailureLoss, 0, 120);
+                }
+            }
+            base.DoSettingsWindowContents(inRect);
+        }
+        private void ExpectationLevelSelector(Rect rect)
+        {
+            if (Widgets.ButtonText(rect, "HVMP_TooltipMinExpectationLevel".Translate(bb1), true, true, true, null))
+            {
+                List<FloatMenuOption> list = new List<FloatMenuOption>
+                {
+                    new FloatMenuOption("HVMP_Inactive".Translate(), delegate
+                    {
+                        settings.bratBehaviorMinExpectationLvl = 999;
+                        bb1 = this.ExpectationLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption(ExpectationsUtility.ExpectationForOrder(0).LabelCap, delegate
+                    {
+                        settings.bratBehaviorMinExpectationLvl = 0;
+                        bb1 = this.ExpectationLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption(ExpectationsUtility.ExpectationForOrder(1).LabelCap, delegate
+                    {
+                        settings.bratBehaviorMinExpectationLvl = 1;
+                        bb1 = this.ExpectationLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption(ExpectationsUtility.ExpectationForOrder(2).LabelCap, delegate
+                    {
+                        settings.bratBehaviorMinExpectationLvl = 2;
+                        bb1 = this.ExpectationLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption(ExpectationsUtility.ExpectationForOrder(3).LabelCap, delegate
+                    {
+                        settings.bratBehaviorMinExpectationLvl = 3;
+                        bb1 = this.ExpectationLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption(ExpectationsUtility.ExpectationForOrder(4).LabelCap, delegate
+                    {
+                        settings.bratBehaviorMinExpectationLvl = 4;
+                        bb1 = this.ExpectationLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption(ExpectationsUtility.ExpectationForOrder(5).LabelCap, delegate
+                    {
+                        settings.bratBehaviorMinExpectationLvl = 5;
+                        bb1 = this.ExpectationLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0)
+                };
+                Find.WindowStack.Add(new FloatMenu(list));
+            }
+        }
+        private string ExpectationLabel
+        {
+            get
+            {
+                return settings.bratBehaviorMinExpectationLvl > 5 ? "HVMP_Inactive".Translate() : ExpectationsUtility.ExpectationForOrder(settings.bratBehaviorMinExpectationLvl).LabelCap;
+            }
+        }
+        private void SeniorityLevelSelector(Rect rect)
+        {
+            if (Widgets.ButtonText(rect, "HVMP_TooltipMinSeniorityLevel".Translate(bb2), true, true, true, null))
+            {
+                List<FloatMenuOption> list = new List<FloatMenuOption>
+                {
+                    new FloatMenuOption("HVMP_Inactive".Translate(), delegate
+                    {
+                        settings.bratBehaviorMinSeniorityLvl = 99999;
+                        bb2 = this.SeniorityLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption("HVMP_LevelFriend".Translate(), delegate
+                    {
+                        settings.bratBehaviorMinSeniorityLvl = 0;
+                        bb2 = this.SeniorityLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption("HVMP_Level".Translate(1), delegate
+                    {
+                        settings.bratBehaviorMinSeniorityLvl = 100;
+                        bb2 = this.SeniorityLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption("HVMP_Level".Translate(2), delegate
+                    {
+                        settings.bratBehaviorMinSeniorityLvl = 200;
+                        bb2 = this.SeniorityLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption("HVMP_Level".Translate(3), delegate
+                    {
+                        settings.bratBehaviorMinSeniorityLvl = 300;
+                        bb2 = this.SeniorityLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption("HVMP_Level".Translate(4), delegate
+                    {
+                        settings.bratBehaviorMinSeniorityLvl = 400;
+                        bb2 = this.SeniorityLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption("HVMP_Level".Translate(5), delegate
+                    {
+                        settings.bratBehaviorMinSeniorityLvl = 500;
+                        bb2 = this.SeniorityLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption("HVMP_Level".Translate(6), delegate
+                    {
+                        settings.bratBehaviorMinSeniorityLvl = 600;
+                        bb2 = this.SeniorityLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption("HVMP_Level".Translate(7), delegate
+                    {
+                        settings.bratBehaviorMinSeniorityLvl = 700;
+                        bb2 = this.SeniorityLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                    new FloatMenuOption("HVMP_Level".Translate(8), delegate
+                    {
+                        settings.bratBehaviorMinSeniorityLvl = 800;
+                        bb2 = this.SeniorityLabel;
+                    }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0)
+                };
+                Find.WindowStack.Add(new FloatMenu(list));
+            }
+        }
+        private string SeniorityLabel
+        {
+            get
+            {
+                return settings.bratBehaviorMinSeniorityLvl > 800 ? "HVMP_Inactive".Translate() : "HVMP_Level".Translate(settings.bratBehaviorMinSeniorityLvl/100);
+            }
+        }
+        private void ParseInput(string buffer, float origValue, out float newValue, float min, float max)
+        {
+            if (!float.TryParse(buffer, out newValue))
+                newValue = origValue;
+            if (newValue < min)
+                newValue = min;
+            if (newValue > max)
+                newValue = max;
+        }
+        private void ParseInput(string buffer, int origValue, out int newValue, int min, int max)
+        {
+            if (!int.TryParse(buffer, out newValue))
+                newValue = origValue;
+            if (newValue < min)
+                newValue = min;
+            if (newValue > max)
+                newValue = max;
+        }
+        public override string SettingsCategory()
+        {
+            return "Hauts' Enterprise: More Permits";
+        }
+        public static HVMP_Settings settings;
+        public string displayMin, displayMax, displayQuestRewardFactor, refusalLoss, failureLoss, bb1, bb2;
+    }
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Issues -->
+  <IssueDef>
+    <defName>HVMP_InterfactionAid</defName>
+    <label>interfaction aid</label>
+    <iconPath>UI/Issues/MiningYield</iconPath>
+  </IssueDef>
+
+  <!-- Precepts -->
+  <PreceptDef>
+    <defName>HVMP_InterfactionAidImproved</defName>
+    <issue>HVMP_InterfactionAid</issue>
+    <label>improved</label>
+    <description>We can rely on our allies more frequently, and are better at parlaying with others.\n\n&lt;color=#E5E54C&gt;Gameplay effect:&lt;/color&gt;\n - Reduces the goodwill cost of refreshing e-branch permit cooldowns from 25 to 20.\n - Lowers the cooldown for requesting allied trade caravans by 40%.\n - Removes the cooldown for requesting allied military aid.</description>
+    <impact>Medium</impact>
+    <associatedMemes>
+      <li>HVMP_Cosmopolitan</li>
+    </associatedMemes>
+    <requiredMemes>
+      <li>HVMP_Cosmopolitan</li>
+    </requiredMemes>
+    <statOffsets>
+      <NegotiationAbility>0.1</NegotiationAbility>
+    </statOffsets>
+  </PreceptDef>
+
+</Defs>

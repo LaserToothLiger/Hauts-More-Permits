@@ -1,0 +1,1170 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!--archive: enigma-->
+  <QuestScriptDef>
+    <defName>HVMP_ArchiveEnigma</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->The [mysterious] [relic]</li>
+        <li>questName->[deciphering] the [mystery]</li>
+		
+        <li>mysterious->Mysterious</li>
+        <li>mysterious->Enigmatic</li>
+        <li>mysterious->Strange</li>
+        <li>mysterious->Curious</li>
+        <li>mysterious->Confounding</li>
+        <li>mysterious->Perplexing</li>
+        <li>mysterious->Befuddling</li>
+        <li>mysterious->Odd</li>
+		
+        <li>relic->Relic</li>
+        <li>relic->Artifact</li>
+        <li>relic->Item</li>
+        <li>relic->Device</li>
+        <li>relic->Object</li>
+        <li>relic->Antique</li>
+        <li>relic->Curio</li>
+        <li>relic->Remnant</li>
+		
+        <li>deciphering->Deciphering</li>
+        <li>deciphering->Unlocking</li>
+        <li>deciphering->Decoding</li>
+        <li>deciphering->Understanding</li>
+        <li>deciphering->Illuminating</li>
+        <li>deciphering->Cracking</li>
+        <li>deciphering->Comprehending</li>
+		
+        <li>mystery->Mystery</li>
+        <li>mystery->Mystery [relic]</li>
+        <li>mystery->Enigma</li>
+        <li>mystery->[relic]</li>
+        <li>mystery->Riddle</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription(asker_factionLeader==True)->The [asker_faction_name] has hit a roadblock studying an artifact from an ancient civilization. If you are willing to help them, they can send it to you for further analysis.\n\nStudying the artifact is a process that takes place at a research bench, scaling with research speed. The civilization the artifact belonged to was known for [skillString], so a researcher with high [statLabel] would be ideal.</li>
+		
+		<li>skillString(statName==PsychicSensitivity)->their attempts to commune with the archotechs using esoteric means</li>
+		<li>skillString(statName==ReadingSpeed)->their love of the written word</li>
+		<li>skillString(statName==HackingSpeed)->integrating computers into every facet of daily life</li>
+		<li>skillString(statName==CleaningSpeed)->a strange residue that encases their ruins</li>
+		<li>skillString(statName==Hauts_SkillGainFromRecreation)->their treatment of play as a way of life</li>
+		<li>skillString(statName==FixBrokenDownBuildingSuccessChance)->the exceptionally damaged state in which their ruins were found</li>
+		<li>skillString(statName==Hauts_IdeoThoughtFactor)->their deep spirituality</li>
+		<li>skillString(statName==Hauts_InstructiveAbility)->their puzzling, almost child-like philosophy</li>
+		<li>skillString(statName==Hauts_BreachDamageFactor)->having protected most of their belongings in resilient containers</li>
+		<li>skillString(statName==MiningSpeed)->having been annihilated so thoroughly the only evidence of their existence was fused deep into the bedrock</li>
+		<li>skillString(statName==EatingSpeed)->placing a high importance on gustation</li>
+		<li>skillString(statName==NegotiationAbility)->a preoccupation with dialogue and argumentation</li>
+		<li>skillString(statName==TrainAnimalChance)->their animal-centric lifestyles</li>
+		<li>skillString(statName==MeleeHitChance)->the exacting detail they placed on the tiniest details of their crafts</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits_Ideology.QuestNode_ArchiveIntermediary">
+      <nodes>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+        </li>
+        <li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		</li>
+        <li Class="HautsPermits_Ideology.QuestNode_GenerateStrangeArtifact">
+          <storeAs>sartifact</storeAs>
+          <thingDef>HVMP_StrangeArtifact</thingDef>
+		  <storeSecondStatAs>statName</storeSecondStatAs>
+		  <storeSecondStatLabelAs>statLabel</storeSecondStatLabelAs>
+        </li>
+        <li Class="QuestNode_DestroyOrPassToWorldOnCleanup">
+          <things>$sartifact</things>
+        </li>
+        <li Class="QuestNode_AddToList">
+          <name>thingsToDrop</name>
+          <value>$sartifact</value>
+        </li>
+        <li Class="QuestNode_DropPods">
+          <contents>$thingsToDrop</contents>
+          <useTradeDropSpot>true</useTradeDropSpot>
+          <thingsToExcludeFromHyperlinks>$sartifact</thingsToExcludeFromHyperlinks>
+        </li>
+		<li Class="QuestNode_Signal">
+		  <inSignal>sartifact.StudiableItemFinished</inSignal>
+		    <node Class="QuestNode_Sequence">
+			  <nodes>
+				<li Class="QuestNode_Set">
+				  <name>sendStandardLetter</name>
+				  <value>true</value>
+				</li>
+				<li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				  <faction>$faction</faction>
+				  <customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+				  <customLetterText TKey="LetterTextPaymentArrived">You have finished studying the strange artifact!\n\nThe Archive Branch's respect for you has increased.</customLetterText>
+				</li>
+				<li Class="QuestNode_End">
+					<outcome>Success</outcome>
+					<!--<sendStandardLetter>$sendStandardLetter</sendStandardLetter>-->
+				</li>
+			  </nodes>
+			</node>
+		</li>
+		<li Class="QuestNode_Signal">
+		  <inSignal>sartifact.StudiableItemDestroyed</inSignal>
+		    <node Class="QuestNode_Sequence">
+			  <nodes>
+				  <li Class="QuestNode_Letter">
+					<label TKey="LetterLabelShuttleDestroyed">Strange artifact destroyed</label>
+					<letterDef>NegativeEvent</letterDef>
+					<text TKey="LetterTextShuttleDestroyed">The strange artifact you were tasked with safeguarding has been destroyed.</text>
+				  </li>
+				  <li Class="HautsPermits.QuestNode_EndBranch">
+					<outcome>Fail</outcome>
+					<goodwillChangeReason>HVMP_SartifactDestroyed</goodwillChangeReason>
+					<faction>HVMP_ArchiveBranch</faction>
+				  </li>
+			  </nodes>
+			</node>
+		</li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--archive: entrant-->
+  <QuestScriptDef>
+    <defName>HVMP_ArchiveEntrant</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->a [lost] [shuttle]</li>
+        <li>questName->[lost] [shuttle] [search]</li>
+        <li>lost->Crashed</li>
+        <li>lost->Lost</li>
+        <li>lost->Downed</li>
+        <li>lost->Vanished</li>
+        <li>lost->Malfunctioned</li>
+        <li>lost->Damaged</li>
+        <li>lost->Missing</li>
+        <li>search->Search</li>
+        <li>search->Investigation</li>
+        <li>search->Tracking</li>
+        <li>search->Retrieval</li>
+        <li>search->Nearby</li>
+        <li>shuttle->Shuttle</li>
+        <li>shuttle->Transport</li>
+        <li>shuttle->Airship</li>
+        <li>shuttle->Barge</li>
+        <li>shuttle->APC</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->The [factionName] has informed us of an unaffiliated air shuttle that has crashed nearby. They are interested in its black box data, and would like us to retrieve it within [timeout_duration] by deconstructing or destroying the shuttle.\n\nThe [factionName] says that [allSitePartsDescriptionsExceptFirst]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits_Ideology.QuestNode_Root_Blackbox">
+	  <nodes>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+          <parms>
+            <pointsFactorTwoStar>1.5</pointsFactorTwoStar>
+            <pointsFactorThreeStar>2</pointsFactorThreeStar>
+          </parms>
+        </li>
+        <li Class="QuestNode_SubScript">
+          <def>Util_AdjustPointsForDistantFight</def>
+        </li>
+        <li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		</li>
+        <li Class="QuestNode_IsSet">
+          <name>asker</name>
+          <elseNode Class="QuestNode_RandomNode">
+            <nodes>
+              <li Class="QuestNode_Set">
+                <name>askerIsNull</name>
+                <value>true</value>
+                <selectionWeight>0.4</selectionWeight>
+              </li>
+              <li Class="QuestNode_GetPawn">
+                <storeAs>asker</storeAs>
+                <mustBeFactionLeader>true</mustBeFactionLeader>
+                <mustBeNonHostileToPlayer>true</mustBeNonHostileToPlayer>
+                <hostileWeight>0.15</hostileWeight>
+                <selectionWeight>0.6</selectionWeight>
+              </li>
+            </nodes>
+          </elseNode>
+        </li>
+        <li Class="QuestNode_GetSiteTile">
+          <storeAs>siteTile</storeAs>
+          <preferCloserTiles>true</preferCloserTiles>
+        </li>
+        <li Class="QuestNode_ViolentQuestsAllowed">
+          <node Class="QuestNode_Set">
+            <name>siteThreatChance</name>
+            <value>1</value>
+          </node>
+          <elseNode Class="QuestNode_Set">
+            <name>siteThreatChance</name>
+            <value>1</value>
+          </elseNode>
+        </li>
+        <li Class="QuestNode_GetSitePartDefsByTagsAndFaction">
+          <storeAs>sitePartDefs</storeAs>
+          <storeFactionAs>siteFaction</storeFactionAs>
+          <sitePartsTags>
+            <li>
+              <tag>HVMP_CrashedShuttle</tag>
+            </li>
+            <li>
+              <tag>ItemStashQuestThreat</tag>
+              <chance>$siteThreatChance</chance>
+            </li>
+          </sitePartsTags>
+        </li>
+        <li Class="QuestNode_GetDefaultSitePartsParams">
+          <tile>$siteTile</tile>
+          <faction>$siteFaction</faction>
+          <sitePartDefs>$sitePartDefs</sitePartDefs>
+          <storeSitePartsParamsAs>sitePartsParams</storeSitePartsParamsAs>
+        </li>
+        <li Class="QuestNode_SubScript">
+          <def>Util_GenerateSite</def>
+          <parms>
+            <hiddenSitePartsPossible>true</hiddenSitePartsPossible>
+          </parms>
+        </li>
+        <li Class="QuestNode_SpawnWorldObjects">
+          <worldObjects>$site</worldObjects>
+        </li>
+        <li Class="HautsPermits.QuestNode_LookOverHere">
+          <worldObjects>$site</worldObjects>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>timeout</name>
+          <value>$(randInt(4,10)*60000)</value>
+        </li>
+        <li Class="QuestNode_WorldObjectTimeout">
+          <worldObject>$site</worldObject>
+          <isQuestTimeout>true</isQuestTimeout>
+          <delayTicks>$timeout</delayTicks>
+          <inSignalDisable>site.MapGenerated</inSignalDisable>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
+                <text TKey="LetterTextQuestExpired">Intercepted communications indicate the shuttle has been taken apart by scavengers. The quest [resolvedQuestName] has expired.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>HVMP_ShuttleLost</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>site.Destroyed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
+                <text TKey="LetterTextQuestExpired">The crashed shuttle was destroyed. The Archive Branch's respect for you has diminished.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>HVMP_ShuttleLost</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+		<li Class="QuestNode_Signal">
+          <inSignal>shuttlething.DeconstructedIcarus</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelSuccess">E-branch relations improved</label>
+                <letterDef>PositiveEvent</letterDef>
+                <text TKey="LetterTextSuccess">You have dismantled the shuttle and recovered its black box.\n\nThe Archive Branch's respect for you has increased.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				<faction>$faction</faction>
+			  </li>
+              <li Class="QuestNode_End">
+                <outcome>Success</outcome>
+              </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  <SitePartDef>
+    <defName>HVMP_CrashedShuttle</defName>
+    <label>shuttle crash site</label>
+    <description>A crashed shuttle.</description>
+    <workerClass>HautsPermits_Ideology.SitePartWorker_CrashedShuttle</workerClass>
+    <siteTexture>World/WorldObjects/Sites/GenericSite</siteTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/TravelingShuttle</expandingIconTexture>
+    <handlesWorldObjectTimeoutInspectString>true</handlesWorldObjectTimeoutInspectString>
+    <tags>
+      <li>HVMP_CrashedShuttle</li>
+    </tags>
+  </SitePartDef>
+  <GenStepDef>
+    <defName>HVMP_CrashedShuttle</defName>
+    <linkWithSite>HVMP_CrashedShuttle</linkWithSite>
+    <order>460</order>
+    <genStep Class="HautsPermits_Ideology.GenStep_CrashedShuttle">
+      <count>1</count>
+      <nearMapCenter>true</nearMapCenter>
+    </genStep>
+  </GenStepDef>
+  
+  <!--Archive: ethnography-->
+  <QuestScriptDef>
+    <defName>HVMP_ArchiveEthnography</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questDescriptionAndNameRules>
+      <rulesStrings>
+        <li>lodgersLabel->guest</li>
+        <li>lodgersLabelPlural->[asker_faction_pawnsPlural]</li>
+      </rulesStrings>
+    </questDescriptionAndNameRules>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[study] By [lodgerIndef]</li>
+        <li>questName->[lodgerIndef] Among [natives]</li>
+        <li>questName->[exposureTo] [natives]</li>
+
+        <li>study->Study</li>
+        <li>study->Observation</li>
+        <li>study->Examination</li>
+        <li>study->Co-habitation</li>
+        <li>study->Fieldwork</li>
+        <li>study->Under Study</li>
+        <li>study->Record</li>
+		
+        <li>natives->Natives</li>
+        <li>natives->the Colony</li>
+        <li>natives->the Settlement</li>
+        <li>natives->Colonists</li>
+        <li>natives->Rimworlders</li>
+        <li>natives->Terrestrials</li>
+        <li>natives->Inhabitants</li>
+		
+        <li>exposureTo->Exposure to</li>
+        <li>exposureTo->Acclimation to</li>
+        <li>exposureTo->Mingling with</li>
+        <li>exposureTo->Studying</li>
+        <li>exposureTo->Recording</li>
+        <li>exposureTo->Living Among</li>
+		
+        <!-- Asker is null -->
+        <li>lodgerIndef(lodgersCount==1)->[lodgers0_label]</li>
+        <li>lodgerIndef(lodgersCount>=1)->a [lodgers0_title]</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <include>
+        <li>QuestHospitalityCommon</li>
+      </include>
+      <rulesStrings>
+        <!-- General use -->
+        <li>lodgersDef(lodgersCount==1)->[lodgers0_nameDef]</li>
+        <li>lodgersDef(lodgersCount>=2)->the [lodgersLabelPlural]</li>
+        <li>joinerEnding(priority=1)-></li> <!-- disable joinerEnding since it's just noise, but I don't want to delete it everywhere yet in case we bring it back -->
+        <li>joinerEnding->You'll be able to direct [lodgersDef] the same way you direct your own colonists.[specialNeedsExplanation]</li>
+        <li>specialNeedsExplanation(asker_royalInCurrentFaction==True,priority=1)-> You'll need to satisfy any special royal needs the [lodgersLabelPlural] may have.</li>
+        <li>specialNeedsExplanation-></li>
+        <li>theirHisHer(lodgersCount==1)->[lodgers0_possessive]</li>
+        <li>theirHisHer(lodgersCount>=2)->their</li>
+        <li>lodgersPronoun(lodgersCount==1)->[lodgers0_pronoun]</li>
+        <li>lodgersPronoun(lodgersCount>=2)->they</li>
+        <li>lodgersWasWere(lodgersCount==1)->was</li>
+        <li>lodgersWasWere(lodgersCount>=2)->were</li>
+        <li>appreciateAppreciates(lodgersCount==1)->appreciates</li>
+        <li>appreciateAppreciates(lodgersCount>=2)->appreciate</li>
+        <!-- Asker is faction leader, single joiner -->
+        <li>questDescription(lodgersCount==1)->[asker_nameFull], [asker_faction_leaderTitle] of [asker_faction_name] is requesting a favor. One of [asker_possessive] anthropologists, [lodgers0_nameFull], is interested in studying your culture and ways of life. [asker_pronoun] wants you to host [lodgers0_objective] at [map_definite] until [lodgers0_pronoun] has completed [lodgers0_possessive] study. The questions [lodgers0_pronoun] asks have a chance to annoy or upset your colonists.[allLodgerInfo]\n\n[joinerEnding]</li>
+        <!-- Asker is faction leader, multiple joiners -->
+        <li>questDescription(lodgersCount>=2,priority=1)->[asker_nameFull], [asker_faction_leaderTitle] of [asker_faction_name], has commissioned [lodgersCount] [asker_faction_pawnsPlural] to study your culture. [asker_pronoun] believes this would be better accomplished if the team could live among you, and so would like you to host them at [map_definite] until they have completed their study. The questions they ask have a chance to annoy or upset those they interact with.[allLodgerInfo]\n\n[joinerEnding]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits_Ideology.QuestNode_ArchiveIntermediary">
+	  <nodes>
+        <li Class="HautsPermits.QuestNode_HospitalityPawnType">
+          <storePawnKindAs>lodgersPawnKind</storePawnKindAs>
+		  <pawnKinds>
+			<li>HVMP_Anthropologist</li>
+		  </pawnKinds>
+        </li>
+		<li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+          <parms>
+            <pointsFactorTwoStar>1</pointsFactorTwoStar>
+            <pointsFactorThreeStar>1</pointsFactorThreeStar>
+            <selectionWeightOneStar>0.7</selectionWeightOneStar>
+            <selectionWeightTwoStar>0.3</selectionWeightTwoStar>
+            <selectionWeightThreeStar>0</selectionWeightThreeStar>
+            <peacefulChallengeRating>1</peacefulChallengeRating> <!-- Restrict to 1 star rating for peaceful difficulty since 1-star quests are non-violent -->
+            <minPointsTwoStar>10</minPointsTwoStar>
+            <minPointsThreeStar>20</minPointsThreeStar>
+          </parms>
+        </li>
+        <li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		</li>
+        <!-- Decide random lodger conditions -->
+        <li Class="QuestNode_SubScript">
+          <def>Util_DecideRandomLodgerConditions</def>
+          <parms>
+            <noConditionsWeight>0</noConditionsWeight>
+            <noWorkWeight>1</noWorkWeight>
+            <paralysisWeight>0</paralysisWeight>
+            <bloodRotWeight>0</bloodRotWeight>
+            <bloodRotAndParalysisWeight>0</bloodRotAndParalysisWeight>
+            <moodThresholdWeight>0.1</moodThresholdWeight>
+          </parms>
+        </li>
+		<li Class="QuestNode_Set">
+		  <name>lodgersWillNotWork</name>
+		  <value>true</value>
+		</li>
+		<li Class="QuestNode_GetPawnCountByPointsWeighted">
+          <storeAs>lodgersCount</storeAs>
+          <challengeRating>$challengeRating</challengeRating>
+          <maxCountOneStar>20</maxCountOneStar>
+          <maxCountTwoStar>20</maxCountTwoStar>
+          <maxCountThreeStar>20</maxCountThreeStar>
+          <roundRandom>True</roundRandom>
+          <pointsCurve>
+            <points>
+              <li>(10, 1)</li>
+              <li>(200, 2)</li>
+              <li>(600, 3)</li>
+              <li>(1600, 4)</li>
+              <li>(4000, 5)</li>
+            </points>
+          </pointsCurve>
+          <chancesCurve>
+            <points>
+              <li>(0, 0)</li>
+              <li>(1, 4)</li>
+              <li>(2, 0.75)</li>
+              <li>(3, 0.3)</li>
+              <li>(4, 0.1)</li>
+            </points>
+          </chancesCurve>
+        </li>
+        <!-- Get asker's faction (if any) for proper faction name generation -->
+        <li Class="QuestNode_IsNull">
+          <value>$asker</value>
+          <elseNode Class="QuestNode_GetFactionOf">
+            <thing>$asker</thing>
+            <storeAs>askerFaction</storeAs>
+          </elseNode>
+        </li>
+        <!-- Generate lodgers -->
+        <li Class="QuestNode_Set">
+          <name>lodgersCountToGenerate</name>
+          <value>$lodgersCount</value>
+        </li>
+        <li Class="QuestNode_Set"> <!-- for text use -->
+          <name>lodgersCountMinusOne</name>
+          <value>$($lodgersCount-1)</value>
+        </li>
+        <li Class="QuestNode_LoopCount">
+          <loopCount>$lodgersCountToGenerate</loopCount>
+          <node Class="QuestNode_GeneratePawn">
+            <kindDef>$lodgersPawnKind</kindDef>
+            <faction>$askerFaction</faction>
+            <addToList>lodgers</addToList>
+            <allowAddictions>false</allowAddictions>
+            <biocodeWeaponChance>1</biocodeWeaponChance>
+            <biocodeApparelChance>1</biocodeApparelChance>
+            <allowPregnant>false</allowPregnant>
+            <isChild>false</isChild>
+            <giveDependentDrugs>true</giveDependentDrugs>
+          </node>
+        </li>
+        <!-- Assign home faction to lodger(s) -->
+        <li Class="QuestNode_ExtraFaction">
+          <factionOf>$asker</factionOf>
+          <pawns>$lodgers</pawns>
+          <factionType>HomeFaction</factionType>
+          <inSignalsRemovePawn>
+            <li>lodgers.RanWild</li>
+            <li>lodgers.BecameMutant</li>
+          </inSignalsRemovePawn>
+        </li>
+        <!-- Lock their apparel -->
+        <li Class="QuestNode_SetAllApparelLocked">
+          <pawns>$lodgers</pawns>
+        </li>
+        <li Class="HautsPermits.QuestNode_GiveHostileEnvironmentFilm">
+          <pawns>$lodgers</pawns>
+        </li>
+        <!-- Apply lodger conditions -->
+        <li Class="QuestNode_SubScript">
+          <def>Util_ApplyLodgerConditions</def>
+        </li>
+        <!-- Execute main worker script -->
+        <li Class="QuestNode_SubScript">
+          <def>HVMP_Hospitality_Util_Worker_I</def>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  <QuestScriptDef>
+    <defName>HVMP_Hospitality_Util_Worker_I</defName>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+		<li Class="QuestNode_Set">
+			<name>infoToGather</name>
+			<value>$(randInt(30, 100)*$lodgersCount*$challengeRating)</value>
+		</li>
+        <li Class="QuestNode_Set">
+          <name>shuttleLeaveDelayTicks</name>
+          <value>$(3*60000)</value>
+        </li>
+        <!-- Lodger(s) leave on cleanup -->
+        <li Class="QuestNode_LeaveOnCleanup">
+          <pawns>$lodgers</pawns>
+          <sendStandardLetter>false</sendStandardLetter>
+          <inSignalRemovePawn>lodgers.RanWild</inSignalRemovePawn>
+        </li>
+        <!-- Create a list of all arriving pawns -->
+        <li Class="QuestNode_Unset">
+          <name>arrivingPawns</name>
+        </li>
+        <li Class="QuestNode_AddRangeToList">
+          <name>arrivingPawns</name>
+          <value>$lodgers</value>
+        </li>
+        <!-- Lodger(s) arrive -->
+        <li Class="QuestNode_Set">
+           <name>lodgersArePrisoners</name>
+           <value>false</value>
+        </li>
+        <li Class="QuestNode_Set">
+           <name>lodgersAreNotPrisoners</name>
+           <value>true</value>
+        </li>
+        <li Class="QuestNode_SubScript">
+          <def>Util_ArriveByDropPodsOrShuttle</def>
+          <parms>
+            <arrivingPawns>$arrivingPawns</arrivingPawns>
+            <joiningPawns>$lodgers</joiningPawns>
+            <joinPlayer>$lodgersAreNotPrisoners</joinPlayer>
+            <makePrisoners>$lodgersArePrisoners</makePrisoners>
+            <customLetterLabel TKey="LetterLabelLodgersArrived">[lodgersLabelSingOrPlural] arrived</customLetterLabel>
+            <customLetterText TKey="LetterTextLodgersArrived">[lodgersLabelSingOrPluralDef] [lodgersHasHave] arrived. Host [lodgersObjective] until they have asked all [infoToGather] of their questions.</customLetterText>
+            <arrivingPawnsLabelDef TKey="ArrivingPawnsDefiniteLabel">[lodgersLabelSingOrPluralDef]</arrivingPawnsLabelDef>
+          </parms>
+        </li>
+        <!-- Shuttle -->
+        <li Class="HautsPermits_Ideology.QuestNode_ShuttleAnthro">
+          <questionsToAsk>$infoToGather</questionsToAsk>
+          <lodgers>$lodgers</lodgers>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_SubScript">
+                <def>Util_TransportShip_Pickup</def>
+                <parms>
+                  <leaveDelayTicks>$shuttleLeaveDelayTicks</leaveDelayTicks>
+                  <requiredPawns>$lodgers</requiredPawns>
+                  <sendAwayIfAllDespawned>$lodgers</sendAwayIfAllDespawned>
+                </parms>
+              </li>
+              <li Class="QuestNode_SendSignals">
+                <outSignals>ShuttleArrived</outSignals>
+              </li>
+              <li Class="QuestNode_InspectString">
+                <targets>$lodgers</targets>
+                <inspectString TKey="InspectStringDepartShuttle">Should depart on shuttle</inspectString>
+              </li>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelShuttleArrived">Shuttle arrived</label>
+                <text TKey="LetterTextShuttleArrived">The shuttle has arrived to collect [lodgersLabelSingOrPluralDef]. Be sure to have these people on the shuttle before it leaves in [shuttleLeaveDelayTicks_duration]:\n\n[lodgers]</text>
+                <lookTargets>$pickupShipThing</lookTargets>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger type reward factor -->
+        <li Class="QuestNode_IsAnimal">
+          <value>$lodgers</value>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <!-- Animals -->
+              <li Class="QuestNode_GetBodySize">
+                <pawnKind>$lodgersPawnKind</pawnKind>
+                <storeAs>lodgersBodySize</storeAs>
+              </li>
+              <li Class="QuestNode_Set">
+                <name>lodgerRewardFactor</name>
+                <value>$(0.5 + 0.1 * $lodgersBodySize)</value>
+              </li>
+            </nodes>
+          </node>
+          <elseNode Class="QuestNode_Sequence">
+            <nodes>
+              <!-- Humanlikes -->
+              <li Class="QuestNode_Set">
+                <name>lodgerRewardFactor</name>
+                <value>1</value>
+              </li>
+            </nodes>
+          </elseNode>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>lodgerRewardFromCountAndDelay</name>
+          <value>$($lodgersCount * $lodgerRewardFactor * $infoToGather)</value>
+        </li>
+        <!-- Lodger died -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.Destroyed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelGuestDied">Guest died: {SUBJECT_definite}</label>
+                <text TKey="LetterTextGuestDied">[letterSubject], who you were charged to protect, has died. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger arrested -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.Arrested</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelGuestCapture">Guest captured: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextGuestCapture">[letterSubject], who you were charged to protect, has been arrested. [remainingWillNowLeave][failLetterEndingQuest]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger recruited -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.Recruited</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LabelLabelPrisonerRecruited">Prisoner recruited: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LabelTextPrisonerRecruited">You have recruited {SUBJECT_definite}, who you were charged to guard. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>QuestPrisonerRecruited</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger enslaved -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.Enslaved</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LabelLabelPrisonerEnslaved">Prisoner enslaved: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LabelTextPrisonerEnslaved">You have enslaved {SUBJECT_definite}, who you were charged to guard. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>QuestPrisonerEnslaved</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Surgery violation -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.SurgeryViolation</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelUnauthorizedSurgery">Unauthorized surgery: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextUnauthorizedSurgery">Unauthorized, violating surgery has been performed on [letterSubject]. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>PerformedHarmfulSurgery</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger's xenogerm absorbed -->
+        <li Class="QuestNode_Signal" MayRequire="Ludeon.RimWorld.Biotech">
+          <inSignal>lodgers.XenogermAbsorbed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label>Xenogerm absorbed: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text>{SUBJECT_definite}, who you were charged to protect, has had {SUBJECT_possessive} xenogerm forcibly absorbed. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>XenogermAbsorbed</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger left map -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.LeftMap</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelGuestLost">Guest lost: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextGuestLost">[letterSubject], who you were charged to protect, is gone. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger ran wild -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.RanWild</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelLodgerRanWild">Guest lost: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextLodgerRanWild">[letterSubject], who you were charged to protect, has run wild. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger changed faction (e.g. sold to trader) -->
+        <li Class="QuestNode_AnySignal">
+          <inSignals>
+            <li>lodgers.ChangedFaction</li>
+            <li>lodgers.ChangedHostFaction</li>
+          </inSignals>
+          <node Class="QuestNode_Filter_FactionNonPlayer">
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_Letter">
+                  <label TKey="LetterLabelGuestJoinedOtherFaction">Guest lost: {SUBJECT_definite}</label>
+                  <letterDef>NegativeEvent</letterDef>
+                  <text TKey="LetterTextGuestJoinedOtherFaction">[letterSubject], who you were charged to protect, has joined another faction. [remainingWillNowLeave][failLetterEndingCommon]</text>
+                </li>
+                <li Class="HautsPermits.QuestNode_EndBranch">
+                  <outcome>Fail</outcome>
+                  <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
+				  <faction>HVMP_ArchiveBranch</faction>
+                </li>
+              </nodes>
+            </node>
+          </node>
+        </li>
+        <!-- Asker faction became hostile -->
+        <li Class="QuestNode_GetFactionOf">
+          <thing>$asker</thing>
+          <storeAs>askerFaction</storeAs>
+        </li>
+        <li Class="QuestNode_End">
+          <inSignal>askerFaction.BecameHostileToPlayer</inSignal>
+          <outcome>InvalidPreAcceptance</outcome>
+          <signalListenMode>NotYetAcceptedOnly</signalListenMode>
+        </li>
+        <li Class="QuestNode_IsNull">
+          <value>$askerFaction</value>
+          <elseNode Class="QuestNode_Signal">
+            <inSignal>askerFaction.BecameHostileToPlayer</inSignal>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_Letter">
+                  <label TKey="LetterLabelAskerFactionHostile">Quest failed: [resolvedQuestName]</label>
+                  <letterDef>NegativeEvent</letterDef>
+                  <text TKey="LetterTextAskerFactionHostile">[asker_faction_name] are now hostile towards you. [failLetterEndingQuest]</text>
+                </li>
+                <li Class="QuestNode_End">
+                  <outcome>Fail</outcome>
+                </li>
+              </nodes>
+            </node>
+          </elseNode>
+        </li>
+        <!-- Shuttle destroyed -->
+        <li Class="QuestNode_Signal">
+          <inSignal>pickupShipThing.Destroyed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelShuttleDestroyed">Shuttle destroyed</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextShuttleDestroyed">The shuttle sent to collect [lodgersLabelSingOrPluralDef] has been destroyed. [lodgersLabelSingOrPluralDef] will now leave on foot. [failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>ShuttleDestroyed</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Shuttle sent -->
+        <li Class="QuestNode_Signal">
+          <inSignal>pickupShipThing.SentSatisfied</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <!-- Goodwill for mood will send a different quest end letter -->
+              <li Class="QuestNode_Set">
+                <name>sendStandardLetter</name>
+                <value>true</value>
+              </li>
+              <!-- End quest -->
+			  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				<faction>$faction</faction>
+				<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+				<customLetterText TKey="LetterTextPaymentArrived">You have taken care of the mercenaries for the requested time. As such, the Archive Branch's respect for you has increased.</customLetterText>
+			  </li>
+              <li Class="QuestNode_End">
+                <outcome>Success</outcome>
+                <sendStandardLetter>$sendStandardLetter</sendStandardLetter>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>pickupShipThing.SentUnsatisfied</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestFailed">Quest failed: [resolvedQuestName]</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextQuestFailed">The shuttle sent to collect [lodgersLabelSingOrPluralDef] has departed. [lodgersLabelSingOrPluralDef] will now leave on foot. [failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>MemberMissedShuttle</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--Archive: excavation-->
+  <QuestScriptDef>
+    <defName>HVMP_ArchiveExcavation</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName(p=6)->The [complexAdj] [complex]</li>
+        <li>questName->The [dig]</li>
+        <li>complexAdj->ancient</li>
+        <li>complexAdj->old</li>
+        <li>complexAdj->dusty</li>
+        <li>complexAdj->secret</li>
+
+        <li>complex->complex</li>
+        <li>complex->compound</li>
+        <li>complex->installation</li>
+        <li>complex->ruin</li>
+        <li>complex->base</li>
+        <li>complex->crypt</li>
+        <li>complex->vault</li>
+
+        <li>dig->dig</li>
+        <li>dig->excavation</li>
+        <li>dig->expedition</li>
+        <li>dig->exploration</li>
+        <li>dig->archive</li>
+
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->Tbe Archive Branch is informing us of an ancient complex nearby. It is said to contain valuable information about the past of this world. They would like you to break into the structure and hack the computers inside to collect that information.\n\nWatch out - there may be all manner of dangers inside, and other enemies may also be attracted by activity at the structure.\n\nIf you don't make it to the complex within [timeout_duration], scavengers will pick it apart and make away with the data.</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <questContentRules>
+      <rulesStrings>
+        <li>terminalHackedMessage->Terminal hacked. {COUNT} / [terminalCount] complete.</li>
+        <li>allTerminalsHackedMessage->You've hacked all of the terminals and secured their information for the Archive Branch! You can now leave.</li>
+
+      </rulesStrings>
+    </questContentRules>
+    <root Class="HautsPermits_Ideology.QuestNode_ArchiveIntermediary">
+      <nodes>
+        <li Class="QuestNode_Set">
+          <name>siteDistRange</name>
+          <value>5~13</value>
+        </li>
+        <li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		</li>
+        <li Class="QuestNode_GetPlayerFaction">
+          <storeAs>playerFaction</storeAs>
+        </li>
+        <li Class="QuestNode_GetSiteTile">
+          <storeAs>tile</storeAs>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>timeout</name>
+          <value>$(randInt(9,21)*60000)</value>
+        </li>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+          <parms>
+            <pointsFactorTwoStar>1.5</pointsFactorTwoStar>
+            <pointsFactorThreeStar>2</pointsFactorThreeStar>
+          </parms>
+        </li>
+        <li Class="HautsPermits_Ideology.QuestNode_GenerateAncientComplex">
+          <tile>$tile</tile>
+          <storeAs>ancientComplex</storeAs>
+		  <successSignal>allHackedSignal</successSignal>
+		  <randomRaidPointsFactorRange>0.25~0.35</randomRaidPointsFactorRange><!--this and the other values below are vanilla properties of Ancient Complex Hacks, just opened up to XML instead of being hardcoded. Don't delete them or you'll get errors.-->
+		  <hackDefenceRange>300~1000</hackDefenceRange>
+		  <threatPointsOverPointsCurve>
+			<points>
+			  <li>(31, 50)</li>
+			  <li>(350, 200)</li>
+			  <li>(8725, 4250)</li>
+			</points>
+		  </threatPointsOverPointsCurve>
+		  <terminalsOverRoomCountCurve>
+			<points>
+			  <li>(0, 1)</li>
+			  <li>(10, 4)</li>
+			  <li>(20, 6)</li>
+			  <li>(50, 10)</li>
+			</points>
+		  </terminalsOverRoomCountCurve>
+		  <complexSizeOverPointsCurve>
+			<points>
+			  <li>(0, 30)</li>
+			  <li>(10000, 50)</li>
+			</points>
+		  </complexSizeOverPointsCurve>
+		  <layoutDef>AncientComplex</layoutDef>
+        </li>
+        <li Class="QuestNode_WorldObjectTimeout">
+          <worldObject>$site</worldObject>
+          <delayTicks>$timeout</delayTicks>
+          <inSignalDisable>site.MapGenerated</inSignalDisable>
+          <isQuestTimeout>true</isQuestTimeout>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
+                <text TKey="LetterTextQuestExpired">Others have already looted the ancient complex for everything of value, including the data the Archive Branch wanted. The Archive Branch's respect for you has slightly diminished.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>HVMP_QuestExpired</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>site.Destroyed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
+                <text TKey="LetterTextQuestExpired">Others have already looted the ancient complex for everything of value, including the data the Archive Branch wanted. The Archive Branch's respect for you has slightly diminished.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>HVMP_QuestExpired</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>$allHackedSignal</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+			  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				<faction>$faction</faction>
+				<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+				<customLetterText TKey="LetterTextPaymentArrived">You have successfully obtained all information from the ancient complex!\n\nThe Archive Branch's respect for you has increased.</customLetterText>
+			  </li>
+              <li Class="QuestNode_End">
+                <outcome>Success</outcome>
+              </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--Archive: extraterrestrial-->
+  <QuestScriptDef>
+    <defName>HVMP_ArchiveExtraterrestrial</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[droneAdj] [drone]</li>
+        <li>questName->[asker_nameDef]'s [drone]</li>
+
+        <li>droneAdj->guarded</li>
+        <li>droneAdj->protected</li>
+        <li>droneAdj->escorted</li>
+        <li>droneAdj->critical</li>
+        <li>droneAdj->historical</li>
+        <li>droneAdj->secret-keeping</li>
+        <li>droneAdj->knowledgeable</li>
+        <li>droneAdj->valuable</li>
+		
+        <li>drone->spacedrone</li>
+        <li>drone->drone</li>
+        <li>drone->satellite</li>
+        <li>drone->datacrypt</li>
+        <li>drone->spacecraft</li>
+        <li>drone->USV</li>
+        <li>drone->dronecraft</li>
+        <li>drone->repository</li>
+        <li>drone->librarium</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>dangersDescription(priority=1)->\n\nThe drone is protected by these dangers:
+\n[allThreats]</li>
+        <li>dangersDescription-></li>
+        <li>questDescription(asker_factionLeader==True)->[asker_nameDef], [asker_faction_leaderTitle] of [asker_faction_name], is making a request. [commonMainPart]</li>
+        <li>questDescription(asker_royalInCurrentFaction==True)->[asker_nameDef], a [asker_royalTitleInCurrentFaction] of [asker_faction_name], is making a request. [commonMainPart]</li>
+
+        <li>commonMainPart->[asker_possessive] surveillance has identified a spacedrone containing valuable information on the history of this world. [asker_pronoun] has the signal to force it to land at [map_definite], but it is protected by mechanoids. [asker_pronoun] would like you clear out its defenders and hack the drone.[dangersDescription]\n\nThe defenders will initially be dormant for up to [timeToWake] hours.</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits_Ideology.QuestNode_ArchiveIntermediary">
+      <nodes>
+		<li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+          <parms>
+            <pointsFactorTwoStar>1</pointsFactorTwoStar>
+            <pointsFactorThreeStar>1</pointsFactorThreeStar>
+            <selectionWeightOneStar>0.7</selectionWeightOneStar>
+            <selectionWeightTwoStar>0.3</selectionWeightTwoStar>
+            <selectionWeightThreeStar>0</selectionWeightThreeStar>
+            <minPointsTwoStar>10</minPointsTwoStar>
+            <minPointsThreeStar>20</minPointsThreeStar>
+          </parms>
+        </li>
+        <li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		</li>
+        <!-- Spawn Drone + guards after delay -->
+        <li Class="QuestNode_Delay">
+          <delayTicks>600</delayTicks>
+          <node Class="HautsPermits_Ideology.QuestNode_SpawnDronePlusGuards">
+            <tag>hvmp_sdrone</tag>
+            <points>$($points)</points>
+			<droneDef>HVMP_Spacedrone</droneDef>
+			<sleepyTime>5~8</sleepyTime>
+          </node>
+        </li>
+        <!-- Send rewards and end after a delay once hacked -->
+        <li Class="QuestNode_AllSignals">
+          <inSignals>
+            <li>spacedrone.Hacked</li>
+          </inSignals>
+          <node Class="QuestNode_Delay">
+            <delayTicks>300</delayTicks>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+				  <li Class="QuestNode_Set">
+					<name>sendStandardLetter</name>
+					<value>true</value>
+				  </li>
+				  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+					<faction>$faction</faction>
+					<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+					<customLetterText TKey="LetterTextPaymentArrived">You have successfully hacked the spacedrone!\n\nThe Archive Branch's respect for you has increased.</customLetterText>
+				  </li>
+				  <li Class="QuestNode_End">
+					<outcome>Success</outcome>
+					<sendStandardLetter>$sendStandardLetter</sendStandardLetter>
+				  </li>
+              </nodes>
+            </node>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>spacedrone.Destroyed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelShuttleDestroyed">Spacedrone destroyed</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextShuttleDestroyed">The spacedrone was destroyed. The Archive Branch's respect for you has diminished.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>HVMP_SpacedroneDestroyed</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+</Defs>

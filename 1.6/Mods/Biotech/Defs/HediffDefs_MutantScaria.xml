@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--quest hediffs-->
+  <HediffDef Name="HVMP_MSBase" ParentName="HVT_TraitHediffBase" Abstract="True">
+	<isBad>true</isBad>
+	<defaultLabelColor>(1, 1, 0.92)</defaultLabelColor>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_MSBase">
+	<defName>HVMP_ScariaAcidBreath</defName>
+	<label>acid breath mutation</label>
+	<hediffClass>HautsPermits_Biotech.Hediff_AnimalAbility</hediffClass><!--animals don't normally have an ability tracker, but they CAN have one. You just need to shake the game by the shoulders until it acquiesces-->
+	<description>A mutant scaria strain enables this creature to expel accumulated acids in a discrete blast.</description>
+	<abilities>
+	  <li>HVMP_AcidBreath</li>
+	</abilities>
+  </HediffDef>
+	  <AbilityDef>
+		<defName>HVMP_AcidBreath</defName>
+		<label>acid breath</label>
+		<description>Spray a sticky acid substance all over the target area. The acid will stick to targets and burn them.</description>
+		<iconPath>UI/Abilities/AcidSpray</iconPath>
+		<cooldownTicksRange>30000</cooldownTicksRange>
+		<aiCanUse>true</aiCanUse>
+		<displayOrder>300</displayOrder>
+		<sendMessageOnCooldownComplete>true</sendMessageOnCooldownComplete>
+		<warmupStartSound>AcidSpray_Warmup</warmupStartSound>
+		<verbProperties>
+		  <verbClass>Verb_CastAbility</verbClass>
+		  <range>20</range>
+		  <warmupTime>0.25</warmupTime>
+		  <soundCast>AcidSpray_Resolve</soundCast>
+		  <targetParams>
+			<canTargetLocations>true</canTargetLocations>
+		  </targetParams>
+		</verbProperties>
+		<comps>
+		  <li Class="CompProperties_AbilitySprayLiquid">
+			<projectileDef>Proj_Acid</projectileDef>
+			<numCellsToHit>1</numCellsToHit>
+			<sprayEffecter>AcidSpray_Directional</sprayEffecter>
+		  </li>
+		  <li Class="HautsFramework.CompProperties_AbilityAiScansForTargets"><!--ordinarily aiCanUse being true would be enough, but scaria animals are in a manhunting mental state so they won't use abilities. we use this to make them do it-->
+			<compClass>HautsFramework.CompAbilityEffect_AiScansForTargets</compClass>
+			<periodicity>500</periodicity>
+			<scanForPawnsOnly>true</scanForPawnsOnly>
+			<onlyHostiles>true</onlyHostiles>
+			<usableInMentalStates>true</usableInMentalStates>
+		  </li>
+		</comps>
+		<modExtensions>
+			<li Class="HautsFramework.Hauts_SpewAbility" />
+		</modExtensions>
+	  </AbilityDef>
+	  <ThingDef>
+		<defName>Proj_Acid</defName>
+		<label>acid</label>
+		<thingClass>Projectile_Liquid</thingClass>
+		<category>Projectile</category>
+		<tickerType>Normal</tickerType>
+		<altitudeLayer>Projectile</altitudeLayer>
+		<useHitPoints>False</useHitPoints>
+		<neverMultiSelect>True</neverMultiSelect>
+		<graphicData>
+		  <texPath>Things/Projectile/Acid</texPath>
+		  <graphicClass>Graphic_Random</graphicClass>
+		  <shaderType>MoteGlow</shaderType>
+		  <drawSize>0.85</drawSize>
+		</graphicData>
+		<projectile>
+		  <damageDef>AcidBurn</damageDef>
+		  <speed>13</speed>
+		  <damageAmountBase>15</damageAmountBase>
+		  <arcHeightFactor>0.4</arcHeightFactor>
+		  <armorPenetrationBase>0.8</armorPenetrationBase>
+		  <stoppingPower>1</stoppingPower>
+		  <shadowSize>0</shadowSize>
+		  <filth>Filth_SpentAcid</filth>
+		  <filthCount>1</filthCount>
+		</projectile>
+	  </ThingDef>
+  <HediffDef ParentName="HVMP_MSBase">
+	<defName>HVMP_ScariaBrightdeath</defName>
+	<label>brightdeath mutation</label>
+	<hediffClass>HediffWithComps</hediffClass>
+	<description>A mutant scaria strain produces a searingly luminescent compound within this creature's body. When it dies, it will release a flash that burns its corpse and blinds nearby beings that do not also possess this mutation. It may even catch on fire.</description>
+	<comps>
+	  <li Class="HautsPermits_Biotech.HediffCompProperties_Brightdeath">
+		<flashRadius>4</flashRadius>
+		<hediff>HVMP_BrightdeathFlash</hediff>
+		<mote>HVMP_Mote_BrightdeathCorpseGlow</mote>
+		<sound>Pawn_Mech_Fabricor_Death</sound>
+		<flameChance>0.1</flameChance>
+	  </li>
+	</comps>
+  </HediffDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_BrightdeathFlash</defName>
+		<label>brightdeath flash</label>
+		<description>Temporary blindness due to being too close to a dying brightdeath mutant.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(1.0, 1.0, 0.85)</defaultLabelColor>
+		<initialSeverity>0.3</initialSeverity>
+		<maxSeverity>0.3</maxSeverity>
+		<stages>
+		  <li>
+			<capMods>
+			  <li>
+				<capacity>Sight</capacity>
+				<postFactor>0.2</postFactor>
+			  </li>
+			</capMods>
+		  </li>
+		</stages>
+		<comps>
+		  <li Class="HediffCompProperties_SeverityPerDay">
+			<severityPerDay>-24</severityPerDay>
+			<showDaysToRecover>true</showDaysToRecover>
+		  </li>
+		  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+		</comps>
+	  </HediffDef>
+	  <ThingDef ParentName="MoteBase">
+		<defName>HVMP_Mote_BrightdeathCorpseGlow</defName>
+		<thingClass>MoteAttached</thingClass>
+		<altitudeLayer>MoteOverhead</altitudeLayer>
+		<mote>
+		  <fadeInTime>0.35</fadeInTime>
+		  <fadeOutTime>0.25</fadeOutTime>
+		  <solidTime>1</solidTime>
+		  <needsMaintenance>False</needsMaintenance>
+		</mote>
+		<graphicData>
+		  <graphicClass>Graphic_PawnBodySilhouette</graphicClass>
+		  <color>(1, 1, 0.87, 1.0)</color>
+		  <shaderType>MoteMultiplyAddScroll</shaderType>
+		  <texPath>Things/Mote/Transparent</texPath>
+		  <shaderParameters>
+			<_MultiplyTexA>/Things/Mote/Cloudy_B</_MultiplyTexA>
+			<_MultiplyTexB>/Things/Mote/Cloudy_C</_MultiplyTexB>
+			<_DetailTex>/Things/Mote/Speckles</_DetailTex>
+			<_detailIntensity>1.3</_detailIntensity>
+			<_texAScale>0.4</_texAScale>
+			<_texBScale>0.3</_texBScale>
+			<_DetailScale>1.25</_DetailScale>
+			<_texAScrollSpeed>(0, 0.15, 0)</_texAScrollSpeed>
+			<_texBScrollSpeed>(0.12, 0, 0)</_texBScrollSpeed>
+			<_detailScrollSpeed>(0.15, 0.15, 0)</_detailScrollSpeed>
+		  </shaderParameters>
+		</graphicData>
+	  </ThingDef>
+  <HediffDef ParentName="HVMP_MSBase">
+	<defName>HVMP_ScariaFrenzy</defName>
+	<label>frenzy mutation</label>
+	<hediffClass>HediffWithComps</hediffClass>
+	<description>A mutant scaria strain randomly induces a frenzied state in this creature, during which it ignores pain and acts faster, but is less accurate and nimble.</description>
+    <minSeverity>0.001</minSeverity>
+    <initialSeverity>0.001</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+	<stages>
+      <li>
+        <label>inactive</label>
+      </li>
+      <li>
+        <minSeverity>1</minSeverity>
+        <label>active</label>
+        <painFactor>0</painFactor>
+        <statFactors>
+		  <MeleeCooldownFactor>0.7</MeleeCooldownFactor>
+		</statFactors>
+        <statOffsets>
+		  <MeleeHitChance>-3</MeleeHitChance>
+		  <MeleeDodgeChance>-3</MeleeDodgeChance>
+		</statOffsets>
+		<capMods>
+		  <li>
+			<capacity>Moving</capacity>
+			<postFactor>1.25</postFactor>
+		  </li>
+		</capMods>
+      </li>
+	</stages>
+	<comps>
+	  <li Class="HautsPermits_Biotech.HediffCompProperties_FrenzyTimer">
+		<frenzyCooldown>2300~2700</frenzyCooldown>
+		<frenzyChancePerHourFifth>0.1</frenzyChancePerHourFifth>
+		<frenzyDuration>1900~2900</frenzyDuration>
+		<moteToPlayOnFrenzy>Mote_RedFlashStrong</moteToPlayOnFrenzy>
+	  </li>
+	</comps>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_MSBase">
+	<defName>HVMP_ScariaHatchery</defName>
+	<label>hatchery mutation</label>
+	<hediffClass>HautsPermits_Biotech.Hediff_Broodlings</hediffClass><!--it is Wednesday my brood-->
+	<description>A mutant scaria strain has turned this creature's body into fertile ground for megascarab eggs. On death, a scaria-infected megascarab may emerge from the corpse.</description>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_MSBase">
+	<defName>HVMP_ScariaInnerFire</defName>
+	<label>superthermal mutation</label>
+	<hediffClass>HautsFramework.Hediff_HasExtraOnHitEffects</hediffClass>
+	<description>A mutant scaria strain has greatly increased this creature's internal body temperature, yet it somehow remains alive. Its attacks char the flesh of enemies.</description>
+	<stages>
+      <li>
+		<statOffsets>
+			<ComfyTemperatureMin>-30</ComfyTemperatureMin>
+			<ComfyTemperatureMax>30</ComfyTemperatureMax>
+		</statOffsets>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HautsFramework.HediffCompProperties_ExtraDamageOnHit">
+		<extraDamages>
+          <li>
+            <def>Burn</def>
+            <amount>2</amount>
+            <chance>1</chance>
+          </li>
+          <li>
+            <def>Flame</def>
+            <amount>1</amount>
+            <chance>0.1</chance>
+          </li>
+		</extraDamages>
+		<appliedViaAttacks>true</appliedViaAttacks>
+		<damageScaling>false</damageScaling>
+		<cellRange>3</cellRange>
+		<canAffectMechs>false</canAffectMechs>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_MSBase">
+	<defName>HVMP_ScariaMucusLayer</defName>
+	<label>mucus layer mutation</label>
+	<description>A thick layer of mucus coating this creature, caused by its mutant scaria strain.</description>
+	<stages>
+	  <li>
+		<statFactors>
+			<Flammability>0</Flammability>
+		</statFactors>
+		<statOffsets>
+			<ArmorRating_Heat>0.3</ArmorRating_Heat>
+			<ArmorRating_Blunt>0.1</ArmorRating_Blunt>
+			<ArmorRating_Sharp>0.1</ArmorRating_Sharp>
+		</statOffsets>
+		<capMods>
+		  <li>
+			<capacity>Manipulation</capacity>
+			<offset>-0.1</offset>
+		  </li>
+		</capMods>
+	  </li>
+	</stages>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_MSBase">
+	<defName>HVMP_ScariaResilience</defName>
+	<label>resilience mutation</label>
+	<description>A mutant scaria strain deadens this creature's pain receptors and calcifies its flesh, but this also slows it down.</description>
+	<stages>
+	  <li>
+        <painFactor>0</painFactor>
+		<statFactors>
+			<IncomingDamageFactor>0.75</IncomingDamageFactor>
+		</statFactors>
+		<capMods>
+		  <li>
+			<capacity>Moving</capacity>
+			<offset>-0.1</offset>
+		  </li>
+		</capMods>
+	  </li>
+	</stages>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_MSBase">
+	<defName>HVMP_ScariaSavagery</defName>
+	<label>savagery mutation</label>
+	<description>A mutant scaria strain amplifies the power behind this creature's melee attacks.</description>
+	<stages>
+	  <li>
+		<statOffsets>
+			<MeleeDamageFactor>0.4</MeleeDamageFactor>
+		</statOffsets>
+	  </li>
+	</stages>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_MSBase">
+	<defName>HVMP_ScariaTunneling</defName>
+	<label>tunneling mutation</label>
+	<description>A mutant scaria strain amplifies the ability of this creature to dig through or demolish structures. Deformed dermis has trapped detritus and stone, increasing its armor as well.</description>
+	<stages>
+	  <li>
+		<statOffsets>
+			<Hauts_BreachDamageFactor>1</Hauts_BreachDamageFactor>
+			<ArmorRating_Blunt>0.12</ArmorRating_Blunt>
+			<ArmorRating_Sharp>0.12</ArmorRating_Sharp>
+		</statOffsets>
+	  </li>
+	</stages>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_MSBase">
+	<defName>HVMP_ScariaVengeant</defName>
+	<label>vengeant mutation</label>
+	<hediffClass>HediffWithComps</hediffClass>
+	<description>A mutant scaria strain induces a thanatalogical pack mentality among the infected. When this creature dies, nearby beings with this mutation will temporarily enter a rage-driven enhanced state.</description>
+	<comps>
+	  <li Class="HautsPermits_Biotech.HediffCompProperties_Vengeant">
+		<vengeanceRadius>4</vengeanceRadius>
+		<hediff>HVMP_VengersSsemble</hediff>
+	  </li>
+	</comps>
+  </HediffDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_VengersSsemble</defName>
+		<label>mutant vengeance</label>
+		<description>Temporary rage brought about by witnessing a fellow scaria mutant die.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(1.0, 1.0, 0.85)</defaultLabelColor>
+		<initialSeverity>1</initialSeverity>
+		<maxSeverity>1</maxSeverity>
+		<stages>
+		  <li>
+			<painFactor>0.25</painFactor>
+			<capMods>
+			  <li>
+				<capacity>Moving</capacity>
+				<offset>0.2</offset>
+			  </li>
+			  <li>
+				<capacity>Manipulation</capacity>
+				<offset>0.2</offset>
+			  </li>
+			</capMods>
+		  </li>
+		</stages>
+		<comps>
+		  <li Class="HediffCompProperties_SeverityPerDay">
+			<severityPerDay>-24</severityPerDay>
+			<showDaysToRecover>true</showDaysToRecover>
+		  </li>
+		  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+		</comps>
+	  </HediffDef>
+  
+</Defs>

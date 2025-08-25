@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Cooler Psycasts</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<!--psychic unveiler disrupts ghoul psychic invisibility-->
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/HediffDef[defName="CoolPsycasts_PsychicUnveilerHD"]/comps/li[@Class="CoolPsycasts.HediffCompProperties_NegateHediffs"]/hediffs</xpath>
+					<match Class="PatchOperationAdd">
+						<xpath>/Defs/HediffDef[defName="CoolPsycasts_PsychicUnveilerHD"]/comps/li[@Class="CoolPsycasts.HediffCompProperties_NegateHediffs"]/hediffs</xpath>
+						<value>
+							<li>HVMP_OccultInvisibility</li>
+						</value>
+					</match>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+</Patch>

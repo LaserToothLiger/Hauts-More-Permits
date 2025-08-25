@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--'tank relationship' button-->
+  <HistoryEventDef>
+    <defName>HVMP_CutTiesWithBranch</defName>
+    <label>cut ties</label>
+  </HistoryEventDef>
+  <!--comms console-->
+  <HistoryEventDef>
+    <defName>HVMP_SolicitedQuest</defName>
+    <label>solicited quest from e-branch</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_RefreshedPermitCDs</defName>
+    <label>refreshed permit cooldowns</label>
+  </HistoryEventDef>
+  <!--permits-->
+  <HistoryEventDef>
+    <defName>HVMP_IngratiationAccepted</defName>
+    <label>accepted ingratiating bribe</label>
+  </HistoryEventDef>
+  <!--quests-->
+  <HistoryEventDef>
+    <defName>HVMP_IgnoredQuest</defName>
+    <label>passed up quest from e-branch</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_QuestExpired</defName>
+    <label>quest timed out</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_ChaincomputerDestroyed</defName>
+    <label>chaincomputer destroyed</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_MarketReportDestroyed</defName>
+    <label>market report destroyed</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_PaxTalksFailed</defName>
+    <label>pax negotiations failed</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_AtlasDestroyed</defName>
+    <label>atlas destroyed</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_LandmarkDestroyed</defName>
+    <label>destroyed landmark</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_LandmarkConstructionExpired</defName>
+    <label>landmark construction expired</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_LandmarkConstructionMapRemoved</defName>
+    <label>landmark construction abandoned</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVG_MissedShuttle</defName>
+    <label>missed shuttle pickup</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_SartifactDestroyed</defName>
+    <label>strange artifact destroyed</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_ShuttleLost</defName>
+    <label>crashed shuttle lost</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_SpacedroneDestroyed</defName>
+    <label>spacedrone destroyed</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_NaturePreserveViolated</defName>
+    <label>nature preserve violated</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_NaturePreserveMapRemoved</defName>
+    <label>nature preserve abandoned</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_RpackageDestroyed</defName>
+    <label>gene-engineering package destroyed</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_PerformedHarmfulInjection</defName>
+    <label>harmful injection on member</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_VoidLensDestroyed</defName>
+    <label>void lens destroyed</label>
+  </HistoryEventDef>
+  
+</Defs>

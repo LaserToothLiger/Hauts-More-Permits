@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_EnterpriseSecurityCrate</defName>
+    <label>enterprise security vault</label>
+    <description>A large self-powered hermetically-sealed vault with built-in digital security and nigh-impenetrable walls. These can preserve their contents for a long time.\n\nThese sorts of containers are typically used to contain valuable technology, which the Enterprise and its branches do not give even to their most stalwart allies.</description>
+    <size>(2, 2)</size>
+    <fillPercent>0.50</fillPercent>
+    <graphicData>
+      <texPath>Things/Building/AncientHatch/AncientHatch_Closed</texPath>
+      <graphicClass>Graphic_Single</graphicClass><!--switch to multi on receipt of new one-->
+      <drawSize>(2, 2)</drawSize>
+      <shadowData>
+        <volume>(2, 0.45, 1.75)</volume>
+      </shadowData>
+    </graphicData>
+    <stealable>false</stealable>
+    <rotatable>false</rotatable>
+	<useHitPoints>false</useHitPoints>
+    <statBases>
+      <Flammability>0</Flammability>
+    </statBases>  
+    <building>
+      <openingEffect>SecurityCrateOpened</openingEffect>
+	  <deconstructible>false</deconstructible>
+	  <isTargetable>false</isTargetable>
+	  <claimable>false</claimable>
+    </building>
+    <comps>
+      <!--<li Class="CompProperties_EmptyStateGraphic">
+        <graphicData>
+          <texPath>Things/Building/Ruins/AncientSecurityCrateOpen</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>(2, 2)</drawSize>
+        </graphicData>
+      </li>-->
+      <li Class="CompProperties_ThrownFleckEmitter">
+        <fleck>TerminalScreenLensFlare</fleck>
+        <offsetMin>(-0.7,0,0.9)</offsetMin>
+        <offsetMax>(0,0,0.9)</offsetMax>
+        <emissionInterval>90</emissionInterval>
+        <scale>1~1.1</scale>
+        <colorA>(214,46,31,255)</colorA>
+        <colorB>(214,46,31,255)</colorB>
+      </li>
+      <li Class="CompProperties_Glower">
+        <glowRadius>4</glowRadius>
+        <glowColor>(214,46,31,0)</glowColor>
+      </li>
+      <li Class="CompProperties_Hackable">
+        <defence>3500</defence>
+        <effectHacking>HackingTerminal</effectHacking>
+		<lockoutDurationHoursRange>1~2</lockoutDurationHoursRange>
+      </li>
+	  <li Class="HautsPermits.CompProperties_CreateRewardsForHack">
+	    <guaranteedReward>HVMP_RewardPermitAuth</guaranteedReward>
+	    <bonusRewardCount>2</bonusRewardCount>
+		<soundOnUnlock>AncientHatchOpened</soundOnUnlock>
+	  </li>
+    </comps>
+    <tickerType>Normal</tickerType>
+  </ThingDef>
+  
+  <HautsPermits.HackRewardDef>
+    <defName>HVMP_RewardPermitAuth</defName>
+    <itemsToDrop>
+        <HVMP_PermitTargeter>1</HVMP_PermitTargeter>
+    </itemsToDrop>
+	<baseChance>0.5</baseChance>
+  </HautsPermits.HackRewardDef>
+  
+  <HautsPermits.HackRewardDef>
+    <defName>HVMP_RewardMoolah</defName>
+    <itemsToDrop>
+        <Silver>500</Silver>
+        <Silver>500</Silver>
+        <Silver>500</Silver>
+        <Silver>500</Silver>
+        <Silver>500</Silver>
+        <Silver>500</Silver>
+        <Silver>500</Silver>
+        <Silver>500</Silver>
+        <Gold>50</Gold>
+    </itemsToDrop>
+	<guaranteedForFaction>HVMP_CommerceBranch</guaranteedForFaction>
+	<baseChance>0</baseChance>
+  </HautsPermits.HackRewardDef>
+  <HautsPermits.HackRewardDef>
+    <defName>HVMP_RewardMoolahGeneric</defName>
+    <itemsToDrop>
+        <Silver>500</Silver>
+        <Silver>300</Silver>
+        <Gold>10</Gold>
+    </itemsToDrop>
+	<baseChance>0.2</baseChance>
+  </HautsPermits.HackRewardDef>
+  
+  <HautsPermits.HackRewardDef>
+    <defName>HVMP_RewardBlackbodyShieldUnit</defName>
+    <itemsToDrop>
+        <HVMP_BSU>1</HVMP_BSU>
+    </itemsToDrop>
+	<guaranteedForFaction>HVMP_PaxBranch</guaranteedForFaction>
+	<baseChance>0.2</baseChance>
+  </HautsPermits.HackRewardDef>
+  
+  <HautsPermits.HackRewardDef>
+    <defName>HVMP_RewardGatepuncher</defName>
+    <itemsToDrop>
+        <HVMP_Gatepuncher>1</HVMP_Gatepuncher>
+    </itemsToDrop>
+	<guaranteedForFaction>HVMP_RoverBranch</guaranteedForFaction>
+	<baseChance>0.2</baseChance>
+  </HautsPermits.HackRewardDef>
+  
+  <HautsPermits.HackRewardDef>
+    <defName>HVMP_RewardIngressor</defName>
+    <itemsToDrop>
+        <HVMP_Ingressor>1</HVMP_Ingressor>
+    </itemsToDrop>
+	<guaranteedForFaction MayRequire="Ludeon.RimWorld.Ideology">HVMP_ArchiveBranch</guaranteedForFaction>
+	<baseChance>0.2</baseChance>
+  </HautsPermits.HackRewardDef>
+  
+  <HautsPermits.HackRewardDef>
+    <defName>HVMP_RewardBiofilmMedicine</defName>
+    <itemsToDrop>
+        <HVMP_BiofilmMedicine>5</HVMP_BiofilmMedicine>
+    </itemsToDrop>
+	<guaranteedForFaction MayRequire="Ludeon.RimWorld.Biotech">HVMP_EcosphereBranch</guaranteedForFaction>
+	<baseChance>0.2</baseChance>
+  </HautsPermits.HackRewardDef>
+  
+  <HautsPermits.HackRewardDef>
+    <defName>HVMP_RewardProbabilityTuner</defName>
+    <itemsToDrop>
+        <HVMP_ProbabilityTuner>1</HVMP_ProbabilityTuner>
+    </itemsToDrop>
+	<guaranteedForFaction MayRequire="Ludeon.RimWorld.Anomaly">HVMP_OccultBranch</guaranteedForFaction>
+	<baseChance>0.2</baseChance>
+  </HautsPermits.HackRewardDef>
+
+</Defs>

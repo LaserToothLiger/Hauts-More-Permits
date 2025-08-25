@@ -1,0 +1,1385 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<!--trade these at comms console to an e-branch for standing w them. lets start w commerce-->
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/ThingDef[defName="ThrumboHorn"]/statBases/RoyalFavorValue</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/ThingDef[defName="ThrumboHorn"]/statBases</xpath>
+			<value>
+				<RoyalFavorValue>0.2</RoyalFavorValue>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationReplace">
+			<xpath>/Defs/ThingDef[defName="ThrumboHorn"]/statBases/RoyalFavorValue</xpath>
+			<value>
+				<RoyalFavorValue>0.2</RoyalFavorValue>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/ThingDef[defName="ElephantTusk"]/statBases/RoyalFavorValue</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/ThingDef[defName="ElephantTusk"]/statBases</xpath>
+			<value>
+				<RoyalFavorValue>0.05</RoyalFavorValue>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationReplace">
+			<xpath>/Defs/ThingDef[defName="ElephantTusk"]/statBases/RoyalFavorValue</xpath>
+			<value>
+				<RoyalFavorValue>0.05</RoyalFavorValue>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/ThingDef[defName="Silver"]/statBases/RoyalFavorValue</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/ThingDef[defName="Silver"]/statBases</xpath>
+			<value>
+				<RoyalFavorValue>0.0004</RoyalFavorValue>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationReplace">
+			<xpath>/Defs/ThingDef[defName="Silver"]/statBases/RoyalFavorValue</xpath>
+			<value>
+				<RoyalFavorValue>0.0004</RoyalFavorValue>
+			</value>
+		</match>
+	</Operation>
+	<!--pax-->
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/ThingDef[defName="Luciferium"]/statBases/RoyalFavorValue</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/ThingDef[defName="Luciferium"]/statBases</xpath>
+			<value>
+				<RoyalFavorValue>0.09</RoyalFavorValue>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationReplace">
+			<xpath>/Defs/ThingDef[defName="Luciferium"]/statBases/RoyalFavorValue</xpath>
+			<value>
+				<RoyalFavorValue>0.09</RoyalFavorValue>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/ThingDef[defName="BroadshieldCore"]/statBases/RoyalFavorValue</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/ThingDef[defName="BroadshieldCore"]/statBases</xpath>
+			<value>
+				<RoyalFavorValue>0.15</RoyalFavorValue>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationReplace">
+			<xpath>/Defs/ThingDef[defName="BroadshieldCore"]/statBases/RoyalFavorValue</xpath>
+			<value>
+				<RoyalFavorValue>0.15</RoyalFavorValue>
+			</value>
+		</match>
+	</Operation>
+	<!--rover-->
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/ThingDef[defName="AIPersonaCore"]/statBases/RoyalFavorValue</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/ThingDef[defName="AIPersonaCore"]/statBases</xpath>
+			<value>
+				<RoyalFavorValue>6</RoyalFavorValue>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationReplace">
+			<xpath>/Defs/ThingDef[defName="AIPersonaCore"]/statBases/RoyalFavorValue</xpath>
+			<value>
+				<RoyalFavorValue>6</RoyalFavorValue>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/ThingDef[defName="Synthread"]/statBases/RoyalFavorValue</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/ThingDef[defName="Synthread"]/statBases</xpath>
+			<value>
+				<RoyalFavorValue>0.007</RoyalFavorValue>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationReplace">
+			<xpath>/Defs/ThingDef[defName="Synthread"]/statBases/RoyalFavorValue</xpath>
+			<value>
+				<RoyalFavorValue>0.007</RoyalFavorValue>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/ThingDef[defName="Hyperweave"]/statBases/RoyalFavorValue</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/ThingDef[defName="Hyperweave"]/statBases</xpath>
+			<value>
+				<RoyalFavorValue>0.015</RoyalFavorValue>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationReplace">
+			<xpath>/Defs/ThingDef[defName="Hyperweave"]/statBases/RoyalFavorValue</xpath>
+			<value>
+				<RoyalFavorValue>0.015</RoyalFavorValue>
+			</value>
+		</match>
+	</Operation>
+	
+	<!--compats-->
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Alpha Animals</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<!--Commerce-->
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="AA_GallatrossHorn"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="AA_GallatrossHorn"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>1.5</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="AA_GallatrossHorn"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>1.5</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="HVMP_CommerceDonations"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>AA_GallatrossHorn</thingDef>
+					  </li>
+					</value>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Alpha Books</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<!--Commerce-->
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="ABooks_MidasTome"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="ABooks_MidasTome"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.35</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="ABooks_MidasTome"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.35</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="HVMP_CommerceDonations"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>ABooks_MidasTome</thingDef>
+					  </li>
+					</value>
+				</li>
+				<!--Pax-->
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="ABooks_ArmyManual"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="ABooks_ArmyManual"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.35</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="ABooks_ArmyManual"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.35</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="HVMP_PaxDonations"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>ABooks_ArmyManual</thingDef>
+					  </li>
+					</value>
+				</li>
+				<!--Rover-->
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="ABooks_AdventuringLogs"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="ABooks_AdventuringLogs"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.35</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="ABooks_AdventuringLogs"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.35</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="ABooks_SurvivalGuide"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="ABooks_SurvivalGuide"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.35</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="ABooks_SurvivalGuide"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.35</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="HVMP_RoverDonations"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>ABooks_AdventuringLogs</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>ABooks_SurvivalGuide</thingDef>
+					  </li>
+					</value>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Grimstone : Beasts</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<!--Commerce-->
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="Grimstone_BellocerosHorn"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="Grimstone_BellocerosHorn"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.05</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="Grimstone_BellocerosHorn"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.05</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="Grimstone_GrimshadowSkull"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="Grimstone_GrimshadowSkull"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.22</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="Grimstone_GrimshadowSkull"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.22</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional"><!--ivory recipes produce 30 from an elephant tusk or belloceros horn, so rendering those down into ivory gives you slightly more standing-->
+					<xpath>/Defs/ThingDef[defName="Grimstone_Ivory"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="Grimstone_Ivory"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.0025</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="Grimstone_Ivory"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.0025</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="HVMP_CommerceDonations"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>Grimstone_BellocerosHorn</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>Grimstone_GrimshadowSkull</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>Grimstone_Ivory</thingDef>
+					  </li>
+					</value>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Kenshi Fauna</li>
+			<li>Kenshi Fauna 1.6 (Forked)</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<!--Commerce-->
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="KenshiFauna_LeviathanPearl"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="KenshiFauna_LeviathanPearl"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.8</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="KenshiFauna_LeviathanPearl"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.8</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="HVMP_CommerceDonations"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>KenshiFauna_LeviathanPearl</thingDef>
+					  </li>
+					</value>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Mythic Ages: Megafauna Bestiary</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<!--Commerce-->
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="MA_PlastemmothTusk"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="MA_PlastemmothTusk"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.14</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="MA_PlastemmothTusk"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.14</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="MA_DeermossHorn"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="MA_DeermossHorn"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.05</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="MA_DeermossHorn"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.05</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="MA_ScarSaberTooth"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="MA_ScarSaberTooth"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.04</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="MA_ScarSaberTooth"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.04</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="MA_DuskhornHorn"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="MA_DuskhornHorn"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.04</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="MA_DuskhornHorn"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.04</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="MA_RaptorkhanClaw"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="MA_RaptorkhanClaw"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.02</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="MA_RaptorkhanClaw"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.02</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="HVMP_CommerceDonations"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>MA_PlastemmothTusk</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>MA_DeermossHorn</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>MA_ScarSaberTooth</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>MA_DuskhornHorn</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>MA_RaptorkhanClaw</thingDef>
+					  </li>
+					</value>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Ideology</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="Urn"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="Urn"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.03</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="Urn"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.03</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="SculptureSmall"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="SculptureSmall"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.025</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="SculptureSmall"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.025</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="SculptureLarge"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="SculptureLarge"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.05</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="SculptureLarge"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.05</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="SculptureTerror"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="SculptureTerror"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.05</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="SculptureTerror"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.05</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="SculptureGrand"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="SculptureGrand"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.1</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="SculptureGrand"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.1</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Biotech</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<!--Ecosphere-->
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="GauranlenSeed"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="GauranlenSeed"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.15</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="GauranlenSeed"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.15</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>/Defs/TraderKindDef[defName="HVMP_EcosphereDonations"]/stockGenerators</xpath>
+								<value>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>GauranlenSeed</thingDef>
+								  </li>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Alpha Books</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="ABooks_PoliticalPamphlet"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="ABooks_PoliticalPamphlet"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.35</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="ABooks_PoliticalPamphlet"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.35</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="ABooks_RestaurantGuide"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="ABooks_RestaurantGuide"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.35</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="ABooks_RestaurantGuide"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.35</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>/Defs/TraderKindDef[defName="HVMP_ArchiveDonations"]/stockGenerators</xpath>
+								<value>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>ABooks_PoliticalPamphlet</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>ABooks_RestaurantGuide</thingDef>
+								  </li>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Tradeable Trinkets (Continued)</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<!--Archive-->
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="CM_Tradeable_Trinkets_Thing_Trinket_Tribal"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="CM_Tradeable_Trinkets_Thing_Trinket_Tribal"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.01</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="CM_Tradeable_Trinkets_Thing_Trinket_Tribal"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.01</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="CM_Tradeable_Trinkets_Thing_Trinket_Doll"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="CM_Tradeable_Trinkets_Thing_Trinket_Doll"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.01</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="CM_Tradeable_Trinkets_Thing_Trinket_Doll"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.01</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="CM_Tradeable_Trinkets_Thing_Trinket_Industrial"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="CM_Tradeable_Trinkets_Thing_Trinket_Industrial"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.015</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="CM_Tradeable_Trinkets_Thing_Trinket_Industrial"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.015</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="CM_Tradeable_Trinkets_Thing_Trinket_Spacer"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="CM_Tradeable_Trinkets_Thing_Trinket_Spacer"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.055</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="CM_Tradeable_Trinkets_Thing_Trinket_Spacer"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.055</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>/Defs/TraderKindDef[defName="HVMP_ArchiveDonations"]/stockGenerators</xpath>
+								<value>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>CM_Tradeable_Trinkets_Thing_Trinket_Tribal</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>CM_Tradeable_Trinkets_Thing_Trinket_Doll</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>CM_Tradeable_Trinkets_Thing_Trinket_Industrial</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>CM_Tradeable_Trinkets_Thing_Trinket_Spacer</thingDef>
+								  </li>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Vanilla Furniture Expanded - Art</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<!--Archive-->
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="VFE_Pottery"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="VFE_Pottery"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.004</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="VFE_Pottery"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.004</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="VFE_Carving"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="VFE_Carving"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.005</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="VFE_Carving"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.005</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="VFE_Relief"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="VFE_Relief"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.1</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="VFE_Relief"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.1</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="VFE_Obelisk"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="VFE_Obelisk"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.05</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="VFE_Obelisk"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.05</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="VFE_Plinth"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="VFE_Plinth"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.04</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="VFE_Plinth"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.04</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="VFE_StatueSmall"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="VFE_StatueSmall"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.025</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="VFE_StatueSmall"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.025</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="VFE_StatueLarge"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="VFE_StatueLarge"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.05</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="VFE_StatueLarge"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.05</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="VFE_StatueGrand"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="VFE_StatueGrand"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.075</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="VFE_StatueGrand"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.075</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="VFE_Monument"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="VFE_Monument"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.2</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="VFE_Monument"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.2</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="VFE_RugSmall"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="VFE_RugSmall"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.015</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="VFE_RugSmall"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.015</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="VFE_RugLarge"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="VFE_RugLarge"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.045</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="VFE_RugLarge"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.045</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="VFE_RugGrand"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="VFE_RugGrand"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.08</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="VFE_RugGrand"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.08</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>/Defs/TraderKindDef[defName="HVMP_ArchiveDonations"]/stockGenerators</xpath>
+								<value>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>VFE_Pottery</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>VFE_Carving</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>VFE_Relief</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>VFE_Obelisk</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>VFE_Plinth</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>VFE_StatueSmall</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>VFE_StatueLarge</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>VFE_StatueGrand</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>VFE_Monument</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>VFE_RugSmall</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>VFE_RugLarge</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>VFE_RugGrand</thingDef>
+								  </li>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Biotech</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<!--Ecosphere-->
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="Ambrosia"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="Ambrosia"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.075</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="Ambrosia"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.075</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="HemogenPack"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="HemogenPack"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.001</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="HemogenPack"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.001</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="HumanOvum"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="HumanOvum"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.015</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="HumanOvum"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.015</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="PoluxSeed"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="PoluxSeed"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.1</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="PoluxSeed"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.1</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Alpha Books</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="ABooks_BotanicalCompendium"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="ABooks_BotanicalCompendium"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.35</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="ABooks_BotanicalCompendium"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.35</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="ABooks_ZoologicalCompendium"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="ABooks_ZoologicalCompendium"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.35</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="ABooks_ZoologicalCompendium"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.35</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>/Defs/TraderKindDef[defName="HVMP_EcosphereDonations"]/stockGenerators</xpath>
+								<value>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>ABooks_BotanicalCompendium</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>ABooks_ZoologicalCompendium</thingDef>
+								  </li>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Anomaly</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="HarbingerSeed"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="HarbingerSeed"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.15</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="HarbingerSeed"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.15</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>/Defs/TraderKindDef[defName="HVMP_EcosphereDonations"]/stockGenerators</xpath>
+								<value>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>HarbingerSeed</thingDef>
+								  </li>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Odyssey</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="ArcheanSeed"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="ArcheanSeed"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.5</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="ArcheanSeed"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.5</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>/Defs/TraderKindDef[defName="HVMP_EcosphereDonations"]/stockGenerators</xpath>
+								<value>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>ArcheanSeed</thingDef>
+								  </li>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Anomaly</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<!--Occult-->
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="Shard"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="Shard"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.35</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="Shard"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.35</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="PsychicAmplifier"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="PsychicAmplifier"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>1</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="PsychicAmplifier"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>1</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Biotech</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="Mechlink"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="Mechlink"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>2.35</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="Mechlink"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>2.35</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>/Defs/TraderKindDef[defName="HVMP_OccultDonations"]/stockGenerators</xpath>
+								<value>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>Mechlink</thingDef>
+								  </li>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Odyssey</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="SentienceCatalyst"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="SentienceCatalyst"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>0.4</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="SentienceCatalyst"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>0.4</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>/Defs/TraderKindDef[defName="HVMP_OccultDonations"]/stockGenerators</xpath>
+								<value>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>SentienceCatalyst</thingDef>
+								  </li>
+								</value>
+							</li>
+							<li Class="PatchOperationConditional">
+								<xpath>/Defs/ThingDef[defName="Apparel_CerebrexNode"]/statBases/RoyalFavorValue</xpath>
+								<nomatch Class="PatchOperationAdd">
+									<xpath>/Defs/ThingDef[defName="Apparel_CerebrexNode"]/statBases</xpath>
+									<value>
+										<RoyalFavorValue>21</RoyalFavorValue>
+									</value>
+								</nomatch>
+								<match Class="PatchOperationReplace">
+									<xpath>/Defs/ThingDef[defName="Apparel_CerebrexNode"]/statBases/RoyalFavorValue</xpath>
+									<value>
+										<RoyalFavorValue>21</RoyalFavorValue>
+									</value>
+								</match>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>/Defs/TraderKindDef[defName="HVMP_OccultDonations"]/stockGenerators</xpath>
+								<value>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>Apparel_CerebrexNode</thingDef>
+								  </li>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	
+	
+	
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Odyssey</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="MastodonTusk"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="MastodonTusk"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.075</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="MastodonTusk"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.075</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="HVMP_CommerceDonations"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>MastodonTusk</thingDef>
+					  </li>
+					</value>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="AlphaThrumboHorn"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="AlphaThrumboHorn"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>1</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="AlphaThrumboHorn"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>1</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="HVMP_CommerceDonations"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>AlphaThrumboHorn</thingDef>
+					  </li>
+					</value>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="ShuttleEngine"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="ShuttleEngine"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>4</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="ShuttleEngine"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>4</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="HVMP_RoverDonations"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>ShuttleEngine</thingDef>
+					  </li>
+					</value>
+				</li>
+			</operations>
+		</match>
+		<nomatch Class="PatchOperationFindMod">
+			<mods>
+				<li>Vanilla Animals Expanded</li>
+			</mods>
+			<match Class="PatchOperationSequence">
+				<operations>
+					<!--Commerce-->
+					<li Class="PatchOperationConditional">
+						<xpath>/Defs/ThingDef[defName="AEXP_WalrusTusk"]/statBases/RoyalFavorValue</xpath>
+						<nomatch Class="PatchOperationAdd">
+							<xpath>/Defs/ThingDef[defName="AEXP_WalrusTusk"]/statBases</xpath>
+							<value>
+								<RoyalFavorValue>0.04</RoyalFavorValue>
+							</value>
+						</nomatch>
+						<match Class="PatchOperationReplace">
+							<xpath>/Defs/ThingDef[defName="AEXP_WalrusTusk"]/statBases/RoyalFavorValue</xpath>
+							<value>
+								<RoyalFavorValue>0.04</RoyalFavorValue>
+							</value>
+						</match>
+					</li>
+					<li Class="PatchOperationAdd">
+						<xpath>/Defs/TraderKindDef[defName="HVMP_CommerceDonations"]/stockGenerators</xpath>
+						<value>
+						  <li Class="StockGenerator_BuySingleDef">
+							<thingDef>AEXP_WalrusTusk</thingDef>
+						  </li>
+						</value>
+					</li>
+				</operations>
+			</match>
+		</nomatch>
+	</Operation>
+</Patch>

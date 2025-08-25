@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!--various loots you get from Branch Platforms-->
+  <ThingDef ParentName="MechSerumBase">
+    <defName>HVMP_PermitTargeter</defName>
+    <label>permit authorizer</label>
+    <description>An implantable surplus Enterprise subpersona core. While installed in a person, it grants them the ability to receive, initiate, and authorize requests to use permits. These are typically installed in trusted individuals high in the Enterprise's organizational structure, combining the rapid data processing power of a machine with the capacities for qualitative judgement of a person.\n\nHowever, when installed in an enemy of the Enterprise, it would instead allow them to use an e-branch's permits even while hostile to them. Whenever a permit authorizer is used in such a way, security systems will temporarily lock the authorizer out of being able to use more permits, for a duration based on the permit's standing cost.</description>
+    <graphicData>
+      <texPath>Things/Item/Special/MechSerumResurrector</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <techLevel>Ultra</techLevel>
+    <tradeTags Inherit="False" />
+    <stackLimit>1</stackLimit>
+    <statBases>
+      <MarketValue>1000</MarketValue>
+    </statBases>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>Sellable</tradeability>
+    <thingSetMakerTags Inherit="False" />
+    <comps>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Use {0_label}</useLabel>
+        <useDuration>0</useDuration>
+        <warmupMote>Mote_ResurrectAbility</warmupMote>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+      <li Class="CompProperties_Targetable">
+        <compClass>CompTargetable_SinglePawn</compClass>
+      </li>
+      <li Class="HautsPermits.CompProperties_TargetEffectInstallPTargeter">
+        <hediffDef>HVMP_PTargeter</hediffDef>
+        <bodyPart>Brain</bodyPart>
+        <soundOnUsed>EnergyShield_Reset</soundOnUsed>
+		<standingGainDefault>3</standingGainDefault>
+		<canUpgrade>true</canUpgrade>
+		<standingGainIfObtainedCorrectly>6</standingGainIfObtainedCorrectly>
+		<cooldownPerStanding>180000</cooldownPerStanding>
+      </li>
+    </comps>
+    <allowedArchonexusCount>1</allowedArchonexusCount>
+  </ThingDef>
+  
+  <ThingDef ParentName="MechSerumBase">
+    <defName>HVMP_BSU</defName>
+    <label>blackbody shield unit</label>
+    <description>A one-use high-energy repulsor field generator. Unlike conventional personal shields, this field is reinforced enough to stop any kind of attack, is resistant to EMPs, and it can absorb immense amounts of damage before failing. However, the shield generator rapidly overheats, causing itself to irreparably burn out over time. Moreover, the intensity of the shield inhibits even the movements of the wearer, and it distorts incoming light, blinding them as well.</description>
+    <graphicData>
+      <texPath>Things/Item/Special/MechSerumResurrector</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+		  <color>(1,0.5804,0.5804,1)</color>
+    </graphicData>
+    <techLevel>Ultra</techLevel>
+    <tradeTags Inherit="False" />
+    <stackLimit>10</stackLimit>
+    <statBases>
+      <MarketValue>1000</MarketValue>
+    </statBases>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>Sellable</tradeability>
+    <thingSetMakerTags Inherit="False" />
+    <comps>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Use {0_label}</useLabel>
+        <useDuration>0</useDuration>
+        <warmupMote>Mote_ResurrectAbility</warmupMote>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+      <li Class="CompProperties_Targetable">
+        <compClass>CompTargetable_SinglePawn</compClass>
+      </li>
+      <li Class="CompProperties_TargetEffectInstallImplantInOtherPawn">
+        <hediffDef>HVMP_BShield</hediffDef>
+        <bodyPart>Brain</bodyPart>
+        <soundOnUsed>EnergyShield_Reset</soundOnUsed>
+      </li>
+    </comps>
+  </ThingDef>
+  
+  <ThingDef ParentName="MechSerumBase">
+    <defName>HVMP_Gatepuncher</defName>
+    <label>gatepuncher implant</label>
+    <description>A nervegel-stimulated electronic link to the Enterprise Branch's teleportation system. Once installed, the host can activate it to open skipgates. However, after four uses (or after one use that can move the host to points outside line of sight) its unauthorized use will be detected, and it will break down harmlessly inside the body.</description>
+    <graphicData>
+      <texPath>Things/Item/Special/MechSerumResurrector</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+		  <color>(0.6039, 0.4941, 0.4941,1)</color>
+    </graphicData>
+    <techLevel>Ultra</techLevel>
+    <tradeTags Inherit="False" />
+    <stackLimit>10</stackLimit>
+    <statBases>
+      <MarketValue>1000</MarketValue>
+    </statBases>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>Sellable</tradeability>
+    <thingSetMakerTags Inherit="False" />
+    <comps>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Use {0_label}</useLabel>
+        <useDuration>0</useDuration>
+        <warmupMote>Mote_ResurrectAbility</warmupMote>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+      <li Class="CompProperties_Targetable">
+        <compClass>CompTargetable_SinglePawn</compClass>
+      </li>
+      <li Class="CompProperties_TargetEffectInstallImplantInOtherPawn">
+        <hediffDef>HVMP_GatepuncherImplant</hediffDef>
+        <bodyPart>Brain</bodyPart>
+        <soundOnUsed>MechSerumUsed</soundOnUsed>
+      </li>
+    </comps>
+  </ThingDef>
+  
+  <ThingDef ParentName="MechSerumBase">
+    <defName>HVMP_Ingressor</defName>
+    <label>ingressor</label>
+    <description>A one-use sabotage device. Once clamped onto a building, its subpersona core infiltrates and subverts any hackable digital system it can find. If the building is not hackable, the ingressor instead activates its powerful directional explosive, dealing 500 damage to the building.</description>
+    <graphicData>
+      <texPath>Things/Item/Special/MechSerumResurrector</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+		  <color>(0.898,0.6,0.6,1)</color>
+    </graphicData>
+    <techLevel>Ultra</techLevel>
+    <tradeTags Inherit="False" />
+    <stackLimit>10</stackLimit>
+    <statBases>
+      <MarketValue>1000</MarketValue>
+    </statBases>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>Sellable</tradeability>
+    <thingSetMakerTags Inherit="False" />
+    <comps>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Use {0_label}</useLabel>
+        <useDuration>0</useDuration>
+        <warmupMote>Mote_ResurrectAbility</warmupMote>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+      <li Class="CompProperties_Targetable">
+        <compClass>HautsPermits.CompTargetable_BuildingOrItem</compClass>
+      </li>
+      <li Class="HautsPermits.CompProperties_TargetEffectIngression">
+        <damageType>Thump</damageType>
+		<damageAmount>500</damageAmount>
+		<hackingPower>12000</hackingPower>
+      </li>
+    </comps>
+  </ThingDef>
+  
+  <ThingDef ParentName="MedicineBase">
+    <defName>HVMP_BiofilmMedicine</defName>
+    <label>biofilm medicine</label>
+    <description>A kit of advanced ultra-tech medical supplies, manufactured only by the Enterprise and its branches. It is roughly as potent as regular medicine. However, in addition to its diagnostic devices, pads, and multi-purpose tools, it contains multiple vials of a techno-organic biofilm substance. The biofilm expands over the patient's body, tending all wounds in one go, and protecting them from hostile environments for the next 24 hours.</description>
+    <possessionCount>3</possessionCount>
+    <graphicData>
+      <texPath>Things/Item/Resource/Medicine/MedicineUltratech</texPath>
+      <graphicClass>Graphic_StackCount</graphicClass>
+		  <color>(0.3412,0.7529,0.4235,1)</color>
+      <drawSize>0.85</drawSize>
+    </graphicData>
+    <techLevel>Ultra</techLevel>
+    <tradeTags Inherit="False" />
+    <statBases>
+      <MarketValue>200</MarketValue>
+      <Mass>0.50</Mass>
+      <Flammability>0.7</Flammability>
+      <MedicalPotency>1.00</MedicalPotency>
+      <MedicalQualityMax>1.00</MedicalQualityMax>
+      <DeteriorationRate>2</DeteriorationRate>
+      <WorkToMake>700</WorkToMake>
+    </statBases>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>Sellable</tradeability>
+    <thingSetMakerTags Inherit="False" />
+    <allowedArchonexusCount>10</allowedArchonexusCount>
+  </ThingDef>
+  
+  <ThingDef ParentName="MechSerumBase">
+    <defName>HVMP_ProbabilityTuner</defName>
+    <label>probability tuner</label>
+    <description>A piece of scavenged archotechnology; one side is utterly smooth, but the other, fuzzier side clings to the skin with a feeling of static electricity. It can be applied to a living person to gradually deplete their psychic sensitivity. While connected and draining sensitivity, it has a chance to cause a good event, after which it will harmlessly disintegrate and stop draining psychic sensitivity.\n\nHas no effect if applied to someone who was previously bonded to a probability tuner.</description>
+    <graphicData>
+      <texPath>Things/Item/Special/MechSerumResurrector</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+		  <color>(0.7019,0,0.5843,1)</color>
+    </graphicData>
+    <techLevel>Archotech</techLevel>
+    <tradeTags Inherit="False" />
+    <stackLimit>10</stackLimit>
+    <statBases>
+      <MarketValue>1000</MarketValue>
+    </statBases>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>Sellable</tradeability>
+    <thingSetMakerTags Inherit="False" />
+    <comps>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Use {0_label}</useLabel>
+        <useDuration>0</useDuration>
+        <warmupMote>Mote_ResurrectAbility</warmupMote>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+      <li Class="CompProperties_Targetable">
+        <compClass>CompTargetable_SinglePawn</compClass>
+      </li>
+      <li Class="CompProperties_TargetEffectInstallImplantInOtherPawn">
+        <hediffDef>HVMP_PTuning</hediffDef>
+        <bodyPart>Brain</bodyPart>
+        <soundOnUsed>MechSerumUsed</soundOnUsed>
+      </li>
+    </comps>
+  </ThingDef>
+  
+  
+</Defs>

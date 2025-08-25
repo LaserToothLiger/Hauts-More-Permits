@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+<!--Initialization-->
+<HVMP_Initialize>[Hauts' Enterprise: More Permits] active.</HVMP_Initialize>
+<!--Mod settings-->
+<HVMP_SettingChaosMode>E-branches issue quests on independent timers</HVMP_SettingChaosMode>
+<HVMP_TooltipChaosMode>Enterprise quests are issued to the player on a timer whose duration is set below. How the timer works is determined by this setting:\n\n-If enabled, each e-branch issues quests based on its own timer.\n\n-If disabled, there is one timer, and whenever it triggers only ONE e-branch will issue a quest.</HVMP_TooltipChaosMode>
+<HVMP_SettingMinDays>Min days between random e-branch quests</HVMP_SettingMinDays>
+<HVMP_TooltipMinDays>Each e-branch periodically offers a quest to the player. This is the minimum amount of time it takes to receive an e-branch quest. Each e-branch's first quest is unaffected by this timer - it always takes 1-10 days to occur.</HVMP_TooltipMinDays>
+<HVMP_SettingMaxDays>Max days between random e-branch quests</HVMP_SettingMaxDays>
+<HVMP_TooltipMaxDays>Each e-branch periodically offers a quest to the player. This is the maximum amount of time it takes to receive an e-branch quest. Each e-branch's first quest is unaffected by this timer - it always takes 1-10 days to occur.</HVMP_TooltipMaxDays>
+<HVMP_SettingRewardFactor>E-branch quest reward factor</HVMP_SettingRewardFactor>
+<HVMP_TooltipRewardFactor>Multiplies the amount of standing and/or goodwill you gain with an e-branch by completing any one of their quests.\nBy default, the rewards for most e-branch quests are usually 3-5 standing or 14-17 goodwill.\nAt minimum, rewards are usually 2-3 standing or 11-12 goodwill.\nAt maximum, rewards are usually 5-7 standing or 17-25 goodwill.</HVMP_TooltipRewardFactor>
+<HVMP_TooltipMinExpectationLevel>Min expectations for penalties: &lt;color=#FF6BBF&gt;{0}&lt;/color&gt;</HVMP_TooltipMinExpectationLevel>
+<HVMP_TooltipExpectationLevel>You will lose goodwill with e-branches when you refuse or fail one of their quests, ONLY IF you have a colony with enough wealth to have expectations of the selected level or higher.\n\nSelect "Inactive" to disable this entirely.\n-If this and the other goodwill penalty setting are both inactive, goodwill loss will not occur.\n-If this is inactive but the other one is active, goodwill loss occurs if the other setting's condition is met.\n-If both are active, goodwill loss will occur only when both conditions are met.</HVMP_TooltipExpectationLevel>
+<HVMP_TooltipMinSeniorityLevel>Min title for penalties: &lt;color=#FF6BBF&gt;{0}&lt;/color&gt;</HVMP_TooltipMinSeniorityLevel>
+<HVMP_TooltipSeniorityLevel>You will lose goodwill with e-branches when you refuse or fail one of their quests, ONLY IF you have a pawn with a title from that e-branch of the selected level or higher.\n\nSelect "Inactive" to disable this entirely.\n-If this and the other goodwill penalty setting are both inactive, goodwill loss will not occur.\n-If this is inactive but the other one is active, goodwill loss occurs if the other setting's condition is met.\n-If both are active, goodwill loss will occur only when both conditions are met.</HVMP_TooltipSeniorityLevel>
+<HVMP_Inactive>Inactive</HVMP_Inactive>
+<HVMP_LevelFriend>Introductory title ("_friend")</HVMP_LevelFriend>
+<HVMP_Level>Level {0} title</HVMP_Level>
+<HVMP_SettingGoodwillRefusal>Goodwill lost from refusing quests</HVMP_SettingGoodwillRefusal>
+<HVMP_TooltipGoodwillRefusal>If you fulfill either the 'minimum expectation' or 'minimum title' conditions set above, you will lose this much goodwill whenever you let an e-branch quest expire without accepting it.\n\nIf both a minimum expectation and title have been selected, both conditions must be fulfilled.\n\nChanging this value will only affect the penalty for FUTURE quests, not ones that have already been generated.</HVMP_TooltipGoodwillRefusal>
+<HVMP_SettingGoodwillFailure>Goodwill lost from failing quests</HVMP_SettingGoodwillFailure>
+<HVMP_TooltipGoodwillFailure>If you fulfill either the 'minimum expectation' or 'minimum title' conditions set above, you will lose this much goodwill whenever you fail an accepted e-branch quest.\n\nIf both a minimum expectation and title have been selected, both conditions must be fulfilled.\n\nChanging this value will only affect the penalty for FUTURE quests, not ones that have already been generated.</HVMP_TooltipGoodwillFailure>
+<HVMP_SettingAnomalyActivityLevel>Occult Branch can always be encountered</HVMP_SettingAnomalyActivityLevel>
+<HVMP_TooltipAnomalyActivityLevel>By default, the Occult Branch will only show up after the monolith has been activated (if using the standard Anomaly playstyle), have its frequency of contact multiplied by the anomaly activity level (if using Ambient Horror), or otherwise not be active at all.\n\nIf you enable this setting, they will not be subject to these rules, instead appearing as frequently as other e-branches.</HVMP_TooltipAnomalyActivityLevel>
+<!--Quest assignation errors-->
+<HVMP_ErrorNoQuestsFoundForBranch>Tried to give an e-branch quest from {0}, but their e-branch quest list is empty</HVMP_ErrorNoQuestsFoundForBranch>
+<HVMP_ErrorNoUsableBranchQuests>Tried to give an e-branch quest from {0}, but none of their quests' prerequisites are met and so cannot fire.</HVMP_ErrorNoUsableBranchQuests>
+<!--Blocked traders-->
+<HVMP_NoTraderForYou>Trader diverted</HVMP_NoTraderForYou>
+<HVMP_TraderBlockedCaravan>A trade caravan would have appeared at this time, but as per a prior agreement you made with the Commerce Branch, they have been diverted.</HVMP_TraderBlockedCaravan>
+<HVMP_TraderBlockedOrbital>An orbital trade ship would have made contact at this time, but as per a prior agreement you made with the Commerce Branch, they have been diverted.</HVMP_TraderBlockedOrbital>
+<HVMP_TraderBlocksRemainingNone>This was the last trader you agreed to let the Commerce Branch block.</HVMP_TraderBlocksRemainingNone>
+<HVMP_TraderBlocksRemaining>The Commerce Branch will still block {0} more trader(s). They would like to thank you for your patience and understanding.</HVMP_TraderBlocksRemaining>
+<!--Comms console-->
+<HVMP_TooDeepToReach>The signal is obstructed by tons of overhead earth. You cannot contact the {0} at this time.</HVMP_TooDeepToReach>
+<HVMP_Representative>A {0} representative greets you with practiced courtesy.</HVMP_Representative>
+<HVMP_QuestAnomalyInactive>No quests available due to current lack of anomalous activity</HVMP_QuestAnomalyInactive>
+<HVMP_QuestCooldown>Cannot request another quest from any e-branch for {0} days</HVMP_QuestCooldown>
+<HVMP_NeedTitle>{0} must have the trust of the {1}</HVMP_NeedTitle>
+<HVMP_Donate>Donate {0} (grants standing)</HVMP_Donate>
+<HVMP_SolicitQuest>Solicit a quest</HVMP_SolicitQuest>
+<HVMP_GotQuest>The {0} has issued you a new quest.</HVMP_GotQuest>
+<HVMP_RefreshPermitCooldowns>Refresh permit cooldowns for {0} (cost: {1} goodwill)</HVMP_RefreshPermitCooldowns>
+<HVMP_NoPermitsToRefresh>no permits to refresh</HVMP_NoPermitsToRefresh>
+<HVMP_RefreshedPermitCDs>The {0} has refreshed its permits' cooldowns for the {1}.</HVMP_RefreshedPermitCDs>
+<!--Permit use warnings-->
+<HVMP_TargetCurrency>Only usable on currency (silver or gold)</HVMP_TargetCurrency>
+<HVMP_TargetDesertion>Only usable on mentally unbroken enemies sapient enough to be bribed</HVMP_TargetDesertion>
+<HVMP_TargetRecruitment>Only usable on mentally unbroken prisoners</HVMP_TargetRecruitment>
+<HVMP_TargetIngratiation>Only usable on mentally unbroken individuals from a faction capable of diplomacy</HVMP_TargetIngratiation>
+<HVMP_NoFactionCanSendRaids>There are no factions that can send raids</HVMP_NoFactionCanSendRaids>
+<HVMP_CommandCallRoyalAidTradersBlocked>The {FACTION_name} is preventing you from receiving traders. Remaining blocks: {0}</HVMP_CommandCallRoyalAidTradersBlocked>
+<HVMP_NoFactionCanSendTraders>There are no factions that can send trading caravans</HVMP_NoFactionCanSendTraders>
+<HVMP_NoSenatorsLeftToBribe>You have the favor of all current senators</HVMP_NoSenatorsLeftToBribe>
+<HVMP_MustBeBiocoded>Only usable on biocoded items.</HVMP_MustBeBiocoded>
+<HVMP_TargetToGood>Only usable on non-artifact, non-artwork, non-building items below good-quality</HVMP_TargetToGood>
+<HVMP_TargetToExc>Only usable on non-artifact, non-artwork, non-building items below excellent-quality</HVMP_TargetToExc>
+<HVMP_TargetToMaster>Only usable on non-artifact, non-artwork, non-building items below masterwork-quality</HVMP_TargetToMaster>
+<HVMP_TargetToLegendary>Only usable on masterwork, non-artifact, non-artwork, non-building items of masterwork quality</HVMP_TargetToLegendary>
+<HVMP_TargetDamaged>Only usable on damaged items or buildings</HVMP_TargetDamaged>
+<HVMP_TargetDamagedOrTainted>Only uasble on damaged, tainted, or broken-down items or buildings</HVMP_TargetDamagedOrTainted>
+<HVMP_TargetTMD>Target must be suffering from a mechanite disease</HVMP_TargetTMD>
+<HVMP_CommandCallRoyalAidMapTooWatery>Cannot drill a geothermal vent in this area.</HVMP_CommandCallRoyalAidMapTooWatery>
+<HVMP_TooCloseToGeyser>Drill must not be too close to another drill or existing steam geyser.</HVMP_TooCloseToGeyser>
+<HVMP_PoorTerrainForGeyser>Drill must be placed on a wide stretch of excavatable ground suitable for heavy structures.</HVMP_PoorTerrainForGeyser>
+<HVMP_WaterUnsuitableForFish>Hatchery cannot function in a body of water incapable of supporting a fish population.</HVMP_WaterUnsuitableForFish>
+<HVMP_NoWaterForFish>Hatchery must be placed on a body of water capable of supporting a fish population.</HVMP_NoWaterForFish>
+<HVMP_TooCloseToHatchery>Hatchery must not be too close to another hatchery.</HVMP_TooCloseToHatchery>
+<HVMP_BadSkipSpot>Cannot teleport into an obstructed space</HVMP_BadSkipSpot>
+<!--Permit activation messages-->
+<HVMP_CombatAssistance>The {FACTION_name} has rendered combat assistance.</HVMP_CombatAssistance>
+<HVMP_CaravanAssistance>The {FACTION_name} has marked the target for caravan assistance.</HVMP_CaravanAssistance>
+<HVMP_MessagePermitAnimal>The {FACTION_name} has deployed their remote animal pulser weapon at the requested location.</HVMP_MessagePermitAnimal>
+<HVMP_MessagePermitChiller>The {FACTION_name} has deployed their climate-cooling weapon at the requested location. It will last for 3 days.</HVMP_MessagePermitChiller>
+<HVMP_MessagePermitEMI>The {FACTION_name} has deployed their EMI weapon at the requested location. It will last for 1 day.</HVMP_MessagePermitEMI>
+<HVMP_MessagePermitScorcher>The {FACTION_name} has deployed their climate-warming weapon at the requested location. It will last for 3 days.</HVMP_MessagePermitScorcher>
+<HVMP_MessagePermitSunBlocker>The {FACTION_name} has deployed their sun-blocker weapon at the requested location. It will last for 3 days.</HVMP_MessagePermitSunBlocker>
+<HVMP_MessagePermitFallout>The {FACTION_name} has deployed their toxic vapor weapon at the requested location. It will last for 3 days.</HVMP_MessagePermitFallout>
+<HVMP_MessageMechCluster>The {FACTION_name} has agitated the mechanoid hive, which will deploy a mech cluster shortly.</HVMP_MessageMechCluster>
+<HVMP_MessagePermitRScan>The {FACTION_name} has deployed their revealing scanner at the requested location.</HVMP_MessagePermitRScan>
+<HVMP_InvestmentMade>The {FACTION_name} has collected the funding for your investment.</HVMP_InvestmentMade>
+<HVMP_InvestmentReturns>The fruits of your investment with the {FACTION_name} have returned.</HVMP_InvestmentReturns>
+<HVMP_Desertion>{PAWN_nameDef} has taken the bribe offered by the {FACTION_name} and will now retreat.</HVMP_Desertion>
+<HVMP_Recruitment>{PAWN_nameDef} has taken the bribe offered by the {FACTION_name} and is now more amenable to working with you.</HVMP_Recruitment>
+<HVMP_Ingratiation>The bribe offered by the {FACTION_name} to the faction of {PAWN_nameDef} has gone through, improving your goodwill with them.</HVMP_Ingratiation>
+<HVMP_Peacemaking>All present hostiles have taken the bribe offered by the {FACTION_name} and will now retreat.</HVMP_Peacemaking>
+<HVMP_SenatorBribed>The {FACTION_name} has bribed a senator on your behalf.</HVMP_SenatorBribed>
+<HVMP_QualityBoost>Item quality improved.</HVMP_QualityBoost>
+<HVMP_UnBioCoded>Item biocoding decrypted.</HVMP_UnBioCoded>
+<HVMP_QualityBoostRisky>The {FACTION_name} has made its attempt to improve the item's quality to legendary.</HVMP_QualityBoostRisky>
+<HVMP_RestoredItem>Item repaired.</HVMP_RestoredItem>
+<HVMP_MassRestoredStructure>Structures in target area repaired.</HVMP_MassRestoredStructure>
+<HVMP_ScannerSweep>The {FACTION_name}'s penetrative scanning technology has provided an image of the targeted area.</HVMP_ScannerSweep>
+<HVMP_ScannerDeep>The {FACTION_name}'s penetrative scanning technology has found a lump of buried {0}!</HVMP_ScannerDeep>
+<HVMP_RelicDiscovered>Analyzing the contents of their libraries, the {0} has discovered the existence of a relic of {1}.</HVMP_RelicDiscovered>
+<HVMP_MedicalAssistance>The {FACTION_name} has rendered medical assistance.</HVMP_MedicalAssistance>
+<HVMP_PsychicAssistance>The {FACTION_name} has rendered psychic assistance.</HVMP_PsychicAssistance>
+<HVMP_TerrainChange>The {FACTION_name} has altered the terrain.</HVMP_TerrainChange>
+<HVMP_MechOptimized>Mechanoid optimized.</HVMP_MechOptimized>
+<!--Platform rewards-->
+<HVMP_GiveStandingFromFaction>Grants {0} standing with the {1}</HVMP_GiveStandingFromFaction>
+<HVMP_UsePermitHediffGizmo>Use {0} permits ({1} charges)</HVMP_UsePermitHediffGizmo>
+<HVMP_UsePermitHediffGizmoDesc>Call for aid using a special permit.\n\nEach permit costs a certain number of charges, which can be regained by implanting more permit targeters.</HVMP_UsePermitHediffGizmoDesc>
+<HVMP_UsePermitTargeterOption>Use {0} (cost: {1})</HVMP_UsePermitTargeterOption>
+<HVMP_ProbabilityTunerActivated>The probability tuner affixed to {PAWN_nameDef} has activated, and subsequently disintegrated.</HVMP_ProbabilityTunerActivated>
+<!--Quest generique-->
+<HVMP_CCProgress>Progress: {0}/{1}</HVMP_CCProgress>
+<!--Commerce intervention-->
+<HVMP_InterventionCR1>low</HVMP_InterventionCR1>
+<HVMP_InterventionCR2>moderate</HVMP_InterventionCR2>
+<HVMP_InterventionCR3>extreme</HVMP_InterventionCR3>
+<HVMP_CCompToggleUpLabel>Increase power consumption</HVMP_CCompToggleUpLabel>
+<HVMP_CCompToggleUpTooltip>Increases power consumption by 100W/d. This enhances computation progress by 0.1% per hour.\n\nThe chaincomputer can handle up to 5000W/d of external power, which would boost its progress by +5% per hour. However, while externally powered, it outputs signals which can attract hostile parties.</HVMP_CCompToggleUpTooltip>
+<HVMP_CCompToggleDownLabel>Decrease power consumption</HVMP_CCompToggleDownLabel>
+<HVMP_CCompToggleDownTooltip>Lowers power consumption by 100W/d. This reduces computation progress by 0.1% per hour.\n\nThe chaincomputer can operate without any external power, but it will be very slow.</HVMP_CCompToggleDownTooltip>
+<!--Rover atlas-->
+<HVMP_BookProgress1>Revision speed scales with these skills: </HVMP_BookProgress1>
+<HVMP_BookProgress2>Revision speed scales with </HVMP_BookProgress2>
+<HVMP_AtlasDesc>An atlas of a nearby region. It's somewhat antiquated, and will take time to update for contemporary accuracy.</HVMP_AtlasDesc>
+<HVMP_NeverBeenToAtlasPoint>hasn't been to the area it describes</HVMP_NeverBeenToAtlasPoint>
+<HVMP_WrongSkillsToStudy>lacks any applicable skills</HVMP_WrongSkillsToStudy>
+<!--Archive enigma-->
+<HVMP_EnigmaSkills>Study speed scales with </HVMP_EnigmaSkills>
+<HVMP_EnigmaStats>Study speed scales with the following stats: </HVMP_EnigmaStats>
+<!--Archive ethnography-->
+<HVMP_ShuttleArriveAnthro>Shuttle arriving after {0} questions asked by anthropologists</HVMP_ShuttleArriveAnthro>
+<HVMP_ShuttleArriveAnthroDesc>A shuttle will arrive after {1} questions have been asked by the anthropologists. The quest {0} requires you to load the following people or items onto the shuttle before it leaves:\n{2}</HVMP_ShuttleArriveAnthroDesc>
+<HVMP_ShuttleArriveAnthroDescHidden>A shuttle will arrive after {0} questions have been asked by the anthropologists.</HVMP_ShuttleArriveAnthroDescHidden>
+<HVMP_ShuttleAnthroInspectString>Departing on shuttle after {0} questions have been asked</HVMP_ShuttleAnthroInspectString>
+<HVMP_ShuttleAnthroArrivesIn>Shuttle arrives after {0} questions asked</HVMP_ShuttleAnthroArrivesIn>
+<HVMP_ShuttleAnthroArrivesOn>Shuttle arrives after anthropologists' inquiries are resolved, consisting of {0} questions</HVMP_ShuttleAnthroArrivesOn>
+<!--Archive excavation-->
+<HVMP_AncientTerminalDiscovered>You've discovered an ancient terminal with valuable information!</HVMP_AncientTerminalDiscovered>
+<!--Archive passage-->
+<HVMP_DroneArrivedLabel>Spacedrone arrived</HVMP_DroneArrivedLabel>
+<HVMP_DroneArrivedText>The spacedrone has arrived. It is guarded by mechanoids.</HVMP_DroneArrivedText>
+<HVMP_DroneHacked>You've finished hacking the {0} on behalf of the Archive Branch.</HVMP_DroneHacked>
+<!--Ecosphere case study-->
+<HVMP_NeopathyCureDiscovered>By studying and tending to {PAWN_nameDef}, a cure has been found for {PAWN_possessive} malady!</HVMP_NeopathyCureDiscovered>
+<HVMP_QuestPartShuttleArriveOnCure>Shuttle arrives when neopathy is cured</HVMP_QuestPartShuttleArriveOnCure>
+<HVMP_QuestPartShuttleArriveOnCureDesc>A shuttle will arrive once the neopathy is cured. The quest {0} requires you to load the following people or items onto the shuttle before it leaves:\n{1}</HVMP_QuestPartShuttleArriveOnCureDesc>
+<!--Ecosphere field work-->
+<HVMPCannotPlacePreserve>Inopportune location for nature preserve</HVMPCannotPlacePreserve>
+<HVMP_PreserveDestroyedBecauseOfViolation>The nature preserve has been destroyed due to artificial constructions or pollution within its bounds.</HVMP_PreserveDestroyedBecauseOfViolation>
+<HVMP_AlertPreserveViolationFlat>Preserve defiled</HVMP_AlertPreserveViolationFlat>
+<HVMP_AlertPreserveViolation>Preserve will be defiled in {0}</HVMP_AlertPreserveViolation>
+<HVMP_AlertPreserveViolationDesc>Pollution, flooring, or an artificial building has been detected inside one of your nature preserves. It will be destroyed in {0}.</HVMP_AlertPreserveViolationDesc>
+<!--Ecosphere retroviral agent-->
+<HVMP_RASkills>Deciphering speed scales with </HVMP_RASkills>
+<HVMP_RetroviralHediff>The retroviral agent caused {0_nameDef} to develop a condition: {1}.</HVMP_RetroviralHediff>
+<HVMP_RetroviralItem>The retroviral agent caused {0_nameDef} to produce an item: {1}.</HVMP_RetroviralItem>
+<HVMP_RetroviralGainedGene>The retroviral agent caused {0_nameDef} to gain the {1} gene.</HVMP_RetroviralGainedGene>
+<HVMP_RetroviralRemovedGene>The retroviral agent caused {0_nameDef} to lose the {1} gene.</HVMP_RetroviralRemovedGene>
+<!--Occult HAT-->
+<HVMP_WokeOccult>The enigmatic psychic sciences employed by the Occult Branch have awakened {PAWN_nameDef} to {PAWN_possessive} psychic potential!</HVMP_WokeOccult>
+<HVMP_WokeOccultF>The secret arcane rituals employed by the Occult Branch have awakened {PAWN_nameDef} to {PAWN_possessive} sorcerous potential!</HVMP_WokeOccultF>
+<!--Occult Lovecraft-->
+<HVMP_LovecraftTooSoon>to wait at least one day since the last psychic discharge. Remaining time: {0}</HVMP_LovecraftTooSoon>
+<HVMP_StatsReport_PsychicAlignment>{0}: +{1}, x{2}</HVMP_StatsReport_PsychicAlignment>
+<HVMP_LovecraftManhunterLabel>Manhunter shockwave</HVMP_LovecraftManhunterLabel>
+<HVMP_LovecraftManhunterText>A roiling wave of psychic energy has swept over the landscape. It seems many of the animals in the area have been driven insane.</HVMP_LovecraftManhunterText>
+<!--Occult Natali-->
+<HVMP_LetterObeliskDiscovered>{PAWN_nameDef} has discovered a large obelisk. In between its twisting prongs, {PAWN_pronoun} catches fleeting synesthetic impressions of different locations across the planet. Perhaps it can be activated to return {PAWN_objective} home.\n\nSelect {PAWN_nameDef} and right-click the obelisk to activate it.</HVMP_LetterObeliskDiscovered>
+<!--Pax offering-->
+<HVMP_GoodwillCurried>Goodwill curried: {0}/{1}</HVMP_GoodwillCurried>
+<!--Pax talks-->
+<HVMP_PaxTalksBackfire>The talks have backfired. Despite trading some pleasantries, no progress was made, and multiple statements were interpreted as insults.</HVMP_PaxTalksBackfire>
+<HVMP_PaxTalksFlounder>The talks floundered. Delegates managed to communicate clearly and with basic respect, but nothing was achieved.</HVMP_PaxTalksFlounder>
+<HVMP_PaxTalksSuccess>The talks were a success. The delegates reached a new level of mutual understanding and respect for each others' people.</HVMP_PaxTalksSuccess>
+<!--Books-->
+<HVMP_titlesPlace_0>Traveler's Manual of {0}</HVMP_titlesPlace_0>
+<HVMP_titlesPlace_1>Encyclopedia of {0}</HVMP_titlesPlace_1>
+<HVMP_titlesPlace_2>Atlas of {0}</HVMP_titlesPlace_2>
+<HVMP_titlesPlace_3>Fantastic Destinations: {0}</HVMP_titlesPlace_3>
+<HVMP_titlesPlace_4>The {0} Compendium</HVMP_titlesPlace_4>
+<HVMP_titlesPlace_5>{0}: an Exploration</HVMP_titlesPlace_5>
+<HVMP_titlesPlace_6>Dive into {0}</HVMP_titlesPlace_6>
+<HVMP_titlesPlace_7>Faraway {0}</HVMP_titlesPlace_7>
+<HVMP_titlesPlace_8>{0} Ahoy!</HVMP_titlesPlace_8>
+<HVMP_titlesPlace_9>Thrillseekers' Guide to {0}</HVMP_titlesPlace_9>
+<HVMP_titlesPlace_10>Down in Old {0}</HVMP_titlesPlace_10>
+<HVMP_titlesPlace_11>The {0}</HVMP_titlesPlace_11>
+<HVMP_titlesPlace_12>Beauties of the Rim: {0}</HVMP_titlesPlace_12>
+<HVMP_titlesPlace_13>Traveling in {0}</HVMP_titlesPlace_13>
+<HVMP_titlesPlanetPlace_0>{0} Factbook - {1}</HVMP_titlesPlanetPlace_0>
+<HVMP_titlesPlanetPlace_1>Secrets of {0}: {1}</HVMP_titlesPlanetPlace_1>
+<HVMP_titlesPlanetPlace_2>Wonders of {0}: {1}</HVMP_titlesPlanetPlace_2>
+<HVMP_InspiringVerseHitsRight>Thanks to reading {0}, {1} has experienced an inspiration!</HVMP_InspiringVerseHitsRight>
+<HVMP_IdeoBookInspireChance>Chance to inspire believers: {0}%</HVMP_IdeoBookInspireChance>
+<HVMP_IdeoBookHediffGain>Per hour of reading: grants {0} stacks of the "{1}" buff to believers, lasting for {2} hours</HVMP_IdeoBookHediffGain>
+<!--other items-->
+<HVMP_ChargecellIsForMechs>Target must have an energy meter</HVMP_ChargecellIsForMechs>
+</LanguageData>
