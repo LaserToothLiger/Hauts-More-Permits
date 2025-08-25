@@ -1,0 +1,2 @@
+# Hauts-More-Permits
+Adds multiple factions to RimWorld which offer thematically relevant quests in exchange for titles that offer thematically relevant permits. These permits are stronger, more frequently usable, and generally more interesting than the vanilla ones. You can spend goodwill with these factions to refresh permit cooldowns, or, if you have the Odyssey DLC, go fight them in space for powerful item rewards (including a whole new way to use their permits). The Ideology, Biotech, and Anomaly DLCs each add an additional permit-granting faction.
