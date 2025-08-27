@@ -541,7 +541,6 @@ namespace HautsPermits_Ideology
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = faction;
-                qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true,true, faction);
                 QuestGen.quest.AddPart(qpbgfh);
                 HVMP_Utility.SetSettingScalingRewardValue(slate);
             }
@@ -1137,7 +1136,6 @@ namespace HautsPermits_Ideology
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = faction;
-                qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true, faction);
                 QuestGen.quest.AddPart(qpbgfh);
                 HVMP_Utility.SetSettingScalingRewardValue(slate, 0.7f);
             }

@@ -363,7 +363,6 @@ namespace HautsPermits_Occult
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = occultFaction;
-                qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true, occultFaction);
                 QuestGen.quest.AddPart(qpbgfh);
                 HVMP_Utility.SetSettingScalingRewardValue(slate);
             }

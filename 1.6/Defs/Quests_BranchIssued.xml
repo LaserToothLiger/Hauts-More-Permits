@@ -179,7 +179,7 @@
         </li>
         <li Class="QuestNode_GetMap">
 		  <canBeSpace>true</canBeSpace>
-		  <mustBeInfestable>true</mustBeInfestable>
+		  <!--<mustBeInfestable>true</mustBeInfestable>-->
 		</li>
         <!-- Raid(s) -->
         <li Class="QuestNode_GetRandomInRangeInt">

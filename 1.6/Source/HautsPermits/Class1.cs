@@ -5289,7 +5289,6 @@ namespace HautsPermits
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = commerceFaction;
-                qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true,commerceFaction);
                 QuestGen.quest.AddPart(qpbgfh);
                 HVMP_Utility.SetSettingScalingRewardValue(slate);
             }
@@ -5316,7 +5315,6 @@ namespace HautsPermits
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = paxFaction;
-                qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true,paxFaction);
                 QuestGen.quest.AddPart(qpbgfh);
                 HVMP_Utility.SetSettingScalingRewardValue(slate);
             }
@@ -5343,7 +5341,6 @@ namespace HautsPermits
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = roverFaction;
-                qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true,roverFaction);
                 QuestGen.quest.AddPart(qpbgfh);
                 HVMP_Utility.SetSettingScalingRewardValue(slate);
             }
@@ -5473,19 +5470,18 @@ namespace HautsPermits
         public override void Notify_PreCleanup()
         {
             base.Notify_PreCleanup();
-            if (this.goodwill < 0 && this.quest.State == QuestState.EndedOfferExpired)
+            int num = HVMP_Utility.ExpectationBasedGoodwillLoss(null, true, true, this.faction);
+            if (this.quest.State == QuestState.EndedOfferExpired)
             {
-                Faction.OfPlayer.TryAffectGoodwillWith(this.faction, this.goodwill, true, true, HVMPDefOf.HVMP_IgnoredQuest, null);
+                Faction.OfPlayer.TryAffectGoodwillWith(this.faction, num, true, true, HVMPDefOf.HVMP_IgnoredQuest, null);
             }
         }
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_References.Look<Faction>(ref this.faction, "faction", false);
-            Scribe_Values.Look<int>(ref this.goodwill, "goodwill", 0, false);
         }
         public Faction faction;
-        public int goodwill;
     }
     public class QuestNode_HospitalityPawnType : QuestNode
     {
@@ -5526,16 +5522,14 @@ namespace HautsPermits
         {
             Slate slate = QuestGen.slate;
             Map map = slate.Get<Map>("map");
-            int value = HVMP_Utility.ExpectationBasedGoodwillLoss(map,this.outcome.GetValue(slate) == QuestEndOutcome.Fail,false,slate.Get<Faction>("faction"));
-            if (value != 0 && this.faction != null)
+            if (this.faction != null)
             {
-                QuestPart_FactionGoodwillChange questPart_FactionGoodwillChange = new QuestPart_FactionGoodwillChange();
-                questPart_FactionGoodwillChange.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
-                questPart_FactionGoodwillChange.faction = Find.FactionManager.FirstFactionOfDef(this.faction);
-                questPart_FactionGoodwillChange.change = value;
-                questPart_FactionGoodwillChange.historyEvent = this.goodwillChangeReason.GetValue(slate);
-                slate.Set<string>("goodwillPenalty", Mathf.Abs(value).ToString(), false);
-                QuestGen.quest.AddPart(questPart_FactionGoodwillChange);
+                QuestPart_BranchGoodwillChange qpbgc = new QuestPart_BranchGoodwillChange();
+                qpbgc.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
+                qpbgc.faction = Find.FactionManager.FirstFactionOfDef(this.faction);
+                qpbgc.historyEvent = this.goodwillChangeReason.GetValue(slate);
+                slate.Set<string>("goodwillPenalty", "dependent on current HEMP settings", false);
+                QuestGen.quest.AddPart(qpbgc);
             }
             QuestPart_QuestEnd questPart_QuestEnd = new QuestPart_QuestEnd();
             questPart_QuestEnd.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
@@ -5555,16 +5549,14 @@ namespace HautsPermits
             qp.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
             qp.worldObjects = this.siteToDestroy.GetValue(slate);
             Map map = slate.Get<Map>("map");
-            int value = HVMP_Utility.ExpectationBasedGoodwillLoss(map, this.outcome.GetValue(slate) == QuestEndOutcome.Fail,false,slate.Get<Faction>("faction"));
-            if (value != 0 && this.faction != null)
+            if (this.faction != null)
             {
-                QuestPart_FactionGoodwillChange questPart_FactionGoodwillChange = new QuestPart_FactionGoodwillChange();
-                questPart_FactionGoodwillChange.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
-                questPart_FactionGoodwillChange.faction = Find.FactionManager.FirstFactionOfDef(this.faction);
-                questPart_FactionGoodwillChange.change = value;
-                questPart_FactionGoodwillChange.historyEvent = this.goodwillChangeReason.GetValue(slate);
-                slate.Set<string>("goodwillPenalty", Mathf.Abs(value).ToString(), false);
-                QuestGen.quest.AddPart(questPart_FactionGoodwillChange);
+                QuestPart_BranchGoodwillChange qpbgc = new QuestPart_BranchGoodwillChange();
+                qpbgc.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
+                qpbgc.faction = Find.FactionManager.FirstFactionOfDef(this.faction);
+                qpbgc.historyEvent = this.goodwillChangeReason.GetValue(slate);
+                slate.Set<string>("goodwillPenalty", "dependent on current HEMP settings", false);
+                QuestGen.quest.AddPart(qpbgc);
             }
             qp.outcome = new QuestEndOutcome?(this.outcome.GetValue(slate));
             qp.signalListenMode = this.signalListenMode.GetValue(slate) ?? QuestPart.SignalListenMode.OngoingOnly;
@@ -5573,6 +5565,96 @@ namespace HautsPermits
         }
         public SlateRef<List<WorldObject>> siteToDestroy;
         public FactionDef faction;
+    }
+    [StaticConstructorOnStartup]
+    public class QuestPart_BranchGoodwillChange : QuestPart
+    {
+        public override IEnumerable<GlobalTargetInfo> QuestLookTargets
+        {
+            get
+            {
+                foreach (GlobalTargetInfo globalTargetInfo in base.QuestLookTargets)
+                {
+                    yield return globalTargetInfo;
+                }
+                yield return this.lookTarget;
+                yield break;
+            }
+        }
+        public override IEnumerable<Faction> InvolvedFactions
+        {
+            get
+            {
+                foreach (Faction faction in base.InvolvedFactions)
+                {
+                    yield return faction;
+                }
+                if (this.faction != null)
+                {
+                    yield return this.faction;
+                }
+                yield break;
+            }
+        }
+        public override void Notify_QuestSignalReceived(Signal signal)
+        {
+            base.Notify_QuestSignalReceived(signal);
+            if (signal.tag == this.inSignal && this.faction != null && this.faction != Faction.OfPlayer)
+            {
+                if (this.lookTarget.IsValid)
+                {
+                    GlobalTargetInfo globalTargetInfo = this.lookTarget;
+                } else if (this.getLookTargetFromSignal) {
+                    if (SignalArgsUtility.TryGetLookTargets(signal.args, "SUBJECT", out LookTargets lookTargets))
+                    {
+                        lookTargets.TryGetPrimaryTarget();
+                    } else {
+                        GlobalTargetInfo invalid = GlobalTargetInfo.Invalid;
+                    }
+                } else {
+                    GlobalTargetInfo invalid2 = GlobalTargetInfo.Invalid;
+                }
+                FactionRelationKind playerRelationKind = this.faction.PlayerRelationKind;
+                int num = HVMP_Utility.ExpectationBasedGoodwillLoss(null, true, false, this.faction);
+                if (this.ensureMakesHostile)
+                {
+                    num = Mathf.Min(num, Faction.OfPlayer.GoodwillToMakeHostile(this.faction));
+                }
+                Faction.OfPlayer.TryAffectGoodwillWith(this.faction, num, this.canSendMessage, this.canSendHostilityLetter, (num >= 0) ? (this.historyEvent ?? HistoryEventDefOf.QuestGoodwillReward) : this.historyEvent, null);
+                TaggedString taggedString = "";
+                this.faction.TryAppendRelationKindChangedInfo(ref taggedString, playerRelationKind, this.faction.PlayerRelationKind, null);
+                if (!taggedString.NullOrEmpty())
+                {
+                    taggedString = "\n\n" + taggedString;
+                }
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Defs.Look<HistoryEventDef>(ref this.historyEvent, "historyEvent");
+            Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
+            Scribe_References.Look<Faction>(ref this.faction, "faction", false);
+            Scribe_Values.Look<bool>(ref this.canSendMessage, "canSendMessage", true, false);
+            Scribe_Values.Look<bool>(ref this.canSendHostilityLetter, "canSendHostilityLetter", true, false);
+            Scribe_Values.Look<bool>(ref this.getLookTargetFromSignal, "getLookTargetFromSignal", true, false);
+            Scribe_TargetInfo.Look(ref this.lookTarget, "lookTarget");
+            Scribe_Values.Look<bool>(ref this.ensureMakesHostile, "ensureMakesHostile", false, false);
+        }
+        public override void AssignDebugData()
+        {
+            base.AssignDebugData();
+            this.inSignal = "DebugSignal" + Rand.Int.ToString();
+            this.faction = Find.FactionManager.RandomNonHostileFaction(false, false, false, TechLevel.Undefined);
+        }
+        public HistoryEventDef historyEvent;
+        public string inSignal;
+        public Faction faction;
+        public bool canSendMessage = true;
+        public bool canSendHostilityLetter = true;
+        public bool getLookTargetFromSignal = true;
+        public GlobalTargetInfo lookTarget;
+        public bool ensureMakesHostile;
     }
     [StaticConstructorOnStartup]
     public class QuestPart_DestroySite : QuestPart_QuestEnd
@@ -6997,7 +7079,6 @@ namespace HautsPermits
                 slate.Set<Map>("map", map, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = roverFaction;
-                qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true,roverFaction);
                 QuestGen.quest.AddPart(qpbgfh);
                 List<WorldObject> wos = new List<WorldObject>
                 {
@@ -7086,7 +7167,6 @@ namespace HautsPermits
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = faction;
-                qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true,faction);
                 QuestGen.quest.AddPart(qpbgfh);
                 HVMP_Utility.SetSettingScalingRewardValue(slate);
             }
@@ -7302,7 +7382,6 @@ namespace HautsPermits
             slate.Set<Map>("map", map, false);
             QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
             qpbgfh.faction = roverFaction;
-            qpbgfh.goodwill = HVMP_Utility.ExpectationBasedGoodwillLoss(map, true, true, roverFaction);
             QuestGen.quest.AddPart(qpbgfh);
             RimWorld.Planet.Site site = this.GenerateSite(roverFaction.leader, (float)num, num2, num3, num4);
             string text2 = QuestGenUtility.HardcodedSignalWithQuestID("askerFaction.BecameHostileToPlayer");
@@ -7613,10 +7692,6 @@ namespace HautsPermits
         }
         public static int ExpectationBasedGoodwillLoss(Map map, bool loss, bool refusalNotFailure, Faction faction)
         {
-            if (map == null)
-            {
-                return 0;
-            }
             int value = 0;
             if (loss)
             {
@@ -7628,7 +7703,7 @@ namespace HautsPermits
                     {
                         if (m.IsPlayerHome)
                         {
-                            ExpectationDef ed = ExpectationsUtility.CurrentExpectationFor(map);
+                            ExpectationDef ed = ExpectationsUtility.CurrentExpectationFor(m);
                             highestExpectationOrder = Math.Max(highestExpectationOrder,ed.order);
                         }
                     }
