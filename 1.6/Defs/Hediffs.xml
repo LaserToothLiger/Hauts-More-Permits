@@ -27,8 +27,8 @@
     <label>hostile environment film</label>
 	<hediffClass>HediffWithComps</hediffClass>
     <description>A biodegradable ultratech film that protects against all manner of environmental conditions, including temperature extremes, toxic fallout, and vacuum. It breaks down after a while.</description>
-	<initialSeverity>1</initialSeverity>
-	<maxSeverity>1</maxSeverity>
+	<initialSeverity>5</initialSeverity>
+	<maxSeverity>5</maxSeverity>
     <stages>
       <li>
 		<statOffsets>

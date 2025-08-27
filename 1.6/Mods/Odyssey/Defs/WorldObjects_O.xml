@@ -82,7 +82,6 @@
     <genStep Class="HautsPermits.GenStep_BigassPawnLoot">
       <requiresRoof>true</requiresRoof>
 	  <defenderMulti>1</defenderMulti>
-	  <addedCombatants>1~3</addedCombatants>
 	  <pointsPerPawnGen>2000~6000</pointsPerPawnGen>
     </genStep>
   </GenStepDef>

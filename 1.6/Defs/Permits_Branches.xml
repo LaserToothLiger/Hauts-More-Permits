@@ -1467,8 +1467,8 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_BaitMechCluster</defName>
     <label>bait mech cluster</label>
-    <description>Send antagonizing signals to the mechanoid hive network, causing it to drop a potentially hostile mech cluster somewhere nearby.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+    <description>Send antagonizing signals to the mechanoid hive network, causing it to drop a potentially hostile mech cluster at the target point.\n\nMech clusters cannot be called in the absence of a functioning global mechhive.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_MechCluster</workerClass>
     <minTitle>HVMP_PaxVI</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1480,7 +1480,6 @@
     </royalAid>
 	<modExtensions>
 		<li Class="HautsFramework.PermitMoreEffects">
-			<incidentDefs><li>MechCluster</li></incidentDefs>
 			<incidentPoints>3500~7000</incidentPoints>
 		</li>
 	</modExtensions>

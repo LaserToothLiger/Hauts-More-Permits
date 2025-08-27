@@ -3,7 +3,7 @@
   
   <ThingDef ParentName="BuildingBase">
     <defName>HVMP_EnterpriseSecurityCrate</defName>
-    <label>enterprise security vault</label>
+    <label>enterprise secure vault</label>
     <description>A large self-powered hermetically-sealed vault with built-in digital security and nigh-impenetrable walls. These can preserve their contents for a long time.\n\nThese sorts of containers are typically used to contain valuable technology, which the Enterprise and its branches do not give even to their most stalwart allies.</description>
     <size>(2, 2)</size>
     <fillPercent>0.50</fillPercent>

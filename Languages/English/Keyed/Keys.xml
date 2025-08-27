@@ -24,6 +24,16 @@
 <HVMP_TooltipGoodwillFailure>If you fulfill either the 'minimum expectation' or 'minimum title' conditions set above, you will lose this much goodwill whenever you fail an accepted e-branch quest.\n\nIf both a minimum expectation and title have been selected, both conditions must be fulfilled.\n\nChanging this value will only affect the penalty for FUTURE quests, not ones that have already been generated.</HVMP_TooltipGoodwillFailure>
 <HVMP_SettingAnomalyActivityLevel>Occult Branch can always be encountered</HVMP_SettingAnomalyActivityLevel>
 <HVMP_TooltipAnomalyActivityLevel>By default, the Occult Branch will only show up after the monolith has been activated (if using the standard Anomaly playstyle), have its frequency of contact multiplied by the anomaly activity level (if using Ambient Horror), or otherwise not be active at all.\n\nIf you enable this setting, they will not be subject to these rules, instead appearing as frequently as other e-branches.</HVMP_TooltipAnomalyActivityLevel>
+<HVMP_SettingBranchPlatformInterval>Time between branch platform spawns</HVMP_SettingBranchPlatformInterval>
+<HVMP_TooltipBranchPlatformInterval>The rate at which new branch platforms appear in orbit. Spawning occurs at the same time and the same rate for all e-branch factions. Each e-branch can only gain one platform per spawning incidence, even if they would need more than one platform to reach their limit.</HVMP_TooltipBranchPlatformInterval>
+<HVMP_SettingBranchPlatformLimit>Max platforms per branch</HVMP_SettingBranchPlatformLimit>
+<HVMP_TooltipBranchPlatformLimit>An e-branch faction will not spawn new platforms in orbit if it already has this many platforms.</HVMP_TooltipBranchPlatformLimit>
+<HVMP_SettingBranchPlatformDefenders>Additional branch platform defenders</HVMP_SettingBranchPlatformDefenders>
+<HVMP_TooltipBranchPlatformDefenders>Scales the number of defenders generated for each e-branch platform. The higher this number, the harder the fight.\n\nSetting this to higher numbers may significantly extend the time it takes for a platform map to load, and may also make the fight a very long, difficult slog.</HVMP_TooltipBranchPlatformDefenders>
+<HVMP_SettingAuthorizerCooldown>Permit authorizer cooldown per standing cost</HVMP_SettingAuthorizerCooldown>
+<HVMP_TooltipAuthorizerCooldown>Once a permit authorizer is used to use a permit from a hostile e-branch, it can't be used to do this again for a number of days equal to [the permit's standing cost] times [this value].</HVMP_TooltipAuthorizerCooldown>
+<HVMP_SettingAuthorizerStandingGain>Permit authorizer standing gain</HVMP_SettingAuthorizerStandingGain>
+<HVMP_TooltipAuthorizerStandingGain>Implanting a permit authorizer grants this much standing with its e-branch.</HVMP_TooltipAuthorizerStandingGain>
 <!--Quest assignation errors-->
 <HVMP_ErrorNoQuestsFoundForBranch>Tried to give an e-branch quest from {0}, but their e-branch quest list is empty</HVMP_ErrorNoQuestsFoundForBranch>
 <HVMP_ErrorNoUsableBranchQuests>Tried to give an e-branch quest from {0}, but none of their quests' prerequisites are met and so cannot fire.</HVMP_ErrorNoUsableBranchQuests>

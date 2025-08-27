@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <RecipeDef ParentName="SurgeryFlesh">
+    <defName>HVMP_ApplyBiofilm</defName>
+    <label>apply hostile environment film</label>
+    <description>Apply a long-lasting coating of hostile environment film to the target, granting damage reduction, nearly nonexistent bleed rate, and immunity to various environmental conditions for 5 days. This operation is perfectly safe and does not require anesthesia.</description>
+    <workerClass>Recipe_AddHediff</workerClass>
+    <jobString>Applying hostile environment film.</jobString>
+    <workAmount>720</workAmount>
+    <hideBodyPartNames>true</hideBodyPartNames>
+    <targetsBodyPart>false</targetsBodyPart>
+    <isViolation>false</isViolation>
+    <surgerySuccessChanceFactor>2</surgerySuccessChanceFactor>
+	<anesthetize>false</anesthetize>
+    <surgeryOutcomeEffect IsNull="True" />
+    <deathOnFailedSurgeryChance>0</deathOnFailedSurgeryChance>
+    <recipeUsers>
+      <li>Human</li>
+      <li MayRequire="Ludeon.RimWorld.Anomaly">CreepJoiner</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>HVMP_BiofilmMedicine</li>
+          </thingDefs>
+        </filter>
+        <count>2</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <categories>
+        <li>Medicine</li>
+      </categories>
+    </fixedIngredientFilter>
+    <addsHediff>HVMP_HostileEnvironmentFilm</addsHediff>
+  </RecipeDef>
+  
+</Defs>

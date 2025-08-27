@@ -59,7 +59,7 @@
 		<breakEffect>Shield_Break</breakEffect>
 		<reactsToShieldBypassers>true</reactsToShieldBypassers>
 		<visualRange>1.2~1.5</visualRange>
-		<priority>10010</priority>
+		<priority>9995</priority>
 		<reactsToOther>true</reactsToOther>
 		<shouldUseIncomingDamageFactor>false</shouldUseIncomingDamageFactor>
 		<noCostIfInvincible>false</noCostIfInvincible>

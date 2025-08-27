@@ -584,7 +584,9 @@ namespace HautsPermits
                 {
                     h.Tended(TendUtility.CalculateBaseTendQuality(doctor, patient, medicine.def), medicine.def.GetStatValueAbstract(StatDefOf.MedicalQualityMax, null));
                 }
-                patient.health.AddHediff(HVMPDefOf.HVMP_HostileEnvironmentFilm);
+                Hediff hef = HediffMaker.MakeHediff(HVMPDefOf.HVMP_HostileEnvironmentFilm, patient);
+                patient.health.AddHediff(hef,null);
+                hef.Severity = 1f;
             }
         }
         public static void HVMPThirdTickEffectsPostfix()
@@ -711,7 +713,7 @@ namespace HautsPermits
                 this.newSettlementTick--;
             } else if (ModsConfig.OdysseyActive) {
                 WorldComponent_HautsFactionComps WCFC = (WorldComponent_HautsFactionComps)Find.World.GetComponent(typeof(WorldComponent_HautsFactionComps));
-                List<Faction> todoFactions = new List<Faction>();
+                List<Faction> factionsToMakePlatformsFor = new List<Faction>();
                 foreach (Faction f in Find.FactionManager.AllFactionsVisible)
                 {
                     Hauts_FactionCompHolder fch = WCFC.FindCompsFor(f);
@@ -720,7 +722,18 @@ namespace HautsPermits
                         HautsFactionComp_PeriodicBranchQuests pbq = fch.TryGetComp<HautsFactionComp_PeriodicBranchQuests>();
                         if (pbq != null && pbq.isBranch)
                         {
-                            todoFactions.Add(f);
+                            int platforms = 0;
+                            foreach (Settlement bpsh in Find.World.worldObjects.Settlements)
+                            {
+                                if (bpsh is BranchPlatform && bpsh.Faction != null && bpsh.Faction == f)
+                                {
+                                    platforms++;
+                                }
+                            }
+                            if (platforms < HVMP_Mod.settings.maxPlatformsPerBranch)
+                            {
+                                factionsToMakePlatformsFor.Add(f);
+                            }
                             if (f.defeated)
                             {
                                 f.defeated = false;
@@ -728,14 +741,7 @@ namespace HautsPermits
                         }
                     }
                 }
-                foreach (Settlement bpsh in Find.World.worldObjects.Settlements)
-                {
-                    if (bpsh is BranchPlatform && bpsh.Faction != null && todoFactions.Contains(bpsh.Faction))
-                    {
-                        todoFactions.Remove(bpsh.Faction);
-                    }
-                }
-                foreach (Faction f2 in todoFactions)
+                foreach (Faction f2 in factionsToMakePlatformsFor)
                 {
                     WorldObject worldObject = WorldObjectMaker.MakeWorldObject(HVMPDefOf.HVMP_BranchPlatform);
                     worldObject.SetFaction(f2);
@@ -747,7 +753,7 @@ namespace HautsPermits
                     }
                     Find.WorldObjects.Add(worldObject);
                 }
-                this.newSettlementTick = 900000;
+                this.newSettlementTick = (int)(HVMP_Mod.settings.makeNewBranchPlatformInterval*60000);
             }
         }
         public override void ExposeData()
@@ -1480,7 +1486,7 @@ namespace HautsPermits
                     PawnGroupKindDef settlement = PawnGroupKindDefOf.Settlement;
                     MapGenUtility.GeneratePawns(map, cellRect2, faction2, lord2, settlement, pawnGroupMakerParms, null, null, null, this.requiresRoof);
                 }
-                int combMulti = this.addedCombatants.RandomInRange;
+                int combMulti = (int)Math.Ceiling(HVMP_Mod.settings.platformDefenderScale);
                 for (int i = 0; i < combMulti; i++)
                 {
                     CellRect cellRect2 = cellRect;
@@ -1526,7 +1532,6 @@ namespace HautsPermits
         public FloatRange? lootMarketValue;
         public bool requiresRoof;
         public IntRange defenderMulti;
-        public IntRange addedCombatants;
         public FloatRange pointsPerPawnGen;
     }
     public class RoomContents_HVMP_RewardVault : RoomContentsWorker
@@ -1676,7 +1681,7 @@ namespace HautsPermits
                     if (this.parent.Faction != null && thing.TryGetComp(out CompTargetEffect_InstallPTargeter cteipt))
                     {
                         cteipt.faction = this.parent.Faction;
-                        cteipt.standingToGive = cteipt.Props.standingGainIfObtainedCorrectly;
+                        cteipt.freshFromVault = true;
                     }
                     if (thing.def.Minifiable)
                     {
@@ -1707,9 +1712,7 @@ namespace HautsPermits
         public bool canUpgrade;
         public bool requiresExistingHediff;
         public SoundDef soundOnUsed;
-        public int standingGainDefault;
-        public int standingGainIfObtainedCorrectly;
-        public int cooldownPerStanding;
+        public float standingGainFactorIfSecondhand;
     }
     public class CompTargetEffect_InstallPTargeter : CompTargetEffect
     {
@@ -1724,9 +1727,20 @@ namespace HautsPermits
         {
             if (this.faction != null)
             {
-                return "HVMP_GiveStandingFromFaction".Translate(this.standingToGive, this.faction.NameColored);
+                return "HVMP_GiveStandingFromFaction".Translate(this.StandingToGive, this.faction.NameColored);
             }
             return base.CompInspectStringExtra();
+        }
+        public int StandingToGive
+        {
+            get {
+                float result = Math.Max(1, (int)Math.Ceiling(HVMP_Mod.settings.authorizerStandingGain));
+                if (!this.freshFromVault)
+                {
+                    result *= this.Props.standingGainFactorIfSecondhand;
+                }
+                return (int)result;
+            }
         }
         public override void PostPostMake()
         {
@@ -1740,7 +1754,7 @@ namespace HautsPermits
                 }
                 this.faction = HVMP_Utility.AssignFallbackFactionToPermitTargeter();
             }
-            this.standingToGive = this.Props.standingGainDefault;
+            this.freshFromVault = false;
         }
         public override void DoEffectOn(Pawn user, Thing target)
         {
@@ -1757,10 +1771,10 @@ namespace HautsPermits
         {
             base.PostExposeData();
             Scribe_References.Look<Faction>(ref this.faction, "faction", false);
-            Scribe_Values.Look<int>(ref this.standingToGive, "standingToGive", 0, false);
+            Scribe_Values.Look<bool>(ref this.freshFromVault, "freshFromVault", false, false);
         }
         public Faction faction;
-        public int standingToGive;
+        public bool freshFromVault;
     }
     public class JobDriver_InstallPTargeter : JobDriver
     {
@@ -1820,11 +1834,10 @@ namespace HautsPermits
                 if (newHediff is Hediff_PTargeter ptarg)
                 {
                     ptarg.faction = f;
-                    ptarg.cooldownPerStanding = cteipt.Props.cooldownPerStanding;
                 }
-                this.TargetPawn.royalty.GainFavor(cteipt.faction,cteipt.standingToGive);
+                this.TargetPawn.royalty.GainFavor(cteipt.faction,cteipt.StandingToGive);
             } else if (cteipt.Props.canUpgrade && firstHediffOfDef is Hediff_PTargeter ptargf && f == ptargf.faction) {
-                this.TargetPawn.royalty.GainFavor(f, cteipt.standingToGive);
+                this.TargetPawn.royalty.GainFavor(f, cteipt.StandingToGive);
             } else {
                 return;
             }
@@ -1869,11 +1882,9 @@ namespace HautsPermits
             base.ExposeData();
             Scribe_References.Look<Faction>(ref this.faction, "faction", false);
             Scribe_Values.Look<int>(ref this.cooldownTicks, "cooldownTicks", 0, false);
-            Scribe_Values.Look<int>(ref this.cooldownPerStanding, "cooldownPerStanding", 300000, false);
         }
         public Faction faction;
         public int cooldownTicks;
-        public int cooldownPerStanding = 300000;
     }
     public class CompProperties_GatepunchAbility : CompProperties_AbilityEffect
     {
@@ -3413,6 +3424,90 @@ namespace HautsPermits
         public Thing instigator;
         private float angle;
         private static readonly FloatRange AngleRange = new FloatRange(-12f, 12f);
+    }
+    public class RoyalTitlePermitWorker_MechCluster : RoyalTitlePermitWorker_Targeted
+    {
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            if (!base.CanHitTarget(target))
+            {
+                if (target.IsValid && showMessages)
+                {
+                    Messages.Message(this.def.LabelCap + ": " + "AbilityCannotHitTarget".Translate(), MessageTypeDefOf.RejectInput, true);
+                }
+                return false;
+            }
+            return true;
+        }
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            this.CallCluster(target.Cell);
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (map.generatorDef.isUnderground)
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            string text = this.def.LabelCap + ": ";
+            Action action = null;
+            bool free;
+            if (HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.BeginCallCluster(pawn, faction, map, free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        private void BeginCallCluster(Pawn caller, Faction faction, Map map, bool free)
+        {
+            this.targetingParameters = new TargetingParameters();
+            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetSelf = true;
+            this.targetingParameters.canTargetFires = true;
+            this.targetingParameters.canTargetItems = true;
+            this.caller = caller;
+            this.map = map;
+            this.faction = faction;
+            this.free = free;
+            this.targetingParameters.validator = delegate (TargetInfo target)
+            {
+                if (this.def.royalAid.targetingRange > 0f && target.Cell.DistanceTo(caller.Position) > this.def.royalAid.targetingRange)
+                {
+                    return false;
+                }
+                if (target.Cell.Fogged(map))
+                {
+                    return false;
+                }
+                RoofDef roof = target.Cell.GetRoof(map);
+                return roof == null || !roof.isThickRoof;
+            };
+            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+        }
+        private void CallCluster(IntVec3 targetCell)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            float points = (pme != null && pme.incidentPoints.max > 0) ? pme.incidentPoints.RandomInRange : StorytellerUtility.DefaultThreatPointsNow(this.map);
+            MechClusterSketch mechClusterSketch = MechClusterGenerator.GenerateClusterSketch(points, this.map, true, false);
+            MechClusterUtility.SpawnCluster(targetCell, this.map, mechClusterSketch, true, false, null);
+            this.caller.royalty.GetPermit(this.def, this.faction).Notify_Used();
+            if (!this.free)
+            {
+                this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
+            }
+            HVMP_Utility.DoPTargeterCooldown(this.faction, this.caller, this);
+        }
+        private Faction faction;
     }
     [StaticConstructorOnStartup]
     public class RoyalTitlePermitWorker_CallRaid : RoyalTitlePermitWorker_GenerateQuest
@@ -5350,7 +5445,9 @@ namespace HautsPermits
             {
                 for (int i = 0; i < this.pawns.Count; i++)
                 {
-                    this.pawns[i].health.AddHediff(HVMPDefOf.HVMP_HostileEnvironmentFilm,null);
+                    Hediff hef = HediffMaker.MakeHediff(HVMPDefOf.HVMP_HostileEnvironmentFilm, this.pawns[i]);
+                    this.pawns[i].health.AddHediff(hef,null);
+                    hef.Severity = 1f;
                 }
             }
         }
@@ -7747,7 +7844,7 @@ namespace HautsPermits
                 if (hpt != null)
                 {
                     hpt.Severity = 0.001f;
-                    hpt.cooldownTicks = hpt.cooldownPerStanding * rptw.def.royalAid.favorCost;
+                    hpt.cooldownTicks = (int)(HVMP_Mod.settings.authorizerCooldownDays * 60000 * rptw.def.royalAid.favorCost);
                 }
             }
         }
@@ -7794,6 +7891,11 @@ namespace HautsPermits
         public int bratBehaviorMinSeniorityLvl = 99999;
         public int goodwillQuestRefusalLoss = 0;
         public int goodwillQuestFailureLoss = 4;
+        public float makeNewBranchPlatformInterval = 15f;
+        public float maxPlatformsPerBranch = 1f;
+        public float platformDefenderScale = 3f;
+        public float authorizerCooldownDays = 3f;
+        public float authorizerStandingGain = 6f;
         public override void ExposeData()
         {
             Scribe_Values.Look(ref maximumChaosMode, "maximumChaosMode", false);
@@ -7809,6 +7911,11 @@ namespace HautsPermits
             Scribe_Values.Look(ref bratBehaviorMinSeniorityLvl, "bratBehaviorMinSeniorityLvl", 99999);
             Scribe_Values.Look(ref goodwillQuestRefusalLoss, "goodwillQuestRefusalLoss", 0);
             Scribe_Values.Look(ref goodwillQuestFailureLoss, "goodwillQuestFailureLoss", 4);
+            Scribe_Values.Look(ref makeNewBranchPlatformInterval, "makeNewBranchPlatformInterval", 15f);
+            Scribe_Values.Look(ref maxPlatformsPerBranch, "maxPlatformsPerBranch", 1f);
+            Scribe_Values.Look(ref platformDefenderScale, "platformDefenderScale", 3f);
+            Scribe_Values.Look(ref authorizerCooldownDays, "authorizerCooldownDays", 3f);
+            Scribe_Values.Look(ref authorizerStandingGain, "authorizerStandingGain", 6f);
             base.ExposeData();
         }
     }
@@ -7938,6 +8045,99 @@ namespace HautsPermits
                 if (!failureLoss.Equals(origString2))
                 {
                     this.ParseInput(failureLoss, settings.goodwillQuestFailureLoss, out settings.goodwillQuestFailureLoss, 0, 120);
+                }
+            }
+            if (ModsConfig.OdysseyActive)
+            {
+                y += 70;
+                //branch platform spawn rate
+                displayBPI = ((int)settings.makeNewBranchPlatformInterval).ToString();
+                displayAuthCD = ((int)settings.authorizerCooldownDays).ToString();
+                displayBPLimit = ((int)settings.maxPlatformsPerBranch).ToString();
+                displayPASG = ((int)settings.authorizerStandingGain).ToString();
+                displayBPD = ((int)settings.platformDefenderScale).ToString();
+                float origBPI = settings.makeNewBranchPlatformInterval;
+                Rect bpiRect = new Rect(x + 10, y, halfWidth - 15, 32);
+                settings.makeNewBranchPlatformInterval = Widgets.HorizontalSlider(bpiRect, settings.makeNewBranchPlatformInterval, 5f, 60f, true, "HVMP_SettingBranchPlatformInterval".Translate(), "5 days", "60 days", 1f);
+                TooltipHandler.TipRegion(bpiRect.LeftPart(1f), "HVMP_TooltipBranchPlatformInterval".Translate());
+                if (origBPI != settings.makeNewBranchPlatformInterval)
+                {
+                    displayBPI = ((int)settings.makeNewBranchPlatformInterval).ToString();
+                }
+                y += 32;
+                string origStringBPI = displayBPI;
+                displayBPI = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayBPI);
+                if (!displayBPI.Equals(origStringBPI))
+                {
+                    this.ParseInput(displayBPI, settings.makeNewBranchPlatformInterval, out settings.makeNewBranchPlatformInterval, 5f, 60f);
+                }
+                y -= 32;
+                //authorizer cooldown per standing cost
+                float origPACooldown = settings.authorizerCooldownDays;
+                Rect paCooldownRect = new Rect(x + 5 + halfWidth, y, halfWidth - 15, 32);
+                settings.authorizerCooldownDays = Widgets.HorizontalSlider(paCooldownRect, settings.authorizerCooldownDays, 1f, 6f, true, "HVMP_SettingAuthorizerCooldown".Translate(), "1d", "6d", 0.1f);
+                TooltipHandler.TipRegion(paCooldownRect.LeftPart(1f), "HVMP_TooltipAuthorizerCooldown".Translate());
+                if (origPACooldown != settings.authorizerCooldownDays)
+                {
+                    displayAuthCD = ((int)settings.authorizerCooldownDays).ToString();
+                }
+                y += 32;
+                string origStringPACooldown = displayAuthCD;
+                displayAuthCD = Widgets.TextField(new Rect(x + 5 + halfWidth, y, 50, 32), displayAuthCD);
+                if (!displayAuthCD.Equals(origStringPACooldown))
+                {
+                    this.ParseInput(displayAuthCD, settings.authorizerCooldownDays, out settings.authorizerCooldownDays, 1f, 6f);
+                }
+                y += 32;
+                //max platforms per branch
+                float origBPLimit = settings.maxPlatformsPerBranch;
+                Rect bplimitRect = new Rect(x + 10, y, halfWidth - 15, 32);
+                settings.maxPlatformsPerBranch = Widgets.HorizontalSlider(bplimitRect, settings.maxPlatformsPerBranch, 1f, 4f, true, "HVMP_SettingBranchPlatformLimit".Translate(), "1", "4", 1f);
+                TooltipHandler.TipRegion(bplimitRect.LeftPart(1f), "HVMP_TooltipBranchPlatformLimit".Translate());
+                if (origBPLimit != settings.maxPlatformsPerBranch)
+                {
+                    displayBPLimit = ((int)settings.maxPlatformsPerBranch).ToString();
+                }
+                y += 32;
+                string origStringBPLimit = displayBPLimit;
+                displayBPLimit = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayBPLimit);
+                if (!displayBPLimit.Equals(origStringBPLimit))
+                {
+                    this.ParseInput(displayBPLimit, settings.maxPlatformsPerBranch, out settings.maxPlatformsPerBranch, 1f, 4f);
+                }
+                y -= 32;
+                //authorizer standing gain
+                float origPASG = settings.authorizerStandingGain;
+                Rect pasgRect = new Rect(x + 5 + halfWidth, y, halfWidth - 15, 32);
+                settings.authorizerStandingGain = Widgets.HorizontalSlider(pasgRect, settings.authorizerStandingGain, 1f, 10f, true, "HVMP_SettingAuthorizerStandingGain".Translate(), "1", "10", 1f);
+                TooltipHandler.TipRegion(pasgRect.LeftPart(1f), "HVMP_TooltipAuthorizerStandingGain".Translate());
+                if (origPASG != settings.authorizerStandingGain)
+                {
+                    displayPASG = ((int)settings.authorizerStandingGain).ToString();
+                }
+                y += 32;
+                string origStringPASG = displayPASG;
+                displayPASG = Widgets.TextField(new Rect(x + 5 + halfWidth, y, 50, 32), displayPASG);
+                if (!displayPASG.Equals(origStringPASG))
+                {
+                    this.ParseInput(displayPASG, settings.authorizerStandingGain, out settings.authorizerStandingGain, 1f, 10f);
+                }
+                y += 32;
+                //branch platform defender scale
+                float origBPD = settings.platformDefenderScale;
+                Rect bpDefenderRect = new Rect(x + 10, y, halfWidth - 15, 32);
+                settings.platformDefenderScale = Widgets.HorizontalSlider(bpDefenderRect, settings.platformDefenderScale, 1f, 7f, true, "HVMP_SettingBranchPlatformDefenders".Translate(), "1x", "7x", 1f);
+                TooltipHandler.TipRegion(bpDefenderRect.LeftPart(1f), "HVMP_TooltipBranchPlatformDefenders".Translate());
+                if (origBPD != settings.platformDefenderScale)
+                {
+                    displayBPD = ((int)settings.platformDefenderScale).ToString();
+                }
+                y += 32;
+                string origStringBPD = displayBPD;
+                displayBPD = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayBPD);
+                if (!displayBPD.Equals(origStringBPD))
+                {
+                    this.ParseInput(displayBPD, settings.platformDefenderScale, out settings.platformDefenderScale, 1f, 7f);
                 }
             }
             base.DoSettingsWindowContents(inRect);
@@ -8084,6 +8284,6 @@ namespace HautsPermits
             return "Hauts' Enterprise: More Permits";
         }
         public static HVMP_Settings settings;
-        public string displayMin, displayMax, displayQuestRewardFactor, refusalLoss, failureLoss, bb1, bb2;
+        public string displayMin, displayMax, displayQuestRewardFactor, refusalLoss, failureLoss, bb1, bb2, displayBPI, displayBPLimit, displayBPD, displayAuthCD, displayPASG;
     }
 }

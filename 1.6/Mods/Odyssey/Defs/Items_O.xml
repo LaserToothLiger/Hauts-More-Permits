@@ -36,10 +36,8 @@
         <hediffDef>HVMP_PTargeter</hediffDef>
         <bodyPart>Brain</bodyPart>
         <soundOnUsed>EnergyShield_Reset</soundOnUsed>
-		<standingGainDefault>3</standingGainDefault>
+		<standingGainFactorIfSecondhand>0.5</standingGainFactorIfSecondhand>
 		<canUpgrade>true</canUpgrade>
-		<standingGainIfObtainedCorrectly>6</standingGainIfObtainedCorrectly>
-		<cooldownPerStanding>180000</cooldownPerStanding>
       </li>
     </comps>
     <allowedArchonexusCount>1</allowedArchonexusCount>
