@@ -361,7 +361,7 @@
 
         <!-- Asker is faction leader, multiple prisoners -->
         <li>questDescription(asker_factionLeader==True,lodgersCount>=2)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], wants you to hold prisoner [lodgersCount] cultists for [shuttleDelayTicks_duration], until [asker_possessive] interrogation facilities are ready.[threatsInfo4]</li>
-        <li>threatsInfo4(generateThreats==true,threatType==Raids,enemyFaction!=Mechanoid)->\n\nUnfortunately, [enemyFaction_name] will send raids after you for sheltering the cultists. [enemyGroupsParagraph]</li>
+        <li>threatsInfo4(generateThreats==true,threatType==Raids,enemyFaction!=Mechanoid)->\n\nUnfortunately, the cult will send raids after you for sheltering the cultists. [enemyGroupsParagraph]</li>
 		
 		<li>cultistKnows->knows the location of potent archotech infrastructure</li>
 		<li>cultistKnows->has knowledge of various cult hideouts around the planet</li>

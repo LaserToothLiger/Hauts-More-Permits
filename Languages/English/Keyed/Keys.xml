@@ -34,6 +34,7 @@
 <HVMP_TooltipAuthorizerCooldown>Once a permit authorizer is used to use a permit from a hostile e-branch, it can't be used to do this again for a number of days equal to [the permit's standing cost] times [this value].</HVMP_TooltipAuthorizerCooldown>
 <HVMP_SettingAuthorizerStandingGain>Permit authorizer standing gain</HVMP_SettingAuthorizerStandingGain>
 <HVMP_TooltipAuthorizerStandingGain>Implanting a permit authorizer grants this much standing with its e-branch.</HVMP_TooltipAuthorizerStandingGain>
+<HVMP_GoodwillLoss>some amount</HVMP_GoodwillLoss>
 <!--Quest assignation errors-->
 <HVMP_ErrorNoQuestsFoundForBranch>Tried to give an e-branch quest from {0}, but their e-branch quest list is empty</HVMP_ErrorNoQuestsFoundForBranch>
 <HVMP_ErrorNoUsableBranchQuests>Tried to give an e-branch quest from {0}, but none of their quests' prerequisites are met and so cannot fire.</HVMP_ErrorNoUsableBranchQuests>

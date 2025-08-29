@@ -1435,6 +1435,7 @@
     <rootMinPoints>350</rootMinPoints>
     <defaultChallengeRating>1</defaultChallengeRating>
     <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>false</everAcceptableInSpace>
     <questNameRules>
       <rulesStrings>
         <li>questName(animalCount==1)->The [AdjectiveBadass] [beast]</li>

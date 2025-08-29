@@ -1375,7 +1375,7 @@ namespace HautsPermits
                 IntVec3 corner = rect.GetCorner(rot, true);
                 int num = Mathf.Max(this.cannonDef.size.x, this.cannonDef.size.z) + 4;
                 CellRect cellRect = corner.RectAbout(num, num);
-                MapGenUtility.Line(this.platformTerrain, map, corner, rect.CenterCell, 6f, true);
+                MapGenUtility.Line_NewTemp(this.platformTerrain, map, corner, rect.CenterCell, 6f, true, TerrainDefOf.Space);
                 foreach (IntVec3 intVec in cellRect.Cells)
                 {
                     if (intVec.InHorDistOf(corner, (float)num / 2f - 0.6f))
@@ -1480,15 +1480,21 @@ namespace HautsPermits
                 };
                 for (int i = 0; i < defMulti; i++)
                 {
+                    pawnGroupMakerParms.points = this.pointsPerPawnGen.RandomInRange;
                     CellRect cellRect2 = cellRect;
                     Faction faction2 = faction;
                     Lord lord2 = lord;
                     PawnGroupKindDef settlement = PawnGroupKindDefOf.Settlement;
                     MapGenUtility.GeneratePawns(map, cellRect2, faction2, lord2, settlement, pawnGroupMakerParms, null, null, null, this.requiresRoof);
+                    pawnGroupMakerParms.points = this.pointsPerPawnGen.RandomInRange;
+                    CellRect cellRect3 = cellRect;
+                    PawnGroupKindDef settlement2 = PawnGroupKindDefOf.Settlement_RangedOnly;
+                    MapGenUtility.GeneratePawns(map, cellRect3, faction2, lord2, settlement2, pawnGroupMakerParms, null, null, null, this.requiresRoof);
                 }
                 int combMulti = (int)Math.Ceiling(HVMP_Mod.settings.platformDefenderScale);
                 for (int i = 0; i < combMulti; i++)
                 {
+                    pawnGroupMakerParms.points = this.pointsPerPawnGen.RandomInRange;
                     CellRect cellRect2 = cellRect;
                     Faction faction2 = faction;
                     Lord lord2 = lord;
@@ -5528,7 +5534,7 @@ namespace HautsPermits
                 qpbgc.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
                 qpbgc.faction = Find.FactionManager.FirstFactionOfDef(this.faction);
                 qpbgc.historyEvent = this.goodwillChangeReason.GetValue(slate);
-                slate.Set<string>("goodwillPenalty", "dependent on current HEMP settings", false);
+                slate.Set<string>("goodwillPenalty", "HVMP_GoodwillLoss".Translate(), false);
                 QuestGen.quest.AddPart(qpbgc);
             }
             QuestPart_QuestEnd questPart_QuestEnd = new QuestPart_QuestEnd();

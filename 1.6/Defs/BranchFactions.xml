@@ -75,6 +75,14 @@
         </options>
       </li>
       <li>
+        <kindDef>Settlement_RangedOnly</kindDef>
+        <options>
+          <Town_Councilman>1</Town_Councilman>
+		  <Drone_Wasp MayRequire="Ludeon.RimWorld.Odyssey">15</Drone_Wasp>
+		  <Drone_Sentry MayRequire="Ludeon.RimWorld.Odyssey">35</Drone_Sentry>
+        </options>
+      </li>
+      <li>
         <kindDef>Trader</kindDef>
         <traders>
           <Town_Trader>1</Town_Trader>

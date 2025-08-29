@@ -673,7 +673,7 @@
     <workerClass>HautsPermits.RoyalTitlePermitWorker_CallRaid</workerClass>
     <minTitle>HVMP_OccultVI</minTitle>
     <faction>HVMP_OccultBranch</faction>
-    <permitPointCost>2</permitPointCost>
+    <permitPointCost>3</permitPointCost>
     <cooldownDays>40</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
     <uiPosition>(6,1)</uiPosition>

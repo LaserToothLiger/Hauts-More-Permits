@@ -454,7 +454,7 @@ namespace HautsPermits_Occult
             Thing thing = this.GenerateThing(pawn);
             quest.Delay(120, delegate
             {
-                quest.DropPods(map.Parent, new List<Thing> { thing }, "[deliveredLetterLabel]", null, "[deliveredLetterText]", null, new bool?(true), false, false, false, null, null, QuestPart.SignalListenMode.OngoingOnly, null, true, true, false, null);
+                quest.DropPods(map.Parent, new List<Thing> { thing }, "[deliveredLetterLabel]", null, "[deliveredLetterText]", null, new bool?(true), false, false, false, null, null, QuestPart.SignalListenMode.OngoingOnly, null, true, true, false, true, null);
                 this.AddPostDroppedQuestParts(pawn, thing, quest);
                 quest.End(QuestEndOutcome.Success, 0, null, null, QuestPart.SignalListenMode.OngoingOnly, false, false);
             }, null, null, null, false, null, null, false, null, null, null, false, QuestPart.SignalListenMode.OngoingOnly, false);

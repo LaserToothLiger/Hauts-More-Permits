@@ -756,7 +756,7 @@
     <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_DropGD</workerClass>
     <minTitle>HVMP_EcosphereVI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
-    <permitPointCost>3</permitPointCost>
+    <permitPointCost>2</permitPointCost>
     <cooldownDays>80</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
     <uiPosition>(7,0)</uiPosition>
