@@ -903,6 +903,15 @@ namespace HautsPermits
                     });
                 }
             }
+            Faction mech = Find.FactionManager.OfMechanoids;
+            if (mech != null)
+            {
+                this.ThisFaction.SetRelation(new FactionRelation
+                {
+                    other = mech,
+                    kind = FactionRelationKind.Hostile
+                });
+            }
             if (HVMP_Mod.settings.maximumChaosMode || !this.AnomalyRequirementsMet())
             {
                 //this.cooldownTicks = 600;
