@@ -132,6 +132,7 @@
     <rootMinPoints>350</rootMinPoints>
     <defaultChallengeRating>1</defaultChallengeRating>
     <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
     <questNameRules>
       <rulesStrings>
         <li>questName->[dangerous] [geology]</li>
@@ -732,6 +733,7 @@
     <rootMinPoints>350</rootMinPoints>
     <defaultChallengeRating>1</defaultChallengeRating>
     <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
     <questNameRules>
       <rulesStrings>
         <li>questName->[menace] cluster</li>

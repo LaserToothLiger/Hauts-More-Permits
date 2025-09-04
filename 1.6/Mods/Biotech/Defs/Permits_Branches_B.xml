@@ -752,7 +752,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_GeothermalDrillDrop</defName>
     <label>geothermal drill drop</label>
-    <description>Call for a geothermal drill, which bores down into the ground to create a steam geyser.\n\nCannot be placed too close to another geothermal drill or existing steam geyser.\n\nCosts three permit points.</description>
+    <description>Call for a geothermal drill, which bores down into the ground to create a steam geyser.\n\nCannot be placed too close to another geothermal drill or existing steam geyser.\n\nCosts two permit points.</description>
     <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_DropGD</workerClass>
     <minTitle>HVMP_EcosphereVI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>

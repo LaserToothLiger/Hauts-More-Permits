@@ -248,7 +248,7 @@
 	  </HediffDef>
   <HediffDef ParentName="HVT_TraitHediffBase">
     <defName>HVMP_CaravanSpeedAura</defName>
-    <label>rover route assist (stealth)</label>
+    <label>rover route assist (speed)</label>
     <description>While on a caravan, its speed is increased.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(1,1,1)</defaultLabelColor>

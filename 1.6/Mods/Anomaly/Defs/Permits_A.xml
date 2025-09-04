@@ -669,7 +669,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_CallAberration</defName>
     <label>signal aberration</label>
-    <description>Send out a signal to attract an eccentric individual both blessed and cursed by the Void. This individual will arrive within 1-2 days.\n\nCosts two permit points.</description>
+    <description>Send out a signal to attract an eccentric individual both blessed and cursed by the Void. This individual will arrive within 1-2 days.\n\nCosts three permit points.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_CallRaid</workerClass>
     <minTitle>HVMP_OccultVI</minTitle>
     <faction>HVMP_OccultBranch</faction>
