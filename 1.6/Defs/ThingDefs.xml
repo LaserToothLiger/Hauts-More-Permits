@@ -143,7 +143,7 @@
         <destroyMode>KillFinalize</destroyMode>
         <countdownLabel>Self-destruct in</countdownLabel>
       </li>
-	  <li Class="HautsFramework.CompProperties_FactionColored">
+	  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
 		<colorFactor>0.75</colorFactor>
 	  </li>
       <li Class="CompProperties_AmbientSound">
@@ -257,7 +257,7 @@
         <destroyMode>KillFinalize</destroyMode>
         <countdownLabel>Self-destruct in</countdownLabel>
       </li>
-	  <li Class="HautsFramework.CompProperties_FactionColored">
+	  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
 		<colorFactor>0.75</colorFactor>
 	  </li>
       <li Class="CompProperties_AmbientSound">
@@ -370,7 +370,7 @@
         <destroyMode>KillFinalize</destroyMode>
         <countdownLabel>Self-destruct in</countdownLabel>
       </li>
-	  <li Class="HautsFramework.CompProperties_FactionColored">
+	  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
 		<colorFactor>0.75</colorFactor>
 	  </li>
       <li Class="CompProperties_AmbientSound">
@@ -472,7 +472,7 @@
         <destroyMode>KillFinalize</destroyMode>
         <countdownLabel>Self-destruct in</countdownLabel>
       </li>
-	  <li Class="HautsFramework.CompProperties_FactionColored">
+	  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
 		<colorFactor>0.75</colorFactor>
 	  </li>
       <li Class="CompProperties_AmbientSound">
@@ -600,7 +600,7 @@
         <destroyMode>KillFinalize</destroyMode>
         <countdownLabel>Self-destruct in</countdownLabel>
       </li>
-	  <li Class="HautsFramework.CompProperties_FactionColored">
+	  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
 		<colorFactor>0.75</colorFactor>
 	  </li>
     </comps>
@@ -676,7 +676,7 @@
         <destroyMode>KillFinalize</destroyMode>
         <countdownLabel>Self-destruct in</countdownLabel>
       </li>
-	  <li Class="HautsFramework.CompProperties_FactionColored">
+	  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
 		<colorFactor>0.75</colorFactor>
 	  </li>
     </comps>
@@ -760,7 +760,7 @@
 			<destroyMode>KillFinalize</destroyMode>
 			<countdownLabel>Self-destruct in</countdownLabel>
 		  </li>
-		  <li Class="HautsFramework.CompProperties_FactionColored">
+		  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
 			<colorFactor>0.75</colorFactor>
 		  </li>
 		  <li Class="CompProperties_AmbientSound">

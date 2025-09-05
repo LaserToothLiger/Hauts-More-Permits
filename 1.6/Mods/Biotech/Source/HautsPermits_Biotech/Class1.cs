@@ -164,6 +164,112 @@ namespace HautsPermits_Biotech
         }
         private Faction faction;
     }
+    public class RoyalTitlePermitWorker_HealStim : RoyalTitlePermitWorker_GiveHediffs_PTargFriendly
+    {
+        public override void GiveHediffInCaravanInner(Pawn caller, Faction faction, bool free, Caravan caravan)
+        {
+            Pawn bestPawn = caller;
+            float bestScore = 0f;
+            foreach (Pawn p in caravan.pawns)
+            {
+                float score = 0f;
+                foreach (Hediff h in p.health.hediffSet.hediffs)
+                {
+                    if (h is Hediff_Injury)
+                    {
+                        score += h.Severity;
+                    }
+                }
+                score /= Math.Max(0.5f,p.GetStatValue(StatDefOf.InjuryHealingFactor));
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestPawn = p;
+                }
+            }
+            this.AffectPawn(bestPawn, faction);
+        }
+    }
+    public class RoyalTitlePermitWorker_ImmunityStim : RoyalTitlePermitWorker_GiveHediffs_PTargFriendly
+    {
+        public override void GiveHediffInCaravanInner(Pawn caller, Faction faction, bool free, Caravan caravan)
+        {
+            Pawn bestPawn = caller;
+            float bestScore = 0f;
+            foreach (Pawn p in caravan.pawns)
+            {
+                float score = 0f;
+                foreach (Hediff h in p.health.hediffSet.hediffs)
+                {
+                    HediffComp_Immunizable hci = h.TryGetComp<HediffComp_Immunizable>();
+                    if (hci != null)
+                    {
+                        score += Math.Max(0f,(h.Severity/h.def.lethalSeverity) - hci.Immunity);
+                    }
+                }
+                score /= Math.Max(0.5f, p.GetStatValue(StatDefOf.ImmunityGainSpeed));
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestPawn = p;
+                }
+            }
+            this.AffectPawn(bestPawn, faction);
+        }
+    }
+    public class RoyalTitlePermitWorker_TempregStim : RoyalTitlePermitWorker_GiveHediffs_PTargFriendly
+    {
+        public override void GiveHediffInCaravanInner(Pawn caller, Faction faction, bool free, Caravan caravan)
+        {
+            Pawn bestPawn = caller;
+            float bestScore = 0f;
+            foreach (Pawn p in caravan.pawns)
+            {
+                float burnup = Math.Max(0f, p.AmbientTemperature - p.GetStatValue(StatDefOf.ComfyTemperatureMax));
+                Hediff heatstroke = p.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Heatstroke);
+                if (heatstroke != null)
+                {
+                    burnup *= (1f+heatstroke.Severity);
+                }
+                float cooldown = Math.Max(0f, p.GetStatValue(StatDefOf.ComfyTemperatureMin) - p.AmbientTemperature);
+                Hediff hypothermia = p.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Hypothermia);
+                if (hypothermia != null)
+                {
+                    burnup *= (1f + hypothermia.Severity);
+                }
+                float score = burnup + cooldown;
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestPawn = p;
+                }
+            }
+            this.AffectPawn(bestPawn, faction);
+        }
+    }
+    public class RoyalTitlePermitWorker_ToxtolStim : RoyalTitlePermitWorker_GiveHediffs_PTargFriendly
+    {
+        public override void GiveHediffInCaravanInner(Pawn caller, Faction faction, bool free, Caravan caravan)
+        {
+            Pawn bestPawn = caller;
+            float bestScore = 0f;
+            foreach (Pawn p in caravan.pawns)
+            {
+                float score = p.GetStatValue(StatDefOf.ToxicEnvironmentResistance);
+                Hediff toxBuildup = p.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.ToxicBuildup);
+                if (toxBuildup != null)
+                {
+                    score *= (1f + toxBuildup.Severity);
+                }
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestPawn = p;
+                }
+            }
+            this.AffectPawn(bestPawn, faction);
+        }
+    }
     [StaticConstructorOnStartup]
     public class RoyalTitlePermitWorker_DropGD : RoyalTitlePermitWorker_Targeted
     {
@@ -1131,7 +1237,7 @@ namespace HautsPermits_Biotech
     {
         protected override bool TestRunInt(Slate slate)
         {
-            return slate.Exists("map", false) && AggressiveAnimalIncidentUtility.TryFindAggressiveAnimalKind(slate.Get<float>("points", 0f, false), slate.Get<Map>("map", null, false), out PawnKindDef pawnKindDef);
+            return Find.Storyteller.difficulty.allowViolentQuests && slate.Exists("map", false) && AggressiveAnimalIncidentUtility.TryFindAggressiveAnimalKind(slate.Get<float>("points", 0f, false), slate.Get<Map>("map", null, false), out PawnKindDef pawnKindDef);
         }
         protected override void RunInt()
         {

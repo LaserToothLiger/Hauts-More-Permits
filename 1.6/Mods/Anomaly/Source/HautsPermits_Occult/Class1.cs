@@ -2035,7 +2035,7 @@ namespace HautsPermits_Occult
     {
         protected override bool TestRunInt(Slate slate)
         {
-            return slate.Exists("map", false);
+            return Find.Storyteller.difficulty.allowViolentQuests && slate.Exists("map", false);
         }
         protected override void RunInt()
         {

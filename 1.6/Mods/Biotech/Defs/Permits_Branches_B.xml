@@ -218,12 +218,12 @@
     <defName>HVMP_StimulateHealing</defName>
     <label>stimulate healing</label>
     <description>Activate mechanites in and around the target's body to encourage faster healing. Lasts 3 days.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_HealStim</workerClass>
     <minTitle>HVMP_EcosphereII</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>15</cooldownDays>
-    <usableOnWorldMap>false</usableOnWorldMap>
+    <usableOnWorldMap>true</usableOnWorldMap>
     <uiPosition>(1,2)</uiPosition>
     <royalAid>
       <favorCost>2</favorCost>
@@ -241,12 +241,12 @@
     <defName>HVMP_StimulateThermotolerance</defName>
     <label>stimulate thermotolerance</label>
     <description>Activate mechanites in and around the target's body to maintain homeostasis in a wider variety of temperatures. Lasts 5 days.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_TempregStim</workerClass>
     <minTitle>HVMP_EcosphereII</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>15</cooldownDays>
-    <usableOnWorldMap>false</usableOnWorldMap>
+    <usableOnWorldMap>true</usableOnWorldMap>
     <uiPosition>(1,3)</uiPosition>
     <royalAid>
       <favorCost>2</favorCost>
@@ -359,12 +359,12 @@
     <defName>HVMP_StimulateImmunity</defName>
     <label>stimulate immunity</label>
     <description>Activate mechanites in and around the target's body to encourage a more robust immune response to disease. Lasts 3 days.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_ImmunityStim</workerClass>
     <minTitle>HVMP_EcosphereIII</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
-    <usableOnWorldMap>false</usableOnWorldMap>
+    <usableOnWorldMap>true</usableOnWorldMap>
     <uiPosition>(2,5)</uiPosition>
     <royalAid>
       <favorCost>4</favorCost>
@@ -382,12 +382,12 @@
     <defName>HVMP_StimulateToxtolerance</defName>
     <label>stimulate toxtolerance</label>
     <description>Activate mechanites in and around the target's body to maintain homeostasis in toxic environments. Lasts 10 days.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_ToxtolStim</workerClass>
     <minTitle>HVMP_EcosphereIII</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
-    <usableOnWorldMap>false</usableOnWorldMap>
+    <usableOnWorldMap>true</usableOnWorldMap>
     <uiPosition>(2,6)</uiPosition>
     <royalAid>
       <favorCost>4</favorCost>
@@ -850,7 +850,7 @@
 			<destroyMode>KillFinalize</destroyMode>
 			<countdownLabel>Self-destruct in</countdownLabel>
 		  </li>
-		  <li Class="HautsFramework.CompProperties_FactionColored">
+		  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
 			<colorFactor>0.75</colorFactor>
 		  </li>
 		  <li Class="CompProperties_AmbientSound">
