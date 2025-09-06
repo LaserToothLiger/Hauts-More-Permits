@@ -4,12 +4,12 @@
   <TipSetDef>
     <defName>HVMP_Tipset</defName>
     <tips>
-      <li TKey="HVMP_CommsConsole1">The comms console enables you to contact Branch factions. You can use this to solicit additional quests from them - although every Branch faction shares the same three-day cooldown for this ability.</li>
+      <li TKey="HVMP_CommsConsole1">If you want to gain standing with Branch factions faster, contact them on the comms console. You can donate certain goods for standing, or ask for new quests.</li>
       <li TKey="HVMP_CommsConsole2">Branch permits' cooldowns can be refreshed by spending goodwill at the comms console. Since this affects all permits belonging to that Branch faction, it's more efficient for colonists with more permits.</li>
-      <li TKey="HVMP_CuttingTies">If you want to stop receiving quests from a Branch faction, you can just accept their Cutting Ties quest in the quest tab. This will make them hostile to you - but Branch factions don't send raids, so the only consequence of hostility is an inability to use their permits.</li>
-      <li TKey="HVMP_CommerceDesertion">The Desertion Bribe permit from the Commerce Branch can be used to force a single sapient foe to flee. Use it on powerful enemies, such as rocket launcher wielders.</li>
-      <li TKey="HVMP_PaxTurrets">Certain permits from the Pax Branch can be used to summon defensive turrets. Like regular turrets, they can explode when destroyed - and since enemies will attack them, it might be best to place them very close to your enemies.</li>
-      <li TKey="HVMP_RoverRescues">The Find Rescuee permit from the Rover Branch can be used to find potential new recruits for the colony. Unlike regular rescuees, you can see all of their traits, skills, and health conditions through the quest tab.</li>
+      <li TKey="HVMP_CuttingTies">Want to stop receiving quests from a Branch faction? Accept their Cutting Ties quest in the quest tab. This will make them hostile - but they don't send raids, so the only consequence of hostility is an inability to use their permits.</li>
+      <li TKey="HVMP_CommerceDesertion">The Desertion Bribe permit from the Commerce Branch forces a single sapient foe to flee. Use it on powerful enemies, such as rocket launcher wielders.</li>
+      <li TKey="HVMP_PaxTurrets">Certain permits from the Pax Branch summon defensive turrets. Like regular turrets, they can explode when destroyed - and since enemies attack them, it might be best to place them very close to your foes.</li>
+      <li TKey="HVMP_RoverRescues">The Find Rescuee permit from the Rover Branch locates potential new recruits for the colony. Unlike regular rescuees, you can see all of their traits, skills, and health conditions through the quest tab.</li>
     </tips>
   </TipSetDef>
 
