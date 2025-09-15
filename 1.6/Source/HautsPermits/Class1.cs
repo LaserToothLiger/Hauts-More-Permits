@@ -3989,13 +3989,22 @@ namespace HautsPermits
             if (pme != null && pme.extraNumber != null)
             {
                 HVMP_Utility.ThrowRepairGlow(target.Cell.ToVector3(), this.map, 1.5f);
+                Thing toHeal = null;
+                float worstMissingHp = 0;
                 foreach (Thing t in target.Cell.GetThingList(this.caller.Map))
                 {
                     if (t.def.useHitPoints && (t.HitPoints < t.MaxHitPoints || this.OtherQualifiers(t)) && (t is Building || (t.def.thingCategories != null && (pme.thingCategories == null || t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.thingCategories.Contains(tcd))) && (pme.forbiddenThingCategories == null || !t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.forbiddenThingCategories.Contains(tcd))))))
                     {
-                        this.Heal(t, this.calledFaction);
-                        break;
+                        if (t.MaxHitPoints - t.HitPoints > worstMissingHp)
+                        {
+                            worstMissingHp = t.MaxHitPoints - t.HitPoints;
+                            toHeal = t;
+                        }
                     }
+                }
+                if (toHeal != null)
+                {
+                    this.Heal(toHeal, this.calledFaction);
                 }
             }
         }
@@ -6480,8 +6489,9 @@ namespace HautsPermits
                 this.curProgress += this.Props.baseProgressPerTick*(float)delta;
                 if (this.PowerTrader.PowerOn)
                 {
+                    float chanceMod = this.curPowerConsumption / this.Props.maxExternalPower;
                     this.curProgress += this.Props.bonusProgressPerInterval * (float)delta * (this.curPowerConsumption / this.Props.powerInterval);
-                    if (this.raidCD <= 0 && this.parent.IsHashIntervalTick(2500, delta) && this.parent.Spawned && Rand.MTBEventOccurs(this.Props.raidMTBdays, 60000f, 2500f))
+                    if (this.raidCD <= 0 && this.parent.IsHashIntervalTick(2500, delta) && this.parent.Spawned && Rand.Chance(chanceMod) && Rand.MTBEventOccurs(this.Props.raidMTBdays, 60000f, 2500f))
                     {
                         this.raidCD = this.Props.minTimeBetweenRaids;
                         IncidentParms incidentParms = new IncidentParms

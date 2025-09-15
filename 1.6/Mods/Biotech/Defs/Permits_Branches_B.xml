@@ -352,6 +352,7 @@
 			<minTechLevelInCategory>Industrial</minTechLevelInCategory>
 			<maxTechLevelInCategory>Spacer</maxTechLevelInCategory>
 			<numFromCategory>1</numFromCategory>
+			<marketValueLimits>150~9999999</marketValueLimits>
 		</li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -609,6 +610,7 @@
 			<minTechLevelInCategory>Industrial</minTechLevelInCategory>
 			<maxTechLevelInCategory>Spacer</maxTechLevelInCategory>
 			<numFromCategory>1</numFromCategory>
+			<marketValueLimits>150~9999999</marketValueLimits>
 		</li>
 	</modExtensions>
   </RoyalTitlePermitDef>

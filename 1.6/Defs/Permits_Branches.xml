@@ -2268,6 +2268,29 @@
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ushanka.GlittertechExpansion">
+		<defName>HVMP_LocateGlittertechSite</defName>
+		<label>find glittertech site</label>
+		<description>Learn about a location where glitterworld technology is being held.\n\nCosts two permit points.</description>
+		<workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+		<minTitle>HVMP_RoverVI</minTitle>
+		<faction>HVMP_RoverBranch</faction>
+		<permitPointCost>2</permitPointCost>
+		<cooldownDays>60</cooldownDays>
+		<usableOnWorldMap>true</usableOnWorldMap>
+		<uiPosition>(7,3)</uiPosition>
+		<royalAid>
+		  <favorCost>8</favorCost>
+		</royalAid>
+		<modExtensions>
+			<li Class="HautsFramework.PermitMoreEffects">
+				<questScriptDefs>
+				  <li>USH_GlittertechFacility</li>
+				  <li>USH_GlittertechOutpost</li>
+				</questScriptDefs>
+			</li>
+		</modExtensions>
+	  </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Woolstrand.RealRuins">
 		<defName>HVMP_LocateAbandonedBase</defName>
 		<label>find abandoned base</label>
@@ -2278,7 +2301,7 @@
 		<permitPointCost>2</permitPointCost>
 		<cooldownDays>55</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(7,3)</uiPosition>
+		<uiPosition>(7,4)</uiPosition>
 		<royalAid>
 		  <favorCost>6</favorCost>
 		</royalAid>
