@@ -66,7 +66,7 @@
 			<invalidTargetMessage>HVMP_TargetCurrency</invalidTargetMessage>
 			<gambaFactorRange>0.5~2.5</gambaFactorRange>
 			<gambaDropPodSoNotInstant>true</gambaDropPodSoNotInstant>
-			<extraNumber>1000</extraNumber>
+			<extraNumber>4000</extraNumber>
 			<gambaReturnDelay>300000</gambaReturnDelay>
 			<returnMessage>HVMP_InvestmentReturns</returnMessage>
 			<onUseMessage>HVMP_InvestmentMade</onUseMessage>
@@ -446,7 +446,7 @@
 			<invalidTargetMessage>HVMP_TargetCurrency</invalidTargetMessage>
 			<gambaFactorRange>0.01~3</gambaFactorRange>
 			<gambaDropPodSoNotInstant>true</gambaDropPodSoNotInstant>
-			<extraNumber>1000</extraNumber>
+			<extraNumber>4000</extraNumber>
 			<gambaReturnDelay>180</gambaReturnDelay>
 			<returnMessage>HVMP_InvestmentReturns</returnMessage>
 			<onUseMessage>HVMP_InvestmentMade</onUseMessage>
