@@ -1898,13 +1898,13 @@
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef>
     <defName>HVMP_CallTransitShuttle</defName>
-    <label>call transit shuttle</label>
+    <label>call transit shuttle A</label>
     <description>Call a shuttle for your own use. It will transport colonists, items, and animals anywhere you like within 70 world tiles.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_CallShuttlePTargFriendly</workerClass>
     <minTitle>HVMP_RoverIII</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>25</cooldownDays>
+    <cooldownDays>30</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
     <uiPosition>(3,5)</uiPosition>
     <royalAid>
@@ -1989,6 +1989,23 @@
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_CallTransitShuttleB</defName>
+    <label>call transit shuttle B</label>
+    <description>Call a shuttle for your own use. It will transport colonists, items, and animals anywhere you like within 70 world tiles.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallShuttlePTargFriendly</workerClass>
+    <minTitle>HVMP_RoverIV</minTitle>
+    <faction>HVMP_RoverBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>30</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(4,4)</uiPosition>
+    <royalAid>
+      <favorCost>6</favorCost>
+      <targetingRange>44.9</targetingRange>
+      <targetingRequireLOS>false</targetingRequireLOS>
+    </royalAid>
+  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Ideology">
     <defName>HVMP_LocateAncientComplex</defName>
     <label>find ancient complex</label>
@@ -2195,6 +2212,23 @@
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_CallTransitShuttleC</defName>
+    <label>call transit shuttle C</label>
+    <description>Call a shuttle for your own use. It will transport colonists, items, and animals anywhere you like within 70 world tiles.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallShuttlePTargFriendly</workerClass>
+    <minTitle>HVMP_RoverV</minTitle>
+    <faction>HVMP_RoverBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>30</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(6,3)</uiPosition>
+    <royalAid>
+      <favorCost>6</favorCost>
+      <targetingRange>44.9</targetingRange>
+      <targetingRequireLOS>false</targetingRequireLOS>
+    </royalAid>
+  </RoyalTitlePermitDef>
   <!--Rover level 6-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Odyssey">
     <defName>HVMP_LocateGravcore</defName>
@@ -2311,5 +2345,22 @@
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_CallTransitShuttleD</defName>
+    <label>call transit shuttle D</label>
+    <description>Call a shuttle for your own use. It will transport colonists, items, and animals anywhere you like within 70 world tiles.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallShuttlePTargFriendly</workerClass>
+    <minTitle>HVMP_RoverVI</minTitle>
+    <faction>HVMP_RoverBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>30</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(7,5)</uiPosition>
+    <royalAid>
+      <favorCost>6</favorCost>
+      <targetingRange>44.9</targetingRange>
+      <targetingRequireLOS>false</targetingRequireLOS>
+    </royalAid>
+  </RoyalTitlePermitDef>
   
 </Defs>

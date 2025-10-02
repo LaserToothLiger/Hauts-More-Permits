@@ -394,6 +394,7 @@ namespace HautsPermits_Biotech
             this.compClass = typeof(CompGTDrill);
         }
         public int ticksToFinish;
+        public float dustRange;
         public SoundDef soundWorking;
     }
     public class CompGTDrill : ThingComp
@@ -434,6 +435,18 @@ namespace HautsPermits_Biotech
                     Thing geyser = ThingMaker.MakeThing(ThingDefOf.SteamGeyser);
                     GenSpawn.Spawn(geyser, this.parent.Position, this.parent.Map, geyser.def.defaultPlacingRot, WipeMode.Vanish, false, false);
                     this.parent.Destroy(DestroyMode.KillFinalize);
+                }
+                if (this.Props.dustRange > 0f)
+                {
+                    int maxDust = 10;
+                    foreach (IntVec3 intVec in GenRadial.RadialCellsAround(this.parent.Position, this.Props.dustRange, true).InRandomOrder())
+                    {
+                        if (maxDust > 0 && Rand.Chance(0.6f))
+                        {
+                            FleckMaker.ThrowDustPuffThick(intVec.ToVector3Shifted(), this.parent.Map, Rand.Range(1f, 3f), CompAbilityEffect_Wallraise.DustColor);
+                            maxDust--;
+                        }
+                    }
                 }
             }
         }
@@ -816,7 +829,7 @@ namespace HautsPermits_Biotech
             }
             int value = this.max.GetValue(slate);
             CellRect cellRect = LargestAreaFinder.FindLargestRect(mapResolved, (IntVec3 x) => this.IsClear(x, mapResolved), value);
-            return Mathf.Min(new int[] { cellRect.Width, cellRect.Height, value });
+            return Mathf.Min(new int[] { (int)(cellRect.Width/2), (int)(cellRect.Height/2), value });
         }
         private bool IsClear(IntVec3 c, Map map)
         {
@@ -1147,21 +1160,34 @@ namespace HautsPermits_Biotech
         {
             if (thing != null && thing is NaturePreserve np)
             {
+                if (center.CloseToEdge(map, (int)np.radius))
+                {
+                    return "HVMPCannotPlacePreserve".Translate();
+                }
                 bool badJuju = false;
                 List<Thing> forCell = map.listerArtificialBuildingsForMeditation.GetForCell(center, np.radius);
                 forCell.AddRange(map.listerThings.ThingsOfDef(HVMP_BDefOf.HVMP_PreserveMarker).Where((Thing t) => t.Position.DistanceTo(center) <= np.radius));
                 if (forCell.Count > 0)
                 {
                     badJuju = true;
-                }
-                else
-                {
-                    foreach (IntVec3 intVec in GenRadial.RadialCellsAround(center, np.radius, true))
+                } else {
+                    foreach (Thing t in map.listerThings.ThingsOfDef(HVMP_BDefOf.HVMP_PreserveMarker))
                     {
-                        if (intVec.InBounds(map) && (intVec.IsPolluted(map) || intVec.GetTerrain(map).IsFloor))
+                        if (t.Spawned && t is NaturePreserve np2 && np2.Position.DistanceTo(center) <= np2.radius)
                         {
                             badJuju = true;
                             break;
+                        }
+                    }
+                    if (!badJuju)
+                    {
+                        foreach (IntVec3 intVec in GenRadial.RadialCellsAround(center, np.radius, true))
+                        {
+                            if (intVec.InBounds(map) && (intVec.IsPolluted(map) || intVec.GetTerrain(map).IsFloor))
+                            {
+                                badJuju = true;
+                                break;
+                            }
                         }
                     }
                 }

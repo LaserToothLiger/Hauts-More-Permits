@@ -19,7 +19,7 @@
 <HVMP_LevelFriend>Introductory title ("_friend")</HVMP_LevelFriend>
 <HVMP_Level>Level {0} title</HVMP_Level>
 <HVMP_SettingGoodwillRefusal>Goodwill lost from refusing quests</HVMP_SettingGoodwillRefusal>
-<HVMP_TooltipGoodwillRefusal>If you fulfill either the 'minimum expectation' or 'minimum title' conditions set above, you will lose this much goodwill whenever you let an e-branch quest expire without accepting it.\n\nIf both a minimum expectation and title have been selected, both conditions must be fulfilled.\n\nChanging this value will only affect the penalty for FUTURE quests, not ones that have already been generated.</HVMP_TooltipGoodwillRefusal>
+<HVMP_TooltipGoodwillRefusal>If you fulfill either the 'minimum expectation' or 'minimum title' conditions set above, you will lose this much goodwill whenever you let an e-branch quest expire without accepting it. You also lose this much goodwill if an e-branch was prevented from sending a quest due to you toggling off its goodwill or standing rewards in the Rewards Preferences menu of your Quests tab.\n\nIf both a minimum expectation and title have been selected, both conditions must be fulfilled.\n\nChanging this value will only affect the penalty for FUTURE quests, not ones that have already been generated.</HVMP_TooltipGoodwillRefusal>
 <HVMP_SettingGoodwillFailure>Goodwill lost from failing quests</HVMP_SettingGoodwillFailure>
 <HVMP_TooltipGoodwillFailure>If you fulfill either the 'minimum expectation' or 'minimum title' conditions set above, you will lose this much goodwill whenever you fail an accepted e-branch quest.\n\nIf both a minimum expectation and title have been selected, both conditions must be fulfilled.\n\nChanging this value will only affect the penalty for FUTURE quests, not ones that have already been generated.</HVMP_TooltipGoodwillFailure>
 <HVMP_SettingAnomalyActivityLevel>Occult Branch can always be encountered</HVMP_SettingAnomalyActivityLevel>
@@ -75,7 +75,7 @@
 <HVMP_TargetTMD>Target must be suffering from a mechanite disease</HVMP_TargetTMD>
 <HVMP_CommandCallRoyalAidMapTooWatery>Cannot drill a geothermal vent in this area.</HVMP_CommandCallRoyalAidMapTooWatery>
 <HVMP_TooCloseToGeyser>Drill must not be too close to another drill or existing steam geyser.</HVMP_TooCloseToGeyser>
-<HVMP_PoorTerrainForGeyser>Drill must be placed on a wide stretch of excavatable ground suitable for heavy structures.</HVMP_PoorTerrainForGeyser>
+<HVMP_PoorTerrainForGeyser>Drill must be placed on a wide stretch of diggable ground suitable for heavy structures.</HVMP_PoorTerrainForGeyser>
 <HVMP_WaterUnsuitableForFish>Hatchery cannot function in a body of water incapable of supporting a fish population.</HVMP_WaterUnsuitableForFish>
 <HVMP_NoWaterForFish>Hatchery must be placed on a body of water capable of supporting a fish population.</HVMP_NoWaterForFish>
 <HVMP_TooCloseToHatchery>Hatchery must not be too close to another hatchery.</HVMP_TooCloseToHatchery>
@@ -203,4 +203,257 @@
 <HVMP_IdeoBookHediffGain>Per hour of reading: grants {0} stacks of the "{1}" buff to believers, lasting for {2} hours</HVMP_IdeoBookHediffGain>
 <!--other items-->
 <HVMP_ChargecellIsForMechs>Target must have an energy meter</HVMP_ChargecellIsForMechs>
+
+
+<!--Mod settings for quest mutators-->
+<HVMP_Label_QuestMutators>Quest Mutators</HVMP_Label_QuestMutators>
+<HVMP_Tooltip_QuestMutators>If you feel like a particular quest type is too easy, you can use the modifiers below to make it more difficult. Changes in this menu only apply to future quests, not those that have already been generated.</HVMP_Tooltip_QuestMutators>
+<HVMP_Label_MayhemMode>Mayhem Mode</HVMP_Label_MayhemMode>
+<HVMP_Tooltip_MayhemMode>If enabled, disabled mutators still have a 35% chance to apply to any quest of this type.</HVMP_Tooltip_MayhemMode>
+<HVMP_Label_Commerce>COMMERCE BRANCH</HVMP_Label_Commerce>
+<HVMP_Label_Fortification>Fortification</HVMP_Label_Fortification>
+<HVMP_Tooltip_Fortification>Fight 1-2 raids.</HVMP_Tooltip_Fortification>
+<HVMP_HardMode_Label_Fortification_1>Advanced Weaponry</HVMP_HardMode_Label_Fortification_1>
+<HVMP_HardMode_Tooltip_Fortification_1>Raids may have an additional contingent of robotic combatants (such as centipedes or Odyssey's wasp drones). Otherwise, their arrival will be accompanied by 2-5 hours of an EMI field, psychic drone, or lesser psychic suppression which only affects you and your allies.</HVMP_HardMode_Tooltip_Fortification_1>
+<HVMP_HardMode_Label_Fortification_2>Dead Raiders Tell No Tales</HVMP_HardMode_Label_Fortification_2>
+<HVMP_HardMode_Tooltip_Fortification_2>Some raiders are "raiding scouts", marked by a red symbol above their heads. Any raiding scout that escapes will grant up to four hostile factions an additional cache of "raid points" which they can spend to empower their future raids.</HVMP_HardMode_Tooltip_Fortification_2>
+<HVMP_HardMode_Label_Fortification_3>Traitor Guard</HVMP_HardMode_Label_Fortification_3>
+<HVMP_HardMode_Tooltip_Fortification_3>Raids have an additional contingent of industrial-tech mercenaries. Some raiders may have a protective mechanite coating, and a few may have a special red shield that makes them slower but can absorb a very high amount of damage (of any kind, even melee or EMP).</HVMP_HardMode_Tooltip_Fortification_3>
+<HVMP_Label_Intervention>Intervention</HVMP_Label_Intervention>
+<HVMP_Tooltip_Intervention>Fight 3-6 waves of insectoids.</HVMP_Tooltip_Intervention>
+<HVMP_HardMode_Label_Intervention_1>Burning, Unadulterated Burning</HVMP_HardMode_Label_Intervention_1>
+<HVMP_HardMode_Tooltip_Intervention_1>Upon accepting the quest, every non-insectoid pawn on the map receives "deepscan burn" for 24 hours, inflicting +30% pain and -6 mood. Deepscan burn elapses faster on pawns with higher toxic environment resistance. Wild, tameable animals affected by the burn flee the map.</HVMP_HardMode_Tooltip_Intervention_1>
+<HVMP_HardMode_Label_Intervention_2>Infestation Infection</HVMP_HardMode_Label_Intervention_2>
+<HVMP_HardMode_Tooltip_Intervention_2>Insectoids may inflict scaria with their bites or claws.</HVMP_HardMode_Tooltip_Intervention_2>
+<HVMP_HardMode_Label_Intervention_3>Jitterbugs</HVMP_HardMode_Label_Intervention_3>
+<HVMP_HardMode_Tooltip_Intervention_3>Z</HVMP_HardMode_Tooltip_Intervention_3>
+<HVMP_Label_Mastermind>Mastermind</HVMP_Label_Mastermind>
+<HVMP_Tooltip_Mastermind>Agree to not encounter the next trade caravan or orbital trader that would visit you.</HVMP_Tooltip_Mastermind>
+<HVMP_HardMode_Label_Mastermind_1>Seed Funding</HVMP_HardMode_Label_Mastermind_1>
+<HVMP_HardMode_Tooltip_Mastermind_1>X</HVMP_HardMode_Tooltip_Mastermind_1>
+<HVMP_HardMode_Label_Mastermind_2>Total Temporal Lockout</HVMP_HardMode_Label_Mastermind_2>
+<HVMP_HardMode_Tooltip_Mastermind_2>Y</HVMP_HardMode_Tooltip_Mastermind_2>
+<HVMP_HardMode_Label_Mastermind_3>Untrustworthy Unreliability</HVMP_HardMode_Label_Mastermind_3>
+<HVMP_HardMode_Tooltip_Mastermind_3>Z</HVMP_HardMode_Tooltip_Mastermind_3>
+<HVMP_Label_Research>Research</HVMP_Label_Research>
+<HVMP_Tooltip_Research>Take care of a "chaincomputer" device until it finishes its calculations.</HVMP_Tooltip_Research>
+<HVMP_HardMode_Label_Research_1>Brain Drain</HVMP_HardMode_Label_Research_1>
+<HVMP_HardMode_Tooltip_Research_1>X</HVMP_HardMode_Tooltip_Research_1>
+<HVMP_HardMode_Label_Research_2>Please Verify You Are Humanlike</HVMP_HardMode_Label_Research_2>
+<HVMP_HardMode_Tooltip_Research_2>Y</HVMP_HardMode_Tooltip_Research_2>
+<HVMP_HardMode_Label_Research_3>Poor Optimization</HVMP_HardMode_Label_Research_3>
+<HVMP_HardMode_Tooltip_Research_3>Z</HVMP_HardMode_Tooltip_Research_3>
+<HVMP_Label_Transportation>Transportation</HVMP_Label_Transportation>
+<HVMP_Tooltip_Transportation>Fulfill a trade request.</HVMP_Tooltip_Transportation>
+<HVMP_HardMode_Label_Transportation_1>Anonymous Transaction</HVMP_HardMode_Label_Transportation_1>
+<HVMP_HardMode_Tooltip_Transportation_1>X</HVMP_HardMode_Tooltip_Transportation_1>
+<HVMP_HardMode_Label_Transportation_2>Express Order</HVMP_HardMode_Label_Transportation_2>
+<HVMP_HardMode_Tooltip_Transportation_2>Y</HVMP_HardMode_Tooltip_Transportation_2>
+<HVMP_HardMode_Label_Transportation_3>Where There's Trade...</HVMP_HardMode_Label_Transportation_3>
+<HVMP_HardMode_Tooltip_Transportation_3>Z</HVMP_HardMode_Tooltip_Transportation_3>
+<HVMP_Label_Pax>PAX BRANCH</HVMP_Label_Pax>
+<HVMP_Label_Caelum>Caelum</HVMP_Label_Caelum>
+<HVMP_Tooltip_Caelum>Endure a lengthy forced game condition, such as a heat wave.</HVMP_Tooltip_Caelum>
+<HVMP_HardMode_Label_Caelum_1>Atmospheric Aftershock</HVMP_HardMode_Label_Caelum_1>
+<HVMP_HardMode_Tooltip_Caelum_1>X</HVMP_HardMode_Tooltip_Caelum_1>
+<HVMP_HardMode_Label_Caelum_2>Mood Killer</HVMP_HardMode_Label_Caelum_2>
+<HVMP_HardMode_Tooltip_Caelum_2>Y</HVMP_HardMode_Tooltip_Caelum_2>
+<HVMP_HardMode_Label_Caelum_3>Signal Interference</HVMP_HardMode_Label_Caelum_3>
+<HVMP_HardMode_Tooltip_Caelum_3>Z</HVMP_HardMode_Tooltip_Caelum_3>
+<HVMP_Label_Machina>Machina</HVMP_Label_Machina>
+<HVMP_Tooltip_Machina>Fight a mech cluster.</HVMP_Tooltip_Machina>
+<HVMP_HardMode_Label_Machina_1>First Strike Protocol</HVMP_HardMode_Label_Machina_1>
+<HVMP_HardMode_Tooltip_Machina_1>X</HVMP_HardMode_Tooltip_Machina_1>
+<HVMP_HardMode_Label_Machina_2>Gargantua</HVMP_HardMode_Label_Machina_2>
+<HVMP_HardMode_Tooltip_Machina_2>Y</HVMP_HardMode_Tooltip_Machina_2>
+<HVMP_HardMode_Label_Machina_3>Second Strike Protocol</HVMP_HardMode_Label_Machina_3>
+<HVMP_HardMode_Tooltip_Machina_3>Z</HVMP_HardMode_Tooltip_Machina_3>
+<HVMP_Label_Mundi>Mundi</HVMP_Label_Mundi>
+<HVMP_Tooltip_Mundi>Improve your goodwill with other factions.</HVMP_Tooltip_Mundi>
+<HVMP_HardMode_Label_Mundi_1>Marshal the Enemies of Paradise</HVMP_HardMode_Label_Mundi_1>
+<HVMP_HardMode_Tooltip_Mundi_1>X</HVMP_HardMode_Tooltip_Mundi_1>
+<HVMP_HardMode_Label_Mundi_2>Peace In Our Lifetime</HVMP_HardMode_Label_Mundi_2>
+<HVMP_HardMode_Tooltip_Mundi_2>Y</HVMP_HardMode_Tooltip_Mundi_2>
+<HVMP_HardMode_Label_Mundi_3>Stray Not From the Narrow Path</HVMP_HardMode_Label_Mundi_3>
+<HVMP_HardMode_Tooltip_Mundi_3>Z</HVMP_HardMode_Tooltip_Mundi_3>
+<HVMP_Label_Populus>Populus</HVMP_Label_Populus>
+<HVMP_Tooltip_Populus>Take care of some refugees for several days. A raid might pursue them.</HVMP_Tooltip_Populus>
+<HVMP_HardMode_Label_Populus_1>Mass Displacement</HVMP_HardMode_Label_Populus_1>
+<HVMP_HardMode_Tooltip_Populus_1>X</HVMP_HardMode_Tooltip_Populus_1>
+<HVMP_HardMode_Label_Populus_2>Pariahs</HVMP_HardMode_Label_Populus_2>
+<HVMP_HardMode_Tooltip_Populus_2>Y</HVMP_HardMode_Tooltip_Populus_2>
+<HVMP_HardMode_Label_Populus_3>VIPs</HVMP_HardMode_Label_Populus_3>
+<HVMP_HardMode_Tooltip_Populus_3>Z</HVMP_HardMode_Tooltip_Populus_3>
+<HVMP_Label_Vox>Vox</HVMP_Label_Vox>
+<HVMP_Tooltip_Vox>Succeed at peace talks with a "minor faction".</HVMP_Tooltip_Vox>
+<HVMP_HardMode_Label_Vox_1>False Pretext? On MY Rimworld?</HVMP_HardMode_Label_Vox_1>
+<HVMP_HardMode_Tooltip_Vox_1>X</HVMP_HardMode_Tooltip_Vox_1>
+<HVMP_HardMode_Label_Vox_2>Mercenary Mouths</HVMP_HardMode_Label_Vox_2>
+<HVMP_HardMode_Tooltip_Vox_2>Y</HVMP_HardMode_Tooltip_Vox_2>
+<HVMP_HardMode_Label_Vox_3>Tangled Web of Politics</HVMP_HardMode_Label_Vox_3>
+<HVMP_HardMode_Tooltip_Vox_3>Z</HVMP_HardMode_Tooltip_Vox_3>
+<HVMP_Label_Rover>ROVER BRANCH</HVMP_Label_Rover>
+<HVMP_Label_Atlas>Atlas</HVMP_Label_Atlas>
+<HVMP_Tooltip_Atlas>Revise a dated atlas. Only those who have been to a specific point on the world map can revise it.</HVMP_Tooltip_Atlas>
+<HVMP_HardMode_Label_Atlas_1>Global Catalogue</HVMP_HardMode_Label_Atlas_1>
+<HVMP_HardMode_Tooltip_Atlas_1>X</HVMP_HardMode_Tooltip_Atlas_1>
+<HVMP_HardMode_Label_Atlas_2>This Book Is For Nerds!</HVMP_HardMode_Label_Atlas_2>
+<HVMP_HardMode_Tooltip_Atlas_2>Y</HVMP_HardMode_Tooltip_Atlas_2>
+<HVMP_HardMode_Label_Atlas_3>Where There's Tourism...</HVMP_HardMode_Label_Atlas_3>
+<HVMP_HardMode_Tooltip_Atlas_3>Z</HVMP_HardMode_Tooltip_Atlas_3>
+<HVMP_Label_Colossus>Colossus</HVMP_Label_Colossus>
+<HVMP_Tooltip_Colossus>Erect a large building. You may also be tasked to keep it safe for a while after completion.</HVMP_Tooltip_Colossus>
+<HVMP_HardMode_Label_Colossus_1>Fit For a King</HVMP_HardMode_Label_Colossus_1>
+<HVMP_HardMode_Tooltip_Colossus_1>X</HVMP_HardMode_Tooltip_Colossus_1>
+<HVMP_HardMode_Label_Colossus_2>Homewreckers</HVMP_HardMode_Label_Colossus_2>
+<HVMP_HardMode_Tooltip_Colossus_2>Y</HVMP_HardMode_Tooltip_Colossus_2>
+<HVMP_HardMode_Label_Colossus_3>The Test of Time</HVMP_HardMode_Label_Colossus_3>
+<HVMP_HardMode_Tooltip_Colossus_3>Z</HVMP_HardMode_Tooltip_Colossus_3>
+<HVMP_Label_Laelaps>Laelaps</HVMP_Label_Laelaps>
+<HVMP_Tooltip_Laelaps>Send colonists on a shuttle to assist someone else for several days.</HVMP_Tooltip_Laelaps>
+<HVMP_HardMode_Label_Laelaps_1>I Like Ike, Specifically</HVMP_HardMode_Label_Laelaps_1>
+<HVMP_HardMode_Tooltip_Laelaps_1>X</HVMP_HardMode_Tooltip_Laelaps_1>
+<HVMP_HardMode_Label_Laelaps_2>Since Sun Tzu Said So</HVMP_HardMode_Label_Laelaps_2>
+<HVMP_HardMode_Tooltip_Laelaps_2>Y</HVMP_HardMode_Tooltip_Laelaps_2>
+<HVMP_HardMode_Label_Laelaps_3>The Nearest Airport Is...</HVMP_HardMode_Label_Laelaps_3>
+<HVMP_HardMode_Tooltip_Laelaps_3>Z</HVMP_HardMode_Tooltip_Laelaps_3>
+<HVMP_Label_Odyssey>Odyssey</HVMP_Label_Odyssey>
+<HVMP_Tooltip_Odyssey>Visit multiple points on the world map.</HVMP_Tooltip_Odyssey>
+<HVMP_HardMode_Label_Odyssey_1>Around the World in 4.8 Million Ticks</HVMP_HardMode_Label_Odyssey_1>
+<HVMP_HardMode_Tooltip_Odyssey_1>X</HVMP_HardMode_Tooltip_Odyssey_1>
+<HVMP_HardMode_Label_Odyssey_2>Move Over, Taxes</HVMP_HardMode_Label_Odyssey_2>
+<HVMP_HardMode_Tooltip_Odyssey_2>Y</HVMP_HardMode_Tooltip_Odyssey_2>
+<HVMP_HardMode_Label_Odyssey_3>You'll Go Everywhere, Man</HVMP_HardMode_Label_Odyssey_3>
+<HVMP_HardMode_Tooltip_Odyssey_3>Z</HVMP_HardMode_Tooltip_Odyssey_3>
+<HVMP_Label_Theseus>Theseus</HVMP_Label_Theseus>
+<HVMP_Tooltip_Theseus>Send colonists on a shuttle to destroy a bandit camp.</HVMP_Tooltip_Theseus>
+<HVMP_HardMode_Label_Theseus_1>Badder</HVMP_HardMode_Label_Theseus_1>
+<HVMP_HardMode_Tooltip_Theseus_1>X</HVMP_HardMode_Tooltip_Theseus_1>
+<HVMP_HardMode_Label_Theseus_2>Bigger</HVMP_HardMode_Label_Theseus_2>
+<HVMP_HardMode_Tooltip_Theseus_2>Y</HVMP_HardMode_Tooltip_Theseus_2>
+<HVMP_HardMode_Label_Theseus_3>Uglier</HVMP_HardMode_Label_Theseus_3>
+<HVMP_HardMode_Tooltip_Theseus_3>Z</HVMP_HardMode_Tooltip_Theseus_3>
+<HVMP_Label_Archive>ARCHIVE BRANCH</HVMP_Label_Archive>
+<HVMP_Label_Enigma>Enigma</HVMP_Label_Enigma>
+<HVMP_Tooltip_Enigma>Study an ancient artifact.</HVMP_Tooltip_Enigma>
+<HVMP_HardMode_Label_Enigma_1>X</HVMP_HardMode_Label_Enigma_1>
+<HVMP_HardMode_Tooltip_Enigma_1>X</HVMP_HardMode_Tooltip_Enigma_1>
+<HVMP_HardMode_Label_Enigma_2>Y</HVMP_HardMode_Label_Enigma_2>
+<HVMP_HardMode_Tooltip_Enigma_2>Y</HVMP_HardMode_Tooltip_Enigma_2>
+<HVMP_HardMode_Label_Enigma_3>Z</HVMP_HardMode_Label_Enigma_3>
+<HVMP_HardMode_Tooltip_Enigma_3>Z</HVMP_HardMode_Tooltip_Enigma_3>
+<HVMP_Label_Entrant>Entrant</HVMP_Label_Entrant>
+<HVMP_Tooltip_Entrant>Journey to a shuttle crash site and deconstruct the shuttle.</HVMP_Tooltip_Entrant>
+<HVMP_HardMode_Label_Entrant_1>X</HVMP_HardMode_Label_Entrant_1>
+<HVMP_HardMode_Tooltip_Entrant_1>X</HVMP_HardMode_Tooltip_Entrant_1>
+<HVMP_HardMode_Label_Entrant_2>Y</HVMP_HardMode_Label_Entrant_2>
+<HVMP_HardMode_Tooltip_Entrant_2>Y</HVMP_HardMode_Tooltip_Entrant_2>
+<HVMP_HardMode_Label_Entrant_3>Z</HVMP_HardMode_Label_Entrant_3>
+<HVMP_HardMode_Tooltip_Entrant_3>Z</HVMP_HardMode_Tooltip_Entrant_3>
+<HVMP_Label_Ethnography>Ethnography</HVMP_Label_Ethnography>
+<HVMP_Tooltip_Ethnography>Take care of some anthropologists until they've asked all their questions.</HVMP_Tooltip_Ethnography>
+<HVMP_HardMode_Label_Ethnography_1>X</HVMP_HardMode_Label_Ethnography_1>
+<HVMP_HardMode_Tooltip_Ethnography_1>X</HVMP_HardMode_Tooltip_Ethnography_1>
+<HVMP_HardMode_Label_Ethnography_2>Y</HVMP_HardMode_Label_Ethnography_2>
+<HVMP_HardMode_Tooltip_Ethnography_2>Y</HVMP_HardMode_Tooltip_Ethnography_2>
+<HVMP_HardMode_Label_Ethnography_3>Z</HVMP_HardMode_Label_Ethnography_3>
+<HVMP_HardMode_Tooltip_Ethnography_3>Z</HVMP_HardMode_Tooltip_Ethnography_3>
+<HVMP_Label_Excavation>Excavation</HVMP_Label_Excavation>
+<HVMP_Tooltip_Excavation>Hack all the terminals in an ancient complex.</HVMP_Tooltip_Excavation>
+<HVMP_HardMode_Label_Excavation_1>X</HVMP_HardMode_Label_Excavation_1>
+<HVMP_HardMode_Tooltip_Excavation_1>X</HVMP_HardMode_Tooltip_Excavation_1>
+<HVMP_HardMode_Label_Excavation_2>Y</HVMP_HardMode_Label_Excavation_2>
+<HVMP_HardMode_Tooltip_Excavation_2>Y</HVMP_HardMode_Tooltip_Excavation_2>
+<HVMP_HardMode_Label_Excavation_3>Z</HVMP_HardMode_Label_Excavation_3>
+<HVMP_HardMode_Tooltip_Excavation_3>Z</HVMP_HardMode_Tooltip_Excavation_3>
+<HVMP_Label_Extraterrestrial>Extraterrestrial</HVMP_Label_Extraterrestrial>
+<HVMP_Tooltip_Extraterrestrial>Hack a crashed spacedrone. It is guarded by mechs which are initially dormant.</HVMP_Tooltip_Extraterrestrial>
+<HVMP_HardMode_Label_Extraterrestrial_1>X</HVMP_HardMode_Label_Extraterrestrial_1>
+<HVMP_HardMode_Tooltip_Extraterrestrial_1>X</HVMP_HardMode_Tooltip_Extraterrestrial_1>
+<HVMP_HardMode_Label_Extraterrestrial_2>Y</HVMP_HardMode_Label_Extraterrestrial_2>
+<HVMP_HardMode_Tooltip_Extraterrestrial_2>Y</HVMP_HardMode_Tooltip_Extraterrestrial_2>
+<HVMP_HardMode_Label_Extraterrestrial_3>Z</HVMP_HardMode_Label_Extraterrestrial_3>
+<HVMP_HardMode_Tooltip_Extraterrestrial_3>Z</HVMP_HardMode_Tooltip_Extraterrestrial_3>
+<HVMP_Label_Ecosphere>ECOSPHERE BRANCH</HVMP_Label_Ecosphere>
+<HVMP_Label_CaseStudy>Case Study</HVMP_Label_CaseStudy>
+<HVMP_Tooltip_CaseStudy>Take care of Patient Zero of a new disease, until you discover and administer the cure. New symptoms of the disease appear over time.</HVMP_Tooltip_CaseStudy>
+<HVMP_HardMode_Label_CaseStudy_1>X</HVMP_HardMode_Label_CaseStudy_1>
+<HVMP_HardMode_Tooltip_CaseStudy_1>X</HVMP_HardMode_Tooltip_CaseStudy_1>
+<HVMP_HardMode_Label_CaseStudy_2>Y</HVMP_HardMode_Label_CaseStudy_2>
+<HVMP_HardMode_Tooltip_CaseStudy_2>Y</HVMP_HardMode_Tooltip_CaseStudy_2>
+<HVMP_HardMode_Label_CaseStudy_3>Z</HVMP_HardMode_Label_CaseStudy_3>
+<HVMP_HardMode_Tooltip_CaseStudy_3>Z</HVMP_HardMode_Tooltip_CaseStudy_3>
+<HVMP_Label_ECquest>Environmental Control</HVMP_Label_ECquest>
+<HVMP_Tooltip_ECquest>Journey to and destroy a problem causer outpost. It is guarded by mechanoids.</HVMP_Tooltip_ECquest>
+<HVMP_HardMode_Label_ECquest_1>X</HVMP_HardMode_Label_ECquest_1>
+<HVMP_HardMode_Tooltip_ECquest_1>X</HVMP_HardMode_Tooltip_ECquest_1>
+<HVMP_HardMode_Label_ECquest_2>Y</HVMP_HardMode_Label_ECquest_2>
+<HVMP_HardMode_Tooltip_ECquest_2>Y</HVMP_HardMode_Tooltip_ECquest_2>
+<HVMP_HardMode_Label_ECquest_3>Z</HVMP_HardMode_Label_ECquest_3>
+<HVMP_HardMode_Tooltip_ECquest_3>Z</HVMP_HardMode_Tooltip_ECquest_3>
+<HVMP_Label_FieldWork>Field Work</HVMP_Label_FieldWork>
+<HVMP_Tooltip_FieldWork>Keep an area of your choice - a "nature preserve" - clear of pollution, structures, and floors.</HVMP_Tooltip_FieldWork>
+<HVMP_HardMode_Label_FieldWork_1>X</HVMP_HardMode_Label_FieldWork_1>
+<HVMP_HardMode_Tooltip_FieldWork_1>X</HVMP_HardMode_Tooltip_FieldWork_1>
+<HVMP_HardMode_Label_FieldWork_2>Y</HVMP_HardMode_Label_FieldWork_2>
+<HVMP_HardMode_Tooltip_FieldWork_2>Y</HVMP_HardMode_Tooltip_FieldWork_2>
+<HVMP_HardMode_Label_FieldWork_3>Z</HVMP_HardMode_Label_FieldWork_3>
+<HVMP_HardMode_Tooltip_FieldWork_3>Z</HVMP_HardMode_Tooltip_FieldWork_3>
+<HVMP_Label_HazardDisposal>Hazard Disposal</HVMP_Label_HazardDisposal>
+<HVMP_Tooltip_HazardDisposal>Fight a manhunter pack that has been empowered by a random mutation.</HVMP_Tooltip_HazardDisposal>
+<HVMP_HardMode_Label_HazardDisposal_1>X</HVMP_HardMode_Label_HazardDisposal_1>
+<HVMP_HardMode_Tooltip_HazardDisposal_1>X</HVMP_HardMode_Tooltip_HazardDisposal_1>
+<HVMP_HardMode_Label_HazardDisposal_2>Y</HVMP_HardMode_Label_HazardDisposal_2>
+<HVMP_HardMode_Tooltip_HazardDisposal_2>Y</HVMP_HardMode_Tooltip_HazardDisposal_2>
+<HVMP_HardMode_Label_HazardDisposal_3>Z</HVMP_HardMode_Label_HazardDisposal_3>
+<HVMP_HardMode_Tooltip_HazardDisposal_3>Z</HVMP_HardMode_Tooltip_HazardDisposal_3>
+<HVMP_Label_RAquest>Retroviral Agent</HVMP_Label_RAquest>
+<HVMP_Tooltip_RAquest>Study a gene-engineering package, or just inject it into someone to witness its effects firsthand. Injection may have negative outcomes, and rarely has positive ones.</HVMP_Tooltip_RAquest>
+<HVMP_HardMode_Label_RAquest_1>X</HVMP_HardMode_Label_RAquest_1>
+<HVMP_HardMode_Tooltip_RAquest_1>X</HVMP_HardMode_Tooltip_RAquest_1>
+<HVMP_HardMode_Label_RAquest_2>Y</HVMP_HardMode_Label_RAquest_2>
+<HVMP_HardMode_Tooltip_RAquest_2>Y</HVMP_HardMode_Tooltip_RAquest_2>
+<HVMP_HardMode_Label_RAquest_3>Z</HVMP_HardMode_Label_RAquest_3>
+<HVMP_HardMode_Tooltip_RAquest_3>Z</HVMP_HardMode_Tooltip_RAquest_3>
+<HVMP_Label_Occult>OCCULT BRANCH</HVMP_Label_Occult>
+<HVMP_Label_Barker>Barker</HVMP_Label_Barker>
+<HVMP_Tooltip_Barker>Receive a dangerous anomalous object.</HVMP_Tooltip_Barker>
+<HVMP_HardMode_Label_Barker_1>X</HVMP_HardMode_Label_Barker_1>
+<HVMP_HardMode_Tooltip_Barker_1>X</HVMP_HardMode_Tooltip_Barker_1>
+<HVMP_HardMode_Label_Barker_2>Y</HVMP_HardMode_Label_Barker_2>
+<HVMP_HardMode_Tooltip_Barker_2>Y</HVMP_HardMode_Tooltip_Barker_2>
+<HVMP_HardMode_Label_Barker_3>Z</HVMP_HardMode_Label_Barker_3>
+<HVMP_HardMode_Tooltip_Barker_3>Z</HVMP_HardMode_Tooltip_Barker_3>
+<HVMP_Label_Fuller>Fuller</HVMP_Label_Fuller>
+<HVMP_Tooltip_Fuller>Keep some Horaxian cultists as prisoners. At least one cultist raid will attempt to free them.</HVMP_Tooltip_Fuller>
+<HVMP_HardMode_Label_Fuller_1>X</HVMP_HardMode_Label_Fuller_1>
+<HVMP_HardMode_Tooltip_Fuller_1>X</HVMP_HardMode_Tooltip_Fuller_1>
+<HVMP_HardMode_Label_Fuller_2>Y</HVMP_HardMode_Label_Fuller_2>
+<HVMP_HardMode_Tooltip_Fuller_2>Y</HVMP_HardMode_Tooltip_Fuller_2>
+<HVMP_HardMode_Label_Fuller_3>Z</HVMP_HardMode_Label_Fuller_3>
+<HVMP_HardMode_Tooltip_Fuller_3>Z</HVMP_HardMode_Tooltip_Fuller_3>
+<HVMP_Label_Lovecraft>Lovecraft</HVMP_Label_Lovecraft>
+<HVMP_Tooltip_Lovecraft>Endure a random psychic or atmospheric condition. You do not know what the condition is until you accept the quest. Most, but not all, possible conditions are negative.</HVMP_Tooltip_Lovecraft>
+<HVMP_HardMode_Label_Lovecraft_1>X</HVMP_HardMode_Label_Lovecraft_1>
+<HVMP_HardMode_Tooltip_Lovecraft_1>X</HVMP_HardMode_Tooltip_Lovecraft_1>
+<HVMP_HardMode_Label_Lovecraft_2>Y</HVMP_HardMode_Label_Lovecraft_2>
+<HVMP_HardMode_Tooltip_Lovecraft_2>Y</HVMP_HardMode_Tooltip_Lovecraft_2>
+<HVMP_HardMode_Label_Lovecraft_3>Z</HVMP_HardMode_Label_Lovecraft_3>
+<HVMP_HardMode_Tooltip_Lovecraft_3>Z</HVMP_HardMode_Tooltip_Lovecraft_3>
+<HVMP_Label_Natali>Natali</HVMP_Label_Natali>
+<HVMP_Tooltip_Natali>Travel to a bubble of warped space on the world map, then escape the labyrinth within.</HVMP_Tooltip_Natali>
+<HVMP_HardMode_Label_Natali_1>X</HVMP_HardMode_Label_Natali_1>
+<HVMP_HardMode_Tooltip_Natali_1>X</HVMP_HardMode_Tooltip_Natali_1>
+<HVMP_HardMode_Label_Natali_2>Y</HVMP_HardMode_Label_Natali_2>
+<HVMP_HardMode_Tooltip_Natali_2>Y</HVMP_HardMode_Tooltip_Natali_2>
+<HVMP_HardMode_Label_Natali_3>Z</HVMP_HardMode_Label_Natali_3>
+<HVMP_HardMode_Tooltip_Natali_3>Z</HVMP_HardMode_Tooltip_Natali_3>
+<HVMP_Label_Romero>Romero</HVMP_Label_Romero>
+<HVMP_Tooltip_Romero>Fight 1-2 waves of shamblers.</HVMP_Tooltip_Romero>
+<HVMP_HardMode_Label_Romero_1>X</HVMP_HardMode_Label_Romero_1>
+<HVMP_HardMode_Tooltip_Romero_1>X</HVMP_HardMode_Tooltip_Romero_1>
+<HVMP_HardMode_Label_Romero_2>Y</HVMP_HardMode_Label_Romero_2>
+<HVMP_HardMode_Tooltip_Romero_2>Y</HVMP_HardMode_Tooltip_Romero_2>
+<HVMP_HardMode_Label_Romero_3>Z</HVMP_HardMode_Label_Romero_3>
+<HVMP_HardMode_Tooltip_Romero_3>Z</HVMP_HardMode_Tooltip_Romero_3>
 </LanguageData>

@@ -169,7 +169,7 @@
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription->The [factionName] has informed us of an unaffiliated air shuttle that has crashed nearby. They are interested in its black box data, and would like us to retrieve it within [timeout_duration] by deconstructing or destroying the shuttle.\n\nThe [factionName] says that [allSitePartsDescriptionsExceptFirst]</li>
+        <li>questDescription->The [factionName] has informed us of an unaffiliated air shuttle that has crashed nearby. They are interested in its black box data, and would like us to retrieve it within [timeout_duration] by deconstructing the shuttle.\n\nThe [factionName] says that [allSitePartsDescriptionsExceptFirst]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Ideology.QuestNode_Root_Blackbox">

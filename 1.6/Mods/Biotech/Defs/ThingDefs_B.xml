@@ -402,6 +402,7 @@
       <li Class="HautsPermits_Biotech.CompProperties_GTDrill">
         <soundWorking>ScannerGroundPenetrating_Ambience</soundWorking>
 		<ticksToFinish>3600000</ticksToFinish>
+		<dustRange>2.4</dustRange>
       </li>
 	  <li Class="HautsFramework.CompProperties_FactionColored">
 		<colorFactor>0.85</colorFactor>

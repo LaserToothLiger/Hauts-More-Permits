@@ -6,13 +6,13 @@
 		<nomatch Class="PatchOperationAdd">
 			<xpath>/Defs/ThingDef[defName="ThrumboHorn"]/statBases</xpath>
 			<value>
-				<RoyalFavorValue>0.2</RoyalFavorValue>
+				<RoyalFavorValue>0.5</RoyalFavorValue>
 			</value>
 		</nomatch>
 		<match Class="PatchOperationReplace">
 			<xpath>/Defs/ThingDef[defName="ThrumboHorn"]/statBases/RoyalFavorValue</xpath>
 			<value>
-				<RoyalFavorValue>0.2</RoyalFavorValue>
+				<RoyalFavorValue>0.5</RoyalFavorValue>
 			</value>
 		</match>
 	</Operation>
@@ -52,13 +52,13 @@
 		<nomatch Class="PatchOperationAdd">
 			<xpath>/Defs/ThingDef[defName="Luciferium"]/statBases</xpath>
 			<value>
-				<RoyalFavorValue>0.09</RoyalFavorValue>
+				<RoyalFavorValue>0.1</RoyalFavorValue>
 			</value>
 		</nomatch>
 		<match Class="PatchOperationReplace">
 			<xpath>/Defs/ThingDef[defName="Luciferium"]/statBases/RoyalFavorValue</xpath>
 			<value>
-				<RoyalFavorValue>0.09</RoyalFavorValue>
+				<RoyalFavorValue>0.1</RoyalFavorValue>
 			</value>
 		</match>
 	</Operation>
@@ -67,13 +67,13 @@
 		<nomatch Class="PatchOperationAdd">
 			<xpath>/Defs/ThingDef[defName="BroadshieldCore"]/statBases</xpath>
 			<value>
-				<RoyalFavorValue>0.15</RoyalFavorValue>
+				<RoyalFavorValue>0.4</RoyalFavorValue>
 			</value>
 		</nomatch>
 		<match Class="PatchOperationReplace">
 			<xpath>/Defs/ThingDef[defName="BroadshieldCore"]/statBases/RoyalFavorValue</xpath>
 			<value>
-				<RoyalFavorValue>0.15</RoyalFavorValue>
+				<RoyalFavorValue>0.4</RoyalFavorValue>
 			</value>
 		</match>
 	</Operation>
@@ -83,13 +83,13 @@
 		<nomatch Class="PatchOperationAdd">
 			<xpath>/Defs/ThingDef[defName="AIPersonaCore"]/statBases</xpath>
 			<value>
-				<RoyalFavorValue>6</RoyalFavorValue>
+				<RoyalFavorValue>8</RoyalFavorValue>
 			</value>
 		</nomatch>
 		<match Class="PatchOperationReplace">
 			<xpath>/Defs/ThingDef[defName="AIPersonaCore"]/statBases/RoyalFavorValue</xpath>
 			<value>
-				<RoyalFavorValue>6</RoyalFavorValue>
+				<RoyalFavorValue>8</RoyalFavorValue>
 			</value>
 		</match>
 	</Operation>
@@ -286,13 +286,13 @@
 					<nomatch Class="PatchOperationAdd">
 						<xpath>/Defs/ThingDef[defName="Grimstone_GrimshadowSkull"]/statBases</xpath>
 						<value>
-							<RoyalFavorValue>0.22</RoyalFavorValue>
+							<RoyalFavorValue>0.16</RoyalFavorValue>
 						</value>
 					</nomatch>
 					<match Class="PatchOperationReplace">
 						<xpath>/Defs/ThingDef[defName="Grimstone_GrimshadowSkull"]/statBases/RoyalFavorValue</xpath>
 						<value>
-							<RoyalFavorValue>0.22</RoyalFavorValue>
+							<RoyalFavorValue>0.16</RoyalFavorValue>
 						</value>
 					</match>
 				</li>
@@ -342,13 +342,13 @@
 					<nomatch Class="PatchOperationAdd">
 						<xpath>/Defs/ThingDef[defName="KenshiFauna_LeviathanPearl"]/statBases</xpath>
 						<value>
-							<RoyalFavorValue>0.8</RoyalFavorValue>
+							<RoyalFavorValue>0.46</RoyalFavorValue>
 						</value>
 					</nomatch>
 					<match Class="PatchOperationReplace">
 						<xpath>/Defs/ThingDef[defName="KenshiFauna_LeviathanPearl"]/statBases/RoyalFavorValue</xpath>
 						<value>
-							<RoyalFavorValue>0.8</RoyalFavorValue>
+							<RoyalFavorValue>0.46</RoyalFavorValue>
 						</value>
 					</match>
 				</li>
@@ -357,6 +357,76 @@
 					<value>
 					  <li Class="StockGenerator_BuySingleDef">
 						<thingDef>KenshiFauna_LeviathanPearl</thingDef>
+					  </li>
+					</value>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Dark Ages : Beasts and Monsters</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<!--Commerce-->
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="DA_DrogTusk"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="DA_DrogTusk"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.28</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="DA_DrogTusk"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.28</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="DA_GoldiloxHorn"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="DA_GoldiloxHorn"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.35</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="DA_GoldiloxHorn"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.35</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="DA_LarpahAntlers"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="DA_LarpahAntlers"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.54</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="DA_LarpahAntlers"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.54</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="HVMP_CommerceDonations"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>DA_DrogTusk</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>DA_GoldiloxHorn</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>DA_LarpahAntlers</thingDef>
 					  </li>
 					</value>
 				</li>
@@ -376,13 +446,13 @@
 					<nomatch Class="PatchOperationAdd">
 						<xpath>/Defs/ThingDef[defName="MA_PlastemmothTusk"]/statBases</xpath>
 						<value>
-							<RoyalFavorValue>0.14</RoyalFavorValue>
+							<RoyalFavorValue>0.3</RoyalFavorValue>
 						</value>
 					</nomatch>
 					<match Class="PatchOperationReplace">
 						<xpath>/Defs/ThingDef[defName="MA_PlastemmothTusk"]/statBases/RoyalFavorValue</xpath>
 						<value>
-							<RoyalFavorValue>0.14</RoyalFavorValue>
+							<RoyalFavorValue>0.3</RoyalFavorValue>
 						</value>
 					</match>
 				</li>
@@ -391,13 +461,28 @@
 					<nomatch Class="PatchOperationAdd">
 						<xpath>/Defs/ThingDef[defName="MA_DeermossHorn"]/statBases</xpath>
 						<value>
-							<RoyalFavorValue>0.05</RoyalFavorValue>
+							<RoyalFavorValue>0.12</RoyalFavorValue>
 						</value>
 					</nomatch>
 					<match Class="PatchOperationReplace">
 						<xpath>/Defs/ThingDef[defName="MA_DeermossHorn"]/statBases/RoyalFavorValue</xpath>
 						<value>
-							<RoyalFavorValue>0.05</RoyalFavorValue>
+							<RoyalFavorValue>0.12</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="MA_GnautHorn"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="MA_GnautHorn"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.005</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="MA_GnautHorn"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.005</RoyalFavorValue>
 						</value>
 					</match>
 				</li>
@@ -406,13 +491,13 @@
 					<nomatch Class="PatchOperationAdd">
 						<xpath>/Defs/ThingDef[defName="MA_ScarSaberTooth"]/statBases</xpath>
 						<value>
-							<RoyalFavorValue>0.04</RoyalFavorValue>
+							<RoyalFavorValue>0.08</RoyalFavorValue>
 						</value>
 					</nomatch>
 					<match Class="PatchOperationReplace">
 						<xpath>/Defs/ThingDef[defName="MA_ScarSaberTooth"]/statBases/RoyalFavorValue</xpath>
 						<value>
-							<RoyalFavorValue>0.04</RoyalFavorValue>
+							<RoyalFavorValue>0.08</RoyalFavorValue>
 						</value>
 					</match>
 				</li>
@@ -421,13 +506,13 @@
 					<nomatch Class="PatchOperationAdd">
 						<xpath>/Defs/ThingDef[defName="MA_DuskhornHorn"]/statBases</xpath>
 						<value>
-							<RoyalFavorValue>0.04</RoyalFavorValue>
+							<RoyalFavorValue>0.08</RoyalFavorValue>
 						</value>
 					</nomatch>
 					<match Class="PatchOperationReplace">
 						<xpath>/Defs/ThingDef[defName="MA_DuskhornHorn"]/statBases/RoyalFavorValue</xpath>
 						<value>
-							<RoyalFavorValue>0.04</RoyalFavorValue>
+							<RoyalFavorValue>0.08</RoyalFavorValue>
 						</value>
 					</match>
 				</li>
@@ -436,13 +521,28 @@
 					<nomatch Class="PatchOperationAdd">
 						<xpath>/Defs/ThingDef[defName="MA_RaptorkhanClaw"]/statBases</xpath>
 						<value>
-							<RoyalFavorValue>0.02</RoyalFavorValue>
+							<RoyalFavorValue>0.04</RoyalFavorValue>
 						</value>
 					</nomatch>
 					<match Class="PatchOperationReplace">
 						<xpath>/Defs/ThingDef[defName="MA_RaptorkhanClaw"]/statBases/RoyalFavorValue</xpath>
 						<value>
-							<RoyalFavorValue>0.02</RoyalFavorValue>
+							<RoyalFavorValue>0.04</RoyalFavorValue>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/ThingDef[defName="MA_Brontorhin"]/statBases/RoyalFavorValue</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/ThingDef[defName="MA_Brontorhin"]/statBases</xpath>
+						<value>
+							<RoyalFavorValue>0.325</RoyalFavorValue>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/ThingDef[defName="MA_Brontorhin"]/statBases/RoyalFavorValue</xpath>
+						<value>
+							<RoyalFavorValue>0.325</RoyalFavorValue>
 						</value>
 					</match>
 				</li>
@@ -463,6 +563,12 @@
 					  </li>
 					  <li Class="StockGenerator_BuySingleDef">
 						<thingDef>MA_RaptorkhanClaw</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>MA_Brontorhin</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>MA_GnautHorn</thingDef>
 					  </li>
 					</value>
 				</li>
@@ -563,13 +669,13 @@
 								<nomatch Class="PatchOperationAdd">
 									<xpath>/Defs/ThingDef[defName="GauranlenSeed"]/statBases</xpath>
 									<value>
-										<RoyalFavorValue>0.15</RoyalFavorValue>
+										<RoyalFavorValue>0.25</RoyalFavorValue>
 									</value>
 								</nomatch>
 								<match Class="PatchOperationReplace">
 									<xpath>/Defs/ThingDef[defName="GauranlenSeed"]/statBases/RoyalFavorValue</xpath>
 									<value>
-										<RoyalFavorValue>0.15</RoyalFavorValue>
+										<RoyalFavorValue>0.25</RoyalFavorValue>
 									</value>
 								</match>
 							</li>
@@ -1013,13 +1119,13 @@
 					<nomatch Class="PatchOperationAdd">
 						<xpath>/Defs/ThingDef[defName="PoluxSeed"]/statBases</xpath>
 						<value>
-							<RoyalFavorValue>0.1</RoyalFavorValue>
+							<RoyalFavorValue>1.5</RoyalFavorValue>
 						</value>
 					</nomatch>
 					<match Class="PatchOperationReplace">
 						<xpath>/Defs/ThingDef[defName="PoluxSeed"]/statBases/RoyalFavorValue</xpath>
 						<value>
-							<RoyalFavorValue>0.1</RoyalFavorValue>
+							<RoyalFavorValue>1.5</RoyalFavorValue>
 						</value>
 					</match>
 				</li>
@@ -1084,13 +1190,13 @@
 								<nomatch Class="PatchOperationAdd">
 									<xpath>/Defs/ThingDef[defName="HarbingerSeed"]/statBases</xpath>
 									<value>
-										<RoyalFavorValue>0.15</RoyalFavorValue>
+										<RoyalFavorValue>0.75</RoyalFavorValue>
 									</value>
 								</nomatch>
 								<match Class="PatchOperationReplace">
 									<xpath>/Defs/ThingDef[defName="HarbingerSeed"]/statBases/RoyalFavorValue</xpath>
 									<value>
-										<RoyalFavorValue>0.15</RoyalFavorValue>
+										<RoyalFavorValue>0.75</RoyalFavorValue>
 									</value>
 								</match>
 							</li>
@@ -1116,13 +1222,13 @@
 								<nomatch Class="PatchOperationAdd">
 									<xpath>/Defs/ThingDef[defName="ArcheanSeed"]/statBases</xpath>
 									<value>
-										<RoyalFavorValue>0.5</RoyalFavorValue>
+										<RoyalFavorValue>1</RoyalFavorValue>
 									</value>
 								</nomatch>
 								<match Class="PatchOperationReplace">
 									<xpath>/Defs/ThingDef[defName="ArcheanSeed"]/statBases/RoyalFavorValue</xpath>
 									<value>
-										<RoyalFavorValue>0.5</RoyalFavorValue>
+										<RoyalFavorValue>1</RoyalFavorValue>
 									</value>
 								</match>
 							</li>
@@ -1168,13 +1274,13 @@
 					<nomatch Class="PatchOperationAdd">
 						<xpath>/Defs/ThingDef[defName="PsychicAmplifier"]/statBases</xpath>
 						<value>
-							<RoyalFavorValue>1</RoyalFavorValue>
+							<RoyalFavorValue>2.5</RoyalFavorValue>
 						</value>
 					</nomatch>
 					<match Class="PatchOperationReplace">
 						<xpath>/Defs/ThingDef[defName="PsychicAmplifier"]/statBases/RoyalFavorValue</xpath>
 						<value>
-							<RoyalFavorValue>1</RoyalFavorValue>
+							<RoyalFavorValue>2.5</RoyalFavorValue>
 						</value>
 					</match>
 				</li>
@@ -1189,13 +1295,13 @@
 								<nomatch Class="PatchOperationAdd">
 									<xpath>/Defs/ThingDef[defName="Mechlink"]/statBases</xpath>
 									<value>
-										<RoyalFavorValue>2.35</RoyalFavorValue>
+										<RoyalFavorValue>4.5</RoyalFavorValue>
 									</value>
 								</nomatch>
 								<match Class="PatchOperationReplace">
 									<xpath>/Defs/ThingDef[defName="Mechlink"]/statBases/RoyalFavorValue</xpath>
 									<value>
-										<RoyalFavorValue>2.35</RoyalFavorValue>
+										<RoyalFavorValue>4.5</RoyalFavorValue>
 									</value>
 								</match>
 							</li>
@@ -1221,13 +1327,13 @@
 								<nomatch Class="PatchOperationAdd">
 									<xpath>/Defs/ThingDef[defName="SentienceCatalyst"]/statBases</xpath>
 									<value>
-										<RoyalFavorValue>0.4</RoyalFavorValue>
+										<RoyalFavorValue>0.25</RoyalFavorValue>
 									</value>
 								</nomatch>
 								<match Class="PatchOperationReplace">
 									<xpath>/Defs/ThingDef[defName="SentienceCatalyst"]/statBases/RoyalFavorValue</xpath>
 									<value>
-										<RoyalFavorValue>0.4</RoyalFavorValue>
+										<RoyalFavorValue>0.25</RoyalFavorValue>
 									</value>
 								</match>
 							</li>
@@ -1244,13 +1350,13 @@
 								<nomatch Class="PatchOperationAdd">
 									<xpath>/Defs/ThingDef[defName="Apparel_CerebrexNode"]/statBases</xpath>
 									<value>
-										<RoyalFavorValue>21</RoyalFavorValue>
+										<RoyalFavorValue>35</RoyalFavorValue>
 									</value>
 								</nomatch>
 								<match Class="PatchOperationReplace">
 									<xpath>/Defs/ThingDef[defName="Apparel_CerebrexNode"]/statBases/RoyalFavorValue</xpath>
 									<value>
-										<RoyalFavorValue>21</RoyalFavorValue>
+										<RoyalFavorValue>35</RoyalFavorValue>
 									</value>
 								</match>
 							</li>
@@ -1305,13 +1411,13 @@
 					<nomatch Class="PatchOperationAdd">
 						<xpath>/Defs/ThingDef[defName="AlphaThrumboHorn"]/statBases</xpath>
 						<value>
-							<RoyalFavorValue>1</RoyalFavorValue>
+							<RoyalFavorValue>2</RoyalFavorValue>
 						</value>
 					</nomatch>
 					<match Class="PatchOperationReplace">
 						<xpath>/Defs/ThingDef[defName="AlphaThrumboHorn"]/statBases/RoyalFavorValue</xpath>
 						<value>
-							<RoyalFavorValue>1</RoyalFavorValue>
+							<RoyalFavorValue>2</RoyalFavorValue>
 						</value>
 					</match>
 				</li>
@@ -1328,13 +1434,13 @@
 					<nomatch Class="PatchOperationAdd">
 						<xpath>/Defs/ThingDef[defName="ShuttleEngine"]/statBases</xpath>
 						<value>
-							<RoyalFavorValue>4</RoyalFavorValue>
+							<RoyalFavorValue>5</RoyalFavorValue>
 						</value>
 					</nomatch>
 					<match Class="PatchOperationReplace">
 						<xpath>/Defs/ThingDef[defName="ShuttleEngine"]/statBases/RoyalFavorValue</xpath>
 						<value>
-							<RoyalFavorValue>4</RoyalFavorValue>
+							<RoyalFavorValue>5</RoyalFavorValue>
 						</value>
 					</match>
 				</li>
@@ -1360,13 +1466,13 @@
 						<nomatch Class="PatchOperationAdd">
 							<xpath>/Defs/ThingDef[defName="AEXP_WalrusTusk"]/statBases</xpath>
 							<value>
-								<RoyalFavorValue>0.04</RoyalFavorValue>
+								<RoyalFavorValue>0.05</RoyalFavorValue>
 							</value>
 						</nomatch>
 						<match Class="PatchOperationReplace">
 							<xpath>/Defs/ThingDef[defName="AEXP_WalrusTusk"]/statBases/RoyalFavorValue</xpath>
 							<value>
-								<RoyalFavorValue>0.04</RoyalFavorValue>
+								<RoyalFavorValue>0.05</RoyalFavorValue>
 							</value>
 						</match>
 					</li>

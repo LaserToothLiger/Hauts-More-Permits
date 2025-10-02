@@ -702,7 +702,7 @@
     <minTitle>HVMP_EcosphereVI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
+    <cooldownDays>12</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
     <uiPosition>(6,2)</uiPosition>
     <royalAid>
