@@ -2,7 +2,7 @@
 <Defs>
 
   <!--pax branch quests-->
-  <WorldObjectDef>
+  <WorldObjectDef ParentName="StaticWorldObjectBase">
     <defName>HVMP_Hypercube</defName>
     <label>spatial anomaly</label>
     <description>An extra volume of space that can only be accessed from this particular spot. The Occult Branch wants you to enter it and discover what lies inside.</description>
@@ -33,7 +33,7 @@
     </genSteps>
   </MapGeneratorDef>
   <GenStepDef>
-    <defName>HVMP_ImSOUpset</defName><!--MY FATHER'S HERE-->
+    <defName>HVMP_ImSOUpset</defName><!--MY FATHER'S HERE. so context, replicating a gray labyrinth that ISN'T tied to an obelisk was an arduous task of painstakingly replicating 99% of the code with only tiny changes because of how inflexible it was. I went insane briefly from doing it, which is on-brand at least-->
     <order>10</order>
     <genStep Class="HautsPermits_Occult.GenStep_ImTiredOfBeinCalmAllTheGaddamnTime" />
   </GenStepDef>
@@ -43,25 +43,25 @@
     <canHaveMultipleLayoutsInRoom>true</canHaveMultipleLayoutsInRoom>
     <multipleLayoutRoomChance>0.15</multipleLayoutRoomChance>
     <roomDefs>
-      <li>LabyrinthEmpty</li>
-      <li>LabyrinthEndlessPit</li>
-      <li>HVMP_HypercubeObelisk</li>
-      <li>LabyrinthFloorEtchings</li>
-      <li>LabyrinthDeadBody</li>
-      <li>LabyrinthCorpseRoom</li>
-      <li>LabyrinthStatueDeadlife</li>
-      <li>LabyrinthStatueTeleporter</li>
-      <li>LabyrinthSleepingFleshbeast</li>
-      <li>LabyrinthAbandonedCamp</li>
-      <li>LabyrinthAnimalCorpses</li>
-      <li>LabyrinthHarbinger</li>
-      <li>LabyrinthTrees</li>
-      <li>LabyrinthAnimals</li>
-      <li>LabyrinthGrayBox</li>
-      <li>LabyrinthLargeGrayBox</li>
-      <li>LabyrinthLargeEmptyGrayBox</li>
-      <li>LabyrinthFloorRamblings</li>
-      <li MayRequire="Ludeon.RimWorld.Biotech">LabyrinthChildRoom</li>
+      <HVMP_HypercubeObelisk />
+      <LabyrinthEmpty>0.15</LabyrinthEmpty>
+      <LabyrinthEndlessPit>0.1</LabyrinthEndlessPit>
+      <LabyrinthFloorEtchings>0.15</LabyrinthFloorEtchings>
+      <LabyrinthDeadBody>0.05</LabyrinthDeadBody>
+      <LabyrinthCorpseRoom>0.01</LabyrinthCorpseRoom>
+      <LabyrinthStatueDeadlife>0.025</LabyrinthStatueDeadlife>
+      <LabyrinthStatueTeleporter>0.025</LabyrinthStatueTeleporter>
+      <LabyrinthSleepingFleshbeast>0.05</LabyrinthSleepingFleshbeast>
+      <LabyrinthAbandonedCamp>0.02</LabyrinthAbandonedCamp>
+      <LabyrinthAnimalCorpses>0.01</LabyrinthAnimalCorpses>
+      <LabyrinthHarbinger>0.01</LabyrinthHarbinger>
+      <LabyrinthTrees>0.03</LabyrinthTrees>
+      <LabyrinthAnimals>0.0075</LabyrinthAnimals>
+      <LabyrinthGrayBox>0.05</LabyrinthGrayBox>
+      <!--<LabyrinthLargeGrayBox>0.025</LabyrinthLargeGrayBox>
+      <LabyrinthLargeEmptyGrayBox>0.025</LabyrinthLargeEmptyGrayBox>-->
+      <LabyrinthFloorRamblings>0.05</LabyrinthFloorRamblings>
+      <LabyrinthChildRoom MayRequire="Ludeon.RimWorld.Biotech">0.01</LabyrinthChildRoom>
     </roomDefs>
   </LayoutDef>
   <LayoutRoomDef>
@@ -78,6 +78,7 @@
     <destroyable>false</destroyable>
     <useHitPoints>false</useHitPoints>
     <drawerType>MapMeshOnly</drawerType>
+    <tickerType>Normal</tickerType>
     <graphicData>
       <texPath>Things/Building/Obelisk_Warped/WarpedObelisk</texPath>
     </graphicData>
@@ -87,24 +88,28 @@
     <comps Inherit="False">
       <li Class="HautsPermits_Occult.CompProperties_ObeliskHypercube">
         <messageActivating>The obelisk has begun to activate.</messageActivating>
-        
         <activeTicks>1</activeTicks>
         <ticksToActivate>600</ticksToActivate>
         <activateTexPath>UI/Commands/TriggerAbductorObelisk</activateTexPath>
-        
         <activateLabelString>Activate...</activateLabelString>
         <activateDescString>Activate the obelisk.</activateDescString>
         <guiLabelString>Choose who should do this</guiLabelString>
         <jobString>Activate obelisk</jobString>
         <activatingStringPending>activating obelisk</activatingStringPending>
         <activatingString>activating obelisk: {1}s</activatingString>
-        
         <targetingParameters>
           <canTargetBuildings>false</canTargetBuildings>
           <canTargetAnimals>false</canTargetAnimals>
           <canTargetMechs>false</canTargetMechs>
           <onlyTargetControlledPawns>true</onlyTargetControlledPawns>
         </targetingParameters>
+		<DF_pawnKinds>
+		  <li>HVMP_PrimedNociosphere</li>
+		  <li>HVMP_PrimedFleshmassNucleus</li>
+		  <li>HVMP_GrandspliceChimera</li>
+		  <li>HVMP_CharybdisDevourer</li>
+		  <li>HVMP_NoctolUmbranarch</li>
+		</DF_pawnKinds>
       </li>
     </comps>
   </ThingDef>

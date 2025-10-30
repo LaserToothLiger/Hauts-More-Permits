@@ -44,6 +44,7 @@
 <HVMP_TraderBlockedOrbital>An orbital trade ship would have made contact at this time, but as per a prior agreement you made with the Commerce Branch, they have been diverted.</HVMP_TraderBlockedOrbital>
 <HVMP_TraderBlocksRemainingNone>This was the last trader you agreed to let the Commerce Branch block.</HVMP_TraderBlocksRemainingNone>
 <HVMP_TraderBlocksRemaining>The Commerce Branch will still block {0} more trader(s). They would like to thank you for your patience and understanding.</HVMP_TraderBlocksRemaining>
+<HVMP_TraderBlocksCommsBlackout>This happened because of the communications blackout you agreed to.</HVMP_TraderBlocksCommsBlackout>
 <!--Comms console-->
 <HVMP_TooDeepToReach>The signal is obstructed by tons of overhead earth. You cannot contact the {0} at this time.</HVMP_TooDeepToReach>
 <HVMP_Representative>A {0} representative greets you with practiced courtesy.</HVMP_Representative>
@@ -56,6 +57,7 @@
 <HVMP_RefreshPermitCooldowns>Refresh permit cooldowns for {0} (cost: {1} goodwill)</HVMP_RefreshPermitCooldowns>
 <HVMP_NoPermitsToRefresh>no permits to refresh</HVMP_NoPermitsToRefresh>
 <HVMP_RefreshedPermitCDs>The {0} has refreshed its permits' cooldowns for the {1}.</HVMP_RefreshedPermitCDs>
+<HVMP_FactionGreeting_CommunicationsBlackout>{0} cannot be reached due to the communications blackout.</HVMP_FactionGreeting_CommunicationsBlackout>
 <!--Permit use warnings-->
 <HVMP_TargetCurrency>Only usable on currency (silver or gold)</HVMP_TargetCurrency>
 <HVMP_TargetDesertion>Only usable on mentally unbroken enemies sapient enough to be bribed</HVMP_TargetDesertion>
@@ -126,15 +128,28 @@
 <HVMP_CCompToggleUpTooltip>Increases power consumption by 100W/d. This enhances computation progress by 0.1% per hour.\n\nThe chaincomputer can handle up to 5000W/d of external power, which would boost its progress by +5% per hour. However, while externally powered, it outputs signals which can attract hostile parties.</HVMP_CCompToggleUpTooltip>
 <HVMP_CCompToggleDownLabel>Decrease power consumption</HVMP_CCompToggleDownLabel>
 <HVMP_CCompToggleDownTooltip>Lowers power consumption by 100W/d. This reduces computation progress by 0.1% per hour.\n\nThe chaincomputer can operate without any external power, but it will be very slow.</HVMP_CCompToggleDownTooltip>
+<!--Commerce research-->
+<HVMP_CCpaused>Progress paused</HVMP_CCpaused>
+<HVMP_CannotBD>Cannot instantiate psychodigital bond</HVMP_CannotBD>
+<HVMP_RequiresBD>Requires psychodigital connection to progress.</HVMP_RequiresBD>
+<HVMP_CComp_BDLabel>Establish psychodigital connection</HVMP_CComp_BDLabel>
+<HVMP_CComp_BDTooltip>Leech the consciousness of a willing colonist so that the chaincomputer can make progress. This link cannot be broken until the colonist dies or the calculations finish; should the former occur, some amount of progress will be lost.</HVMP_CComp_BDTooltip>
+<HVMP_RequiresPVYAH>Must be hacked to progress.</HVMP_RequiresPVYAH>
+<!--Commerce transportation-->
+<HVMP_StatsReport_MinValCond>{0}: {1} minimum</HVMP_StatsReport_MinValCond>
+<HVMP_QualOrBetter>{0} quality or better</HVMP_QualOrBetter>
+<!--Pax vox-->
+<HVMP_VoxSiteLabel_AAA>\nDifficulty is reduced by the number of factions you are allied with.</HVMP_VoxSiteLabel_AAA>
+<HVMP_VoxSiteLabel_ST>\nDifficulty can be reduced by bringing up to {0} silver.</HVMP_VoxSiteLabel_ST>
+<HVMP_VoxSiteLabel_TTFTIO>\nMay be false pretext for an ambush.</HVMP_VoxSiteLabel_TTFTIO>
 <!--Rover atlas-->
 <HVMP_BookProgress1>Revision speed scales with these skills: </HVMP_BookProgress1>
 <HVMP_BookProgress2>Revision speed scales with </HVMP_BookProgress2>
 <HVMP_AtlasDesc>An atlas of a nearby region. It's somewhat antiquated, and will take time to update for contemporary accuracy.</HVMP_AtlasDesc>
 <HVMP_NeverBeenToAtlasPoint>hasn't been to the area it describes</HVMP_NeverBeenToAtlasPoint>
 <HVMP_WrongSkillsToStudy>lacks any applicable skills</HVMP_WrongSkillsToStudy>
-<!--Archive enigma-->
-<HVMP_EnigmaSkills>Study speed scales with </HVMP_EnigmaSkills>
-<HVMP_EnigmaStats>Study speed scales with the following stats: </HVMP_EnigmaStats>
+<!--Rover odyssey-->
+<HVMP_OdysseySiteLabel_SG>\nMust be visited by someone with at least {0} {1} skill.</HVMP_OdysseySiteLabel_SG>
 <!--Archive ethnography-->
 <HVMP_ShuttleArriveAnthro>Shuttle arriving after {0} questions asked by anthropologists</HVMP_ShuttleArriveAnthro>
 <HVMP_ShuttleArriveAnthroDesc>A shuttle will arrive after {1} questions have been asked by the anthropologists. The quest {0} requires you to load the following people or items onto the shuttle before it leaves:\n{2}</HVMP_ShuttleArriveAnthroDesc>
@@ -144,6 +159,12 @@
 <HVMP_ShuttleAnthroArrivesOn>Shuttle arrives after anthropologists' inquiries are resolved, consisting of {0} questions</HVMP_ShuttleAnthroArrivesOn>
 <!--Archive excavation-->
 <HVMP_AncientTerminalDiscovered>You've discovered an ancient terminal with valuable information!</HVMP_AncientTerminalDiscovered>
+<!--Archive remnant-->
+<HVMP_RemnantSkills>Study speed scales with </HVMP_RemnantSkills>
+<HVMP_RemnantStats>Study speed scales with the following stats: </HVMP_RemnantStats>
+<HVMP_Remnant_BJlabel>Study will eventually trigger a bad event.</HVMP_Remnant_BJlabel>
+<HVMP_Remnant_CDlabel>Loses {0} hp/day</HVMP_Remnant_CDlabel>
+<HVMP_Remnant_PIlabel>If not studied in {0}, loses {1} progress/day</HVMP_Remnant_PIlabel>
 <!--Archive passage-->
 <HVMP_DroneArrivedLabel>Spacedrone arrived</HVMP_DroneArrivedLabel>
 <HVMP_DroneArrivedText>The spacedrone has arrived. It is guarded by mechanoids.</HVMP_DroneArrivedText>
@@ -152,6 +173,7 @@
 <HVMP_NeopathyCureDiscovered>By studying and tending to {PAWN_nameDef}, a cure has been found for {PAWN_possessive} malady!</HVMP_NeopathyCureDiscovered>
 <HVMP_QuestPartShuttleArriveOnCure>Shuttle arrives when neopathy is cured</HVMP_QuestPartShuttleArriveOnCure>
 <HVMP_QuestPartShuttleArriveOnCureDesc>A shuttle will arrive once the neopathy is cured. The quest {0} requires you to load the following people or items onto the shuttle before it leaves:\n{1}</HVMP_QuestPartShuttleArriveOnCureDesc>
+<HVMP_NeopathyCureFailed>{0} was unable to cure the neopathy of {1} on this attempt. Perhaps a future attempt will work, however.</HVMP_NeopathyCureFailed>
 <!--Ecosphere field work-->
 <HVMPCannotPlacePreserve>Inopportune location for nature preserve</HVMPCannotPlacePreserve>
 <HVMP_PreserveDestroyedBecauseOfViolation>The nature preserve has been destroyed due to artificial constructions or pollution within its bounds.</HVMP_PreserveDestroyedBecauseOfViolation>
@@ -164,14 +186,20 @@
 <HVMP_RetroviralItem>The retroviral agent caused {0_nameDef} to produce an item: {1}.</HVMP_RetroviralItem>
 <HVMP_RetroviralGainedGene>The retroviral agent caused {0_nameDef} to gain the {1} gene.</HVMP_RetroviralGainedGene>
 <HVMP_RetroviralRemovedGene>The retroviral agent caused {0_nameDef} to lose the {1} gene.</HVMP_RetroviralRemovedGene>
+<HVMP_MustHackToInject>The retroviral agent must be hacked first, before it can be injected.</HVMP_MustHackToInject>
 <!--Occult HAT-->
 <HVMP_WokeOccult>The enigmatic psychic sciences employed by the Occult Branch have awakened {PAWN_nameDef} to {PAWN_possessive} psychic potential!</HVMP_WokeOccult>
 <HVMP_WokeOccultF>The secret arcane rituals employed by the Occult Branch have awakened {PAWN_nameDef} to {PAWN_possessive} sorcerous potential!</HVMP_WokeOccultF>
+<!--Occult Fuller-->
+<HVMP_TeleportationRaidLabel>Skip raid</HVMP_TeleportationRaidLabel>
+<HVMP_TeleportationRaidText>The Cult of Horax is attempting to liberate one of your prisoners!</HVMP_TeleportationRaidText>
 <!--Occult Lovecraft-->
 <HVMP_LovecraftTooSoon>to wait at least one day since the last psychic discharge. Remaining time: {0}</HVMP_LovecraftTooSoon>
 <HVMP_StatsReport_PsychicAlignment>{0}: +{1}, x{2}</HVMP_StatsReport_PsychicAlignment>
 <HVMP_LovecraftManhunterLabel>Manhunter shockwave</HVMP_LovecraftManhunterLabel>
-<HVMP_LovecraftManhunterText>A roiling wave of psychic energy has swept over the landscape. It seems many of the animals in the area have been driven insane.</HVMP_LovecraftManhunterText>
+<HVMP_LovecraftManhunterText>A roiling wave of psychic energy has swept over the landscape. Many of the animals in the area have been driven insane.</HVMP_LovecraftManhunterText>
+<HVMP_LovecraftMutationLabel>Manhunter shockwave</HVMP_LovecraftMutationLabel>
+<HVMP_LovecraftMutationText>A roiling wave of psychic energy has swept over the landscape. It has reshaped the musculature of many animals in the area, turning them into terrifying creatures.</HVMP_LovecraftMutationText>
 <!--Occult Natali-->
 <HVMP_LetterObeliskDiscovered>{PAWN_nameDef} has discovered a large obelisk. In between its twisting prongs, {PAWN_pronoun} catches fleeting synesthetic impressions of different locations across the planet. Perhaps it can be activated to return {PAWN_objective} home.\n\nSelect {PAWN_nameDef} and right-click the obelisk to activate it.</HVMP_LetterObeliskDiscovered>
 <!--Pax offering-->
@@ -181,23 +209,6 @@
 <HVMP_PaxTalksFlounder>The talks floundered. Delegates managed to communicate clearly and with basic respect, but nothing was achieved.</HVMP_PaxTalksFlounder>
 <HVMP_PaxTalksSuccess>The talks were a success. The delegates reached a new level of mutual understanding and respect for each others' people.</HVMP_PaxTalksSuccess>
 <!--Books-->
-<HVMP_titlesPlace_0>Traveler's Manual of {0}</HVMP_titlesPlace_0>
-<HVMP_titlesPlace_1>Encyclopedia of {0}</HVMP_titlesPlace_1>
-<HVMP_titlesPlace_2>Atlas of {0}</HVMP_titlesPlace_2>
-<HVMP_titlesPlace_3>Fantastic Destinations: {0}</HVMP_titlesPlace_3>
-<HVMP_titlesPlace_4>The {0} Compendium</HVMP_titlesPlace_4>
-<HVMP_titlesPlace_5>{0}: an Exploration</HVMP_titlesPlace_5>
-<HVMP_titlesPlace_6>Dive into {0}</HVMP_titlesPlace_6>
-<HVMP_titlesPlace_7>Faraway {0}</HVMP_titlesPlace_7>
-<HVMP_titlesPlace_8>{0} Ahoy!</HVMP_titlesPlace_8>
-<HVMP_titlesPlace_9>Thrillseekers' Guide to {0}</HVMP_titlesPlace_9>
-<HVMP_titlesPlace_10>Down in Old {0}</HVMP_titlesPlace_10>
-<HVMP_titlesPlace_11>The {0}</HVMP_titlesPlace_11>
-<HVMP_titlesPlace_12>Beauties of the Rim: {0}</HVMP_titlesPlace_12>
-<HVMP_titlesPlace_13>Traveling in {0}</HVMP_titlesPlace_13>
-<HVMP_titlesPlanetPlace_0>{0} Factbook - {1}</HVMP_titlesPlanetPlace_0>
-<HVMP_titlesPlanetPlace_1>Secrets of {0}: {1}</HVMP_titlesPlanetPlace_1>
-<HVMP_titlesPlanetPlace_2>Wonders of {0}: {1}</HVMP_titlesPlanetPlace_2>
 <HVMP_InspiringVerseHitsRight>Thanks to reading {0}, {1} has experienced an inspiration!</HVMP_InspiringVerseHitsRight>
 <HVMP_IdeoBookInspireChance>Chance to inspire believers: {0}%</HVMP_IdeoBookInspireChance>
 <HVMP_IdeoBookHediffGain>Per hour of reading: grants {0} stacks of the "{1}" buff to believers, lasting for {2} hours</HVMP_IdeoBookHediffGain>
@@ -212,13 +223,13 @@
 <HVMP_Tooltip_MayhemMode>If enabled, disabled mutators still have a 35% chance to apply to any quest of this type.</HVMP_Tooltip_MayhemMode>
 <HVMP_Label_Commerce>COMMERCE BRANCH</HVMP_Label_Commerce>
 <HVMP_Label_Fortification>Fortification</HVMP_Label_Fortification>
-<HVMP_Tooltip_Fortification>Fight 1-2 raids.</HVMP_Tooltip_Fortification>
-<HVMP_HardMode_Label_Fortification_1>Advanced Weaponry</HVMP_HardMode_Label_Fortification_1>
-<HVMP_HardMode_Tooltip_Fortification_1>Raids may have an additional contingent of robotic combatants (such as centipedes or Odyssey's wasp drones). Otherwise, their arrival will be accompanied by 2-5 hours of an EMI field, psychic drone, or lesser psychic suppression which only affects you and your allies.</HVMP_HardMode_Tooltip_Fortification_1>
-<HVMP_HardMode_Label_Fortification_2>Dead Raiders Tell No Tales</HVMP_HardMode_Label_Fortification_2>
-<HVMP_HardMode_Tooltip_Fortification_2>Some raiders are "raiding scouts", marked by a red symbol above their heads. Any raiding scout that escapes will grant up to four hostile factions an additional cache of "raid points" which they can spend to empower their future raids.</HVMP_HardMode_Tooltip_Fortification_2>
-<HVMP_HardMode_Label_Fortification_3>Traitor Guard</HVMP_HardMode_Label_Fortification_3>
-<HVMP_HardMode_Tooltip_Fortification_3>Raids have an additional contingent of industrial-tech mercenaries. Some raiders may have a protective mechanite coating, and a few may have a special red shield that makes them slower but can absorb a very high amount of damage (of any kind, even melee or EMP).</HVMP_HardMode_Tooltip_Fortification_3>
+<HVMP_Tooltip_Fortification>Erect a large building. You may also be tasked to keep it safe for a while after completion.</HVMP_Tooltip_Fortification>
+<HVMP_HardMode_Label_Fortification_1>Rushmore</HVMP_HardMode_Label_Fortification_1>
+<HVMP_HardMode_Tooltip_Fortification_1>The deadline for completing the landmark is only 70% as long.</HVMP_HardMode_Tooltip_Fortification_1>
+<HVMP_HardMode_Label_Fortification_2>The Test of Time</HVMP_HardMode_Label_Fortification_2>
+<HVMP_HardMode_Tooltip_Fortification_2>The landmark must be guarded for slightly longer than normal after completion. Failure to guard inflicts twice the goodwill penalty (-20 instead of -10), and also triggers a bad event such as an infestation, mech cluster, raid, or forced weather.</HVMP_HardMode_Tooltip_Fortification_2>
+<HVMP_HardMode_Label_Fortification_3>Up to the Name</HVMP_HardMode_Label_Fortification_3>
+<HVMP_HardMode_Tooltip_Fortification_3>Landmark blueprints are approximately 33% larger, and the maximum allowed size is either 1.2x longer or +5 cells longer on the longest side, whichever would be larger.</HVMP_HardMode_Tooltip_Fortification_3>
 <HVMP_Label_Intervention>Intervention</HVMP_Label_Intervention>
 <HVMP_Tooltip_Intervention>Fight 3-6 waves of insectoids.</HVMP_Tooltip_Intervention>
 <HVMP_HardMode_Label_Intervention_1>Burning, Unadulterated Burning</HVMP_HardMode_Label_Intervention_1>
@@ -226,234 +237,234 @@
 <HVMP_HardMode_Label_Intervention_2>Infestation Infection</HVMP_HardMode_Label_Intervention_2>
 <HVMP_HardMode_Tooltip_Intervention_2>Insectoids may inflict scaria with their bites or claws.</HVMP_HardMode_Tooltip_Intervention_2>
 <HVMP_HardMode_Label_Intervention_3>Jitterbugs</HVMP_HardMode_Label_Intervention_3>
-<HVMP_HardMode_Tooltip_Intervention_3>Z</HVMP_HardMode_Tooltip_Intervention_3>
+<HVMP_HardMode_Tooltip_Intervention_3>Insectoids move faster, have bonus consciousness, and feel less pain.</HVMP_HardMode_Tooltip_Intervention_3>
 <HVMP_Label_Mastermind>Mastermind</HVMP_Label_Mastermind>
 <HVMP_Tooltip_Mastermind>Agree to not encounter the next trade caravan or orbital trader that would visit you.</HVMP_Tooltip_Mastermind>
-<HVMP_HardMode_Label_Mastermind_1>Seed Funding</HVMP_HardMode_Label_Mastermind_1>
-<HVMP_HardMode_Tooltip_Mastermind_1>X</HVMP_HardMode_Tooltip_Mastermind_1>
-<HVMP_HardMode_Label_Mastermind_2>Total Temporal Lockout</HVMP_HardMode_Label_Mastermind_2>
-<HVMP_HardMode_Tooltip_Mastermind_2>Y</HVMP_HardMode_Tooltip_Mastermind_2>
+<HVMP_HardMode_Label_Mastermind_1>Communications Blackout</HVMP_HardMode_Label_Mastermind_1>
+<HVMP_HardMode_Tooltip_Mastermind_1>Accepting the quest inflicts the following effects for 10 days:\n- Non-branch factions cannot be contacted on the comms console\n- Settlements will not trade with the player\n- All trade caravans and orbital traders will be diverted\n- Other kinds of traders (e.g. some visitors) will not trade\n- -100% trade price improvement</HVMP_HardMode_Tooltip_Mastermind_1>
+<HVMP_HardMode_Label_Mastermind_2>Isolation Invites Predation</HVMP_HardMode_Label_Mastermind_2>
+<HVMP_HardMode_Tooltip_Mastermind_2>Accepting the quest grants a bonus cache of raid points to each hostile faction.</HVMP_HardMode_Tooltip_Mastermind_2>
 <HVMP_HardMode_Label_Mastermind_3>Untrustworthy Unreliability</HVMP_HardMode_Label_Mastermind_3>
-<HVMP_HardMode_Tooltip_Mastermind_3>Z</HVMP_HardMode_Tooltip_Mastermind_3>
+<HVMP_HardMode_Tooltip_Mastermind_3>Accepting the quest inflicts -10 goodwill with allied non-branch factions, and -5 goodwill with neutral ones.</HVMP_HardMode_Tooltip_Mastermind_3>
 <HVMP_Label_Research>Research</HVMP_Label_Research>
 <HVMP_Tooltip_Research>Take care of a "chaincomputer" device until it finishes its calculations.</HVMP_Tooltip_Research>
 <HVMP_HardMode_Label_Research_1>Brain Drain</HVMP_HardMode_Label_Research_1>
-<HVMP_HardMode_Tooltip_Research_1>X</HVMP_HardMode_Tooltip_Research_1>
-<HVMP_HardMode_Label_Research_2>Please Verify You Are Humanlike</HVMP_HardMode_Label_Research_2>
-<HVMP_HardMode_Tooltip_Research_2>Y</HVMP_HardMode_Tooltip_Research_2>
-<HVMP_HardMode_Label_Research_3>Poor Optimization</HVMP_HardMode_Label_Research_3>
-<HVMP_HardMode_Tooltip_Research_3>Z</HVMP_HardMode_Tooltip_Research_3>
+<HVMP_HardMode_Tooltip_Research_1>The chaincomputer only gains progress while linked to a willing colonist. The colonist suffers greatly reduced consciousness, and this debuff only ends on death or on maximum progress. Death of the linked pawn regresses progress to some extent.</HVMP_HardMode_Tooltip_Research_1>
+<HVMP_HardMode_Label_Research_2>Optimization Issues</HVMP_HardMode_Label_Research_2>
+<HVMP_HardMode_Tooltip_Research_2>The chaincomputer gradually overheats, warming up any room it's in. Eventually, it will start causing disasters - releasing bursts of flame, breaking down electronics in the same power grid, or unleashing EMI fields.</HVMP_HardMode_Tooltip_Research_2>
+<HVMP_HardMode_Label_Research_3>Please Verify You Are Humanlike</HVMP_HardMode_Label_Research_3>
+<HVMP_HardMode_Tooltip_Research_3>The chaincomputer stops gaining progress after a certain point, and must be hacked in order to continue functioning. Failing a hacking stealth check will cause a mech cluster to land or a forced weather condition to occur.</HVMP_HardMode_Tooltip_Research_3>
 <HVMP_Label_Transportation>Transportation</HVMP_Label_Transportation>
-<HVMP_Tooltip_Transportation>Fulfill a trade request.</HVMP_Tooltip_Transportation>
-<HVMP_HardMode_Label_Transportation_1>Anonymous Transaction</HVMP_HardMode_Label_Transportation_1>
-<HVMP_HardMode_Tooltip_Transportation_1>X</HVMP_HardMode_Tooltip_Transportation_1>
-<HVMP_HardMode_Label_Transportation_2>Express Order</HVMP_HardMode_Label_Transportation_2>
-<HVMP_HardMode_Tooltip_Transportation_2>Y</HVMP_HardMode_Tooltip_Transportation_2>
-<HVMP_HardMode_Label_Transportation_3>Where There's Trade...</HVMP_HardMode_Label_Transportation_3>
-<HVMP_HardMode_Tooltip_Transportation_3>Z</HVMP_HardMode_Tooltip_Transportation_3>
+<HVMP_Tooltip_Transportation>Fulfill a trade request, although instead of visiting a settlement you drop the items off at a trading point.</HVMP_Tooltip_Transportation>
+<HVMP_HardMode_Label_Transportation_1>Pukis</HVMP_HardMode_Label_Transportation_1>
+<HVMP_HardMode_Tooltip_Transportation_1>An ambush lies in wait around the trade point. Caravans close to the trade point may trigger the ambush early.</HVMP_HardMode_Tooltip_Transportation_1>
+<HVMP_HardMode_Label_Transportation_2>Neither Snow Nor Rain Nor...</HVMP_HardMode_Label_Transportation_2>
+<HVMP_HardMode_Tooltip_Transportation_2>Trade points can generate at any distance, and the deadline is 4-7 days shorter.</HVMP_HardMode_Tooltip_Transportation_2>
+<HVMP_HardMode_Label_Transportation_3>That Gucci, the Louis</HVMP_HardMode_Label_Transportation_3>
+<HVMP_HardMode_Tooltip_Transportation_3>The minimum acceptable quality of requested items has a 70% chance to be good, a 25% chance to be excellent, or a 5% chance to be masterwork.</HVMP_HardMode_Tooltip_Transportation_3>
 <HVMP_Label_Pax>PAX BRANCH</HVMP_Label_Pax>
 <HVMP_Label_Caelum>Caelum</HVMP_Label_Caelum>
 <HVMP_Tooltip_Caelum>Endure a lengthy forced game condition, such as a heat wave.</HVMP_Tooltip_Caelum>
-<HVMP_HardMode_Label_Caelum_1>Atmospheric Aftershock</HVMP_HardMode_Label_Caelum_1>
-<HVMP_HardMode_Tooltip_Caelum_1>X</HVMP_HardMode_Tooltip_Caelum_1>
-<HVMP_HardMode_Label_Caelum_2>Mood Killer</HVMP_HardMode_Label_Caelum_2>
-<HVMP_HardMode_Tooltip_Caelum_2>Y</HVMP_HardMode_Tooltip_Caelum_2>
-<HVMP_HardMode_Label_Caelum_3>Signal Interference</HVMP_HardMode_Label_Caelum_3>
-<HVMP_HardMode_Tooltip_Caelum_3>Z</HVMP_HardMode_Tooltip_Caelum_3>
+<HVMP_HardMode_Label_Caelum_1>Mood Killer</HVMP_HardMode_Label_Caelum_1>
+<HVMP_HardMode_Tooltip_Caelum_1>The condition also inflicts -8 mood on all pawns in the affected map.</HVMP_HardMode_Tooltip_Caelum_1>
+<HVMP_HardMode_Label_Caelum_2>Sensory Overload</HVMP_HardMode_Label_Caelum_2>
+<HVMP_HardMode_Tooltip_Caelum_2>Upon accepting the quest, all living, non-Anomaly pawns on the map are stunned for 3 seconds, and receive a -75% penalty to sight and hearing that fades out over 5 days.</HVMP_HardMode_Tooltip_Caelum_2>
+<HVMP_HardMode_Label_Caelum_3>Tempest Engine</HVMP_HardMode_Label_Caelum_3>
+<HVMP_HardMode_Tooltip_Caelum_3>A second condition is also inflicted for a shorter duration. The quest description does not mention what it is.</HVMP_HardMode_Tooltip_Caelum_3>
 <HVMP_Label_Machina>Machina</HVMP_Label_Machina>
 <HVMP_Tooltip_Machina>Fight a mech cluster.</HVMP_Tooltip_Machina>
-<HVMP_HardMode_Label_Machina_1>First Strike Protocol</HVMP_HardMode_Label_Machina_1>
-<HVMP_HardMode_Tooltip_Machina_1>X</HVMP_HardMode_Tooltip_Machina_1>
-<HVMP_HardMode_Label_Machina_2>Gargantua</HVMP_HardMode_Label_Machina_2>
-<HVMP_HardMode_Tooltip_Machina_2>Y</HVMP_HardMode_Tooltip_Machina_2>
-<HVMP_HardMode_Label_Machina_3>Second Strike Protocol</HVMP_HardMode_Label_Machina_3>
-<HVMP_HardMode_Tooltip_Machina_3>Z</HVMP_HardMode_Tooltip_Machina_3>
+<HVMP_HardMode_Label_Machina_1>One-Two Combo</HVMP_HardMode_Label_Machina_1>
+<HVMP_HardMode_Tooltip_Machina_1>Upon defeating the cluster, a mechanoid raid strikes,</HVMP_HardMode_Tooltip_Machina_1>
+<HVMP_HardMode_Label_Machina_2>Rise and Shine</HVMP_HardMode_Label_Machina_2>
+<HVMP_HardMode_Tooltip_Machina_2>The cluster wakes immediately.</HVMP_HardMode_Tooltip_Machina_2>
+<HVMP_HardMode_Label_Machina_3>...The Harder They Fall</HVMP_HardMode_Label_Machina_3>
+<HVMP_HardMode_Tooltip_Machina_3>The cluster is stronger (technically by 3x, but in practice empowered clusters only feel twice as strong).</HVMP_HardMode_Tooltip_Machina_3>
 <HVMP_Label_Mundi>Mundi</HVMP_Label_Mundi>
 <HVMP_Tooltip_Mundi>Improve your goodwill with other factions.</HVMP_Tooltip_Mundi>
 <HVMP_HardMode_Label_Mundi_1>Marshal the Enemies of Paradise</HVMP_HardMode_Label_Mundi_1>
-<HVMP_HardMode_Tooltip_Mundi_1>X</HVMP_HardMode_Tooltip_Mundi_1>
+<HVMP_HardMode_Tooltip_Mundi_1>Accepting the quest grants a substantial bonus cache of raid points to each permanently hostile faction (e.g. pirates, but not rough outlanders).</HVMP_HardMode_Tooltip_Mundi_1>
 <HVMP_HardMode_Label_Mundi_2>Peace In Our Lifetime</HVMP_HardMode_Label_Mundi_2>
-<HVMP_HardMode_Tooltip_Mundi_2>Y</HVMP_HardMode_Tooltip_Mundi_2>
-<HVMP_HardMode_Label_Mundi_3>Stray Not From the Narrow Path</HVMP_HardMode_Label_Mundi_3>
-<HVMP_HardMode_Tooltip_Mundi_3>Z</HVMP_HardMode_Tooltip_Mundi_3>
+<HVMP_HardMode_Tooltip_Mundi_2>The quest has a deadline of 12-20 days.</HVMP_HardMode_Tooltip_Mundi_2>
+<HVMP_HardMode_Label_Mundi_3>The Wages of Sin</HVMP_HardMode_Label_Mundi_3>
+<HVMP_HardMode_Tooltip_Mundi_3>Goodwill losses count for twice as much against quest progress.</HVMP_HardMode_Tooltip_Mundi_3>
 <HVMP_Label_Populus>Populus</HVMP_Label_Populus>
 <HVMP_Tooltip_Populus>Take care of some refugees for several days. A raid might pursue them.</HVMP_Tooltip_Populus>
 <HVMP_HardMode_Label_Populus_1>Mass Displacement</HVMP_HardMode_Label_Populus_1>
-<HVMP_HardMode_Tooltip_Populus_1>X</HVMP_HardMode_Tooltip_Populus_1>
-<HVMP_HardMode_Label_Populus_2>Pariahs</HVMP_HardMode_Label_Populus_2>
-<HVMP_HardMode_Tooltip_Populus_2>Y</HVMP_HardMode_Tooltip_Populus_2>
-<HVMP_HardMode_Label_Populus_3>VIPs</HVMP_HardMode_Label_Populus_3>
-<HVMP_HardMode_Tooltip_Populus_3>Z</HVMP_HardMode_Tooltip_Populus_3>
+<HVMP_HardMode_Tooltip_Populus_1>Number of refugees increased, from anywhere from +1 to +35% of your current colonist count.</HVMP_HardMode_Tooltip_Populus_1>
+<HVMP_HardMode_Label_Populus_2>VIPs</HVMP_HardMode_Label_Populus_2>
+<HVMP_HardMode_Tooltip_Populus_2>The quest can be failed if any refugee's mood remains too low for too long.</HVMP_HardMode_Tooltip_Populus_2>
+<HVMP_HardMode_Label_Populus_3>Worse Than Useless</HVMP_HardMode_Label_Populus_3>
+<HVMP_HardMode_Tooltip_Populus_3>Each refugee has at least one negative trait.</HVMP_HardMode_Tooltip_Populus_3>
 <HVMP_Label_Vox>Vox</HVMP_Label_Vox>
 <HVMP_Tooltip_Vox>Succeed at peace talks with a "minor faction".</HVMP_Tooltip_Vox>
-<HVMP_HardMode_Label_Vox_1>False Pretext? On MY Rimworld?</HVMP_HardMode_Label_Vox_1>
-<HVMP_HardMode_Tooltip_Vox_1>X</HVMP_HardMode_Tooltip_Vox_1>
-<HVMP_HardMode_Label_Vox_2>Mercenary Mouths</HVMP_HardMode_Label_Vox_2>
-<HVMP_HardMode_Tooltip_Vox_2>Y</HVMP_HardMode_Tooltip_Vox_2>
-<HVMP_HardMode_Label_Vox_3>Tangled Web of Politics</HVMP_HardMode_Label_Vox_3>
-<HVMP_HardMode_Tooltip_Vox_3>Z</HVMP_HardMode_Tooltip_Vox_3>
+<HVMP_HardMode_Label_Vox_1>Allies Attract Allies</HVMP_HardMode_Label_Vox_1>
+<HVMP_HardMode_Tooltip_Vox_1>Chance of failure doubled, but this penalty is reduced proportionate to the percentage of goodwill-having non-branch factions you are allied with.</HVMP_HardMode_Tooltip_Vox_1>
+<HVMP_HardMode_Label_Vox_2>Silver Talks</HVMP_HardMode_Label_Vox_2>
+<HVMP_HardMode_Tooltip_Vox_2>Chance of failure doubled, but this penalty can be reduced by donating silver to the peace talks site.</HVMP_HardMode_Tooltip_Vox_2>
+<HVMP_HardMode_Label_Vox_3>The Time For Talk Is Over</HVMP_HardMode_Label_Vox_3>
+<HVMP_HardMode_Tooltip_Vox_3>There is a 50% chance to be ambushed instead of initiating peace talks. This finishes the quest without causing success or failure.</HVMP_HardMode_Tooltip_Vox_3>
 <HVMP_Label_Rover>ROVER BRANCH</HVMP_Label_Rover>
 <HVMP_Label_Atlas>Atlas</HVMP_Label_Atlas>
 <HVMP_Tooltip_Atlas>Revise a dated atlas. Only those who have been to a specific point on the world map can revise it.</HVMP_Tooltip_Atlas>
-<HVMP_HardMode_Label_Atlas_1>Global Catalogue</HVMP_HardMode_Label_Atlas_1>
-<HVMP_HardMode_Tooltip_Atlas_1>X</HVMP_HardMode_Tooltip_Atlas_1>
-<HVMP_HardMode_Label_Atlas_2>This Book Is For Nerds!</HVMP_HardMode_Label_Atlas_2>
-<HVMP_HardMode_Tooltip_Atlas_2>Y</HVMP_HardMode_Tooltip_Atlas_2>
-<HVMP_HardMode_Label_Atlas_3>Where There's Tourism...</HVMP_HardMode_Label_Atlas_3>
-<HVMP_HardMode_Tooltip_Atlas_3>Z</HVMP_HardMode_Tooltip_Atlas_3>
-<HVMP_Label_Colossus>Colossus</HVMP_Label_Colossus>
-<HVMP_Tooltip_Colossus>Erect a large building. You may also be tasked to keep it safe for a while after completion.</HVMP_Tooltip_Colossus>
-<HVMP_HardMode_Label_Colossus_1>Fit For a King</HVMP_HardMode_Label_Colossus_1>
-<HVMP_HardMode_Tooltip_Colossus_1>X</HVMP_HardMode_Tooltip_Colossus_1>
-<HVMP_HardMode_Label_Colossus_2>Homewreckers</HVMP_HardMode_Label_Colossus_2>
-<HVMP_HardMode_Tooltip_Colossus_2>Y</HVMP_HardMode_Tooltip_Colossus_2>
-<HVMP_HardMode_Label_Colossus_3>The Test of Time</HVMP_HardMode_Label_Colossus_3>
-<HVMP_HardMode_Tooltip_Colossus_3>Z</HVMP_HardMode_Tooltip_Colossus_3>
+<HVMP_HardMode_Label_Atlas_1>Drier Than Salt</HVMP_HardMode_Label_Atlas_1>
+<HVMP_HardMode_Tooltip_Atlas_1>Pawns lose joy and mood while revising the atlas.</HVMP_HardMode_Tooltip_Atlas_1>
+<HVMP_HardMode_Label_Atlas_2>Infodense</HVMP_HardMode_Label_Atlas_2>
+<HVMP_HardMode_Tooltip_Atlas_2>The atlas takes 1.25x longer to study.</HVMP_HardMode_Tooltip_Atlas_2>
+<HVMP_HardMode_Label_Atlas_3>Trespassing Punishable By Ultratech</HVMP_HardMode_Label_Atlas_3>
+<HVMP_HardMode_Tooltip_Atlas_3>Any time someone visits the atlas revision point, a problem causer site is activated to harass one of your colonies. Each time this happens, there is an 80% chance that further visitations will be unable to trigger the effect.</HVMP_HardMode_Tooltip_Atlas_3>
+<HVMP_Label_Ares>Ares</HVMP_Label_Ares>
+<HVMP_Tooltip_Ares>Fight 1-2 raids.</HVMP_Tooltip_Ares>
+<HVMP_HardMode_Label_Ares_1>Advanced Weaponry</HVMP_HardMode_Label_Ares_1>
+<HVMP_HardMode_Tooltip_Ares_1>Raids may have an additional contingent of robotic combatants (such as centipedes or Odyssey's wasp drones). Otherwise, their arrival will be accompanied by 2-5 hours of an EMI field, psychic drone, or lesser psychic suppression which only affects you and your allies.</HVMP_HardMode_Tooltip_Ares_1>
+<HVMP_HardMode_Label_Ares_2>Dead Raiders Tell No Tales</HVMP_HardMode_Label_Ares_2>
+<HVMP_HardMode_Tooltip_Ares_2>Some raiders are "raiding scouts", marked by a red symbol above their heads. Any raiding scout that escapes will grant up to four hostile factions an additional cache of "raid points" which they can spend to empower their future raids.</HVMP_HardMode_Tooltip_Ares_2>
+<HVMP_HardMode_Label_Ares_3>Traitor Guard</HVMP_HardMode_Label_Ares_3>
+<HVMP_HardMode_Tooltip_Ares_3>Raids have an additional contingent of industrial-tech mercenaries. Some raiders may have a protective mechanite coating, and a few may have a special red shield that makes them slower but can absorb a very high amount of damage (of any kind, even melee or EMP).</HVMP_HardMode_Tooltip_Ares_3>
 <HVMP_Label_Laelaps>Laelaps</HVMP_Label_Laelaps>
 <HVMP_Tooltip_Laelaps>Send colonists on a shuttle to assist someone else for several days.</HVMP_Tooltip_Laelaps>
-<HVMP_HardMode_Label_Laelaps_1>I Like Ike, Specifically</HVMP_HardMode_Label_Laelaps_1>
-<HVMP_HardMode_Tooltip_Laelaps_1>X</HVMP_HardMode_Tooltip_Laelaps_1>
+<HVMP_HardMode_Label_Laelaps_1>Eenie Meenie Meinee Mo</HVMP_HardMode_Label_Laelaps_1>
+<HVMP_HardMode_Tooltip_Laelaps_1>A specific pawn must be loaded onto the shuttle.</HVMP_HardMode_Tooltip_Laelaps_1>
 <HVMP_HardMode_Label_Laelaps_2>Since Sun Tzu Said So</HVMP_HardMode_Label_Laelaps_2>
-<HVMP_HardMode_Tooltip_Laelaps_2>Y</HVMP_HardMode_Tooltip_Laelaps_2>
-<HVMP_HardMode_Label_Laelaps_3>The Nearest Airport Is...</HVMP_HardMode_Label_Laelaps_3>
-<HVMP_HardMode_Tooltip_Laelaps_3>Z</HVMP_HardMode_Tooltip_Laelaps_3>
+<HVMP_HardMode_Tooltip_Laelaps_2>A raid strikes shortly after the shuttle departs.</HVMP_HardMode_Tooltip_Laelaps_2>
+<HVMP_HardMode_Label_Laelaps_3>The Long Way Round</HVMP_HardMode_Label_Laelaps_3>
+<HVMP_HardMode_Tooltip_Laelaps_3>The lending duration is 1.25x longer.</HVMP_HardMode_Tooltip_Laelaps_3>
 <HVMP_Label_Odyssey>Odyssey</HVMP_Label_Odyssey>
 <HVMP_Tooltip_Odyssey>Visit multiple points on the world map.</HVMP_Tooltip_Odyssey>
-<HVMP_HardMode_Label_Odyssey_1>Around the World in 4.8 Million Ticks</HVMP_HardMode_Label_Odyssey_1>
-<HVMP_HardMode_Tooltip_Odyssey_1>X</HVMP_HardMode_Tooltip_Odyssey_1>
-<HVMP_HardMode_Label_Odyssey_2>Move Over, Taxes</HVMP_HardMode_Label_Odyssey_2>
-<HVMP_HardMode_Tooltip_Odyssey_2>Y</HVMP_HardMode_Tooltip_Odyssey_2>
-<HVMP_HardMode_Label_Odyssey_3>You'll Go Everywhere, Man</HVMP_HardMode_Label_Odyssey_3>
-<HVMP_HardMode_Tooltip_Odyssey_3>Z</HVMP_HardMode_Tooltip_Odyssey_3>
+<HVMP_HardMode_Label_Odyssey_1>Loaded Itinerary</HVMP_HardMode_Label_Odyssey_1>
+<HVMP_HardMode_Tooltip_Odyssey_1>The deadline is extended by two days, but there are also two additional points to visit and they can spawn up to 20% further away from each other.</HVMP_HardMode_Tooltip_Odyssey_1>
+<HVMP_HardMode_Label_Odyssey_2>Random Encounters</HVMP_HardMode_Label_Odyssey_2>
+<HVMP_HardMode_Tooltip_Odyssey_2>Each point has a 15% chance to have an ambush. Only up to two points per quest can have an ambush.</HVMP_HardMode_Tooltip_Odyssey_2>
+<HVMP_HardMode_Label_Odyssey_3>Skill Gauntlet</HVMP_HardMode_Label_Odyssey_3>
+<HVMP_HardMode_Tooltip_Odyssey_3>Travelers must have at least a certain level of a random skill in order to properly visit each point. The requisite skill and level are the same for each point; the more points there are, the lower the requisite level (max 10, min 6).</HVMP_HardMode_Tooltip_Odyssey_3>
 <HVMP_Label_Theseus>Theseus</HVMP_Label_Theseus>
 <HVMP_Tooltip_Theseus>Send colonists on a shuttle to destroy a bandit camp.</HVMP_Tooltip_Theseus>
-<HVMP_HardMode_Label_Theseus_1>Badder</HVMP_HardMode_Label_Theseus_1>
-<HVMP_HardMode_Tooltip_Theseus_1>X</HVMP_HardMode_Tooltip_Theseus_1>
-<HVMP_HardMode_Label_Theseus_2>Bigger</HVMP_HardMode_Label_Theseus_2>
-<HVMP_HardMode_Tooltip_Theseus_2>Y</HVMP_HardMode_Tooltip_Theseus_2>
-<HVMP_HardMode_Label_Theseus_3>Uglier</HVMP_HardMode_Label_Theseus_3>
-<HVMP_HardMode_Tooltip_Theseus_3>Z</HVMP_HardMode_Tooltip_Theseus_3>
+<HVMP_HardMode_Label_Theseus_1>A Quality All Its Own</HVMP_HardMode_Label_Theseus_1>
+<HVMP_HardMode_Tooltip_Theseus_1>The camp's defender count is higher.</HVMP_HardMode_Tooltip_Theseus_1>
+<HVMP_HardMode_Label_Theseus_2>Grave Goods</HVMP_HardMode_Label_Theseus_2>
+<HVMP_HardMode_Tooltip_Theseus_2>Up to 10 defenders have a random buff (a shield that works on all damage types but slows the user, protective mechanite coating, or a limited teleport ability).</HVMP_HardMode_Tooltip_Theseus_2>
+<HVMP_HardMode_Label_Theseus_3>Static Defense</HVMP_HardMode_Label_Theseus_3>
+<HVMP_HardMode_Tooltip_Theseus_3>The camp has 1 extra mechanoid turret or low-shield per 5 defenders (minimum of 1 extra building). Their destruction is not required for success.</HVMP_HardMode_Tooltip_Theseus_3>
 <HVMP_Label_Archive>ARCHIVE BRANCH</HVMP_Label_Archive>
-<HVMP_Label_Enigma>Enigma</HVMP_Label_Enigma>
-<HVMP_Tooltip_Enigma>Study an ancient artifact.</HVMP_Tooltip_Enigma>
-<HVMP_HardMode_Label_Enigma_1>X</HVMP_HardMode_Label_Enigma_1>
-<HVMP_HardMode_Tooltip_Enigma_1>X</HVMP_HardMode_Tooltip_Enigma_1>
-<HVMP_HardMode_Label_Enigma_2>Y</HVMP_HardMode_Label_Enigma_2>
-<HVMP_HardMode_Tooltip_Enigma_2>Y</HVMP_HardMode_Tooltip_Enigma_2>
-<HVMP_HardMode_Label_Enigma_3>Z</HVMP_HardMode_Label_Enigma_3>
-<HVMP_HardMode_Tooltip_Enigma_3>Z</HVMP_HardMode_Tooltip_Enigma_3>
-<HVMP_Label_Entrant>Entrant</HVMP_Label_Entrant>
-<HVMP_Tooltip_Entrant>Journey to a shuttle crash site and deconstruct the shuttle.</HVMP_Tooltip_Entrant>
-<HVMP_HardMode_Label_Entrant_1>X</HVMP_HardMode_Label_Entrant_1>
-<HVMP_HardMode_Tooltip_Entrant_1>X</HVMP_HardMode_Tooltip_Entrant_1>
-<HVMP_HardMode_Label_Entrant_2>Y</HVMP_HardMode_Label_Entrant_2>
-<HVMP_HardMode_Tooltip_Entrant_2>Y</HVMP_HardMode_Tooltip_Entrant_2>
-<HVMP_HardMode_Label_Entrant_3>Z</HVMP_HardMode_Label_Entrant_3>
-<HVMP_HardMode_Tooltip_Entrant_3>Z</HVMP_HardMode_Tooltip_Entrant_3>
 <HVMP_Label_Ethnography>Ethnography</HVMP_Label_Ethnography>
-<HVMP_Tooltip_Ethnography>Take care of some anthropologists until they've asked all their questions.</HVMP_Tooltip_Ethnography>
-<HVMP_HardMode_Label_Ethnography_1>X</HVMP_HardMode_Label_Ethnography_1>
-<HVMP_HardMode_Tooltip_Ethnography_1>X</HVMP_HardMode_Tooltip_Ethnography_1>
-<HVMP_HardMode_Label_Ethnography_2>Y</HVMP_HardMode_Label_Ethnography_2>
-<HVMP_HardMode_Tooltip_Ethnography_2>Y</HVMP_HardMode_Tooltip_Ethnography_2>
-<HVMP_HardMode_Label_Ethnography_3>Z</HVMP_HardMode_Label_Ethnography_3>
-<HVMP_HardMode_Tooltip_Ethnography_3>Z</HVMP_HardMode_Tooltip_Ethnography_3>
+<HVMP_Tooltip_Ethnography>Take care of some anthropologists until they've asked all their questions. Questions have a chance to cause mood and opinion debuffs.</HVMP_Tooltip_Ethnography>
+<HVMP_HardMode_Label_Ethnography_1>Quiverful of Questions</HVMP_HardMode_Label_Ethnography_1>
+<HVMP_HardMode_Tooltip_Ethnography_1>Twice as many questions must be asked to succeed.</HVMP_HardMode_Tooltip_Ethnography_1>
+<HVMP_HardMode_Label_Ethnography_2>Sensitive Souls</HVMP_HardMode_Label_Ethnography_2>
+<HVMP_HardMode_Tooltip_Ethnography_2>Anthropologists have 1.2x hunger rate, 1.2x rest fall rate, 1.25x joy fall rate, and +20% negative thought duration.</HVMP_HardMode_Tooltip_Ethnography_2>
+<HVMP_HardMode_Label_Ethnography_3>Tactless Tongues</HVMP_HardMode_Label_Ethnography_3>
+<HVMP_HardMode_Tooltip_Ethnography_3>Questions are twice as likely to cause mood debuffs, and always inflict an extra stack of the debuff.</HVMP_HardMode_Tooltip_Ethnography_3>
 <HVMP_Label_Excavation>Excavation</HVMP_Label_Excavation>
 <HVMP_Tooltip_Excavation>Hack all the terminals in an ancient complex.</HVMP_Tooltip_Excavation>
-<HVMP_HardMode_Label_Excavation_1>X</HVMP_HardMode_Label_Excavation_1>
-<HVMP_HardMode_Tooltip_Excavation_1>X</HVMP_HardMode_Tooltip_Excavation_1>
-<HVMP_HardMode_Label_Excavation_2>Y</HVMP_HardMode_Label_Excavation_2>
-<HVMP_HardMode_Tooltip_Excavation_2>Y</HVMP_HardMode_Tooltip_Excavation_2>
-<HVMP_HardMode_Label_Excavation_3>Z</HVMP_HardMode_Label_Excavation_3>
-<HVMP_HardMode_Tooltip_Excavation_3>Z</HVMP_HardMode_Tooltip_Excavation_3>
-<HVMP_Label_Extraterrestrial>Extraterrestrial</HVMP_Label_Extraterrestrial>
-<HVMP_Tooltip_Extraterrestrial>Hack a crashed spacedrone. It is guarded by mechs which are initially dormant.</HVMP_Tooltip_Extraterrestrial>
-<HVMP_HardMode_Label_Extraterrestrial_1>X</HVMP_HardMode_Label_Extraterrestrial_1>
-<HVMP_HardMode_Tooltip_Extraterrestrial_1>X</HVMP_HardMode_Tooltip_Extraterrestrial_1>
-<HVMP_HardMode_Label_Extraterrestrial_2>Y</HVMP_HardMode_Label_Extraterrestrial_2>
-<HVMP_HardMode_Tooltip_Extraterrestrial_2>Y</HVMP_HardMode_Tooltip_Extraterrestrial_2>
-<HVMP_HardMode_Label_Extraterrestrial_3>Z</HVMP_HardMode_Label_Extraterrestrial_3>
-<HVMP_HardMode_Tooltip_Extraterrestrial_3>Z</HVMP_HardMode_Tooltip_Extraterrestrial_3>
+<HVMP_HardMode_Label_Excavation_1>"Cyber" Security</HVMP_HardMode_Label_Excavation_1>
+<HVMP_HardMode_Tooltip_Excavation_1>The complex is patrolled by 1-2 mechanoids per terminal.</HVMP_HardMode_Tooltip_Excavation_1>
+<HVMP_HardMode_Label_Excavation_2>Enemy Terminals</HVMP_HardMode_Label_Excavation_2>
+<HVMP_HardMode_Tooltip_Excavation_2>Each terminal has a 25% chance to call a raid when hacked.</HVMP_HardMode_Tooltip_Excavation_2>
+<HVMP_HardMode_Label_Excavation_3>Why Are These Even Here</HVMP_HardMode_Label_Excavation_3>
+<HVMP_HardMode_Tooltip_Excavation_3>The complex is full of unstable fuel nodes.</HVMP_HardMode_Tooltip_Excavation_3>
+<HVMP_Label_Remnant>Remnant</HVMP_Label_Remnant>
+<HVMP_Tooltip_Remnant>Study an ancient artifact.</HVMP_Tooltip_Remnant>
+<HVMP_HardMode_Label_Remnant_1>Bad Juju</HVMP_HardMode_Label_Remnant_1>
+<HVMP_HardMode_Tooltip_Remnant_1>Studying the artifact eventually causes a random bad event.</HVMP_HardMode_Tooltip_Remnant_1>
+<HVMP_HardMode_Label_Remnant_2>Creeping Decay</HVMP_HardMode_Label_Remnant_2>
+<HVMP_HardMode_Tooltip_Remnant_2>The artifact loses 2.5 hp (out of 200) each day.</HVMP_HardMode_Tooltip_Remnant_2>
+<HVMP_HardMode_Label_Remnant_3>Perplexicon</HVMP_HardMode_Label_Remnant_3>
+<HVMP_HardMode_Tooltip_Remnant_3>If nobody has studied the artifact in the last hour, study progress decays at a rate of 6 per day.</HVMP_HardMode_Tooltip_Remnant_3>
+<HVMP_Label_Satellite>Satellite</HVMP_Label_Satellite>
+<HVMP_Tooltip_Satellite>Hack a crashed spacedrone. It is guarded by mechs which are initially dormant.</HVMP_Tooltip_Satellite>
+<HVMP_HardMode_Label_Satellite_1>Descend</HVMP_HardMode_Label_Satellite_1>
+<HVMP_HardMode_Tooltip_Satellite_1>The spacedrone's guards attack immediately.</HVMP_HardMode_Tooltip_Satellite_1>
+<HVMP_HardMode_Label_Satellite_2>Homing Beacon</HVMP_HardMode_Label_Satellite_2>
+<HVMP_HardMode_Tooltip_Satellite_2>The spacedrone periodically calls mechanoid reinforcements.</HVMP_HardMode_Tooltip_Satellite_2>
+<HVMP_HardMode_Label_Satellite_3>Shipboard Weaponry</HVMP_HardMode_Label_Satellite_3>
+<HVMP_HardMode_Tooltip_Satellite_3>The spacedrone has a mounted auto-charge turret, which fires on enemies of the mechhive. Like a regular auto-charge turret, it does have a minimum range. Completing the hack disables the turret.</HVMP_HardMode_Tooltip_Satellite_3>
+<HVMP_Label_Shrine>Shrine</HVMP_Label_Shrine>
+<HVMP_Tooltip_Shrine>Journey to a minor faction's settlement and hack their terminal, then fight your way out.</HVMP_Tooltip_Shrine>
+<HVMP_HardMode_Label_Shrine_1>Population Boom</HVMP_HardMode_Label_Shrine_1>
+<HVMP_HardMode_Tooltip_Shrine_1>Defenders are generated with 4x the points.</HVMP_HardMode_Tooltip_Shrine_1>
+<HVMP_HardMode_Label_Shrine_2>This Tape Will Self-Destruct</HVMP_HardMode_Label_Shrine_2>
+<HVMP_HardMode_Tooltip_Shrine_2>Upon being hacked, the terminal will drop an antigrain explosive that detonates after approximately 1 hour.</HVMP_HardMode_Tooltip_Shrine_2>
+<HVMP_HardMode_Label_Shrine_3>Xenophobia</HVMP_HardMode_Label_Shrine_3>
+<HVMP_HardMode_Tooltip_Shrine_3>Defenders are generated with 1.5x the points. Unless you're on Peaceful difficulty, they immediately turn hostile.</HVMP_HardMode_Tooltip_Shrine_3>
 <HVMP_Label_Ecosphere>ECOSPHERE BRANCH</HVMP_Label_Ecosphere>
 <HVMP_Label_CaseStudy>Case Study</HVMP_Label_CaseStudy>
 <HVMP_Tooltip_CaseStudy>Take care of Patient Zero of a new disease, until you discover and administer the cure. New symptoms of the disease appear over time.</HVMP_Tooltip_CaseStudy>
-<HVMP_HardMode_Label_CaseStudy_1>X</HVMP_HardMode_Label_CaseStudy_1>
-<HVMP_HardMode_Tooltip_CaseStudy_1>X</HVMP_HardMode_Tooltip_CaseStudy_1>
-<HVMP_HardMode_Label_CaseStudy_2>Y</HVMP_HardMode_Label_CaseStudy_2>
-<HVMP_HardMode_Tooltip_CaseStudy_2>Y</HVMP_HardMode_Tooltip_CaseStudy_2>
-<HVMP_HardMode_Label_CaseStudy_3>Z</HVMP_HardMode_Label_CaseStudy_3>
-<HVMP_HardMode_Tooltip_CaseStudy_3>Z</HVMP_HardMode_Tooltip_CaseStudy_3>
+<HVMP_HardMode_Label_CaseStudy_1>Darwin's Disfavor</HVMP_HardMode_Label_CaseStudy_1>
+<HVMP_HardMode_Tooltip_CaseStudy_1>Neopathies can have +1 max complication. The complication pool is expanded to include the following symptoms: extremely rapid aging, intermittent infestation provocation, or an antigrain explosion on death.</HVMP_HardMode_Tooltip_CaseStudy_1>
+<HVMP_HardMode_Label_CaseStudy_2>Don't Expect Miracles</HVMP_HardMode_Label_CaseStudy_2>
+<HVMP_HardMode_Tooltip_CaseStudy_2>Cure attempts have a 50% chance to not do anything.</HVMP_HardMode_Tooltip_CaseStudy_2>
+<HVMP_HardMode_Label_CaseStudy_3>Late Detection</HVMP_HardMode_Label_CaseStudy_3>
+<HVMP_HardMode_Tooltip_CaseStudy_3>Neopathies have +1 starting complication and +1 max complication.</HVMP_HardMode_Tooltip_CaseStudy_3>
 <HVMP_Label_ECquest>Environmental Control</HVMP_Label_ECquest>
 <HVMP_Tooltip_ECquest>Journey to and destroy a problem causer outpost. It is guarded by mechanoids.</HVMP_Tooltip_ECquest>
-<HVMP_HardMode_Label_ECquest_1>X</HVMP_HardMode_Label_ECquest_1>
-<HVMP_HardMode_Tooltip_ECquest_1>X</HVMP_HardMode_Tooltip_ECquest_1>
-<HVMP_HardMode_Label_ECquest_2>Y</HVMP_HardMode_Label_ECquest_2>
-<HVMP_HardMode_Tooltip_ECquest_2>Y</HVMP_HardMode_Tooltip_ECquest_2>
-<HVMP_HardMode_Label_ECquest_3>Z</HVMP_HardMode_Label_ECquest_3>
-<HVMP_HardMode_Tooltip_ECquest_3>Z</HVMP_HardMode_Tooltip_ECquest_3>
+<HVMP_HardMode_Label_ECquest_1>Do Not Leave Unattended</HVMP_HardMode_Label_ECquest_1>
+<HVMP_HardMode_Tooltip_ECquest_1>Each problem causer has additional guards that start in its own building.</HVMP_HardMode_Tooltip_ECquest_1>
+<HVMP_HardMode_Label_ECquest_2>Gee Bill</HVMP_HardMode_Label_ECquest_2>
+<HVMP_HardMode_Tooltip_ECquest_2>An additional outpost is generated, with the same type of problem causer.</HVMP_HardMode_Tooltip_ECquest_2>
+<HVMP_HardMode_Label_ECquest_3>Land and Sky</HVMP_HardMode_Label_ECquest_3>
+<HVMP_HardMode_Tooltip_ECquest_3>A raid will attack if you haven't cleared out the outpost(s) within 6-10 days.</HVMP_HardMode_Tooltip_ECquest_3>
 <HVMP_Label_FieldWork>Field Work</HVMP_Label_FieldWork>
 <HVMP_Tooltip_FieldWork>Keep an area of your choice - a "nature preserve" - clear of pollution, structures, and floors.</HVMP_Tooltip_FieldWork>
-<HVMP_HardMode_Label_FieldWork_1>X</HVMP_HardMode_Label_FieldWork_1>
-<HVMP_HardMode_Tooltip_FieldWork_1>X</HVMP_HardMode_Tooltip_FieldWork_1>
-<HVMP_HardMode_Label_FieldWork_2>Y</HVMP_HardMode_Label_FieldWork_2>
-<HVMP_HardMode_Tooltip_FieldWork_2>Y</HVMP_HardMode_Tooltip_FieldWork_2>
-<HVMP_HardMode_Label_FieldWork_3>Z</HVMP_HardMode_Label_FieldWork_3>
-<HVMP_HardMode_Tooltip_FieldWork_3>Z</HVMP_HardMode_Tooltip_FieldWork_3>
+<HVMP_HardMode_Label_FieldWork_1>Coast to Coast</HVMP_HardMode_Label_FieldWork_1>
+<HVMP_HardMode_Tooltip_FieldWork_1>The marker's radius is 1.4x longer, or +7c longer, whichever would be larger.</HVMP_HardMode_Tooltip_FieldWork_1>
+<HVMP_HardMode_Label_FieldWork_2>Insects of Unusual Size</HVMP_HardMode_Label_FieldWork_2>
+<HVMP_HardMode_Tooltip_FieldWork_2>Once its marker is deployed, the preserve causes infestations roughly every 6 days.</HVMP_HardMode_Tooltip_FieldWork_2>
+<HVMP_HardMode_Label_FieldWork_3>Season to Season</HVMP_HardMode_Label_FieldWork_3>
+<HVMP_HardMode_Tooltip_FieldWork_3>The preserve must be maintained for 150% as long.</HVMP_HardMode_Tooltip_FieldWork_3>
 <HVMP_Label_HazardDisposal>Hazard Disposal</HVMP_Label_HazardDisposal>
 <HVMP_Tooltip_HazardDisposal>Fight a manhunter pack that has been empowered by a random mutation.</HVMP_Tooltip_HazardDisposal>
-<HVMP_HardMode_Label_HazardDisposal_1>X</HVMP_HardMode_Label_HazardDisposal_1>
-<HVMP_HardMode_Tooltip_HazardDisposal_1>X</HVMP_HardMode_Tooltip_HazardDisposal_1>
-<HVMP_HardMode_Label_HazardDisposal_2>Y</HVMP_HardMode_Label_HazardDisposal_2>
-<HVMP_HardMode_Tooltip_HazardDisposal_2>Y</HVMP_HardMode_Tooltip_HazardDisposal_2>
-<HVMP_HardMode_Label_HazardDisposal_3>Z</HVMP_HardMode_Label_HazardDisposal_3>
-<HVMP_HardMode_Tooltip_HazardDisposal_3>Z</HVMP_HardMode_Tooltip_HazardDisposal_3>
+<HVMP_HardMode_Label_HazardDisposal_1>Double Trouble</HVMP_HardMode_Label_HazardDisposal_1>
+<HVMP_HardMode_Tooltip_HazardDisposal_1>The manhunter pack has an additional mutation.</HVMP_HardMode_Tooltip_HazardDisposal_1>
+<HVMP_HardMode_Label_HazardDisposal_2>Malthus' Malignance</HVMP_HardMode_Label_HazardDisposal_2>
+<HVMP_HardMode_Tooltip_HazardDisposal_2>The manhunter pack is generated with 2x points.</HVMP_HardMode_Tooltip_HazardDisposal_2>
+<HVMP_HardMode_Label_HazardDisposal_3>Unpredictable Pleiotropy</HVMP_HardMode_Label_HazardDisposal_3>
+<HVMP_HardMode_Tooltip_HazardDisposal_3>Each manhunter has a 16% chance for +1 mutation. Each such manhunter rolls separately for its bonus mutation.</HVMP_HardMode_Tooltip_HazardDisposal_3>
 <HVMP_Label_RAquest>Retroviral Agent</HVMP_Label_RAquest>
 <HVMP_Tooltip_RAquest>Study a gene-engineering package, or just inject it into someone to witness its effects firsthand. Injection may have negative outcomes, and rarely has positive ones.</HVMP_Tooltip_RAquest>
-<HVMP_HardMode_Label_RAquest_1>X</HVMP_HardMode_Label_RAquest_1>
-<HVMP_HardMode_Tooltip_RAquest_1>X</HVMP_HardMode_Tooltip_RAquest_1>
-<HVMP_HardMode_Label_RAquest_2>Y</HVMP_HardMode_Label_RAquest_2>
-<HVMP_HardMode_Tooltip_RAquest_2>Y</HVMP_HardMode_Tooltip_RAquest_2>
-<HVMP_HardMode_Label_RAquest_3>Z</HVMP_HardMode_Label_RAquest_3>
-<HVMP_HardMode_Tooltip_RAquest_3>Z</HVMP_HardMode_Tooltip_RAquest_3>
+<HVMP_HardMode_Label_RAquest_1>BSL-4</HVMP_HardMode_Label_RAquest_1>
+<HVMP_HardMode_Tooltip_RAquest_1>Once study begins, the package causes random disease outbreaks (MTB 11d). If injected into a pawn, it causes a random disease outbreak.</HVMP_HardMode_Tooltip_RAquest_1>
+<HVMP_HardMode_Label_RAquest_2>Cannibal Code</HVMP_HardMode_Label_RAquest_2>
+<HVMP_HardMode_Tooltip_RAquest_2>The package can only be injected once it's been hacked. It is possible to fail the hack due to a poor hacking stealth roll, which prevents the hack from being completed and therefore requires you to study to complete the quest.</HVMP_HardMode_Tooltip_RAquest_2>
+<HVMP_HardMode_Label_RAquest_3>Playing God</HVMP_HardMode_Label_RAquest_3>
+<HVMP_HardMode_Tooltip_RAquest_3>Injection always results in bad outcomes, and inflicts an additional -10 goodwill with the victim's faction.</HVMP_HardMode_Tooltip_RAquest_3>
 <HVMP_Label_Occult>OCCULT BRANCH</HVMP_Label_Occult>
 <HVMP_Label_Barker>Barker</HVMP_Label_Barker>
 <HVMP_Tooltip_Barker>Receive a dangerous anomalous object.</HVMP_Tooltip_Barker>
-<HVMP_HardMode_Label_Barker_1>X</HVMP_HardMode_Label_Barker_1>
-<HVMP_HardMode_Tooltip_Barker_1>X</HVMP_HardMode_Tooltip_Barker_1>
-<HVMP_HardMode_Label_Barker_2>Y</HVMP_HardMode_Label_Barker_2>
-<HVMP_HardMode_Tooltip_Barker_2>Y</HVMP_HardMode_Tooltip_Barker_2>
-<HVMP_HardMode_Label_Barker_3>Z</HVMP_HardMode_Label_Barker_3>
-<HVMP_HardMode_Tooltip_Barker_3>Z</HVMP_HardMode_Tooltip_Barker_3>
+<HVMP_HardMode_Label_Barker_1>Late Grows the Hour</HVMP_HardMode_Label_Barker_1>
+<HVMP_HardMode_Tooltip_Barker_1>Effects vary based on the object dropped:\n-Golden Cube: an additional 1-5 pawns are immediately interested in it.\n-Fleshmass Nucleus/Nociosphere: 0.9x incoming damage factor and +2.5% activity per hour.\n-Unnatural Corpse: awakens 5 days quicker.</HVMP_HardMode_Tooltip_Barker_1>
+<HVMP_HardMode_Label_Barker_2>Repo Reapers</HVMP_HardMode_Label_Barker_2>
+<HVMP_HardMode_Tooltip_Barker_2>Accepting the quest also provokes the Void.</HVMP_HardMode_Tooltip_Barker_2>
+<HVMP_HardMode_Label_Barker_3>Twin Terrors</HVMP_HardMode_Label_Barker_3>
+<HVMP_HardMode_Tooltip_Barker_3>Drops an additional anomalous object.</HVMP_HardMode_Tooltip_Barker_3>
 <HVMP_Label_Fuller>Fuller</HVMP_Label_Fuller>
-<HVMP_Tooltip_Fuller>Keep some Horaxian cultists as prisoners. At least one cultist raid will attempt to free them.</HVMP_Tooltip_Fuller>
-<HVMP_HardMode_Label_Fuller_1>X</HVMP_HardMode_Label_Fuller_1>
-<HVMP_HardMode_Tooltip_Fuller_1>X</HVMP_HardMode_Tooltip_Fuller_1>
-<HVMP_HardMode_Label_Fuller_2>Y</HVMP_HardMode_Label_Fuller_2>
-<HVMP_HardMode_Tooltip_Fuller_2>Y</HVMP_HardMode_Tooltip_Fuller_2>
-<HVMP_HardMode_Label_Fuller_3>Z</HVMP_HardMode_Label_Fuller_3>
-<HVMP_HardMode_Tooltip_Fuller_3>Z</HVMP_HardMode_Tooltip_Fuller_3>
+<HVMP_Tooltip_Fuller>Keep some Horaxian cultists as prisoners. Raids might attack as a consequence of accepting the quest.</HVMP_Tooltip_Fuller>
+<HVMP_HardMode_Label_Fuller_1>Faith Well Kept</HVMP_HardMode_Label_Fuller_1>
+<HVMP_HardMode_Tooltip_Fuller_1>The prisoners have bonus death refusals. Also, additional cultist raiders will infrequently skip to the prisoners' position to help them escape and take vengeance on you.</HVMP_HardMode_Tooltip_Fuller_1>
+<HVMP_HardMode_Label_Fuller_2>Stark Raving Mad</HVMP_HardMode_Label_Fuller_2>
+<HVMP_HardMode_Tooltip_Fuller_2>The prisoners have -100 mood while imprisoned. They are immune to anesthetic and effects which would render them unconscious; when such a condition would be inflicted on them, they attempt a prison break instead.</HVMP_HardMode_Tooltip_Fuller_2>
+<HVMP_HardMode_Label_Fuller_3>What Lurks Within</HVMP_HardMode_Label_Fuller_3>
+<HVMP_HardMode_Tooltip_Fuller_3>If not given medical treatment twice daily, the prisoners turn into ghouls. Even one turning into a ghoul results in failure.</HVMP_HardMode_Tooltip_Fuller_3>
 <HVMP_Label_Lovecraft>Lovecraft</HVMP_Label_Lovecraft>
 <HVMP_Tooltip_Lovecraft>Endure a random psychic or atmospheric condition. You do not know what the condition is until you accept the quest. Most, but not all, possible conditions are negative.</HVMP_Tooltip_Lovecraft>
-<HVMP_HardMode_Label_Lovecraft_1>X</HVMP_HardMode_Label_Lovecraft_1>
-<HVMP_HardMode_Tooltip_Lovecraft_1>X</HVMP_HardMode_Tooltip_Lovecraft_1>
-<HVMP_HardMode_Label_Lovecraft_2>Y</HVMP_HardMode_Label_Lovecraft_2>
-<HVMP_HardMode_Tooltip_Lovecraft_2>Y</HVMP_HardMode_Tooltip_Lovecraft_2>
-<HVMP_HardMode_Label_Lovecraft_3>Z</HVMP_HardMode_Label_Lovecraft_3>
-<HVMP_HardMode_Tooltip_Lovecraft_3>Z</HVMP_HardMode_Tooltip_Lovecraft_3>
+<HVMP_HardMode_Label_Lovecraft_1>Escape From Tartarus</HVMP_HardMode_Label_Lovecraft_1>
+<HVMP_HardMode_Tooltip_Lovecraft_1>30% chance for the condition to also be accompanied by a threat of some kind:\n-A nociosphere that activates after a few seconds\n-A devourer assault\n-A psychic shockwave that turns most animals on the map into fleshbeasts\n-A very powerful ghoul that wanders around</HVMP_HardMode_Tooltip_Lovecraft_1>
+<HVMP_HardMode_Label_Lovecraft_2>No Kindness Nor Succor</HVMP_HardMode_Label_Lovecraft_2>
+<HVMP_HardMode_Tooltip_Lovecraft_2>Can only result in negative conditions.\n\n(If, somehow, none of the negative conditions can fire, Lovecraft defaults to Psychic Alignment, which is a good condition but at least is never incapable of firing)</HVMP_HardMode_Tooltip_Lovecraft_2>
+<HVMP_HardMode_Label_Lovecraft_3>Touch of the Unfathomable</HVMP_HardMode_Label_Lovecraft_3>
+<HVMP_HardMode_Tooltip_Lovecraft_3>Also inflicts a bad condition for 0.5-5 days, which only affects non-anomalous non-machine pawns:\n-Randomly gives a pawn blood rot (MTB 3 hours) with 0.33x duration\n-1.25x damage taken\n-1.25x mental break threshold\n-Reduced moving, which scales with psychic sensitivity</HVMP_HardMode_Tooltip_Lovecraft_3>
 <HVMP_Label_Natali>Natali</HVMP_Label_Natali>
 <HVMP_Tooltip_Natali>Travel to a bubble of warped space on the world map, then escape the labyrinth within.</HVMP_Tooltip_Natali>
-<HVMP_HardMode_Label_Natali_1>X</HVMP_HardMode_Label_Natali_1>
-<HVMP_HardMode_Tooltip_Natali_1>X</HVMP_HardMode_Tooltip_Natali_1>
-<HVMP_HardMode_Label_Natali_2>Y</HVMP_HardMode_Label_Natali_2>
-<HVMP_HardMode_Tooltip_Natali_2>Y</HVMP_HardMode_Tooltip_Natali_2>
-<HVMP_HardMode_Label_Natali_3>Z</HVMP_HardMode_Label_Natali_3>
-<HVMP_HardMode_Tooltip_Natali_3>Z</HVMP_HardMode_Tooltip_Natali_3>
+<HVMP_HardMode_Label_Natali_1>Absence of Energy and Happiness</HVMP_HardMode_Label_Natali_1>
+<HVMP_HardMode_Tooltip_Natali_1>Pawns in the labyrinth have +50% rest fall rate factor, and their mood worsens by -1 per hour.</HVMP_HardMode_Tooltip_Natali_1>
+<HVMP_HardMode_Label_Natali_2>Chaos of Limbo</HVMP_HardMode_Label_Natali_2>
+<HVMP_HardMode_Tooltip_Natali_2>The labyrinth has either additional dangers or its terrain is different and more inconvenient.</HVMP_HardMode_Tooltip_Natali_2>
+<HVMP_HardMode_Label_Natali_3>Don't Forget</HVMP_HardMode_Label_Natali_3>
+<HVMP_HardMode_Tooltip_Natali_3>Escaping from the labyrinth summons an empowered version of an advanced unnatural entity.</HVMP_HardMode_Tooltip_Natali_3>
 <HVMP_Label_Romero>Romero</HVMP_Label_Romero>
 <HVMP_Tooltip_Romero>Fight 1-2 waves of shamblers.</HVMP_Tooltip_Romero>
-<HVMP_HardMode_Label_Romero_1>X</HVMP_HardMode_Label_Romero_1>
-<HVMP_HardMode_Tooltip_Romero_1>X</HVMP_HardMode_Tooltip_Romero_1>
-<HVMP_HardMode_Label_Romero_2>Y</HVMP_HardMode_Label_Romero_2>
-<HVMP_HardMode_Tooltip_Romero_2>Y</HVMP_HardMode_Tooltip_Romero_2>
-<HVMP_HardMode_Label_Romero_3>Z</HVMP_HardMode_Label_Romero_3>
-<HVMP_HardMode_Tooltip_Romero_3>Z</HVMP_HardMode_Tooltip_Romero_3>
+<HVMP_HardMode_Label_Romero_1>Black Skies</HVMP_HardMode_Label_Romero_1>
+<HVMP_HardMode_Tooltip_Romero_1>A death pall occurs when you accept the quest, and it lasts for longer than it takes the first shambler wave to arrive.</HVMP_HardMode_Tooltip_Romero_1>
+<HVMP_HardMode_Label_Romero_2>Combined Appendages Doctrine</HVMP_HardMode_Label_Romero_2>
+<HVMP_HardMode_Tooltip_Romero_2>Additional unnatural entities of other kinds are added to the shambler waves.</HVMP_HardMode_Tooltip_Romero_2>
+<HVMP_HardMode_Label_Romero_3>Night of the Everliving Dead</HVMP_HardMode_Label_Romero_3>
+<HVMP_HardMode_Tooltip_Romero_3>Shamblers last 3x as long, and regenerate 7 hp/day.</HVMP_HardMode_Tooltip_Romero_3>
 </LanguageData>

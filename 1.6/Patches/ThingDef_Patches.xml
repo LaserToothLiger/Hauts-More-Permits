@@ -2,6 +2,23 @@
 <Patch>
 	<Operation Class="PatchOperationFindMod">
 		<mods>
+			<li>Ideology</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/ThingDef[defName="AncientTerminal_Worshipful"]/comps</xpath>
+					<value>
+						<li Class="HautsPermits_Ideology.CompProperties_TTWSD">
+							<thingToSpawn>HVMP_TrapTTWSD</thingToSpawn>
+						</li>
+					</value>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
 			<li>Anomaly</li>
 		</mods>
 		<match Class="PatchOperationSequence">

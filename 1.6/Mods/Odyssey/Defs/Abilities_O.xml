@@ -49,6 +49,7 @@
 	  <li Class="HautsPermits.CompProperties_GatepunchAbility">
         <compClass>HautsPermits.CompAbilityEffect_GatepunchAbility</compClass>
 		<chargeCost>1</chargeCost>
+		<gatepuncherHediff>HVMP_GatepuncherImplant</gatepuncherHediff>
 	  </li>
     </comps>
   </AbilityDef>
@@ -104,6 +105,7 @@
 	  <li Class="HautsPermits.CompProperties_GatepunchAbility">
         <compClass>HautsPermits.CompAbilityEffect_GatepunchAbility</compClass>
 		<chargeCost>4</chargeCost>
+		<gatepuncherHediff>HVMP_GatepuncherImplant</gatepuncherHediff>
 	  </li>
     </comps>
   </AbilityDef>

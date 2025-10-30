@@ -68,7 +68,8 @@
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription->The Occult Branch tracks down objects with potentially anomalous origins and properties. They have found one in the possession of other, less trustworthy parties on your world, and would like to transfer ownership of it to you for safeguarding.</li>
+        <li>questDescription->The Occult Branch tracks down objects with potentially anomalous origins and properties. They have found [mutator_TT_info] in the possession of other, less trustworthy parties on your world, and would like to transfer ownership of it to you for safeguarding.\n[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_LGTH_info][mutator_RR_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Occult.QuestNode_OccultIntermediary">
@@ -102,6 +103,13 @@
 					  <li>HVMP_BarkerSphere</li>
 					  <!--<li>HVMP_BarkerSpine</li> this is just a free shard since you can kill revenant spines in one shot-->
 					</possibleQuests>
+					<LGTH_storeAs>LGTH_on</LGTH_storeAs>
+					<LGTH_description>\nThe object is already agitated, and may activate soon.</LGTH_description>
+					<RR_provocationDelayHoursRange>1</RR_provocationDelayHoursRange>
+					<RR_description>\nThe Void is possessive of these trinkets; by accepting this quest, you will provoke it. A random anomalous incident will occur shortly thereafter.</RR_description>
+					<TT_bonusItems>1</TT_bonusItems>
+					<nonTT_description>one</nonTT_description>
+					<TT_description>not one, but two such objects</TT_description>
 				  </li>
 				  <li Class="QuestNode_End">
 					<outcome>Success</outcome>
@@ -147,7 +155,9 @@
   
   <QuestScriptDef ParentName="MysteriousCargoBase">
     <defName>HVMP_BarkerCube</defName>
-    <root Class="HautsPermits_Occult.QuestNode_Root_BarkerCube" />
+    <root Class="HautsPermits_Occult.QuestNode_Root_BarkerCube">
+	  <LGTH_bonusInterests>1~5</LGTH_bonusInterests>
+	</root>
     <questContentRules>
       <rulesStrings>
         <li>deliveredLetterLabel->Anomalous object</li>
@@ -159,7 +169,9 @@
   
   <QuestScriptDef ParentName="MysteriousCargoBase">
     <defName>HVMP_BarkerNucleus</defName>
-    <root Class="HautsPermits_Occult.QuestNode_Root_BarkerNucleus" />
+    <root Class="HautsPermits_Occult.QuestNode_Root_BarkerNucleus">
+	  <hediff>HVMP_Owwwwww</hediff><!--the nucleus gains activity when damaged-->
+	</root>
     <questContentRules>
       <rulesStrings>
         <li>deliveredLetterLabel->Anomalous object</li>
@@ -167,121 +179,6 @@
       </rulesStrings>
     </questContentRules>
   </QuestScriptDef>
-  <ThingDef ParentName="MysteriousSphereEntityBase">
-    <defName>HVMP_FleshmassNucleus</defName>
-    <label>fleshmass nucleus</label>
-    <description>The archotech core of a fleshmass heart. It is a chaotic lattice of fluid-smeared metal. Solid chunks of jagged metal appear here and there, packed with archotechnology. The whole structure slowly twists and bends under its own power.\n\nIt constantly grows meat on its surface, which occasionally erupts violently. If too much meat builds up, it will regrow into a fleshmass heart.</description>
-    <uiIconPath>Things/Pawn/FleshmassNucleus/FleshmassNucleusA</uiIconPath>
-    <hiddenWhileUndiscovered>true</hiddenWhileUndiscovered>
-    <race>
-      <body>FleshmassNucleus</body>
-      <thinkTreeMain>FleshmassNucleus</thinkTreeMain>
-      <thinkTreeConstant>FleshmassNucleusConstant</thinkTreeConstant>
-      <baseHealthScale>1</baseHealthScale>
-      <baseBodySize>1</baseBodySize>
-    </race>
-    <comps>
-      <li Class="CompProperties_Studiable">
-        <frequencyTicks>120000</frequencyTicks>
-        <knowledgeCategory>Advanced</knowledgeCategory>
-        <anomalyKnowledge>3</anomalyKnowledge>
-        <minMonolithLevelForStudy>1</minMonolithLevelForStudy>
-        <requiresHoldingPlatform>true</requiresHoldingPlatform>
-      </li>
-      <li Class="CompProperties_ProducesBioferrite">
-        <bioferriteDensity>3</bioferriteDensity>
-      </li>
-      <li Class="CompProperties_Pushable">
-        <offsetDistance>0.5</offsetDistance>
-      </li>
-      <li Class="CompProperties_Activity">
-        <startingRange>0.2~0.4</startingRange>
-        <changePerDayOutside>0.05</changePerDayOutside>
-        <workerClass>PawnActivityWorker</workerClass>
-        <showLetterOnActivated>true</showLetterOnActivated>
-        <dirtyGraphicsOnActivityChange>true</dirtyGraphicsOnActivityChange>
-        <changePerDamage>0.02</changePerDamage>
-        <letterDef>ThreatBig</letterDef>
-        <letterTitle>Fleshmass transformation</letterTitle>
-        <letterDesc>The fleshmass nucleus has grown a critical mass of new flesh. It has developed into a new fleshmass heart!\n\nIn the process, the fleshmass heart has mutated and adopted a new biosignature.</letterDesc>
-        <activityResearchFactorCurve>
-          <points>
-            <li>0, 0.5</li>
-            <li>0.5, 1</li>
-            <li>0.99, 2</li>
-          </points>
-        </activityResearchFactorCurve>
-      </li>
-      <li Class="CompProperties_FleshmassNucleus">
-        <activityOnRoofCollapsed>0.4</activityOnRoofCollapsed>
-        <activityMeatPerDayCurve>
-          <points>
-            <li>0.1, 20</li>
-            <li>0.9, 120</li>
-          </points>
-        </activityMeatPerDayCurve>
-      </li>
-      <li Class="CompProperties_AttachPoints">
-        <points>
-          <li>
-            <offset>(-.35, 0, .35)</offset>
-            <type>PlatformRestraint0</type>
-          </li>
-          <li>
-            <offset>(.35, 0, .35)</offset>
-            <type>PlatformRestraint1</type>
-          </li>
-          <li>
-            <offset>(.35, 0, -.35)</offset>
-            <type>PlatformRestraint2</type>
-          </li>
-          <li>
-            <offset>(-.35, 0, -.35)</offset>
-            <type>PlatformRestraint3</type>
-          </li>
-        </points>
-      </li>
-    </comps>
-    <killedLeavingsRanges>
-      <Meat_Twisted>100~200</Meat_Twisted>
-      <Shard>2</Shard>
-    </killedLeavingsRanges>
-  </ThingDef>
-  <PawnKindDef>
-    <defName>HVMP_FleshmassNucleus</defName>
-    <label>fleshmass nucleus</label>
-    <race>HVMP_FleshmassNucleus</race>
-    <canMeleeAttack>false</canMeleeAttack>
-    <hostileToAll>true</hostileToAll>
-    <allowOldAgeInjuries>false</allowOldAgeInjuries>
-    <defaultFactionType>Entities</defaultFactionType>
-    <immuneToGameConditionEffects>true</immuneToGameConditionEffects>
-    <preventIdeo>true</preventIdeo>
-    <canStrip>false</canStrip>
-    <immuneToTraps>true</immuneToTraps>
-    <collidesWithPawns>false</collidesWithPawns>
-    <ignoresPainShock>true</ignoresPainShock>
-    <minGenerationAge>200</minGenerationAge>
-    <useFixedRotation>true</useFixedRotation>
-    <fixedRotation>South</fixedRotation>
-    <overrideDebugActionCategory>Entity</overrideDebugActionCategory>
-    <startingHediffs>
-      <li>
-        <def>Regeneration</def>
-        <severity>0.1</severity>
-      </li>
-    </startingHediffs>
-    <combatPower>100</combatPower>
-    <lifeStages>
-      <li>
-        <bodyGraphicData>
-          <texPath>Things/Pawn/FleshmassNucleus</texPath>
-          <graphicClass>Graphic_ActivityStaged</graphicClass>
-          <drawSize>2</drawSize>
-        </bodyGraphicData>
-      </li>
-    </lifeStages>
-  </PawnKindDef>
   
   <QuestScriptDef ParentName="MysteriousCargoBase">
     <defName>HVMP_BarkerSphere</defName>
@@ -353,20 +250,19 @@
       </include>
       <rulesStrings>
         <!-- Asker is faction leader, single prisoner -->
-        <li>questDescription(asker_factionLeader==True,lodgersCount==1)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], wants you to hold prisoner a cultist for [asker_objective]. The prisoner, a [lodgers0_age]-year-old cultist named [lodgers0_nameFull], [cultistKnows], which makes [lodgers0_objective] to the [asker_faction_name]. You only need to keep the cultist for [shuttleDelayTicks_duration] until the scandal passes.[threatsInfo3]</li>
-        <li>threatsInfo3(generateThreats==true,threatType==Raids,enemyFaction!=Mechanoid)->\n\nUnfortunately, [enemyFaction_name] will send raids to rescue [lodgers0_nameDef]. [enemyGroupsParagraph]</li>
-        <li>threatsInfo3(generateThreats==true,threatType==Raids,enemyFaction==Mechanoid)->\n\n[threatsInfoMechRaidsSingleHuman] [enemyGroupsParagraph]</li>
-        <li>threatsInfo3(generateThreats==true,threatType==MechClusters)->\n\n[threatsInfoMechClustersSingleHuman] [enemyGroupsParagraph]</li>
-        <li>threatsInfo3(generateThreats==false)-></li>
+        <li>questDescription(asker_factionLeader==True,lodgersCount==1)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], wants you to hold prisoner a cultist for [asker_objective]. The prisoner, a [lodgers0_age]-year-old cultist named [lodgers0_nameFull], [cultistKnows], which makes [lodgers0_objective] to the [asker_faction_name]. You only need to keep the cultist for [shuttleDelayTicks_duration] until [asker_possessive] interrogation facilities are ready.[threatsInfo3]\n[mutatorSuffix]</li>
+        <li>threatsInfo3(generateThreats==true)->\n\nUnfortunately, [lodgersFaction_name] has contracted mercenary forces to rescue [lodgers0_nameDef]. [pawnKindsParagraph]</li>
+		 <li>threatsInfo3(generateThreats==false)-></li>
 
         <!-- Asker is faction leader, multiple prisoners -->
-        <li>questDescription(asker_factionLeader==True,lodgersCount>=2)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], wants you to hold prisoner [lodgersCount] cultists for [shuttleDelayTicks_duration], until [asker_possessive] interrogation facilities are ready.[threatsInfo4]</li>
-        <li>threatsInfo4(generateThreats==true,threatType==Raids,enemyFaction!=Mechanoid)->\n\nUnfortunately, the cult will send raids after you for sheltering the cultists. [enemyGroupsParagraph]</li>
+        <li>questDescription(asker_factionLeader==True,lodgersCount>=2)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], wants you to hold prisoner [lodgersCount] cultists for [shuttleDelayTicks_duration], until [asker_possessive] interrogation facilities are ready.</li>
 		
 		<li>cultistKnows->knows the location of potent archotech infrastructure</li>
 		<li>cultistKnows->has knowledge of various cult hideouts around the planet</li>
 		<li>cultistKnows->is the only survivor with the knowledge needed to stop an upcoming Void ritual</li>
 		<li>cultistKnows->may be the last holder of a particular psychic engram</li>
+		
+		<li>mutatorSuffix->[mutator_FWK_info][mutator_SRM_info][mutator_WLW_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Occult.QuestNode_Fuller">
@@ -385,7 +281,7 @@
             <selectionWeightOneStar>0.5</selectionWeightOneStar>
             <selectionWeightTwoStar>0.3</selectionWeightTwoStar>
             <selectionWeightThreeStar>0.2</selectionWeightThreeStar>
-            <peacefulChallengeRating>1</peacefulChallengeRating> <!-- Restrict to 1 star rating for peaceful difficulty since 1-star quests are non-violent -->
+            <peacefulChallengeRating>1</peacefulChallengeRating>
             <minPointsTwoStar>250</minPointsTwoStar>
             <minPointsThreeStar>350</minPointsThreeStar>
           </parms>
@@ -469,22 +365,25 @@
             <giveDependentDrugs>true</giveDependentDrugs>
           </node>
         </li>
-        <!-- Assign home faction to lodger(s) -->
-        <li Class="QuestNode_ExtraFaction">
-            <factionOf>$asker</factionOf>
-			<!--<faction>$lodgersFaction</faction>-->
-            <pawns>$lodgers</pawns>
-            <factionType>HostFaction</factionType>
-            <inSignalsRemovePawn>
-              <li>lodgers.BecameMutant</li>
-            </inSignalsRemovePawn>
-        </li>
         <!-- Lock their apparel -->
         <li Class="QuestNode_SetAllApparelLocked">
           <pawns>$lodgers</pawns>
         </li>
         <li Class="HautsPermits.QuestNode_GiveHostileEnvironmentFilm">
           <pawns>$lodgers</pawns>
+        </li>
+        <li Class="HautsPermits_Occult.QuestNode_GiveFullerMutators">
+          <pawns>$lodgers</pawns>
+		  <FWK_deathRefusalCount>1~3</FWK_deathRefusalCount>
+		  <FWK_storeAs>FWK_on</FWK_storeAs>
+		  <FWK_storeAsMin>FWK_min</FWK_storeAsMin>
+		  <FWK_storeAsMax>FWK_max</FWK_storeAsMax>
+		  <FWK_hediffDef>HVMP_FWK</FWK_hediffDef>
+		  <FWK_description>\nThe cultists are clearly of a high position, given their powers of death refusal. They speak of their allies breaking through the walls of reality to reach them - and since the cult is known to harness skipgates to teleport, this may be no mere boast. Stay wary.</FWK_description>
+		  <SRM_hediffDef>HVMP_SRM</SRM_hediffDef>
+		  <SRM_description>\nThe cultists become aggressive when imprisoned, and a dark psychic effect of some kind prevents anesthetic or other forms of sedation from working on them.</SRM_description>
+		  <WLW_hediffDef>HVMP_WLW</WLW_hediffDef>
+		  <WLW_description>\nThe cultists have undergone a procedure which is causing them to gradually turn into ghouls. Twice-a-day medical treatment is required to keep the process from completing.</WLW_description>
         </li>
         <!-- Apply lodger conditions -->
         <li Class="QuestNode_SubScript">
@@ -501,27 +400,8 @@
     <defName>HVMP_Hospitality_Util_Fuller</defName>
     <root Class="QuestNode_Sequence">
       <nodes>
-        <li Class="QuestNode_GreaterOrEqual">
-          <value1>$challengeRating</value1>
-          <value2>2</value2>
-          <node Class="QuestNode_Sequence">
+        <li Class="QuestNode_Sequence">
             <nodes>
-              <li Class="QuestNode_Set">
-                <name>generateThreats</name>
-                <value>true</value>
-              </li>
-              <li Class="QuestNode_Set">
-                <name>helpersChance</name>
-                <value>0</value>
-              </li>
-            </nodes>
-          </node>
-          <elseNode Class="QuestNode_Sequence">
-            <nodes>
-              <li Class="QuestNode_Set">
-                <name>generateThreats</name>
-                <value>false</value>    <!-- must define as false for explicit check in text gen -->
-              </li>
               <li Class="QuestNode_Set">
                 <name>helpersChance</name>
                 <value>0</value>
@@ -531,355 +411,43 @@
                 <value>$(roundToTicksRough(randInt(5, 25)*60000))</value> <!-- 5~25 days to shuttle -->
               </li>
             </nodes>
-          </elseNode>
         </li>
-        <li Class="QuestNode_Equal">
-          <value1>$challengeRating</value1>
-          <value2>2</value2>
-          <!-- Random 2-star threat -->
-          <node Class="QuestNode_RandomNode">
-            <nodes>
-              <!-- 1 raid, 5~25 days -->
-              <li Class="QuestNode_Sequence">
-                <nodes>
-                  <li Class="QuestNode_Set">
-                    <name>shuttleDelayTicks</name>
-                    <value>$(roundToTicksRough(randInt(5, 25)*60000))</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatCount</name>
-                    <value>1</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatFactor</name>
-                    <value>1</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatPoints</name>
-                    <value>$($points * $threatFactor / $threatCount)</value>
-                  </li>
-				  <li Class="QuestNode_Set">
-                    <name>enemyFaction</name>
-                    <value>$lodgersFaction</value>
-                  </li>
-                  <li Class="QuestNode_CreateIncidents">
-                    <incidentDef>RaidEnemy</incidentDef>
-                    <randomIncidents>$threatCount</randomIncidents>
-                    <startOffsetTicks>$(2.5 * 60000)</startOffsetTicks>
-                    <duration>$shuttleDelayTicks</duration>
-                    <points>$threatPoints</points>
-                    <faction>$enemyFaction</faction>
-                    <inSignalDisable>ShuttleArrived</inSignalDisable>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatType</name>
-                    <value>Raids</value>
-                  </li>
-                </nodes>
-              </li>
-              <!-- 2 raids, 5~15 days -->
-              <li Class="QuestNode_Sequence">
-                <nodes>
-                  <li Class="QuestNode_Set">
-                    <name>shuttleDelayTicks</name>
-                    <value>$(roundToTicksRough(randInt(5, 15)*60000))</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatCount</name>
-                    <value>2</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatFactor</name>
-                    <value>1</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatPoints</name>
-                    <value>$($points * $threatFactor / $threatCount)</value>
-                  </li>
-				  <li Class="QuestNode_Set">
-                    <name>enemyFaction</name>
-                    <value>$lodgersFaction</value>
-                  </li>
-                  <li Class="QuestNode_CreateIncidents">
-                    <incidentDef>RaidEnemy</incidentDef>
-                    <randomIncidents>$threatCount</randomIncidents>
-                    <startOffsetTicks>$(2.5 * 60000)</startOffsetTicks>
-                    <duration>$shuttleDelayTicks</duration>
-                    <points>$threatPoints</points>
-                    <faction>$enemyFaction</faction>
-                    <inSignalDisable>ShuttleArrived</inSignalDisable>
-                  </li> 
-                  <li Class="QuestNode_Set">
-                    <name>threatType</name>
-                    <value>Raids</value>
-                  </li>
-                </nodes>
-              </li>
-              <!-- 3 raids, 10~25 days -->
-              <li Class="QuestNode_Sequence">
-                <nodes>
-                  <li Class="QuestNode_Set">
-                    <name>shuttleDelayTicks</name>
-                    <value>$(roundToTicksRough(randInt(10, 25)*60000))</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatCount</name>
-                    <value>3</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatFactor</name>
-                    <value>1</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatPoints</name>
-                    <value>$($points * $threatFactor / $threatCount)</value>
-                  </li>
-				  <li Class="QuestNode_Set">
-                    <name>enemyFaction</name>
-                    <value>$lodgersFaction</value>
-                  </li>
-                  <li Class="QuestNode_CreateIncidents">
-                    <incidentDef>RaidEnemy</incidentDef>
-                    <randomIncidents>$threatCount</randomIncidents>
-                    <startOffsetTicks>$(5 * 60000)</startOffsetTicks>
-                    <duration>$shuttleDelayTicks</duration>
-                    <points>$threatPoints</points>
-                    <faction>$enemyFaction</faction>
-                    <inSignalDisable>ShuttleArrived</inSignalDisable>
-                  </li> 
-                  <li Class="QuestNode_Set">
-                    <name>threatType</name>
-                    <value>Raids</value>
-                  </li>
-                </nodes>
-              </li>
-              <!-- 2 raids, 0.5~1.5 days -->
-              <li Class="QuestNode_Sequence">
-                <nodes>
-                  <li Class="QuestNode_Set">
-                    <name>shuttleDelayTicks</name>
-                    <value>$(roundToTicksRough(randFloat(0.5, 1.5)*60000))</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatCount</name>
-                    <value>2</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatFactor</name>
-                    <value>1</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatPoints</name>
-                    <value>$($points * $threatFactor / $threatCount)</value>
-                  </li>
-				  <li Class="QuestNode_Set">
-                    <name>enemyFaction</name>
-                    <value>$lodgersFaction</value>
-                  </li>
-                  <li Class="QuestNode_CreateIncidents">
-                    <incidentDef>RaidEnemy</incidentDef>
-                    <randomIncidents>$threatCount</randomIncidents>
-                    <startOffsetTicks>$(0.25 * 60000)</startOffsetTicks>
-                    <duration>$shuttleDelayTicks</duration>
-                    <points>$threatPoints</points>
-                    <faction>$enemyFaction</faction>
-                    <inSignalDisable>ShuttleArrived</inSignalDisable>
-                  </li> 
-                  <li Class="QuestNode_Set">
-                    <name>threatType</name>
-                    <value>Raids</value>
-                  </li>
-                </nodes>
-              </li>
-              <!-- 1 raid, double points, 5~25 days -->
-              <li Class="QuestNode_Sequence">
-                <nodes>
-                  <li Class="QuestNode_Set">
-                    <name>shuttleDelayTicks</name>
-                    <value>$(roundToTicksRough(randInt(5, 25)*60000))</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatCount</name>
-                    <value>1</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatFactor</name>
-                    <value>2</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatPoints</name>
-                    <value>$($points * $threatFactor / $threatCount)</value>
-                  </li>
-				  <li Class="QuestNode_Set">
-                    <name>enemyFaction</name>
-                    <value>$lodgersFaction</value>
-                  </li>
-                  <li Class="QuestNode_CreateIncidents">
-                    <incidentDef>RaidEnemy</incidentDef>
-                    <randomIncidents>$threatCount</randomIncidents>
-                    <startOffsetTicks>$(2.5 * 60000)</startOffsetTicks>
-                    <duration>$shuttleDelayTicks</duration>
-                    <points>$threatPoints</points>
-                    <faction>$enemyFaction</faction>
-                    <inSignalDisable>ShuttleArrived</inSignalDisable>
-                  </li> 
-                  <li Class="QuestNode_Set">
-                    <name>threatType</name>
-                    <value>Raids</value>
-                  </li>
-                </nodes>
-              </li>
-            </nodes>
-          </node>
-        </li>
-        <li Class="QuestNode_Equal">
-          <value1>$challengeRating</value1>
-          <value2>3</value2>
-          <!-- Random 3-star threat -->
-          <node Class="QuestNode_RandomNode">
-            <nodes>
-              <!-- 2 raids, double points, 5~25 days -->
-              <li Class="QuestNode_Sequence">
-                <nodes>
-                  <li Class="QuestNode_Set">
-                    <name>shuttleDelayTicks</name>
-                    <value>$(roundToTicksRough(randInt(5, 25)*60000))</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatCount</name>
-                    <value>2</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatFactor</name>
-                    <value>2</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatPoints</name>
-                    <value>$($points * $threatFactor / $threatCount)</value>
-                  </li>
-				  <li Class="QuestNode_Set">
-                    <name>enemyFaction</name>
-                    <value>$lodgersFaction</value>
-                  </li>
-                  <li Class="QuestNode_CreateIncidents">
-                    <incidentDef>RaidEnemy</incidentDef>
-                    <randomIncidents>$threatCount</randomIncidents>
-                    <startOffsetTicks>$(2.5 * 60000)</startOffsetTicks>
-                    <duration>$shuttleDelayTicks</duration>
-                    <points>$threatPoints</points>
-                    <faction>$enemyFaction</faction>
-                    <inSignalDisable>ShuttleArrived</inSignalDisable>
-                  </li> 
-                  <li Class="QuestNode_Set">
-                    <name>threatType</name>
-                    <value>Raids</value>
-                  </li>
-                </nodes>
-              </li>
-              <!-- 1 raid, triple points, 5~25 days -->
-              <li Class="QuestNode_Sequence">
-                <nodes>
-                  <li Class="QuestNode_Set">
-                    <name>shuttleDelayTicks</name>
-                    <value>$(roundToTicksRough(randInt(5, 25)*60000))</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatCount</name>
-                    <value>2</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatFactor</name>
-                    <value>2</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatPoints</name>
-                    <value>$($points * $threatFactor / $threatCount)</value>
-                  </li>
-				  <li Class="QuestNode_Set">
-                    <name>enemyFaction</name>
-                    <value>$lodgersFaction</value>
-                  </li>
-                  <li Class="QuestNode_CreateIncidents">
-                    <incidentDef>RaidEnemy</incidentDef>
-                    <randomIncidents>$threatCount</randomIncidents>
-                    <startOffsetTicks>$(2.5 * 60000)</startOffsetTicks>
-                    <duration>$shuttleDelayTicks</duration>
-                    <points>$threatPoints</points>
-                    <faction>$enemyFaction</faction>
-                    <inSignalDisable>ShuttleArrived</inSignalDisable>
-                  </li> 
-                  <li Class="QuestNode_Set">
-                    <name>threatType</name>
-                    <value>Raids</value>
-                  </li>
-                </nodes>
-              </li>
-              <!-- 3 raids, 0.5~1.5 days -->
-              <li Class="QuestNode_Sequence">
-                <nodes>
-                  <li Class="QuestNode_Set">
-                    <name>shuttleDelayTicks</name>
-                    <value>$(roundToTicksRough(randFloat(0.5, 1.5)*60000))</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatCount</name>
-                    <value>3</value>
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatFactor</name>
-                    <value>1</value>  
-                  </li>
-                  <li Class="QuestNode_Set">
-                    <name>threatPoints</name>
-                    <value>$($points * $threatFactor / $threatCount)</value>
-                  </li>
-				  <li Class="QuestNode_Set">
-                    <name>enemyFaction</name>
-                    <value>$lodgersFaction</value>
-                  </li>
-                  <li Class="QuestNode_CreateIncidents">
-                    <incidentDef>RaidEnemy</incidentDef>
-                    <randomIncidents>$threatCount</randomIncidents>
-                    <startOffsetTicks>$(0.25 * 60000)</startOffsetTicks>
-                    <duration>$shuttleDelayTicks</duration>
-                    <points>$threatPoints</points>
-                    <faction>$enemyFaction</faction>
-                    <inSignalDisable>ShuttleArrived</inSignalDisable>
-                  </li> 
-                  <li Class="QuestNode_Set">
-                    <name>threatType</name>
-                    <value>Raids</value>
-                  </li>
-                </nodes>
-              </li>
-            </nodes>
-          </node>
-        </li>
-        <!-- allowedThreats set to stop translations breaking, otherwise obsolete -->
-        <li Class="QuestNode_IsSet">
-          <name>threatType</name>
-          <node Class="QuestNode_Set">
-            <name>allowedThreats</name>
-            <value>$threatType</value>
-          </node>
-        </li>
-        <!-- Final threat factor  -->
-        <li Class="QuestNode_IsSet">
-          <name>threatFactor</name>
-          <node Class="QuestNode_Set">
-            <name>threatSize</name>
-            <value>$(roundToDigits($threatFactor, 1))</value>
-          </node>
-        </li>
-        <!-- Example threat only for raids -->
-        <li Class="QuestNode_Equal">
-          <value1>$threatType</value1>
-          <value2>Raids</value2>
-          <node Class="QuestNode_GetExampleRaid">
-            <storeAs>threatExample</storeAs>
-            <points>$threatPoints</points>
-            <faction>$enemyFaction</faction>
-          </node>
+        <li Class="QuestNode_ViolentQuestsAllowed">
+            <node Class="QuestNode_Sequence">
+				<nodes>
+					<li Class="QuestNode_Set">
+					  <name>generateThreats</name>
+					  <value>true</value>
+					</li>
+					<li Class="QuestNode_GetRandomInRangeInt">
+					  <storeAs>raidCount</storeAs>
+					  <range>1~3</range>
+					</li>
+					<li Class="QuestNode_Set">
+					  <name>firstRaidDelayTicks</name>
+					  <value>$(roundToTicksRough(randInt(60000, 300000)))</value>
+					</li>
+					<li Class="QuestNode_Set">
+						<name>threatPoints</name>
+						<value>$($points / $raidCount)</value>
+					</li>
+					<li Class="QuestNode_Set">
+						<name>enemyFaction</name>
+						<value>$lodgersFaction</value>
+					</li>
+					<li Class="QuestNode_Subscript">
+					  <def>Util_RaidDelayRepeatable</def>
+					  <parms>
+						<points>$threatPoints</points>
+						<enemyFaction>$lodgersFaction</enemyFaction>
+					  </parms>
+					</li>
+				</nodes>
+            </node>
+			<elseNode Class="QuestNode_Set">
+                <name>generateThreats</name>
+                <value>false</value>
+            </elseNode>
         </li>
         <li Class="QuestNode_Set">
           <name>shuttleLeaveDelayTicks</name>
@@ -1159,7 +727,6 @@
         <li Class="QuestNode_AnySignal">
           <inSignals>
             <li>lodgers.ChangedFaction</li>
-            <li>lodgers.ChangedHostFaction</li>
           </inSignals>
           <node Class="QuestNode_Filter_FactionNonPlayer">
             <node Class="QuestNode_Sequence">
@@ -1293,6 +860,14 @@
         <li>eldritch->Empyrean</li>
         <li>eldritch->Hellish</li>
         <li>eldritch->Transcendental</li>
+        <li>eldritch->Roiling</li>
+        <li>eldritch->Blistering</li>
+        <li>eldritch->Hissing</li>
+        <li>eldritch->Chittering</li>
+        <li>eldritch->Sibilant</li>
+        <li>eldritch->Radiant</li>
+        <li>eldritch->Foul</li>
+        <li>eldritch->Warp</li>
 		
         <li>defusing->Defusing</li>
         <li>defusing->Dispersing</li>
@@ -1319,6 +894,18 @@
 		<li>reality->Normalcy</li>
 		<li>reality->World</li>
 		<li>reality->Mundanity</li>
+		<li>reality->Typicality</li>
+		<li>reality->Universe</li>
+		<li>reality->Plane</li>
+		<li>reality->Realm</li>
+		<li>reality->Orrery</li>
+		<li>reality->Normality</li>
+		<li>reality->Hell</li>
+		<li>reality->Abyss</li>
+		<li>reality->Pandaemonium</li>
+		<li>reality->Tartarean</li>
+		<li>reality->Hadean</li>
+		<li>reality->Gehenna</li>
 		
 		<li>breaker->Breaker</li>
 		<li>breaker->Blister</li>
@@ -1330,12 +917,14 @@
 		<li>breaker->Shatterpoint</li>
 		<li>breaker->Wound</li>
 		<li>breaker->Distortion</li>
+		<li>breaker->Breach</li>
 		
       </rulesStrings>
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription->The Occult Branch has detected alarming fluctuations in the psychic field which, if left unchecked, could ravage the material universe. It will take them a long time to calm the fluctuations down, but they will be able to do so much faster if they could foist a discharge of the psychic energy onto a population of living beings.\n\nIf you are willing, they will discharge that energy to you, causing an unpredictable psychic effect. This discharge has been known to take the form of psychic drones, weather disturbances, or even stranger events, although there is also a small chance for nothing bad to happen whatsoever.</li>
+        <li>questDescription->The Occult Branch has detected alarming fluctuations in the psychic field which, if left unchecked, could ravage the material universe. It will take them a long time to calm the fluctuations down, but they will be able to do so much faster if they could foist a discharge of the psychic energy onto a population of living beings.\n\nIf you are willing, they will discharge that energy to you, causing an unpredictable psychic effect. This discharge has been known to take the form of psychic drones, weather disturbances, or even stranger events[mutator_NKNS_info]\n[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_EFT_info][mutator_TOTU_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Occult.QuestNode_OccultIntermediary">
@@ -1363,22 +952,42 @@
 					<cooldownBetweenLovecrafts>60000</cooldownBetweenLovecrafts>
 					<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
 					<customLetterText TKey="LetterTextPaymentArrived">By agreeing to take the brunt of a psychic discharge, the Occult Branch's respect for you has increased.</customLetterText>
-					<possibleIncidents>
-					  <li>PsychicDrone</li>
+					<possibleOkIncidents>
 					  <li>PsychicSoothe</li>
+					  <li>HVMP_LovecraftAlignment</li>
+					  <li MayRequire="VanillaExpanded.VEE">VEE_PsychicBloom</li>
+					</possibleOkIncidents>
+					<possibleBadIncidents>
+					  <li>PsychicDrone</li>
 					  <li>Flashstorm</li>
 					  <li>SolarFlare</li>
 					  <li>DeathPall</li>
 					  <li>BloodRain</li>
 					  <li>UnnaturalDarkness</li>
-					  <li>HVMP_LovecraftAlignment</li>
 					  <li>HVMP_LovecraftHypnoticLight</li>
 					  <li>HVMP_LovecraftManhunter</li>
 					  <li>HVMP_LovecraftSuppression</li>
 					  <li MayRequire="vanillaracesexpanded.archon">VREA_PsychicStorm</li>
 					  <li MayRequire="VanillaExpanded.VEE">VEE_PsychicRain</li>
-					  <li MayRequire="VanillaExpanded.VEE">VEE_PsychicBloom</li>
-					</possibleIncidents>
+					</possibleBadIncidents>
+					<EFT_chance>0.3</EFT_chance>
+					<EFT_incidents>
+					  <li>DevourerAssault</li>
+					  <li>HVMP_EFT_MutationWave</li>
+					  <li>HVMP_EFT_Nociosphere</li>
+					  <li>HVMP_EFT_SuperGhoul</li>
+					</EFT_incidents>
+					<EFT_description>\nThe fluctuations resonate with a subdimension of the Void in which fearsome and violent entities have been long imprisoned. Discharging the psychic energy might let some of these creatures loose.</EFT_description>
+					<nonNKNS_description>, although there is also a small chance for nothing bad to happen whatsoever.</nonNKNS_description>
+					<NKNS_description>; the fluctuations are tinged with purposeful malice. The discharge is sure to be destructive in nature.</NKNS_description>
+					<TOTU_durationTicks>30000~300000</TOTU_durationTicks><!--0.5 to 5 days-->
+					<TOTU_conditions>
+					  <li>HVMP_TOTU_BloodBlight</li>
+					  <li>HVMP_TOTU_EldritchViscosity</li>
+					  <li>HVMP_TOTU_Mindfire</li>
+					  <li>HVMP_TOTU_WeaknessOfFlesh</li>
+					</TOTU_conditions>
+					<TOTU_description>\nThe discharge will also have deleterious effects on living beings in the area for the next several days, although the [asker_faction_name] cannot determine what these will be in advance.</TOTU_description>
 				  </li>
 				  <li Class="QuestNode_End">
 					<outcome>Success</outcome>
@@ -1451,8 +1060,9 @@
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription->The Occult Branch has recently identified a spatial anomaly on the terrestrial surface, generated and maintained by the fiat of a mysterious archotech. They would like you to send an exploratory team into the anomaly and discover what lies inside.
-\nThe Occult Branch projects that the anomaly will collapse within [hypercubeTimer_duration].</li>
+        <li>questDescription->The [asker_faction_name] has recently identified a spatial anomaly on the terrestrial surface, generated and maintained by the fiat of a mysterious archotech. They would like you to send an exploratory team into the anomaly and discover what lies inside.
+\nThe [asker_faction_name] projects that the anomaly will collapse within [hypercubeTimer_duration].\n[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_AOEAH_info][mutator_COL_info][mutator_DF_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Occult.QuestNode_OccultIntermediary">
@@ -1470,11 +1080,15 @@
         <li Class="QuestNode_GetSiteTile">
           <storeAs>tile</storeAs>
         </li>
-        <li Class="QuestNode_GenerateWorldObject">
+        <li Class="HautsPermits_Occult.QuestNode_GenerateHypercube">
           <def>HVMP_Hypercube</def>
           <tile>$tile</tile>
           <faction>$faction</faction>
           <storeAs>hypercubeDoorway</storeAs>
+		  <AOEAH_condition>HVMP_AOEAH</AOEAH_condition>
+		  <AOEAH_description>\nCorrosive psychic radiation has been detected emanating in spurts from the anomaly. Those inside it will be exposed to the full force of the corrosion, gradually depleting their mood and wakefulness.</AOEAH_description>
+		  <COL_description>\nThere's no telling what might be inside - the [asker_faction_name] notes that this anomaly is particularly unusual, even by their standards. It could be very dangerous.</COL_description>
+		  <DF_description>\nThe anomaly bears the comingled signature of a subdimension in which particularly ghastly Void entities have been imprisoned. Attempting to exit from the anomaly will pull one of the prisoners out as well.</DF_description>
         </li>
         <li Class="QuestNode_SpawnWorldObjects">
           <worldObjects>$hypercubeDoorway</worldObjects>
@@ -1595,8 +1209,9 @@
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription(raidCount==1)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], is tracking a massive deadlife outbreak near [map_definite]. [asker_nameDef] wants you to destroy the shamblers which have arisen from it.\n\nIf you accept, the shamblers will arrive in [firstRaidDelayTicks_duration].</li>
-        <li>questDescription(raidCount==2)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], is tracking a massive deadlife outbreak near [map_definite]. [asker_nameDef] wants you to destroy the &lt;color=#00FFFF&gt;two&lt;/color&gt; hordes of shamblers which have arisen from it.\n\nIf you accept, the shamblers will arrive in [firstRaidDelayTicks_duration].</li>
+        <li>questDescription(raidCount==1)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], is tracking a massive deadlife outbreak near [map_definite]. [asker_nameDef] wants you to destroy the shamblers which have arisen from it.\n\nIf you accept, the shamblers will arrive in [firstRaidDelayTicks_duration].\n[mutatorSuffix]</li>
+        <li>questDescription(raidCount==2)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], is tracking a massive deadlife outbreak near [map_definite]. [asker_nameDef] wants you to destroy the &lt;color=#00FFFF&gt;two&lt;/color&gt; hordes of shamblers which have arisen from it.\n\nIf you accept, the shamblers will arrive in [firstRaidDelayTicks_duration].\n[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_BS_info][raid0/mutator_CAD_info][raid0/mutator_NOTED_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Occult.QuestNode_OccultIntermediary">
@@ -1618,12 +1233,91 @@
           <name>firstRaidDelayTicks</name>
           <value>$(roundToTicksRough(randInt(6000, 30000)))</value>
         </li>
-        <li Class="QuestNode_Subscript">
-          <def>HVMP_ShamblerDelayRepeatable</def>
-          <parms>
-            <points>$points</points>
-          </parms>
+        <li Class="QuestNode_Set">
+          <name>BS_duration</name>
+          <value>$firstRaidDelayTicks</value>
         </li>
+        <li Class="HautsPermits_Occult.QuestNode_Romero_BS">
+          <duration>$BS_duration</duration>
+		  <durationFactor>1.4~9</durationFactor>
+		  <BS_description>\nThe deadlife dust will arrive ahead of the shamblers, and it will blanket [map_definite] until some time after they arrive.</BS_description>
+        </li>
+		<li Class="QuestNode_Sequence">
+		  <nodes>
+			<li Class="HautsPermits_Occult.QuestNode_GetShamblerFaction">
+			  <storeAs>enemyFaction</storeAs>
+			</li>
+			<li Class="QuestNode_SubScript">
+			  <def>Util_RandomizePointsChallengeRating</def>
+			</li>
+			<li Class="QuestNode_Set">
+			  <name>nextRaidDelayTicks</name>
+			  <value>$firstRaidDelayTicks</value>
+			</li>
+			<li Class="QuestNode_Set">
+			  <name>raidCountMinusOne</name>
+			  <value>$raidCount</value>
+			</li>
+			<li Class="QuestNode_Subtract">
+			  <value1>$raidCountMinusOne</value1>
+			  <value2>1</value2>
+			  <storeAs>raidCountMinusOne</storeAs>
+			</li>
+			<li Class="QuestNode_LoopCount">
+			  <loopCount>$raidCount</loopCount>
+			  <storeLoopCounterAs>raidLoopCounter</storeLoopCounterAs>
+			  <node Class="QuestNode_Sequence">
+				<nodes>
+				  <!-- Try using specific delay -->
+				  <li Class="QuestNode_IsNull">
+					<value>$raid(($raidLoopCounter))/raidDelayTicks</value>
+					<elseNode Class="QuestNode_Set">
+					  <name>nextRaidDelayTicks</name>
+					  <value>$raid(($raidLoopCounter))/raidDelayTicks</value>
+					</elseNode>
+				  </li>
+
+				  <li Class="QuestNode_Delay">
+					<delayTicks>$nextRaidDelayTicks</delayTicks>
+					<node Class="QuestNode_Sequence">
+					  <nodes>
+						<li Class="QuestNode_SubScript">
+						  <prefix>raid$raidLoopCounter</prefix>
+						  <def>HVMP_ShamblerAssault</def>
+						  <parms>
+							<tag>lord</tag>
+							<inSignal>$inSignal</inSignal>
+							<map>$map</map>
+							<enemyFaction>$enemyFaction</enemyFaction>
+							<points>$($points * 0.5)</points>
+							<walkInSpot>$walkInSpot</walkInSpot>
+							<customLetterLabel>$customLetterLabel</customLetterLabel>
+							<customLetterText>$customLetterText</customLetterText>
+							<customLetterLabelRules>$customLetterLabelRules</customLetterLabelRules>
+							<customLetterTextRules>$customLetterTextRules</customLetterTextRules>
+						  </parms>
+						</li>
+						<li Class="QuestNode_Equal">
+						  <value1>$raidLoopCounter</value1>
+						  <value2>$($raidCount - 1)</value2>
+						  <compareAs>int</compareAs>
+						  <node Class="QuestNode_SendSignals">
+							<outSignals>AllRaidsSent</outSignals>
+						  </node>
+						</li>
+					  </nodes>
+					</node>
+				  </li>
+				  <li Class="QuestNode_Add"> <!-- next raid comes 13000 ticks after the previous -->
+					<value1>$nextRaidDelayTicks</value1>
+					<value2>13000</value2>
+					<storeAs>nextRaidDelayTicks</storeAs>
+				  </li>
+				</nodes>
+			  </node>
+			</li>
+		  </nodes>
+		</li>
         <li Class="QuestNode_AllSignals">
           <inSignals>
             <li>AllRaidsSent</li>
@@ -1654,97 +1348,6 @@
     </root>
   </QuestScriptDef>
   <QuestScriptDef>
-    <defName>HVMP_ShamblerDelayRepeatable</defName>
-    <questDescriptionRules>
-      <rulesStrings>
-        <li>pawnKindsParagraph(raidCount==1)->The group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\n[raid0/raidArrivalModeInfo]</li>
-        <li>pawnKindsParagraph(raidCount==2)->The first group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\nThe second similar-sized group will follow soon after.</li>
-        <li>pawnKindsParagraph(raidCount==3)->The first group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\nTwo similar-sized groups will follow soon after.</li>
-        <li>pawnKindsParagraph(raidCount>=4)->The first group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\n[raidCountMinusOne] similar-sized groups will follow soon after.</li>
-        <li>numGroupsOf(raidCount==1)-></li>
-        <li>numGroupsOf(raidCount==2)->two groups of</li>
-        <li>numGroupsOf(raidCount==3)->three groups of</li>
-        <li>numGroupsOf(raidCount>=4)->[raidCount] groups of</li>
-      </rulesStrings>
-    </questDescriptionRules>
-    <root Class="QuestNode_Sequence">
-      <nodes>
-        <li Class="HautsPermits_Occult.QuestNode_GetShamblerFaction">
-          <storeAs>enemyFaction</storeAs>
-        </li>
-        <li Class="QuestNode_SubScript">
-          <def>Util_RandomizePointsChallengeRating</def>
-        </li>
-        <li Class="QuestNode_Set">
-          <name>nextRaidDelayTicks</name>
-          <value>$firstRaidDelayTicks</value>
-        </li>
-        <li Class="QuestNode_Set">
-          <name>raidCountMinusOne</name>
-          <value>$raidCount</value>
-        </li>
-        <li Class="QuestNode_Subtract">
-          <value1>$raidCountMinusOne</value1>
-          <value2>1</value2>
-          <storeAs>raidCountMinusOne</storeAs>
-        </li>
-        <li Class="QuestNode_LoopCount">
-          <loopCount>$raidCount</loopCount>
-          <storeLoopCounterAs>raidLoopCounter</storeLoopCounterAs>
-          <node Class="QuestNode_Sequence">
-            <nodes>
-              <!-- Try using specific delay -->
-              <li Class="QuestNode_IsNull">
-                <value>$raid(($raidLoopCounter))/raidDelayTicks</value>
-                <elseNode Class="QuestNode_Set">
-                  <name>nextRaidDelayTicks</name>
-                  <value>$raid(($raidLoopCounter))/raidDelayTicks</value>
-                </elseNode>
-              </li>
-
-              <li Class="QuestNode_Delay">
-                <delayTicks>$nextRaidDelayTicks</delayTicks>
-                <node Class="QuestNode_Sequence">
-                  <nodes>
-                    <li Class="QuestNode_SubScript">
-                      <prefix>raid$raidLoopCounter</prefix>
-                      <def>HVMP_ShamblerAssault</def>
-                      <parms>
-                        <tag>lord</tag>
-                        <inSignal>$inSignal</inSignal>
-                        <map>$map</map>
-                        <enemyFaction>$enemyFaction</enemyFaction>
-                        <points>$($points * 0.5)</points>
-                        <walkInSpot>$walkInSpot</walkInSpot>
-                        <customLetterLabel>$customLetterLabel</customLetterLabel>
-                        <customLetterText>$customLetterText</customLetterText>
-                        <customLetterLabelRules>$customLetterLabelRules</customLetterLabelRules>
-                        <customLetterTextRules>$customLetterTextRules</customLetterTextRules>
-                      </parms>
-                    </li>
-                    <li Class="QuestNode_Equal">
-                      <value1>$raidLoopCounter</value1>
-                      <value2>$($raidCount - 1)</value2>
-                      <compareAs>int</compareAs>
-                      <node Class="QuestNode_SendSignals">
-                        <outSignals>AllRaidsSent</outSignals>
-                      </node>
-                    </li>
-                  </nodes>
-                </node>
-              </li>
-              <li Class="QuestNode_Add"> <!-- next raid comes 13000 ticks after the previous -->
-                <value1>$nextRaidDelayTicks</value1>
-                <value2>13000</value2>
-                <storeAs>nextRaidDelayTicks</storeAs>
-              </li>
-            </nodes>
-          </node>
-        </li>
-      </nodes>
-    </root>
-  </QuestScriptDef>
-  <QuestScriptDef>
     <defName>HVMP_ShamblerAssault</defName>
     <questDescriptionRules>
       <rulesStrings>
@@ -1763,6 +1366,18 @@
           <canTimeoutOrFlee>$canTimeoutOrFlee</canTimeoutOrFlee>
           <raidPawnKind>$raidPawnKind</raidPawnKind>
           <inSignalLeave>EndRaid</inSignalLeave>
+		  <CAD_pawnList>
+		    <li>Sightstealer</li>
+		    <li>Devourer</li>
+		    <li>Chimera</li>
+		    <li>Bulbfreak</li>
+		    <li>Ghoul</li>
+		  </CAD_pawnList>
+		  <CAD_pointFactor>0.2</CAD_pointFactor>
+		  <CAD_description>\nA variety of other unnatural entities have been spotted accompanying the shamblers.</CAD_description>
+		  <NOTED_lifespanFactor>3</NOTED_lifespanFactor>
+		  <NOTED_bonusHediff>HVMP_ShamblerRegen</NOTED_bonusHediff>
+		  <NOTED_description>\nUnlike regular shamblers, these ones last for far longer and can even regenerate, albeit slowly.</NOTED_description>
         </li>
       </nodes>
     </root>

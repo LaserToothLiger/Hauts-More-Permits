@@ -19,6 +19,9 @@ using static System.Collections.Specialized.BitVector32;
 using System.Net.NetworkInformation;
 using System.Collections;
 using Verse.Noise;
+using static UnityEngine.GraphicsBuffer;
+using VEF;
+using System.Text.RegularExpressions;
 
 namespace HautsPermits
 {
@@ -94,6 +97,8 @@ namespace HautsPermits
             }
             harmony.Patch(AccessTools.Method(typeof(WorldComponent_HautsFactionComps), nameof(WorldComponent_HautsFactionComps.ThirdTickEffects)),
                           postfix: new HarmonyMethod(patchType, nameof(HVMPThirdTickEffectsPostfix)));
+            harmony.Patch(AccessTools.Property(typeof(Settlement), nameof(Settlement.CanTradeNow)).GetGetMethod(),
+                           prefix: new HarmonyMethod(patchType, nameof(HVMP_Settlement_CanTradeNowPrefix)));
             Log.Message("HVMP_Initialize".Translate().CapitalizeFirst());
         }
         internal static object GetInstanceField(Type type, object instance, string fieldName)
@@ -345,6 +350,25 @@ namespace HautsPermits
                 };
                 __result.options.Add(diaOptionOuties);
                 return false;
+            } else if (Find.World.gameConditionManager.ConditionIsActive(HVMPDefOf.HVMP_CommsBlackout)) {
+                Pawn pawn;
+                string text;
+                if (faction.leader != null)
+                {
+                    pawn = faction.leader;
+                    text = faction.leader.Name.ToStringFull.Colorize(ColoredText.NameColor);
+                } else {
+                    Log.Error(string.Format("Faction {0} has no leader.", faction));
+                    pawn = negotiator;
+                    text = faction.Name;
+                }
+                __result = new DiaNode("HVMP_FactionGreeting_CommunicationsBlackout".Translate(text).AdjustedFor(pawn, "PAWN", true));
+                DiaOption diaOptionOuties = new DiaOption("(" + "Disconnect".Translate() + ")")
+                {
+                    resolveTree = true
+                };
+                __result.options.Add(diaOptionOuties);
+                return false;
             }
             if (fch != null)
             {
@@ -368,6 +392,11 @@ namespace HautsPermits
                     __result = true;
                     return false;
                 }
+            }
+            if (Find.World.gameConditionManager.ConditionIsActive(HVMPDefOf.HVMP_CommsBlackout))
+            {
+                __result = false;
+                return false;
             }
             return true;
         }
@@ -431,15 +460,27 @@ namespace HautsPermits
             if (__instance.def == IncidentDefOf.TraderCaravanArrival || __instance.def == IncidentDefOf.OrbitalTraderArrival)
             {
                 WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
-                if (wcbs != null && wcbs.tradeBlockages > 0)
+                if (wcbs != null)
                 {
-                    wcbs.tradeBlockages--;
-                    TaggedString letterLabel = "HVMP_NoTraderForYou".Translate();
-                    TaggedString letterText = (__instance.def == IncidentDefOf.TraderCaravanArrival ? "HVMP_TraderBlockedCaravan".Translate() : "HVMP_TraderBlockedOrbital".Translate()) + "\n\n" + (wcbs.tradeBlockages == 0 ? "HVMP_TraderBlocksRemainingNone".Translate() : "HVMP_TraderBlocksRemaining".Translate(wcbs.tradeBlockages));
-                    ChoiceLetter notification = LetterMaker.MakeLetter(
-                    letterLabel, letterText, LetterDefOf.NegativeEvent, null, null, null, null);
-                    Find.LetterStack.ReceiveLetter(notification, null);
-                    return false;
+                    if (wcbs.tradeBlockages > 0)
+                    {
+                        wcbs.tradeBlockages--;
+                        TaggedString letterLabel = "HVMP_NoTraderForYou".Translate();
+                        TaggedString letterText = (__instance.def == IncidentDefOf.TraderCaravanArrival ? "HVMP_TraderBlockedCaravan".Translate() : "HVMP_TraderBlockedOrbital".Translate()) + "\n\n" + (wcbs.tradeBlockages == 0 ? "HVMP_TraderBlocksRemainingNone".Translate() : "HVMP_TraderBlocksRemaining".Translate(wcbs.tradeBlockages));
+                        ChoiceLetter notification = LetterMaker.MakeLetter(
+                        letterLabel, letterText, LetterDefOf.NegativeEvent, null, null, null, null);
+                        Find.LetterStack.ReceiveLetter(notification, null);
+                        return false;
+                    }
+                    if (Find.World.gameConditionManager.ConditionIsActive(HVMPDefOf.HVMP_CommsBlackout))
+                    {
+                        TaggedString letterLabel = "HVMP_NoTraderForYou".Translate();
+                        TaggedString letterText = (__instance.def == IncidentDefOf.TraderCaravanArrival ? "HVMP_TraderBlockedCaravan".Translate() : "HVMP_TraderBlockedOrbital".Translate()) + "\n\n" + "HVMP_TraderBlocksCommsBlackout".Translate();
+                        ChoiceLetter notification = LetterMaker.MakeLetter(
+                        letterLabel, letterText, LetterDefOf.NegativeEvent, null, null, null, null);
+                        Find.LetterStack.ReceiveLetter(notification, null);
+                        return false;
+                    }
                 }
             }
             return true;
@@ -467,10 +508,10 @@ namespace HautsPermits
             {
                 for (int i = 0; i < quest.PartsListForReading.Count; i++)
                 {
-                    QuestPart_PaxOffering qppo = quest.GetFirstPartOfType<QuestPart_PaxOffering>();
-                    if (qppo != null)
+                    QuestPart_PaxMundi qppm = quest.GetFirstPartOfType<QuestPart_PaxMundi>();
+                    if (qppm != null)
                     {
-                        wcbs.qppos.Add(qppo);
+                        wcbs.qppms.Add(qppm);
                         break;
                     }
                 }
@@ -485,9 +526,7 @@ namespace HautsPermits
             else if (__instance != Faction.OfPlayerSilentFail && other == Faction.OfPlayerSilentFail)
             {
                 __state = __instance.GoodwillWith(Faction.OfPlayerSilentFail);
-            }
-            else
-            {
+            } else {
                 __state = 0;
             }
         }
@@ -503,7 +542,7 @@ namespace HautsPermits
                 if (nonPlayerFaction != null && !nonPlayerFaction.def.HasModExtension<EBranchQuests>() && !nonPlayerFaction.def.permanentEnemy && nonPlayerFaction.HasGoodwill && (reason == null || reason != HistoryEventDefOf.ReachNaturalGoodwill))
                 {
                     int goodwillChange = nonPlayerFaction.GoodwillWith(Faction.OfPlayerSilentFail) - __state;
-                    HVMP_Utility.PaxOfferingInner(goodwillChange);
+                    HVMP_Utility.PaxMundiInner(goodwillChange);
                 }
             }
             if (__instance == Faction.OfPlayerSilentFail && ModsConfig.IdeologyActive)
@@ -587,6 +626,15 @@ namespace HautsPermits
                 wo.Destroy();
             }
         }
+        public static bool HVMP_Settlement_CanTradeNowPrefix(ref bool __result)
+        {
+            if (Find.World.gameConditionManager.ConditionIsActive(HVMPDefOf.HVMP_CommsBlackout))
+            {
+                __result = false;
+                return false;
+            }
+            return true;
+        }
     }
     [DefOf]
     public static class HVMPDefOf
@@ -605,13 +653,14 @@ namespace HautsPermits
         [MayRequireAnomaly]
         public static FactionDef HVMP_OccultBranch;
 
+        public static GameConditionDef HVMP_CommsBlackout;
         [MayRequireIdeology]
         public static GameConditionDef HVMP_RevealingScanEffect;
 
         public static HediffDef HVMP_HostileEnvironmentFilm;
         public static HediffDef HVMP_TargetedPsychicSuppression;
-        [MayRequireOdyssey]
-        public static HediffDef HVMP_GatepuncherImplant;
+        [MayRequireIdeology]
+        public static HediffDef HVMP_TactlessTongues;
 
         public static HistoryEventDef HVMP_CutTiesWithBranch;
         public static HistoryEventDef HVMP_SolicitedQuest;
@@ -619,7 +668,7 @@ namespace HautsPermits
         public static HistoryEventDef HVMP_IgnoredQuest;
         public static HistoryEventDef HVMP_IngratiationAccepted;
 
-        public static IncidentDef HVMP_RaidFortification;
+        public static IncidentDef HVMP_RaidAres;
         [MayRequireBiotech]
         public static IncidentDef HVMP_MutantManhunterPack;
         [MayRequireAnomaly]
@@ -644,12 +693,15 @@ namespace HautsPermits
         public static QuestScriptDef HVMP_BranchIntro;
         public static QuestScriptDef HVMP_BranchOutro;
 
+        [MayRequireIdeology]
+        public static SitePartDef HVMP_Shrine;
+
         public static ThingDef HVMP_DropPodOfFaction;
         public static ThingDef HVMP_DelayedPowerBeam;
         public static ThingDef HVMP_DatedAtlas;
         public static ThingDef HVMP_TunnelHiveSpawner;
         [MayRequireIdeology]
-        public static ThingDef HVMP_ShuttleCrashed;
+        public static ThingDef HVMP_AncientTerminal;
         [MayRequireOdyssey]
         public static ThingDef HVMP_EnterpriseSecurityCrate;
         [MayRequireOdyssey]
@@ -748,13 +800,11 @@ namespace HautsPermits
             Scribe_Values.Look<int>(ref this.tradeBlockages, "tradeBlockages", 0, false);
             Scribe_Values.Look<int>(ref this.lovecraftEventTimer, "lovecraftEventTimer", 0, false);
             Scribe_Values.Look<int>(ref this.newSettlementTick, "newSettlementTick", 100, false);
-            /*this breaks PaxOffering quests for reasons I don't quite understand, so the saving to cache actually gets handled by the qppos themselves
-             * Scribe_Collections.Look<QuestPart_PaxOffering>(ref wcbs.qppos, "qppos", LookMode.Deep, Array.Empty<object>());*/
         }
         public int tradeBlockages;
         public int lovecraftEventTimer = 0;
         public int newSettlementTick = 100;
-        public List<QuestPart_PaxOffering> qppos = new List<QuestPart_PaxOffering>();
+        public List<QuestPart_PaxMundi> qppms = new List<QuestPart_PaxMundi>();
     }
     //basis for branch properties
     public class EBranchQuests : DefModExtension
@@ -1894,6 +1944,7 @@ namespace HautsPermits
             this.compClass = typeof(CompAbilityEffect_GatepunchAbility);
         }
         public int chargeCost;
+        public HediffDef gatepuncherHediff;
     }
     public class CompAbilityEffect_GatepunchAbility : CompAbilityEffect
     {
@@ -1910,7 +1961,7 @@ namespace HautsPermits
             {
                 if (this.parent.pawn != null)
                 {
-                    return this.parent.pawn.health.hediffSet.GetFirstHediffOfDef(HVMPDefOf.HVMP_GatepuncherImplant);
+                    return this.parent.pawn.health.hediffSet.GetFirstHediffOfDef(this.Props.gatepuncherHediff);
                 }
                 return null;
             }
@@ -2961,15 +3012,30 @@ namespace HautsPermits
             HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
         }
     }
-    public class RoyalTitlePermitWorker_OrbitalScalpel : RoyalTitlePermitWorker_GiveHediffs
+    [StaticConstructorOnStartup]
+    public class RoyalTitlePermitWorker_OrbitalScalpel : RoyalTitlePermitWorker_Targeted
     {
-        public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
+        public AcceptanceReport IsValidThing(LocalTargetInfo lti)
         {
-            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
-        }
-        public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
-        {
-            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                TaggedString error = pme.invalidTargetMessage.Translate();
+                if (!lti.IsValid)
+                {
+                    return new AcceptanceReport(error);
+                } else {
+                    foreach (Thing t in lti.Cell.GetThingList(this.caller.Map))
+                    {
+                        if ((t is Pawn p && !p.IsPsychologicallyInvisible()) || (t is Building && t.def.useHitPoints))
+                        {
+                            return AcceptanceReport.WasAccepted;
+                        }
+                    }
+                }
+                return new AcceptanceReport(error);
+            }
+            return new AcceptanceReport("Hauts_PMEMisconfig".Translate());
         }
         public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
         {
@@ -2981,12 +3047,142 @@ namespace HautsPermits
                 }
                 return false;
             }
-            return base.ValidateTarget(target, showMessages);
+            if (!base.CanHitTarget(target))
+            {
+                if (target.IsValid && showMessages)
+                {
+                    Messages.Message(this.def.LabelCap + ": " + "AbilityCannotHitTarget".Translate(), MessageTypeDefOf.RejectInput, true);
+                }
+                return false;
+            }
+            AcceptanceReport acceptanceReport = this.IsValidThing(target);
+            if (!acceptanceReport.Accepted)
+            {
+                Messages.Message(acceptanceReport.Reason, new LookTargets(target.Cell, this.map), MessageTypeDefOf.RejectInput, false);
+            }
+            return acceptanceReport.Accepted;
         }
-        public override void DoOtherEffect(Pawn caller, Faction faction)
+        public override void OrderForceTarget(LocalTargetInfo target)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                foreach (Thing t in target.Cell.GetThingList(this.caller.Map))
+                {
+                    if ((t is Pawn p && !p.IsPsychologicallyInvisible()))
+                    {
+                        this.AffectPawn(p, this.calledFaction);
+                        break;
+                    }
+                }
+                foreach (Thing t in target.Cell.GetThingList(this.caller.Map))
+                {
+                    if (t is Building && t.def.useHitPoints)
+                    {
+                        this.AffectCell(target.Cell,this.calledFaction);
+                        break;
+                    }
+                }
+            }
         }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (map.generatorDef.isUnderground)
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            {
+                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            Action action = null;
+            string text = this.def.LabelCap + ": ";
+            if (HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.BeginAffectPawn(pawn, map, faction, free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        public bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
+        {
+            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+        }
+        private void BeginAffectPawn(Pawn pawn, Map map, Faction faction, bool free)
+        {
+            if (this.IsFactionHostileToPlayer(faction, pawn))
+            {
+                return;
+            }
+            this.targetingParameters = new TargetingParameters();
+            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetSelf = false;
+            this.targetingParameters.canTargetPawns = false;
+            this.targetingParameters.canTargetFires = false;
+            this.targetingParameters.canTargetBuildings = false;
+            this.targetingParameters.canTargetItems = true;
+            this.targetingParameters.validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange;
+            this.caller = pawn;
+            this.map = map;
+            this.calledFaction = faction;
+            this.free = free;
+            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+        }
+        protected void AffectCell(IntVec3 iv3, Faction faction)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                HVMP_Utility.DoScalpelExplosion(iv3,this.caller.MapHeld,pme.soundDef,(int)pme.extraNumber.RandomInRange);
+                this.caller.royalty.GetPermit(this.def, faction).Notify_Used();
+                if (!this.free)
+                {
+                    this.caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
+                }
+                HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            }
+        }
+        protected void AffectPawn(Pawn pawn, Faction faction)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                this.AffectPawnInner(pme, pawn, faction);
+                this.caller.royalty.GetPermit(this.def, faction).Notify_Used();
+                if (!this.free)
+                {
+                    this.caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
+                }
+                HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            }
+        }
+        public Faction CalledFaction
+        {
+            get
+            {
+                return this.CalledFaction;
+            }
+        }
+        public void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
+        {
+            foreach (HediffDef hd in pme.hediffs)
+            {
+                Hediff hediff = HediffMaker.MakeHediff(hd, pawn);
+                pawn.health.AddHediff(hediff);
+                HediffComp_Flashlight hcf = hediff.TryGetComp<HediffComp_Flashlight>();
+                if (hcf != null)
+                {
+                    hcf.damageAmount = (int)pme.extraNumber.RandomInRange;
+                }
+            }
+        }
+        private Faction calledFaction;
+        private static readonly Texture2D CommandTex = ContentFinder<Texture2D>.Get("UI/Commands/CallAid", true);
     }
     public class HediffCompProperties_Flashlight : HediffCompProperties_MoteConditional
     {
@@ -2995,9 +3191,6 @@ namespace HautsPermits
             this.compClass = typeof(HediffComp_Flashlight);
         }
         public int ticksDelay;
-        public DamageDef damageType;
-        public float damage;
-        public int numHits;
         public SoundDef impactSound;
     }
     public class HediffComp_Flashlight : HediffComp_MoteConditional
@@ -3022,26 +3215,7 @@ namespace HautsPermits
                 this.ticksRemaining -= delta;
                 if (this.ticksRemaining <= 0)
                 {
-                    this.Props.impactSound?.PlayOneShot(new TargetInfo(this.Pawn.Position, this.Pawn.Map, false));
-                    if (HautsUtility.CanBeHitByAirToSurface(this.Pawn.Position, this.Pawn.Map, false))
-                    {
-                        RoofDef roof = this.Pawn.Position.GetRoof(this.Pawn.Map);
-                        if (roof != null && !roof.isThickRoof && roof.canCollapse)
-                        {
-                            if (!roof.soundPunchThrough.NullOrUndefined())
-                            {
-                                roof.soundPunchThrough.PlayOneShot(new TargetInfo(this.Pawn.Position, this.Pawn.Map, false));
-                            }
-                            RoofCollapserImmediate.DropRoofInCells(this.Pawn.Position, this.Pawn.Map, null);
-                        }
-                        for (int i = this.Props.numHits; i > 0; i--)
-                        {
-                            if (!this.Pawn.Dead)
-                            {
-                                this.Pawn.TakeDamage(new DamageInfo(this.Props.damageType, this.Props.damage));
-                            }
-                        }
-                    }
+                    HVMP_Utility.DoScalpelExplosion(this.Pawn.Position,this.Pawn.Map,this.Props.impactSound,this.damageAmount);
                     this.parent.Severity = -1f;
                 }
             } else {
@@ -3052,8 +3226,10 @@ namespace HautsPermits
         {
             base.CompExposeData();
             Scribe_Values.Look<int>(ref this.ticksRemaining, "ticksRemaining", 0, false);
+            Scribe_Values.Look<int>(ref this.damageAmount, "damageAmount", 0, false);
         }
         public int ticksRemaining;
+        public int damageAmount;
     }
     public class HediffCompProperties_CaravanHediffAura : HediffCompProperties_AuraHediff
     {
@@ -5833,6 +6009,86 @@ namespace HautsPermits
         }
         private WorldObject wo;
     }
+    public class StatPart_DirectlyAdjustedByGameCondition_World : StatPart
+    {
+        public override void TransformValue(StatRequest req, ref float val)
+        {
+            if (this.ShouldWork(req))
+            {
+                val += this.offset;
+                val *= this.factor;
+            }
+        }
+        public override string ExplanationPart(StatRequest req)
+        {
+            if (this.ShouldWork(req))
+            {
+                string explanation = "";
+                if (this.offset != 0)
+                {
+                    explanation += this.requiredCondition.LabelCap + ": +" + this.offset.ToStringPercent() + "\n";
+                }
+                if (this.offset != 1)
+                {
+                    explanation += this.requiredCondition.LabelCap + ": x" + this.factor.ToStringPercent();
+                }
+                return explanation;
+            }
+            return null;
+        }
+        public bool ShouldWork(StatRequest req)
+        {
+            return req.HasThing && req.Thing is Pawn p && Find.World.gameConditionManager.ConditionIsActive(this.requiredCondition) && (this.worksOnMechs || p.RaceProps.IsFlesh) && (!ModsConfig.AnomalyActive || ((this.worksOnMutants || !p.IsMutant) && (this.worksOnEntities || !p.IsEntity)));
+        }
+        public float offset;
+        public float factor = 1f;
+        public bool worksOnMechs = true;
+        public bool worksOnMutants = true;
+        public bool worksOnEntities = true;
+        public GameConditionDef requiredCondition;
+    }
+    public class HediffCompProperties_ReliantOnGameCondition : HediffCompProperties
+    {
+        public HediffCompProperties_ReliantOnGameCondition()
+        {
+            this.compClass = typeof(HediffComp_ReliantOnGameCondition);
+        }
+        public GameConditionDef gameCondition;
+        public bool dontAffectAnomalies;
+        public bool dontAffectMechs;
+    }
+    public class HediffComp_ReliantOnGameCondition : HediffComp
+    {
+        public HediffCompProperties_ReliantOnGameCondition Props
+        {
+            get
+            {
+                return (HediffCompProperties_ReliantOnGameCondition)this.props;
+            }
+        }
+        public override bool CompShouldRemove
+        {
+            get
+            {
+                if (this.Props.dontAffectMechs && !this.Pawn.RaceProps.IsFlesh)
+                {
+                    return true;
+                }
+                if (ModsConfig.AnomalyActive && this.Props.dontAffectAnomalies && (this.Pawn.IsMutant || this.Pawn.IsEntity))
+                {
+                    return true;
+                }
+                if (base.Pawn.SpawnedOrAnyParentSpawned)
+                {
+                    if (this.Pawn.MapHeld.gameConditionManager.ConditionIsActive(this.Props.gameCondition))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+    }
     //branchquest mechanics: studiable items
     public class CompProperties_StudiableQuestItem : CompProperties_Interactable
     {
@@ -5903,7 +6159,12 @@ namespace HautsPermits
                 {
                     this.curProgress = this.RequiredProgress;
                 }
+                this.ExtraStudyEffects(delta,researcher,brb,researchBench);
             }
+        }
+        public virtual void ExtraStudyEffects(int delta, Pawn researcher, Thing brb, Thing researchBench)
+        {
+
         }
         public override AcceptanceReport CanInteract(Pawn activateBy = null, bool checkOptionalItems = true)
         {
@@ -6033,7 +6294,7 @@ namespace HautsPermits
             }
             return text;
         }
-        public float RequiredProgress
+        public virtual float RequiredProgress
         {
             get
             {
@@ -6168,485 +6429,177 @@ namespace HautsPermits
             return null;
         }
     }
-    //branchquest mechanics: books
-    public class HVMP_BookDeets : DefModExtension
+    //branchquest mechanics: other
+    public class GameCondition_MutationDummy : GameCondition
     {
-        public HVMP_BookDeets() { }
-        public string descKey;
-        public List<string> titlesPlace;
-        public List<string> titlesPlanetPlace;
-        public List<string> titlesMarket;
-        public List<string> titlesMarketItem;
-        public List<string> marketTerms;
+
     }
     //commerce branchquest: fortification
-    public class QuestNode_AllThreeFortificationMutators : QuestNode
+    public class QuestNode_Root_Fortification : QuestNode_Sequence
+    {
+        protected override void RunInt()
+        {
+            if (HVMP_Utility.TryFindCommerceFaction(out Faction faction))
+            {
+                Slate slate = QuestGen.slate;
+                Quest quest = QuestGen.quest;
+                slate.Set<Faction>("faction", faction, false);
+                slate.Set<Pawn>("asker", faction.leader, false);
+                bool TTOT_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fort2, HVMP_Mod.settings.fortX);
+                slate.Set<bool>("punishmentOnDestroy", TTOT_on || Rand.Chance(0.5f), false);
+                if (TTOT_on)
+                {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_TTOT_info", this.TTOT_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TTOT_info", " ") });
+                }
+                slate.Set<bool>(this.storeTTOT.GetValue(slate), TTOT_on, false);
+                Map map = HVMP_Utility.TryGetMap();
+                slate.Set<Map>("map", map, false);
+                PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
+                slate.Set<PlanetTile>("pTile", tile, false);
+                QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
+                qpbgfh.faction = faction;
+                QuestGen.quest.AddPart(qpbgfh);
+                HVMP_Utility.SetSettingScalingRewardValue(slate);
+            }
+            base.RunInt();
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            HVMP_Utility.SetSettingScalingRewardValue(slate);
+            return HVMP_Utility.TryFindCommerceFaction(out Faction commerceFaction) && base.TestRunInt(slate);
+        }
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+        [NoTranslate]
+        public SlateRef<string> storeTTOT;
+        [MustTranslate]
+        public string TTOT_description;
+    }
+    public class QuestNode_Fortification_TTOT : QuestNode
     {
         protected override bool TestRunInt(Slate slate)
         {
-            return Find.Storyteller.difficulty.allowViolentQuests && slate.Exists("map", false) && slate.Exists("enemyFaction", false);
+            this.SetVars(slate);
+            return true;
+        }
+        protected override void RunInt()
+        {
+            this.SetVars(QuestGen.slate);
+        }
+        private void SetVars(Slate slate)
+        {
+            slate.Set<int>(this.nameTime.GetValue(slate), (int)(this.valueTime.RandomInRange * this.valueTimeUnits * (this.TTOT_enabled.GetValue(slate) ? this.timeFactorTTOT : 1f)), false);
+            slate.Set<int>(this.nameGoodwill.GetValue(slate), (int)(this.valueGoodwill * (this.TTOT_enabled.GetValue(slate) ? this.goodwillFactorTTOT : 1f)), false);
+        }
+        [NoTranslate]
+        public SlateRef<string> nameTime;
+        public IntRange valueTime;
+        public int valueTimeUnits;
+        public float timeFactorTTOT;
+        [NoTranslate]
+        public SlateRef<string> nameGoodwill;
+        public int valueGoodwill;
+        public float goodwillFactorTTOT;
+        public SlateRef<bool> TTOT_enabled;
+    }
+    public class QuestNode_Multiply_RM : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return !this.storeAs.GetValue(slate).NullOrEmpty();
         }
         protected override void RunInt()
         {
             Slate slate = QuestGen.slate;
-            Map map = QuestGen.slate.Get<Map>("map", null, false);
-            float num = QuestGen.slate.Get<float>("points", 0f, false);
-            Faction faction = QuestGen.slate.Get<Faction>("enemyFaction", null, false);
-            QuestPart_Incident questPart_Incident = new QuestPart_Incident();
-            questPart_Incident.debugLabel = "raid";
-            questPart_Incident.incident = HVMPDefOf.HVMP_RaidFortification;
-            int num2 = 0;
-            IncidentParms incidentParms;
-            PawnGroupMakerParms defaultPawnGroupMakerParms;
-            IEnumerable<PawnKindDef> enumerable;
-            do
-            {
-                incidentParms = this.GenerateIncidentParms(map, num, faction, slate, questPart_Incident);
-                defaultPawnGroupMakerParms = IncidentParmsUtility.GetDefaultPawnGroupMakerParms(PawnGroupKindDefOf.Combat, incidentParms, true);
-                defaultPawnGroupMakerParms.points = IncidentWorker_Raid.AdjustedRaidPoints(defaultPawnGroupMakerParms.points, incidentParms.raidArrivalMode, incidentParms.raidStrategy, defaultPawnGroupMakerParms.faction, PawnGroupKindDefOf.Combat, incidentParms.target, null);
-                enumerable = PawnGroupMakerUtility.GeneratePawnKindsExample(defaultPawnGroupMakerParms);
-                num2++;
-            }
-            while (!enumerable.Any<PawnKindDef>() && num2 < 50);
-            if (!enumerable.Any<PawnKindDef>())
-            {
-                string[] array = new string[6];
-                array[0] = "No pawnkinds example for ";
-                array[1] = QuestGen.quest.root.defName;
-                array[2] = " parms=";
-                int num3 = 3;
-                PawnGroupMakerParms pawnGroupMakerParms = defaultPawnGroupMakerParms;
-                array[num3] = ((pawnGroupMakerParms != null) ? pawnGroupMakerParms.ToString() : null);
-                array[4] = " iterations=";
-                array[5] = num2.ToString();
-                Log.Error(string.Concat(array));
-            }
-            IncidentWorker_RaidFortification iwrf = (IncidentWorker_RaidFortification)questPart_Incident.incident.Worker;
-            this.ImplementQuestMutators(slate, faction);
-            questPart_Incident.SetIncidentParmsAndRemoveTarget(incidentParms);
-            questPart_Incident.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
-            QuestGen.quest.AddPart(questPart_Incident);
-            QuestGen.AddQuestDescriptionRules(new List<Rule>
-            {
-                new Rule_String("raidPawnKinds", PawnUtility.PawnKindsToLineList(enumerable, "  - ", ColoredText.ThreatColor)),
-                new Rule_String("raidArrivalModeInfo", incidentParms.raidArrivalMode.textWillArrive.Formatted(faction))
-            });
+            slate.Set<double>(this.storeAs.GetValue(slate), this.value1.GetValue(slate) * this.value2.GetValue(slate) * (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fort1, HVMP_Mod.settings.fortX) ? this.RM_factor : 1d), false);
         }
-        private IncidentParms GenerateIncidentParms(Map map, float points, Faction faction, Slate slate, QuestPart_Incident questPart)
-        {
-            IncidentParms incidentParms = new IncidentParms
-            {
-                forced = true,
-                target = map,
-                points = Mathf.Max(points, faction.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat, null)),
-                faction = faction,
-                pawnGroupMakerSeed = new int?(Rand.Int),
-                inSignalEnd = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignalLeave.GetValue(slate)),
-                questTag = QuestGenUtility.HardcodedTargetQuestTagWithQuestID(this.tag.GetValue(slate)),
-                canTimeoutOrFlee = (map.CanEverExit && (this.canTimeoutOrFlee.GetValue(slate) ?? true))
-            };
-            if (this.raidPawnKind.GetValue(slate) != null)
-            {
-                incidentParms.pawnKind = this.raidPawnKind.GetValue(slate);
-                incidentParms.pawnCount = Mathf.Max(1, Mathf.RoundToInt(incidentParms.points / incidentParms.pawnKind.combatPower));
-            }
-            if (this.arrivalMode.GetValue(slate) != null)
-            {
-                incidentParms.raidArrivalMode = this.arrivalMode.GetValue(slate);
-            }
-            if (!this.customLetterLabel.GetValue(slate).NullOrEmpty() || this.customLetterLabelRules.GetValue(slate) != null)
-            {
-                QuestGen.AddTextRequest("root", delegate (string x)
-                {
-                    incidentParms.customLetterLabel = x;
-                }, QuestGenUtility.MergeRules(this.customLetterLabelRules.GetValue(slate), this.customLetterLabel.GetValue(slate), "root"));
-            }
-            if (!this.customLetterText.GetValue(slate).NullOrEmpty() || this.customLetterTextRules.GetValue(slate) != null)
-            {
-                QuestGen.AddTextRequest("root", delegate (string x)
-                {
-                    incidentParms.customLetterText = x;
-                }, QuestGenUtility.MergeRules(this.customLetterTextRules.GetValue(slate), this.customLetterText.GetValue(slate), "root"));
-            }
-            IncidentWorker_RaidFortification iwrf = (IncidentWorker_RaidFortification)questPart.incident.Worker;
-            iwrf.ResolveRaidStrategy(incidentParms, PawnGroupKindDefOf.Combat);
-            iwrf.ResolveRaidArriveMode(incidentParms);
-            iwrf.ResolveRaidAgeRestriction(incidentParms);
-            if (incidentParms.raidArrivalMode.walkIn)
-            {
-                incidentParms.spawnCenter = this.walkInSpot.GetValue(slate) ?? QuestGen.slate.Get<IntVec3?>("walkInSpot", null, false) ?? IntVec3.Invalid;
-            } else {
-                incidentParms.spawnCenter = this.dropSpot.GetValue(slate) ?? QuestGen.slate.Get<IntVec3?>("dropSpot", null, false) ?? IntVec3.Invalid;
-            }
-            return incidentParms;
-        }
-        public void ImplementQuestMutators(Slate slate, Faction faction)
-        {
-            QuestPart_AllThreeFortificationMutators qpa3 = new QuestPart_AllThreeFortificationMutators();
-            bool mayhemMode = HVMP_Mod.settings.fortX;
-            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fort1, mayhemMode))
-            {
-                if (Rand.Chance(this.AW_conditionChance))
-                {
-                    qpa3.AW_condition = this.AW_conditions.RandomElement();
-                    qpa3.AW_conditionTicks = (int)(this.AW_conditionHours.RandomInRange * 2500);
-                } else {
-                    qpa3.AW_bonusPoints = (float)this.AW_bonusPoints.GetValue(slate);
-                    qpa3.AW_pawnRosterOtherwise = this.AW_pawnRosterOtherwise.RandomElement();
-                }
-                QuestGen.AddQuestDescriptionRules(new List<Rule>
-                {
-                    new Rule_String("mutator_AW_info", this.AW_description.Formatted(faction))
-                });
-            } else {
-                QuestGen.AddQuestDescriptionRules(new List<Rule>{ new Rule_String("mutator_AW_info", " ") });
-            }
-            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fort2, mayhemMode))
-            {
-                qpa3.DRTNT_hediff = this.DRTNT_hediff;
-                qpa3.DRTNT_spyChance = this.DRTNT_spyChance;
-                QuestGen.AddQuestDescriptionRules(new List<Rule>
-                    {
-                        new Rule_String("mutator_DRTNT_info", this.DRTNT_description.Formatted(faction))
-                    });
-            } else {
-                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_DRTNT_info", " ") });
-            }
-            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fort3, mayhemMode))
-            {
-                qpa3.TG_hediffChances = this.TG_hediffChances;
-                qpa3.TG_bonusPoints = (float)this.TG_bonusPoints.GetValue(slate);
-                qpa3.TG_pawnRoster = this.TG_pawnRoster.RandomElement();
-                QuestGen.AddQuestDescriptionRules(new List<Rule>
-                    {
-                        new Rule_String("mutator_TG_info", this.TG_description.Formatted(faction))
-                    });
-            } else {
-                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TG_info", " ") });
-            }
-            QuestGen.quest.AddPart(qpa3);
-        }
+        public SlateRef<double> value1;
+        public SlateRef<double> value2;
+        public double RM_factor;
         [NoTranslate]
-        public SlateRef<string> inSignal;
-        public SlateRef<IntVec3?> walkInSpot;
-        public SlateRef<IntVec3?> dropSpot;
-        public SlateRef<string> customLetterLabel;
-        public SlateRef<string> customLetterText;
-        public SlateRef<RulePack> customLetterLabelRules;
-        public SlateRef<RulePack> customLetterTextRules;
-        public SlateRef<PawnsArrivalModeDef> arrivalMode;
-        public SlateRef<PawnKindDef> raidPawnKind;
-        public SlateRef<bool?> canTimeoutOrFlee;
-        [NoTranslate]
-        public SlateRef<string> inSignalLeave;
-        [NoTranslate]
-        public SlateRef<string> tag;
-        public float AW_conditionChance;
-        public List<GameConditionDef> AW_conditions;
-        public FloatRange AW_conditionHours;
-        public List<PawnGroupMaker> AW_pawnRosterOtherwise;
-        public SlateRef<float?> AW_bonusPoints;
-        [MustTranslate]
-        public string AW_description;
-        public float DRTNT_spyChance;
-        public HediffDef DRTNT_hediff;
-        [MustTranslate]
-        public string DRTNT_description;
-        public Dictionary<HediffDef, float> TG_hediffChances;
-        public List<PawnGroupMaker> TG_pawnRoster;
-        public SlateRef<float?> TG_bonusPoints;
-        [MustTranslate]
-        public string TG_description;
+        public SlateRef<string> storeAs;
     }
-    public class QuestPart_AllThreeFortificationMutators : QuestPart
+    public class QuestNode_Fortification_UTTN : QuestNode
     {
-        public override void ExposeData()
+        protected override bool TestRunInt(Slate slate)
         {
-            base.ExposeData();
-            Scribe_Defs.Look<GameConditionDef>(ref this.AW_condition, "AW_condition");
-            Scribe_Values.Look<int>(ref this.AW_conditionTicks, "AW_conditionTicks", 0, false);
-            Scribe_Values.Look<PawnGroupMaker>(ref this.AW_pawnRosterOtherwise, "AW_pawnRosterOtherwise", null, false);
-            Scribe_Values.Look<float>(ref this.AW_bonusPoints, "AW_bonusPoints", 0f, false);
-            Scribe_Values.Look<float>(ref this.DRTNT_spyChance, "DRTNT_spyChance", 0f, false);
-            Scribe_Defs.Look<HediffDef>(ref this.DRTNT_hediff, "DRTNT_hediff");
-            Scribe_Collections.Look<HediffDef, float>(ref this.TG_hediffChances, "TG_hediffChances", LookMode.Def, LookMode.Value, ref this.tmpHediffs, ref this.tmpChances);
-            Scribe_Values.Look<PawnGroupMaker>(ref this.TG_pawnRoster, "TG_pawnRoster", null, false);
-            Scribe_Values.Look<float>(ref this.TG_bonusPoints, "TG_bonusPoints", 0f, false);
+            int largestSize = this.GetLargestSize(slate);
+            slate.Set<int>(this.storeAs.GetValue(slate), largestSize, false);
+            return largestSize >= this.failIfSmaller.GetValue(slate);
         }
-        public GameConditionDef AW_condition;
-        public int AW_conditionTicks;
-        public PawnGroupMaker AW_pawnRosterOtherwise;
-        public float AW_bonusPoints;
-        public float DRTNT_spyChance;
-        public HediffDef DRTNT_hediff;
-        public Dictionary<HediffDef, float> TG_hediffChances;
-        public PawnGroupMaker TG_pawnRoster;
-        public float TG_bonusPoints;
-        private List<HediffDef> tmpHediffs;
-        private List<float> tmpChances;
-    }
-    public class IncidentWorker_RaidFortification : IncidentWorker_RaidEnemy
-    {
-        protected override bool TryExecuteWorker(IncidentParms parms)
+        protected override void RunInt()
         {
-            List<Pawn> list;
-            if (!this.TryGenerateRaidInfo(parms, out list, false))
+            Slate slate = QuestGen.slate;
+            int largestSize = this.GetLargestSize(slate);
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fort3, HVMP_Mod.settings.fortX))
+            {
+                largestSize = (int)Math.Max(largestSize * this.UTTN_factor, largestSize + this.UTTN_minBonus);
+                slate.Set<float>(this.UTTN_scalarSaveAs.GetValue(slate), this.UTTN_scalarIfOn, false);
+            } else {
+                slate.Set<float>(this.UTTN_scalarSaveAs.GetValue(slate), this.UTTN_scalarIfOff, false);
+            }
+            slate.Set<int>(this.storeAs.GetValue(slate), largestSize, false);
+        }
+        private int GetLargestSize(Slate slate)
+        {
+            Map mapResolved = this.map.GetValue(slate) ?? slate.Get<Map>("map", null, false);
+            if (mapResolved == null)
+            {
+                return 0;
+            }
+            int value = this.max.GetValue(slate);
+            CellRect cellRect = LargestAreaFinder.FindLargestRect(mapResolved, (IntVec3 x) => this.IsClear(x, mapResolved), value);
+            return Mathf.Min(new int[] { cellRect.Width, cellRect.Height, value });
+        }
+        private bool IsClear(IntVec3 c, Map map)
+        {
+            if (!c.GetAffordances(map).Contains(TerrainAffordanceDefOf.Heavy))
             {
                 return false;
             }
-            List<Pawn> listMut = new List<Pawn>();
-            PawnGroupMakerParms pgmp = new PawnGroupMakerParms();
-            pgmp.tile = parms.target.Tile;
-            pgmp.faction = parms.faction;
-            pgmp.traderKind = parms.traderKind;
-            pgmp.generateFightersOnly = parms.generateFightersOnly;
-            pgmp.raidStrategy = parms.raidStrategy;
-            pgmp.forceOneDowned = parms.raidForceOneDowned;
-            pgmp.seed = parms.pawnGroupMakerSeed;
-            pgmp.ideo = parms.pawnIdeo;
-            pgmp.raidAgeRestriction = parms.raidAgeRestriction;
-            QuestPart_AllThreeFortificationMutators qpa3 = parms.quest.GetFirstPartOfType<QuestPart_AllThreeFortificationMutators>();
-            if (qpa3 != null)
+            List<Thing> thingList = c.GetThingList(map);
+            for (int i = 0; i < thingList.Count; i++)
             {
-                if (qpa3.AW_pawnRosterOtherwise != null)
+                if (thingList[i].def.IsBuildingArtificial && thingList[i].Faction == Faction.OfPlayer)
                 {
-                    pgmp.groupKind = qpa3.AW_pawnRosterOtherwise.kindDef;
-                    if (!pgmp.faction.def.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm) => pgm.kindDef == pgmp.groupKind))
+                    return false;
+                }
+                if (thingList[i].def.mineable)
+                {
+                    bool flag = false;
+                    for (int j = 0; j < 8; j++)
                     {
-                        pgmp.faction.def.pawnGroupMakers.Add(qpa3.AW_pawnRosterOtherwise);
-                    }
-                    float minPoints = 200f;
-                    foreach (PawnGenOption pgo in qpa3.AW_pawnRosterOtherwise.options)
-                    {
-                        float combatPower = pgo.kind.combatPower;
-                        if (combatPower > minPoints)
+                        IntVec3 intVec = c + GenAdj.AdjacentCells[j];
+                        if (intVec.InBounds(map) && intVec.GetFirstMineable(map) == null)
                         {
-                            minPoints = combatPower;
-                        }
-                    }
-                    pgmp.points = Math.Max(qpa3.AW_bonusPoints, minPoints*4f);
-                    foreach (Pawn pawn in qpa3.AW_pawnRosterOtherwise.GeneratePawns(pgmp, true))
-                    {
-                        listMut.Add(pawn);
-                    }
-                }
-                if (qpa3.TG_pawnRoster != null)
-                {
-                    pgmp.groupKind = qpa3.TG_pawnRoster.kindDef;
-                    if (!pgmp.faction.def.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm) => pgm.kindDef == pgmp.groupKind))
-                    {
-                        pgmp.faction.def.pawnGroupMakers.Add(qpa3.AW_pawnRosterOtherwise);
-                    }
-                    float minPoints = 200f;
-                    foreach (PawnGenOption pgo in qpa3.TG_pawnRoster.options)
-                    {
-                        float combatPower = pgo.kind.combatPower;
-                        if (combatPower > minPoints)
-                        {
-                            minPoints = combatPower;
-                        }
-                    }
-                    pgmp.points = Math.Max(qpa3.TG_bonusPoints, minPoints*4f);
-                    foreach (Pawn pawn in qpa3.TG_pawnRoster.GeneratePawns(pgmp, true))
-                    {
-                        listMut.Add(pawn);
-                    }
-                }
-                if (!listMut.NullOrEmpty())
-                {
-                    parms.raidArrivalMode.Worker.Arrive(listMut, parms);
-                }
-                if (qpa3.AW_condition != null)
-                {
-                    GameCondition gameCondition = GameConditionMaker.MakeCondition(qpa3.AW_condition, qpa3.AW_conditionTicks);
-                    gameCondition.forceDisplayAsDuration = true;
-                    gameCondition.Permanent = false;
-                    gameCondition.quest = parms.quest;
-                    Map map = (Map)parms.target;
-                    if (map == null)
-                    {
-                        MapParent mapParent = gameCondition.quest.TryFindNewSuitableMapParentForRetarget();
-                        map = ((mapParent != null) ? mapParent.Map : null) ?? Find.AnyPlayerHomeMap;
-                    }
-                    if (map != null)
-                    {
-                        List<Rule> listRule = new List<Rule>();
-                        Dictionary<string, string> dictionary = new Dictionary<string, string>();
-                        gameCondition.RandomizeSettings(parms.points, map,listRule,dictionary);
-                        map.gameConditionManager.RegisterCondition(gameCondition);
-                    }
-                    Find.LetterStack.ReceiveLetter(gameCondition.LabelCap, gameCondition.LetterText, gameCondition.def.letterDef, LookTargets.Invalid, null, gameCondition.quest, null, null, 0, true);
-                }
-            }
-            TaggedString taggedString = this.GetLetterLabel(parms);
-            TaggedString taggedString2 = this.GetLetterText(parms, list);
-            PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter(list, ref taggedString, ref taggedString2, this.GetRelatedPawnsInfoLetterText(parms), true, true);
-            List<TargetInfo> list2 = new List<TargetInfo>();
-            if (parms.pawnGroups != null)
-            {
-                List<List<Pawn>> list3 = IncidentParmsUtility.SplitIntoGroups(list, parms.pawnGroups);
-                if (!listMut.NullOrEmpty())
-                {
-                    list3.Add(listMut);
-                }
-                List<Pawn> list4 = list3.MaxBy((List<Pawn> x) => x.Count);
-                if (list4.Any<Pawn>())
-                {
-                    list2.Add(list4[0]);
-                }
-                for (int i = 0; i < list3.Count; i++)
-                {
-                    if (list3[i] != list4 && list3[i].Any<Pawn>())
-                    {
-                        list2.Add(list3[i][0]);
-                    }
-                }
-            } else if (list.Any<Pawn>()) {
-                foreach (Pawn pawn in list)
-                {
-                    list2.Add(pawn);
-                }
-            }
-            base.SendStandardLetter(taggedString, taggedString2, this.GetLetterDef(), parms, list2, Array.Empty<NamedArgument>());
-            if (parms.controllerPawn == null || parms.controllerPawn.Faction != Faction.OfPlayer)
-            {
-                if (!listMut.NullOrEmpty())
-                {
-                    list.AddRange(listMut);
-                }
-                parms.raidStrategy.Worker.MakeLords(parms, list);
-            }
-            LessonAutoActivator.TeachOpportunity(ConceptDefOf.EquippingWeapons, OpportunityType.Critical);
-            if (!PlayerKnowledgeDatabase.IsComplete(ConceptDefOf.ShieldBelts))
-            {
-                for (int j = 0; j < list.Count; j++)
-                {
-                    Pawn pawn2 = list[j];
-                    if (pawn2.apparel != null)
-                    {
-                        if (pawn2.apparel.WornApparel.Any((Apparel ap) => ap.def == ThingDefOf.Apparel_ShieldBelt))
-                        {
-                            LessonAutoActivator.TeachOpportunity(ConceptDefOf.ShieldBelts, OpportunityType.Critical);
+                            flag = true;
                             break;
                         }
                     }
-                }
-            }
-            if (DebugSettings.logRaidInfo)
-            {
-                Log.Message(string.Format("Raid: {0} ({1}) {2} {3} c={4} p={5}", new object[]
-                {
-                    parms.faction.Name,
-                    parms.faction.def.defName,
-                    parms.raidArrivalMode.defName,
-                    parms.raidStrategy.defName,
-                    parms.spawnCenter,
-                    parms.points
-                }));
-            }
-            return true;
-        }
-        protected override void PostProcessSpawnedPawns(IncidentParms parms, List<Pawn> pawns)
-        {
-            base.PostProcessSpawnedPawns(parms, pawns);
-            QuestPart_AllThreeFortificationMutators qpa3 = parms.quest.GetFirstPartOfType<QuestPart_AllThreeFortificationMutators>();
-            if (qpa3 != null)
-            {
-                int minSpyCount = 1;
-                foreach (Pawn p in pawns.InRandomOrder())
-                {
-                    if (qpa3.DRTNT_hediff != null && (minSpyCount > 0 || Rand.Chance(qpa3.DRTNT_spyChance)))
-                    {
-                        p.health.AddHediff(qpa3.DRTNT_hediff);
-                        minSpyCount--;
-                    }
-                    if (!qpa3.TG_hediffChances.NullOrEmpty())
-                    {
-                        foreach (KeyValuePair<HediffDef, float> kvp in qpa3.TG_hediffChances)
-                        {
-                            if (Rand.Chance(kvp.Value))
-                            {
-                                p.health.AddHediff(kvp.Key);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    public class HVMP_GameCondition_TargetedPsychicSuppression : GameCondition
-    {
-        public override string LetterText
-        {
-            get
-            {
-                return base.LetterText.Formatted(this.gender.GetLabel(false).ToLower());
-            }
-        }
-        public override string Description
-        {
-            get
-            {
-                return base.Description.Formatted(this.gender.GetLabel(false).ToLower());
-            }
-        }
-        public override void Init()
-        {
-            base.Init();
-        }
-        public override void ExposeData()
-        {
-            base.ExposeData();
-            Scribe_Values.Look<Gender>(ref this.gender, "gender", Gender.None, false);
-        }
-        public static void CheckPawn(Pawn pawn, Gender targetGender)
-        {
-            if (pawn.RaceProps.Humanlike && pawn.gender == targetGender && (pawn.Faction == null || pawn.Faction == Faction.OfPlayer || !pawn.Faction.HostileTo(Faction.OfPlayer)) && !pawn.health.hediffSet.HasHediff(HVMPDefOf.HVMP_TargetedPsychicSuppression, false))
-            {
-                pawn.health.AddHediff(HVMPDefOf.HVMP_TargetedPsychicSuppression, null, null, null);
-            }
-        }
-        public override void GameConditionTick()
-        {
-            foreach (Map map in base.AffectedMaps)
-            {
-                List<Pawn> allPawns = map.mapPawns.AllPawns;
-                for (int i = 0; i < allPawns.Count; i++)
-                {
-                    HVMP_GameCondition_TargetedPsychicSuppression.CheckPawn(allPawns[i], this.gender);
-                }
-            }
-        }
-        public override void RandomizeSettings(float points, Map map, List<Rule> outExtraDescriptionRules, Dictionary<string, string> outExtraDescriptionConstants)
-        {
-            base.RandomizeSettings(points, map, outExtraDescriptionRules, outExtraDescriptionConstants);
-            if (map.mapPawns.FreeColonistsCount > 0)
-            {
-                this.gender = map.mapPawns.FreeColonists.RandomElement<Pawn>().gender;
-            } else {
-                this.gender = Rand.Element<Gender>(Gender.Male, Gender.Female);
-            }
-            outExtraDescriptionRules.Add(new Rule_String("psychicSuppressorGender", this.gender.GetLabel(false)));
-        }
-        public Gender gender;
-    }
-    public class HediffComp_TargetedPsychicSuppression : HediffComp
-    {
-        public override bool CompShouldRemove
-        {
-            get
-            {
-                if (base.Pawn.SpawnedOrAnyParentSpawned)
-                {
-                    HVMP_GameCondition_TargetedPsychicSuppression activeCondition = base.Pawn.MapHeld.gameConditionManager.GetActiveCondition<HVMP_GameCondition_TargetedPsychicSuppression>();
-                    if (activeCondition != null && base.Pawn.gender == activeCondition.gender)
+                    if (!flag)
                     {
                         return false;
                     }
                 }
-                return true;
             }
+            return true;
         }
+        public SlateRef<Map> map;
+        [NoTranslate]
+        public SlateRef<string> storeAs;
+        public SlateRef<int> failIfSmaller;
+        public SlateRef<int> max;
+        public int UTTN_minBonus;
+        public float UTTN_factor = 1f;
+        [NoTranslate]
+        public SlateRef<string> UTTN_scalarSaveAs;
+        public float UTTN_scalarIfOff;
+        public float UTTN_scalarIfOn;
     }
     //commerce branchquest: intervention
     public class QuestNode_InterventionInner : QuestNode
@@ -6996,8 +6949,48 @@ namespace HautsPermits
             {
                 slate.Set<int>(this.tradeBlocksRemaining.GetValue(slate), wcbs.tradeBlockages, false);
                 QuestPart_TradeBlocker qptb = new QuestPart_TradeBlocker();
+                qptb.map = QuestGen.slate.Get<Map>("map", null, false);
                 qptb.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(quest.InitiateSignal);
                 quest.AddPart(qptb);
+                bool mayhemMode = HVMP_Mod.settings.mmX;
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.mm1, mayhemMode))
+                {
+                    qptb.CB_gcd = this.CB_conditionDef;
+                    qptb.CB_duration = this.CB_duration.RandomInRange;
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_CB_info", this.CB_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_CB_info", " ") });
+                }
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.mm2, mayhemMode))
+                {
+                    qptb.IIP_pointFactor = this.IIP_pointFactor;
+                    qptb.doIIP = true;
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_IIP_info", this.IIP_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_IIP_info", " ") });
+                }
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.mm3, mayhemMode))
+                {
+                    qptb.doUU = true;
+                    qptb.UU_allyMax = this.UU_goodwillPenaltyAlly.max;
+                    qptb.UU_allyMin = this.UU_goodwillPenaltyAlly.min;
+                    qptb.UU_neutMax = this.UU_goodwillPenaltyNeutral.max;
+                    qptb.UU_neutMin = this.UU_goodwillPenaltyNeutral.min;
+                    qptb.UU_hostMax = this.UU_goodwillPenaltyHostile.max;
+                    qptb.UU_hostMin = this.UU_goodwillPenaltyHostile.min;
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_UU_info", this.UU_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_UU_info", " ") });
+                }
             }
             base.RunInt();
         }
@@ -7012,6 +7005,18 @@ namespace HautsPermits
         }
         [NoTranslate]
         public SlateRef<string> tradeBlocksRemaining;
+        public GameConditionDef CB_conditionDef;
+        public IntRange CB_duration;
+        [MustTranslate]
+        public string CB_description;
+        public float IIP_pointFactor;
+        [MustTranslate]
+        public string IIP_description;
+        public IntRange UU_goodwillPenaltyAlly;
+        public IntRange UU_goodwillPenaltyNeutral;
+        public IntRange UU_goodwillPenaltyHostile;
+        [MustTranslate]
+        public string UU_description;
     }
     public class QuestPart_TradeBlocker : QuestPart
     {
@@ -7025,14 +7030,105 @@ namespace HautsPermits
                 {
                     wcbs.tradeBlockages++;
                 }
+                Faction p = Faction.OfPlayerSilentFail;
+                if (p != null)
+                {
+                    if (this.CB_gcd != null)
+                    {
+                        GameCondition gameCondition = GameConditionMaker.MakeCondition(this.CB_gcd, -1);
+                        gameCondition.Duration = this.CB_duration;
+                        Find.World.GameConditionManager.RegisterCondition(gameCondition);
+                    }
+                    if (this.doIIP)
+                    {
+                        WorldComponent_HautsFactionComps WCFC = (WorldComponent_HautsFactionComps)Find.World.GetComponent(typeof(WorldComponent_HautsFactionComps));
+                        if (WCFC != null)
+                        {
+                            float spyPoints = 0f;
+                            Map m = this.map??Find.AnyPlayerHomeMap;
+                            if (m != null)
+                            {
+                                spyPoints = StorytellerUtility.DefaultThreatPointsNow(m);
+                            }
+                            spyPoints *= this.IIP_pointFactor;
+                            foreach (Faction f in Find.FactionManager.AllFactionsListForReading)
+                            {
+                                if (f != p && f.RelationKindWith(p) == FactionRelationKind.Hostile)
+                                {
+                                    Hauts_FactionCompHolder fch = WCFC.FindCompsFor(f);
+                                    if (fch != null)
+                                    {
+                                        HautsFactionComp_SpyPoints spc = fch.TryGetComp<HautsFactionComp_SpyPoints>();
+                                        if (spc != null)
+                                        {
+                                            spc.spyPoints += (int)spyPoints;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (this.doUU)
+                    {
+                        IntRange allyRange = new IntRange(this.UU_allyMin, this.UU_allyMax);
+                        IntRange neutRange = new IntRange(this.UU_neutMin, this.UU_neutMax);
+                        IntRange hostRange = new IntRange(this.UU_hostMin, this.UU_hostMax);
+                        foreach (Faction f in Find.FactionManager.AllFactionsListForReading)
+                        {
+                            if (f != p)
+                            {
+                                EBranchQuests gq = f.def.GetModExtension<EBranchQuests>();
+                                if (gq == null)
+                                {
+                                    switch (f.RelationKindWith(p))
+                                    {
+                                        case FactionRelationKind.Ally:
+                                            f.TryAffectGoodwillWith(p, allyRange.RandomInRange, false, true);
+                                            break;
+                                        case FactionRelationKind.Hostile:
+                                            f.TryAffectGoodwillWith(p, hostRange.RandomInRange, false, true);
+                                            break;
+                                        default:
+                                            f.TryAffectGoodwillWith(p, neutRange.RandomInRange, false, true);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
+            Scribe_Defs.Look<GameConditionDef>(ref this.CB_gcd, "CB_gcd");
+            Scribe_Values.Look<int>(ref this.CB_duration, "CB_duration", 0, false);
+            Scribe_Values.Look<bool>(ref this.doIIP, "doCB", false, false);
+            Scribe_Values.Look<bool>(ref this.doUU, "doCB", false, false);
+            Scribe_Values.Look<float>(ref this.IIP_pointFactor, "IIP_pointFactor", 0.5f, false);
+            Scribe_Values.Look<int>(ref this.UU_allyMax, "UU_allyMax", 0, false);
+            Scribe_Values.Look<int>(ref this.UU_allyMin, "UU_allyMin", 0, false);
+            Scribe_Values.Look<int>(ref this.UU_neutMax, "UU_neutMax", 0, false);
+            Scribe_Values.Look<int>(ref this.UU_neutMin, "UU_neutMin", 0, false);
+            Scribe_Values.Look<int>(ref this.UU_hostMax, "UU_hostMax", 0, false);
+            Scribe_Values.Look<int>(ref this.UU_hostMin, "UU_hostMin", 0, false);
+            Scribe_References.Look<Map>(ref this.map, "map", false);
         }
         public string inSignal;
+        public GameConditionDef CB_gcd;
+        public int CB_duration;
+        public float IIP_pointFactor;
+        public bool doIIP;
+        public bool doUU;
+        public int UU_allyMax;
+        public int UU_allyMin;
+        public int UU_neutMax;
+        public int UU_neutMin;
+        public int UU_hostMax;
+        public int UU_hostMin;
+        public Map map;
     }
     //commerce branchquest: research
     public class QuestNode_GenerateChainComputer : QuestNode
@@ -7050,6 +7146,46 @@ namespace HautsPermits
             if (ccc != null)
             {
                 ccc.challengeRating = challengeRating;
+                bool mayhemMode = HVMP_Mod.settings.researchX;
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.research1, mayhemMode))
+                {
+                    ccc.needsPsyConnection = true;
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_BD_info", this.BD_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_BD_info", " ") });
+                }
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.research2, mayhemMode))
+                {
+                    CompHeatPusher_OI chpoi = thing.TryGetComp<CompHeatPusher_OI>();
+                    if (chpoi != null)
+                    {
+                        chpoi.enabled = true;
+                    }
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_OI_info", this.OI_description.Formatted())
+                    });
+                } else {
+                    CompHeatPusher_OI chpoi = thing.TryGetComp<CompHeatPusher_OI>();
+                    if (chpoi != null)
+                    {
+                        chpoi.enabled = false;
+                    }
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_OI_info", " ") });
+                }
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.research3, mayhemMode))
+                {
+                    ccc.captchaThreshold = ccc.Props.PVYAH_captchaAtPctProgress.RandomInRange*ccc.RequiredProgress;
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_PVYAH_info", this.PVYAH_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_PVYAH_info", " ") });
+                }
             }
             string srpa;
             switch (challengeRating)
@@ -7076,8 +7212,14 @@ namespace HautsPermits
         public ThingDef thingDef;
         [NoTranslate]
         public SlateRef<string> storeReqProgressAs;
+        [MustTranslate]
+        public string BD_description;
+        [MustTranslate]
+        public string OI_description;
+        [MustTranslate]
+        public string PVYAH_description;
     }
-    public class CompProperties_ChainComputer : CompProperties
+    public class CompProperties_ChainComputer : CompProperties_Hackable
     {
         public CompProperties_ChainComputer()
         {
@@ -7103,10 +7245,22 @@ namespace HautsPermits
         public float raidMTBdays;
         public int minTimeBetweenRaids;
         public float raidPointFactor;
+        public HediffDef BD_hediff;
+        public TargetingParameters BD_targetingParameters;
+        [NoTranslate]
+        public string texBD = "UI/Abilities/Focus";
+        [NoTranslate]
+        public string labelBD = "HVMP_CComp_BDLabel";
+        [NoTranslate]
+        public string tooltipBD = "HVMP_CComp_BDTooltip";
+        public FloatRange PVYAH_captchaAtPctProgress;
+        public string PVYAH_messageLabel;
+        public string PVYAH_messageText;
+        public ColorInt PVYAH_mustHackColor;
     }
-    public class CompChainComputer : ThingComp
+    public class CompChainComputer : CompHackable, ITargetingSource
     {
-        private CompProperties_ChainComputer Props
+        public new CompProperties_ChainComputer Props
         {
             get
             {
@@ -7115,9 +7269,12 @@ namespace HautsPermits
         }
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
-            foreach (Gizmo gizmo in base.CompGetGizmosExtra())
+            if (this.captchaThreshold > 0f)
             {
-                yield return gizmo;
+                foreach (Gizmo gizmo in base.CompGetGizmosExtra())
+                {
+                    yield return gizmo;
+                }
             }
             yield return new Command_Action
             {
@@ -7139,16 +7296,244 @@ namespace HautsPermits
                     this.curPowerConsumption = Math.Max(this.curPowerConsumption - this.Props.powerInterval, 0f);
                 }
             };
+            if (this.needsPsyConnection && this.linkedPawn == null)
+            {
+                yield return new Command_Action
+                {
+                    icon = this.UIIcon,
+                    defaultLabel = this.Props.labelBD.Translate(),
+                    defaultDesc = this.Props.tooltipBD.Translate(),
+                    action = delegate
+                    {
+                        Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+                    }
+                };
+            }
+            if (DebugSettings.ShowDevGizmos)
+            {
+                yield return new Command_Action
+                {
+                    defaultLabel = "DEV: Finish computation",
+                    action = delegate
+                    {
+                        this.FinishComputation();
+                    }
+                };
+            }
             foreach (Gizmo gizmo3 in QuestUtility.GetQuestRelatedGizmos(this.parent))
             {
                 yield return gizmo3;
             }
             yield break;
         }
+        public bool CanHitTarget(LocalTargetInfo target)
+        {
+            return this.ValidateTarget(target, false);
+        }
+        public bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            if (!target.IsValid || target.Pawn == null)
+            {
+                return false;
+            }
+            Pawn pawn = target.Pawn;
+            AcceptanceReport acceptanceReport = this.CanInteract(pawn, true);
+            if (!acceptanceReport.Accepted)
+            {
+                if (showMessages && !acceptanceReport.Reason.NullOrEmpty())
+                {
+                    Messages.Message("HVMP_CannotBD".Translate() + ": " + acceptanceReport.Reason.CapitalizeFirst(), pawn, MessageTypeDefOf.RejectInput, false);
+                }
+                return false;
+            }
+            return true;
+        }
+        public AcceptanceReport CanInteract(Pawn activateBy = null, bool checkOptionalItems = true)
+        {
+            if (!this.needsPsyConnection || this.linkedPawn != null)
+            {
+                return "AlreadyActive".Translate();
+            }
+            if (activateBy != null)
+            {
+                if (activateBy.Dead)
+                {
+                    return "PawnIsDead".Translate(activateBy);
+                }
+                if (activateBy.GetStatValue(StatDefOf.PsychicSensitivity) <= float.Epsilon || !activateBy.IsColonistPlayerControlled)
+                {
+                    return "Incapable".Translate().CapitalizeFirst();
+                }
+                if (activateBy.Downed)
+                {
+                    return "MessageRitualPawnDowned".Translate(activateBy);
+                }
+            }
+            return true;
+        }
+        public void DrawHighlight(LocalTargetInfo target)
+        {
+            if (target.IsValid)
+            {
+                GenDraw.DrawTargetHighlight(target);
+            }
+        }
+        public void OrderForceTarget(LocalTargetInfo target)
+        {
+            if (this.ValidateTarget(target, false) && target.Pawn != null)
+            {
+                this.PsychoConnectPawn(target.Pawn);
+            }
+        }
+        public void PsychoConnectPawn(Pawn p)
+        {
+            Hediff h = HediffMaker.MakeHediff(this.Props.BD_hediff, p);
+            p.health.AddHediff(h);
+            HediffComp_BrainDrain hcbd = h.TryGetComp<HediffComp_BrainDrain>();
+            if (hcbd != null)
+            {
+                hcbd.other = this.parent;
+            }
+            this.linkedPawn = p;
+        }
+        public void OnGUI(LocalTargetInfo target)
+        {
+            string text = "ChooseWhoShouldActivate".Translate();
+            Widgets.MouseAttachedLabel(text, 0f, 0f, null);
+            if (this.ValidateTarget(target, false) && this.Props.BD_targetingParameters.CanTarget(target.Pawn, this))
+            {
+                GenUI.DrawMouseAttachment(this.UIIcon);
+                return;
+            }
+            GenUI.DrawMouseAttachment(TexCommand.CannotShoot);
+        }
+        public bool CasterIsPawn
+        {
+            get
+            {
+                return true;
+            }
+        }
+        public bool IsMeleeAttack
+        {
+            get
+            {
+                return false;
+            }
+        }
+        public bool Targetable
+        {
+            get
+            {
+                return true;
+            }
+        }
+        public bool MultiSelect
+        {
+            get
+            {
+                return false;
+            }
+        }
+        public bool HidePawnTooltips
+        {
+            get
+            {
+                return false;
+            }
+        }
+        public Thing Caster
+        {
+            get
+            {
+                return this.parent;
+            }
+        }
+        public Pawn CasterPawn
+        {
+            get
+            {
+                return null;
+            }
+        }
+        public Verb GetVerb
+        {
+            get
+            {
+                return null;
+            }
+        }
+        public TargetingParameters targetParams
+        {
+            get
+            {
+                return this.Props.BD_targetingParameters;
+            }
+        }
+        public ITargetingSource DestinationSelector
+        {
+            get
+            {
+                return null;
+            }
+        }
         public override void PostPostMake()
         {
             base.PostPostMake();
             this.raidCD = 0;
+        }
+        public AcceptanceReport CanMakeProgress()
+        {
+            if (this.needsPsyConnection && this.linkedPawn == null)
+            {
+                return "HVMP_RequiresBD".Translate();
+            }
+            if (this.canBeHackedNow)
+            {
+                return "HVMP_RequiresPVYAH".Translate();
+            }
+            return true;
+        }
+        protected override void OnHacked(Pawn hacker = null, bool suppressMessages = false)
+        {
+            base.OnHacked(hacker, suppressMessages);
+            CompGlower cg = this.parent.GetComp<CompGlower>();
+            if (cg != null)
+            {
+                cg.GlowColor = cg.Props.glowColor;
+            }
+            this.canBeHackedNow = false;
+        }
+        protected override void OnLockedOut(Pawn hacker = null)
+        {
+            base.OnLockedOut(hacker);
+            if (this.parent.Spawned)
+            {
+                if (Rand.Chance(0.5f))
+                {
+                    this.ResetStaticData();
+                    CompChainComputer.Option option = CompChainComputer.options.RandomElement();
+                    GameCondition gameCondition = GameConditionMaker.MakeCondition(option.gameCondition, (int)(option.durationDaysRange.RandomInRange * 60000f));
+                    gameCondition.forceDisplayAsDuration = true;
+                    gameCondition.Permanent = false;
+                    List<Rule> listRule = new List<Rule>();
+                    Dictionary<string, string> dictionary = new Dictionary<string, string>();
+                    gameCondition.RandomizeSettings(1000f, this.parent.MapHeld, listRule, dictionary);
+                    this.parent.MapHeld.gameConditionManager.RegisterCondition(gameCondition);
+                    Find.LetterStack.ReceiveLetter(gameCondition.LabelCap, gameCondition.LetterText, gameCondition.def.letterDef, LookTargets.Invalid, null, gameCondition.quest, null, null, 0, true);
+                } else {
+                    MechClusterSketch mechClusterSketch = MechClusterGenerator.GenerateClusterSketch(StorytellerUtility.DefaultThreatPointsNow(this.parent.Map), this.parent.MapHeld, true, false);
+                    IntVec3 intVec = MechClusterUtility.FindClusterPosition(this.parent.MapHeld, mechClusterSketch, 100, 0.5f);
+                    if (!intVec.IsValid)
+                    {
+                        return;
+                    }
+                    IEnumerable<Thing> enumerable = from t in MechClusterUtility.SpawnCluster(intVec, this.parent.MapHeld, mechClusterSketch, true, true, null)
+                                                    where t.def != ThingDefOf.Wall && t.def != ThingDefOf.Barricade
+                                                    select t;
+                    Find.LetterStack.ReceiveLetter("LetterLabelMechClusterArrived".Translate(), "LetterMechClusterArrived".Translate(), LetterDefOf.ThreatBig, new TargetInfo(intVec, this.parent.MapHeld, false), null, null, null, null, 0, true);
+                }
+            }
         }
         public override void CompTickInterval(int delta)
         {
@@ -7159,37 +7544,65 @@ namespace HautsPermits
             }
             if (!this.parent.questTags.NullOrEmpty())
             {
-                this.curProgress += this.Props.baseProgressPerTick*(float)delta;
-                if (this.PowerTrader.PowerOn)
+                AcceptanceReport acceptanceReport = this.CanMakeProgress();
+                if (acceptanceReport)
                 {
-                    float chanceMod = this.curPowerConsumption / this.Props.maxExternalPower;
-                    this.curProgress += this.Props.bonusProgressPerInterval * (float)delta * (this.curPowerConsumption / this.Props.powerInterval);
-                    if (this.raidCD <= 0 && this.parent.IsHashIntervalTick(2500, delta) && this.parent.Spawned && Rand.Chance(chanceMod) && Rand.MTBEventOccurs(this.Props.raidMTBdays, 60000f, 2500f))
+                    this.curProgress += this.Props.baseProgressPerTick * (float)delta;
+                    if (!this.IsHacked && this.captchaThreshold > 0f && this.curProgress >= this.captchaThreshold)
                     {
-                        this.raidCD = this.Props.minTimeBetweenRaids;
-                        IncidentParms incidentParms = new IncidentParms
+                        Find.LetterStack.ReceiveLetter(this.Props.PVYAH_messageLabel, this.Props.PVYAH_messageText, LetterDefOf.NeutralEvent, this.parent);
+                        CompGlower cg = this.parent.GetComp<CompGlower>();
+                        if (cg != null)
                         {
-                            target = this.parent.Map,
-                            points = StorytellerUtility.DefaultThreatPointsNow(this.parent.Map) * this.Props.raidPointFactor,
-                            raidStrategy = RaidStrategyDefOf.ImmediateAttack
-                        };
-                        IncidentDefOf.RaidEnemy.Worker.TryExecute(incidentParms);
+                            cg.GlowColor = this.Props.PVYAH_mustHackColor;
+                        }
+                        this.canBeHackedNow = true;
+                        return;
                     }
-                }
-                if (this.raidCD > 0)
-                {
-                    this.raidCD -= delta;
-                }
-                if (this.curProgress >= this.RequiredProgress)
-                {
-                    this.curProgress = this.RequiredProgress;
-                    if (this.parent.SpawnedOrAnyParentSpawned)
+                    if (this.PowerTrader.PowerOn)
                     {
-                        GenExplosion.DoExplosion(this.parent.PositionHeld, this.parent.MapHeld, 2.4f, DamageDefOf.Smoke, this.parent, -1, -1f, this.parent.def.building.destroySound ?? null);
+                        float chanceMod = this.curPowerConsumption / this.Props.maxExternalPower;
+                        this.curProgress += this.Props.bonusProgressPerInterval * (float)delta * (this.curPowerConsumption / this.Props.powerInterval);
+                        if (this.raidCD <= 0 && this.parent.IsHashIntervalTick(2500, delta) && this.parent.Spawned && Rand.Chance(chanceMod) && Rand.MTBEventOccurs(this.Props.raidMTBdays, 60000f, 2500f))
+                        {
+                            this.raidCD = this.Props.minTimeBetweenRaids;
+                            IncidentParms incidentParms = new IncidentParms
+                            {
+                                target = this.parent.Map,
+                                points = StorytellerUtility.DefaultThreatPointsNow(this.parent.Map) * this.Props.raidPointFactor,
+                                raidStrategy = RaidStrategyDefOf.ImmediateAttack
+                            };
+                            IncidentDefOf.RaidEnemy.Worker.TryExecute(incidentParms);
+                        }
                     }
-                    QuestUtility.SendQuestTargetSignals(this.parent.questTags, "FinishedChainComp", this.Named("SUBJECT"));
+                    if (this.raidCD > 0)
+                    {
+                        this.raidCD -= delta;
+                    }
+                    if (this.curProgress >= this.RequiredProgress)
+                    {
+                        this.FinishComputation();
+                    }
+                }
+                if (this.parent.Spawned && !this.IsHacked)
+                {
+                    if (this.captchaThreshold <= 0f)
+                    {
+                        this.Hack(this.defence, null, true);
+                    } else if (!this.canBeHackedNow) {
+                        this.Hack(-this.defence, null, true);
+                    }
                 }
             }
+        }
+        public void FinishComputation()
+        {
+            this.curProgress = this.RequiredProgress;
+            if (this.parent.SpawnedOrAnyParentSpawned)
+            {
+                GenExplosion.DoExplosion(this.parent.PositionHeld, this.parent.MapHeld, 2.4f, DamageDefOf.Smoke, this.parent, -1, -1f, this.parent.def.building.destroySound ?? null);
+            }
+            QuestUtility.SendQuestTargetSignals(this.parent.questTags, "FinishedChainComp", this.Named("SUBJECT"));
         }
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
@@ -7201,7 +7614,17 @@ namespace HautsPermits
         }
         public override string CompInspectStringExtra()
         {
-            return "HVMP_CCProgress".Translate(this.curProgress.ToStringByStyle(ToStringStyle.FloatOne),this.RequiredProgress.ToStringByStyle(ToStringStyle.FloatOne));
+            string desc = "HVMP_CCProgress".Translate(this.curProgress.ToStringByStyle(ToStringStyle.FloatOne),this.RequiredProgress.ToStringByStyle(ToStringStyle.FloatOne));
+            AcceptanceReport acceptanceReport = this.CanMakeProgress();
+            if (!acceptanceReport.Reason.NullOrEmpty())
+            {
+                desc += "\n" + "HVMP_CCpaused".Translate() + ": " + acceptanceReport.Reason.CapitalizeFirst();
+            }
+            if (this.canBeHackedNow)
+            {
+                desc += "\n" + base.CompInspectStringExtra();
+            }
+            return desc;
         }
         private CompPowerTrader PowerTrader
         {
@@ -7233,12 +7656,47 @@ namespace HautsPermits
                 return this.texDown;
             }
         }
+        public Texture2D UIIcon
+        {
+            get
+            {
+                if (this.texBD == null)
+                {
+                    this.texBD = ContentFinder<Texture2D>.Get(this.Props.texBD, true);
+                }
+                return this.texBD;
+            }
+        }
         public float RequiredProgress
         {
             get
             {
                 return this.Props.maxProgress * this.challengeRating;
             }
+        }
+        public void ResetStaticData()
+        {
+            CompChainComputer.options = new List<CompChainComputer.Option>
+            {
+                new CompChainComputer.Option(GameConditionDefOf.VolcanicWinter, new FloatRange(10f, 20f)),
+                new CompChainComputer.Option(GameConditionDefOf.WeatherController, new FloatRange(5f, 20f)),
+                new CompChainComputer.Option(GameConditionDefOf.HeatWave, new FloatRange(4f, 8f)),
+                new CompChainComputer.Option(GameConditionDefOf.ColdSnap, new FloatRange(4f, 8f)),
+                new CompChainComputer.Option(GameConditionDefOf.ToxicFallout, new FloatRange(5f, 20f)),
+                new CompChainComputer.Option(GameConditionDefOf.PsychicSuppression, new FloatRange(4f, 8f)),
+                new CompChainComputer.Option(GameConditionDefOf.EMIField, new FloatRange(4f, 8f)),
+                new CompChainComputer.Option(GameConditionDefOf.PsychicDrone, new FloatRange(4f, 8f))
+            };
+        }
+        private struct Option
+        {
+            public Option(GameConditionDef gameCondition, FloatRange durationDaysRange)
+            {
+                this.gameCondition = gameCondition;
+                this.durationDaysRange = durationDaysRange;
+            }
+            public GameConditionDef gameCondition;
+            public FloatRange durationDaysRange;
         }
         public override void PostExposeData()
         {
@@ -7247,80 +7705,892 @@ namespace HautsPermits
             Scribe_Values.Look<float>(ref this.curProgress, "curProgress", 0f, false);
             Scribe_Values.Look<int>(ref this.challengeRating, "challengeRating", 0, false);
             Scribe_Values.Look<int>(ref this.raidCD, "raidCD", 180000, false);
+            Scribe_Values.Look<bool>(ref this.needsPsyConnection, "needsPsyConnection", false, false);
+            Scribe_References.Look<Pawn>(ref this.linkedPawn, "linkedPawn", false);
+            Scribe_Values.Look<float>(ref this.captchaThreshold, "captchaThreshold", -1f, false);
+            Scribe_Values.Look<bool>(ref this.canBeHackedNow, "canBeHackedNow", false, false);
         }
         private Texture2D texUp;
         private Texture2D texDown;
+        private Texture2D texBD;
         public float curPowerConsumption;
         public float curProgress;
         public int challengeRating;
         public int raidCD;
+        public bool needsPsyConnection;
+        public Pawn linkedPawn;
+        public float captchaThreshold;
+        public bool canBeHackedNow;
+        private static List<CompChainComputer.Option> options;
+    }
+    public class CompProperties_HeatPusher_OI : CompProperties_HeatPusher
+    {
+        public CompProperties_HeatPusher_OI()
+        {
+            this.compClass = typeof(CompHeatPusher_OI);
+        }
+        public float OI_heatRatePerHour;
+        public float OI_heatLimitPerHour;
+        public float OI_heatRateMax;
+        public float OI_heatLimitMax;
+        public FloatRange OI_hoursUntilHaywireRisk;
+        public float OI_haywireChancePerHour_CompBreak;
+        public float OI_haywireChancePerHour_Explosion;
+        public float OI_haywireExplosionRadius;
+        public IntRange OI_haywireExplosionDamage;
+        public float OI_haywireChancePerHour_EMI;
+        public IntRange OI_EMIduration;
+        public int OI_haywireCooldownTicks;
+        public string OI_haywireMessageLabel;
+        public string OI_haywireMessageText;
+        public EffecterDef OI_effecterDef;
+    }
+    public class CompHeatPusher_OI : CompHeatPusher
+    {
+        public new CompProperties_HeatPusher_OI Props
+        {
+            get
+            {
+                return (CompProperties_HeatPusher_OI)this.props;
+            }
+        }
+        public override void PostPostMake()
+        {
+            base.PostPostMake();
+            this.enabled = false;
+            this.OI_haywireThreshold = (int)(this.Props.OI_hoursUntilHaywireRisk.RandomInRange*2500);
+        }
+        public override bool ShouldPushHeatNow {
+            get {
+                if (this.enabled)
+                {
+                    float ambientTemperature = this.parent.AmbientTemperature;
+                    return this.enabled && ambientTemperature < this.MaxTemperature;
+                }
+                return false;
+            }
+        }
+        public float EnergyPerPush
+        {
+            get
+            {
+                return Math.Min(this.Props.OI_heatRateMax, this.Props.heatPerSecond + (this.Props.OI_heatRatePerHour * this.ticksActive / 2500));
+            }
+        }
+        public float MaxTemperature
+        {
+            get
+            {
+                return Math.Min(this.Props.OI_heatLimitMax, this.Props.heatPushMaxTemperature + (this.Props.OI_heatLimitPerHour * this.ticksActive / 2500));
+            }
+        }
+        public override void CompTick()
+        {
+            base.CompTick();
+            if (this.enabled && this.parent.SpawnedOrAnyParentSpawned)
+            {
+                this.ticksActive++;
+                if (this.OI_haywireCooldown > 0)
+                {
+                    this.OI_haywireCooldown--;
+                }
+                if (this.parent.IsHashIntervalTick(60) && this.ShouldPushHeatNow)
+                {
+                    GenTemperature.PushHeat(this.parent.PositionHeld, this.parent.MapHeld, this.EnergyPerPush);
+                }
+                if (this.OI_goneHaywire)
+                {
+                    if (this.effecter == null)
+                    {
+                        this.effecter = this.Props.OI_effecterDef.Spawn();
+                        this.effecter.Trigger(this.parent, this.parent);
+                    }
+                    if (this.effecter != null)
+                    {
+                        this.effecter.EffectTick(this.parent, this.parent);
+                    }
+                }
+                if (this.ticksActive >= this.OI_haywireThreshold)
+                {
+                    if (!this.OI_goneHaywire)
+                    {
+                        Find.LetterStack.ReceiveLetter(this.Props.OI_haywireMessageLabel, this.Props.OI_haywireMessageText, LetterDefOf.NegativeEvent, this.parent);
+                        this.OI_goneHaywire = true;
+                    }
+                    if (this.OI_goneHaywire && this.OI_haywireCooldown <= 0 && this.parent.IsHashIntervalTick(250))
+                    {
+                        if (Rand.Chance(this.Props.OI_haywireChancePerHour_CompBreak * 0.1f))
+                        {
+                            CompPower power = this.parent.TryGetComp<CompPower>();
+                            if (power != null)
+                            {
+                                PowerNet pn = power.PowerNet;
+                                if (pn != null)
+                                {
+                                    List<CompPower> connectors = pn.connectors.InRandomOrder().ToList();
+                                    if (!connectors.NullOrEmpty())
+                                    {
+                                        foreach (CompPower p2 in connectors)
+                                        {
+                                            CompBreakdownable cbd = p2.parent.GetComp<CompBreakdownable>();
+                                            if (cbd != null && !cbd.BrokenDown)
+                                            {
+                                                GenExplosion.DoExplosion(this.parent.Position, this.parent.Map, this.Props.OI_haywireExplosionRadius, DamageDefOf.Smoke, this.parent);
+                                                cbd.DoBreakdown();
+                                                this.OI_haywireCooldown = this.Props.OI_haywireCooldownTicks;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (Rand.Chance(this.Props.OI_haywireChancePerHour_Explosion * 0.1f))
+                        {
+                            GenExplosion.DoExplosion(this.parent.Position, this.parent.Map, this.Props.OI_haywireExplosionRadius, DamageDefOf.Flame, this.parent, this.Props.OI_haywireExplosionDamage.RandomInRange);
+                            Find.TickManager.slower.SignalForceNormalSpeed();
+                            this.OI_haywireCooldown = this.Props.OI_haywireCooldownTicks;
+                        }
+                        if (Rand.Chance(this.Props.OI_haywireChancePerHour_EMI * 0.1f))
+                        {
+                            GenExplosion.DoExplosion(this.parent.Position, this.parent.Map, this.Props.OI_haywireExplosionRadius, DamageDefOf.EMP, this.parent);
+                            GameCondition gameCondition = GameConditionMaker.MakeCondition(GameConditionDefOf.EMIField, this.Props.OI_EMIduration.RandomInRange);
+                            gameCondition.forceDisplayAsDuration = true;
+                            gameCondition.Permanent = false;
+                            List<Rule> listRule = new List<Rule>();
+                            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+                            this.parent.Map.gameConditionManager.RegisterCondition(gameCondition);
+                            Find.LetterStack.ReceiveLetter(gameCondition.LabelCap, gameCondition.LetterText, gameCondition.def.letterDef, LookTargets.Invalid, null, null, null, null, 0, true);
+                            this.OI_haywireCooldown = this.Props.OI_haywireCooldownTicks;
+                        }
+                    }
+                }
+            }
+        }
+        public override void CompTickRare()
+        {
+            base.CompTickRare();
+            if (this.parent.SpawnedOrAnyParentSpawned)
+            {
+                if (this.ShouldPushHeatNow)
+                {
+                    GenTemperature.PushHeat(this.parent.PositionHeld, this.parent.MapHeld, this.EnergyPerPush * 4.1666665f);
+                }
+                Log.Error("meow?");
+            }
+        }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look<bool>(ref this.OI_goneHaywire, "OI_goneHaywire", false, false);
+            Scribe_Values.Look<int>(ref this.OI_haywireThreshold, "OI_haywireThreshold", 3000000, false);
+            Scribe_Values.Look<int>(ref this.OI_haywireCooldown, "OI_haywireCooldown", 0, false);
+            Scribe_Values.Look<int>(ref this.ticksActive, "ticksActive", 0, false);
+        }
+        public bool OI_goneHaywire;
+        public int OI_haywireThreshold;
+        public int OI_haywireCooldown;
+        public int ticksActive;
+        public Effecter effecter;
+    }
+    public class HediffCompProperties_BrainDrain : HediffCompProperties_Link
+    {
+        public HediffCompProperties_BrainDrain()
+        {
+            this.compClass = typeof(HediffComp_BrainDrain);
+        }
+        public FloatRange BD_progressLossOnDeath;
+    }
+    public class HediffComp_BrainDrain : HediffComp_Link
+    {
+        public new HediffCompProperties_BrainDrain Props
+        {
+            get
+            {
+                return (HediffCompProperties_BrainDrain)this.props;
+            }
+        }
+        public override void CompPostPostRemoved()
+        {
+            if (this.other != null)
+            {
+                CompChainComputer ccc = this.other.TryGetComp<CompChainComputer>();
+                if (ccc != null)
+                {
+                    ccc.linkedPawn = null;
+                    if (ccc.curProgress <= ccc.RequiredProgress)
+                    {
+                        ccc.curProgress -= this.Props.BD_progressLossOnDeath.RandomInRange;
+                        if (ccc.curProgress <= 0f)
+                        {
+                            ccc.curProgress = 0f;
+                        }
+                    }
+                }
+            }
+            base.CompPostPostRemoved();
+        }
     }
     //commerce branchquest: transportation
-    public class QuestNode_GetAnySettlement : QuestNode
+    public class QuestNode_NRNSN : QuestNode
     {
-        private Settlement RandomNearbyTradeableSettlement(PlanetTile originTile, Slate slate)
+        public bool NRNSN_Enabled()
         {
-            return Find.WorldObjects.SettlementBases.RandomElementWithFallback(null);
+            return HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.transport2, HVMP_Mod.settings.transportX);
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            bool goNRNSN = this.NRNSN_Enabled();
+            this.SetVars(slate, goNRNSN);
+            if (goNRNSN)
+            {
+                this.SetVars2(slate);
+            } else {
+                slate.Set<object>(this.NRNSN_timeName.GetValue(slate), 0, false);
+            }
+            return true;
         }
         protected override void RunInt()
         {
             Slate slate = QuestGen.slate;
-            Map map = QuestGen.slate.Get<Map>("map", null, false);
-            Settlement settlement = this.RandomNearbyTradeableSettlement(map.Tile, slate);
-            QuestGen.slate.Set<Settlement>(this.storeAs.GetValue(slate), settlement, false);
-            if (!string.IsNullOrEmpty(this.storeFactionAs.GetValue(slate)))
+            bool goNRNSN = this.NRNSN_Enabled();
+            this.SetVars(slate, goNRNSN);
+            if (goNRNSN)
             {
-                QuestGen.slate.Set<Faction>(this.storeFactionAs.GetValue(slate), settlement.Faction, false);
+                this.SetVars2(slate);
+            } else {
+                slate.Set<object>(this.NRNSN_timeName.GetValue(slate), 0, false);
             }
-            if (!this.storeFactionLeaderAs.GetValue(slate).NullOrEmpty())
+        }
+        private void SetVars(Slate slate, bool goNRNSN)
+        {
+            object obj = (goNRNSN ? valueIfNRNSN : value).GetValue(slate);
+            if (this.convertTo.GetValue(slate) != null)
             {
-                QuestGen.slate.Set<Pawn>(this.storeFactionLeaderAs.GetValue(slate), settlement.Faction.leader, false);
+                obj = ConvertHelper.Convert(obj, this.convertTo.GetValue(slate));
             }
-            if (!this.storeCanCaravanAs.GetValue(slate).NullOrEmpty())
+            slate.Set<object>(this.name.GetValue(slate), obj, false);
+        }
+        private void SetVars2(Slate slate)
+        {
+            object obj = this.NRNSN_timeValue.GetValue(slate);
+            if (this.convertTo.GetValue(slate) != null)
             {
-                bool flag = settlement.Tile.Valid && map.Tile.Valid && settlement.Tile.Layer == map.Tile.Layer && settlement.Tile.LayerDef.SurfaceTiles;
-                QuestGen.slate.Set<bool>(this.storeCanCaravanAs.GetValue(slate), flag, false);
+                obj = ConvertHelper.Convert(obj, this.convertTo.GetValue(slate));
+            }
+            slate.Set<object>(this.NRNSN_timeName.GetValue(slate), obj, false);
+        }
+        [NoTranslate]
+        public SlateRef<string> name;
+        public SlateRef<object> value;
+        public SlateRef<object> valueIfNRNSN;
+        public SlateRef<Type> convertTo;
+        [NoTranslate]
+        public SlateRef<string> NRNSN_timeName;
+        public SlateRef<object> NRNSN_timeValue;
+    }
+    public class QuestNode_PUKIS_TGTL : QuestNode
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            WorldObject worldObject = WorldObjectMaker.MakeWorldObject(this.def.GetValue(slate));
+            worldObject.Tile = this.tile.GetValue(slate);
+            if (this.faction.GetValue(slate) != null)
+            {
+                worldObject.SetFaction(this.faction.GetValue(slate));
+            }
+            if (worldObject is WorldObject_DeadDrop wodd)
+            {
+                bool mayhemMode = HVMP_Mod.settings.transportX;
+                wodd.TryGetComponent<DeadDropComp>(out DeadDropComp ddc);
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.transport1, mayhemMode))
+                {
+                    Map map = QuestGen.slate.Get<Map>("map", null, false) ?? Find.AnyPlayerHomeMap;
+                    wodd.PUKIS_points = (int)(this.PUKIS_pointsFactor * StorytellerUtility.DefaultThreatPointsNow(map));
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_PUKIS_info", this.PUKIS_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_PUKIS_info", " ") });
+                }
+                if (ddc != null)
+                {
+                    QuestPart_SetupDeadDrop questPart_InitiateTradeRequest = new QuestPart_SetupDeadDrop
+                    {
+                        settlement = wodd,
+                        requestedThingDef = this.requestedThingDef.GetValue(slate),
+                        requestedCount = this.requestedThingCount.GetValue(slate),
+                        requestDuration = this.duration.GetValue(slate),
+                        keepAfterQuestEnds = false,
+                        inSignal = slate.Get<string>("inSignal", null, false)
+                    };
+                    QuestGen.quest.AddPart(questPart_InitiateTradeRequest);
+                    if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.transport3, mayhemMode))
+                    {
+                        if (ddc != null)
+                        {
+                            ddc.requestedMinQuality = this.TGTL_qualityChances.RandomElementByWeight((KeyValuePair<QualityCategory, float> kvp) => kvp.Value).Key;
+                            if (ddc.requestedMinQuality < QualityCategory.Normal)
+                            {
+                                ddc.requestedMinQuality = QualityCategory.Normal;
+                            }
+                        }
+                    }
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("requestedQualityLabel", ddc.requestedMinQuality.GetLabel())
+                    });
+                }
+            }
+            if (this.storeAs.GetValue(slate) != null)
+            {
+                QuestGen.slate.Set<WorldObject>(this.storeAs.GetValue(slate), worldObject, false);
             }
         }
         protected override bool TestRunInt(Slate slate)
         {
-            Map map = slate.Get<Map>("map", null, false);
-            if (map == null)
+            return this.requestedThingCount.GetValue(slate) > 0 && this.requestedThingDef.GetValue(slate) != null;
+        }
+        public SlateRef<WorldObjectDef> def;
+        public SlateRef<PlanetTile> tile;
+        public SlateRef<Faction> faction;
+        [NoTranslate]
+        public SlateRef<string> storeAs;
+        public SlateRef<ThingDef> requestedThingDef;
+        public SlateRef<int> requestedThingCount;
+        public SlateRef<int> duration;
+        public float PUKIS_pointsFactor;
+        [MustTranslate]
+        public string PUKIS_description;
+        public Dictionary<QualityCategory, float> TGTL_qualityChances;
+    }
+    public class QuestPart_SetupDeadDrop : QuestPart
+    {
+        public override IEnumerable<GlobalTargetInfo> QuestLookTargets
+        {
+            get
+            {
+                foreach (GlobalTargetInfo globalTargetInfo in base.QuestLookTargets)
+                {
+                    yield return globalTargetInfo;
+                }
+                if (this.settlement != null)
+                {
+                    yield return this.settlement;
+                }
+                yield break;
+            }
+        }
+        public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
+        {
+            get
+            {
+                foreach (Dialog_InfoCard.Hyperlink hyperlink in base.Hyperlinks)
+                {
+                    yield return hyperlink;
+                }
+                yield return new Dialog_InfoCard.Hyperlink(this.requestedThingDef, -1);
+                yield break;
+            }
+        }
+        public override void Notify_QuestSignalReceived(Signal signal)
+        {
+            base.Notify_QuestSignalReceived(signal);
+            if (signal.tag == this.inSignal)
+            {
+                DeadDropComp component = this.settlement.GetComponent<DeadDropComp>();
+                if (component != null)
+                {
+                    component.requestThingDef = this.requestedThingDef;
+                    component.requestCount = this.requestedCount;
+                    component.expiration = Find.TickManager.TicksGame + this.requestDuration;
+                }
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
+            Scribe_References.Look<WorldObject_DeadDrop>(ref this.settlement, "settlement", false);
+            Scribe_Defs.Look<ThingDef>(ref this.requestedThingDef, "requestedThingDef");
+            Scribe_Values.Look<int>(ref this.requestedCount, "requestedCount", 0, false);
+            Scribe_Values.Look<int>(ref this.requestDuration, "requestDuration", 0, false);
+            Scribe_Values.Look<bool>(ref this.keepAfterQuestEnds, "keepAfterQuestEnds", false, false);
+        }
+        public string inSignal;
+        public WorldObject_DeadDrop settlement;
+        public ThingDef requestedThingDef;
+        public int requestedCount;
+        public int requestDuration;
+        public bool keepAfterQuestEnds;
+    }
+    public class WorldObject_DeadDrop : WorldObject
+    {
+        public override Material Material
+        {
+            get
+            {
+                if (this.cachedMat == null)
+                {
+                    Color color;
+                    if (base.Faction != null)
+                    {
+                        color = base.Faction.Color;
+                    } else {
+                        color = Color.white;
+                    }
+                    this.cachedMat = MaterialPool.MatFrom(this.def.texture, ShaderDatabase.WorldOverlayTransparentLit, color, WorldMaterials.WorldObjectRenderQueue);
+                }
+                return this.cachedMat;
+            }
+        }
+        public void Notify_CaravanArrived(Caravan caravan)
+        {
+            if (this.PUKIS_points > 0)
+            {
+                this.Ambush(caravan);
+            }
+        }
+        protected override void TickInterval(int delta)
+        {
+            base.TickInterval(delta);
+            if (this.PUKIS_points > 0 && this.IsHashIntervalTick(250, delta) && Rand.Chance(0.05f))
+            {
+                foreach (Caravan c in Find.WorldObjects.Caravans.InRandomOrder())
+                {
+                    Log.Error("c");
+                    if (c.Tile != null && this.Tile != null && Find.WorldGrid.TraversalDistanceBetween(c.Tile, this.Tile, true) <= 6f)
+                    {
+                        this.Ambush(c);
+                    }
+                }
+            }
+        }
+        public void Ambush(Caravan target)
+        {
+            HVMP_Utility.DoAmbush(target, this.PUKIS_points);
+            this.PUKIS_points = -1;
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<int>(ref this.PUKIS_points, "PUKIS_points", -1, false);
+        }
+        private Material cachedMat;
+        public int PUKIS_points;
+    }
+    public class WorldObjectCompProperties_DeadDrop : WorldObjectCompProperties
+    {
+        public WorldObjectCompProperties_DeadDrop()
+        {
+            this.compClass = typeof(DeadDropComp);
+        }
+    }
+    [StaticConstructorOnStartup]
+    public class DeadDropComp : WorldObjectComp
+    {
+        public bool ActiveRequest
+        {
+            get
+            {
+                return this.expiration > Find.TickManager.TicksGame;
+            }
+        }
+        public override string CompInspectStringExtra()
+        {
+            if (this.ActiveRequest)
+            {
+                return "CaravanRequestInfo".Translate(this.RequestedThingLabel(this.requestThingDef, this.requestCount).CapitalizeFirst(), (this.expiration - Find.TickManager.TicksGame).ToStringTicksToDays("F1"), (this.requestThingDef.GetStatValueAbstract(StatDefOf.MarketValue, null) * (float)this.requestCount).ToStringMoney(null));
+            }
+            return null;
+        }
+        public string RequestedThingLabel(ThingDef def, int count)
+        {
+            string text = GenLabel.ThingLabel(def, null, count);
+            if (def.HasComp(typeof(CompQuality)))
+            {
+                text += " (" + "HVMP_QualOrBetter".Translate(this.requestedMinQuality.GetLabel().CapitalizeFirst()) + ")";
+            }
+            if (def.IsApparel)
+            {
+                text += " (" + "NotTainted".Translate() + ")";
+            }
+            return text;
+        }
+        public override IEnumerable<Gizmo> GetCaravanGizmos(Caravan caravan)
+        {
+            if (this.ActiveRequest && this.DDVisitedNow(caravan) == this.parent)
+            {
+                yield return this.FulfillRequestCommand(caravan);
+            }
+            yield break;
+        }
+        public WorldObject_DeadDrop DDVisitedNow(Caravan caravan)
+        {
+            if (!caravan.Spawned || caravan.pather.Moving)
+            {
+                return null;
+            }
+            List<WorldObject> sites = Find.WorldObjects.ObjectsAt(caravan.Tile).ToList();
+            foreach (WorldObject wo in sites)
+            {
+                if (wo == this.parent && this.parent is WorldObject_DeadDrop wodd)
+                {
+                    return wodd;
+                }
+            }
+            return null;
+        }
+        private Command FulfillRequestCommand(Caravan caravan)
+        {
+            Command_Action command_Action = new Command_Action();
+            command_Action.defaultLabel = "CommandFulfillTradeOffer".Translate();
+            command_Action.defaultDesc = "CommandFulfillTradeOfferDesc".Translate();
+            command_Action.icon = DeadDropComp.TradeCommandTex;
+            command_Action.action = delegate
+            {
+                if (!this.ActiveRequest)
+                {
+                    Log.Error("Attempted to fulfill an unavailable request");
+                    return;
+                }
+                if (!CaravanInventoryUtility.HasThings(caravan, this.requestThingDef, this.requestCount, new Func<Thing, bool>(this.PlayerCanGive)))
+                {
+                    Messages.Message("CommandFulfillTradeOfferFailInsufficient".Translate(this.RequestedThingLabel(this.requestThingDef, this.requestCount)), MessageTypeDefOf.RejectInput, false);
+                    return;
+                }
+                WindowStack windowStack = Find.WindowStack;
+                TaggedString taggedString = "CommandFulfillTradeOfferConfirm".Translate(GenLabel.ThingLabel(this.requestThingDef, null, this.requestCount));
+                Action action = delegate
+                {
+                    this.Fulfill(caravan);
+                };
+                windowStack.Add(Dialog_MessageBox.CreateConfirmation(taggedString, action, false, null, WindowLayer.Dialog));
+            };
+            if (!CaravanInventoryUtility.HasThings(caravan, this.requestThingDef, this.requestCount, new Func<Thing, bool>(this.PlayerCanGive)))
+            {
+                command_Action.Disable("CommandFulfillTradeOfferFailInsufficient".Translate(this.RequestedThingLabel(this.requestThingDef, this.requestCount)));
+            }
+            return command_Action;
+        }
+        private void Fulfill(Caravan caravan)
+        {
+            int remaining = this.requestCount;
+            List<Thing> list = CaravanInventoryUtility.TakeThings(caravan, delegate (Thing thing)
+            {
+                if (this.requestThingDef != thing.def)
+                {
+                    return 0;
+                }
+                if (!this.PlayerCanGive(thing))
+                {
+                    return 0;
+                }
+                int num = Mathf.Min(remaining, thing.stackCount);
+                remaining -= num;
+                return num;
+            });
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i].Destroy(DestroyMode.Vanish);
+            }
+            QuestUtility.SendQuestTargetSignals(this.parent.questTags, "TradeRequestFulfilled", this.parent.Named("SUBJECT"), caravan.Named("CARAVAN"));
+            if (this.parent is WorldObject_DeadDrop wodd)
+            {
+                wodd.Notify_CaravanArrived(caravan);
+            }
+            this.parent.Destroy();
+        }
+        private bool PlayerCanGive(Thing thing)
+        {
+            if (thing.GetRotStage() != RotStage.Fresh)
             {
                 return false;
             }
-            Settlement settlement = this.RandomNearbyTradeableSettlement(map.Tile, slate);
-            if (settlement != null)
+            Apparel apparel = thing as Apparel;
+            if (apparel != null && apparel.WornByCorpse)
             {
-                slate.Set<Settlement>(this.storeAs.GetValue(slate), settlement, false);
-                if (!string.IsNullOrEmpty(this.storeFactionAs.GetValue(slate)))
+                return false;
+            }
+            CompQuality compQuality = thing.TryGetComp<CompQuality>();
+            return compQuality == null || compQuality.Quality >= this.requestedMinQuality;
+        }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Defs.Look<ThingDef>(ref this.requestThingDef, "requestThingDef");
+            Scribe_Values.Look<int>(ref this.requestCount, "requestCount", 0, false);
+            Scribe_Values.Look<QualityCategory>(ref this.requestedMinQuality, "requestedMinQuality", QualityCategory.Normal, false);
+            Scribe_Values.Look<int>(ref this.expiration, "expiration", 0, false);
+            BackCompatibility.PostExposeData(this);
+        }
+        public ThingDef requestThingDef;
+        public QualityCategory requestedMinQuality = QualityCategory.Normal;
+        public int requestCount;
+        public int expiration = -1;
+        public string outSignalFulfilled;
+        private static readonly Texture2D TradeCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/FulfillTradeRequest", true);
+    }
+    //pax branchquest: pax caelum
+    public class QuestNode_AllThreeCaelumMutators : QuestNode_GameCondition
+    {
+        protected override void RunInt()
+        {
+            base.RunInt();
+            bool mayhemMode = HVMP_Mod.settings.caelumX;
+            Quest quest = QuestGen.quest;
+            Slate slate = QuestGen.slate;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.caelum1, mayhemMode))
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
                 {
-                    slate.Set<Faction>(this.storeFactionAs.GetValue(slate), settlement.Faction, false);
-                }
-                if (!string.IsNullOrEmpty(this.storeFactionLeaderAs.GetValue(slate)))
+                    new Rule_String("mutator_MK_info", this.MK_description.Formatted())
+                });
+                float num = slate.Get<float>("points", 0f, false);
+                GameCondition gameCondition2 = GameConditionMaker.MakeCondition(this.MK_condition, this.duration.GetValue(slate));
+                QuestPart_GameCondition questPart_GameCondition2 = new QuestPart_GameCondition();
+                questPart_GameCondition2.gameCondition = gameCondition2;
+                List<Rule> list2 = new List<Rule>();
+                Dictionary<string, string> dictionary2 = new Dictionary<string, string>();
+                if (this.targetWorld.GetValue(slate))
                 {
-                    slate.Set<Pawn>(this.storeFactionLeaderAs.GetValue(slate), settlement.Faction.leader, false);
+                    questPart_GameCondition2.targetWorld = true;
+                    gameCondition2.RandomizeSettings(num, null, list2, dictionary2);
+                } else {
+                    Map map = HVMP_Utility.GetMap_QuestNodeGameCondition(slate);
+                    questPart_GameCondition2.mapParent = map.Parent;
+                    gameCondition2.RandomizeSettings(num, map, list2, dictionary2);
                 }
-                return true;
+                questPart_GameCondition2.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? slate.Get<string>("inSignal", null, false);
+                questPart_GameCondition2.sendStandardLetter = false;
+                quest.AddPart(questPart_GameCondition2);
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_MK_info", " ") });
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.caelum2, mayhemMode))
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_SO_info", this.SO_description.Formatted())
+                });
+                QuestPart_SensoryOverload qpSO = new QuestPart_SensoryOverload();
+                qpSO.SO_hediff = this.SO_hediff;
+                qpSO.SO_stunDuration = this.SO_stunDuration;
+                qpSO.map = slate.Get<Map>("map", null, false);
+                qpSO.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(quest.InitiateSignal);
+                quest.AddPart(qpSO);
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_SO_info", " ") });
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.caelum3, mayhemMode))
+            {
+                float num = QuestGen.slate.Get<float>("points", 0f, false);
+                GameCondition gameCondition = GameConditionMaker.MakeCondition(this.TE_gameCondition.GetValue(slate), (int)(this.TE_duration.GetValue(slate)*this.TE_durationPct.RandomInRange));
+                QuestPart_GameCondition questPart_GameCondition = new QuestPart_GameCondition
+                {
+                    gameCondition = gameCondition,
+                    sendStandardLetter = false
+                };
+                List<Rule> list = new List<Rule>();
+                Dictionary<string, string> dictionary = new Dictionary<string, string>();
+                if (this.targetWorld.GetValue(slate))
+                {
+                    questPart_GameCondition.targetWorld = true;
+                    gameCondition.RandomizeSettings(num, null, list, dictionary);
+                } else {
+                    Map map = HVMP_Utility.GetMap_QuestNodeGameCondition(QuestGen.slate);
+                    questPart_GameCondition.mapParent = map.Parent;
+                    gameCondition.RandomizeSettings(num, map, list, dictionary);
+                }
+                questPart_GameCondition.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
+                QuestGen.quest.AddPart(questPart_GameCondition);
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_TE_info", this.TE_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TE_info", " ") });
+            }
+        }
+        [MustTranslate]
+        public string TE_description;
+        public FloatRange TE_durationPct;
+        public SlateRef<GameConditionDef> TE_gameCondition;
+        public SlateRef<int> TE_duration;
+        public GameConditionDef MK_condition;
+        [MustTranslate]
+        public string MK_description;
+        public HediffDef SO_hediff;
+        public int SO_stunDuration;
+        [MustTranslate]
+        public string SO_description;
+    }
+    public class GameCondition_MoodKiller : GameCondition
+    {
+
+    }
+    public class ThoughtWorker_MoodKiller : ThoughtWorker
+    {
+        protected override ThoughtState CurrentStateInternal(Pawn p)
+        {
+            Map mapHeld = p.MapHeld;
+            if (mapHeld != null)
+            {
+                GameCondition_MoodKiller mk = mapHeld.gameConditionManager.GetActiveCondition<GameCondition_MoodKiller>();
+                if (mk != null)
+                {
+                    return true;
+                }
             }
             return false;
         }
-        public SlateRef<bool> allowActiveTradeRequest = true;
-        public SlateRef<bool> canBeSpace;
-        public SlateRef<bool> requireSameOrAdjacentLayer;
+    }
+    public class QuestPart_SensoryOverload : QuestPart
+    {
+        public override void Notify_QuestSignalReceived(Signal signal)
+        {
+            if (signal.tag == this.inSignal)
+            {
+                if (this.SO_hediff != null)
+                {
+                    SoundDefOf.ShipTakeoff.PlayOneShotOnCamera(null);
+                    foreach (Pawn p in this.map.mapPawns.AllPawnsSpawned)
+                    {
+                        if (p.RaceProps.IsFlesh && (!ModsConfig.AnomalyActive || !(p.RaceProps.IsAnomalyEntity && !p.IsMutant)))
+                        {
+                            p.health.AddHediff(this.SO_hediff);
+                            p.stances.stunner.StunFor(this.SO_stunDuration,null);
+                        }
+                    }
+                }
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Defs.Look<HediffDef>(ref this.SO_hediff, "SO_hediff");
+            Scribe_Values.Look<int>(ref this.SO_stunDuration, "SO_stunDuration", 180, false);
+            Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
+            Scribe_References.Look<Map>(ref this.map, "map", false);
+        }
+        public HediffDef SO_hediff;
+        public int SO_stunDuration;
+        public string inSignal;
+        public Map map;
+    }
+    //pax branchquest: pax machina
+    public class QuestNode_RS_THTF : QuestNode
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            QuestPart_MechCluster questPart_MechCluster = new QuestPart_MechCluster();
+            questPart_MechCluster.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
+            questPart_MechCluster.tag = QuestGenUtility.HardcodedTargetQuestTagWithQuestID(this.tag.GetValue(slate));
+            questPart_MechCluster.mapParent = slate.Get<Map>("map", null, false).Parent;
+            questPart_MechCluster.sketch = this.GenerateSketch(slate);
+            questPart_MechCluster.dropSpot = this.dropSpot.GetValue(slate) ?? IntVec3.Invalid;
+            QuestGen.quest.AddPart(questPart_MechCluster);
+            string text = "";
+            if (questPart_MechCluster.sketch.pawns != null)
+            {
+                text += PawnUtility.PawnKindsToLineList(questPart_MechCluster.sketch.pawns.Select((MechClusterSketch.Mech m) => m.kindDef), "  - ", ColoredText.ThreatColor);
+            }
+            string[] array = (from t in questPart_MechCluster.sketch.buildingsSketch.Things
+                              where GenHostility.IsDefMechClusterThreat(t.def)
+                              group t by t.def.label).Select(delegate (IGrouping<string, SketchThing> grp)
+                              {
+                                  int num = grp.Count<SketchThing>();
+                                  return num.ToString() + " " + ((num > 1) ? Find.ActiveLanguageWorker.Pluralize(grp.Key, num) : grp.Key);
+                              }).ToArray<string>();
+            if (array.Any<string>())
+            {
+                if (text != "")
+                {
+                    text += "\n";
+                }
+                text += array.ToLineList(ColoredText.ThreatColor, "  - ");
+            }
+            if (text != "")
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("allThreats", text)
+                });
+            }
+        }
+        public MechClusterSketch GenerateSketch(Slate slate)
+        {
+            float points = this.points.GetValue(slate) ?? slate.Get<float>("points", 0f, false);
+            bool mayhemMode = HVMP_Mod.settings.machinaX;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.machina3, mayhemMode))
+            {
+                points *= this.THTF_multi;
+            }
+            bool shouldBeAsleep = true;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.machina2, mayhemMode))
+            {
+                shouldBeAsleep = false;
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_RS_info", this.RS_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_RS_info", this.nonRS_description.Formatted()) });
+            }
+            return MechClusterGenerator.GenerateClusterSketch(points, slate.Get<Map>("map", null, false), shouldBeAsleep, false);
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return Find.Storyteller.difficulty.allowViolentQuests && Faction.OfMechanoids != null && slate.Get<Map>("map", null, false) != null;
+        }
+
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+        [NoTranslate]
+        public SlateRef<string> tag;
+        public SlateRef<float?> points;
+        public SlateRef<IntVec3?> dropSpot;
+        [MustTranslate]
+        public string RS_description;
+        [MustTranslate]
+        public string nonRS_description;
+        public float THTF_multi;
+    }
+    public class QuestNode_MachinaOTC : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return Faction.OfMechanoids != null;
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.machina1,HVMP_Mod.settings.machinaX))
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_OTC_info", this.OTC_description.Formatted())
+                });
+                if (this.node != null)
+                {
+                    slate.Set<Faction>(this.storeAs.GetValue(slate), Faction.OfMechanoids, false);
+                    this.node.Run();
+                }
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_OTC_info", " ") });
+            }
+        }
         [NoTranslate]
         public SlateRef<string> storeAs;
-        [NoTranslate]
-        public SlateRef<string> storeFactionAs;
-        [NoTranslate]
-        public SlateRef<string> storeFactionLeaderAs;
-        [NoTranslate]
-        public SlateRef<string> storeCanCaravanAs;
-        public SlateRef<List<PlanetLayerDef>> layerWhitelist;
-        public SlateRef<List<PlanetLayerDef>> layerBlacklist;
+        public QuestNode node;
+        [MustTranslate]
+        public string OTC_description;
     }
-    //pax branchquest: pax offering
-    public class QuestNode_PaxOffering : QuestNode
+    //pax branchquest: pax mundi
+    public class QuestNode_PaxMundi : QuestNode
     {
         protected override void RunInt()
         {
@@ -7376,7 +8646,7 @@ namespace HautsPermits
         }
         private bool IsGoodFaction(Faction faction)
         {
-            if (faction.def.HasModExtension<EBranchQuests>() || faction.IsPlayer || !faction.HasGoodwill || faction.def.permanentEnemy || faction.GoodwillWith(Faction.OfPlayer) >= 100)
+            if (faction.def.HasModExtension<EBranchQuests>() || faction.IsPlayer || !faction.HasGoodwill || faction.def.PermanentlyHostileTo(Faction.OfPlayer.def) || faction.GoodwillWith(Faction.OfPlayer) >= 100)
             {
                 return false;
             }
@@ -7392,27 +8662,55 @@ namespace HautsPermits
         public QuestNode noGoodwillableFactionsNode;
         public QuestNode elseNode;
     }
-    public class QuestNode_PaxOfferingTracker : QuestNode
+    public class QuestNode_PaxMundiTracker : QuestNode
     {
         protected override void RunInt()
         {
             Slate slate = QuestGen.slate;
             Quest quest = QuestGen.quest;
-            QuestPart_PaxOffering qppo;
-            if (!quest.TryGetFirstPartOfType<QuestPart_PaxOffering>(out qppo))
+            QuestPart_PaxMundi qppm;
+            if (!quest.TryGetFirstPartOfType<QuestPart_PaxMundi>(out qppm))
             {
-                qppo = quest.AddPart<QuestPart_PaxOffering>();
-                qppo.goodwillChangesInt = 0;
-                qppo.denominator = slate.Get<int>("goodwillAmount", 0, false);
-                qppo.inSignalEnable = slate.Get<string>("inSignal", null, false);
+                qppm = quest.AddPart<QuestPart_PaxMundi>();
+                qppm.goodwillChangesInt = 0;
+                qppm.denominator = slate.Get<int>("goodwillAmount", 0, false);
+                qppm.inSignalEnable = slate.Get<string>("inSignal", null, false);
+            }
+            bool mayhemMode = HVMP_Mod.settings.mundiX;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.mundi1, mayhemMode))
+            {
+                qppm.MTEOP_pointFactor = this.MTEOP_pointFactor;
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_MTEOP_info", this.MTEOP_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_MTEOP_info", " ") });
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.mundi3, mayhemMode))
+            {
+                qppm.TWOS_on = true;
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_TWOS_info", this.TWOS_description.Formatted())
+                    });
+            }
+            else
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TWOS_info", " ") });
             }
         }
         protected override bool TestRunInt(Slate slate)
         {
             return true;
         }
+        public float MTEOP_pointFactor;
+        [MustTranslate]
+        public string MTEOP_description;
+        [MustTranslate]
+        public string TWOS_description;
     }
-    public class QuestPart_PaxOffering : QuestPartActivable
+    public class QuestPart_PaxMundi : QuestPartActivable
     {
         public override string ExpiryInfoPart
         {
@@ -7424,6 +8722,34 @@ namespace HautsPermits
         public override void QuestPartTick()
         {
             base.QuestPartTick();
+            if (this.MTEOP_pointFactor > 0f)
+            {
+                Faction p = Faction.OfPlayerSilentFail;
+                WorldComponent_HautsFactionComps WCFC = (WorldComponent_HautsFactionComps)Find.World.GetComponent(typeof(WorldComponent_HautsFactionComps));
+                if (WCFC != null && p != null)
+                {
+                    float spyPoints = 0f;
+                    Map m = Find.AnyPlayerHomeMap;
+                    spyPoints = m != null ? StorytellerUtility.DefaultThreatPointsNow(m) : StorytellerUtility.DefaultThreatPointsNow(Find.World);
+                    spyPoints *= this.MTEOP_pointFactor;
+                    foreach (Faction f in Find.FactionManager.AllFactionsListForReading)
+                    {
+                        if (f != p && f.def.PermanentlyHostileTo(p.def))
+                        {
+                            Hauts_FactionCompHolder fch = WCFC.FindCompsFor(f);
+                            if (fch != null)
+                            {
+                                HautsFactionComp_SpyPoints spc = fch.TryGetComp<HautsFactionComp_SpyPoints>();
+                                if (spc != null)
+                                {
+                                    spc.spyPoints += (int)spyPoints;
+                                }
+                            }
+                        }
+                    }
+                }
+                this.MTEOP_pointFactor = 0f;
+            }
             if (this.goodwillChangesInt >= this.denominator)
             {
                 base.Complete();
@@ -7431,9 +8757,9 @@ namespace HautsPermits
             if (this.quest.State == QuestState.Ongoing)
             {
                 WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
-                if (wcbs != null && wcbs.qppos != null && !wcbs.qppos.Contains(this))
+                if (wcbs != null && wcbs.qppms != null && !wcbs.qppms.Contains(this))
                 {
-                    wcbs.qppos.Add(this);
+                    wcbs.qppms.Add(this);
                 }
             }
         }
@@ -7459,11 +8785,224 @@ namespace HautsPermits
             base.ExposeData();
             Scribe_Values.Look<int>(ref this.goodwillChangesInt, "goodwillChangesInt", 0, false);
             Scribe_Values.Look<int>(ref this.denominator, "denominator", 0, false);
+            Scribe_Values.Look<float>(ref this.MTEOP_pointFactor, "MTEOP_pointFactor", 0f, false);
+            Scribe_Values.Look<bool>(ref this.TWOS_on, "TWOS_on", false, false);
         }
         public int goodwillChangesInt;
         public int denominator;
+        public float MTEOP_pointFactor;
+        public bool TWOS_on;
     }
-    //pax branchquest: pax talks
+    public class QuestNode_MundiPIOL : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.mundi2, HVMP_Mod.settings.mundiX))
+            {
+                if (this.node != null)
+                {
+                    this.node.Run();
+                }
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_PIOL_info", this.PIOL_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_PIOL_info", " ") });
+            }
+        }
+        [NoTranslate]
+        public SlateRef<string> storeAs;
+        public QuestNode node;
+        [MustTranslate]
+        public string PIOL_description;
+    }
+    //pax branchquest: pax populus
+    public class QuestNode_PaxPopulus : QuestNode_PaxIntermediary
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            PawnKindDef pawnKindDef;
+            if (pawnKinds.TryRandomElement(out pawnKindDef))
+            {
+                slate.Set<PawnKindDef>(this.storePawnKindAs.GetValue(slate), pawnKindDef, false);
+            }
+            base.RunInt();
+        }
+        [NoTranslate]
+        public SlateRef<string> storePawnKindAs;
+        public List<PawnKindDef> pawnKinds;
+    }
+    public class QuestNode_PopulusMD_VIP : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return !this.storeAs.GetValue(slate).NullOrEmpty();
+        }
+        protected override void RunInt()
+        {
+            bool mayhemMode = HVMP_Mod.settings.populusX;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.populus1, mayhemMode))
+            {
+                Slate slate = QuestGen.slate;
+                int ogValue = this.value.GetValue(slate);
+                float capValue = 999f;
+                Map map = slate.Get<Map>("map", null, false);
+                if (map != null)
+                {
+                    capValue = ogValue + (map.mapPawns.ColonistCount*this.MD_bonusPopPctOfColonyPop);
+                }
+                float postFactorValue = Math.Min(ogValue * this.MD_multi, capValue);
+                if (postFactorValue < ogValue + 1)
+                {
+                    postFactorValue = ogValue + 1;
+                }
+                slate.Set<int>(this.storeAs.GetValue(slate), (int)postFactorValue, false);
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.populus2, mayhemMode))
+            {
+                this.VIP_node?.Run();
+            }
+        }
+        public SlateRef<int> value;
+        public float MD_multi;
+        public float MD_bonusPopPctOfColonyPop;
+        [NoTranslate]
+        public SlateRef<string> storeAs;
+        public QuestNode VIP_node;
+    }
+    public class QuestNode_PopulusWTU : QuestNode
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            if (this.pawns.GetValue(slate) == null || this.WTU_traitList.NullOrEmpty())
+            {
+                return;
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.populus3,HVMP_Mod.settings.populusX))
+            {
+                List<Pawn> pawns = this.pawns.GetValue(slate).ToList();
+                for (int i = 0; i < pawns.Count; i++)
+                {
+                    Pawn_StoryTracker story = pawns[i].story;
+                    if (story != null)
+                    {
+                        BackstoryTrait bt = this.WTU_traitList.Where((BackstoryTrait bst) => !story.traits.HasTrait(bst.def) && !story.traits.allTraits.Any((Trait tr) => bst.def.ConflictsWith(tr))).RandomElement();
+                        if (bt != null)
+                        {
+                            story.traits.GainTrait(new Trait(bt.def, bt.degree, true), false);
+                        }
+                    }
+                }
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_WTU_info", this.WTU_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_WTU_info", " ") });
+            }
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+        public SlateRef<IEnumerable<Pawn>> pawns;
+        public List<BackstoryTrait> WTU_traitList = new List<BackstoryTrait>();
+        [MustTranslate]
+        public string WTU_description;
+    }
+    //pax branchquest: pax vox
+    public class QuestNode_GenerateVox : QuestNode
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            WorldObject worldObject = WorldObjectMaker.MakeWorldObject(this.def.GetValue(slate));
+            worldObject.Tile = this.tile.GetValue(slate);
+            if (this.faction.GetValue(slate) != null)
+            {
+                worldObject.SetFaction(this.faction.GetValue(slate));
+            }
+            if (worldObject is WorldObject_PaxTalks wopt)
+            {
+                bool mayhemMode = HVMP_Mod.settings.voxX;
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.vox1, mayhemMode))
+                {
+                    wopt.AAA_difficultyFactor = this.AAA_difficultyFactor;
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_AAA_info", this.AAA_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_AAA_info", " ") });
+                }
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.vox2, mayhemMode))
+                {
+                    wopt.ST_difficultyFactor = this.ST_difficultyFactor;
+                    wopt.ST_giftCount = this.ST_giftCountRange.RandomInRange;
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("moneyAmount", wopt.ST_giftCount.ToString())
+                    });
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_ST_info", this.ST_description.Formatted())
+                    });
+                }
+                else
+                {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_ST_info", " ") });
+                }
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.vox3, mayhemMode))
+                {
+                    if (Rand.Chance(this.TTFTIO_chance))
+                    {
+                        Map map = QuestGen.slate.Get<Map>("map", null, false) ?? Find.AnyPlayerHomeMap;
+                        wopt.TTFTIO_points = (int)(this.TTFTIO_pointsFactor * StorytellerUtility.DefaultThreatPointsNow(map));
+                    }
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_TTFTIO_info", this.TTFTIO_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TTFTIO_info", " ") });
+                }
+            }
+            if (this.storeAs.GetValue(slate) != null)
+            {
+                QuestGen.slate.Set<WorldObject>(this.storeAs.GetValue(slate), worldObject, false);
+            }
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+        public SlateRef<WorldObjectDef> def;
+        public SlateRef<PlanetTile> tile;
+        public SlateRef<Faction> faction;
+        [NoTranslate]
+        public SlateRef<string> storeAs;
+        public float AAA_difficultyFactor;
+        [MustTranslate]
+        public string AAA_description;
+        public float ST_difficultyFactor;
+        public IntRange ST_giftCountRange;
+        [MustTranslate]
+        public string ST_description;
+        public float TTFTIO_chance;
+        public float TTFTIO_pointsFactor;
+        [MustTranslate]
+        public string TTFTIO_description;
+    }
     public class WorldObject_PaxTalks : WorldObject
     {
         public override Material Material
@@ -7486,31 +9025,83 @@ namespace HautsPermits
                 return this.cachedMat;
             }
         }
+        public override string GetInspectString()
+        {
+            string text = base.GetInspectString();
+            if (this.TTFTIO_points > 0)
+            {
+                text += "HVMP_VoxSiteLabel_TTFTIO".Translate();
+            }
+            if (this.AAA_difficultyFactor > 1f)
+            {
+                text += "HVMP_VoxSiteLabel_AAA".Translate();
+            }
+            if (this.ST_giftCount > 0)
+            {
+                text += "HVMP_VoxSiteLabel_ST".Translate(this.ST_giftCount);
+            }
+            return text;
+        }
         public void Notify_CaravanArrived(Caravan caravan)
         {
-            Pawn pawn = BestCaravanPawnUtility.FindBestDiplomat(caravan);
-            if (pawn == null)
+            if (this.TTFTIO_points <= 0f || Rand.Chance(0.5f))
             {
-                Messages.Message("MessagePeaceTalksNoDiplomat".Translate(), caravan, MessageTypeDefOf.NegativeEvent, false);
-                return;
+                Pawn pawn = BestCaravanPawnUtility.FindBestDiplomat(caravan);
+                if (pawn == null)
+                {
+                    Messages.Message("MessagePeaceTalksNoDiplomat".Translate(), caravan, MessageTypeDefOf.NegativeEvent, false);
+                    return;
+                }
+                float badOutcomeWeightFactor = this.GetBadOutcomeWeightFactor(pawn, caravan);
+                if (this.ST_giftCount > 0)
+                {
+                    int silverCount = 0;
+                    List<Thing> list = CaravanInventoryUtility.AllInventoryItems(caravan);
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        Thing thing = list[i];
+                        if (thing.def == ThingDefOf.Silver)
+                        {
+                            silverCount += thing.stackCount;
+                        }
+                    }
+                    badOutcomeWeightFactor *= Math.Max(1f,((this.ST_difficultyFactor-1f)*(this.ST_giftCount-silverCount)/this.ST_giftCount)+1f);
+                    int silverToTake = this.ST_giftCount;
+                    List<Thing> list2 = CaravanInventoryUtility.TakeThings(caravan, delegate (Thing thing)
+                    {
+                        if (ThingDefOf.Silver != thing.def)
+                        {
+                            return 0;
+                        }
+                        int numS = Mathf.Min(silverToTake, thing.stackCount);
+                        silverToTake -= numS;
+                        return numS;
+                    });
+                    for (int i = 0; i < list2.Count; i++)
+                    {
+                        list2[i].Destroy(DestroyMode.Vanish);
+                    }
+                }
+                float num = 1f / badOutcomeWeightFactor;
+                WorldObject_PaxTalks.tmpPossibleOutcomes.Clear();
+                WorldObject_PaxTalks.tmpPossibleOutcomes.Add(new Pair<Action, float>(delegate
+                {
+                    this.Outcome_Backfire(caravan);
+                }, 0.15f * badOutcomeWeightFactor));
+                WorldObject_PaxTalks.tmpPossibleOutcomes.Add(new Pair<Action, float>(delegate
+                {
+                    this.Outcome_TalksFlounder(caravan);
+                }, 0.15f));
+                WorldObject_PaxTalks.tmpPossibleOutcomes.Add(new Pair<Action, float>(delegate
+                {
+                    this.Outcome_Success(caravan);
+                }, 0.55f * num));
+                WorldObject_PaxTalks.tmpPossibleOutcomes.RandomElementByWeight((Pair<Action, float> x) => x.Second).First();
+                pawn.skills.Learn(SkillDefOf.Social, 6000f, true, false);
+            } else {
+                HVMP_Utility.DoAmbush(caravan, this.TTFTIO_points);
+                QuestUtility.SendQuestTargetSignals(this.questTags, "TTFTIO_Ambush", this.Named("SUBJECT"));
             }
-            float badOutcomeWeightFactor = WorldObject_PaxTalks.GetBadOutcomeWeightFactor(pawn, caravan);
-            float num = 1f / badOutcomeWeightFactor;
-            WorldObject_PaxTalks.tmpPossibleOutcomes.Clear();
-            WorldObject_PaxTalks.tmpPossibleOutcomes.Add(new Pair<Action, float>(delegate
-            {
-                this.Outcome_Backfire(caravan);
-            }, 0.15f * badOutcomeWeightFactor));
-            WorldObject_PaxTalks.tmpPossibleOutcomes.Add(new Pair<Action, float>(delegate
-            {
-                this.Outcome_TalksFlounder(caravan);
-            }, 0.15f));
-            WorldObject_PaxTalks.tmpPossibleOutcomes.Add(new Pair<Action, float>(delegate
-            {
-                this.Outcome_Success(caravan);
-            }, 0.55f * num));
-            WorldObject_PaxTalks.tmpPossibleOutcomes.RandomElementByWeight((Pair<Action, float> x) => x.Second).First();
-            pawn.skills.Learn(SkillDefOf.Social, 6000f, true, false);
             this.Destroy();
         }
         public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
@@ -7550,9 +9141,15 @@ namespace HautsPermits
             }
             return taggedString;
         }
-        private static float GetBadOutcomeWeightFactor(Pawn diplomat, Caravan caravan)
+        private float GetBadOutcomeWeightFactor(Pawn diplomat, Caravan caravan)
         {
-            float statValue = diplomat.GetStatValue(StatDefOf.NegotiationAbility, true, -1);
+            StatDef sd = StatDefOf.NegotiationAbility;
+            PaxTalksComp ptc = this.GetComponent<PaxTalksComp>();
+            if (ptc != null)
+            {
+                sd = ptc.negotiationStat;
+            }
+            float statValue = diplomat.GetStatValue(sd, true, -1);
             float num = 0f;
             if (ModsConfig.IdeologyActive)
             {
@@ -7570,7 +9167,35 @@ namespace HautsPermits
                 }
                 num = (flag ? (-0.05f) : 0.05f);
             }
-            return WorldObject_PaxTalks.GetBadOutcomeWeightFactor(statValue) * (1f + num);
+            return WorldObject_PaxTalks.GetBadOutcomeWeightFactor(statValue) * (1f + num)*this.AAA_Difficulty;
+        }
+        private float AAA_Difficulty
+        {
+            get
+            {
+                float totalGoodwillFactions = 0f, totalAlliedFactions = 0f;
+                Faction p = Faction.OfPlayer;
+                if (p != null)
+                {
+                    foreach (Faction f in Find.FactionManager.AllFactionsVisible)
+                    {
+                        if (!f.def.HasModExtension<EBranchQuests>() && f != p && f.HasGoodwill && !f.def.PermanentlyHostileTo(p.def))
+                        {
+                            totalGoodwillFactions += 1f;
+                            if (f.RelationKindWith(p) == FactionRelationKind.Ally)
+                            {
+                                totalAlliedFactions += 1f;
+                            }
+                        }
+                    }
+                }
+                float result = this.AAA_difficultyFactor;
+                if (totalGoodwillFactions <= 0f)
+                {
+                    return result;
+                }
+                return Math.Max(1f,((result-1f)*(totalGoodwillFactions-totalAlliedFactions)/totalGoodwillFactions)+1f);
+            }
         }
         private static float GetBadOutcomeWeightFactor(float negotationAbility)
         {
@@ -7590,9 +9215,50 @@ namespace HautsPermits
             {
                 new CurvePoint(1.5f, 0.4f),
                 true
+            },
+            {
+                new CurvePoint(5f, 0.01f),
+                true
             }
         };
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<float>(ref this.AAA_difficultyFactor, "AAA_difficultyFactor", 1f, false);
+            Scribe_Values.Look<int>(ref this.ST_giftCount, "ST_giftCount", -1, false);
+            Scribe_Values.Look<float>(ref this.ST_difficultyFactor, "ST_difficultyFactor", 1f, false);
+            Scribe_Values.Look<int>(ref this.TTFTIO_points, "TTFTIO_points", -1, false);
+        }
         private static List<Pair<Action, float>> tmpPossibleOutcomes = new List<Pair<Action, float>>();
+        public float AAA_difficultyFactor = 1f;
+        public int ST_giftCount = -1;
+        public float ST_difficultyFactor = 1f;
+        public int TTFTIO_points;
+    }
+    public class WorldObjectCompProperties_PaxTalks : WorldObjectCompProperties
+    {
+        public WorldObjectCompProperties_PaxTalks ()
+        {
+            this.compClass = typeof(PaxTalksComp);
+        }
+        public StatDef negotiationStat;
+    }
+    public class PaxTalksComp : WorldObjectComp
+    {
+        public override void Initialize(WorldObjectCompProperties props)
+        {
+            base.Initialize(props);
+            if (this.props is WorldObjectCompProperties_PaxTalks woccpt)
+            {
+                this.negotiationStat = woccpt.negotiationStat;
+            }
+        }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Defs.Look<StatDef>(ref this.negotiationStat, "negotiationStat");
+        }
+        public StatDef negotiationStat;
     }
     public class CaravanArrivalAction_VisitPaxTalks : CaravanArrivalAction
     {
@@ -7649,55 +9315,59 @@ namespace HautsPermits
         }
         private WorldObject_PaxTalks paxTalks;
     }
-    //pax branchquest: pax through
-    public class QuestNode_PaxThrough : QuestNode_PaxIntermediary
-    {
-        protected override void RunInt()
-        {
-            Slate slate = QuestGen.slate;
-            PawnKindDef pawnKindDef;
-            if (pawnKinds.TryRandomElement(out pawnKindDef))
-            {
-                slate.Set<PawnKindDef>(this.storePawnKindAs.GetValue(slate), pawnKindDef, false);
-            }
-            base.RunInt();
-        }
-        [NoTranslate]
-        public SlateRef<string> storePawnKindAs;
-        public List<PawnKindDef> pawnKinds;
-    }
     //rover branchquest: atlas
-    public class Book_Atlas : Book
+    public class Book_Atlas : ThingWithComps
     {
-        public override void GenerateBook(Pawn author = null, long? fixedDate = null)
-        {
-            base.GenerateBook(author, fixedDate);
-            HVMP_BookDeets bd = this.def.GetModExtension<HVMP_BookDeets>();
-            if (bd != null)
-            {
-                string featureName = "";
-                if (this.wo != null && Find.WorldGrid[this.wo.Tile].feature != null && Rand.Chance(0.9f))
-                {
-                    featureName = Find.WorldGrid[this.wo.Tile].feature.name;
-                }
-                else
-                {
-                    featureName = NameGenerator.GenerateName(DefDatabase<FeatureDef>.AllDefsListForReading.RandomElement().nameMaker, Find.WorldFeatures.features.Select((WorldFeature x) => x.name), false, "r_name");
-                }
-                typeof(Book).GetField("descCanBeInvalidated", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, true);
-                string title = Rand.Chance(bd.titlesPlace.Count / (bd.titlesPlace.Count + bd.titlesPlanetPlace.Count)) ? bd.titlesPlace.RandomElement().Translate(featureName) : bd.titlesPlanetPlace.RandomElement().Translate(Find.World.info.name, featureName);
-                typeof(Book).GetField("title", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, GenText.CapitalizeAsTitle(title));
-                typeof(Book).GetField("description", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, bd.descKey.Translate().CapitalizeFirst().Resolve());
-                typeof(Book).GetField("descCanBeInvalidated", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, false);
-                typeof(Book).GetField("descriptionFlavor", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, bd.descKey.Translate().CapitalizeFirst().Resolve());
-            }
-        }
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_References.Look<WorldObject>(ref this.wo, "wo", false);
         }
         public WorldObject wo;
+    }
+    public class CompProperties_StudiableAtlas : CompProperties_StudiableQuestItem
+    {
+        public CompProperties_StudiableAtlas()
+        {
+            this.compClass = typeof(CompStudiableAtlas);
+        }
+        public float DTS_boredomPerHour;
+        public ThoughtDef DTS_thoughtToGive;
+        public int DTS_thoughtGiverCooldown;
+    }
+    public class CompStudiableAtlas : CompStudiableQuestItem
+    {
+        public new CompProperties_StudiableAtlas Props
+        {
+            get
+            {
+                return (CompProperties_StudiableAtlas)this.props;
+            }
+        }
+        public override void ExtraStudyEffects(int delta, Pawn researcher, Thing brb, Thing researchBench)
+        {
+            if (this.DTS_on)
+            {
+                if (this.Props.DTS_thoughtToGive != null && researcher.needs.mood != null && researcher.IsHashIntervalTick(this.Props.DTS_thoughtGiverCooldown,delta))
+                {
+                    researcher.needs.mood.thoughts.memories.TryGainMemory(this.Props.DTS_thoughtToGive);
+                }
+                Need_Joy nj = researcher.needs.joy;
+                if (nj != null)
+                {
+                    nj.CurLevel = nj.CurLevel - (this.Props.DTS_boredomPerHour*delta/2500);
+                }
+            }
+        }
+        public override float RequiredProgress => base.RequiredProgress * this.ID_multi;
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look<bool>(ref this.DTS_on, "DTS_on", false, false);
+            Scribe_Values.Look<float>(ref this.ID_multi, "ID_multi", 1f, false);
+        }
+        public bool DTS_on;
+        public float ID_multi = 1f;
     }
     public class WorldObject_AtlasPoint : WorldObject
     {
@@ -7726,13 +9396,31 @@ namespace HautsPermits
                     }
                 }
             }
+            if (this.TPBU_on)
+            {
+                Slate slate = new Slate();
+                Map map = Find.AnyPlayerHomeMap;
+                slate.Set<float>("points", StorytellerUtility.DefaultThreatPointsNow(map), false);
+                slate.Set<Map>("map", map, false);
+                Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(DefDatabase<QuestScriptDef>.GetNamed("ProblemCauser"), slate);
+                if (!quest.hidden && quest.root.sendAvailableLetter)
+                {
+                    QuestUtility.SendLetterQuestAvailable(quest);
+                }
+                if (Rand.Chance(0.8f))
+                {
+                    this.TPBU_on = false;
+                }
+            }
         }
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_References.Look<Book_Atlas>(ref this.book, "book", false);
+            Scribe_Values.Look<bool>(ref this.TPBU_on, "TPBU_on", false, false);
         }
         public Book_Atlas book;
+        public bool TPBU_on;
     }
     public class CaravanArrivalAction_VisitAtlasPoint : CaravanArrivalAction
     {
@@ -7802,6 +9490,7 @@ namespace HautsPermits
                 Slate slate = QuestGen.slate;
                 Quest quest = QuestGen.quest;
                 Map map = HVMP_Utility.TryGetMap();
+                bool mayhemMode = HVMP_Mod.settings.atlasX;
                 this.TryFindSiteTile(tile, out PlanetTile num2);
                 string text = QuestGenUtility.HardcodedSignalWithQuestID("worldObject.Destroyed");
                 WorldObject_AtlasPoint worldObject_AtlasPoint = (WorldObject_AtlasPoint)WorldObjectMaker.MakeWorldObject(HVMPDefOf.HVMP_AtlasPoint);
@@ -7809,12 +9498,21 @@ namespace HautsPermits
                 worldObject_AtlasPoint.SetFaction(roverFaction);
                 worldObject_AtlasPoint.book = (Book_Atlas)ThingMaker.MakeThing(HVMPDefOf.HVMP_DatedAtlas);
                 worldObject_AtlasPoint.book.wo = worldObject_AtlasPoint;
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.atlas3, mayhemMode))
+                {
+                    worldObject_AtlasPoint.TPBU_on = true;
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_TPBU_info", this.TPBU_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TPBU_info", " ") });
+                }
                 CompQuality cq = worldObject_AtlasPoint.book.TryGetComp<CompQuality>();
                 if (cq != null)
                 {
                     cq.SetQuality(QualityUtility.GenerateQualityTraderItem(), new ArtGenerationContext?(ArtGenerationContext.Outsider));
                 }
-                //worldObject_AtlasPoint.GetComponent<TimeoutComp>().StartTimeout(3600000);
                 quest.SpawnWorldObject(worldObject_AtlasPoint, null, null);
                 quest.End(QuestEndOutcome.Unknown, 0, null, text, QuestPart.SignalListenMode.OngoingOnly, false, false);
                 slate.Set<Map>("map", map, false);
@@ -7860,6 +9558,25 @@ namespace HautsPermits
                         }
                         cda.relevantStats.Add(secondStat);
                     }
+                    if (cda is CompStudiableAtlas atlasComp)
+                    {
+                        if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.atlas1, mayhemMode))
+                        {
+                            atlasComp.DTS_on = true;
+                            QuestGen.AddQuestDescriptionRules(new List<Rule>
+                            {
+                                new Rule_String("mutator_DTS_info", this.DTS_description.Formatted())
+                            });
+                        } else {
+                            QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_DTS_info", " ") });
+                        }
+                        if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.atlas2, mayhemMode))
+                        {
+                            atlasComp.ID_multi = this.ID_multi;
+                        }
+                    } else {
+                        QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_DTS_info", " ") });
+                    }
                 }
                 slate.Set<List<WorldObject>>("worldObject", wos, false);
                 HVMP_Utility.SetSettingScalingRewardValue(slate);
@@ -7889,37 +9606,621 @@ namespace HautsPermits
         public SlateRef<string> storeExtraSkillAs;
         [NoTranslate]
         public SlateRef<string> inSignal;
+        [MustTranslate]
+        public string DTS_description;
+        public float ID_multi;
+        [MustTranslate]
+        public string TPBU_description;
     }
-    //rover branchquest: colossus
-    public class QuestNode_Root_Colossus  : QuestNode_Sequence
+    //rover branchquest: ares
+    public class QuestNode_AllThreeAresMutators : QuestNode
     {
-        protected override void RunInt()
-        {
-            if (HVMP_Utility.TryFindRoverFaction(out Faction faction))
-            {
-                Slate slate = QuestGen.slate;
-                Quest quest = QuestGen.quest;
-                slate.Set<Faction>("faction", faction, false);
-                slate.Set<Pawn>("asker", faction.leader, false);
-                slate.Set<bool>("punishmentOnDestroy", Rand.Chance(0.5f), false);
-                Map map = HVMP_Utility.TryGetMap();
-                slate.Set<Map>("map", map, false);
-                PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
-                slate.Set<PlanetTile>("pTile", tile, false);
-                QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
-                qpbgfh.faction = faction;
-                QuestGen.quest.AddPart(qpbgfh);
-                HVMP_Utility.SetSettingScalingRewardValue(slate);
-            }
-            base.RunInt();
-        }
         protected override bool TestRunInt(Slate slate)
         {
-            HVMP_Utility.SetSettingScalingRewardValue(slate);
-            return HVMP_Utility.TryFindRoverFaction(out Faction roverFaction) && base.TestRunInt(slate);
+            return Find.Storyteller.difficulty.allowViolentQuests && slate.Exists("map", false) && slate.Exists("enemyFaction", false);
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            Map map = QuestGen.slate.Get<Map>("map", null, false);
+            float num = QuestGen.slate.Get<float>("points", 0f, false);
+            Faction faction = QuestGen.slate.Get<Faction>("enemyFaction", null, false);
+            QuestPart_Incident questPart_Incident = new QuestPart_Incident();
+            questPart_Incident.debugLabel = "raid";
+            questPart_Incident.incident = HVMPDefOf.HVMP_RaidAres;
+            int num2 = 0;
+            IncidentParms incidentParms;
+            PawnGroupMakerParms defaultPawnGroupMakerParms;
+            IEnumerable<PawnKindDef> enumerable;
+            do
+            {
+                incidentParms = this.GenerateIncidentParms(map, num, faction, slate, questPart_Incident);
+                defaultPawnGroupMakerParms = IncidentParmsUtility.GetDefaultPawnGroupMakerParms(PawnGroupKindDefOf.Combat, incidentParms, true);
+                defaultPawnGroupMakerParms.points = IncidentWorker_Raid.AdjustedRaidPoints(defaultPawnGroupMakerParms.points, incidentParms.raidArrivalMode, incidentParms.raidStrategy, defaultPawnGroupMakerParms.faction, PawnGroupKindDefOf.Combat, incidentParms.target, null);
+                enumerable = PawnGroupMakerUtility.GeneratePawnKindsExample(defaultPawnGroupMakerParms);
+                num2++;
+            }
+            while (!enumerable.Any<PawnKindDef>() && num2 < 50);
+            if (!enumerable.Any<PawnKindDef>())
+            {
+                string[] array = new string[6];
+                array[0] = "No pawnkinds example for ";
+                array[1] = QuestGen.quest.root.defName;
+                array[2] = " parms=";
+                int num3 = 3;
+                PawnGroupMakerParms pawnGroupMakerParms = defaultPawnGroupMakerParms;
+                array[num3] = ((pawnGroupMakerParms != null) ? pawnGroupMakerParms.ToString() : null);
+                array[4] = " iterations=";
+                array[5] = num2.ToString();
+                Log.Error(string.Concat(array));
+            }
+            IncidentWorker_RaidAres iwrf = (IncidentWorker_RaidAres)questPart_Incident.incident.Worker;
+            this.ImplementQuestMutators(slate, faction);
+            questPart_Incident.SetIncidentParmsAndRemoveTarget(incidentParms);
+            questPart_Incident.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
+            QuestGen.quest.AddPart(questPart_Incident);
+            QuestGen.AddQuestDescriptionRules(new List<Rule>
+            {
+                new Rule_String("raidPawnKinds", PawnUtility.PawnKindsToLineList(enumerable, "  - ", ColoredText.ThreatColor)),
+                new Rule_String("raidArrivalModeInfo", incidentParms.raidArrivalMode.textWillArrive.Formatted(faction))
+            });
+        }
+        private IncidentParms GenerateIncidentParms(Map map, float points, Faction faction, Slate slate, QuestPart_Incident questPart)
+        {
+            IncidentParms incidentParms = new IncidentParms
+            {
+                forced = true,
+                target = map,
+                points = Mathf.Max(points, faction.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat, null)),
+                faction = faction,
+                pawnGroupMakerSeed = new int?(Rand.Int),
+                inSignalEnd = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignalLeave.GetValue(slate)),
+                questTag = QuestGenUtility.HardcodedTargetQuestTagWithQuestID(this.tag.GetValue(slate)),
+                canTimeoutOrFlee = (map.CanEverExit && (this.canTimeoutOrFlee.GetValue(slate) ?? true))
+            };
+            if (this.raidPawnKind.GetValue(slate) != null)
+            {
+                incidentParms.pawnKind = this.raidPawnKind.GetValue(slate);
+                incidentParms.pawnCount = Mathf.Max(1, Mathf.RoundToInt(incidentParms.points / incidentParms.pawnKind.combatPower));
+            }
+            if (this.arrivalMode.GetValue(slate) != null)
+            {
+                incidentParms.raidArrivalMode = this.arrivalMode.GetValue(slate);
+            }
+            if (!this.customLetterLabel.GetValue(slate).NullOrEmpty() || this.customLetterLabelRules.GetValue(slate) != null)
+            {
+                QuestGen.AddTextRequest("root", delegate (string x)
+                {
+                    incidentParms.customLetterLabel = x;
+                }, QuestGenUtility.MergeRules(this.customLetterLabelRules.GetValue(slate), this.customLetterLabel.GetValue(slate), "root"));
+            }
+            if (!this.customLetterText.GetValue(slate).NullOrEmpty() || this.customLetterTextRules.GetValue(slate) != null)
+            {
+                QuestGen.AddTextRequest("root", delegate (string x)
+                {
+                    incidentParms.customLetterText = x;
+                }, QuestGenUtility.MergeRules(this.customLetterTextRules.GetValue(slate), this.customLetterText.GetValue(slate), "root"));
+            }
+            IncidentWorker_RaidAres iwrf = (IncidentWorker_RaidAres)questPart.incident.Worker;
+            iwrf.ResolveRaidStrategy(incidentParms, PawnGroupKindDefOf.Combat);
+            iwrf.ResolveRaidArriveMode(incidentParms);
+            iwrf.ResolveRaidAgeRestriction(incidentParms);
+            if (incidentParms.raidArrivalMode.walkIn)
+            {
+                incidentParms.spawnCenter = this.walkInSpot.GetValue(slate) ?? QuestGen.slate.Get<IntVec3?>("walkInSpot", null, false) ?? IntVec3.Invalid;
+            }
+            else
+            {
+                incidentParms.spawnCenter = this.dropSpot.GetValue(slate) ?? QuestGen.slate.Get<IntVec3?>("dropSpot", null, false) ?? IntVec3.Invalid;
+            }
+            return incidentParms;
+        }
+        public void ImplementQuestMutators(Slate slate, Faction faction)
+        {
+            QuestPart_AllThreeAresMutators qpa3 = new QuestPart_AllThreeAresMutators();
+            bool mayhemMode = HVMP_Mod.settings.aresX;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ares1, mayhemMode))
+            {
+                if (Rand.Chance(this.AW_conditionChance))
+                {
+                    qpa3.AW_condition = this.AW_conditions.RandomElement();
+                    qpa3.AW_conditionTicks = (int)(this.AW_conditionHours.RandomInRange * 2500);
+                }
+                else
+                {
+                    qpa3.AW_bonusPoints = (float)this.AW_bonusPoints.GetValue(slate);
+                    qpa3.AW_pawnRosterOtherwise = this.AW_pawnRosterOtherwise.RandomElement();
+                }
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_AW_info", this.AW_description.Formatted(faction))
+                });
+            }
+            else
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_AW_info", " ") });
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ares2, mayhemMode))
+            {
+                qpa3.DRTNT_hediff = this.DRTNT_hediff;
+                qpa3.DRTNT_spyChance = this.DRTNT_spyChance;
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_DRTNT_info", this.DRTNT_description.Formatted(faction))
+                    });
+            }
+            else
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_DRTNT_info", " ") });
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ares3, mayhemMode))
+            {
+                qpa3.TG_hediffChances = this.TG_hediffChances;
+                qpa3.TG_bonusPoints = (float)this.TG_bonusPoints.GetValue(slate);
+                qpa3.TG_pawnRoster = this.TG_pawnRoster.RandomElement();
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_TG_info", this.TG_description.Formatted(faction))
+                    });
+            }
+            else
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TG_info", " ") });
+            }
+            QuestGen.quest.AddPart(qpa3);
         }
         [NoTranslate]
         public SlateRef<string> inSignal;
+        public SlateRef<IntVec3?> walkInSpot;
+        public SlateRef<IntVec3?> dropSpot;
+        public SlateRef<string> customLetterLabel;
+        public SlateRef<string> customLetterText;
+        public SlateRef<RulePack> customLetterLabelRules;
+        public SlateRef<RulePack> customLetterTextRules;
+        public SlateRef<PawnsArrivalModeDef> arrivalMode;
+        public SlateRef<PawnKindDef> raidPawnKind;
+        public SlateRef<bool?> canTimeoutOrFlee;
+        [NoTranslate]
+        public SlateRef<string> inSignalLeave;
+        [NoTranslate]
+        public SlateRef<string> tag;
+        public float AW_conditionChance;
+        public List<GameConditionDef> AW_conditions;
+        public FloatRange AW_conditionHours;
+        public List<PawnGroupMaker> AW_pawnRosterOtherwise;
+        public SlateRef<float?> AW_bonusPoints;
+        [MustTranslate]
+        public string AW_description;
+        public float DRTNT_spyChance;
+        public HediffDef DRTNT_hediff;
+        [MustTranslate]
+        public string DRTNT_description;
+        public Dictionary<HediffDef, float> TG_hediffChances;
+        public List<PawnGroupMaker> TG_pawnRoster;
+        public SlateRef<float?> TG_bonusPoints;
+        [MustTranslate]
+        public string TG_description;
+    }
+    public class QuestPart_AllThreeAresMutators : QuestPart
+    {
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Defs.Look<GameConditionDef>(ref this.AW_condition, "AW_condition");
+            Scribe_Values.Look<int>(ref this.AW_conditionTicks, "AW_conditionTicks", 0, false);
+            Scribe_Values.Look<PawnGroupMaker>(ref this.AW_pawnRosterOtherwise, "AW_pawnRosterOtherwise", null, false);
+            Scribe_Values.Look<float>(ref this.AW_bonusPoints, "AW_bonusPoints", 0f, false);
+            Scribe_Values.Look<float>(ref this.DRTNT_spyChance, "DRTNT_spyChance", 0f, false);
+            Scribe_Defs.Look<HediffDef>(ref this.DRTNT_hediff, "DRTNT_hediff");
+            Scribe_Collections.Look<HediffDef, float>(ref this.TG_hediffChances, "TG_hediffChances", LookMode.Def, LookMode.Value, ref this.tmpHediffs, ref this.tmpChances);
+            Scribe_Values.Look<PawnGroupMaker>(ref this.TG_pawnRoster, "TG_pawnRoster", null, false);
+            Scribe_Values.Look<float>(ref this.TG_bonusPoints, "TG_bonusPoints", 0f, false);
+        }
+        public GameConditionDef AW_condition;
+        public int AW_conditionTicks;
+        public PawnGroupMaker AW_pawnRosterOtherwise;
+        public float AW_bonusPoints;
+        public float DRTNT_spyChance;
+        public HediffDef DRTNT_hediff;
+        public Dictionary<HediffDef, float> TG_hediffChances;
+        public PawnGroupMaker TG_pawnRoster;
+        public float TG_bonusPoints;
+        private List<HediffDef> tmpHediffs;
+        private List<float> tmpChances;
+    }
+    public class IncidentWorker_RaidAres : IncidentWorker_RaidEnemy
+    {
+        protected override bool TryExecuteWorker(IncidentParms parms)
+        {
+            List<Pawn> list;
+            if (!this.TryGenerateRaidInfo(parms, out list, false))
+            {
+                return false;
+            }
+            List<Pawn> listMut = new List<Pawn>();
+            PawnGroupMakerParms pgmp = new PawnGroupMakerParms();
+            pgmp.tile = parms.target.Tile;
+            pgmp.faction = parms.faction;
+            pgmp.traderKind = parms.traderKind;
+            pgmp.generateFightersOnly = parms.generateFightersOnly;
+            pgmp.raidStrategy = parms.raidStrategy;
+            pgmp.forceOneDowned = parms.raidForceOneDowned;
+            pgmp.seed = parms.pawnGroupMakerSeed;
+            pgmp.ideo = parms.pawnIdeo;
+            pgmp.raidAgeRestriction = parms.raidAgeRestriction;
+            QuestPart_AllThreeAresMutators qpa3 = parms.quest.GetFirstPartOfType<QuestPart_AllThreeAresMutators>();
+            if (qpa3 != null)
+            {
+                if (qpa3.AW_pawnRosterOtherwise != null)
+                {
+                    pgmp.groupKind = qpa3.AW_pawnRosterOtherwise.kindDef;
+                    if (!pgmp.faction.def.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm) => pgm.kindDef == pgmp.groupKind))
+                    {
+                        pgmp.faction.def.pawnGroupMakers.Add(qpa3.AW_pawnRosterOtherwise);
+                    }
+                    float minPoints = 200f;
+                    foreach (PawnGenOption pgo in qpa3.AW_pawnRosterOtherwise.options)
+                    {
+                        float combatPower = pgo.kind.combatPower;
+                        if (combatPower > minPoints)
+                        {
+                            minPoints = combatPower;
+                        }
+                    }
+                    pgmp.points = Math.Max(qpa3.AW_bonusPoints, minPoints * 4f);
+                    foreach (Pawn pawn in qpa3.AW_pawnRosterOtherwise.GeneratePawns(pgmp, true))
+                    {
+                        listMut.Add(pawn);
+                    }
+                }
+                if (qpa3.TG_pawnRoster != null)
+                {
+                    pgmp.groupKind = qpa3.TG_pawnRoster.kindDef;
+                    if (!pgmp.faction.def.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm) => pgm.kindDef == pgmp.groupKind))
+                    {
+                        pgmp.faction.def.pawnGroupMakers.Add(qpa3.AW_pawnRosterOtherwise);
+                    }
+                    float minPoints = 200f;
+                    foreach (PawnGenOption pgo in qpa3.TG_pawnRoster.options)
+                    {
+                        float combatPower = pgo.kind.combatPower;
+                        if (combatPower > minPoints)
+                        {
+                            minPoints = combatPower;
+                        }
+                    }
+                    pgmp.points = Math.Max(qpa3.TG_bonusPoints, minPoints * 4f);
+                    foreach (Pawn pawn in qpa3.TG_pawnRoster.GeneratePawns(pgmp, true))
+                    {
+                        pawn.health.AddHediff(HVMPDefOf.HVMP_HostileEnvironmentFilm);
+                        listMut.Add(pawn);
+                    }
+                }
+                if (!listMut.NullOrEmpty())
+                {
+                    parms.raidArrivalMode.Worker.Arrive(listMut, parms);
+                }
+                if (qpa3.AW_condition != null)
+                {
+                    GameCondition gameCondition = GameConditionMaker.MakeCondition(qpa3.AW_condition, qpa3.AW_conditionTicks);
+                    gameCondition.forceDisplayAsDuration = true;
+                    gameCondition.Permanent = false;
+                    gameCondition.quest = parms.quest;
+                    Map map = (Map)parms.target;
+                    if (map == null)
+                    {
+                        MapParent mapParent = gameCondition.quest.TryFindNewSuitableMapParentForRetarget();
+                        map = ((mapParent != null) ? mapParent.Map : null) ?? Find.AnyPlayerHomeMap;
+                    }
+                    if (map != null)
+                    {
+                        List<Rule> listRule = new List<Rule>();
+                        Dictionary<string, string> dictionary = new Dictionary<string, string>();
+                        gameCondition.RandomizeSettings(parms.points, map, listRule, dictionary);
+                        map.gameConditionManager.RegisterCondition(gameCondition);
+                    }
+                    Find.LetterStack.ReceiveLetter(gameCondition.LabelCap, gameCondition.LetterText, gameCondition.def.letterDef, LookTargets.Invalid, null, gameCondition.quest, null, null, 0, true);
+                }
+            }
+            TaggedString taggedString = this.GetLetterLabel(parms);
+            TaggedString taggedString2 = this.GetLetterText(parms, list);
+            PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter(list, ref taggedString, ref taggedString2, this.GetRelatedPawnsInfoLetterText(parms), true, true);
+            List<TargetInfo> list2 = new List<TargetInfo>();
+            if (parms.pawnGroups != null)
+            {
+                List<List<Pawn>> list3 = IncidentParmsUtility.SplitIntoGroups(list, parms.pawnGroups);
+                if (!listMut.NullOrEmpty())
+                {
+                    list3.Add(listMut);
+                }
+                List<Pawn> list4 = list3.MaxBy((List<Pawn> x) => x.Count);
+                if (list4.Any<Pawn>())
+                {
+                    list2.Add(list4[0]);
+                }
+                for (int i = 0; i < list3.Count; i++)
+                {
+                    if (list3[i] != list4 && list3[i].Any<Pawn>())
+                    {
+                        list2.Add(list3[i][0]);
+                    }
+                }
+            } else if (list.Any<Pawn>()) {
+                foreach (Pawn pawn in list)
+                {
+                    list2.Add(pawn);
+                }
+            }
+            base.SendStandardLetter(taggedString, taggedString2, this.GetLetterDef(), parms, list2, Array.Empty<NamedArgument>());
+            if (parms.controllerPawn == null || parms.controllerPawn.Faction != Faction.OfPlayer)
+            {
+                if (!listMut.NullOrEmpty())
+                {
+                    list.AddRange(listMut);
+                }
+                parms.raidStrategy.Worker.MakeLords(parms, list);
+            }
+            LessonAutoActivator.TeachOpportunity(ConceptDefOf.EquippingWeapons, OpportunityType.Critical);
+            if (!PlayerKnowledgeDatabase.IsComplete(ConceptDefOf.ShieldBelts))
+            {
+                for (int j = 0; j < list.Count; j++)
+                {
+                    Pawn pawn2 = list[j];
+                    if (pawn2.apparel != null)
+                    {
+                        if (pawn2.apparel.WornApparel.Any((Apparel ap) => ap.def == ThingDefOf.Apparel_ShieldBelt))
+                        {
+                            LessonAutoActivator.TeachOpportunity(ConceptDefOf.ShieldBelts, OpportunityType.Critical);
+                            break;
+                        }
+                    }
+                }
+            }
+            if (DebugSettings.logRaidInfo)
+            {
+                Log.Message(string.Format("Raid: {0} ({1}) {2} {3} c={4} p={5}", new object[]
+                {
+                    parms.faction.Name,
+                    parms.faction.def.defName,
+                    parms.raidArrivalMode.defName,
+                    parms.raidStrategy.defName,
+                    parms.spawnCenter,
+                    parms.points
+                }));
+            }
+            return true;
+        }
+        protected override void PostProcessSpawnedPawns(IncidentParms parms, List<Pawn> pawns)
+        {
+            base.PostProcessSpawnedPawns(parms, pawns);
+            QuestPart_AllThreeAresMutators qpa3 = parms.quest.GetFirstPartOfType<QuestPart_AllThreeAresMutators>();
+            if (qpa3 != null)
+            {
+                int minSpyCount = 1;
+                foreach (Pawn p in pawns.InRandomOrder())
+                {
+                    if (qpa3.DRTNT_hediff != null && (minSpyCount > 0 || Rand.Chance(qpa3.DRTNT_spyChance)))
+                    {
+                        p.health.AddHediff(qpa3.DRTNT_hediff);
+                        minSpyCount--;
+                    }
+                    if (!qpa3.TG_hediffChances.NullOrEmpty())
+                    {
+                        foreach (KeyValuePair<HediffDef, float> kvp in qpa3.TG_hediffChances)
+                        {
+                            if (Rand.Chance(kvp.Value))
+                            {
+                                p.health.AddHediff(kvp.Key);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public class HVMP_GameCondition_TargetedPsychicSuppression : GameCondition
+    {
+        public override string LetterText
+        {
+            get
+            {
+                return base.LetterText.Formatted(this.gender.GetLabel(false).ToLower());
+            }
+        }
+        public override string Description
+        {
+            get
+            {
+                return base.Description.Formatted(this.gender.GetLabel(false).ToLower());
+            }
+        }
+        public override void Init()
+        {
+            base.Init();
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<Gender>(ref this.gender, "gender", Gender.None, false);
+        }
+        public static void CheckPawn(Pawn pawn, Gender targetGender)
+        {
+            if (pawn.RaceProps.Humanlike && pawn.gender == targetGender && (pawn.Faction == null || pawn.Faction == Faction.OfPlayer || !pawn.Faction.HostileTo(Faction.OfPlayer)) && !pawn.health.hediffSet.HasHediff(HVMPDefOf.HVMP_TargetedPsychicSuppression, false))
+            {
+                pawn.health.AddHediff(HVMPDefOf.HVMP_TargetedPsychicSuppression, null, null, null);
+            }
+        }
+        public override void GameConditionTick()
+        {
+            foreach (Map map in base.AffectedMaps)
+            {
+                List<Pawn> allPawns = map.mapPawns.AllPawns;
+                for (int i = 0; i < allPawns.Count; i++)
+                {
+                    HVMP_GameCondition_TargetedPsychicSuppression.CheckPawn(allPawns[i], this.gender);
+                }
+            }
+        }
+        public override void RandomizeSettings(float points, Map map, List<Rule> outExtraDescriptionRules, Dictionary<string, string> outExtraDescriptionConstants)
+        {
+            base.RandomizeSettings(points, map, outExtraDescriptionRules, outExtraDescriptionConstants);
+            if (map.mapPawns.FreeColonistsCount > 0)
+            {
+                this.gender = map.mapPawns.FreeColonists.RandomElement<Pawn>().gender;
+            }
+            else
+            {
+                this.gender = Rand.Element<Gender>(Gender.Male, Gender.Female);
+            }
+            outExtraDescriptionRules.Add(new Rule_String("psychicSuppressorGender", this.gender.GetLabel(false)));
+        }
+        public Gender gender;
+    }
+    public class HediffComp_TargetedPsychicSuppression : HediffComp
+    {
+        public override bool CompShouldRemove
+        {
+            get
+            {
+                if (base.Pawn.SpawnedOrAnyParentSpawned)
+                {
+                    HVMP_GameCondition_TargetedPsychicSuppression activeCondition = base.Pawn.MapHeld.gameConditionManager.GetActiveCondition<HVMP_GameCondition_TargetedPsychicSuppression>();
+                    if (activeCondition != null && base.Pawn.gender == activeCondition.gender)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+    }
+    //rover branchquest: laelaps
+    public class QuestNode_GenerateShuttle_EMMM : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+        protected override void RunInt()
+        {
+            if (!ModLister.CheckRoyaltyOrIdeology("Shuttle"))
+            {
+                return;
+            }
+            Slate slate = QuestGen.slate;
+            Thing thing = ThingMaker.MakeThing(ThingDefOf.Shuttle, null);
+            if (this.owningFaction.GetValue(slate) != null)
+            {
+                thing.SetFaction(this.owningFaction.GetValue(slate), null);
+            }
+            CompShuttle compShuttle = thing.TryGetComp<CompShuttle>();
+            if (this.requiredPawns.GetValue(slate) != null)
+            {
+                compShuttle.requiredPawns.AddRange(this.requiredPawns.GetValue(slate));
+            }
+            if (this.requiredItems.GetValue(slate) != null)
+            {
+                compShuttle.requiredItems.AddRange(this.requiredItems.GetValue(slate));
+            }
+            compShuttle.acceptColonists = this.acceptColonists.GetValue(slate);
+            compShuttle.acceptChildren = this.acceptChildren.GetValue(slate) ?? true;
+            compShuttle.onlyAcceptColonists = this.onlyAcceptColonists.GetValue(slate);
+            compShuttle.onlyAcceptHealthy = this.onlyAcceptHealthy.GetValue(slate);
+            compShuttle.requiredColonistCount = this.requireColonistCount.GetValue(slate);
+            compShuttle.permitShuttle = this.permitShuttle.GetValue(slate);
+            compShuttle.minAge = this.minAge.GetValue(slate).GetValueOrDefault();
+            bool EMMO_colonistFound = false;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.laelaps1, HVMP_Mod.settings.laelapsX))
+            {
+                Map map = slate.Get<Map>("map", null, false);
+                if (map != null)
+                {
+                    Pawn colonist = map.mapPawns.FreeColonists.Where((Pawn p) =>compShuttle.IsAllowed(p)).RandomElement();
+                    if (colonist != null)
+                    {
+                        compShuttle.requiredPawns.Add(colonist);
+                        EMMO_colonistFound = true;
+                        slate.Set<Thing>("EMMO_target", colonist, false);
+                        QuestGen.AddQuestDescriptionRules(new List<Rule>
+                        {
+                            new Rule_String("mutator_EMMO_info", this.EMMO_description.Formatted())
+                        });
+                    }
+                }
+            }
+            if (!EMMO_colonistFound)
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_EMMO_info", " ") });
+            }
+            if (this.overrideMass.TryGetValue(slate, out float num) && num > 0f)
+            {
+                compShuttle.Transporter.massCapacityOverride = num;
+            }
+            QuestGen.slate.Set<Thing>(this.storeAs.GetValue(slate), thing, false);
+        }
+        [NoTranslate]
+        public SlateRef<string> storeAs;
+        public SlateRef<IEnumerable<Pawn>> requiredPawns;
+        public SlateRef<IEnumerable<ThingDefCount>> requiredItems;
+        public SlateRef<int> requireColonistCount;
+        public SlateRef<bool> acceptColonists;
+        public SlateRef<bool?> acceptChildren;
+        public SlateRef<bool> onlyAcceptColonists;
+        public SlateRef<bool> onlyAcceptHealthy;
+        public SlateRef<Faction> owningFaction;
+        public SlateRef<bool> permitShuttle;
+        public SlateRef<float> overrideMass;
+        public SlateRef<float?> minAge;
+        [MustTranslate]
+        public string EMMO_description;
+    }
+    public class QuestNode_SSTSS : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+        protected override void RunInt()
+        {
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.laelaps2,HVMP_Mod.settings.laelapsX))
+            {
+                if (this.node != null)
+                {
+                    this.node.Run();
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                        {
+                            new Rule_String("mutator_SSTSS_info", this.SSTSS_description.Formatted())
+                        });
+                    return;
+                }
+            } else {
+                if (this.elseNode != null)
+                {
+                    this.elseNode.Run();
+                }
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_SSTSS_info", " ") });
+            }
+        }
+        public QuestNode node;
+        public QuestNode elseNode;
+        [MustTranslate]
+        public string SSTSS_description;
+    }
+    public class QuestNode_Multiply_TLWR : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return !this.storeAs.GetValue(slate).NullOrEmpty();
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            slate.Set<int>(this.storeAs.GetValue(slate), (int)(this.value1.GetValue(slate) * (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.laelaps3, HVMP_Mod.settings.laelapsX) ? this.TLWR_factor : 1f)), false);
+        }
+        public SlateRef<int> value1;
+        public float TLWR_factor;
+        [NoTranslate]
+        public SlateRef<string> storeAs;
     }
     //rover branchquest: odyssey
     public class QuestNode_Root_Odyssey : QuestNode_Sequence
@@ -7932,14 +10233,46 @@ namespace HautsPermits
                 Quest quest = QuestGen.quest;
                 PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
                 Map map = HVMP_Utility.TryGetMap();
-                int numSites = Rand.RangeInclusive(3, 5);
+                int numSites = this.normal_siteCount.RandomInRange;
+                int timeout = (numSites - 1) * this.ticksPerSite;
+                int maxDist = 20;
+                bool SG_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.odyssey3, HVMP_Mod.settings.odysseyX);
+                int SG_minSkillLevel = this.SG_levelBase - (this.SG_levelReductionPerExtraSite*(numSites-this.normal_siteCount.min));
+                SkillDef SG_sd = DefDatabase<SkillDef>.GetRandom();
+                if (SG_on)
+                {
+                    slate.Set<int>("SG_levelDesc", SG_minSkillLevel, false);
+                    slate.Set<string>("SG_nameDesc", SG_sd.label.CapitalizeFirst(), false);
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_SG_info", this.SG_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_SG_info", " ") });
+                }
+                bool LI_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.odyssey1, HVMP_Mod.settings.odysseyX);
+                if (LI_on)
+                {
+                    numSites += this.LI_extraSites;
+                    timeout += this.LI_extraDays;
+                    maxDist = this.LI_maxDist;
+                }
+                bool RE_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.odyssey2, HVMP_Mod.settings.odysseyX);
+                int RE_ambushLimit = this.RE_maxAmbushes;
+                if (RE_on)
+                {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_RE_info", this.RE_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_RE_info", " ") });
+                }
                 List<WorldObject> wos = new List<WorldObject>();
                 for (int i = 0; i < numSites; i++)
                 {
-                    if (this.TryFindSiteTile(tile, out PlanetTile num))
+                    if (this.TryFindSiteTile(tile, out PlanetTile num, maxDist))
                     {
-                        PlanetTile num2;
-                        this.TryFindSiteTile(tile, out num2);
                         WorldObject_OdysseyPoint wo = (WorldObject_OdysseyPoint)WorldObjectMaker.MakeWorldObject(HVMPDefOf.HVMP_OdysseyPoint);
                         wo.Tile = num;
                         wo.SetFaction(roverFaction);
@@ -7947,36 +10280,63 @@ namespace HautsPermits
                         quest.SpawnWorldObject(wo, null, null);
                         QuestUtility.AddQuestTag(ref wo.questTags, this.storeSitesAs.GetValue(slate));
                         wo.linkedQuest = quest;
-                        quest.WorldObjectTimeout(wo, (numSites - 1) * this.ticksPerSite, null, null, false, null, true);
+                        if (RE_on && RE_ambushLimit > 0 && Rand.Chance(this.RE_chance))
+                        {
+                            wo.RE_points = (int)(this.RE_pointsFactor * StorytellerUtility.DefaultThreatPointsNow(map));
+                        }
+                        if (SG_on && SG_sd != null)
+                        {
+                            wo.SG_level = SG_minSkillLevel;
+                            wo.SG_skill = SG_sd;
+                        }
+                        quest.WorldObjectTimeout(wo, timeout, null, null, false, null, true);
                         wos.Add(wo);
                     }
                 }
                 slate.Set<List<WorldObject>>("worldObject", wos, false);
                 slate.Set<Map>("map", map, false);
                 slate.Set<int>("numSites", numSites, false);
-                slate.Set<int>("timeoutDays", (numSites - 1) * this.ticksPerSite/60000, false);
-                slate.Set<int>("timeout", (numSites - 1) * this.ticksPerSite, false);
+                slate.Set<int>("timeoutDays", timeout / 60000, false);
+                slate.Set<int>("timeout", timeout, false);
                 slate.Set<Faction>("faction", roverFaction, false);
                 HVMP_Utility.SetSettingScalingRewardValue(slate);
             }
             base.RunInt();
         }
-        private bool TryFindSiteTile(PlanetTile pTile, out PlanetTile tile)
+        private bool TryFindSiteTile(PlanetTile pTile, out PlanetTile tile, int maxDist)
         {
-            return TileFinder.TryFindNewSiteTile(out tile, pTile, 2, 20, false, DefDatabase<LandmarkDef>.AllDefsListForReading, 0.5f, true, TileFinderMode.Near, true, false, null, null);
+            return TileFinder.TryFindNewSiteTile(out tile, pTile, 2, maxDist, false, DefDatabase<LandmarkDef>.AllDefsListForReading, 0.5f, true, TileFinderMode.Near, true, false, null, null);
         }
         protected override bool TestRunInt(Slate slate)
         {
             HVMP_Utility.SetSettingScalingRewardValue(slate);
             Map map = HVMP_Utility.TryGetMap();
             PlanetTile pTile = HVMP_Utility.TryGetPlanetTile();
-            return this.TryFindSiteTile(pTile, out PlanetTile num) && HVMP_Utility.TryFindRoverFaction(out Faction roverFaction) && base.TestRunInt(slate);
+            return this.TryFindSiteTile(pTile, out PlanetTile num, 20) && HVMP_Utility.TryFindRoverFaction(out Faction roverFaction) && base.TestRunInt(slate);
         }
         [NoTranslate]
         public SlateRef<string> storeSitesAs;
         [NoTranslate]
         public SlateRef<string> inSignal;
         public int ticksPerSite;
+        public IntRange normal_siteCount;
+        public int normal_maxDist;
+        public int LI_extraSites;
+        public int LI_extraDays;
+        public int LI_maxDist;
+        public float RE_chance;
+        public int RE_maxAmbushes;
+        public float RE_pointsFactor;
+        [MustTranslate]
+        public string RE_description;
+        public int SG_levelBase;
+        public int SG_levelReductionPerExtraSite;
+        [MustTranslate]
+        public string SG_description;
+        [NoTranslate]
+        public SlateRef<string> SG_storeLevelAs;
+        [NoTranslate]
+        public SlateRef<string> SG_storeSkillAs;
     }
     public class WorldObject_OdysseyPoint : WorldObject
     {
@@ -8004,10 +10364,43 @@ namespace HautsPermits
                 });
             }
         }
+        public override string GetInspectString()
+        {
+            string text = base.GetInspectString();
+            if (this.SG_skill != null)
+            {
+                text += "HVMP_OdysseySiteLabel_SG".Translate(this.SG_level,this.SG_skill.label.CapitalizeFirst());
+            }
+            return text;
+        }
         public void Notify_CaravanArrived(Caravan caravan)
         {
+            if (this.SG_skill != null)
+            {
+                bool skillLevelMet = false;
+                foreach (Pawn p in caravan.pawns)
+                {
+                    if (p.skills != null)
+                    {
+                        SkillRecord sr = p.skills.GetSkill(this.SG_skill);
+                        if (sr != null && !sr.TotallyDisabled && sr.Level >= this.SG_level)
+                        {
+                            skillLevelMet = true;
+                            break;
+                        }
+                    }
+                }
+                if (!skillLevelMet)
+                {
+                    return;
+                }
+            }
             this.Destroy();
             bool endQuest = true;
+            if (this.RE_points > 0)
+            {
+                this.Ambush(caravan);
+            }
             foreach (WorldObject wo in Find.WorldObjects.AllWorldObjects)
             {
                 if (wo != this && wo is WorldObject_OdysseyPoint woop && woop.linkedQuest == this.linkedQuest)
@@ -8029,12 +10422,23 @@ namespace HautsPermits
                 Find.SignalManager.SendSignal(new Signal(this.OutSignalCompleted, signalargs, false));
             }
         }
+        public void Ambush(Caravan target)
+        {
+            HVMP_Utility.DoAmbush(target, this.RE_points);
+            this.RE_points = -1;
+        }
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_References.Look<Quest>(ref this.linkedQuest, "linkedQuest", false);
+            Scribe_Values.Look<int>(ref this.RE_points, "RE_points", -1, false);
+            Scribe_Values.Look<int>(ref this.SG_level, "SG_level", 10, false);
+            Scribe_Defs.Look<SkillDef>(ref this.SG_skill, "SG_skill");
         }
         public Quest linkedQuest;
+        public int RE_points;
+        public int SG_level;
+        public SkillDef SG_skill;
     }
     public class CaravanArrivalAction_VisitOdysseyPoint : CaravanArrivalAction
     {
@@ -8158,6 +10562,20 @@ namespace HautsPermits
             slate.Set<Thing>("shuttle", shuttle, false);
             QuestUtility.AddQuestTag(ref shuttle.questTags, text);
             quest.SpawnWorldObject(site, null, null);
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.theseus2, HVMP_Mod.settings.theseusX))
+            {
+                Mutator_GG_SD component = site.GetComponent<Mutator_GG_SD>();
+                if (component != null)
+                {
+                    component.GG_on = true;
+                }
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_GG_info", this.GG_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_GG_info", " ") });
+            }
             TransportShip transportShip = quest.GenerateTransportShip(TransportShipDefOf.Ship_Shuttle, null, shuttle, null).transportShip;
             slate.Set<TransportShip>("transportShip", transportShip, false);
             QuestUtility.AddQuestTag(ref transportShip.questTags, text);
@@ -8203,6 +10621,20 @@ namespace HautsPermits
             quest3.SignalPassActivable(action, text6, text4, null, null, text7, false);
             int num5 = (int)(this.timeLimitDays.RandomInRange * 60000f);
             slate.Set<int>("timeoutTicks", num5, false);
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.theseus3,HVMP_Mod.settings.theseusX))
+            {
+                Mutator_GG_SD component = site.GetComponent<Mutator_GG_SD>();
+                if (component != null)
+                {
+                    component.SD_on = true;
+                }
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_SD_info", this.SD_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_SD_info", " ") });
+            }
             quest.WorldObjectTimeout(site, num5, null, null, false, null, true);
             List<Rule> list = new List<Rule>();
             list.AddRange(GrammarUtility.RulesForWorldObject("site", site, true));
@@ -8263,7 +10695,7 @@ namespace HautsPermits
         }
         private float GetSiteThreatPoints(float threatPoints, int population, int pawnCount)
         {
-            return threatPoints * ((float)pawnCount / (float)population) * QuestNode_Theseus.PawnCountToSitePointsFactorCurve.Evaluate((float)pawnCount);
+            return threatPoints * (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.theseus1, HVMP_Mod.settings.theseusX) ?this.AQAIO_pointFactor.RandomInRange : 1f);
         }
         protected RimWorld.Planet.Site GenerateSite(Pawn asker, float threatPoints, int pawnCount, int population, int tile)
         {
@@ -8281,26 +10713,13 @@ namespace HautsPermits
         }
         private bool TryGetSiteFaction(out Faction faction)
         {
-            faction = Find.FactionManager.RandomEnemyFaction(false, false, false);
-            if (faction == null)
-            {
-                //to build the throne of madness
-                faction = Find.FactionManager.RandomEnemyFaction(true, false, false);
-                if (faction == null)
-                {
-                    faction = Find.FactionManager.RandomEnemyFaction(true, true, false);
-                    if (faction == null)
-                    {
-                        faction = Find.FactionManager.RandomEnemyFaction(true, true, true);
-                    }
-                }
-            }
+            faction = HVMP_Utility.GetAnEnemyFaction();
             return faction != null;
         }
         private static readonly SimpleCurve PawnCountToSitePointsFactorCurve = new SimpleCurve
         {
             {
-                new CurvePoint(1f, 0.4f),
+                new CurvePoint(1f, 0.33f),
                 true
             },
             {
@@ -8308,11 +10727,11 @@ namespace HautsPermits
                 true
             },
             {
-                new CurvePoint(5f, 0.62f),
+                new CurvePoint(5f, 0.75f),
                 true
             },
             {
-                new CurvePoint(10f, 0.75f),
+                new CurvePoint(10f, 1f),
                 true
             }
         };
@@ -8326,6 +10745,171 @@ namespace HautsPermits
         public SlateRef<int?> variants;
         public bool canBeSpace;
         public FloatRange timeLimitDays = new FloatRange(2f, 5f);
+        public FloatRange AQAIO_pointFactor = new FloatRange(2f,3f);
+        [MustTranslate]
+        public string GG_description;
+        [MustTranslate]
+        public string SD_description;
+    }
+    public class WorldObjectCompProperties_Mutator_GG_SD : WorldObjectCompProperties
+    {
+        public WorldObjectCompProperties_Mutator_GG_SD()
+        {
+            this.compClass = typeof(Mutator_GG_SD);
+        }
+        public int GG_maxBanditsBuffed;
+        public List<HediffDef> GG_buffs;
+        public List<ThingDef> SD_turrets;
+        public float SD_turretsPerPawn;
+    }
+    public class Mutator_GG_SD : WorldObjectComp
+    {
+        public override void Initialize(WorldObjectCompProperties props)
+        {
+            base.Initialize(props);
+            WorldObjectCompProperties_Mutator_GG_SD proper = props as WorldObjectCompProperties_Mutator_GG_SD;
+            if (proper != null)
+            {
+                this.GG_buffs = proper.GG_buffs;
+                this.GG_maxBanditsBuffed = proper.GG_maxBanditsBuffed;
+                this.SD_turretsPerPawn = proper.SD_turretsPerPawn;
+                this.SD_turrets = proper.SD_turrets;
+            }
+        }
+        public override void PostMapGenerate()
+        {
+            if (this.parent is MapParent mp)
+            {
+                Map m = mp.Map;
+                if (this.GG_on && !this.GG_buffs.NullOrEmpty())
+                {
+                    int GG_count = this.GG_maxBanditsBuffed;
+                    List<Pawn> pawns = m.mapPawns.PawnsInFaction(this.parent.Faction).InRandomOrder().ToList();
+                    foreach (Pawn p in pawns)
+                    {
+                        if (p.Spawned)
+                        {
+                            GG_count--;
+                            if (GG_count >= 0)
+                            {
+                                if (p.RaceProps.Humanlike)
+                                {
+                                    p.health.AddHediff(this.GG_buffs.RandomElement());
+                                }
+                            }
+                        }
+                    }
+                }
+                if (this.SD_on && !this.SD_turrets.NullOrEmpty())
+                {
+                    List<Pawn> pawns = m.mapPawns.PawnsInFaction(this.parent.Faction).Where((Pawn paw)=>paw.RaceProps.Humanlike).InRandomOrder().ToList();
+                    int SD_count = Math.Max(1,(int)(pawns.Count*this.SD_turretsPerPawn));
+                    foreach (Pawn p in pawns)
+                    {
+                        if (p.Spawned)
+                        {
+                            if (SD_count > 0)
+                            {
+                                Thing t = ThingMaker.MakeThing(this.SD_turrets.RandomElement());
+                                GenPlace.TryPlaceThing(t, p.Position, m, ThingPlaceMode.Near, null, null, null, 1);
+                                t.SetFactionDirect(p.Faction);
+                                SD_count--;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look<bool>(ref this.GG_on, "GG_on", false, false);
+            Scribe_Values.Look<int>(ref this.GG_maxBanditsBuffed, "GG_maxBanditsBuffed", 10, false);
+            Scribe_Collections.Look<HediffDef>(ref this.GG_buffs, "GG_buffs", LookMode.Undefined, LookMode.Undefined);
+            Scribe_Values.Look<bool>(ref this.SD_on, "SD_on", false, false);
+            Scribe_Values.Look<float>(ref this.SD_turretsPerPawn, "SD_turretsPerPawn", 0.5f, false);
+            Scribe_Collections.Look<ThingDef>(ref this.SD_turrets, "SD_turrets", LookMode.Undefined, LookMode.Undefined);
+        }
+        public bool GG_on;
+        public int GG_maxBanditsBuffed;
+        public List<HediffDef> GG_buffs;
+        public bool SD_on;
+        public List<ThingDef> SD_turrets;
+        public float SD_turretsPerPawn;
+    }
+    //technically for Biotech's environmental control quest
+    public class WorldObjectCompProperties_Mutator_DNLU : WorldObjectCompProperties
+    {
+        public WorldObjectCompProperties_Mutator_DNLU()
+        {
+            this.compClass = typeof(Mutator_DNLU);
+        }
+        public float DNLU_pointFactor;
+    }
+    public class Mutator_DNLU : WorldObjectComp
+    {
+        public override void Initialize(WorldObjectCompProperties props)
+        {
+            base.Initialize(props);
+            WorldObjectCompProperties_Mutator_DNLU proper = props as WorldObjectCompProperties_Mutator_DNLU;
+            if (proper != null)
+            {
+                this.DNLU_pointFactor = proper.DNLU_pointFactor;
+            }
+        }
+        public override void PostMapGenerate()
+        {
+            if (this.DNLU_on && this.parent is Site site)
+            {
+                Thing problemCauser = null;
+                foreach (SitePart sp in site.parts)
+                {
+                    if (sp.conditionCauser != null && sp.conditionCauser.SpawnedOrAnyParentSpawned)
+                    {
+                        problemCauser = sp.conditionCauser;
+                        break;
+                    }
+                }
+                if (problemCauser != null)
+                {
+                    Faction faction = site.Faction ?? Faction.OfMechanoids;
+                    PawnGroupMaker pgm = faction.def.pawnGroupMakers.Where((PawnGroupMaker pgm0) => pgm0.kindDef == PawnGroupKindDefOf.Settlement || pgm0.kindDef == PawnGroupKindDefOf.Combat).RandomElement();
+                    if (pgm != null)
+                    {
+                        PawnGroupMakerParms pawnGroupMakerParms = new PawnGroupMakerParms
+                        {
+                            groupKind = pgm.kindDef,
+                            tile = site.Tile,
+                            faction = faction,
+                            inhabitants = true,
+                            generateFightersOnly = true,
+                            seed = new int?(Rand.Int),
+                            points = Math.Max(StorytellerUtility.DefaultThreatPointsNow(site.Map) * this.DNLU_pointFactor, faction.def.MinPointsToGeneratePawnGroup(pgm.kindDef, null))
+                        };
+                        IntVec3 iv3 = problemCauser.PositionHeld;
+                        Map map = problemCauser.MapHeld;
+                        List<Pawn> pawns = new List<Pawn>();
+                        foreach (Pawn pawn in PawnGroupMakerUtility.GeneratePawns(pawnGroupMakerParms, true))
+                        {
+                            GenSpawn.Spawn(pawn, CellFinder.RandomClosewalkCellNear(iv3, map, 10, null), map);
+                            pawns.Add(pawn);
+                        }
+                        if (pawns.Count > 0)
+                        {
+                            LordMaker.MakeNewLord(faction, new LordJob_DefendPoint(iv3), map, pawns);
+                        }
+                    }
+                }
+            }
+        }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look<bool>(ref this.DNLU_on, "DNLU_on", false, false);
+            Scribe_Values.Look<float>(ref this.DNLU_pointFactor, "DNLU_pointFactor", 0.5f, false);
+        }
+        public bool DNLU_on;
+        public float DNLU_pointFactor;
     }
     //utility
     public static class HVMP_Utility
@@ -8542,35 +11126,39 @@ namespace HautsPermits
             }
             return true;
         }
-        public static void PaxOfferingInner(int goodwillChange)
+        public static void PaxMundiInner(int goodwillChange)
         {
             WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
             if (wcbs != null)
             {
-                QuestPart_PaxOffering qppo = null;
-                for (int i = wcbs.qppos.Count - 1; i >= 0; i--)
+                QuestPart_PaxMundi qppm = null;
+                for (int i = wcbs.qppms.Count - 1; i >= 0; i--)
                 {
-                    if (wcbs.qppos[i].quest.Historical || wcbs.qppos[i].denominator <= wcbs.qppos[i].goodwillChangesInt)
+                    if (wcbs.qppms[i].quest.Historical || wcbs.qppms[i].denominator <= wcbs.qppms[i].goodwillChangesInt)
                     {
-                        wcbs.qppos.Remove(wcbs.qppos[i]);
-                    } else if (wcbs.qppos[i].quest.State == QuestState.Ongoing) {
-                        if (qppo == null || qppo.quest.TicksSinceAccepted <= wcbs.qppos[i].quest.TicksSinceAccepted)
+                        wcbs.qppms.Remove(wcbs.qppms[i]);
+                    } else if (wcbs.qppms[i].quest.State == QuestState.Ongoing) {
+                        if (qppm == null || qppm.quest.TicksSinceAccepted <= wcbs.qppms[i].quest.TicksSinceAccepted)
                         {
-                            qppo = wcbs.qppos[i];
+                            qppm = wcbs.qppms[i];
                         }
                     }
                 }
-                if (qppo != null)
+                if (qppm != null)
                 {
-                    int functionalChange = Math.Min(goodwillChange, qppo.denominator);
+                    int functionalChange = Math.Min(goodwillChange, qppm.denominator);
                     int leftovers = goodwillChange - functionalChange;
-                    qppo.goodwillChangesInt += functionalChange;
+                    if (qppm.TWOS_on && functionalChange < 0f)
+                    {
+                        functionalChange *= 2;
+                    }
+                    qppm.goodwillChangesInt += functionalChange;
                     if (leftovers >= 0)
                     {
                         bool goodwillMaxedOut = true;
                         foreach (Faction f in Find.FactionManager.AllFactions)
                         {
-                            if (f != Faction.OfPlayerSilentFail && !f.def.HasModExtension<EBranchQuests>() && !f.def.permanentEnemy && f.HasGoodwill && f.GoodwillWith(Faction.OfPlayerSilentFail) < 100)
+                            if (f != Faction.OfPlayerSilentFail && !f.def.HasModExtension<EBranchQuests>() && !f.def.PermanentlyHostileTo(Faction.OfPlayerSilentFail.def) && f.HasGoodwill && f.GoodwillWith(Faction.OfPlayerSilentFail) < 100)
                             {
                                 goodwillMaxedOut = false;
                                 break;
@@ -8578,12 +11166,12 @@ namespace HautsPermits
                         }
                         if (goodwillMaxedOut)
                         {
-                            qppo.goodwillChangesInt = qppo.denominator;
+                            qppm.goodwillChangesInt = qppm.denominator;
                             return;
                         }
                         if (leftovers > 0)
                         {
-                            HVMP_Utility.PaxOfferingInner(leftovers);
+                            HVMP_Utility.PaxMundiInner(leftovers);
                         }
                     }
                 }
@@ -8600,6 +11188,23 @@ namespace HautsPermits
             dataStatic.velocityAngle = 330f + Rand.Range(0f, 50f);
             dataStatic.velocitySpeed = 0.6f;
             map.flecks.CreateFleck(dataStatic);
+        }
+        public static void DoScalpelExplosion(IntVec3 iv3, Map map, SoundDef sound, int damageAmount = -1)
+        {
+            sound.PlayOneShot(new TargetInfo(iv3, map, false));
+            if (HautsUtility.CanBeHitByAirToSurface(iv3, map, false))
+            {
+                RoofDef roof = iv3.GetRoof(map);
+                if (roof != null && !roof.isThickRoof && roof.canCollapse)
+                {
+                    if (!roof.soundPunchThrough.NullOrUndefined())
+                    {
+                        roof.soundPunchThrough.PlayOneShot(new TargetInfo(iv3, map, false));
+                    }
+                    RoofCollapserImmediate.DropRoofInCells(iv3, map, null);
+                }
+                GenExplosion.DoExplosion(iv3,map,1.42f,DamageDefOf.Bomb,null,damageAmount);
+            }
         }
         public static void ThrowRepairGlow(Vector3 loc, Map map, float size)
         {
@@ -8698,6 +11303,40 @@ namespace HautsPermits
         {
             return flag || (mayhemMode && Rand.Chance(0.35f));
         }
+        public static Map GetMap_QuestNodeGameCondition(Slate slate)
+        {
+            Map randomPlayerHomeMap;
+            if (!slate.TryGet<Map>("map", out randomPlayerHomeMap, false))
+            {
+                randomPlayerHomeMap = Find.RandomPlayerHomeMap;
+            }
+            return randomPlayerHomeMap;
+        }
+        public static void DoAmbush(IIncidentTarget target, float points)
+        {
+            IncidentDef id = DefDatabase<IncidentDef>.GetNamed("Ambush");
+            IncidentParms parms = StorytellerUtility.DefaultParmsNow(id.category, target);
+            parms.points = points;
+            id.Worker.TryExecute(parms);
+        }
+        public static Faction GetAnEnemyFaction()
+        {
+            Faction faction = Find.FactionManager.RandomEnemyFaction(false, false, false);
+            if (faction == null)
+            {
+                //to build the throne of madness
+                faction = Find.FactionManager.RandomEnemyFaction(true, false, false);
+                if (faction == null)
+                {
+                    faction = Find.FactionManager.RandomEnemyFaction(true, true, false);
+                    if (faction == null)
+                    {
+                        faction = Find.FactionManager.RandomEnemyFaction(true, true, true);
+                    }
+                }
+            }
+            return faction;
+        }
     }
     //settings
     public class HVMP_Settings : ModSettings
@@ -8718,11 +11357,11 @@ namespace HautsPermits
         public float authorizerStandingGain = 6f;
         public bool fort1, fort2, fort3, interv1, interv2, interv3, mm1, mm2, mm3, research1, research2, research3, transport1, transport2, transport3;
         public bool caelum1, caelum2, caelum3, machina1, machina2, machina3, mundi1, mundi2, mundi3, populus1, populus2, populus3, vox1, vox2, vox3;
-        public bool atlas1, atlas2, atlas3, colossus1, colossus2, colossus3, laelaps1, laelaps2, laelaps3, odyssey1, odyssey2, odyssey3, theseus1, theseus2, theseus3;
-        public bool enigma1, enigma2, enigma3, entrant1, entrant2, entrant3, ethnog1, ethnog2, ethnog3, excav1, excav2, excav3, et1, et2, et3;
+        public bool atlas1, atlas2, atlas3, ares1, ares2, ares3, laelaps1, laelaps2, laelaps3, odyssey1, odyssey2, odyssey3, theseus1, theseus2, theseus3;
+        public bool ethnog1, ethnog2, ethnog3, excav1, excav2, excav3, remnant1, remnant2, remnant3, sat1, sat2, sat3, shrine1, shrine2, shrine3;
         public bool cs1, cs2, cs3, ec1, ec2, ec3, fw1, fw2, fw3, hd1, hd2, hd3, ra1, ra2, ra3;
         public bool barker1, barker2, barker3, fuller1, fuller2, fuller3, lc1, lc2, lc3, natali1, natali2, natali3, romero1, romero2, romero3;
-        public bool fortX, intervX, mmX, researchX, transportX, caelumX, machinaX, mundiX, populusX, voxX, atlasX, colossusX, laelapsX, odysseyX, theseusX, enigmaX, entrantX, ethnogX, excavX, etX, csX, ecX, fwX, hdX, raX, barkerX, fullerX, lcX, nataliX, romeroX;
+        public bool fortX, intervX, mmX, researchX, transportX, caelumX, machinaX, mundiX, populusX, voxX, atlasX, aresX, laelapsX, odysseyX, theseusX, ethnogX, excavX, remnantX, satX, shrineX, csX, ecX, fwX, hdX, raX, barkerX, fullerX, lcX, nataliX, romeroX;
         public override void ExposeData()
         {
             Scribe_Values.Look(ref maximumChaosMode, "maximumChaosMode", false);
@@ -8787,10 +11426,10 @@ namespace HautsPermits
             Scribe_Values.Look(ref atlas2, "atlas2", false);
             Scribe_Values.Look(ref atlas3, "atlas3", false);
             Scribe_Values.Look(ref atlasX, "atlasX", false);
-            Scribe_Values.Look(ref colossus1, "colossus1", false);
-            Scribe_Values.Look(ref colossus2, "colossus2", false);
-            Scribe_Values.Look(ref colossus3, "colossus3", false);
-            Scribe_Values.Look(ref colossusX, "colossusX", false);
+            Scribe_Values.Look(ref ares1, "ares1", false);
+            Scribe_Values.Look(ref ares2, "ares2", false);
+            Scribe_Values.Look(ref ares3, "ares3", false);
+            Scribe_Values.Look(ref aresX, "aresX", false);
             Scribe_Values.Look(ref laelaps1, "laelaps1", false);
             Scribe_Values.Look(ref laelaps2, "laelaps2", false);
             Scribe_Values.Look(ref laelaps3, "laelaps3", false);
@@ -8803,14 +11442,6 @@ namespace HautsPermits
             Scribe_Values.Look(ref theseus2, "theseus2", false);
             Scribe_Values.Look(ref theseus3, "theseus3", false);
             Scribe_Values.Look(ref theseusX, "theseusX", false);
-            Scribe_Values.Look(ref enigma1, "enigma1", false);
-            Scribe_Values.Look(ref enigma2, "enigma2", false);
-            Scribe_Values.Look(ref enigma3, "enigma3", false);
-            Scribe_Values.Look(ref enigmaX, "enigmaX", false);
-            Scribe_Values.Look(ref entrant1, "entrant1", false);
-            Scribe_Values.Look(ref entrant2, "entrant2", false);
-            Scribe_Values.Look(ref entrant3, "entrant3", false);
-            Scribe_Values.Look(ref entrantX, "entrantX", false);
             Scribe_Values.Look(ref ethnog1, "ethnog1", false);
             Scribe_Values.Look(ref ethnog2, "ethnog2", false);
             Scribe_Values.Look(ref ethnog3, "ethnog3", false);
@@ -8819,10 +11450,18 @@ namespace HautsPermits
             Scribe_Values.Look(ref excav2, "excav2", false);
             Scribe_Values.Look(ref excav3, "excav3", false);
             Scribe_Values.Look(ref excavX, "excavX", false);
-            Scribe_Values.Look(ref et1, "et1", false);
-            Scribe_Values.Look(ref et2, "et2", false);
-            Scribe_Values.Look(ref et3, "et3", false);
-            Scribe_Values.Look(ref etX, "etX", false);
+            Scribe_Values.Look(ref remnant1, "remnant1", false);
+            Scribe_Values.Look(ref remnant2, "remnant2", false);
+            Scribe_Values.Look(ref remnant3, "remnant3", false);
+            Scribe_Values.Look(ref remnantX, "remnantX", false);
+            Scribe_Values.Look(ref sat1, "sat1", false);
+            Scribe_Values.Look(ref sat2, "sat2", false);
+            Scribe_Values.Look(ref sat3, "sat3", false);
+            Scribe_Values.Look(ref satX, "satX", false);
+            Scribe_Values.Look(ref shrine1, "shrine1", false);
+            Scribe_Values.Look(ref shrine2, "shrine2", false);
+            Scribe_Values.Look(ref shrine3, "shrine3", false);
+            Scribe_Values.Look(ref shrineX, "shrineX", false);
             Scribe_Values.Look(ref cs1, "cs1", false);
             Scribe_Values.Look(ref cs2, "cs2", false);
             Scribe_Values.Look(ref cs3, "cs3", false);
@@ -9209,9 +11848,9 @@ namespace HautsPermits
             bool flagPB3 = settings.machina3;
             listing_Standard2.CheckboxLabeled("HVMP_Label_Machina".Translate() + ": " + "HVMP_HardMode_Label_Machina_3".Translate(), ref flagPB3, "HVMP_HardMode_Tooltip_Machina_3".Translate());
             settings.machina3 = flagPB3;
-            bool flagPBX = settings.mundiX;
+            bool flagPBX = settings.machinaX;
             listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagPBX, "HVMP_Tooltip_MayhemMode".Translate());
-            settings.mundiX = flagPBX;
+            settings.machinaX = flagPBX;
             listing_Standard2.Gap(10f);
             Text.Font = GameFont.Small;
             listing_Standard2.Label("HVMP_Label_Mundi".Translate(), -1, "HVMP_Tooltip_Mundi".Translate());
@@ -9279,20 +11918,20 @@ namespace HautsPermits
             settings.atlasX = flagRAX;
             listing_Standard2.Gap(10f);
             Text.Font = GameFont.Small;
-            listing_Standard2.Label("HVMP_Label_Colossus".Translate(), -1, "HVMP_Tooltip_Colossus".Translate());
+            listing_Standard2.Label("HVMP_Label_Ares".Translate(), -1, "HVMP_Tooltip_Ares".Translate());
             Text.Font = GameFont.Tiny;
-            bool flagRB1 = settings.colossus1;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Colossus".Translate() + ": " + "HVMP_HardMode_Label_Colossus_1".Translate(), ref flagRB1, "HVMP_HardMode_Tooltip_Colossus_1".Translate());
-            settings.colossus1 = flagRB1;
-            bool flagRB2 = settings.colossus2;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Colossus".Translate() + ": " + "HVMP_HardMode_Label_Colossus_2".Translate(), ref flagRB2, "HVMP_HardMode_Tooltip_Colossus_2".Translate());
-            settings.colossus2 = flagRB2;
-            bool flagRB3 = settings.colossus3;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Colossus".Translate() + ": " + "HVMP_HardMode_Label_Colossus_3".Translate(), ref flagRB3, "HVMP_HardMode_Tooltip_Colossus_3".Translate());
-            settings.colossus3 = flagRB3;
-            bool flagRBX = settings.colossusX;
+            bool flagRB1 = settings.ares1;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Ares".Translate() + ": " + "HVMP_HardMode_Label_Ares_1".Translate(), ref flagRB1, "HVMP_HardMode_Tooltip_Ares_1".Translate());
+            settings.ares1 = flagRB1;
+            bool flagRB2 = settings.ares2;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Ares".Translate() + ": " + "HVMP_HardMode_Label_Ares_2".Translate(), ref flagRB2, "HVMP_HardMode_Tooltip_Ares_2".Translate());
+            settings.ares2 = flagRB2;
+            bool flagRB3 = settings.ares3;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Ares".Translate() + ": " + "HVMP_HardMode_Label_Ares_3".Translate(), ref flagRB3, "HVMP_HardMode_Tooltip_Ares_3".Translate());
+            settings.ares3 = flagRB3;
+            bool flagRBX = settings.aresX;
             listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagRBX, "HVMP_Tooltip_MayhemMode".Translate());
-            settings.colossusX = flagRBX;
+            settings.aresX = flagRBX;
             listing_Standard2.Gap(10f);
             Text.Font = GameFont.Small;
             listing_Standard2.Label("HVMP_Label_Laelaps".Translate(), -1, "HVMP_Tooltip_Laelaps".Translate());
@@ -9346,84 +11985,84 @@ namespace HautsPermits
                 listing_Standard2.Gap(20f);
                 Text.Font = GameFont.Small;
                 listing_Standard2.Label("HVMP_Label_Archive".Translate());
-                listing_Standard2.Label("HVMP_Label_Enigma".Translate(), -1, "HVMP_Tooltip_Enigma".Translate());
-                Text.Font = GameFont.Tiny;
-                bool flagAA1 = settings.enigma1;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Enigma".Translate() + ": " + "HVMP_HardMode_Label_Enigma_1".Translate(), ref flagAA1, "HVMP_HardMode_Tooltip_Enigma_1".Translate());
-                settings.enigma1 = flagAA1;
-                bool flagAA2 = settings.enigma2;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Enigma".Translate() + ": " + "HVMP_HardMode_Label_Enigma_2".Translate(), ref flagAA2, "HVMP_HardMode_Tooltip_Enigma_2".Translate());
-                settings.enigma2 = flagAA2;
-                bool flagAA3 = settings.enigma3;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Enigma".Translate() + ": " + "HVMP_HardMode_Label_Enigma_3".Translate(), ref flagAA3, "HVMP_HardMode_Tooltip_Enigma_3".Translate());
-                settings.enigma3 = flagAA3;
-                bool flagAAX = settings.enigmaX;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagAAX, "HVMP_Tooltip_MayhemMode".Translate());
-                settings.enigmaX = flagAAX;
-                listing_Standard2.Gap(10f);
-                Text.Font = GameFont.Small;
-                listing_Standard2.Label("HVMP_Label_Entrant".Translate(), -1, "HVMP_Tooltip_Entrant".Translate());
-                Text.Font = GameFont.Tiny;
-                bool flagAB1 = settings.entrant1;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Entrant".Translate() + ": " + "HVMP_HardMode_Label_Entrant_1".Translate(), ref flagAB1, "HVMP_HardMode_Tooltip_Entrant_1".Translate());
-                settings.entrant1 = flagAB1;
-                bool flagAB2 = settings.entrant2;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Entrant".Translate() + ": " + "HVMP_HardMode_Label_Entrant_2".Translate(), ref flagAB2, "HVMP_HardMode_Tooltip_Entrant_2".Translate());
-                settings.entrant2 = flagAB2;
-                bool flagAB3 = settings.entrant3;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Entrant".Translate() + ": " + "HVMP_HardMode_Label_Entrant_3".Translate(), ref flagAB3, "HVMP_HardMode_Tooltip_Entrant_3".Translate());
-                settings.entrant3 = flagAB3;
-                bool flagABX = settings.entrantX;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagABX, "HVMP_Tooltip_MayhemMode".Translate());
-                settings.entrantX = flagABX;
-                listing_Standard2.Gap(10f);
-                Text.Font = GameFont.Small;
                 listing_Standard2.Label("HVMP_Label_Ethnography".Translate(), -1, "HVMP_Tooltip_Ethnography".Translate());
                 Text.Font = GameFont.Tiny;
-                bool flagAC1 = settings.ethnog1;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Ethnography".Translate() + ": " + "HVMP_HardMode_Label_Ethnography_1".Translate(), ref flagAC1, "HVMP_HardMode_Tooltip_Ethnography_1".Translate());
-                settings.ethnog1 = flagAC1;
-                bool flagAC2 = settings.ethnog2;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Ethnography".Translate() + ": " + "HVMP_HardMode_Label_Ethnography_2".Translate(), ref flagAC2, "HVMP_HardMode_Tooltip_Ethnography_2".Translate());
-                settings.ethnog2 = flagAC2;
-                bool flagAC3 = settings.ethnog3;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Ethnography".Translate() + ": " + "HVMP_HardMode_Label_Ethnography_3".Translate(), ref flagAC3, "HVMP_HardMode_Tooltip_Ethnography_3".Translate());
-                settings.ethnog3 = flagAC3;
-                bool flagACX = settings.ethnogX;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagACX, "HVMP_Tooltip_MayhemMode".Translate());
-                settings.ethnogX = flagACX;
+                bool flagAA1 = settings.ethnog1;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Ethnography".Translate() + ": " + "HVMP_HardMode_Label_Ethnography_1".Translate(), ref flagAA1, "HVMP_HardMode_Tooltip_Ethnography_1".Translate());
+                settings.ethnog1 = flagAA1;
+                bool flagAA2 = settings.ethnog2;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Ethnography".Translate() + ": " + "HVMP_HardMode_Label_Ethnography_2".Translate(), ref flagAA2, "HVMP_HardMode_Tooltip_Ethnography_2".Translate());
+                settings.ethnog2 = flagAA2;
+                bool flagAA3 = settings.ethnog3;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Ethnography".Translate() + ": " + "HVMP_HardMode_Label_Ethnography_3".Translate(), ref flagAA3, "HVMP_HardMode_Tooltip_Ethnography_3".Translate());
+                settings.ethnog3 = flagAA3;
+                bool flagAAX = settings.ethnogX;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagAAX, "HVMP_Tooltip_MayhemMode".Translate());
+                settings.ethnogX = flagAAX;
                 listing_Standard2.Gap(10f);
                 Text.Font = GameFont.Small;
                 listing_Standard2.Label("HVMP_Label_Excavation".Translate(), -1, "HVMP_Tooltip_Excavation".Translate());
                 Text.Font = GameFont.Tiny;
-                bool flagAD1 = settings.excav1;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Excavation".Translate() + ": " + "HVMP_HardMode_Label_Excavation_1".Translate(), ref flagAD1, "HVMP_HardMode_Tooltip_Excavation_1".Translate());
-                settings.excav1 = flagAD1;
-                bool flagAD2 = settings.excav2;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Excavation".Translate() + ": " + "HVMP_HardMode_Label_Excavation_2".Translate(), ref flagAD2, "HVMP_HardMode_Tooltip_Excavation_2".Translate());
-                settings.excav2 = flagAD2;
-                bool flagAD3 = settings.excav3;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Excavation".Translate() + ": " + "HVMP_HardMode_Label_Excavation_3".Translate(), ref flagAD3, "HVMP_HardMode_Tooltip_Excavation_3".Translate());
-                settings.excav3 = flagAD3;
-                bool flagADX = settings.excavX;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagADX, "HVMP_Tooltip_MayhemMode".Translate());
-                settings.excavX = flagADX;
+                bool flagAB1 = settings.excav1;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Excavation".Translate() + ": " + "HVMP_HardMode_Label_Excavation_1".Translate(), ref flagAB1, "HVMP_HardMode_Tooltip_Excavation_1".Translate());
+                settings.excav1 = flagAB1;
+                bool flagAB2 = settings.excav2;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Excavation".Translate() + ": " + "HVMP_HardMode_Label_Excavation_2".Translate(), ref flagAB2, "HVMP_HardMode_Tooltip_Excavation_2".Translate());
+                settings.excav2 = flagAB2;
+                bool flagAB3 = settings.excav3;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Excavation".Translate() + ": " + "HVMP_HardMode_Label_Excavation_3".Translate(), ref flagAB3, "HVMP_HardMode_Tooltip_Excavation_3".Translate());
+                settings.excav3 = flagAB3;
+                bool flagABX = settings.excavX;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagABX, "HVMP_Tooltip_MayhemMode".Translate());
+                settings.excavX = flagABX;
                 listing_Standard2.Gap(10f);
                 Text.Font = GameFont.Small;
-                listing_Standard2.Label("HVMP_Label_Extraterrestrial".Translate(), -1, "HVMP_Tooltip_Extraterrestrial".Translate());
+                listing_Standard2.Label("HVMP_Label_Remnant".Translate(), -1, "HVMP_Tooltip_Remnant".Translate());
                 Text.Font = GameFont.Tiny;
-                bool flagAE1 = settings.et1;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Extraterrestrial".Translate() + ": " + "HVMP_HardMode_Label_Extraterrestrial_1".Translate(), ref flagAE1, "HVMP_HardMode_Tooltip_Extraterrestrial_1".Translate());
-                settings.et1 = flagAE1;
-                bool flagAE2 = settings.et2;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Extraterrestrial".Translate() + ": " + "HVMP_HardMode_Label_Extraterrestrial_2".Translate(), ref flagAE2, "HVMP_HardMode_Tooltip_Extraterrestrial_2".Translate());
-                settings.et2 = flagAE2;
-                bool flagAE3 = settings.et3;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Extraterrestrial".Translate() + ": " + "HVMP_HardMode_Label_Extraterrestrial_3".Translate(), ref flagAE3, "HVMP_HardMode_Tooltip_Extraterrestrial_3".Translate());
-                settings.et3 = flagAE3;
-                bool flagAEX = settings.etX;
+                bool flagAC1 = settings.remnant1;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Remnant".Translate() + ": " + "HVMP_HardMode_Label_Remnant_1".Translate(), ref flagAC1, "HVMP_HardMode_Tooltip_Remnant_1".Translate());
+                settings.remnant1 = flagAC1;
+                bool flagAC2 = settings.remnant2;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Remnant".Translate() + ": " + "HVMP_HardMode_Label_Remnant_2".Translate(), ref flagAC2, "HVMP_HardMode_Tooltip_Remnant_2".Translate());
+                settings.remnant2 = flagAC2;
+                bool flagAC3 = settings.remnant3;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Remnant".Translate() + ": " + "HVMP_HardMode_Label_Remnant_3".Translate(), ref flagAC3, "HVMP_HardMode_Tooltip_Remnant_3".Translate());
+                settings.remnant3 = flagAC3;
+                bool flagACX = settings.remnantX;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagACX, "HVMP_Tooltip_MayhemMode".Translate());
+                settings.remnantX = flagACX;
+                listing_Standard2.Gap(10f);
+                Text.Font = GameFont.Small;
+                listing_Standard2.Label("HVMP_Label_Satellite".Translate(), -1, "HVMP_Tooltip_Satellite".Translate());
+                Text.Font = GameFont.Tiny;
+                bool flagAD1 = settings.sat1;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Satellite".Translate() + ": " + "HVMP_HardMode_Label_Satellite_1".Translate(), ref flagAD1, "HVMP_HardMode_Tooltip_Satellite_1".Translate());
+                settings.sat1 = flagAD1;
+                bool flagAD2 = settings.sat2;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Satellite".Translate() + ": " + "HVMP_HardMode_Label_Satellite_2".Translate(), ref flagAD2, "HVMP_HardMode_Tooltip_Satellite_2".Translate());
+                settings.sat2 = flagAD2;
+                bool flagAD3 = settings.sat3;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Satellite".Translate() + ": " + "HVMP_HardMode_Label_Satellite_3".Translate(), ref flagAD3, "HVMP_HardMode_Tooltip_Satellite_3".Translate());
+                settings.sat3 = flagAD3;
+                bool flagADX = settings.satX;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagADX, "HVMP_Tooltip_MayhemMode".Translate());
+                settings.satX = flagADX;
+                listing_Standard2.Gap(10f);
+                Text.Font = GameFont.Small;
+                listing_Standard2.Label("HVMP_Label_Shrine".Translate(), -1, "HVMP_Tooltip_Shrine".Translate());
+                Text.Font = GameFont.Tiny;
+                bool flagAE1 = settings.shrine1;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Shrine".Translate() + ": " + "HVMP_HardMode_Label_Shrine_1".Translate(), ref flagAE1, "HVMP_HardMode_Tooltip_Shrine_1".Translate());
+                settings.shrine1 = flagAE1;
+                bool flagAE2 = settings.shrine2;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Shrine".Translate() + ": " + "HVMP_HardMode_Label_Shrine_2".Translate(), ref flagAE2, "HVMP_HardMode_Tooltip_Shrine_2".Translate());
+                settings.shrine2 = flagAE2;
+                bool flagAE3 = settings.shrine3;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Shrine".Translate() + ": " + "HVMP_HardMode_Label_Shrine_3".Translate(), ref flagAE3, "HVMP_HardMode_Tooltip_Shrine_3".Translate());
+                settings.shrine3 = flagAE3;
+                bool flagAEX = settings.shrineX;
                 listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagAEX, "HVMP_Tooltip_MayhemMode".Translate());
-                settings.etX = flagAEX;
+                settings.shrineX = flagAEX;
             }
             if (ModsConfig.BiotechActive)
             {

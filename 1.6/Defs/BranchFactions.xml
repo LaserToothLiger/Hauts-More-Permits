@@ -245,7 +245,7 @@
   
   <FactionDef ParentName="HVMP_EBranchFactionBase">
     <defName>HVMP_CommerceBranch</defName>
-    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch lays the foundation for healthy, wide-reaching trade networks.\n\nIt offers jobs to defeat bandits, fulfill trade requests, handle hostile responses to resource scans, and manipulate the global market. Those in good standing with this e-branch may solicit them for investment opportunities, valuable materials, and traders, as well as to influence others by leaning on their massive wealth.</description>
+    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch lays the foundation for healthy, wide-reaching trade networks.\n\nIt offers jobs to fulfill create displays of wealth, trade requests, accommodate dangerous resource scans, and manipulate the market. Those in good standing with this e-branch may solicit them for investment opportunities, valuable materials, and traders, as well as to influence others by leaning on their massive wealth.</description>
 	<fixedName>Commerce Branch</fixedName>
     <label>commerce branch</label>
     <royalTitleTags>
@@ -306,7 +306,7 @@
   
   <FactionDef ParentName="HVMP_EBranchFactionBase">
     <defName>HVMP_RoverBranch</defName>
-    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch is concerned with matters of travel and navigation.\n\nIt offers jobs to visit sites of interest, update older maps, erect landmarks, deal with threats to travelers, and join up with their scouting parties. Those in good standing with this e-branch may solicit them to assist with long-distance travel, deliver survival resources, and share the locations of sites of interest.</description>
+    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch is concerned with matters of travel and navigation.\n\nIt offers jobs to visit sites of interest, update older maps, deal with threats to travelers, and join up with their scouting parties. Those in good standing with this e-branch may solicit them to assist with long-distance travel, deliver survival resources, and share the locations of sites of interest.</description>
 	<fixedName>Rover Branch</fixedName>
     <label>rover branch</label>
     <royalTitleTags>
@@ -323,7 +323,7 @@
 		<li Class="HautsPermits.EBranchQuests">
 			<quests>
 				<li>HVMP_RoverAtlas</li>
-				<li>HVMP_RoverColossus</li>
+				<li>HVMP_RoverAres</li>
 				<li>HVMP_RoverLaelaps</li>
 				<li>HVMP_RoverOdyssey</li>
 				<li>HVMP_RoverTheseus</li>
@@ -335,7 +335,7 @@
   
   <FactionDef ParentName="HVMP_EBranchFactionBase" MayRequire="Ludeon.RimWorld.Ideology">
     <defName>HVMP_ArchiveBranch</defName>
-    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch focuses on the recording and preservation of human cultures.\n\nIt offers jobs to study artifacts and retrieve data from ancient civilizations, as well as to consent to anthropological studies. Those in good standing with this e-branch may solicit them to repair and enhance items; share ideoligious, technical, or philosophical knowledge; employ their scanning technology; or provide powerful items.</description>
+    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch focuses on the recording and preservation of human cultures.\n\nIt offers jobs to retrieve and study artifacts and data, as well as to consent to anthropological studies. Those in good standing with this e-branch may solicit them to repair and enhance items; share ideoligious, technical, or philosophical knowledge; employ their scanning technology; or provide powerful items.</description>
 	<fixedName>Archive Branch</fixedName>
     <label>archive branch</label>
     <royalTitleTags>
@@ -354,11 +354,11 @@
 	<modExtensions>
 		<li Class="HautsPermits.EBranchQuests">
 			<quests>
-				<li>HVMP_ArchiveEnigma</li>
-				<li>HVMP_ArchiveEntrant</li>
 				<li>HVMP_ArchiveEthnography</li>
 				<li>HVMP_ArchiveExcavation</li>
-				<li>HVMP_ArchiveExtraterrestrial</li>
+				<li>HVMP_ArchiveRemnant</li>
+				<li>HVMP_ArchiveSatellite</li>
+				<li>HVMP_ArchiveShrine</li>
 			</quests>
 			<donationTraderKind>HVMP_ArchiveDonations</donationTraderKind>
 		</li>

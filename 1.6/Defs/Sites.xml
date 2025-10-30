@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
+  <!--commerce branch quests-->
+  <WorldObjectDef ParentName="StaticWorldObjectBase">
+    <defName>HVMP_CommerceTradePoint</defName>
+    <label>trade request point</label>
+    <description>A  site where the Commerce Branch facilitates anonymized trades between interested parties. Such sites are established in random locations to avoid attracting raiders.</description>
+    <worldObjectClass>HautsPermits.WorldObject_DeadDrop</worldObjectClass>
+    <texture>UI/Buttons/GiftMode</texture>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconPriority>12</expandingIconPriority>
+	<allowCaravanIncidentsWhichGenerateMap>true</allowCaravanIncidentsWhichGenerateMap>
+    <comps>
+      <li Class="HautsPermits.WorldObjectCompProperties_DeadDrop" />
+    </comps>
+  </WorldObjectDef>
+  
   <!--pax branch quests-->
-  <WorldObjectDef>
+  <WorldObjectDef ParentName="StaticWorldObjectBase">
     <defName>HVMP_PaxTalks</defName>
     <label>pax negotiations</label>
     <description>A site where the Pax Branch wants you to negotiate for peaceful cooperation with other inhabitants of the planet.</description>
@@ -13,11 +28,14 @@
     <expandingIconPriority>70</expandingIconPriority>
     <comps>
       <li Class="WorldObjectCompProperties_Timeout" />
+      <li Class="HautsPermits.WorldObjectCompProperties_PaxTalks">
+	    <negotiationStat>NegotiationAbility</negotiationStat>
+	  </li>
     </comps>
   </WorldObjectDef>
   
   <!--rover branch quests-->
-  <WorldObjectDef>
+  <WorldObjectDef ParentName="StaticWorldObjectBase">
     <defName>HVMP_AtlasPoint</defName>
     <label>atlas revision point</label>
     <description>This region is important to an atlas you have been tasked with revising. In order for someone to be able to work on the atlas, they must visit this place first.</description>
@@ -30,7 +48,7 @@
       <li Class="WorldObjectCompProperties_Timeout" />
     </comps>
   </WorldObjectDef>
-  <WorldObjectDef>
+  <WorldObjectDef ParentName="StaticWorldObjectBase">
     <defName>HVMP_OdysseyPoint</defName>
     <label>mapping point</label>
     <description>Visiting this place is essential to establishing a contemporary version of the Rover Branch's regional map.</description>

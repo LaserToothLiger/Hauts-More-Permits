@@ -294,8 +294,61 @@
     </comps>
   </ThingDef>
   
-  <!--archive quests: enigma-->
-
+  <!--archive quests: excavation-->
+  <ThingDef ParentName="AncientTerminal">
+    <defName>HVMP_AncientTerminal</defName>
+    <statBases>
+      <Flammability>0.04</Flammability>
+    </statBases>
+    <comps>
+      <li Class="HautsPermits_Ideology.CompProperties_ExcavationMutatorHandler">
+        <CS_heavyChance>0.09</CS_heavyChance>
+		<CS_ultraChance>0.01</CS_ultraChance>
+		<CS_bonusDefenderChance>0.12</CS_bonusDefenderChance>
+		<ET_chance>10.25</ET_chance>
+      </li>
+    </comps>
+    <tickerType>Normal</tickerType>
+  </ThingDef>
+  
+  <!--archive quests: shrine-->
+  <ThingDef ParentName="TrapIEDBase">
+    <defName>HVMP_TrapTTWSD</defName>
+    <label>antigrain warhead trap</label>
+    <description>An antimatter-powered antigrain bomb.</description>
+    <graphicData>
+      <texPath>Things/Building/Security/IEDAntigrainWarhead</texPath>
+    </graphicData>
+    <costList>
+      <Shell_AntigrainWarhead>1</Shell_AntigrainWarhead>
+    </costList>
+    <designationHotKey>Misc11</designationHotKey>
+    <comps>
+      <li Class="CompProperties_Explosive">
+        <explosiveRadius>14.9</explosiveRadius>
+        <explosiveDamageType>BombSuper</explosiveDamageType>
+        <startWickHitPointsPercent>0.2</startWickHitPointsPercent>
+        <chanceToStartFire>0.22</chanceToStartFire>
+        <damageFalloff>true</damageFalloff>
+        <explosionEffect>GiantExplosion</explosionEffect>
+        <explosionSound>Explosion_GiantBomb</explosionSound>
+        <wickTicks>2300~2700</wickTicks>
+        <startWickOnDamageTaken>
+          <li>Bullet</li>
+          <li>Arrow</li>
+          <li>ArrowHighVelocity</li>
+        </startWickOnDamageTaken>
+        <preExplosionSpawnSingleThingDef>CraterMedium</preExplosionSpawnSingleThingDef>
+      </li>
+    </comps>
+    <specialDisplayRadius>14.9</specialDisplayRadius>
+	<building>
+      <claimable>false</claimable>
+	  <deconstructible>true</deconstructible>
+	</building>
+  </ThingDef>
+  
+  <!--archive quests: remnant-->
   <ThingDef ParentName="ResourceBase">
     <defName>HVMP_StrangeArtifact</defName>
     <label>strange artifact</label>
@@ -308,6 +361,7 @@
     <soundDrop>Standard_Drop</soundDrop>
     <stackLimit>1</stackLimit>
 	<tradeability>None</tradeability>
+	<tickerType>Rare</tickerType>
     <statBases>
       <Flammability>0</Flammability>
       <Mass>1.5</Mass>
@@ -317,7 +371,7 @@
       <DeteriorationRate>2.0</DeteriorationRate>
     </statBases>
     <comps>
-      <li Class="HautsPermits.CompProperties_StudiableQuestItem">
+      <li Class="HautsPermits_Ideology.CompProperties_StudiableRemnant">
         <totalRequiredProgressHours>288~720</totalRequiredProgressHours><!--12d to 30d-->
         <activateTexPath>UI/Icons/Study</activateTexPath>
         <activateLabelString>Study...</activateLabelString>
@@ -334,7 +388,7 @@
 		<requiredSkillDefs><li>Intellectual</li></requiredSkillDefs>
 		<requiredStatDefs><li>ResearchSpeed</li></requiredStatDefs>
 		<extraStat>true</extraStat>
-		<possibleExtraStatDefsLikely><!--60% chance for one of these. NOTE: if you add more stats to these lists, they will also need a flavorful description string in the Enigma quest-->
+		<possibleExtraStatDefsLikely><!--60% chance for one of these. NOTE: if you add more stats to these lists, they will also need a flavorful description string in the Remnant quest-->
 		  <li>PsychicSensitivity</li>
 		  <li>ReadingSpeed</li>
 		  <li>HackingSpeed</li>
@@ -354,50 +408,17 @@
 		  <li>TrainAnimalChance</li>
 		  <li>MeleeHitChance</li>
 		</possibleExtraStatDefsUnlikely>
-		<progressInspectStringSkills>HVMP_EnigmaSkills</progressInspectStringSkills>
-		<progressInspectStringStats>HVMP_EnigmaStats</progressInspectStringStats>
+		<progressInspectStringSkills>HVMP_RemnantSkills</progressInspectStringSkills>
+		<progressInspectStringStats>HVMP_RemnantStats</progressInspectStringStats>
+		<CD_damagePerDay>2.5</CD_damagePerDay>
+		<PI_maxCooldown>2500</PI_maxCooldown>
+		<PI_progressLossPerDay>6</PI_progressLossPerDay>
       </li>
     </comps>
   </ThingDef>
   
-  <!--archive quests: entrant-->
-  <ThingDef ParentName="ShuttleBase">
-    <defName>HVMP_ShuttleCrashed</defName>
-    <label>crashed shuttle</label>
-    <graphicData>
-      <texPath>Things/Building/Misc/CrashedShuttle</texPath>
-    </graphicData>
-    <statBases>
-      <MaxHitPoints>200</MaxHitPoints>
-      <Flammability>1</Flammability>
-      <WorkToBuild>800</WorkToBuild>
-    </statBases>
-    <comps Inherit="False" />
-    <killedLeavings Inherit="False">
-      <Steel>4</Steel>
-      <Plasteel>7</Plasteel>
-      <ChunkSlagSteel>1</ChunkSlagSteel>
-      <ComponentIndustrial>1</ComponentIndustrial>
-    </killedLeavings>
-    <costList>
-      <Steel>40</Steel>
-      <Plasteel>70</Plasteel>
-      <ComponentIndustrial>10</ComponentIndustrial>
-    </costList>
-    <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
-    <preventSkyfallersLandingOn>true</preventSkyfallersLandingOn>
-    <building Inherit="False">
-      <destroySound>BuildingDestroyed_Metal_Big</destroySound>
-      <claimable>false</claimable>
-      <alwaysDeconstructible>true</alwaysDeconstructible>
-    </building>
-	<comps Inherit="False">
-		<li Class="HautsPermits_Ideology.CompProperties_Icarus" />
-	</comps>
-  </ThingDef>
-  
-  <!--archive quests: extraterrestrial-->
-  <ThingDef ParentName="BuildingBase">
+  <!--archive quests: satellite-->
+  <ThingDef ParentName="BuildingBase" Name="HVMP_Spacedrone">
     <defName>HVMP_Spacedrone</defName>
     <label>spacedrone</label>
     <description>An ancient ultratech spacedrone containing valuable information.</description>
@@ -452,8 +473,50 @@
         <sound>SpacedroneIdle_Ambience</sound>
         <disableOnHacked>true</disableOnHacked>
       </li>
+      <li Class="HautsPermits_Ideology.CompProperties_HB">
+        <periodicity>20000</periodicity>
+		<pointFactor>0.4</pointFactor>
+		<pointMinimum>500</pointMinimum>
+      </li>
     </comps><!--does not explode because non-Flame explosions would harm the mech guards, making the risk/reward of preemptive hacking vs hacking later even MORE stacked in the former's favor, and bc it creates an awkward spot where you can finish hacking in time for the guards
 				to wake up and down your hacker, THEN the explosion removes all hope of recovery. Technically that'd be an "issue" w the normal spacedrone quest too, but the hostiles don't spawn directly around the drone in that one, so-->
+  </ThingDef>
+  <ThingDef ParentName="HVMP_Spacedrone">
+    <defName>HVMP_SpacedroneWithTurret</defName>
+	<label>spacedrone</label>
+    <description>An ancient ultratech spacedrone containing valuable information.</description>
+    <thingClass>Building_TurretGun</thingClass>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <statBases>
+      <MaxHitPoints>1500</MaxHitPoints>
+      <ShootingAccuracyTurret>0.96</ShootingAccuracyTurret>
+    </statBases>
+    <damageMultipliers>
+      <li>
+        <damageDef>Flame</damageDef>
+        <multiplier>0</multiplier>
+      </li>
+    </damageMultipliers>
+    <fillPercent>0.5</fillPercent>
+    <building>
+      <combatPower>150</combatPower>
+      <ai_combatDangerous>true</ai_combatDangerous>
+      <turretGunDef>Gun_ChargeBlasterHeavyTurret</turretGunDef>
+      <turretBurstCooldownTime>5.5</turretBurstCooldownTime>
+      <turretTopDrawSize>1.75</turretTopDrawSize>
+      <turretTopOffset>(0, 0.05)</turretTopOffset>
+    </building>
+    <comps>
+      <li Class="CompProperties_Stunnable">
+        <affectedDamageDefs>
+          <li>Stun</li>
+          <li>EMP</li>
+        </affectedDamageDefs>
+        <adaptableDamageDefs>
+          <li>EMP</li>
+        </adaptableDamageDefs>
+      </li>
+    </comps>
   </ThingDef>
   
 </Defs>

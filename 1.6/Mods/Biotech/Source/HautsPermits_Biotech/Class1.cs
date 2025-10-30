@@ -15,6 +15,7 @@ using System.Reflection.Emit;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using UnityEngine;
 using Verse;
 using Verse.AI;
@@ -23,6 +24,7 @@ using Verse.Grammar;
 using Verse.Noise;
 using Verse.Sound;
 using static RimWorld.QuestPart;
+using static System.Net.Mime.MediaTypeNames;
 using static UnityEngine.GraphicsBuffer;
 
 namespace HautsPermits_Biotech
@@ -520,6 +522,176 @@ namespace HautsPermits_Biotech
         public SlateRef<string> storePawnKindAs;
         public List<PawnKindDef> pawnKinds;
     }
+    public class QuestNode_AddNeopathy : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            if (this.pawns.GetValue(slate) == null || this.hediffDef.GetValue(slate) == null)
+            {
+                return;
+            }
+            QuestPart_AddNeopathy questPart_AddHediff = new QuestPart_AddNeopathy();
+            questPart_AddHediff.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
+            questPart_AddHediff.hediffDef = this.hediffDef.GetValue(slate);
+            questPart_AddHediff.pawns.AddRange(this.pawns.GetValue(slate));
+            questPart_AddHediff.addToHyperlinks = this.addToHyperlinks.GetValue(slate);
+            bool mayhemMode = HVMP_Mod.settings.csX;
+            bool DD_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.cs1, mayhemMode);
+            bool DEM_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.cs2, mayhemMode);
+            bool LD_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.cs3, mayhemMode);
+            if (DD_on)
+            {
+                questPart_AddHediff.DD_bonusComplications += this.DD_bonusComplications.RandomInRange;
+                questPart_AddHediff.DD_on = true;
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_DD_info", this.DD_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_DD_info", " ") });
+            }
+            if (DEM_on)
+            {
+                questPart_AddHediff.DEM_failureChance = this.DEM_failureChance;
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_DEM_info", this.DEM_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_DEM_info", " ") });
+            }
+            if (LD_on)
+            {
+                questPart_AddHediff.LD_bonusComplications += this.LD_bonusComplications.RandomInRange;
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_LD_info", this.LD_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_LD_info", " ") });
+            }
+            QuestGen.quest.AddPart(questPart_AddHediff);
+        }
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+        public SlateRef<IEnumerable<Pawn>> pawns;
+        public SlateRef<HediffDef> hediffDef;
+        public SlateRef<IEnumerable<BodyPartDef>> partsToAffect;
+        public SlateRef<bool> checkDiseaseContractChance;
+        public SlateRef<bool> addToHyperlinks;
+        public IntRange DD_bonusComplications;
+        [MustTranslate]
+        public string DD_description;
+        public float DEM_failureChance;
+        [MustTranslate]
+        public string DEM_description;
+        public IntRange LD_bonusComplications;
+        [MustTranslate]
+        public string LD_description;
+    }
+    public class QuestPart_AddNeopathy : QuestPart
+    {
+        public override IEnumerable<GlobalTargetInfo> QuestLookTargets
+        {
+            get
+            {
+                foreach (GlobalTargetInfo globalTargetInfo in base.QuestLookTargets)
+                {
+                    yield return globalTargetInfo;
+                }
+                int num;
+                for (int i = 0; i < this.pawns.Count; i = num + 1)
+                {
+                    yield return this.pawns[i];
+                    num = i;
+                }
+                yield break;
+            }
+        }
+        public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
+        {
+            get
+            {
+                foreach (Dialog_InfoCard.Hyperlink hyperlink in base.Hyperlinks)
+                {
+                    yield return hyperlink;
+                }
+                if (this.addToHyperlinks)
+                {
+                    yield return new Dialog_InfoCard.Hyperlink(this.hediffDef, -1);
+                }
+                yield break;
+            }
+        }
+        public override void Notify_QuestSignalReceived(Signal signal)
+        {
+            base.Notify_QuestSignalReceived(signal);
+            if (signal.tag == this.inSignal)
+            {
+                for (int i = 0; i < this.pawns.Count; i++)
+                {
+                    if (!this.pawns[i].DestroyedOrNull())
+                    {
+                        Hediff h = HediffMaker.MakeHediff(this.hediffDef, this.pawns[i]);
+                        HediffComp_NeopathyComplications hcnp = h.TryGetComp<HediffComp_NeopathyComplications>();
+                        if (hcnp != null)
+                        {
+                            if (this.DD_on)
+                            {
+                                hcnp.DD_on = true;
+                            }
+                            hcnp.DEM_failureChance = this.DEM_failureChance;
+                            hcnp.maxComplications += this.DD_bonusComplications + this.LD_bonusComplications;
+                            for (int j = this.LD_bonusComplications; j > 0; j--)
+                            {
+                                hcnp.GainComplication();
+                            }
+                        }
+                        this.pawns[i].health.AddHediff(h);
+                    }
+                }
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Collections.Look<Pawn>(ref this.pawns, "pawns", LookMode.Reference, Array.Empty<object>());
+            Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
+            Scribe_Defs.Look<HediffDef>(ref this.hediffDef, "hediffDef");
+            Scribe_Values.Look<bool>(ref this.addToHyperlinks, "addToHyperlinks", false, false);
+            Scribe_Values.Look<bool>(ref this.DD_on, "DD_on", false, false);
+            Scribe_Values.Look<float>(ref this.DEM_failureChance, "DEM_failureChance", 0f, false);
+            Scribe_Values.Look<int>(ref this.LD_bonusComplications, "LD_bonusComplications", 0, false);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                this.pawns.RemoveAll((Pawn x) => x == null);
+            }
+        }
+        public override void AssignDebugData()
+        {
+            base.AssignDebugData();
+            this.inSignal = "DebugSignal" + Rand.Int.ToString();
+            this.hediffDef = HediffDefOf.Anesthetic;
+            this.pawns.Add(PawnsFinder.AllMaps_FreeColonists.FirstOrDefault<Pawn>());
+        }
+        public override void ReplacePawnReferences(Pawn replace, Pawn with)
+        {
+            this.pawns.Replace(replace, with);
+        }
+        public List<Pawn> pawns = new List<Pawn>();
+        public string inSignal;
+        public HediffDef hediffDef;
+        public bool addToHyperlinks;
+        public bool DD_on;
+        public float DEM_failureChance;
+        public int DD_bonusComplications;
+        public int LD_bonusComplications;
+    }
     public class QuestNode_ShuttleWhenCured : QuestNode
     {
         protected override bool TestRunInt(Slate slate)
@@ -678,6 +850,16 @@ namespace HautsPermits_Biotech
         }
         public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
         {
+            Hediff hediff = pawn.health.hediffSet.hediffs.Find((Hediff x) => x.def == this.recipe.removesHediff && x.Part == part && x.Visible);
+            bool shouldGetRemoved = true;
+            if (hediff != null)
+            {
+                HediffComp_NeopathyComplications hcnp = hediff.TryGetComp<HediffComp_NeopathyComplications>();
+                if (hcnp != null && Rand.Chance(hcnp.DEM_failureChance))
+                {
+                    shouldGetRemoved = false;
+                }
+            }
             if (billDoer != null)
             {
                 if (base.CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
@@ -687,18 +869,23 @@ namespace HautsPermits_Biotech
                 TaleRecorder.RecordTale(TaleDefOf.DidSurgery, new object[] { billDoer, pawn });
                 if (PawnUtility.ShouldSendNotificationAbout(pawn) || PawnUtility.ShouldSendNotificationAbout(billDoer))
                 {
-                    string text;
-                    if (!this.recipe.successfullyRemovedHediffMessage.NullOrEmpty())
+                    if (shouldGetRemoved)
                     {
-                        text = this.recipe.successfullyRemovedHediffMessage.Formatted(billDoer.LabelShort, pawn.LabelShort);
+                        string text;
+                        if (!this.recipe.successfullyRemovedHediffMessage.NullOrEmpty())
+                        {
+                            text = this.recipe.successfullyRemovedHediffMessage.Formatted(billDoer.LabelShort, pawn.LabelShort);
+                        } else {
+                            text = "MessageSuccessfullyRemovedHediff".Translate(billDoer.LabelShort, pawn.LabelShort, this.recipe.removesHediff.label.Named("HEDIFF"), billDoer.Named("SURGEON"), pawn.Named("PATIENT"));
+                        }
+                        Messages.Message(text, pawn, MessageTypeDefOf.PositiveEvent, true);
                     } else {
-                        text = "MessageSuccessfullyRemovedHediff".Translate(billDoer.LabelShort, pawn.LabelShort, this.recipe.removesHediff.label.Named("HEDIFF"), billDoer.Named("SURGEON"), pawn.Named("PATIENT"));
+                        string text = "HVMP_NeopathyCureFailed".Translate(billDoer.LabelShort, pawn.LabelShort);
+                        Messages.Message(text, pawn, MessageTypeDefOf.PositiveEvent, true);
                     }
-                    Messages.Message(text, pawn, MessageTypeDefOf.PositiveEvent, true);
                 }
             }
-            Hediff hediff = pawn.health.hediffSet.hediffs.Find((Hediff x) => x.def == this.recipe.removesHediff && x.Part == part && x.Visible);
-            if (hediff != null)
+            if (hediff != null && shouldGetRemoved)
             {
                 pawn.health.RemoveHediff(hediff);
             }
@@ -713,6 +900,7 @@ namespace HautsPermits_Biotech
         public IntRange complicationCount;
         public IntRange nextComplicationTimer;
         public List<HediffDef> possibleComplications;
+        public List<HediffDef> DD_complications;
         public float chanceTendRevealsCureMethod;
         public FloatRange tendDiscoveryRange;
     }
@@ -740,13 +928,22 @@ namespace HautsPermits_Biotech
                 if (this.ticksToNextComplication <= 0)
                 {
                     this.ticksToNextComplication = this.Props.nextComplicationTimer.RandomInRange;
-                    if (!this.Props.possibleComplications.NullOrEmpty())
-                    {
-                        Hediff complication = HediffMaker.MakeHediff(this.Props.possibleComplications.RandomElement(), this.Pawn);
-                        this.Pawn.health.AddHediff(complication);
-                        this.complicationsCreated++;
-                    }
+                    this.GainComplication();
                 }
+            }
+        }
+        public void GainComplication()
+        {
+            if (!this.Props.possibleComplications.NullOrEmpty())
+            {
+                List<HediffDef> compPool = this.Props.possibleComplications;
+                if (this.DD_on)
+                {
+                    compPool.AddRange(this.Props.DD_complications);
+                }
+                Hediff complication = HediffMaker.MakeHediff(compPool.RandomElement(), this.Pawn);
+                this.Pawn.health.AddHediff(complication);
+                this.complicationsCreated++;
             }
         }
         public override void CompTended(float quality, float maxQuality, int batchPosition = 0)
@@ -769,7 +966,7 @@ namespace HautsPermits_Biotech
             List<Hediff> toRemove = new List<Hediff>();
             foreach (Hediff h in this.Pawn.health.hediffSet.hediffs)
             {
-                if (this.Props.possibleComplications.Contains(h.def))
+                if (this.Props.possibleComplications.Contains(h.def) || this.Props.DD_complications.Contains(h.def))
                 {
                     toRemove.Add(h);
                 }
@@ -787,12 +984,73 @@ namespace HautsPermits_Biotech
             Scribe_Values.Look<int>(ref this.complicationsCreated, "complicationsCreated", 0, false);
             Scribe_Values.Look<int>(ref this.numTends, "numTends", 0, false);
             Scribe_Values.Look<bool>(ref this.cureDiscovered, "cureDiscovered", false, false);
+            Scribe_Values.Look<bool>(ref this.DD_on, "DD_on", false, false);
+            Scribe_Values.Look<float>(ref this.DEM_failureChance, "DEM_failureChance", 0f, false);
         }
         public int maxComplications;
         public int ticksToNextComplication;
         public int complicationsCreated;
         public int numTends;
         public bool cureDiscovered;
+        public bool DD_on;
+        public float DEM_failureChance;
+    }
+    public class HediffCompProperties_AcceleratedAging : HediffCompProperties
+    {
+        public HediffCompProperties_AcceleratedAging()
+        {
+            this.compClass = typeof(HediffComp_AcceleratedAging);
+        }
+        public int daysPerDay;
+    }
+    public class HediffComp_AcceleratedAging : HediffComp
+    {
+        public HediffCompProperties_AcceleratedAging Props
+        {
+            get
+            {
+                return (HediffCompProperties_AcceleratedAging)this.props;
+            }
+        }
+        public override void CompPostTickInterval(ref float severityAdjustment, int delta)
+        {
+            base.CompPostTickInterval(ref severityAdjustment, delta);
+            if (this.Pawn.IsHashIntervalTick(60000,delta))
+            {
+                this.Pawn.ageTracker.AgeBiologicalTicks += (this.Props.daysPerDay*60000);
+            }
+        }
+    }
+    public class HediffCompProperties_Infestation : HediffCompProperties
+    {
+        public HediffCompProperties_Infestation()
+        {
+            this.compClass = typeof(HediffComp_Infestation);
+        }
+        public float MTBdays;
+    }
+    public class HediffComp_Infestation : HediffComp
+    {
+        public HediffCompProperties_Infestation Props
+        {
+            get
+            {
+                return (HediffCompProperties_Infestation)this.props;
+            }
+        }
+        public override void CompPostTickInterval(ref float severityAdjustment, int delta)
+        {
+            base.CompPostTickInterval(ref severityAdjustment, delta);
+            if (this.Pawn.IsHashIntervalTick(2500, delta) && this.Pawn.SpawnedOrAnyParentSpawned && Rand.MTBEventOccurs(this.Props.MTBdays, 60000f, 2500))
+            {
+                IncidentParms incidentParms = new IncidentParms();
+                incidentParms.target = this.Pawn.MapHeld;
+                incidentParms.points = StorytellerUtility.DefaultThreatPointsNow(this.Pawn.MapHeld);
+                incidentParms.infestationLocOverride = new IntVec3?(this.Pawn.PositionHeld);
+                incidentParms.forced = true;
+                IncidentDefOf.Infestation.Worker.TryExecute(incidentParms);
+            }
+        }
     }
     public class Hediff_MiasmaticRot : Hediff
     {
@@ -804,6 +1062,268 @@ namespace HautsPermits_Biotech
                 GasUtility.AddGas(this.pawn.PositionHeld, this.pawn.MapHeld, GasType.RotStink, 4444);
             }
         }
+    }
+    //environmental control
+    public class QuestNode_DNLU_SG : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            for (int i = 0; i < this.GB_LoopCount; i++)
+            {
+                if (this.storeLoopCounterAs.GetValue(slate) != null)
+                {
+                    slate.Set<int>(this.storeLoopCounterAs.GetValue(slate), i, false);
+                }
+                try
+                {
+                    if (!this.node.TestRun(slate))
+                    {
+                        return false;
+                    }
+                } finally {
+                    slate.PopPrefix();
+                }
+            }
+            return true;
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            bool mayhemMode = HVMP_Mod.settings.ecX;
+            bool DNLU_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ec1, mayhemMode);
+            bool GB_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ec2, mayhemMode);
+            int counter = GB_on ?this.GB_LoopCount:this.nonGB_LoopCount;
+            if (DNLU_on)
+            {
+                QuestGen.slate.Set<bool>(this.DNLU_saveAs.GetValue(slate), true, false);
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_DNLU_info", this.DNLU_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_DNLU_info", " ") });
+            }
+            if (GB_on)
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_GB_info", this.GB_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_GB_info", " ") });
+            }
+            for (int i = 0; i < counter; i++)
+            {
+                if (this.storeLoopCounterAs.GetValue(slate) != null)
+                {
+                    QuestGen.slate.Set<int>(this.storeLoopCounterAs.GetValue(slate), i, false);
+                }
+                try
+                {
+                    this.node.Run();
+                } finally {
+                    QuestGen.slate.PopPrefix();
+                }
+            }
+        }
+        public QuestNode node;
+        public int nonGB_LoopCount;
+        public int GB_LoopCount;
+        [NoTranslate]
+        public SlateRef<string> storeLoopCounterAs;
+        [MustTranslate]
+        public string GB_description;
+        [NoTranslate]
+        public SlateRef<string> DNLU_saveAs;
+        [MustTranslate]
+        public string DNLU_description;
+    }
+    public class QuestNode_MultiProblemCauserGenerator : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            if (!this.TryFindTile(slate, out PlanetTile planetTile))
+            {
+                return false;
+            }
+            bool? value = this.clampRangeBySiteParts.GetValue(slate);
+            if (((value.GetValueOrDefault()) & (value != null)) && this.sitePartDefs.GetValue(slate) == null)
+            {
+                return false;
+            }
+            this.SetVars(QuestGen.slate, planetTile, out List<SitePartDefWithParams> spdwp);
+            if (!Find.Storyteller.difficulty.allowViolentQuests && !spdwp.NullOrEmpty())
+            {
+                using (IEnumerator<SitePartDefWithParams> enumerator = spdwp.GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        if (enumerator.Current.def.wantsThreatPoints)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+            return true;
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            Quest quest = QuestGen.quest;
+            PlanetTile planetTile;
+            if (this.TryFindTile(QuestGen.slate, out planetTile))
+            {
+                this.SetVars(slate,planetTile, out List<SitePartDefWithParams> spdwp);
+                Site site = QuestGen_Sites.GenerateSite(spdwp, planetTile , this.faction.GetValue(slate), this.hiddenSitePartsPossible.GetValue(slate), this.SingleSitePartRules, this.worldObjectDef.GetValue(slate));
+                site.SetFaction(this.faction.GetValue(slate));
+                quest.AddPart(new QuestPart_LookOverHere(site));
+                IEnumerable<WorldObject> wosIEnum = this.worldObjects.GetValue(slate);
+                List<WorldObject> wos = wosIEnum != null ? wosIEnum.ToList(): new List<WorldObject>();
+                if (wos != null)
+                {
+                    wos.Add(site);
+                } else {
+                    wos = new List<WorldObject> { site };
+                }
+                slate.Set<List<WorldObject>>(this.storeAs.GetValue(slate), wos, false);
+                Thing conditionCauser = slate.Get<Thing>("conditionCauser", null, false);
+                if (conditionCauser != null)
+                {
+                    string text = QuestGen.GenerateNewSignal("AllConditionCausersDestroyed", false);
+                    string text2 = QuestGen.GenerateNewSignal("ConditionCauserHacked", false);
+                    IEnumerable<string> dsIEnum = this.destroyedStrings.GetValue(slate);
+                    List<string> ds = dsIEnum != null ? dsIEnum.ToList() : new List<String>();
+                    int i = this.iterator.GetValue(slate);
+                    string text3 = QuestGenUtility.HardcodedTargetQuestTagWithQuestID("terminal" + i.ToString());
+                    QuestUtility.AddQuestTag(conditionCauser, text3);
+                    string text4 = QuestGenUtility.HardcodedSignalWithQuestID(text3 + ".Destroyed");
+                    ds.Add(text4);
+                    slate.Set<int>(this.storeIteratorAs.GetValue(slate),i + 1);
+                    slate.Set<List<string>>(this.storeStringsAs.GetValue(slate), ds, false);
+                    QuestPart_PassAllActivable questPart_PassAllActivable;
+                    if (!quest.TryGetFirstPartOfType<QuestPart_PassAllActivable>(out questPart_PassAllActivable))
+                    {
+                        questPart_PassAllActivable = quest.AddPart<QuestPart_PassAllActivable>();
+                        questPart_PassAllActivable.inSignalEnable = QuestGen.slate.Get<string>("inSignal", null, false);
+                    }
+                    questPart_PassAllActivable.inSignals = ds;
+                    questPart_PassAllActivable.outSignalsCompleted.Add(text);
+                    questPart_PassAllActivable.outSignalAny = text2;
+                }
+                if (this.DNLU_flag.GetValue(slate))
+                {
+                    Mutator_DNLU component = site.GetComponent<Mutator_DNLU>();
+                    if (component != null)
+                    {
+                        component.DNLU_on = true;
+                    }
+                }
+            }
+        }
+        private RulePack SingleSitePartRules
+        {
+            get
+            {
+                Slate slate = QuestGen.slate;
+                QuestScriptDef qsd = DefDatabase<QuestScriptDef>.GetNamed("Util_GenerateSite");
+                if (qsd != null && qsd.root is QuestNode_GenerateSite qngs)
+                {
+                    return qngs.singleSitePartRules.GetValue(slate);
+                }
+                return this.singleSitePartRules.GetValue(slate);
+            }
+        }
+        private bool TryFindTile(Slate slate, out PlanetTile tile)
+        {
+            bool value = this.canSelectSpace.GetValue(slate);
+            Map map = slate.Get<Map>("map", null, false) ?? (value ? Find.RandomPlayerHomeMap : Find.RandomSurfacePlayerHomeMap);
+            PlanetTile planetTile = ((map != null) ? map.Tile : PlanetTile.Invalid);
+            if (planetTile.Valid && planetTile.LayerDef.isSpace && !value)
+            {
+                planetTile = PlanetTile.Invalid;
+            }
+            int num = int.MaxValue;
+            bool? value2 = this.clampRangeBySiteParts.GetValue(slate);
+            if (value2 != null && value2.Value)
+            {
+                foreach (SitePartDef sitePartDef in this.sitePartDefs.GetValue(slate))
+                {
+                    if (sitePartDef.conditionCauserDef != null)
+                    {
+                        num = Mathf.Min(num, sitePartDef.conditionCauserDef.GetCompProperties<CompProperties_CausesGameCondition>().worldRange);
+                    }
+                }
+            }
+            TileFinderMode tileFinderMode = (this.preferCloserTiles.GetValue(slate) ? TileFinderMode.Near : TileFinderMode.Random);
+            float num2 = ((!ModsConfig.OdysseyActive) ? 0f : (this.selectLandmarkChance.GetValue(slate) ?? 0.5f));
+            return TileFinder.TryFindNewSiteTile(out tile, planetTile, Mathf.Min(siteDistRange.min,num), Mathf.Min(siteDistRange.max,num), this.allowCaravans.GetValue(slate), this.allowedLandmarks.GetValue(slate), num2, this.canSelectComboLandmarks.GetValue(slate), tileFinderMode, false, value, null, null);
+        }
+        private void SetVars(Slate slate, PlanetTile planetTile, out List<SitePartDefWithParams> spdwp)
+        {
+            List<SitePartDefWithParams> list;
+            SiteMakerHelper.GenerateDefaultParams(slate.Get<float>("points", 0f, false), planetTile, this.faction.GetValue(slate), this.sitePartDefs.GetValue(slate), out list);
+            if (list != null)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (list[i].def == SitePartDefOf.PreciousLump)
+                    {
+                        list[i].parms.preciousLumpResources = slate.Get<ThingDef>("targetMineable", null, false);
+                    }
+                }
+            }
+            slate.Set<List<SitePartDefWithParams>>(this.storeSitePartsParamsAs.GetValue(slate), list, false);
+            spdwp = list;
+        }
+        public SlateRef<bool> preferCloserTiles;
+        public SlateRef<bool> allowCaravans;
+        public SlateRef<bool> canSelectSpace;
+        public SlateRef<bool?> clampRangeBySiteParts;
+        public SlateRef<IEnumerable<SitePartDef>> sitePartDefs;
+        public SlateRef<List<LandmarkDef>> allowedLandmarks;
+        public SlateRef<float?> selectLandmarkChance;
+        public SlateRef<bool> canSelectComboLandmarks;
+        public SlateRef<Faction> faction;
+        [NoTranslate]
+        public SlateRef<string> storeSitePartsParamsAs;
+        public SlateRef<bool> hiddenSitePartsPossible;
+        public SlateRef<RulePack> singleSitePartRules;
+        public SlateRef<WorldObjectDef> worldObjectDef;
+        public SlateRef<IEnumerable<WorldObject>> worldObjects;
+        [NoTranslate]
+        public SlateRef<string> storeAs;
+        public SlateRef<IEnumerable<string>> destroyedStrings;
+        [NoTranslate]
+        public SlateRef<string> storeStringsAs;
+        public SlateRef<int> iterator;
+        [NoTranslate]
+        public SlateRef<string> storeIteratorAs;
+        public IntRange siteDistRange;
+        public SlateRef<bool> DNLU_flag;
+    }
+    public class QuestNode_LAS : QuestNode_Delay
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ec3, HVMP_Mod.settings.ecX))
+            {
+                base.RunInt();
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_LAS_info", this.LAS_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_LAS_info", " ") });
+            }
+            slate.Set<Faction>(this.storeMechFactionAs.GetValue(slate), Faction.OfMechanoids ?? HVMP_Utility.GetAnEnemyFaction(), false);
+        }
+        [MustTranslate]
+        public string LAS_description;
+        [NoTranslate]
+        public SlateRef<string> storeMechFactionAs;
     }
     //field work
     public class QuestNode_GetLargestClearAreaOrSlightlySmaller : QuestNode
@@ -818,7 +1338,12 @@ namespace HautsPermits_Biotech
         {
             Slate slate = QuestGen.slate;
             int largestSize = this.GetLargestSize(slate);
-            slate.Set<int>(this.storeAs.GetValue(slate), (int)(largestSize*(0.6f+(0.4f*Rand.Value))), false);
+            float baseSize = largestSize * (0.6f + (0.4f * Rand.Value));
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fw1, HVMP_Mod.settings.fwX))
+            {
+                baseSize = Math.Max(baseSize*this.C2C_factor,baseSize+this.C2C_minBonus);
+            }
+            slate.Set<int>(this.storeAs.GetValue(slate), (int)baseSize, false);
         }
         private int GetLargestSize(Slate slate)
         {
@@ -869,6 +1394,8 @@ namespace HautsPermits_Biotech
         public SlateRef<string> storeAs;
         public SlateRef<int> failIfSmaller;
         public SlateRef<int> max;
+        public int C2C_minBonus;
+        public float C2C_factor = 1f;
     }
     public class QuestNode_GeneratePreserveMarker : QuestNode
     {
@@ -882,11 +1409,27 @@ namespace HautsPermits_Biotech
             Thing thing = ThingMaker.MakeThing(this.thingDef, null);
             if (thing is NaturePreserve np)
             {
+                bool mayhemMode = HVMP_Mod.settings.fwX;
                 np.radius = slate.Get<int>("preserveRadius", 10, false);
                 np.ticksRemaining = slate.Get<int>("preserveTicks", 900000, false);
-                np.initialTicks = slate.Get<int>("preserveTicks", 900000, false);
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fw3, mayhemMode))
+                {
+                    np.ticksRemaining = (int)(np.ticksRemaining * this.S2S_factor);
+                }
+                np.initialTicks = np.ticksRemaining;
+                slate.Set<float>("preserveDays", np.ticksRemaining/60000f, false);
                 slate.Set<Thing>(this.storeAs.GetValue(slate), np, false);
                 QuestGen.quest.AddPart(new QuestPart_LookAtThis(np));
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fw2, mayhemMode))
+                {
+                    np.IOUS_infestationMTBdays = this.IOUS_infestationMTBdays;
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_IOUS_info", this.IOUS_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_IOUS_info", " ") });
+                }
             }
         }
         [NoTranslate]
@@ -894,6 +1437,10 @@ namespace HautsPermits_Biotech
         public ThingDef thingDef;
         [NoTranslate]
         public SlateRef<string> storeReqProgressAs;
+        public float IOUS_infestationMTBdays;
+        [MustTranslate]
+        public string IOUS_description;
+        public float S2S_factor;
     }
     public class QuestNode_DropPreserveMarkerCopy : QuestNode
     {
@@ -1015,6 +1562,15 @@ namespace HautsPermits_Biotech
             base.TickInterval(delta);
             if (this.Spawned && this.IsHashIntervalTick(177, delta))
             {
+                if (this.IOUS_infestationMTBdays > 0f && this.Spawned && Rand.MTBEventOccurs(this.IOUS_infestationMTBdays, 60000f, 177))
+                {
+                    IncidentParms incidentParms = new IncidentParms();
+                    incidentParms.target = this.MapHeld;
+                    incidentParms.points = StorytellerUtility.DefaultThreatPointsNow(this.MapHeld);
+                    incidentParms.infestationLocOverride = new IntVec3?(this.PositionHeld);
+                    incidentParms.forced = true;
+                    IncidentDefOf.Infestation.Worker.TryExecute(incidentParms);
+                }
                 if (this.AnyBadJuju)
                 {
                     this.ticksSinceDisallowedAnything += 177;
@@ -1027,9 +1583,7 @@ namespace HautsPermits_Biotech
                             this.Destroy(DestroyMode.Vanish);
                         }
                     }
-                }
-                else
-                {
+                } else {
                     this.ticksSinceDisallowedAnything = 0;
                     this.ticksRemaining -= 177;
                     if (this.ticksRemaining <= 0)
@@ -1141,11 +1695,13 @@ namespace HautsPermits_Biotech
             Scribe_Values.Look<int>(ref this.ticksRemaining, "ticksRemaining", 900000, false);
             Scribe_Values.Look<int>(ref this.initialTicks, "initialTicks", 900000, false);
             Scribe_Values.Look<int>(ref this.ticksSinceDisallowedAnything, "ticksSinceDisallowedAnything", 0, false);
+            Scribe_Values.Look<float>(ref this.IOUS_infestationMTBdays, "IOUS_infestationMTBdays", -1f, false);
         }
         public float radius;
         public int ticksRemaining;
         public int initialTicks;
         public int ticksSinceDisallowedAnything;
+        public float IOUS_infestationMTBdays;
     }
     public class PlaceWorker_NoPollutionFloorsStructuresOrOtherPreserves : PlaceWorker
     {
@@ -1274,11 +1830,38 @@ namespace HautsPermits_Biotech
             HediffDef hd = mp.mutations.RandomElement();
             slate.Set<string>("mutationLabel", hd.label, false);
             slate.Set<string>("mutationDesc", hd.description, false);
+            bool mayhemMode = HVMP_Mod.settings.hdX;
             QuestPart_IncidentMutantMPs questPart_Incident = new QuestPart_IncidentMutantMPs
             {
                 incident = HVMPDefOf.HVMP_MutantManhunterPack,
                 mutation = hd
             };
+            HediffDef hd2 = null;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.hd1, mayhemMode))
+            {
+                List<HediffDef> possibleSecondMutations = mp.mutations;
+                possibleSecondMutations.Remove(hd);
+                hd2 = possibleSecondMutations.RandomElement();
+                questPart_Incident.DT_mutation = hd2;
+                slate.Set<string>("DT_mutationLabel", hd2.label, false);
+                slate.Set<string>("DT_mutationDesc", hd2.description, false);
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_DT_info", this.DT_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_DT_info", " ") });
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.hd3, mayhemMode))
+            {
+                questPart_Incident.UP_chance = this.UP_chance;
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_UP_info", this.UP_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_UP_info", " ") });
+            }
             IncidentParms incidentParms = new IncidentParms
             {
                 forced = true,
@@ -1289,6 +1872,10 @@ namespace HautsPermits_Biotech
                 spawnCenter = this.walkInSpot.GetValue(slate) ?? QuestGen.slate.Get<IntVec3?>("walkInSpot", null, false) ?? IntVec3.Invalid,
                 pawnCount = this.animalCount.GetValue(slate)
             };
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.hd2, mayhemMode))
+            {
+                incidentParms.points *= this.MM_factor;
+            }
             if (AggressiveAnimalIncidentUtility.TryFindAggressiveAnimalKind(num, map, out PawnKindDef pawnKindDef))
             {
                 incidentParms.pawnKind = pawnKindDef;
@@ -1313,9 +1900,11 @@ namespace HautsPermits_Biotech
             questPart_Incident.SetIncidentParmsAndRemoveTarget(incidentParms);
             questPart_Incident.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
             QuestGen.quest.AddPart(questPart_Incident);
-            List<Rule> list = new List<Rule>();
-            list.Add(new Rule_String("animalKind_label", pawnKindDef.label));
-            list.Add(new Rule_String("animalKind_labelPlural", pawnKindDef.GetLabelPlural(num2)));
+            List<Rule> list = new List<Rule>
+            {
+                new Rule_String("animalKind_label", pawnKindDef.label),
+                new Rule_String("animalKind_labelPlural", pawnKindDef.GetLabelPlural(num2))
+            };
             QuestGen.AddQuestDescriptionRules(list);
             QuestGen.AddQuestNameRules(list);
         }
@@ -1329,7 +1918,12 @@ namespace HautsPermits_Biotech
         public SlateRef<int> animalCount;
         [NoTranslate]
         public SlateRef<string> tag;
-        private const string RootSymbol = "root";
+        [MustTranslate]
+        public string DT_description;
+        public float MM_factor;
+        public float UP_chance;
+        [MustTranslate]
+        public string UP_description;
     }
     public class QuestPart_IncidentMutantMPs : QuestPart_Incident
     {
@@ -1337,8 +1931,12 @@ namespace HautsPermits_Biotech
         {
             base.ExposeData();
             Scribe_Defs.Look<HediffDef>(ref this.mutation, "mutation");
+            Scribe_Defs.Look<HediffDef>(ref this.DT_mutation, "DT_mutation");
+            Scribe_Values.Look<float>(ref this.UP_chance, "UP_chance", 0f, false);
         }
         public HediffDef mutation;
+        public HediffDef DT_mutation;
+        public float UP_chance;
     }
     public class MutationsPool : DefModExtension
     {
@@ -1381,6 +1979,13 @@ namespace HautsPermits_Biotech
             QuestPart_IncidentMutantMPs qpimp = parms.quest.GetFirstPartOfType<QuestPart_IncidentMutantMPs>();
             if (qpimp != null)
             {
+                MutationsPool mp = HVMPDefOf.HVMP_MutantManhunterPack.GetModExtension<MutationsPool>();
+                List<HediffDef> possibleMutations = mp.mutations;
+                possibleMutations.Remove(qpimp.mutation);
+                if (qpimp.DT_mutation != null && possibleMutations.Contains(qpimp.DT_mutation))
+                {
+                    possibleMutations.Remove(qpimp.DT_mutation);
+                }
                 for (int i = 0; i < list.Count; i++)
                 {
                     Pawn pawn = list[i];
@@ -1388,6 +1993,14 @@ namespace HautsPermits_Biotech
                     QuestUtility.AddQuestTag(GenSpawn.Spawn(pawn, intVec, map, rot, WipeMode.Vanish, false, false), parms.questTag);
                     pawn.health.AddHediff(HediffDefOf.Scaria, null, null, null);
                     pawn.health.AddHediff(qpimp.mutation, null, null, null);
+                    if (qpimp.DT_mutation != null)
+                    {
+                        pawn.health.AddHediff(qpimp.DT_mutation, null, null, null);
+                    }
+                    if (Rand.Chance(qpimp.UP_chance))
+                    {
+                        pawn.health.AddHediff(possibleMutations.RandomElement());
+                    }
                     pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.ManhunterPermanent, null, false, false, false, null, false, false, false);
                     pawn.mindState.exitMapAfterTick = Find.TickManager.TicksGame + Rand.Range(60000, 120000);
                 }
@@ -1637,12 +2250,63 @@ namespace HautsPermits_Biotech
                     }
                     cda.relevantStats.Add(secondStat);
                 }
+                bool mayhemMode = HVMP_Mod.settings.raX;
+                CompRetroviralInjection cri = thing.TryGetComp<CompRetroviralInjection>();
+                if (cri != null)
+                {
+                    if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ra1, mayhemMode))
+                    {
+                        cri.BSL4_on = true;
+                        QuestGen.AddQuestDescriptionRules(new List<Rule>
+                        {
+                            new Rule_String("mutator_BSL4_info", this.BSL4_description.Formatted())
+                        });
+                    } else {
+                        QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_BSL4_info", " ") });
+                    }
+                    if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ra2, mayhemMode))
+                    {
+                        CompHackableRA chra = thing.TryGetComp<CompHackableRA>();
+                        if (chra != null)
+                        {
+                            chra.CC_on = true;
+                        }
+                        QuestGen.AddQuestDescriptionRules(new List<Rule>
+                        {
+                            new Rule_String("mutator_CC_info", this.CC_description.Formatted())
+                        });
+                    } else {
+                        QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_CC_info", " ") });
+                    }
+                    if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ra3, mayhemMode))
+                    {
+                        cri.PG_on = true;
+                        cri.effectOnInjection = cri.Props.possibleInjectionEffects.Where((RetroviralEffectDef red) => red.isBad).RandomElement();
+                        QuestGen.AddQuestDescriptionRules(new List<Rule>
+                        {
+                            new Rule_String("mutator_PG_info", this.PG_description.Formatted())
+                        });
+                    } else {
+                        QuestGen.AddQuestDescriptionRules(new List<Rule>
+                        {
+                            new Rule_String("mutator_PG_info", this.nonPG_description.Formatted())
+                        });
+                    }
+                }
                 QuestGen.quest.AddPart(new QuestPart_LookAtThis(thing));
             }
         }
         [NoTranslate]
         public SlateRef<string> storeAs;
         public ThingDef thingDef;
+        [MustTranslate]
+        public string BSL4_description;
+        [MustTranslate]
+        public string CC_description;
+        [MustTranslate]
+        public string nonPG_description;
+        [MustTranslate]
+        public string PG_description;
     }
     public class RetroviralEffectDef : Def
     {
@@ -1653,6 +2317,58 @@ namespace HautsPermits_Biotech
         public bool healWorstInjury;
         public HediffGiverSetDef inflictedChronicHediffPool;
         public IncidentDef inflictedDisease;
+        public bool isBad;
+    }
+    public class CompProperties_HackableRA : CompProperties_Hackable
+    {
+        public CompProperties_HackableRA()
+        {
+            this.compClass = typeof(CompHackableRA);
+        }
+    }
+    public class CompHackableRA : CompHackable
+    {
+        public new CompProperties_HackableRA Props
+        {
+            get
+            {
+                return (CompProperties_HackableRA)this.props;
+            }
+        }
+        public override string CompInspectStringExtra()
+        {
+            if (!this.CC_on)
+            {
+                return null;
+            }
+            return base.CompInspectStringExtra();
+        }
+        public override void CompTickInterval(int delta)
+        {
+            base.CompTickInterval(delta);
+            if (this.parent.Spawned && !this.IsHacked && !this.CC_on)
+            {
+                this.Hack(this.defence, null, true);
+            }
+        }
+        public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        {
+            if (!this.CC_on)
+            {
+                yield break;
+            }
+            foreach (Gizmo gizmo in base.CompGetGizmosExtra())
+            {
+                yield return gizmo;
+            }
+            yield break;
+        }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look<bool>(ref this.CC_on, "CC_on", false, false);
+        }
+        public bool CC_on;
     }
     public class CompProperties_RetroviralInjection : CompProperties_UseEffect
     {
@@ -1662,6 +2378,8 @@ namespace HautsPermits_Biotech
         }
         public float chanceForInjectionEffect;
         public List<RetroviralEffectDef> possibleInjectionEffects;
+        public float BSL4_diseaseMTBdays;
+        public int PG_extraGoodwillPenalty;
     }
     public class CompRetroviralInjection : CompTargetEffect
     {
@@ -1670,6 +2388,18 @@ namespace HautsPermits_Biotech
             get
             {
                 return (CompProperties_RetroviralInjection)this.props;
+            }
+        }
+        public override void CompTickInterval(int delta)
+        {
+            base.CompTickInterval(delta);
+            if (this.parent.IsHashIntervalTick(2500,delta) && Rand.MTBEventOccurs(this.Props.BSL4_diseaseMTBdays, 60000f, 2500) && this.parent.SpawnedOrAnyParentSpawned && this.BSL4_on)
+            {
+                CompStudiableQuestItem csqi = this.parent.GetComp<CompStudiableQuestItem>();
+                if (csqi != null && csqi.curProgress > 0f)
+                {
+                    HautsUtility.DoRandomDiseaseOutbreak(this.parent);
+                }
             }
         }
         public override void DoEffectOn(Pawn user, Thing target)
@@ -1687,13 +2417,21 @@ namespace HautsPermits_Biotech
         {
             base.PostPostMake();
             this.effectOnInjection = Rand.Chance(this.Props.chanceForInjectionEffect) ? this.Props.possibleInjectionEffects.RandomElement() : null;
+            if (this.PG_on)
+            {
+                this.effectOnInjection = this.Props.possibleInjectionEffects.Where((RetroviralEffectDef red) => red.isBad).RandomElement();
+            }
         }
         public override void PostExposeData()
         {
             base.PostExposeData();
             Scribe_Defs.Look<RetroviralEffectDef>(ref this.effectOnInjection, "effectOnInjection");
+            Scribe_Values.Look<bool>(ref this.BSL4_on, "BSL4_on", false, false);
+            Scribe_Values.Look<bool>(ref this.PG_on, "PG_on", false, false);
         }
         public RetroviralEffectDef effectOnInjection;
+        public bool BSL4_on;
+        public bool PG_on;
     }
     public class JobDriver_InjectRpackage : JobDriver
     {
@@ -1717,6 +2455,15 @@ namespace HautsPermits_Biotech
         }
         protected override IEnumerable<Toil> MakeNewToils()
         {
+            if (this.Item != null)
+            {
+                CompHackableRA chra = this.Item.TryGetComp<CompHackableRA>();
+                if (chra != null && chra.CC_on && !chra.IsHacked)
+                {
+                    Messages.Message("HVMP_MustHackToInject".Translate(), this.Pawn, MessageTypeDefOf.NeutralEvent, true);
+                    yield break;
+                }
+            }
             yield return Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.Touch, false).FailOnDespawnedOrNull(TargetIndex.B).FailOnDespawnedOrNull(TargetIndex.A);
             yield return Toils_Haul.StartCarryThing(TargetIndex.B, false, false, false, true, false);
             yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch, false).FailOnDespawnedOrNull(TargetIndex.A);
@@ -1750,6 +2497,10 @@ namespace HautsPermits_Biotech
                 SoundDefOf.MechSerumUsed.PlayOneShot(SoundInfo.InMap(this.Pawn, MaintenanceType.None));
                 TaggedString taggedString = "";
                 RetroviralEffectDef red = rinject.effectOnInjection;
+                if (rinject.BSL4_on)
+                {
+                    HautsUtility.DoRandomDiseaseOutbreak(this.Pawn);
+                }
                 if (red != null)
                 {
                     if (red.healWorstInjury)
@@ -1840,7 +2591,7 @@ namespace HautsPermits_Biotech
                 }
                 if ((this.Pawn.Faction != null && this.pawn.Faction != null && this.Pawn.Faction != this.pawn.Faction) || this.Pawn.IsQuestLodger())
                 {
-                    Faction.OfPlayer.TryAffectGoodwillWith(this.Pawn.HomeFaction, -70, true, !this.Pawn.HomeFaction.temporary, HVMP_BDefOf.HVMP_PerformedHarmfulInjection, null);
+                    Faction.OfPlayer.TryAffectGoodwillWith(this.Pawn.HomeFaction, -(70+(rinject.PG_on?rinject.Props.PG_extraGoodwillPenalty :0)), true, !this.Pawn.HomeFaction.temporary, HVMP_BDefOf.HVMP_PerformedHarmfulInjection, null);
                     QuestUtility.SendQuestTargetSignals(pawn.questTags, "SurgeryViolation", pawn.Named("SUBJECT"));
                 }
                 if (PawnUtility.ShouldSendNotificationAbout(this.Pawn))

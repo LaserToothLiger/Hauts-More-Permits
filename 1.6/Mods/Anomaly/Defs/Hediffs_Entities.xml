@@ -33,5 +33,23 @@
 	  </li>
 	</stages>
   </HediffDef>
+  <!--nucleus dislikes taking damage-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_Owwwwww</defName>
+	<label>owwwwww</label>
+	<description>stop poking me!</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+	    <becomeVisible>false</becomeVisible>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HautsPermits_Occult.HediffCompProperties_LGTH">
+		<activityPerDamage>0.04</activityPerDamage>
+	  </li>
+	</comps>
+  </HediffDef>
   
 </Defs>

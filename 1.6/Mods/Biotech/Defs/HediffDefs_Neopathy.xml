@@ -81,7 +81,12 @@
 		  <li>HVMP_ComplicationSporadicStupor</li>
 		  <li>HVMP_ComplicationUncontrollableEmesis</li>
 		</possibleComplications>
-		<chanceTendRevealsCureMethod>10.1</chanceTendRevealsCureMethod>
+		<DD_complications>
+		  <li>HVMP_ComplicationAcceleratedAging</li>
+		  <li>HVMP_ComplicationInsectBait</li>
+		  <li>HVMP_ComplicationPosthumousExplosion</li>
+		</DD_complications>
+		<chanceTendRevealsCureMethod>0.1</chanceTendRevealsCureMethod>
 		<tendDiscoveryRange>3~40</tendDiscoveryRange><!--tends can only reveal the cure from the 3rd tend onward. However, if you somehow fail a 10% chance 36 times in a row you will succeed on the 37th.
 															Assuming you somehow tend the patient instantly every time, this procs on day 35-->
         <severityPerDayTended>-1</severityPerDayTended>
@@ -314,6 +319,41 @@
 			</capMods>
 		  </li>
 		</stages>
+	  </HediffDef>
+	  <!--Darwin's Disfavor-exclusive-->
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationAcceleratedAging</defName>
+		<label>gerogenesis</label>
+		<description>A neopathic complication which increases the rate at which one ages.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<comps>
+		  <li Class="HautsPermits_Biotech.HediffCompProperties_AcceleratedAging">
+			<daysPerDay>30</daysPerDay>
+		  </li>
+		</comps>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationInsectBait</defName>
+		<label>insect bait</label>
+		<description>A neopathic complication that causes the body to emit insectoid pheromones, regularly causing infestations to surface.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<comps>
+		  <li Class="HautsPermits_Biotech.HediffCompProperties_Infestation">
+			<MTBdays>6</MTBdays>
+		  </li>
+		</comps>
+	  </HediffDef>
+	  <HediffDef ParentName="HVMP_NCBase">
+		<defName>HVMP_ComplicationPosthumousExplosion</defName>
+		<label>posthumous antigrain detonation</label>
+		<description>A neopathic complication that causes a buildup of chemicals which are released on death, combining to create a powerful explosion.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<comps>
+		  <li Class="VEF.AnimalBehaviours.HediffCompProperties_Exploder">
+			<explosionForce>14.9</explosionForce>
+			<damageDef>BombSuper</damageDef>
+		  </li>
+		</comps>
 	  </HediffDef>
   
   <RecipeDef ParentName="SurgeryFlesh">

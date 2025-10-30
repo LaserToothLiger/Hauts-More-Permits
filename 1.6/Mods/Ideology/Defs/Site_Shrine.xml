@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <SitePartDef ParentName="Outpost">
+    <defName>HVMP_Shrine</defName>
+    <label>data shrine</label>
+    <description>A small settlement containing an ancient terminal which the Archive Branch wants you to copy the data from.</description>
+    <arrivedLetter>You may stay here for {TIMER} as long as you do not violate the locals' rules.</arrivedLetter>
+    <approachOrderString>Investigate {0}</approachOrderString>
+    <disallowsAutomaticDetectionTimerStart>true</disallowsAutomaticDetectionTimerStart>
+    <workerClass>HautsPermits_Ideology.SitePartWorker_Shrine</workerClass>
+    <expandingIconTexture>World/WorldObjects/Expanding/Sites/AncientRelic</expandingIconTexture>
+    <gravShipsCanLandOn>true</gravShipsCanLandOn>
+    <tags Inherit="False">
+      <li>WorshippedTerminal</li>
+    </tags>
+  </SitePartDef>
+
+  <GenStepDef>
+    <defName>HVMP_Shrine</defName>
+    <linkWithSite>HVMP_Shrine</linkWithSite>
+    <order>400</order>
+    <genStep Class="GenStep_Outpost">
+      <size>29</size>
+      <requiredWorshippedTerminalRooms>1</requiredWorshippedTerminalRooms>
+      <unfogged>true</unfogged>
+      <attackWhenPlayerBecameEnemy>true</attackWhenPlayerBecameEnemy>
+      <pawnGroupKindDef>Settlement</pawnGroupKindDef>
+    </genStep>
+  </GenStepDef>
+
+  <GenStepDef><!--never does anything. ...whatever.-->
+    <defName>HVMP_ShrineTurrets</defName>
+    <linkWithSite>HVMP_Shrine</linkWithSite>
+    <order>420</order>
+    <genStep Class="HautsPermits_Ideology.GenStep_MaybeTurrets">
+      <widthRange><min>3</min><max>4</max></widthRange>
+      <guardsCountRange><min>1</min><max>1</max></guardsCountRange>
+	  <chance>0.5</chance>
+    </genStep>
+  </GenStepDef>
+
+  <GenStepDef>
+    <defName>WorshippedTerminalPower</defName>
+    <linkWithSite>HVMP_Shrine</linkWithSite>
+    <order>401</order>
+    <genStep Class="GenStep_Power"/>
+  </GenStepDef>
+
+</Defs>

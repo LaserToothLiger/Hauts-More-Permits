@@ -69,7 +69,8 @@
         <li>appreciateAppreciates(lodgersCount>=2)->appreciate</li>
         <li>threatsInfo2(generateThreats==false)-></li>
         <!-- Asker is faction leader, single joiner -->
-        <li>questDescription->The Ecosphere Branch has discovered Patient Zero of a new disease. They would like you to study the patient, [lodgers0_nameFull], at [map_definite] until you can implement a cure.\n\nYou will need to provide regular medical care to prevent the patient from dying, and a doctor with at least &lt;color=#33d733&gt;8 medical skill&lt;/color&gt; will be needed to attempt the cure. Be advised that the disease may have unknown symptoms that will appear over time.</li>
+        <li>questDescription->The Ecosphere Branch has discovered Patient Zero of a new disease. They would like you to study the patient, [lodgers0_nameFull], at [map_definite] until you can implement a cure.\n\nYou will need to provide regular medical care to prevent the patient from dying, and a doctor with at least &lt;color=#33d733&gt;8 medical skill&lt;/color&gt; will be needed to attempt the cure. Be advised that the disease may have unknown symptoms that will appear over time.\n[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_DD_info][mutator_DEM_info][mutator_LD_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Biotech.QuestNode_CaseStudy">
@@ -145,10 +146,15 @@
           <pawns>$lodgers</pawns>
         </li>
         <!-- Set neopathy -->
-        <li Class="QuestNode_AddHediff">
+        <li Class="HautsPermits_Biotech.QuestNode_AddNeopathy">
 			<pawns>$lodgers</pawns>
 			<hediffDef>HVMP_Neopathy</hediffDef>
 			<addToHyperlinks>true</addToHyperlinks>
+			<DD_description>\nThis disease was contracted on a world where particularly devastating epidemics are common. It might have extremely dangerous symptoms, such as the production of pheromones that lure insectoid infestations, but only time will tell.</DD_description>
+			<DEM_failureChance>0.5</DEM_failureChance>
+			<DEM_description>\nPreliminary analysis indicates several similarities to diseases which are notoriously difficult to treat. Expect a 50% chance for any attempted cure to not work.</DEM_description>
+			<LD_bonusComplications>1</LD_bonusComplications>
+			<LD_description>\nThe neopathy is already showing unique symptoms.</LD_description>
 		</li>
         <!-- Execute main worker script -->
         <li Class="QuestNode_SubScript">
@@ -1118,8 +1124,9 @@
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription(siteFaction==Pirate)->Pirates have set up a [problemCauserLabel] near [map_definite]. The Ecospehre Branch is suppressing its activation, but would like to free up the resources they are using to do so.\n\nIf you agree to help, they will allow the machine to activate, and it will remain until you send a team there to attack and destroy it.</li>
-        <li>questDescription(siteFaction==Mechanoids)->A mechanoid cluster containing a [problemCauserLabel] has landed not far from [map_definite]. The Ecosphere Branch is suppressing its activation, but would like to free up the resources they are using to do so.\n\nIf you agree to help, they will allow the machine to activate, and it will remain until you send a team there to attack and destroy it.</li>
+        <li>questDescription(siteFaction==Pirate)->Pirates have set up a [problemCauserLabel] near [map_definite]. The Ecospehre Branch is suppressing its activation, but would like to free up the resources they are using to do so.\n\nIf you agree to help, they will allow the machine to activate, and it will remain until you send a team there to attack and destroy it.[mutatorSuffix]</li>
+        <li>questDescription(siteFaction==Mechanoids)->A mechanoid cluster containing a [problemCauserLabel] has landed not far from [map_definite]. The Ecosphere Branch is suppressing its activation, but would like to free up the resources they are using to do so.\n\nIf you agree to help, they will allow the machine to activate, and it will remain until you send a team there to attack and destroy it.[mutatorSuffix]</li>
+		<li>mutatorSuffix->\n[mutator_DNLU_info][mutator_GB_info][mutator_LAS_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Biotech.QuestNode_EcosphereIntermediary">
@@ -1128,7 +1135,6 @@
           <name>siteDistRange</name>
           <value>1~10</value>
         </li>
-
         <li Class="QuestNode_FactionExists">
           <faction>Mechanoid</faction>
           <node Class="QuestNode_Set">
@@ -1140,7 +1146,6 @@
             <value>0</value>
           </elseNode>
         </li>
-
         <li Class="QuestNode_FactionExists">
           <faction>Pirate</faction>
           <node Class="QuestNode_Set">
@@ -1152,7 +1157,6 @@
             <value>0</value>
           </elseNode>
         </li>
-
 		<li Class="QuestNode_GetMap">
 		  <canBeSpace>true</canBeSpace>
 		</li>
@@ -1200,50 +1204,90 @@
             </li>
           </nodes>
         </li>
-
         <li Class="QuestNode_QuestUnique">
           <tag>ProblemCauser</tag>
           <faction>$siteFaction</faction>
         </li>
-
         <li Class="QuestNode_SubScript">
           <def>Util_AdjustPointsForDistantFight</def>
         </li>
-
         <li Class="QuestNode_GetSitePartDefsByTagsAndFaction">
           <storeAs>sitePartDefs</storeAs>
           <sitePartsTags>$sitePartsTags</sitePartsTags>
         </li>
-        
-        <li Class="QuestNode_GetSiteTile">
-          <storeAs>siteTile</storeAs>
-          <clampRangeBySiteParts>true</clampRangeBySiteParts>
-          <sitePartDefs>$sitePartDefs</sitePartDefs>
+		<li Class="HautsPermits_Biotech.QuestNode_DNLU_SG">
+          <nonGB_LoopCount>1</nonGB_LoopCount>
+		  <DNLU_saveAs>DNLU_on</DNLU_saveAs>
+		  <DNLU_description>\nAn extra contingent has been spotted directly guarding the [problemCauserLabel].</DNLU_description>
+          <GB_LoopCount>2</GB_LoopCount>
+		  <GB_description>\nThey have also set up an a redundant site with the same functionality, although it may be far enough away to not trouble you.</GB_description>
+          <storeLoopCounterAs>doesntMatter</storeLoopCounterAs>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+				<li Class="HautsPermits_Biotech.QuestNode_MultiProblemCauserGenerator">
+				  <clampRangeBySiteParts>true</clampRangeBySiteParts>
+				  <sitePartDefs>$sitePartDefs</sitePartDefs>
+				  <faction>$siteFaction</faction>
+				  <storeSitePartsParamsAs>sitePartsParams</storeSitePartsParamsAs>
+				  <hiddenSitePartsPossible>false</hiddenSitePartsPossible>
+				  <worldObjects>$sites</worldObjects>
+				  <storeAs>sites</storeAs>
+				  <siteDistRange>5~12</siteDistRange>
+				  <destroyedStrings>$destroyedStrings</destroyedStrings>
+				  <storeStringsAs>destroyedStrings</storeStringsAs>
+				  <iterator>$GBiterator</iterator>
+				  <storeIteratorAs>GBiterator</storeIteratorAs>
+				  <DNLU_flag>$DNLU_on</DNLU_flag>
+				</li>
+            </nodes>
+          </node>
         </li>
-
-        <li Class="QuestNode_GetDefaultSitePartsParams">
-          <tile>$siteTile</tile>
-          <faction>$siteFaction</faction>
-          <sitePartDefs>$sitePartDefs</sitePartDefs>
-          <storeSitePartsParamsAs>sitePartsParams</storeSitePartsParamsAs>
-        </li>
-
-        <li Class="QuestNode_SubScript">
-          <def>Util_GenerateSite</def>
-          <parms>
-            <hiddenSitePartsPossible>false</hiddenSitePartsPossible>
-          </parms>
-        </li>
-
-        <li Class="QuestNode_SpawnWorldObjects">
-          <worldObjects>$site</worldObjects>
-        </li>
-        
-        <li Class="HautsPermits.QuestNode_LookOverHere">
-          <worldObjects>$site</worldObjects>
-        </li>
+		<li Class="HautsPermits_Biotech.QuestNode_LAS">
+			<delayTicks>$(randInt(6,10)*60000)</delayTicks>
+			<inSignalDisable>AllConditionCausersDestroyed</inSignalDisable>
+			<storeMechFactionAs>mechFaction</storeMechFactionAs>
+			<node Class="QuestNode_Sequence">
+				<nodes>
+					<li Class="QuestNode_GetRandomInRangeInt">
+					  <storeAs>raidCount</storeAs>
+					  <range>1</range>
+					</li>
+					<li Class="QuestNode_Set">
+					  <name>firstRaidDelayTicks</name>
+					  <value>$(roundToTicksRough(randInt(600, 700)))</value>
+					</li>
+					<!--no clue why mechanoids owning the site somehow overrides all of this and causes an error. whatever
+					<li Class="QuestNode_IsNull">
+						<value>$siteFaction</value>
+						<node Class="QuestNode_Set">
+							<name>enemyFaction</name>
+							<value>$mechFaction</value>
+						</node>
+						<elseNode Class="QuestNode_Set">
+							<name>enemyFaction</name>
+							<value>$siteFaction</value>
+						</elseNode>
+					</li>-->
+					<li Class="QuestNode_GetFaction">
+					  <allowEnemy>true</allowEnemy>
+					  <mustBePermanentEnemy>true</mustBePermanentEnemy>
+					  <storeAs>enemyFaction</storeAs>
+					</li>
+					<li Class="QuestNode_Subscript">
+					  <def>Util_RaidDelayRepeatable</def>
+					  <parms>
+						<points>$points</points>
+					  </parms>
+					</li>
+				</nodes>
+			</node>
+			<LAS_description>\nThe [problemCauserLabel] is being used as a staging point. A raid will assault you within 6-10 days, unless you destroy the site first.</LAS_description>
+		</li>
+		<li Class="QuestNode_SpawnWorldObjects">
+		  <worldObjects>$sites</worldObjects>
+		</li>
         <li Class="QuestNode_Signal">
-          <inSignal>conditionCauser.Destroyed</inSignal>
+          <inSignal>AllConditionCausersDestroyed</inSignal>
           <node Class="QuestNode_Sequence">
             <nodes>
               <li Class="QuestNode_Set">
@@ -1254,7 +1298,7 @@
 			  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
 				<faction>$faction</faction>
 				<customLetterLabel TKey="LetterLabelPaymentArrived">[problemCauserLabel] destroyed</customLetterLabel>
-				<customLetterText TKey="LetterTextPaymentArrived">You have destroyed the [problemCauserLabel] that was affecting [map_definite]! The Ecosphere Branch's respect for you has increased.</customLetterText>
+				<customLetterText TKey="LetterTextPaymentArrived">You have destroyed the [problemCauserLabel]! The Ecosphere Branch's respect for you has increased.</customLetterText>
 			  </li>
               <li Class="QuestNode_End">
                 <outcome>Success</outcome>
@@ -1306,7 +1350,7 @@
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription(asker_factionLeader==True)->The [asker_faction_name] wishes to set up a dedicated space for preserving and studying the natural environment of this world. If you are willing to help them, you will be entrusted to establish an area of [preserveRadius] radius which you must keep free of pollution, flooring, and artificial structures. They want you to maintain such a preserve for [preserveDays] days.</li>
+        <li>questDescription(asker_factionLeader==True)->The [asker_faction_name] wishes to set up a dedicated space for preserving and studying the natural environment of this world. If you are willing to help them, you will be entrusted to establish an area of [preserveRadius] radius which you must keep free of pollution, flooring, and artificial structures. They want you to maintain such a preserve for [preserveDays] days.\n[mutator_IOUS_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Biotech.QuestNode_EcosphereIntermediary">
@@ -1325,6 +1369,8 @@
           <storeAs>largestClearArea</storeAs>
           <failIfSmaller>10</failIfSmaller>
           <max>45</max>
+		  <C2C_minBonus>7</C2C_minBonus>
+		  <C2C_factor>1.4</C2C_factor>
         </li>
         <li Class="QuestNode_Set">
           <name>preserveRadius</name>
@@ -1334,6 +1380,9 @@
           <storeAs>preserveMarker</storeAs>
           <thingDef>HVMP_PreserveMarker</thingDef>
 		  <storeReqProgressAs>reqProgressAs</storeReqProgressAs>
+		  <IOUS_infestationMTBdays>6</IOUS_infestationMTBdays>
+		  <IOUS_description>\nThe [asker_faction_name] will perform several scans of the demarcated region. While most are of no concern to you, some have a chance to irritate subterranean insectoid colonies. There will be an infestation around the preserve marker an average of every 6 days.</IOUS_description>
+		  <S2S_factor>1.5</S2S_factor>
         </li>
         <li Class="QuestNode_DestroyOrPassToWorldOnCleanup">
           <things>$preserveMarker</things>
@@ -1461,7 +1510,8 @@
         <li>animalKindLabelCorrect(animalCount>=2)->[animalKind_labelPlural]</li>
         <li>manhuntingBeastIndef(animalCount==1)->a (*Threat)manhunting [animalKind_label](/Threat)</li>
         <li>manhuntingBeastIndef(animalCount>=2)->a pack of (*Threat)[animalCount] manhunting [animalKind_labelPlural](/Threat)</li>
-        <li>endSection->[helpersParagraph]The [animalKindLabelCorrect] will arrive at [map_definite] [manhuntersDelayTicks_duration] after you accept.\n\nThe mutation, which the Ecosphere Branch is calling '[mutationLabel]', is described as follows:\n\n[mutationDesc]</li>
+        <li>endSection->[helpersParagraph]The [animalKindLabelCorrect] will arrive at [map_definite] [manhuntersDelayTicks_duration] after you accept.\n\nThe mutation, which the Ecosphere Branch is calling '[mutationLabel]', is described as follows:\n[mutationDesc]\n[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_DT_info][mutator_UP_info]</li>
         <!--single animal OR multiple animals -->
         <li>questDescription(asker_factionLeader==True)->The Ecosphere Branch is tracking a dangerous mutant strain of scaria which has infected [animalKind_labelPlural]. They want your help to put down the beasts. [endSection]</li>
         
@@ -1491,7 +1541,7 @@
         </li>
         <li Class="QuestNode_Set">
           <name>manhuntersDelayTicks</name>
-          <value>$(roundToTicksRough(randInt(300, 600)))</value>
+          <value>$(roundToTicksRough(randInt(15000, 120000)))</value>
         </li>
         <li Class="QuestNode_Delay">
           <delayTicks>$manhuntersDelayTicks</delayTicks>
@@ -1499,7 +1549,11 @@
             <nodes>
               <li Class="HautsPermits_Biotech.QuestNode_MutantManhunterPack">
                 <tag>$signalTag</tag>
-                <customLetterText TKey="LetterTextManhunterArrival">{BASETEXT}\n\nBeware - these [animalKindLabelCorrect] possess a dangerous mutation.</customLetterText>
+                <customLetterText TKey="LetterTextManhunterArrival">{BASETEXT}\n\nBeware - these [animalKindLabelCorrect] are dangerously mutated.</customLetterText>
+				<DT_description>\nThe animals are affected by a second mutation:\n[DT_mutationDesc]</DT_description>
+				<MM_factor>2</MM_factor>
+				<UP_chance>0.16</UP_chance>
+				<UP_description>\nThe scaria afflicting the [animalKindLabelCorrect] exhibits a rapid rate of evolution. Approximately 16% of the infected will display additional dangerous mutations.</UP_description>
               </li>
               <li Class="QuestNode_SendSignals">
                 <outSignals>ManhuntersArrived</outSignals>
@@ -1556,8 +1610,11 @@
 	<modExtensions>
 	  <li Class="HautsPermits_Biotech.MutationsPool">
 		<mutations>
+		  <li>HVMP_ScariaAblativeTissues</li>
 		  <li>HVMP_ScariaAcidBreath</li>
+		  <li>HVMP_ScariaBioelectricJolt</li>
 		  <li>HVMP_ScariaBrightdeath</li>
+		  <li>HVMP_ScariaEvasive</li>
 		  <li>HVMP_ScariaFrenzy</li>
 		  <li>HVMP_ScariaHatchery</li>
 		  <li>HVMP_ScariaInnerFire</li>
@@ -1566,6 +1623,7 @@
 		  <li>HVMP_ScariaSavagery</li>
 		  <li>HVMP_ScariaTunneling</li>
 		  <li>HVMP_ScariaVengeant</li>
+		  <li MayRequire="Ludeon.RimWorld.Anomaly">HVMP_ScariaUnnaturalRegeneration</li>
 		</mutations>
 	  </li>
 	</modExtensions>
@@ -1618,7 +1676,8 @@
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription(asker_factionLeader==True)->The [asker_faction_name] is studying gene-engineering tools from other worlds, and would like you to assist with deciphering one of the samples. If you are willing to help them, they can send it to you for further analysis.\n\nStudying the gene-engineering package is a process that takes place at a research bench, scaling with research speed. You can also determine the package's effects by injecting it into a person, which will bypass the lengthy amount of time required to study it, but is likely to have unpleasant and potentially deadly consequences.</li>
+        <li>questDescription(asker_factionLeader==True)->The [asker_faction_name] is studying gene-engineering tools from other worlds, and would like you to assist with deciphering one of the samples. If you are willing to help them, they can send it to you for further analysis.\n\nStudying the gene-engineering package is a process that takes place at a research bench, scaling with hacking speed. You can also determine the package's effects by injecting it into a person, which will bypass the lengthy amount of time required to study it, but [mutator_PG_info].\n[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_BSL4_info][mutator_CC_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Biotech.QuestNode_EcosphereIntermediary">
@@ -1629,6 +1688,10 @@
         <li Class="HautsPermits_Biotech.QuestNode_GenerateRetroviralPackage">
           <storeAs>rpackage</storeAs>
           <thingDef>HVMP_RetroviralPackage</thingDef>
+		  <BSL4_description>\nThe package contains infectious agents. Studying it might allow some of them to escape, causing diseases; injecting it will also release them in a burst, causing a disease outbreak.</BSL4_description>
+		  <CC_description>\nSafeguards on the package prevent it from being injected, but this can be circumvented by hacking it. However, a botched hack (based on the hacking stealth stat) may result in injection functionality being permanently locked.</CC_description>
+		  <nonPG_description>is likely to have unpleasant and potentially deadly consequences</nonPG_description>
+		  <PG_description>is guaranteed to have unpleasant and potentially deadly consequences</PG_description>
         </li>
         <li Class="QuestNode_DestroyOrPassToWorldOnCleanup">
           <things>$rpackage</things>

@@ -1,338 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-  <!--archive: enigma-->
-  <QuestScriptDef>
-    <defName>HVMP_ArchiveEnigma</defName>
-	<isRootSpecial>true</isRootSpecial>
-    <rootSelectionWeight>0</rootSelectionWeight>
-    <rootMinPoints>350</rootMinPoints>
-    <defaultChallengeRating>1</defaultChallengeRating>
-    <expireDaysRange>4~8</expireDaysRange>
-	<everAcceptableInSpace>true</everAcceptableInSpace>
-    <questNameRules>
-      <rulesStrings>
-        <li>questName->The [mysterious] [relic]</li>
-        <li>questName->[deciphering] the [mystery]</li>
-		
-        <li>mysterious->Mysterious</li>
-        <li>mysterious->Enigmatic</li>
-        <li>mysterious->Strange</li>
-        <li>mysterious->Curious</li>
-        <li>mysterious->Confounding</li>
-        <li>mysterious->Perplexing</li>
-        <li>mysterious->Befuddling</li>
-        <li>mysterious->Odd</li>
-		
-        <li>relic->Relic</li>
-        <li>relic->Artifact</li>
-        <li>relic->Item</li>
-        <li>relic->Device</li>
-        <li>relic->Object</li>
-        <li>relic->Antique</li>
-        <li>relic->Curio</li>
-        <li>relic->Remnant</li>
-		
-        <li>deciphering->Deciphering</li>
-        <li>deciphering->Unlocking</li>
-        <li>deciphering->Decoding</li>
-        <li>deciphering->Understanding</li>
-        <li>deciphering->Illuminating</li>
-        <li>deciphering->Cracking</li>
-        <li>deciphering->Comprehending</li>
-		
-        <li>mystery->Mystery</li>
-        <li>mystery->Mystery [relic]</li>
-        <li>mystery->Enigma</li>
-        <li>mystery->[relic]</li>
-        <li>mystery->Riddle</li>
-      </rulesStrings>
-    </questNameRules>
-    <questDescriptionRules>
-      <rulesStrings>
-        <li>questDescription(asker_factionLeader==True)->The [asker_faction_name] has hit a roadblock studying an artifact from an ancient civilization. If you are willing to help them, they can send it to you for further analysis.\n\nStudying the artifact is a process that takes place at a research bench, scaling with research speed. The civilization the artifact belonged to was known for [skillString], so a researcher with high [statLabel] would be ideal.</li>
-		
-		<li>skillString(statName==PsychicSensitivity)->their attempts to commune with the archotechs using esoteric means</li>
-		<li>skillString(statName==ReadingSpeed)->their love of the written word</li>
-		<li>skillString(statName==HackingSpeed)->integrating computers into every facet of daily life</li>
-		<li>skillString(statName==CleaningSpeed)->a strange residue that encases their ruins</li>
-		<li>skillString(statName==Hauts_SkillGainFromRecreation)->their treatment of play as a way of life</li>
-		<li>skillString(statName==FixBrokenDownBuildingSuccessChance)->the exceptionally damaged state in which their ruins were found</li>
-		<li>skillString(statName==Hauts_IdeoThoughtFactor)->their deep spirituality</li>
-		<li>skillString(statName==Hauts_InstructiveAbility)->their puzzling, almost child-like philosophy</li>
-		<li>skillString(statName==Hauts_BreachDamageFactor)->having protected most of their belongings in resilient containers</li>
-		<li>skillString(statName==MiningSpeed)->having been annihilated so thoroughly the only evidence of their existence was fused deep into the bedrock</li>
-		<li>skillString(statName==EatingSpeed)->placing a high importance on gustation</li>
-		<li>skillString(statName==NegotiationAbility)->a preoccupation with dialogue and argumentation</li>
-		<li>skillString(statName==TrainAnimalChance)->their animal-centric lifestyles</li>
-		<li>skillString(statName==MeleeHitChance)->the exacting detail they placed on the tiniest details of their crafts</li>
-      </rulesStrings>
-    </questDescriptionRules>
-    <root Class="HautsPermits_Ideology.QuestNode_ArchiveIntermediary">
-      <nodes>
-        <li Class="QuestNode_SubScript">
-          <def>Util_RandomizePointsChallengeRating</def>
-        </li>
-        <li Class="QuestNode_GetMap">
-		  <canBeSpace>true</canBeSpace>
-		</li>
-        <li Class="HautsPermits_Ideology.QuestNode_GenerateStrangeArtifact">
-          <storeAs>sartifact</storeAs>
-          <thingDef>HVMP_StrangeArtifact</thingDef>
-		  <storeSecondStatAs>statName</storeSecondStatAs>
-		  <storeSecondStatLabelAs>statLabel</storeSecondStatLabelAs>
-        </li>
-        <li Class="QuestNode_DestroyOrPassToWorldOnCleanup">
-          <things>$sartifact</things>
-        </li>
-        <li Class="QuestNode_AddToList">
-          <name>thingsToDrop</name>
-          <value>$sartifact</value>
-        </li>
-        <li Class="QuestNode_DropPods">
-          <contents>$thingsToDrop</contents>
-          <useTradeDropSpot>true</useTradeDropSpot>
-          <thingsToExcludeFromHyperlinks>$sartifact</thingsToExcludeFromHyperlinks>
-        </li>
-		<li Class="QuestNode_Signal">
-		  <inSignal>sartifact.StudiableItemFinished</inSignal>
-		    <node Class="QuestNode_Sequence">
-			  <nodes>
-				<li Class="QuestNode_Set">
-				  <name>sendStandardLetter</name>
-				  <value>true</value>
-				</li>
-				<li Class="HautsPermits.QuestNode_GiveRewardsBranch">
-				  <faction>$faction</faction>
-				  <customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
-				  <customLetterText TKey="LetterTextPaymentArrived">You have finished studying the strange artifact!\n\nThe Archive Branch's respect for you has increased.</customLetterText>
-				</li>
-				<li Class="QuestNode_End">
-					<outcome>Success</outcome>
-					<!--<sendStandardLetter>$sendStandardLetter</sendStandardLetter>-->
-				</li>
-			  </nodes>
-			</node>
-		</li>
-		<li Class="QuestNode_Signal">
-		  <inSignal>sartifact.StudiableItemDestroyed</inSignal>
-		    <node Class="QuestNode_Sequence">
-			  <nodes>
-				  <li Class="QuestNode_Letter">
-					<label TKey="LetterLabelShuttleDestroyed">Strange artifact destroyed</label>
-					<letterDef>NegativeEvent</letterDef>
-					<text TKey="LetterTextShuttleDestroyed">The strange artifact you were tasked with safeguarding has been destroyed.</text>
-				  </li>
-				  <li Class="HautsPermits.QuestNode_EndBranch">
-					<outcome>Fail</outcome>
-					<goodwillChangeReason>HVMP_SartifactDestroyed</goodwillChangeReason>
-					<faction>HVMP_ArchiveBranch</faction>
-				  </li>
-			  </nodes>
-			</node>
-		</li>
-      </nodes>
-    </root>
-  </QuestScriptDef>
-  
-  <!--archive: entrant-->
-  <QuestScriptDef>
-    <defName>HVMP_ArchiveEntrant</defName>
-	<isRootSpecial>true</isRootSpecial>
-    <rootSelectionWeight>0</rootSelectionWeight>
-    <rootMinPoints>350</rootMinPoints>
-    <defaultChallengeRating>1</defaultChallengeRating>
-    <expireDaysRange>4~8</expireDaysRange>
-	<everAcceptableInSpace>true</everAcceptableInSpace>
-    <questNameRules>
-      <rulesStrings>
-        <li>questName->a [lost] [shuttle]</li>
-        <li>questName->[lost] [shuttle] [search]</li>
-        <li>lost->Crashed</li>
-        <li>lost->Lost</li>
-        <li>lost->Downed</li>
-        <li>lost->Vanished</li>
-        <li>lost->Malfunctioned</li>
-        <li>lost->Damaged</li>
-        <li>lost->Missing</li>
-        <li>search->Search</li>
-        <li>search->Investigation</li>
-        <li>search->Tracking</li>
-        <li>search->Retrieval</li>
-        <li>search->Nearby</li>
-        <li>shuttle->Shuttle</li>
-        <li>shuttle->Transport</li>
-        <li>shuttle->Airship</li>
-        <li>shuttle->Barge</li>
-        <li>shuttle->APC</li>
-      </rulesStrings>
-    </questNameRules>
-    <questDescriptionRules>
-      <rulesStrings>
-        <li>questDescription->The [factionName] has informed us of an unaffiliated air shuttle that has crashed nearby. They are interested in its black box data, and would like us to retrieve it within [timeout_duration] by deconstructing the shuttle.\n\nThe [factionName] says that [allSitePartsDescriptionsExceptFirst]</li>
-      </rulesStrings>
-    </questDescriptionRules>
-    <root Class="HautsPermits_Ideology.QuestNode_Root_Blackbox">
-	  <nodes>
-        <li Class="QuestNode_SubScript">
-          <def>Util_RandomizePointsChallengeRating</def>
-          <parms>
-            <pointsFactorTwoStar>1.5</pointsFactorTwoStar>
-            <pointsFactorThreeStar>2</pointsFactorThreeStar>
-          </parms>
-        </li>
-        <li Class="QuestNode_SubScript">
-          <def>Util_AdjustPointsForDistantFight</def>
-        </li>
-        <li Class="QuestNode_GetMap">
-		  <canBeSpace>true</canBeSpace>
-		</li>
-        <li Class="QuestNode_IsSet">
-          <name>asker</name>
-          <elseNode Class="QuestNode_RandomNode">
-            <nodes>
-              <li Class="QuestNode_Set">
-                <name>askerIsNull</name>
-                <value>true</value>
-                <selectionWeight>0.4</selectionWeight>
-              </li>
-              <li Class="QuestNode_GetPawn">
-                <storeAs>asker</storeAs>
-                <mustBeFactionLeader>true</mustBeFactionLeader>
-                <mustBeNonHostileToPlayer>true</mustBeNonHostileToPlayer>
-                <hostileWeight>0.15</hostileWeight>
-                <selectionWeight>0.6</selectionWeight>
-              </li>
-            </nodes>
-          </elseNode>
-        </li>
-        <li Class="QuestNode_GetSiteTile">
-          <storeAs>siteTile</storeAs>
-          <preferCloserTiles>true</preferCloserTiles>
-        </li>
-        <li Class="QuestNode_ViolentQuestsAllowed">
-          <node Class="QuestNode_Set">
-            <name>siteThreatChance</name>
-            <value>1</value>
-          </node>
-          <elseNode Class="QuestNode_Set">
-            <name>siteThreatChance</name>
-            <value>1</value>
-          </elseNode>
-        </li>
-        <li Class="QuestNode_GetSitePartDefsByTagsAndFaction">
-          <storeAs>sitePartDefs</storeAs>
-          <storeFactionAs>siteFaction</storeFactionAs>
-          <sitePartsTags>
-            <li>
-              <tag>HVMP_CrashedShuttle</tag>
-            </li>
-            <li>
-              <tag>ItemStashQuestThreat</tag>
-              <chance>$siteThreatChance</chance>
-            </li>
-          </sitePartsTags>
-        </li>
-        <li Class="QuestNode_GetDefaultSitePartsParams">
-          <tile>$siteTile</tile>
-          <faction>$siteFaction</faction>
-          <sitePartDefs>$sitePartDefs</sitePartDefs>
-          <storeSitePartsParamsAs>sitePartsParams</storeSitePartsParamsAs>
-        </li>
-        <li Class="QuestNode_SubScript">
-          <def>Util_GenerateSite</def>
-          <parms>
-            <hiddenSitePartsPossible>true</hiddenSitePartsPossible>
-          </parms>
-        </li>
-        <li Class="QuestNode_SpawnWorldObjects">
-          <worldObjects>$site</worldObjects>
-        </li>
-        <li Class="HautsPermits.QuestNode_LookOverHere">
-          <worldObjects>$site</worldObjects>
-        </li>
-        <li Class="QuestNode_Set">
-          <name>timeout</name>
-          <value>$(randInt(4,10)*60000)</value>
-        </li>
-        <li Class="QuestNode_WorldObjectTimeout">
-          <worldObject>$site</worldObject>
-          <isQuestTimeout>true</isQuestTimeout>
-          <delayTicks>$timeout</delayTicks>
-          <inSignalDisable>site.MapGenerated</inSignalDisable>
-          <node Class="QuestNode_Sequence">
-            <nodes>
-              <li Class="QuestNode_Letter">
-                <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
-                <text TKey="LetterTextQuestExpired">Intercepted communications indicate the shuttle has been taken apart by scavengers. The quest [resolvedQuestName] has expired.</text>
-              </li>
-              <li Class="HautsPermits.QuestNode_EndBranch">
-                <outcome>Fail</outcome>
-                <goodwillChangeReason>HVMP_ShuttleLost</goodwillChangeReason>
-				<faction>HVMP_ArchiveBranch</faction>
-              </li>
-            </nodes>
-          </node>
-        </li>
-        <li Class="QuestNode_Signal">
-          <inSignal>site.Destroyed</inSignal>
-          <node Class="QuestNode_Sequence">
-            <nodes>
-              <li Class="QuestNode_Letter">
-                <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
-                <text TKey="LetterTextQuestExpired">The crashed shuttle was destroyed. The Archive Branch's respect for you has diminished.</text>
-              </li>
-              <li Class="HautsPermits.QuestNode_EndBranch">
-                <outcome>Fail</outcome>
-                <goodwillChangeReason>HVMP_ShuttleLost</goodwillChangeReason>
-				<faction>HVMP_ArchiveBranch</faction>
-              </li>
-            </nodes>
-          </node>
-        </li>
-		<li Class="QuestNode_Signal">
-          <inSignal>shuttlething.DeconstructedIcarus</inSignal>
-          <node Class="QuestNode_Sequence">
-            <nodes>
-              <li Class="QuestNode_Letter">
-                <label TKey="LetterLabelSuccess">E-branch relations improved</label>
-                <letterDef>PositiveEvent</letterDef>
-                <text TKey="LetterTextSuccess">You have dismantled the shuttle and recovered its black box.\n\nThe Archive Branch's respect for you has increased.</text>
-              </li>
-              <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
-				<faction>$faction</faction>
-			  </li>
-              <li Class="QuestNode_End">
-                <outcome>Success</outcome>
-              </li>
-            </nodes>
-          </node>
-        </li>
-      </nodes>
-    </root>
-  </QuestScriptDef>
-  <SitePartDef>
-    <defName>HVMP_CrashedShuttle</defName>
-    <label>shuttle crash site</label>
-    <description>A crashed shuttle.</description>
-    <workerClass>HautsPermits_Ideology.SitePartWorker_CrashedShuttle</workerClass>
-    <siteTexture>World/WorldObjects/Sites/GenericSite</siteTexture>
-    <expandingIconTexture>World/WorldObjects/Expanding/TravelingShuttle</expandingIconTexture>
-    <handlesWorldObjectTimeoutInspectString>true</handlesWorldObjectTimeoutInspectString>
-    <tags>
-      <li>HVMP_CrashedShuttle</li>
-    </tags>
-  </SitePartDef>
-  <GenStepDef>
-    <defName>HVMP_CrashedShuttle</defName>
-    <linkWithSite>HVMP_CrashedShuttle</linkWithSite>
-    <order>460</order>
-    <genStep Class="HautsPermits_Ideology.GenStep_CrashedShuttle">
-      <count>1</count>
-      <nearMapCenter>true</nearMapCenter>
-    </genStep>
-  </GenStepDef>
-  
   <!--Archive: ethnography-->
   <QuestScriptDef>
     <defName>HVMP_ArchiveEthnography</defName>
@@ -403,9 +71,11 @@
         <li>appreciateAppreciates(lodgersCount==1)->appreciates</li>
         <li>appreciateAppreciates(lodgersCount>=2)->appreciate</li>
         <!-- Asker is faction leader, single joiner -->
-        <li>questDescription(lodgersCount==1)->[asker_nameFull], [asker_faction_leaderTitle] of [asker_faction_name] is requesting a favor. One of [asker_possessive] anthropologists, [lodgers0_nameFull], is interested in studying your culture and ways of life. [asker_pronoun] wants you to host [lodgers0_objective] at [map_definite] until [lodgers0_pronoun] has completed [lodgers0_possessive] study. The questions [lodgers0_pronoun] asks have a chance to annoy or upset your colonists.[allLodgerInfo]\n\n[joinerEnding]</li>
+        <li>questDescription(lodgersCount==1)->[asker_nameFull], [asker_faction_leaderTitle] of [asker_faction_name] is requesting a favor. One of [asker_possessive] anthropologists, [lodgers0_nameFull], is interested in studying your culture and ways of life. [asker_pronoun] wants you to host [lodgers0_objective] at [map_definite] until [lodgers0_pronoun] has completed [lodgers0_possessive] study. The questions [lodgers0_pronoun] asks have a chance to annoy or upset your colonists.[allLodgerInfo]\n\n[joinerEnding][mutatorSuffix]</li>
         <!-- Asker is faction leader, multiple joiners -->
-        <li>questDescription(lodgersCount>=2,priority=1)->[asker_nameFull], [asker_faction_leaderTitle] of [asker_faction_name], has commissioned [lodgersCount] [asker_faction_pawnsPlural] to study your culture. [asker_pronoun] believes this would be better accomplished if the team could live among you, and so would like you to host them at [map_definite] until they have completed their study. The questions they ask have a chance to annoy or upset those they interact with.[allLodgerInfo]\n\n[joinerEnding]</li>
+        <li>questDescription(lodgersCount>=2,priority=1)->[asker_nameFull], [asker_faction_leaderTitle] of [asker_faction_name], has commissioned [lodgersCount] [asker_faction_pawnsPlural] to study your culture. [asker_pronoun] believes this would be better accomplished if the team could live among you, and so would like you to host them at [map_definite] until they have completed their study. The questions they ask have a chance to annoy or upset those they interact with.[allLodgerInfo]\n\n[joinerEnding][mutatorSuffix]</li>
+		<li>mutatorSuffix(lodgersCount==1)->[mutator_SS_info_singular][mutator_TT_info_singular]</li>
+		<li>mutatorSuffix(lodgersCount>=2)->[mutator_SS_info_plural][mutator_TT_info_plural]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Ideology.QuestNode_ArchiveIntermediary">
@@ -522,6 +192,15 @@
         <li Class="HautsPermits.QuestNode_GiveHostileEnvironmentFilm">
           <pawns>$lodgers</pawns>
         </li>
+        <li Class="HautsPermits_Ideology.QuestNode_Give_SS_TT">
+          <pawns>$lodgers</pawns>
+		  <SS_hediff>HVMP_SensitiveSoul</SS_hediff>
+		  <SS_description_singular>\nThe anthropologist, [lodgers0_nameFull], is pampered and rather weak-willed, prone to overeating, fits of boredom, and long naps.</SS_description_singular>
+		  <SS_description_plural>\nThis particular crew of anthropologists is pampered and rather weak-willed, prone to overeating, fits of boredom, and long naps.</SS_description_plural>
+		  <TT_hediff>HVMP_TactlessTongues</TT_hediff>
+		  <TT_description_singular>\nNote that [lodgers0_nameFull] cares little for politeness or phrasing; [lodgers0_pronoun] is likelier to offend with [lodgers0_possessive] questions, and the degree of offense will be more severe.</TT_description_singular>
+		  <TT_description_plural>\nThis particular crew of anthropologists care little for politeness or phrasing. They are likelier to offend with their questions, and the degree of offense will be more severe.</TT_description_plural>
+        </li>
         <!-- Apply lodger conditions -->
         <li Class="QuestNode_SubScript">
           <def>Util_ApplyLodgerConditions</def>
@@ -541,6 +220,11 @@
 			<name>infoToGather</name>
 			<value>$(randInt(30, 100)*$lodgersCount*$challengeRating)</value>
 		</li>
+	    <li Class="HautsPermits_Ideology.QuestNode_Multiply_QQ">
+		  <value1>$infoToGather</value1>
+		  <QQ_factor>2</QQ_factor>
+		  <storeAs>infoToGather</storeAs>
+	    </li>
         <li Class="QuestNode_Set">
           <name>shuttleLeaveDelayTicks</name>
           <value>$(3*60000)</value>
@@ -864,7 +548,7 @@
 			  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
 				<faction>$faction</faction>
 				<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
-				<customLetterText TKey="LetterTextPaymentArrived">You have taken care of the mercenaries for the requested time. As such, the Archive Branch's respect for you has increased.</customLetterText>
+				<customLetterText TKey="LetterTextPaymentArrived">You have taken care of the mercenaries for the requested time. As such, The [asker_faction_name]'s respect for you has increased.</customLetterText>
 			  </li>
               <li Class="QuestNode_End">
                 <outcome>Success</outcome>
@@ -929,7 +613,8 @@
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription->Tbe Archive Branch is informing us of an ancient complex nearby. It is said to contain valuable information about the past of this world. They would like you to break into the structure and hack the computers inside to collect that information.\n\nWatch out - there may be all manner of dangers inside, and other enemies may also be attracted by activity at the structure.\n\nIf you don't make it to the complex within [timeout_duration], scavengers will pick it apart and make away with the data.</li>
+        <li>questDescription->Tbe Archive Branch is informing us of an ancient complex nearby. It is said to contain valuable information about the past of this world. They would like you to break into the structure and hack the computers inside to collect that information.\n\nWatch out - there may be all manner of dangers inside, and other enemies may also be attracted by activity at the structure.\n\nIf you don't make it to the complex within [timeout_duration], scavengers will pick it apart and make away with the data.\n[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_CS_info][mutator_ET_info][mutator_WATEH_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <questContentRules>
@@ -993,6 +678,12 @@
 			</points>
 		  </complexSizeOverPointsCurve>
 		  <layoutDef>AncientComplex</layoutDef>
+		  <WATEH_layoutDef>HVMP_AncientComplex_WATEH</WATEH_layoutDef>
+		  <CS_description>\nWhoever built the complex made use of mechanoid guardians, which are likely still patrolling its halls even to this day.</CS_description>
+		  <ET_pointFactor>0.3</ET_pointFactor>
+		  <ET_minPoints>400</ET_minPoints>
+		  <ET_description>\nThe terminals are linked to a broadcasting platform which anyone can listen to. Each terminal has a 25% chance to emit a message through that platform upon being hacked, which will draw a hostile raid.</ET_description>
+		  <WATEH_description>\nRemote scanning seems to indicate the complex is, for some reason, chock-full of unstable fuel nodes. Your arrival is liable to disturb them.</WATEH_description>
         </li>
         <li Class="QuestNode_WorldObjectTimeout">
           <worldObject>$site</worldObject>
@@ -1003,7 +694,7 @@
             <nodes>
               <li Class="QuestNode_Letter">
                 <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
-                <text TKey="LetterTextQuestExpired">Others have already looted the ancient complex for everything of value, including the data the Archive Branch wanted. The Archive Branch's respect for you has slightly diminished.</text>
+                <text TKey="LetterTextQuestExpired">Others have already looted the ancient complex for everything of value, including the data the Archive Branch wanted. The [asker_faction_name]'s respect for you has slightly diminished.</text>
               </li>
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
@@ -1019,7 +710,7 @@
             <nodes>
               <li Class="QuestNode_Letter">
                 <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
-                <text TKey="LetterTextQuestExpired">Others have already looted the ancient complex for everything of value, including the data the Archive Branch wanted. The Archive Branch's respect for you has slightly diminished.</text>
+                <text TKey="LetterTextQuestExpired">Others have already looted the ancient complex for everything of value, including the data the Archive Branch wanted. The [asker_faction_name]'s respect for you has slightly diminished.</text>
               </li>
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
@@ -1036,7 +727,7 @@
 			  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
 				<faction>$faction</faction>
 				<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
-				<customLetterText TKey="LetterTextPaymentArrived">You have successfully obtained all information from the ancient complex!\n\nThe Archive Branch's respect for you has increased.</customLetterText>
+				<customLetterText TKey="LetterTextPaymentArrived">You have successfully obtained all information from the ancient complex!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
 			  </li>
               <li Class="QuestNode_End">
                 <outcome>Success</outcome>
@@ -1048,9 +739,148 @@
     </root>
   </QuestScriptDef>
   
-  <!--Archive: extraterrestrial-->
+  <!--archive: remnant-->
   <QuestScriptDef>
-    <defName>HVMP_ArchiveExtraterrestrial</defName>
+    <defName>HVMP_ArchiveRemnant</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->The [mysterious] [relic]</li>
+        <li>questName->[deciphering] the [mystery]</li>
+		
+        <li>mysterious->Mysterious</li>
+        <li>mysterious->Enigmatic</li>
+        <li>mysterious->Strange</li>
+        <li>mysterious->Curious</li>
+        <li>mysterious->Confounding</li>
+        <li>mysterious->Perplexing</li>
+        <li>mysterious->Befuddling</li>
+        <li>mysterious->Odd</li>
+		
+        <li>relic->Relic</li>
+        <li>relic->Artifact</li>
+        <li>relic->Item</li>
+        <li>relic->Device</li>
+        <li>relic->Object</li>
+        <li>relic->Antique</li>
+        <li>relic->Curio</li>
+        <li>relic->Remnant</li>
+		
+        <li>deciphering->Deciphering</li>
+        <li>deciphering->Unlocking</li>
+        <li>deciphering->Decoding</li>
+        <li>deciphering->Understanding</li>
+        <li>deciphering->Illuminating</li>
+        <li>deciphering->Cracking</li>
+        <li>deciphering->Comprehending</li>
+		
+        <li>mystery->Mystery</li>
+        <li>mystery->Mystery [relic]</li>
+        <li>mystery->Enigma</li>
+        <li>mystery->[relic]</li>
+        <li>mystery->Riddle</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription(asker_factionLeader==True)->The [asker_faction_name] has hit a roadblock studying an artifact from an ancient civilization. If you are willing to help them, they can send it to you for further analysis.\n\nStudying the artifact is a process that takes place at a research bench, scaling with research speed. The civilization the artifact belonged to was known for [skillString], so a researcher with high [statLabel] would be ideal.[mutatorSuffix]</li>
+		
+		<li>skillString(statName==PsychicSensitivity)->their attempts to commune with the archotechs using esoteric means</li>
+		<li>skillString(statName==ReadingSpeed)->their love of the written word</li>
+		<li>skillString(statName==HackingSpeed)->integrating computers into every facet of daily life</li>
+		<li>skillString(statName==CleaningSpeed)->a strange residue that encases their ruins</li>
+		<li>skillString(statName==Hauts_SkillGainFromRecreation)->their treatment of play as a way of life</li>
+		<li>skillString(statName==FixBrokenDownBuildingSuccessChance)->the exceptionally damaged state in which their ruins were found</li>
+		<li>skillString(statName==Hauts_IdeoThoughtFactor)->their deep spirituality</li>
+		<li>skillString(statName==Hauts_InstructiveAbility)->their puzzling, almost child-like philosophy</li>
+		<li>skillString(statName==Hauts_BreachDamageFactor)->having protected most of their belongings in resilient containers</li>
+		<li>skillString(statName==MiningSpeed)->having been annihilated so thoroughly the only evidence of their existence was fused deep into the bedrock</li>
+		<li>skillString(statName==EatingSpeed)->placing a high importance on gustation</li>
+		<li>skillString(statName==NegotiationAbility)->a preoccupation with dialogue and argumentation</li>
+		<li>skillString(statName==TrainAnimalChance)->their animal-centric lifestyles</li>
+		<li>skillString(statName==MeleeHitChance)->the exacting detail they placed on the tiniest details of their crafts</li>
+		
+		<li>mutatorSuffix->[mutator_BJ_info][mutator_CD_info][mutator_PI_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits_Ideology.QuestNode_ArchiveIntermediary">
+      <nodes>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+        </li>
+        <li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		</li>
+        <li Class="HautsPermits_Ideology.QuestNode_GenerateStrangeArtifact">
+          <storeAs>sartifact</storeAs>
+          <thingDef>HVMP_StrangeArtifact</thingDef>
+		  <storeSecondStatAs>statName</storeSecondStatAs>
+		  <storeSecondStatLabelAs>statLabel</storeSecondStatLabelAs>
+		  <BJ_description>\n\nThe artifact houses an advanced defensive signaling system. Study is liable to eventually trigger it, causing some kind of bad event to occur - which could be anything from a mechanoid cluster to a forced weather strike.</BJ_description>
+		  <CD_description>\n\nTime has taken its toll on the artifact, and it is beginning to fall apart. It will deteriorate over time.</CD_description>
+		  <PI_description>\n\nThe artifact evades easy understanding. If your researchers go too long without studying it, their understanding of it will decrease.</PI_description>
+        </li>
+        <li Class="QuestNode_DestroyOrPassToWorldOnCleanup">
+          <things>$sartifact</things>
+        </li>
+        <li Class="QuestNode_AddToList">
+          <name>thingsToDrop</name>
+          <value>$sartifact</value>
+        </li>
+        <li Class="QuestNode_DropPods">
+          <contents>$thingsToDrop</contents>
+          <useTradeDropSpot>true</useTradeDropSpot>
+          <thingsToExcludeFromHyperlinks>$sartifact</thingsToExcludeFromHyperlinks>
+        </li>
+		<li Class="QuestNode_Signal">
+		  <inSignal>sartifact.StudiableItemFinished</inSignal>
+		    <node Class="QuestNode_Sequence">
+			  <nodes>
+				<li Class="QuestNode_Set">
+				  <name>sendStandardLetter</name>
+				  <value>true</value>
+				</li>
+				<li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				  <faction>$faction</faction>
+				  <customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+				  <customLetterText TKey="LetterTextPaymentArrived">You have finished studying the strange artifact!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
+				</li>
+				<li Class="QuestNode_End">
+					<outcome>Success</outcome>
+					<!--<sendStandardLetter>$sendStandardLetter</sendStandardLetter>-->
+				</li>
+			  </nodes>
+			</node>
+		</li>
+		<li Class="QuestNode_Signal">
+		  <inSignal>sartifact.StudiableItemDestroyed</inSignal>
+		    <node Class="QuestNode_Sequence">
+			  <nodes>
+				  <li Class="QuestNode_Letter">
+					<label TKey="LetterLabelShuttleDestroyed">Strange artifact destroyed</label>
+					<letterDef>NegativeEvent</letterDef>
+					<text TKey="LetterTextShuttleDestroyed">The strange artifact you were tasked with safeguarding has been destroyed.</text>
+				  </li>
+				  <li Class="HautsPermits.QuestNode_EndBranch">
+					<outcome>Fail</outcome>
+					<goodwillChangeReason>HVMP_SartifactDestroyed</goodwillChangeReason>
+					<faction>HVMP_ArchiveBranch</faction>
+				  </li>
+			  </nodes>
+			</node>
+		</li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--Archive: satellite-->
+  <QuestScriptDef>
+    <defName>HVMP_ArchiveSatellite</defName>
 	<isRootSpecial>true</isRootSpecial>
     <rootSelectionWeight>0</rootSelectionWeight>
     <rootMinPoints>350</rootMinPoints>
@@ -1087,10 +917,8 @@
         <li>dangersDescription(priority=1)->\n\nThe drone is protected by these dangers:
 \n[allThreats]</li>
         <li>dangersDescription-></li>
-        <li>questDescription(asker_factionLeader==True)->[asker_nameDef], [asker_faction_leaderTitle] of [asker_faction_name], is making a request. [commonMainPart]</li>
-        <li>questDescription(asker_royalInCurrentFaction==True)->[asker_nameDef], a [asker_royalTitleInCurrentFaction] of [asker_faction_name], is making a request. [commonMainPart]</li>
-
-        <li>commonMainPart->[asker_possessive] surveillance has identified a spacedrone containing valuable information on the history of this world. [asker_pronoun] has the signal to force it to land at [map_definite], but it is protected by mechanoids. [asker_pronoun] would like you clear out its defenders and hack the drone.[dangersDescription]\n\nThe defenders will initially be dormant for up to [timeToWake] hours.</li>
+        <li>questDescription->[asker_nameDef], [asker_faction_leaderTitle] of [asker_faction_name], is making a request. [asker_possessive] surveillance has identified a spacedrone containing valuable information on the history of this world. [asker_pronoun] has the signal to force it to land at [map_definite], but it is protected by mechanoids. [asker_pronoun] would like you clear out its defenders and hack the drone.[dangersDescription]\n[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_DESC_info][mutator_HB_info][mutator_SW_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Ideology.QuestNode_ArchiveIntermediary">
@@ -1116,8 +944,13 @@
           <node Class="HautsPermits_Ideology.QuestNode_SpawnDronePlusGuards">
             <tag>hvmp_sdrone</tag>
             <points>$($points)</points>
-			<droneDef>HVMP_Spacedrone</droneDef>
 			<sleepyTime>5~8</sleepyTime>
+			<nonDESC_description>\nThe defenders will initially be dormant for up to [timeToWake] hours.</nonDESC_description>
+			<DESC_description>\nThe defenders will attack immediately upon landing.</DESC_description>
+			<HB_description>\nThe drone harbors a distress beacon. Until the hack is complete, it will continually broadcast, calling for mechanoid reinforcements every 8 hours.</HB_description>
+			<nonSW_droneDef>HVMP_Spacedrone</nonSW_droneDef>
+			<SW_droneDef>HVMP_SpacedroneWithTurret</SW_droneDef>
+			<SW_description>\nThe drone has a mounted charge turret. It will open fire on anyone nearby until hacked, although it has a minimum range. Your people may panic and attempt to fire back - ensure they do not destroy it until the hack is complete.</SW_description>
           </node>
         </li>
         <!-- Send rewards and end after a delay once hacked -->
@@ -1136,7 +969,7 @@
 				  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
 					<faction>$faction</faction>
 					<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
-					<customLetterText TKey="LetterTextPaymentArrived">You have successfully hacked the spacedrone!\n\nThe Archive Branch's respect for you has increased.</customLetterText>
+					<customLetterText TKey="LetterTextPaymentArrived">You have successfully hacked the spacedrone!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
 				  </li>
 				  <li Class="QuestNode_End">
 					<outcome>Success</outcome>
@@ -1153,11 +986,147 @@
               <li Class="QuestNode_Letter">
                 <label TKey="LetterLabelShuttleDestroyed">Spacedrone destroyed</label>
                 <letterDef>NegativeEvent</letterDef>
-                <text TKey="LetterTextShuttleDestroyed">The spacedrone was destroyed. The Archive Branch's respect for you has diminished.</text>
+                <text TKey="LetterTextShuttleDestroyed">The spacedrone was destroyed. The [asker_faction_name]'s respect for you has diminished.</text>
               </li>
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
                 <goodwillChangeReason>HVMP_SpacedroneDestroyed</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--archive: shrine-->
+  <QuestScriptDef>
+    <defName>HVMP_ArchiveShrine</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->The [adj] [terminalName]</li>
+        <li>questName->[terminalName] [town]</li>
+
+        <li>adj->ancient</li>
+        <li>adj->villager's</li>
+        <li>adj->village</li>
+        <li>adj->protected</li>
+        <li>adj->secret</li>
+        <li>adj->guarded</li>
+        <li>adj->historical</li>
+        <li>adj->storied</li>
+
+        <li>terminalName(p=4)->terminal</li>
+        <li>terminalName->machine</li>
+        <li>terminalName->device</li>
+        <li>terminalName->screen</li>
+        <li>terminalName->computer</li>
+        <li>terminalName->databank</li>
+        <li>terminalName->database</li>
+        <li>terminalName->silicon</li>
+        <li>terminalName->record</li>
+        <li>terminalName->archive</li>
+        <li>terminalName->repository</li>
+        <li>terminalName->shrine</li>
+		
+		<li>town->town</li>
+		<li>town->village</li>
+		<li>town->hamlet</li>
+		<li>town->settlement</li>
+		<li>town->colony</li>
+		<li>town->outpost</li>
+		<li>town->townlet</li>
+		<li>town->burg</li>
+		<li>town->community</li>
+		<li>town->commune</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->[asker_nameDef], [asker_faction_leaderTitle] of [asker_faction_name], is making a request. [asker_possessive] surveillance has identified a databank on the planet's surface containing valuable information. However, it is surrounded by a small settlement which protects it. They aren't part of any major faction.\n\n[visitInfo]\n[mutatorSuffix]</li>
+        <li>visitInfo(allowViolentQuests==true)->[mutator_XP_info]</li>
+		<li>visitInfo(allowViolentQuests==false)->[mutator_XP_info_nonviolent]</li>
+		<li>mutatorSuffix->[mutator_PB_info][mutator_TTWSD_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <questContentRules>
+      <rulesStrings>
+        <li>terminalHackedMessage->Terminal hacked. You've collected the information and can now leave.</li>
+      </rulesStrings>
+    </questContentRules>
+    <root Class="HautsPermits_Ideology.QuestNode_ArchiveIntermediary">
+      <nodes>
+		<li Class="HautsPermits_Ideology.QuestNode_ArchiveShrine">
+		  <base_populationFactor>2</base_populationFactor>
+		  <PB_populationFactor>8</PB_populationFactor>
+		  <PB_description>\nDespite belonging to a minor faction, the settlement's population is quite large.</PB_description>
+		  <TTWSD_description>\nThe terminal is booby-trapped. Once hacked, it will prime a powerful explosive to go off after a short delay.</TTWSD_description>
+		  <XP_populationFactor>1.5</XP_populationFactor>
+		  <nonXP_description>They are willing to accept visitors, but will attack if you interact with the databank terminal.\n\nYou can attack the settlement from the outside, or enter peacefully and try to quickly escape with the data from the terminal.\n\nBeware - If you spend over [timer_duration] in the settlement or build anything near it, the locals will attack, and call reinforcements.</nonXP_description>
+		  <XP_description>They are hostile to visitors, and will call reinforcements over time.</XP_description>
+		  <nonviolent_description>They are willing to let you visit.</nonviolent_description>
+		</li>
+        <li Class="QuestNode_AllSignals">
+          <inSignals>
+            <li>terminal.Hacked</li>
+          </inSignals>
+          <node Class="QuestNode_Delay">
+            <delayTicks>30</delayTicks>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+				  <li Class="QuestNode_Set">
+					<name>sendStandardLetter</name>
+					<value>true</value>
+				  </li>
+				  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+					<faction>$faction</faction>
+					<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+					<customLetterText TKey="LetterTextPaymentArrived">You have successfully hacked the terminal!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
+				  </li>
+				  <li Class="QuestNode_End">
+					<outcome>Success</outcome>
+					<sendStandardLetter>$sendStandardLetter</sendStandardLetter>
+				  </li>
+              </nodes>
+            </node>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>site.MapRemoved</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelShuttleDestroyed">Terminal destroyed</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextShuttleDestroyed">The terminal was destroyed. The [asker_faction_name]'s respect for you has diminished.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>HVMP_ShrineDestroyed</goodwillChangeReason>
+				<faction>HVMP_ArchiveBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>terminal.Destroyed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelShuttleDestroyed">Terminal destroyed</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextShuttleDestroyed">The terminal was destroyed. The [asker_faction_name]'s respect for you has diminished.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>HVMP_ShrineDestroyed</goodwillChangeReason>
 				<faction>HVMP_ArchiveBranch</faction>
               </li>
             </nodes>

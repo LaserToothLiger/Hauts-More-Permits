@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationAdd">
+		<xpath>/Defs/WorldObjectDef[defName="Site"]/comps</xpath>
+		<value>
+			<li Class="HautsPermits.WorldObjectCompProperties_Mutator_GG_SD">
+			  <GG_maxBanditsBuffed>10</GG_maxBanditsBuffed>
+			  <GG_buffs>
+				<li>HVMP_BShield</li>
+				<li>HVMP_BShield</li>
+				<li>HVMP_Gatepuncher_NPC</li>
+				<li>HVMP_HostileEnvironmentFilm</li>
+				<li>HVMP_HostileEnvironmentFilm</li>
+				<li>HVMP_HostileEnvironmentFilm</li>
+			  </GG_buffs><!--I'm too lazy to put in weightings. bleh-->
+			  <SD_turretsPerPawn>0.2</SD_turretsPerPawn>
+			  <SD_turrets>
+			    <li>Turret_AutoMiniTurret</li>
+			    <li>Turret_AutoMiniTurret</li>
+			    <li>Turret_AutoMiniTurret</li>
+			    <li>Turret_AutoChargeBlaster</li>
+			    <li>Turret_AutoInferno</li>
+			    <li>ShieldGeneratorBullets</li>
+			  </SD_turrets>
+			</li>
+			<li Class="HautsPermits.WorldObjectCompProperties_Mutator_DNLU">
+			  <DNLU_pointFactor>0.5</DNLU_pointFactor>
+			</li>
+		</value>
+	</Operation>
+</Patch>

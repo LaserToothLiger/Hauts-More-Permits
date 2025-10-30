@@ -141,7 +141,7 @@
     <targetTags>
       <li>Map_PlayerHome</li>
     </targetTags>
-    <workerClass>IncidentWorker_ShamblerAssault</workerClass>
+    <workerClass>HautsPermits_Occult.IncidentWorker_RomeroAssault</workerClass>
     <baseChance>2</baseChance>
     <minAnomalyThreatLevel>0</minAnomalyThreatLevel>
     <earliestDay>20</earliestDay>

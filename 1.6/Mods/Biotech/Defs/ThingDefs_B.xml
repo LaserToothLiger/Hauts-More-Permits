@@ -65,6 +65,7 @@
       <MarketValue>500</MarketValue>
       <DeteriorationRate>2.0</DeteriorationRate>
     </statBases>
+    <tickerType>Normal</tickerType>
     <comps>
       <li Class="HautsPermits.CompProperties_StudiableQuestItem">
         <totalRequiredProgressHours>288~720</totalRequiredProgressHours><!--12d to 30d-->
@@ -94,6 +95,15 @@
       <li Class="CompProperties_Targetable">
         <compClass>HautsPermits_Biotech.CompTargetable_AnyHumanlikeWillDo</compClass>
       </li>
+      <li Class="HautsPermits_Biotech.CompProperties_HackableRA">
+        <defence>60000</defence>
+		<lockoutPermanently>true</lockoutPermanently>
+        <effectHacking>HackingTerminal</effectHacking>
+        <notHackedInspectString>Cannot be injected unless hacked.</notHackedInspectString>
+        <hackedInspectString> </hackedInspectString>
+        <showProgressAfterHackCompletion>false</showProgressAfterHackCompletion>
+        <!--<hackedMessage>{HACKER_labelShort} has bypassed the safeguards of {SUBJECT_labelNoParenthesisDef}, and it can now be injected.</hackedMessage>-->
+      </li>
       <li Class="HautsPermits_Biotech.CompProperties_RetroviralInjection">
         <chanceForInjectionEffect>0.65</chanceForInjectionEffect>
 		<possibleInjectionEffects>
@@ -111,6 +121,8 @@
 		  <li>HVMP_RED_Decay</li>
 		  <li>HVMP_RED_ScariaPrecursor</li>
 		</possibleInjectionEffects>
+		<BSL4_diseaseMTBdays>11</BSL4_diseaseMTBdays>
+		<PG_extraGoodwillPenalty>10</PG_extraGoodwillPenalty>
       </li>
     </comps>
   </ThingDef>
@@ -130,32 +142,38 @@
 		<li>SleepingSickness</li>
 		<li>FoodPoisoning</li>
 	  </inflictedHediffPool>
+	  <isBad>true</isBad>
 	</HautsPermits_Biotech.RetroviralEffectDef>
 	<HautsPermits_Biotech.RetroviralEffectDef>
 	  <defName>HVMP_RED_Coma</defName>
 	  <inflictedHediffPool>
 		<li>CatatonicBreakdown</li>
 	  </inflictedHediffPool>
+	  <isBad>true</isBad>
 	</HautsPermits_Biotech.RetroviralEffectDef>
 	<HautsPermits_Biotech.RetroviralEffectDef>
 	  <defName>HVMP_RED_Decay</defName>
 	  <inflictedDisease>Disease_OrganDecay</inflictedDisease>
+	  <isBad>true</isBad>
 	</HautsPermits_Biotech.RetroviralEffectDef>
 	<HautsPermits_Biotech.RetroviralEffectDef>
 	  <defName>HVMP_RED_ScariaPrecursor</defName>
 	  <inflictedHediffPool>
 		<li>ScariaInfection</li>
 	  </inflictedHediffPool>
+	  <isBad>true</isBad>
 	</HautsPermits_Biotech.RetroviralEffectDef>
 	<HautsPermits_Biotech.RetroviralEffectDef>
 	  <defName>HVMP_RED_Toxins</defName>
 	  <inflictedHediffPool>
 		<li>ToxicBuildup</li>
 	  </inflictedHediffPool>
+	  <isBad>true</isBad>
 	</HautsPermits_Biotech.RetroviralEffectDef>
 	<HautsPermits_Biotech.RetroviralEffectDef>
 	  <defName>HVMP_RED_Chronic</defName>
 	  <inflictedChronicHediffPool>OrganicStandard</inflictedChronicHediffPool>
+	  <isBad>true</isBad>
 	</HautsPermits_Biotech.RetroviralEffectDef>
   
   <!--PERMITS-->

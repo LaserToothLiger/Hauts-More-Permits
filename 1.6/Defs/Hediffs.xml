@@ -96,9 +96,6 @@
 	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
 	  <li Class="HautsPermits.HediffCompProperties_Flashlight"> <!--red light, neon light, stop light/everybody's got a little light under the sun-->
 		<ticksDelay>60</ticksDelay>
-		<damageType>Bomb</damageType>
-		<damage>30</damage>
-		<numHits>3</numHits>
 		<impactSound>Shot_TurretSniper</impactSound>
 		<mote>HVMP_DirectLineToHeaven</mote>
 		<scale>1</scale>
@@ -128,6 +125,7 @@
 		<severityPerDay>-0.2</severityPerDay>
 		<showDaysToRecover>true</showDaysToRecover>
 	  </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
     </comps>
   </HediffDef>
 	  <HediffDef ParentName="HVT_TraitHediffBase">
@@ -153,6 +151,38 @@
 		</comps>
 	  </HediffDef>
   <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_CaravanPilfering</defName>
+	<label>rover route assist (burglary)</label>
+	<description>While on a caravan, this character's pilfering stealth is increased.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<minSeverity>0.001</minSeverity>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+	<stages>
+	  <li>
+		<label>inactive</label>
+	  </li>
+	  <li>
+		<minSeverity>1</minSeverity>
+		<statOffsets>
+		  <Hauts_PilferingStealth>0.25</Hauts_PilferingStealth>
+		</statOffsets>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HautsFramework.HediffCompProperties_OnCaravanSeverity">
+		<whileOnCaravan>1</whileOnCaravan>
+		<whileInMap>0.001</whileInMap>
+	  </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>300000</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	</comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
     <defName>HVMP_CaravanComfortAura</defName>
     <label>rover route assist (comfort)</label>
     <description>While on a caravan, everyone in the caravan rests easier, feels better, and gets bored slower.</description>
@@ -173,6 +203,7 @@
 		<severityPerDay>-0.2</severityPerDay>
 		<showDaysToRecover>true</showDaysToRecover>
 	  </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
     </comps>
   </HediffDef>
 	  <HediffDef ParentName="HVT_TraitHediffBase">
@@ -222,6 +253,7 @@
 		<severityPerDay>-0.2</severityPerDay>
 		<showDaysToRecover>true</showDaysToRecover>
 	  </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
     </comps>
   </HediffDef>
 	  <HediffDef ParentName="HVT_TraitHediffBase">
@@ -247,53 +279,30 @@
 		</comps>
 	  </HediffDef>
   <HediffDef ParentName="HVT_TraitHediffBase">
-    <defName>HVMP_CaravanSpeedAura</defName>
-    <label>rover route assist (speed)</label>
-    <description>While on a caravan, its speed is increased.</description>
-    <hediffClass>HediffWithComps</hediffClass>
-    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<defName>HVMP_CaravanSpeed</defName>
+	<label>rover route assist (speed)</label>
+	<description>While on a caravan, this character's speed is increased.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<defaultLabelColor>(1,1,1)</defaultLabelColor>
 	<initialSeverity>1</initialSeverity>
 	<maxSeverity>1</maxSeverity>
-    <comps>
-      <li Class="HautsPermits.HediffCompProperties_CaravanHediffAura">
-        <hediffs>
-		  <li>HVMP_CaravanSpeed</li>
-		</hediffs>
-		<affectsSelf>true</affectsSelf>
-		<affectsAllies>true</affectsAllies>
-		<affectsHostiles>true</affectsHostiles>
-      </li>
+	<stages>
+	  <li>
+		<statOffsets>
+		  <CaravanBonusSpeedFactor>0.2</CaravanBonusSpeedFactor>
+		</statOffsets>
+	  </li>
+	</stages>
+	<comps>
 	  <li Class="HediffCompProperties_SeverityPerDay">
 		<severityPerDay>-0.2</severityPerDay>
-		<showDaysToRecover>true</showDaysToRecover>
 	  </li>
-    </comps>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	</comps>
   </HediffDef>
-	  <HediffDef ParentName="HVT_TraitHediffBase">
-		<defName>HVMP_CaravanSpeed</defName>
-		<label>hastening route assist</label>
-		<description>Following a route optimized for speed, courtesy of real-time advisement from Rover Branch navigational services.</description>
-		<hediffClass>HediffWithComps</hediffClass>
-		<defaultLabelColor>(1,1,1)</defaultLabelColor>
-		<initialSeverity>0.1001</initialSeverity>
-		<maxSeverity>0.1001</maxSeverity>
-		<stages>
-		  <li>
-			<statOffsets>
-			  <CaravanBonusSpeedFactor>0.2</CaravanBonusSpeedFactor>
-			</statOffsets>
-		  </li>
-		</stages>
-		<comps>
-		  <li Class="HediffCompProperties_SeverityPerDay">
-			<severityPerDay>-24</severityPerDay>
-		  </li>
-		  <li Class="HediffCompProperties_DisappearsOnDeath"/>
-		</comps>
-	  </HediffDef>
 	  
 	  
-  <!--important for Odyssey-exclusive e-branch platform raid rewards, and for a certain hard mode quest-->
+  <!--important for Odyssey-exclusive e-branch platform raid rewards, and for certain hard mode quests-->
   <HediffDef ParentName="HVT_TraitHediffBase">
 	<defName>HVMP_BShield</defName>
 	<hediffClass>HautsFramework.Hediff_PreDamageModification</hediffClass>
@@ -379,5 +388,90 @@
 		  </shaderParameters>
 		</graphicData>
 	  </ThingDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_Gatepuncher_NPC</defName>
+	<label>jailbroken gatepuncher</label>
+    <labelNoun>a jailbroken gatepuncher</labelNoun>
+    <defaultLabelColor>(0.6, 0.6, 1.0)</defaultLabelColor>
+	<description>A bionic link to a field of skipgates. Enables the use of Personal Skip up to four times.</description>
+	<initialSeverity>4</initialSeverity>
+	<maxSeverity>4</maxSeverity>
+	<stages>
+	  <li>
+		<label>1 use</label>
+	  </li>
+	  <li>
+		<minSeverity>1.001</minSeverity>
+		<label>2 uses</label>
+	  </li>
+	  <li>
+		<minSeverity>2.001</minSeverity>
+		<label>3 uses</label>
+	  </li>
+	  <li>
+		<minSeverity>3.001</minSeverity>
+		<label>4 uses</label>
+	  </li>
+	</stages>
+    <descriptionHyperlinks><ThingDef>HVMP_Gatepuncher</ThingDef></descriptionHyperlinks>
+    <abilities>
+      <li>HVMP_GatepunchSkip_NPC</li>
+    </abilities>
+  </HediffDef>
+	  <AbilityDef>
+		<defName>HVMP_GatepunchSkip_NPC</defName>
+		<label>personal skip</label>
+		<description>Teleport to a desired position not too far away. Can target positions outside line of sight.\n\nCan be used four times before the gatepuncher breaks down.</description>
+		<category>Skip</category>
+		<iconPath>UI/Abilities/Skip</iconPath>
+		<aiCanUse>true</aiCanUse>
+		<statBases>
+		  <Ability_Duration>0</Ability_Duration>
+		</statBases>
+		<warmupSound>PsycastCastLoop</warmupSound>
+		<cooldownTicksRange>240</cooldownTicksRange>
+		<writeCombatLog>True</writeCombatLog>
+		<showPsycastEffects>False</showPsycastEffects>
+		<verbProperties>
+		  <verbClass>Verb_CastAbility</verbClass>
+		  <violent>false</violent>
+		  <forceNormalTimeSpeed>false</forceNormalTimeSpeed>
+		  <warmupTime>0.25</warmupTime>
+		  <range>19.9</range>
+		  <requireLineOfSight>False</requireLineOfSight>
+		  <targetParams>
+			<canTargetLocations>true</canTargetLocations>
+			<canTargetPawns>false</canTargetPawns>
+			<canTargetBuildings>false</canTargetBuildings>
+		  </targetParams>
+		</verbProperties>
+		<casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+		<comps>
+		  <li Class = "HautsFramework.CompProperties_AbilityTeleportSelf">
+			<compClass>HautsFramework.CompAbilityEffect_TeleportSelf</compClass>
+			<requiresLineOfSight>False</requiresLineOfSight>
+			<clamorType>Ability</clamorType>
+			<clamorRadius>10</clamorRadius>
+			<destClamorType>Ability</destClamorType>
+			<destClamorRadius>10</destClamorRadius>
+			<stunTicks>18~60</stunTicks>
+		  </li>
+		  <li Class="HautsFramework.CompProperties_AbilityAiTargetingDistanceRange">
+			<compClass>HautsFramework.CompAbilityEffect_AiTargetingDistanceRange</compClass>
+			<distanceRange>4.5~99999</distanceRange>
+			<mustBeMelee>true</mustBeMelee>
+		  </li>
+		  <li Class="HautsFramework.CompProperties_AbilityAiUsesToRetreat">
+			<compClass>HautsFramework.CompAbilityEffect_AiUsesToRetreat</compClass>
+			<hpThreshold>0.2</hpThreshold>
+			<mustBeRanged>true</mustBeRanged>
+		  </li>
+		  <li Class="HautsPermits.CompProperties_GatepunchAbility">
+			<compClass>HautsPermits.CompAbilityEffect_GatepunchAbility</compClass>
+			<gatepuncherHediff>HVMP_Gatepuncher_NPC</gatepuncherHediff>
+			<chargeCost>1</chargeCost>
+		  </li>
+		</comps>
+	  </AbilityDef>
   
 </Defs>

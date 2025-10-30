@@ -7,6 +7,21 @@
 	<defaultLabelColor>(1, 1, 0.92)</defaultLabelColor>
   </HediffDef>
   <HediffDef ParentName="HVMP_MSBase">
+	<defName>HVMP_ScariaAblativeTissues</defName>
+	<label>ablative tissue mutation</label>
+	<description>A mutant scaria strain has caused the formation of fatty cushions around this creature's vital organs. It is resistant to concussive trauma.</description>
+	<stages>
+	  <li>
+		<statOffsets>
+			<ArmorRating_Blunt>0.2</ArmorRating_Blunt>
+		</statOffsets>
+		<damageFactors>
+		  <Bomb>0.5</Bomb>
+		</damageFactors>
+	  </li>
+	</stages>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_MSBase">
 	<defName>HVMP_ScariaAcidBreath</defName>
 	<label>acid breath mutation</label>
 	<hediffClass>HautsPermits_Biotech.Hediff_AnimalAbility</hediffClass><!--animals don't normally have an ability tracker, but they CAN have one. You just need to shake the game by the shoulders until it acquiesces-->
@@ -80,6 +95,34 @@
 		</projectile>
 	  </ThingDef>
   <HediffDef ParentName="HVMP_MSBase">
+	<defName>HVMP_ScariaBioelectricJolt</defName>
+	<label>bioelectric jolt mutation</label>
+	<hediffClass>HautsFramework.Hediff_HasExtraOnHitEffects</hediffClass>
+	<description>A mutant scaria strain has imbued this creature with a thrumming current of wild electromagnetic energy. Its attacks have a chance to stun.</description>
+    <comps>
+      <li Class="HautsFramework.HediffCompProperties_ExtraDamageOnHit">
+		<extraDamages>
+          <li>
+            <def>EMP</def>
+            <amount>100</amount>
+            <chance>1</chance>
+          </li>
+		</extraDamages>
+		<appliedViaAttacks>true</appliedViaAttacks>
+		<damageScaling>false</damageScaling>
+		<cellRange>3</cellRange>
+		<canAffectMechs>true</canAffectMechs>
+      </li>
+	  <li Class="HautsFramework.HediffCompProperties_StunOnHit">
+		<stunTicksRange>90~210</stunTicksRange>
+		<appliedViaAttacks>true</appliedViaAttacks>
+		<cellRange>1.5</cellRange>
+		<minDmgToTrigger>0</minDmgToTrigger>
+		<chance>0.1</chance>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_MSBase">
 	<defName>HVMP_ScariaBrightdeath</defName>
 	<label>brightdeath mutation</label>
 	<hediffClass>HediffWithComps</hediffClass>
@@ -149,6 +192,19 @@
 		  </shaderParameters>
 		</graphicData>
 	  </ThingDef>
+  <HediffDef ParentName="HVMP_MSBase">
+	<defName>HVMP_ScariaEvasive</defName>
+	<label>evasive mutation</label>
+	<description>This creature's nervous system and behavior have been altered by a mutant strain of scaria, making it supremely adept at dodging attacks.</description>
+	<stages>
+	  <li>
+		<statOffsets>
+			<VEF_RangedDodgeChance>0.18</VEF_RangedDodgeChance>
+			<MeleeDodgeChance>5</MeleeDodgeChance>
+		</statOffsets>
+	  </li>
+	</stages>
+  </HediffDef>
   <HediffDef ParentName="HVMP_MSBase">
 	<defName>HVMP_ScariaFrenzy</defName>
 	<label>frenzy mutation</label>
@@ -265,7 +321,7 @@
 		<capMods>
 		  <li>
 			<capacity>Moving</capacity>
-			<offset>-0.1</offset>
+			<offset>-0.05</offset>
 		  </li>
 		</capMods>
 	  </li>
@@ -341,4 +397,16 @@
 		</comps>
 	  </HediffDef>
   
+  <HediffDef ParentName="HVMP_MSBase" MayRequire="Ludeon.RimWorld.Anomaly">
+	<defName>HVMP_ScariaUnnaturalRegeneration</defName>
+	<label>unnatural healing mutation</label>
+	<hediffClass>HautsFramework.Hediff_HasExtraOnHitEffects</hediffClass>
+	<description>A mutant scaria strain causes corrupted archites to repair this creature's damaged tissues.</description>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+        <regeneration>25</regeneration>
+      </li>
+    </stages>
+  </HediffDef>
 </Defs>

@@ -7,111 +7,6 @@
     <workerClass>PawnGroupKindWorker_Normal</workerClass>
   </PawnGroupKindDef>
   
-  <!--COMMERCE Fortification
-		pertinent to all three-->
-  <IncidentDef>
-    <defName>HVMP_RaidFortification</defName>
-    <label>enemy raid</label>
-    <targetTags>
-      <li>Map_PlayerHome</li>
-    </targetTags>
-    <workerClass>HautsPermits.IncidentWorker_RaidFortification</workerClass>
-    <baseChance>0</baseChance>
-    <category>ThreatBig</category>
-    <pointsScaleable>true</pointsScaleable>
-    <tale>Raid</tale>
-    <ignoreRecentSelectionWeighting>true</ignoreRecentSelectionWeighting>
-    <canOccurOnAllPlanetLayers>true</canOccurOnAllPlanetLayers>
-  </IncidentDef>
-  <!--	Advanced Weaponry-->
-  <HediffDef ParentName="DiseaseBase">
-    <defName>HVMP_TargetedPsychicSuppression</defName>
-    <label>lesser psychic suppression</label>
-    <description>The effect of a targeted psychic suppression field. Coordination and reasoning are muddled.</description>
-    <isBad>true</isBad>
-    <everCurableByItem>false</everCurableByItem>
-    <comps>
-      <li Class="HediffCompProperties">
-        <compClass>HautsPermits.HediffComp_TargetedPsychicSuppression</compClass>
-      </li>
-    </comps>
-    <stages>
-      <li>
-        <capMods>
-          <li>
-            <capacity>Consciousness</capacity>
-            <setMaxCurveOverride>
-              <points>
-                <li>0, 1</li>
-                <li>1, 0.75</li>
-              </points>
-            </setMaxCurveOverride>
-            <setMaxCurveEvaluateStat>PsychicSensitivity</setMaxCurveEvaluateStat>
-          </li>
-        </capMods>
-      </li>
-    </stages>
-  </HediffDef>
-  <GameConditionDef>
-    <defName>HVMP_TargetedPsychicSuppression</defName>
-    <conditionClass>HautsPermits.HVMP_GameCondition_TargetedPsychicSuppression</conditionClass>
-    <label>lesser psychic suppression</label>
-    <description>A targeted psychic suppression field is affecting {0}s and slightly reducing their consciousness. The effect is modulated by an individual's psychic sensitivity.</description>
-    <descriptionFuture>a targeted psychic suppression wave will slightly reduce the consciousness of all [psychicSuppressorGender]s around [map_definite] for [gameConditionDuration_duration]</descriptionFuture>
-    <endMessage>The targeted psychic suppressor field has dissipated.</endMessage>
-    <letterText>A targeted psychic suppressor field has begun slightly reducing the consciousness of {0}s across the whole region. The effect is modulated by an individual's psychic sensitivity.</letterText>
-    <letterDef>NegativeEvent</letterDef>
-    <canBePermanent>false</canBePermanent>
-    <natural>false</natural>
-  </GameConditionDef>
-  <!--	Dead Raiders Tell No Tales-->
-  <HediffDef ParentName="HVT_TraitHediffBase">
-    <defName>HVMP_DRTNT</defName>
-    <hediffClass>HediffWithComps</hediffClass>
-    <label>raiding scout</label>
-    <description>This raider collects information on your colony. Should they escape, they will sell that information to interested parties, granting a temporary reserve of extra 'raid power' to four random hostile factions. This effect scales with sight, hearing, Construction skill, and Intellectual skill.</description>
-	<comps>
-	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
-	  <li Class="HautsFramework.HediffCompProperties_Espionage">
-		<unscalableFlatSpyPoints>40</unscalableFlatSpyPoints>
-		<baseSpyPoints>18</baseSpyPoints>
-		<relevantSkills>
-			<li>Construction</li>
-			<li>Intellectual</li>
-		</relevantSkills>
-		<fallbackIfNoSkillLevel>1</fallbackIfNoSkillLevel>
-		<relevantCapacities>
-			<li>Sight</li>
-			<li>Hearing</li>
-		</relevantCapacities>
-		<spyPointAttribution>RandomHostileFactions</spyPointAttribution>
-		<randomFactionCount>4</randomFactionCount>
-	  </li>
-	  <li Class="HautsFramework.HediffCompProperties_MoteConditional">
-		<mote>HVMP_EyeSpy</mote>
-		<scale>1</scale>
-	  </li>
-	</comps>
-  </HediffDef>
-  <ThingDef ParentName="MoteBase">
-	<defName>HVMP_EyeSpy</defName>
-	<thingClass>MoteAttached</thingClass>
-	<altitudeLayer>MoteOverhead</altitudeLayer>
-	<mote>
-		<fadeInTime>1.05</fadeInTime>
-		<fadeOutTime>1.05</fadeOutTime>
-		<solidTime>1.05</solidTime>
-		<needsMaintenance>true</needsMaintenance>
-	</mote>
-	<graphicData>
-	  <graphicClass>Graphic_Single</graphicClass>
-	  <color>(0.44,0.067,0.067,0.7)</color>
-	  <texPath>UI/Icons/RoyalFavor</texPath>
-	  <drawSize>0.65</drawSize>
-      <drawOffset>(0,0,1)</drawOffset>
-	</graphicData>
-  </ThingDef>
-  
   <!--COMMERCE Intervention
 		Burning, Unadulterated Burning-->
   <HediffDef ParentName="HVT_TraitHediffBase">
@@ -220,6 +115,277 @@
             <offset>0.1</offset>
           </li>
         </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+  
+  <!--COMMERCE Mastermind
+		Communications Blackout-->
+  <GameConditionDef>
+    <defName>HVMP_CommsBlackout</defName>
+    <conditionClass>HautsPermits.GameCondition_MutationDummy</conditionClass>
+    <label>communications blackout</label>
+    <description>Machinations of the Commerce Branch. You cannot contact non-Branch factions on the comms console, you cannot trade with settlements, and traders will avoid your colonies.</description>
+  </GameConditionDef>
+  
+  <!--COMMERCE Research
+		Brain Drain-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_BrainDrain</defName>
+    <label>psychodigital connection</label>
+    <description>A psychically connected chaincomputer is utilizing this character's consciousness to perform calculations.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <comps>
+      <li Class="HediffCompProperties_DisappearsOnDeath"/>
+      <li Class="HautsPermits.HediffCompProperties_BrainDrain">
+        <requireLinkOnOtherPawn>false</requireLinkOnOtherPawn>
+		<BD_progressLossOnDeath>10~20</BD_progressLossOnDeath>
+      </li>
+    </comps>
+    <stages>
+      <li>
+		<capMods>
+		  <li>
+			<capacity>Consciousness</capacity>
+			<postFactor>0.5</postFactor>
+		  </li>
+          <li>
+            <capacity>Consciousness</capacity>
+            <setMax>1</setMax>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+    <isBad>false</isBad>
+  </HediffDef>
+  
+  <!--PAX Caelum
+		Mood Killer-->
+  <GameConditionDef>
+    <defName>HVMP_MoodKiller</defName>
+    <conditionClass>HautsPermits.GameCondition_MoodKiller</conditionClass>
+    <label>synaptic irritation</label>
+    <description>Exotic particles saturate the atmosphere. They suppress certain pathways in the nervous system, worsening mood.</description>
+  </GameConditionDef>
+  <ThoughtDef>
+    <defName>HVMP_MoodKillerThought</defName>
+    <workerClass>HautsPermits.ThoughtWorker_MoodKiller</workerClass>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <stages>
+      <li>
+        <label>synaptic irritation</label>
+        <description>Exotic particles in the atmosphere worsen the mood.</description>
+        <baseMoodEffect>-8</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  <!--	Sensory Overload-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_SensoryOverload</defName>
+    <label>sensory overload</label>
+    <description>Lingering effects of exposure to the overwhelming sensation of a powerful orbital weapon.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <initialSeverity>5</initialSeverity>
+    <maxSeverity>5</maxSeverity>
+    <stages>
+      <li>
+        <capMods>
+          <li><capacity>Sight</capacity><offset>-0.15</offset></li>
+          <li><capacity>Hearing</capacity><offset>-0.15</offset></li>
+        </capMods>
+      </li>
+      <li>
+        <minSeverity>1</minSeverity>
+        <capMods>
+          <li><capacity>Sight</capacity><offset>-0.3</offset></li>
+          <li><capacity>Hearing</capacity><offset>-0.3</offset></li>
+        </capMods>
+      </li>
+      <li>
+        <minSeverity>2</minSeverity>
+        <capMods>
+          <li><capacity>Sight</capacity><offset>-0.45</offset></li>
+          <li><capacity>Hearing</capacity><offset>-0.45</offset></li>
+        </capMods>
+      </li>
+      <li>
+        <minSeverity>3</minSeverity>
+        <capMods>
+          <li><capacity>Sight</capacity><offset>-0.6</offset></li>
+          <li><capacity>Hearing</capacity><offset>-0.6</offset></li>
+        </capMods>
+      </li>
+      <li>
+        <minSeverity>4</minSeverity>
+        <capMods>
+          <li><capacity>Sight</capacity><offset>-0.75</offset></li>
+          <li><capacity>Hearing</capacity><offset>-0.75</offset></li>
+        </capMods>
+      </li>
+    </stages>
+	<comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-1</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  
+  <!--ROVER Atlas
+		Drier Than Salt-->
+  <ThoughtDef>
+    <defName>HVMP_DTS_Thought</defName>
+    <durationDays>0.5</durationDays>
+    <stackLimit>12</stackLimit>
+    <stackedEffectMultiplier>1.0</stackedEffectMultiplier>
+    <validWhileDespawned>true</validWhileDespawned>
+    <nullifyingTraits>
+      <li>Ascetic</li>
+      <li MayRequire="Hautarche.HautsTraits">HVT_Drudge</li>
+      <li MayRequire="Hautarche.HautsTraits">HVT_Staid</li>
+    </nullifyingTraits>
+    <stages>
+      <li>
+        <label>frustrating revision</label>
+        <description>This atlas I've been revising is so dull. I have to adhere to all these weird, nonsensical formatting rules, too.</description>
+        <baseMoodEffect>-1</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+  <!--ROVER Ares
+		pertinent to all three-->
+  <IncidentDef>
+    <defName>HVMP_RaidAres</defName>
+    <label>enemy raid</label>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>HautsPermits.IncidentWorker_RaidAres</workerClass>
+    <baseChance>0</baseChance>
+    <category>ThreatBig</category>
+    <pointsScaleable>true</pointsScaleable>
+    <tale>Raid</tale>
+    <ignoreRecentSelectionWeighting>true</ignoreRecentSelectionWeighting>
+    <canOccurOnAllPlanetLayers>true</canOccurOnAllPlanetLayers>
+  </IncidentDef>
+  <!--	Advanced Weaponry-->
+  <GameConditionDef>
+    <defName>HVMP_TargetedPsychicSuppression</defName>
+    <conditionClass>HautsPermits.HVMP_GameCondition_TargetedPsychicSuppression</conditionClass>
+    <label>lesser psychic suppression</label>
+    <description>A targeted psychic suppression field is affecting {0}s and slightly reducing their consciousness. The effect is modulated by an individual's psychic sensitivity.</description>
+    <descriptionFuture>a targeted psychic suppression wave will slightly reduce the consciousness of all [psychicSuppressorGender]s around [map_definite] for [gameConditionDuration_duration]</descriptionFuture>
+    <endMessage>The targeted psychic suppressor field has dissipated.</endMessage>
+    <letterText>A targeted psychic suppressor field has begun slightly reducing the consciousness of {0}s across the whole region. The effect is modulated by an individual's psychic sensitivity.</letterText>
+    <letterDef>NegativeEvent</letterDef>
+    <canBePermanent>false</canBePermanent>
+    <natural>false</natural>
+  </GameConditionDef>
+	  <HediffDef ParentName="DiseaseBase">
+		<defName>HVMP_TargetedPsychicSuppression</defName>
+		<label>lesser psychic suppression</label>
+		<description>The effect of a targeted psychic suppression field. Coordination and reasoning are muddled.</description>
+		<isBad>true</isBad>
+		<everCurableByItem>false</everCurableByItem>
+		<comps>
+		  <li Class="HediffCompProperties">
+			<compClass>HautsPermits.HediffComp_TargetedPsychicSuppression</compClass>
+		  </li>
+		</comps>
+		<stages>
+		  <li>
+			<capMods>
+			  <li>
+				<capacity>Consciousness</capacity>
+				<setMaxCurveOverride>
+				  <points>
+					<li>0, 1</li>
+					<li>1, 0.75</li>
+				  </points>
+				</setMaxCurveOverride>
+				<setMaxCurveEvaluateStat>PsychicSensitivity</setMaxCurveEvaluateStat>
+			  </li>
+			</capMods>
+		  </li>
+		</stages>
+	  </HediffDef>
+  <!--	Dead Raiders Tell No Tales-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_DRTNT</defName>
+    <hediffClass>HediffWithComps</hediffClass>
+    <label>raiding scout</label>
+    <description>This raider collects information on your colony. Should they escape, they will sell that information to interested parties, granting a temporary reserve of extra 'raid power' to four random hostile factions. This effect scales with sight, hearing, Construction skill, and Intellectual skill.</description>
+	<comps>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	  <li Class="HautsFramework.HediffCompProperties_Espionage">
+		<unscalableFlatSpyPoints>40</unscalableFlatSpyPoints>
+		<baseSpyPoints>18</baseSpyPoints>
+		<relevantSkills>
+			<li>Construction</li>
+			<li>Intellectual</li>
+		</relevantSkills>
+		<fallbackIfNoSkillLevel>1</fallbackIfNoSkillLevel>
+		<relevantCapacities>
+			<li>Sight</li>
+			<li>Hearing</li>
+		</relevantCapacities>
+		<spyPointAttribution>RandomHostileFactions</spyPointAttribution>
+		<randomFactionCount>4</randomFactionCount>
+	  </li>
+	  <li Class="HautsFramework.HediffCompProperties_MoteConditional">
+		<mote>HVMP_EyeSpy</mote>
+		<scale>1</scale>
+	  </li>
+	</comps>
+  </HediffDef>
+  <ThingDef ParentName="MoteBase">
+	<defName>HVMP_EyeSpy</defName>
+	<thingClass>MoteAttached</thingClass>
+	<altitudeLayer>MoteOverhead</altitudeLayer>
+	<mote>
+		<fadeInTime>1.05</fadeInTime>
+		<fadeOutTime>1.05</fadeOutTime>
+		<solidTime>1.05</solidTime>
+		<needsMaintenance>true</needsMaintenance>
+	</mote>
+	<graphicData>
+	  <graphicClass>Graphic_Single</graphicClass>
+	  <color>(0.44,0.067,0.067,0.7)</color>
+	  <texPath>UI/Icons/RoyalFavor</texPath>
+	  <drawSize>0.65</drawSize>
+      <drawOffset>(0,0,1)</drawOffset>
+	</graphicData>
+  </ThingDef>
+  
+  <!--ARCHIVE Ethnography
+		Sensitive Souls-->
+  <HediffDef ParentName="HVT_TraitHediffBase" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_SensitiveSoul</defName>
+    <label>weak will</label>
+    <description>This character struggles with processing upsetting feelings, as well as with resisting basic temptations.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+    <stages>
+      <li>
+        <hungerRateFactor>1.2</hungerRateFactor>
+        <statFactors>
+          <RestFallRateFactor>1.2</RestFallRateFactor>
+          <JoyFallRateFactor>1.25</JoyFallRateFactor>
+        </statFactors>
+        <statOffsets>
+          <VEF_NegativeThoughtDurationFactor>0.2</VEF_NegativeThoughtDurationFactor>
+        </statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_TactlessTongues</defName>
+    <label>tactless tongue</label>
+    <description>Questions asked by this anthropologist are likelier to be offensive, and are more offensive if so.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+    <stages>
+      <li>
+		<becomeVisible>false</becomeVisible>
       </li>
     </stages>
   </HediffDef>

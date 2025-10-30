@@ -30,6 +30,18 @@
     <label>quest timed out</label>
   </HistoryEventDef>
   <HistoryEventDef>
+    <defName>HVMP_LandmarkDestroyed</defName>
+    <label>destroyed landmark</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_LandmarkConstructionExpired</defName>
+    <label>landmark construction expired</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_LandmarkConstructionMapRemoved</defName>
+    <label>landmark construction abandoned</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
     <defName>HVMP_ChaincomputerDestroyed</defName>
     <label>chaincomputer destroyed</label>
   </HistoryEventDef>
@@ -46,18 +58,6 @@
     <label>atlas destroyed</label>
   </HistoryEventDef>
   <HistoryEventDef>
-    <defName>HVMP_LandmarkDestroyed</defName>
-    <label>destroyed landmark</label>
-  </HistoryEventDef>
-  <HistoryEventDef>
-    <defName>HVMP_LandmarkConstructionExpired</defName>
-    <label>landmark construction expired</label>
-  </HistoryEventDef>
-  <HistoryEventDef>
-    <defName>HVMP_LandmarkConstructionMapRemoved</defName>
-    <label>landmark construction abandoned</label>
-  </HistoryEventDef>
-  <HistoryEventDef>
     <defName>HVG_MissedShuttle</defName>
     <label>missed shuttle pickup</label>
   </HistoryEventDef>
@@ -66,12 +66,12 @@
     <label>strange artifact destroyed</label>
   </HistoryEventDef>
   <HistoryEventDef>
-    <defName>HVMP_ShuttleLost</defName>
-    <label>crashed shuttle lost</label>
-  </HistoryEventDef>
-  <HistoryEventDef>
     <defName>HVMP_SpacedroneDestroyed</defName>
     <label>spacedrone destroyed</label>
+  </HistoryEventDef>
+  <HistoryEventDef>
+    <defName>HVMP_ShrineDestroyed</defName>
+    <label>terminal destroyed</label>
   </HistoryEventDef>
   <HistoryEventDef>
     <defName>HVMP_NaturePreserveViolated</defName>
@@ -88,10 +88,6 @@
   <HistoryEventDef>
     <defName>HVMP_PerformedHarmfulInjection</defName>
     <label>harmful injection on member</label>
-  </HistoryEventDef>
-  <HistoryEventDef>
-    <defName>HVMP_VoidLensDestroyed</defName>
-    <label>void lens destroyed</label>
   </HistoryEventDef>
   
 </Defs>

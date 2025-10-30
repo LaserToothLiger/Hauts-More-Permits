@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--Barker:
+		Late Grows the Hour-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_LGTH</defName>
+	<label>psychic agitation</label>
+	<description>This entity's activity rises by an additional 2.5% per hour.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+		<statFactors>
+		  <IncomingDamageFactor>0.9</IncomingDamageFactor>
+		</statFactors>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HautsPermits_Occult.HediffCompProperties_LGTH">
+		<activityPerHour>0.025</activityPerHour>
+	  </li>
+	</comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_LGTH_Corpse</defName>
+	<label>psychic agitation</label>
+	<description>This entity is awakening faster than normal.</description>
+	<isBad>false</isBad>
+	<minSeverity>6</minSeverity>
+	<maxSeverity>8</maxSeverity><!--these are the min and max days it has to start the awakening process (ordinarily 11-13 days), after which you've only got 1-3 days left before it awakens. this shaves off 5 days total-->
+	<initialSeverity>7</initialSeverity><!--rimworld complains if this is lower than the min, but it doesn't do anything for our purposes-->
+  </HediffDef>
+  
+  <!--Fuller:
+		Faith Well Kept-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_FWK</defName>
+	<label>who keeps faith...</label>
+	<description>... is never alone.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+		<becomeVisible>false</becomeVisible>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HautsPermits_Occult.HediffCompProperties_FWK">
+		<MTBdays>10</MTBdays>
+		<raidPointFactor>0.7</raidPointFactor>
+		<maxPawns>10</maxPawns><!--it can go high, but let's not make it a clown car-->
+	  </li>
+	</comps>
+  </HediffDef>
+  <!--	Stark Raving Mad-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_SRM</defName>
+	<label>anesthetic resistance</label>
+	<description>Holy water cannot help you now / a thousand armies couldn't keep me out</description><!--I don't want your money, I don't want your crown / see I've come to burn your ...colony... down-->
+	<hediffClass>HautsPermits_Occult.Hediff_SRM</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+		<becomeVisible>false</becomeVisible>
+	  </li>
+	</stages>
+  </HediffDef>
+  <ThoughtDef>
+    <defName>HVMP_SRM_thought</defName>
+    <workerClass>HautsPermits_Occult.ThoughtWorker_SRM</workerClass>
+    <hediff>HVMP_SRM</hediff>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <label>you cannot hold me</label>
+        <description>I will not be contained.\n\nI will not be contained!\n\nI will NOT be CONTAINED!\n\nI. WiLL NOT. BE CONTAINED!</description>
+        <baseMoodEffect>-100</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  <!-- What Lurks Within-->
+  <HediffDef ParentName="DiseaseBase">
+	<defName>HVMP_WLW</defName>
+	<label>suppressed ghoulization</label>
+	<scenarioCanAdd>false</scenarioCanAdd>
+    <keepOnBodyPartRestoration>True</keepOnBodyPartRestoration>
+    <defaultLabelColor>(0.0, 0.82, 0.28)</defaultLabelColor>
+	<allowMothballIfLowPriorityWorldPawn>true</allowMothballIfLowPriorityWorldPawn>
+	<description>Regular medical treatment is required to prevent ghoulization.</description>
+	<hediffClass>HautsPermits_Occult.Hediff_WLW</hediffClass>
+	<isBad>false</isBad>
+    <tendable>true</tendable>
+    <makesSickThought>true</makesSickThought>
+    <minSeverity>0.001</minSeverity>
+    <initialSeverity>0.001</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>2.1</severityPerDay><!--a little bit of leniency; it's actually a little longer than 12 hours-->
+      </li>
+      <li Class="HediffCompProperties_TendDuration">
+        <severityPerDayTended>-2</severityPerDayTended>
+        <baseTendDurationHours>8</baseTendDurationHours>
+      </li>
+    </comps>
+  </HediffDef>
+  
+  <!--Lovecraft
+		Escape From Tartarus-->
+  <IncidentDef>
+    <defName>HVMP_EFT_MutationWave</defName>
+    <label>mutation shockwave</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+	<layerBlacklist>
+	  <li MayRequire="Ludeon.RimWorld.Odyssey">Orbit</li>
+	  <li MayRequire="Broms.DeepOrbit">Orbit2</li>
+	</layerBlacklist>
+    <workerClass>HautsPermits_Occult.IncidentWorker_MutationPulse</workerClass>
+    <baseChance>0</baseChance>
+    <minRefireDays>5</minRefireDays>
+  </IncidentDef>
+  <IncidentDef>
+    <defName>HVMP_EFT_Nociosphere</defName>
+    <label>active nociosphere</label>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>HautsPermits_Occult.IncidentWorker_PrimedNociosphere</workerClass>
+    <category>Misc</category>
+    <letterLabel>Active nociosphere</letterLabel>
+    <baseChance>0</baseChance>
+    <letterText>A strange metallic sphere has appeared. It hurts to be near it.\nHarsh energies flicker across and just underneath its surface. It will activate after a few moments, indiscriminately destroying everything it comes across.</letterText>
+    <letterDef>ThreatBig</letterDef>
+    <minRefireDays>0.01</minRefireDays>
+  </IncidentDef>
+  <IncidentDef>
+    <defName>HVMP_EFT_SuperGhoul</defName>
+    <label>super-ghoul</label>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>HautsPermits_Occult.IncidentWorker_SuperGhoul</workerClass>
+    <category>Misc</category>
+    <letterLabel>Super-ghoul</letterLabel>
+    <baseChance>0</baseChance>
+    <letterText>A vicious humanoid ghoul has been spotted!\n\nIt is unthinking in its inhuman savagery, and much more powerful than its kin. As it grows hungry, it may hunt your people.</letterText>
+    <letterDef>ThreatBig</letterDef>
+    <minRefireDays>0.01</minRefireDays>
+  </IncidentDef>
+	  <PawnKindDef ParentName="HVMP_GhoulBase">
+		<defName>HVMP_GhoulSuperEvil</defName>
+		<label>super-ghoul</label>
+		<combatPower>1001</combatPower>
+		<techHediffsTags>
+		  <li>Ghoul</li>
+		  <li>Advanced</li>
+		  <li>AdvancedWeapon</li>
+		</techHediffsTags>
+		<techHediffsChance>1</techHediffsChance>
+		<techHediffsMoney>12999~19999</techHediffsMoney>
+		<techHediffsMaxAmount>15</techHediffsMaxAmount>
+		<startingHediffs>
+		  <li>
+			<def>JuggernautSerum</def>
+			<durationTicksRange>600000</durationTicksRange> <!-- 10 days -->
+		  </li>
+		  <li>
+			<def>RapidRegeneration</def>
+		  </li>
+		  <li>
+			<def>GoJuiceHigh</def>
+			<severity>1</severity>
+		  </li>
+		  <li>
+			<def>YayoHigh</def>
+			<severity>1</severity>
+		  </li>
+		  <li>
+			<def>DeathRefusal</def>
+		  </li>
+		</startingHediffs>
+	  </PawnKindDef>
+  
+  <!--Touch of the Unfathomable-->
+  <GameConditionDef>
+    <defName>HVMP_TOTU_BloodBlight</defName>
+    <conditionClass>HautsPermits_Occult.GameCondition_BloodBlight</conditionClass>
+    <label>blood blight</label>
+    <description>A foul psychic emanation causes random living creatures to develop blood rot.</description>
+  </GameConditionDef>
+  <GameConditionDef>
+    <defName>HVMP_TOTU_EldritchViscosity</defName>
+    <conditionClass>HautsPermits_Occult.GameCondition_PsychicViscosity</conditionClass>
+    <label>psychic viscosity</label>
+    <description>Powerful psychic currents pull at the motor nervous systems of living creatures, slowing them down as if moving in molasses.</description>
+  </GameConditionDef>
+	  <HediffDef ParentName="DiseaseBase">
+		<defName>HVMP_TOTU_PsychicViscosity</defName>
+		<label>psychic viscosity</label>
+		<description>Powerful psychic currents pull at the motor nervous systems of this creature, slowing it down as if moving in molasses.</description>
+		<isBad>true</isBad>
+		<everCurableByItem>false</everCurableByItem>
+		<comps>
+		  <li Class="HautsPermits.HediffCompProperties_ReliantOnGameCondition">
+			<gameCondition>HVMP_TOTU_EldritchViscosity</gameCondition>
+			<dontAffectAnomalies>true</dontAffectAnomalies>
+			<dontAffectMechs>true</dontAffectMechs>
+		  </li>
+		</comps>
+		<stages>
+		  <li>
+			<capMods>
+			  <li>
+				<capacity>Moving</capacity>
+				<setMaxCurveOverride>
+				  <points>
+					<li>0, 1</li>
+					<li>1, 0.5</li>
+				  </points>
+				</setMaxCurveOverride>
+				<setMaxCurveEvaluateStat>PsychicSensitivity</setMaxCurveEvaluateStat>
+			  </li>
+			</capMods>
+		  </li>
+		</stages>
+	  </HediffDef>
+  <GameConditionDef>
+    <defName>HVMP_TOTU_Mindfire</defName>
+    <conditionClass>HautsPermits_Occult.GameCondition_Mindfire</conditionClass>
+    <label>mindfire</label>
+    <description>A skew in the psychic manifold sets every living creature in the region on edge.</description>
+  </GameConditionDef>
+	  <HediffDef ParentName="DiseaseBase">
+		<defName>HVMP_Mindfire_hediff</defName>
+		<label>mindfire</label>
+		<description>A skew in the psychic manifold.</description>
+		<isBad>false</isBad>
+		<comps>
+		  <li Class="HautsPermits.HediffCompProperties_ReliantOnGameCondition">
+			<gameCondition>HVMP_TOTU_Mindfire</gameCondition>
+			<dontAffectAnomalies>true</dontAffectAnomalies>
+			<dontAffectMechs>true</dontAffectMechs>
+		  </li>
+		</comps>
+		<stages>
+		  <li>
+			<statFactors>
+			  <MentalBreakThreshold>1.25</MentalBreakThreshold>
+			</statFactors>
+		  </li>
+		</stages>
+	  </HediffDef>
+  <GameConditionDef>
+    <defName>HVMP_TOTU_WeaknessOfFlesh</defName>
+    <conditionClass>HautsPermits_Occult.GameCondition_WeaknessOfFlesh</conditionClass>
+    <label>dissolution of the flesh</label>
+    <description>A foul psychic emanation seeps into the flesh of living creatures, making them easier to destroy.</description>
+  </GameConditionDef>
+	  <HediffDef ParentName="DiseaseBase">
+		<defName>HVMP_WeaknessOfFlesh_hediff</defName>
+		<label>dissolution of the flesh</label>
+		<description>Foul psychic energy which irritates living cells and weakens tissue.</description>
+		<isBad>false</isBad>
+		<comps>
+		  <li Class="HautsPermits.HediffCompProperties_ReliantOnGameCondition">
+			<gameCondition>HVMP_TOTU_WeaknessOfFlesh</gameCondition>
+			<dontAffectAnomalies>true</dontAffectAnomalies>
+			<dontAffectMechs>true</dontAffectMechs>
+		  </li>
+		</comps>
+		<stages>
+		  <li>
+			<statFactors>
+			  <IncomingDamageFactor>1.25</IncomingDamageFactor>
+			</statFactors>
+		  </li>
+		</stages>
+	  </HediffDef>
+  
+  <!--Natali
+		Absence of Energy and Happiness-->
+  <GameConditionDef>
+    <defName>HVMP_AOEAH</defName>
+    <conditionClass>HautsPermits_Occult.GameCondition_AOEAH</conditionClass>
+    <label>psychic upset</label>
+    <description>An otherworldly engine of psychic antipathy eats at the restfulness of everyone in the labyrinth, and causes their mood to worsen progressively.</description>
+    <letterText>Within the anomaly's confines, psychic antipathy eats away at wakefulness and mood.</letterText>
+    <letterDef>NegativeEvent</letterDef>
+    <canBePermanent>true</canBePermanent>
+  </GameConditionDef>
+	  <HediffDef ParentName="DiseaseBase">
+		<defName>HVMP_AOEAH_hediff</defName>
+		<label>psychic upset</label>
+		<description>An otherworldly engine of psychic antipathy eats at the restfulness of everyone in the labyrinth, and causes their mood to worsen progressively.</description>
+		<isBad>false</isBad>
+		<minSeverity>1</minSeverity>
+		<initialSeverity>1</initialSeverity>
+		<maxSeverity>66.6</maxSeverity>
+		<comps>
+		  <li Class="HautsPermits.HediffCompProperties_ReliantOnGameCondition">
+			<gameCondition>HVMP_AOEAH</gameCondition>
+			<dontAffectAnomalies>true</dontAffectAnomalies>
+			<dontAffectMechs>true</dontAffectMechs>
+		  </li>
+		  <li Class="HediffCompProperties_SeverityPerDay">
+			<severityPerDay>24</severityPerDay>
+		  </li>
+		</comps>
+		<stages>
+		  <li>
+			<statOffsets>
+			  <RestFallRateFactor>0.5</RestFallRateFactor>
+			</statOffsets>
+		  </li>
+		</stages>
+	  </HediffDef>
+  <ThoughtDef>
+    <defName>HVMP_AOEAH_thought</defName>
+    <workerClass>ThoughtWorker_Hediff</workerClass>
+    <thoughtClass>HautsPermits_Occult.Thought_AOEAH</thoughtClass>
+    <hediff>HVMP_AOEAH_hediff</hediff>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <label>psychic upset</label>
+        <description>Staying here is like keeping my head underwater. The longer it goes on, the worse it burns...</description>
+        <baseMoodEffect>-1</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  <!--Chaos of Limbo-->
+  <TerrainDef ParentName="FloorBase">
+    <defName>HVMP_BurntSurface</defName>
+    <label>black surface</label>
+    <description>An unnatural and unrecognizable material.</description>
+    <texturePath>Terrain/Surfaces/Voidmetal</texturePath>
+    <edgeType>FadeRough</edgeType>
+    <renderPrecedence>340</renderPrecedence>
+    <layerable>false</layerable>
+    <pathCost>7</pathCost>
+    <takeFootprints>True</takeFootprints>
+    <designationCategory />
+    <affordances>
+      <li>Light</li>
+    </affordances>
+    <fertility>0</fertility>
+    <statBases>
+      <Beauty>-5</Beauty>
+      <Cleanliness>-0.5</Cleanliness>
+    </statBases>
+  </TerrainDef>
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>HVMP_LivingCloudkill</defName>
+    <label>putridity</label>
+    <thingClass>HautsPermits_Occult.LivingCloudkill</thingClass>
+    <tickerType>Normal</tickerType>
+    <drawerType>RealtimeOnly</drawerType>
+    <drawOffscreen>false</drawOffscreen>
+    <seeThroughFog>false</seeThroughFog>
+    <alwaysFlee>false</alwaysFlee>
+  </ThingDef>
+  <!--Don't Forget-->
+  <PawnKindDef>
+    <defName>HVMP_PrimedFleshmassNucleus</defName>
+    <label>fleshmass nucleus</label>
+    <race>FleshmassNucleus</race>
+    <canMeleeAttack>false</canMeleeAttack>
+    <hostileToAll>true</hostileToAll>
+    <allowOldAgeInjuries>false</allowOldAgeInjuries>
+    <defaultFactionDef>Entities</defaultFactionDef>
+    <immuneToGameConditionEffects>true</immuneToGameConditionEffects>
+    <preventIdeo>true</preventIdeo>
+    <canStrip>false</canStrip>
+    <immuneToTraps>true</immuneToTraps>
+    <collidesWithPawns>false</collidesWithPawns>
+    <ignoresPainShock>true</ignoresPainShock>
+    <minGenerationAge>200</minGenerationAge>
+    <useFixedRotation>true</useFixedRotation>
+    <fixedRotation>South</fixedRotation>
+    <overrideDebugActionCategory>Entity</overrideDebugActionCategory>
+    <startingHediffs>
+      <li>
+        <def>Regeneration</def>
+        <severity>0.1</severity>
+      </li>
+      <li>
+        <def>HVMP_SixHourNucleus</def>
+      </li>
+    </startingHediffs>
+    <combatPower>100</combatPower>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Things/Pawn/FleshmassNucleus</texPath>
+          <graphicClass>Graphic_ActivityStaged</graphicClass>
+          <drawSize>2</drawSize>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+  </PawnKindDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_SixHourNucleus</defName>
+		<label>psychic agitation</label>
+		<description>This entity's activity rises by an additional 16.5% per hour.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<isBad>false</isBad>
+		<comps>
+		  <li Class="HautsPermits_Occult.HediffCompProperties_LGTH">
+			<activityPerHour>0.165</activityPerHour>
+		  </li>
+		</comps>
+	  </HediffDef>
+  <PawnKindDef>
+    <defName>HVMP_GrandspliceChimera</defName>
+    <label>grandsplice chimera</label>
+    <race>Chimera</race>
+    <overrideDeathOnDownedChance>0.25</overrideDeathOnDownedChance>
+    <overrideDebugActionCategory>Entity</overrideDebugActionCategory>
+    <combatPower>135</combatPower>
+    <ecoSystemWeight>0</ecoSystemWeight>
+    <defaultFactionDef>Entities</defaultFactionDef>
+    <alternateGraphicChance>0.75</alternateGraphicChance>
+    <alternateGraphics>
+      <li>
+        <texPath>Things/Pawn/Chimera/Chimera_D</texPath>
+        <dessicatedTexPath>Things/Pawn/Chimera/Dessicated/DessicatedChimera_D</dessicatedTexPath>
+        <dessicatedGraphicData><attachPoints><li><offset>(-.2, 0, .7)</offset><type>PlatformRestraint0</type></li><li><offset>(.2, 0, .7)</offset><type>PlatformRestraint1</type></li><li><offset>(.3, 0, -.8)</offset><type>PlatformRestraint2</type></li><li><offset>(-.3, 0, -.8)</offset><type>PlatformRestraint3</type></li></attachPoints></dessicatedGraphicData> 
+        <attachPoints><li><offset>(-.3, 0, .75)</offset><type>PlatformRestraint0</type></li><li><offset>(.2, 0, .75)</offset><type>PlatformRestraint1</type></li><li><offset>(.2, 0, -.6)</offset><type>PlatformRestraint2</type></li><li><offset>(-.2, 0, -.6)</offset><type>PlatformRestraint3</type></li></attachPoints>
+      </li>
+      <li>
+        <texPath>Things/Pawn/Chimera/Chimera_C</texPath>
+        <dessicatedTexPath>Things/Pawn/Chimera/Dessicated/DessicatedChimera_C</dessicatedTexPath>
+        <dessicatedGraphicData><attachPoints><li><offset>(-.25, 0, .7)</offset><type>PlatformRestraint0</type></li><li><offset>(.2, 0, .7)</offset><type>PlatformRestraint1</type></li><li><offset>(.3, 0, -.7)</offset><type>PlatformRestraint2</type></li><li><offset>(-.3, 0, -.7)</offset><type>PlatformRestraint3</type></li></attachPoints></dessicatedGraphicData>
+        <attachPoints><li><offset>(-.4, 0, .6)</offset><type>PlatformRestraint0</type></li><li><offset>(.3, 0, .6)</offset><type>PlatformRestraint1</type></li><li><offset>(.2, 0, -.7)</offset><type>PlatformRestraint2</type></li><li><offset>(-.25, 0, -.7)</offset><type>PlatformRestraint3</type></li></attachPoints>
+     </li>
+      <li>
+        <texPath>Things/Pawn/Chimera/Chimera_B</texPath>
+        <dessicatedTexPath>Things/Pawn/Chimera/Dessicated/DessicatedChimera_B</dessicatedTexPath>
+        <dessicatedGraphicData><attachPoints><li><offset>(-.2, 0, .6)</offset><type>PlatformRestraint0</type></li><li><offset>(.2, 0, .6)</offset><type>PlatformRestraint1</type></li><li><offset>(.5, 0, -.8)</offset><type>PlatformRestraint2</type></li><li><offset>(-.5, 0, -.8)</offset><type>PlatformRestraint3</type></li></attachPoints></dessicatedGraphicData>
+       <attachPoints><li><offset>(-.4, 0, .7)</offset><type>PlatformRestraint0</type></li><li><offset>(.35, 0, .7)</offset><type>PlatformRestraint1</type></li><li><offset>(.6, 0, -.85)</offset><type>PlatformRestraint2</type></li><li><offset>(-.6, 0, -.85)</offset><type>PlatformRestraint3</type></li></attachPoints>
+      </li>
+    </alternateGraphics>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Things/Pawn/Chimera/Chimera_A</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>3.5</drawSize>
+        </bodyGraphicData>
+        <dessicatedBodyGraphicData><texPath>Things/Pawn/Chimera/Dessicated/DessicatedChimera_A</texPath><graphicClass>Graphic_Multi</graphicClass><drawSize>2.7</drawSize><attachPoints><li><offset>(-.5, 0, .5)</offset><type>PlatformRestraint0</type></li><li><offset>(.5, 0, .5)</offset><type>PlatformRestraint1</type></li><li><offset>(.4, 0, -.5)</offset><type>PlatformRestraint2</type></li><li><offset>(-.4, 0, -.5)</offset><type>PlatformRestraint3</type></li></attachPoints></dessicatedBodyGraphicData>
+      </li>
+    </lifeStages>
+    <startingHediffs>
+      <li>
+        <def>JuggernautSerum</def>
+        <durationTicksRange>600000</durationTicksRange> <!-- 10 days -->
+      </li>
+	  <li>
+	    <def>RapidRegeneration</def>
+	  </li>
+	  <li>
+	    <def>GoJuiceHigh</def>
+		<severity>1</severity>
+	  </li>
+	  <li>
+	    <def>YayoHigh</def>
+		<severity>1</severity>
+	  </li>
+	  <li>
+		<def>HVMP_OccultInvisibility</def>
+	  </li>
+      <li>
+        <def>DeathRefusal</def>
+      </li>
+	  <li>
+		<def>HVMP_Grandsplice</def>
+	  </li>
+    </startingHediffs>
+    <techHediffsTags>
+      <li>Ghoul</li>
+    </techHediffsTags>
+    <techHediffsChance>1</techHediffsChance>
+    <techHediffsMoney>9999~9999</techHediffsMoney>
+    <techHediffsMaxAmount>8</techHediffsMaxAmount>
+    <combatPower>2000</combatPower>
+  </PawnKindDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_Grandsplice</defName>
+		<label>chimeral primacy</label>
+		<description>This chimera is stronger than others of its kind.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<isBad>false</isBad>
+		<stages>
+		  <li>
+			<statFactors>
+			  <IncomingDamageFactor>0.3</IncomingDamageFactor>
+			  <MeleeDamageFactor>1.25</MeleeDamageFactor>
+			</statFactors>
+		  </li>
+		</stages>
+	  </HediffDef>
+  <PawnKindDef>
+    <defName>HVMP_CharybdisDevourer</defName>
+    <label>charybdis devourer</label>
+    <race>Devourer</race>
+    <defaultFactionDef>Entities</defaultFactionDef>
+    <immuneToGameConditionEffects>true</immuneToGameConditionEffects>
+    <overrideDebugActionCategory>Entity</overrideDebugActionCategory>
+    <lifeStages>
+      <li>
+        <bodyGraphicData><texPath>Things/Pawn/Devourer/Devourer</texPath><graphicClass>Graphic_Multi</graphicClass><drawSize>4</drawSize></bodyGraphicData>
+        <swimmingGraphicData><texPath>Things/Pawn/Devourer/Swimming_Devourer</texPath><graphicClass>Graphic_Multi</graphicClass><drawSize>4</drawSize></swimmingGraphicData>
+		<dessicatedBodyGraphicData><texPath>Things/Pawn/Devourer/Dessicated_Devourer</texPath><graphicClass>Graphic_Multi</graphicClass><drawSize>4</drawSize><attachPoints><li><offset>(-.4, 0, .85)</offset><type>PlatformRestraint0</type></li><li><offset>(.45, 0, .85)</offset><type>PlatformRestraint1</type></li><li><offset>(.5, 0, -.85)</offset><type>PlatformRestraint2</type></li><li><offset>(-.5, 0, -.85)</offset><type>PlatformRestraint3</type></li></attachPoints></dessicatedBodyGraphicData>
+      </li>
+    </lifeStages>
+    <combatPower>500</combatPower>
+    <abilities>
+      <li>ConsumeLeap_Devourer</li>
+    </abilities>
+	<startingHediffs>
+      <li>
+        <def>Regeneration</def>
+        <severity>0.1</severity>
+      </li>
+      <li>
+        <def>DeathRefusal</def>
+      </li>
+      <li>
+        <def>HVMP_Charybdis</def>
+      </li>
+    </startingHediffs>
+  </PawnKindDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_Charybdis</defName>
+		<label>charybdis strain</label>
+		<description>This devourer has been mutated by long exposure to interdimensional forces.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<isBad>false</isBad>
+		<stages>
+		  <li>
+			<statFactors>
+			  <IncomingDamageFactor>0.4</IncomingDamageFactor>
+			</statFactors>
+		  </li>
+		</stages>
+		<comps>
+		  <li Class="MVCF.Comps.HediffCompProperties_ExtendedVerbGiver">
+			<verbs>
+				<li>
+				  <verbClass>Verb_Shoot</verbClass>
+				  <label>acid globule</label>
+				  <hasStandardCommand>true</hasStandardCommand>
+				  <defaultProjectile>Bullet_Shell_AcidSpit</defaultProjectile>
+				  <warmupTime>25</warmupTime>
+				  <forcedMissRadius>3</forcedMissRadius>
+				  <minRange>6.9</minRange>
+				  <range>100</range>
+				  <burstShotCount>1</burstShotCount>
+				  <soundCast>SpitterSpit</soundCast>
+				  <requireLineOfSight>false</requireLineOfSight>
+				  <targetParams>
+					<canTargetLocations>true</canTargetLocations>
+				  </targetParams>
+				  <commandIcon>Things/Building/Fleshmass/FleshmassSpitter</commandIcon>
+				</li>
+			</verbs>
+			<verbProps>
+				<li>
+				  <label>acid globule</label>
+				  <canBeToggled>true</canBeToggled>
+				  <comps>
+				  <li Class="MVCF.VerbComps.VerbCompProperties_Turret">
+					<compClass>MVCF.VerbComps.VerbComp_Turret</compClass>
+						<invisible>true</invisible>
+						<uniqueTargets>true</uniqueTargets>
+				  </li>
+				</comps>
+				  <description>Acid mortar.</description>
+				</li>
+			</verbProps>
+		  </li>
+		</comps>
+	  </HediffDef>
+  <PawnKindDef>
+    <defName>HVMP_NoctolUmbranarch</defName>
+    <label>noctol umbranarch</label>
+    <race>Noctol</race>
+    <defaultFactionDef>Entities</defaultFactionDef>
+    <combatPower>200</combatPower>
+    <immuneToGameConditionEffects>true</immuneToGameConditionEffects>
+    <overrideDebugActionCategory>Entity</overrideDebugActionCategory>
+    <lifeStages>
+      <li>
+        <bodyGraphicData><texPath>Things/Pawn/Noctol/Noctol</texPath><graphicClass>Graphic_Multi</graphicClass><drawSize>2.5</drawSize></bodyGraphicData>
+        <dessicatedBodyGraphicData><texPath>Things/Pawn/Noctol/Dessicated_Noctol</texPath><graphicClass>Graphic_Multi</graphicClass><drawSize>2.5</drawSize>
+          <attachPoints>
+            <li><offset>(-.35, 0, .12)</offset><type>PlatformRestraint0</type></li><li><offset>(.32, 0, .12)</offset><type>PlatformRestraint1</type></li>
+            <li><offset>(.29, 0, -.85)</offset><type>PlatformRestraint2</type></li>
+            <li><offset>(-.22, 0, -.85)</offset><type>PlatformRestraint3</type></li>
+          </attachPoints>
+        </dessicatedBodyGraphicData>
+      </li>
+    </lifeStages>
+    <startingHediffs>
+      <li>
+        <def>LightExposure</def>
+      </li>
+      <li>
+        <def>HVMP_Umbranarch</def>
+      </li>
+    </startingHediffs>
+    <meleeAttackInfectionPathways>
+      <li>EntityAttacked</li>
+    </meleeAttackInfectionPathways>
+  </PawnKindDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_Umbranarch</defName>
+		<label>umbranarch</label>
+		<description>This noctol can induce unnatural darkness, and may spawn other noctols when damaged.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<isBad>false</isBad>
+		<stages>
+		  <li>
+			<statFactors>
+			  <IncomingDamageFactor>0.4</IncomingDamageFactor>
+			</statFactors>
+		  </li>
+		</stages>
+		<comps>
+		  <li Class="HautsPermits_Occult.HediffCompProperties_Umbranarch">
+			<noctolCount>2~4</noctolCount>
+			<noctolCooldown>2500</noctolCooldown>
+			<noctolDef>Noctol</noctolDef>
+			<darknessLetterText>The noctol umbranarch is bringing forth an unnatural darkness!</darknessLetterText>
+		  </li>
+		</comps>
+	  </HediffDef>
+  <!--Romero
+		Night of the Everliving Dead-->
+  <HediffDef>
+    <defName>HVMP_ShamblerRegen</defName>
+    <label>lesser regeneration</label>
+    <description>This creature is experiencing regeneration supported by a distant archotechnological engine. They will heal nearly any wound... eventually.</description>
+    <isBad>false</isBad>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+        <regeneration>7</regeneration>
+      </li>
+    </stages>
+  </HediffDef>
+  
+</Defs>

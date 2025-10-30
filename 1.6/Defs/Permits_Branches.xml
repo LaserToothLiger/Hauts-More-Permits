@@ -978,6 +978,30 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_OrbitalScalpel</defName>
+    <label>orbital scalpel</label>
+    <description>Call for a high-velocity antipersonnel round to be fired from orbit at the target creature, dealing explosive damage.\n\nA slight delay is required to ensure accurate aim against the target if it is a creature, but otherwise the attack will be instantaneous.\n\nTo conserve ammunition, no creature may be marked by more than one orbital scalpel at a time.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_OrbitalScalpel</workerClass>
+    <minTitle>HVMP_PaxI</minTitle>
+    <faction>HVMP_PaxBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>4</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(0,5)</uiPosition>
+    <royalAid>
+      <favorCost>1</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_OrbitalScalpelMarker</li></hediffs>
+			<allowAnyFlesh>true</allowAnyFlesh>
+			<allowAnyNonflesh>true</allowAnyNonflesh>
+			<soundDef>Shot_TurretSniper</soundDef>
+			<extraNumber>50</extraNumber><!--how much bomb damage you get per shot-->
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
   <!--Pax level 2-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_ChargeTurretDrop</defName>
@@ -1068,28 +1092,6 @@
       </itemsToDrop>
       <favorCost>2</favorCost>
     </royalAid>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_OrbitalScalpel</defName>
-    <label>orbital scalpel</label>
-    <description>Call for a high-velocity antipersonnel round to be fired from orbit at the target creature, dealing heavy damage. Not rated for use against buildings. To conserve ammunition, no creature may be marked by more than one orbital scalpel at a time.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_OrbitalScalpel</workerClass>
-    <minTitle>HVMP_PaxII</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>4</cooldownDays>
-    <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(1,6)</uiPosition>
-    <royalAid>
-      <favorCost>1</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<hediffs><li>HVMP_OrbitalScalpelMarker</li></hediffs>
-			<allowAnyFlesh>true</allowAnyFlesh>
-			<allowAnyNonflesh>true</allowAnyNonflesh>
-        </li>
-	</modExtensions>
   </RoyalTitlePermitDef>
   <!--Pax level 4-->
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="GoGaTio.LostFactoryMechanoids">
@@ -1664,7 +1666,31 @@
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_CaravanStealthComfort</defName>
+    <defName>HVMP_CaravanBurglaryBoost</defName>
+    <label>aid caravan heisting</label>
+    <description>Mark the target individual. For the next 5 days, the target is part of will be advised on the security measures of any settlement encountered while caravanning, enabling and enhancing burglary attempts.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_RoverI</minTitle>
+    <faction>HVMP_RoverBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>10</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(1,1)</uiPosition>
+    <royalAid>
+      <favorCost>2</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_CaravanPilfering</li></hediffs>
+			<soundDef>CrateOpeningStarted</soundDef>
+			<onUseMessage>HVMP_CaravanAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+			<allowAnyNonflesh>true</allowAnyNonflesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_CaravanComfortBoost</defName>
     <label>comfort caravan</label>
     <description>Mark the target individual. For the next 5 days, any caravan the target is part of will have access to exclusive, high-quality radio broadcasts that enhance mood, reduce boredom, and better sleep effectiveness.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
@@ -1673,7 +1699,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>10</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(1,1)</uiPosition>
+    <uiPosition>(1,2)</uiPosition>
     <royalAid>
       <favorCost>2</favorCost>
     </royalAid>
@@ -1697,7 +1723,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>10</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(1,2)</uiPosition>
+    <uiPosition>(1,3)</uiPosition>
     <royalAid>
       <favorCost>2</favorCost>
     </royalAid>
@@ -1721,13 +1747,13 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>10</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(1,3)</uiPosition>
+    <uiPosition>(1,4)</uiPosition>
     <royalAid>
       <favorCost>2</favorCost>
     </royalAid>
 	<modExtensions>
 		<li Class="HautsFramework.PermitMoreEffects">
-			<hediffs><li>HVMP_CaravanSpeedAura</li></hediffs>
+			<hediffs><li>HVMP_CaravanSpeed</li></hediffs>
 			<soundDef>CrateOpeningStarted</soundDef>
 			<onUseMessage>HVMP_CaravanAssistance</onUseMessage>
 			<allowAnyFlesh>true</allowAnyFlesh>
@@ -1999,7 +2025,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>30</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,4)</uiPosition>
+    <uiPosition>(4,5)</uiPosition>
     <royalAid>
       <favorCost>6</favorCost>
       <targetingRange>44.9</targetingRange>
@@ -2222,7 +2248,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>30</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(6,3)</uiPosition>
+    <uiPosition>(6,5)</uiPosition>
     <royalAid>
       <favorCost>6</favorCost>
       <targetingRange>44.9</targetingRange>

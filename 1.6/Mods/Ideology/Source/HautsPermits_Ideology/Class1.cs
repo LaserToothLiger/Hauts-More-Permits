@@ -40,8 +40,6 @@ namespace HautsPermits_Ideology
             Harmony harmony = new Harmony(id: "rimworld.hautarche.hautspermits.ideology");
             harmony.Patch(AccessTools.Method(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.TryInteractWith)),
                           postfix: new HarmonyMethod(patchType, nameof(HVMP_I_TryInteractWithPostfix)));
-            harmony.Patch(AccessTools.Method(typeof(GenStep_ManhunterPack), nameof(GenStep_ManhunterPack.Generate)),
-                          prefix: new HarmonyMethod(patchType, nameof(HVMPManhunterPackGeneratePrefix)));
         }
         internal static object GetInstanceField(Type type, object instance, string fieldName)
         {
@@ -55,13 +53,22 @@ namespace HautsPermits_Ideology
             Pawn pawn = GetInstanceField(typeof(Pawn_InteractionsTracker), __instance, "pawn") as Pawn;
             if (pawn.kindDef == HVMPDefOf.HVMP_Anthropologist && recipient.needs.mood != null && recipient.IsColonist && !recipient.IsQuestLodger() && recipient.kindDef != HVMPDefOf.HVMP_Anthropologist)
             {
+                bool tt = pawn.health.hediffSet.HasHediff(HVMPDefOf.HVMP_TactlessTongues);
                 float val = Rand.Value;
+                if (tt)
+                {
+                    val *= 0.5f;
+                }
                 if (val <= 0.05f)
                 {
                     recipient.needs.mood.thoughts.memories.TryGainMemory(HVMPDefOf.HVMP_AnthroAnnoyance, pawn);
                     recipient.needs.mood.thoughts.memories.TryGainMemory(HVMPDefOf.HVMP_AnthroAnnoyance, pawn);
                 } else if (val <= 0.3f) {
                     recipient.needs.mood.thoughts.memories.TryGainMemory(HVMPDefOf.HVMP_AnthroAnnoyance, pawn);
+                    if (tt)
+                    {
+                        recipient.needs.mood.thoughts.memories.TryGainMemory(HVMPDefOf.HVMP_AnthroAnnoyance, pawn);
+                    }
                 }
                 List<Quest> questsListForReading = Find.QuestManager.QuestsListForReading;
                 for (int i = 0; i < questsListForReading.Count; i++)
@@ -83,47 +90,6 @@ namespace HautsPermits_Ideology
                     }
                 }
             }
-        }
-        public static bool HVMPManhunterPackGeneratePrefix(GenStep_ManhunterPack __instance, Map map, GenStepParams parms)
-        {
-            if (map.Parent is RimWorld.Planet.Site s)
-            {
-                foreach (SitePart sp in s.parts)
-                {
-                    if (sp.def.workerClass == typeof(SitePartWorker_CrashedShuttle))
-                    {
-                        TraverseParms traverseParams = TraverseParms.For(TraverseMode.NoPassClosedDoors, Danger.Deadly, false, false, false).WithFenceblocked(true);
-                        IntVec3 intVec;
-                        if (RCellFinder.TryFindRandomCellNearTheCenterOfTheMapWith((IntVec3 x) => x.IsValid, map, out intVec))
-                        {
-                            float num = ((parms.sitePart != null) ? parms.sitePart.parms.threatPoints : __instance.defaultPointsRange.RandomInRange);
-                            PawnKindDef animalKind;
-                            bool goodAnimal = true;
-                            if (parms.sitePart != null && parms.sitePart.parms.animalKind != null)
-                            {
-                                animalKind = parms.sitePart.parms.animalKind;
-                            }
-                            else if (!ManhunterPackGenStepUtility.TryGetAnimalsKind(num, map.Tile, out animalKind))
-                            {
-                                goodAnimal = false;
-                            }
-                            if (goodAnimal)
-                            {
-                                List<Pawn> list = AggressiveAnimalIncidentUtility.GenerateAnimals(animalKind, map.Tile, num, 0);
-                                for (int i = 0; i < list.Count; i++)
-                                {
-                                    IntVec3 intVec2 = CellFinder.RandomSpawnCellForPawnNear(intVec, map, 10);
-                                    GenSpawn.Spawn(list[i], intVec2, map, Rot4.Random, WipeMode.Vanish, false, false);
-                                    list[i].health.AddHediff(HediffDefOf.Scaria, null, null, null);
-                                    list[i].mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.ManhunterPermanent, null, false, false, false, null, false, false, false);
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
-            }
-            return true;
         }
     }
     //permit unique mechanics
@@ -525,7 +491,7 @@ namespace HautsPermits_Ideology
             }
         }
     }
-    //quest nodes
+    //quest node
     public class QuestNode_ArchiveIntermediary : QuestNode_Sequence
     {
         protected override void RunInt()
@@ -551,6 +517,114 @@ namespace HautsPermits_Ideology
             HVMP_Utility.SetSettingScalingRewardValue(slate);
             return HVMP_Utility.TryFindArchiveFaction(out Faction archiveFaction) && base.TestRunInt(slate);
         }
+    }
+    //quest: ethnography
+    public class QuestNode_Multiply_QQ : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return !this.storeAs.GetValue(slate).NullOrEmpty();
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            slate.Set<int>(this.storeAs.GetValue(slate), (int)(this.value1.GetValue(slate) * (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ethnog1, HVMP_Mod.settings.ethnogX) ? this.QQ_factor : 1f)), false);
+        }
+        public SlateRef<int> value1;
+        public float QQ_factor;
+        [NoTranslate]
+        public SlateRef<string> storeAs;
+    }
+    public class QuestNode_Give_SS_TT : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            if (this.pawns.GetValue(slate) == null)
+            {
+                return;
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ethnog2, HVMP_Mod.settings.ethnogX))
+            {
+                QuestPart_Give_SS qpss = new QuestPart_Give_SS();
+                qpss.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? slate.Get<string>("inSignal", null, false);
+                qpss.pawns.AddRange(this.pawns.GetValue(slate));
+                qpss.hediff = this.SS_hediff;
+                QuestGen.quest.AddPart(qpss);
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_SS_info_singular", this.SS_description_singular.Formatted()),
+                    new Rule_String("mutator_SS_info_plural", this.SS_description_plural.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_SS_info_singular", " "), new Rule_String("mutator_SS_info_plural", " ") });
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ethnog3, HVMP_Mod.settings.ethnogX))
+            {
+                QuestPart_Give_SS qpss = new QuestPart_Give_SS();
+                qpss.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? slate.Get<string>("inSignal", null, false);
+                qpss.pawns.AddRange(this.pawns.GetValue(slate));
+                qpss.hediff = this.TT_hediff;
+                QuestGen.quest.AddPart(qpss);
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_TT_info_singular", this.TT_description_singular.Formatted()),
+                    new Rule_String("mutator_TT_info_plural", this.TT_description_plural.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TT_info_singular", " "), new Rule_String("mutator_TT_info_plural", " ") });
+            }
+        }
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+        public SlateRef<IEnumerable<Pawn>> pawns;
+        public HediffDef SS_hediff;
+        [MustTranslate]
+        public string SS_description_singular;
+        [MustTranslate]
+        public string SS_description_plural;
+        public HediffDef TT_hediff;
+        [MustTranslate]
+        public string TT_description_singular;
+        [MustTranslate]
+        public string TT_description_plural;
+    }
+    public class QuestPart_Give_SS : QuestPart
+    {
+        public override void Notify_QuestSignalReceived(Signal signal)
+        {
+            base.Notify_QuestSignalReceived(signal);
+            if (signal.tag == this.inSignal)
+            {
+                for (int i = 0; i < this.pawns.Count; i++)
+                {
+                    Hediff hef = HediffMaker.MakeHediff(this.hediff, this.pawns[i]);
+                    this.pawns[i].health.AddHediff(hef, null);
+                }
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
+            Scribe_Collections.Look<Pawn>(ref this.pawns, "pawns", LookMode.Reference, Array.Empty<object>());
+            Scribe_Defs.Look<HediffDef>(ref this.hediff, "hediff");
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                this.pawns.RemoveAll((Pawn x) => x == null);
+            }
+        }
+        public override void ReplacePawnReferences(Pawn replace, Pawn with)
+        {
+            this.pawns.Replace(replace, with);
+        }
+        public string inSignal;
+        public List<Pawn> pawns = new List<Pawn>();
+        public HediffDef hediff;
     }
     public class QuestNode_ShuttleAnthro : QuestNode
     {
@@ -707,6 +781,7 @@ namespace HautsPermits_Ideology
         public string expiryInfoPart;
         public string expiryInfoPartTip;
     }
+    //quest: excavation
     public class QuestNode_GenerateAncientComplex : QuestNode_Root_AncientComplex
     {
         protected override void RunInt()
@@ -791,13 +866,54 @@ namespace HautsPermits_Ideology
             {
                 size = new IntVec2(num, num)
             };
-            LayoutStructureSketch layoutStructureSketch = this.layoutDef.Worker.GenerateStructureSketch(structureGenParams);
+            bool mayhemMode = HVMP_Mod.settings.excavX;
+            bool WATEH_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.excav3, mayhemMode);
+            if (WATEH_on)
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_WATEH_info", this.WATEH_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_WATEH_info", " ") });
+            }
+            LayoutDef ld = WATEH_on ?this.WATEH_layoutDef:this.layoutDef;
+            LayoutStructureSketch layoutStructureSketch = ld.Worker.GenerateStructureSketch(structureGenParams);
             if (generateTerminals)
             {
                 int num2 = Mathf.FloorToInt(this.terminalsOverRoomCountCurve.Evaluate((float)layoutStructureSketch.structureLayout.Rooms.Count));
+                bool CS_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.excav1, mayhemMode);
+                bool ET_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.excav2, mayhemMode);
+                Faction ET_faction = Find.FactionManager.RandomRaidableEnemyFaction(false, false, false, TechLevel.Undefined);
                 for (int i = 0; i < num2; i++)
                 {
-                    layoutStructureSketch.thingsToSpawn.Add(ThingMaker.MakeThing(ThingDefOf.AncientTerminal, null));
+                    Thing thing = ThingMaker.MakeThing(HVMPDefOf.HVMP_AncientTerminal, null);
+                    CompExcavationMutatorHandler cemh = thing.TryGetComp<CompExcavationMutatorHandler>();
+                    if (cemh != null)
+                    {
+                        if (CS_on)
+                        {
+                            cemh.CS_on = true;
+                            QuestGen.AddQuestDescriptionRules(new List<Rule>
+                            {
+                                new Rule_String("mutator_CS_info", this.CS_description.Formatted())
+                            });
+                        } else {
+                            QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_CS_info", " ") });
+                        }
+                        if (ET_on && ET_faction != null)
+                        {
+                            cemh.ET_points = Math.Max(points * this.ET_pointFactor,this.ET_minPoints);
+                            cemh.ET_faction = ET_faction;
+                            QuestGen.AddQuestDescriptionRules(new List<Rule>
+                            {
+                                new Rule_String("mutator_ET_info", this.ET_description.Formatted())
+                            });
+                        } else {
+                            QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_ET_info", " ") });
+                        }
+                    }
+                    layoutStructureSketch.thingsToSpawn.Add(thing);
                 }
             }
             return layoutStructureSketch;
@@ -822,162 +938,141 @@ namespace HautsPermits_Ideology
         public SimpleCurve terminalsOverRoomCountCurve;
         public SimpleCurve complexSizeOverPointsCurve;
         public LayoutDef layoutDef;
+        [MustTranslate]
+        public string CS_description;
+        public float ET_pointFactor;
+        public float ET_minPoints;
+        [MustTranslate]
+        public string ET_description;
+        public LayoutDef WATEH_layoutDef;
+        [MustTranslate]
+        public string WATEH_description;
     }
-    public class QuestNode_SpawnDronePlusGuards : QuestNode
+    public class CompProperties_ExcavationMutatorHandler : CompProperties_Hackable
     {
-        protected override void RunInt()
+        public CompProperties_ExcavationMutatorHandler()
         {
-            Slate slate = QuestGen.slate;
-            Quest quest = QuestGen.quest;
-            QuestPart_DronePlusGuards qpdpg = new QuestPart_DronePlusGuards();
-            qpdpg.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
-            qpdpg.tag = QuestGenUtility.HardcodedTargetQuestTagWithQuestID(this.tag.GetValue(slate));
-            qpdpg.mapParent = slate.Get<Map>("map", null, false).Parent;
-            float num = Mathf.Max(slate.Get<float>("points", 0f, false) * 0.9f, 300f);
-            string spacedroneDestroyedSignal = QuestGenUtility.HardcodedSignalWithQuestID("spacedrone.Destroyed");
-            string spacedroneHackedSignal = QuestGenUtility.HardcodedSignalWithQuestID("spacedrone.Hacked");
-            List<Pawn> list2 = PawnGroupMakerUtility.GeneratePawns(new PawnGroupMakerParms
-            {
-                groupKind = PawnGroupKindDefOf.Combat,
-                tile = slate.Get<Map>("map", null, false).Tile,
-                faction = Faction.OfMechanoids,
-                points = num
-            }, true).ToList<Pawn>();
-            qpdpg.pawnsToSpawn = new List<PawnKindDef>();
-            foreach (Pawn p in list2)
-            {
-                qpdpg.pawnsToSpawn.Add(p.kindDef);
-            }
-            Thing thing = ThingMaker.MakeThing(this.droneDef, null);
-            slate.Set<Thing>("spacedrone", thing, false);
-            QuestPart_Filter_AllThingsHacked questPart_Filter_AllThingsHacked = new QuestPart_Filter_AllThingsHacked();
-            questPart_Filter_AllThingsHacked.things.Add(thing);
-            questPart_Filter_AllThingsHacked.inSignal = spacedroneDestroyedSignal;
-            questPart_Filter_AllThingsHacked.outSignal = QuestGen.GenerateNewSignal("QuestEndSuccess", true);
-            questPart_Filter_AllThingsHacked.outSignalElse = QuestGen.GenerateNewSignal("QuestEndFailure", true);
-			quest.AddPart(questPart_Filter_AllThingsHacked);
-            qpdpg.drone = thing;
-            qpdpg.sleepyTime = this.sleepyTime.RandomInRange;
-            slate.Set<int>("timeToWake",qpdpg.sleepyTime,false);
-            List<PawnKindDef> pkdList = new List<PawnKindDef>();
-            foreach (Pawn p in list2)
-            {
-                pkdList.Add(p.kindDef);
-            }
-            qpdpg.dropSpot = this.dropSpot.GetValue(slate) ?? IntVec3.Invalid;
-            quest.AddPart(qpdpg);
-            string text = PawnUtility.PawnKindsToLineList(pkdList, "  - ", ColoredText.ThreatColor);
-            if (text != "")
-            {
-                QuestGen.AddQuestDescriptionRules(new List<Rule>
-                {
-                    new Rule_String("allThreats", text)
-                });
-            }
-            QuestGen.quest.AddPart(new QuestPart_LookAtThis(thing));
+            this.compClass = typeof(CompExcavationMutatorHandler);
         }
-        protected override bool TestRunInt(Slate slate)
-        {
-            return Find.Storyteller.difficulty.allowViolentQuests && Faction.OfMechanoids != null && slate.Get<Map>("map", null, false) != null;
-        }
-        [NoTranslate]
-        public SlateRef<string> inSignal;
-        [NoTranslate]
-        public SlateRef<string> tag;
-        public SlateRef<float?> points;
-        public SlateRef<IntVec3?> dropSpot;
-        public ThingDef droneDef;
-        public IntRange sleepyTime;
+        public float CS_heavyChance;
+        public float CS_ultraChance;
+        public float CS_bonusDefenderChance;
+        public float ET_chance;
     }
-    public class QuestPart_DronePlusGuards : QuestPart
+    public class CompExcavationMutatorHandler : CompHackable
     {
-        public override IEnumerable<GlobalTargetInfo> QuestLookTargets
+        public new CompProperties_ExcavationMutatorHandler Props
         {
             get
             {
-                foreach (GlobalTargetInfo globalTargetInfo in base.QuestLookTargets)
-                {
-                    yield return globalTargetInfo;
-                }
-                if (this.spawnedClusterPos.IsValid && this.mapParent != null && this.mapParent.HasMap)
-                {
-                    yield return new GlobalTargetInfo(this.spawnedClusterPos, this.mapParent.Map, false);
-                }
-                yield break;
+                return (CompProperties_ExcavationMutatorHandler)this.props;
             }
         }
-        public override void Notify_QuestSignalReceived(Signal signal)
+        public override void PostSpawnSetup(bool respawningAfterLoad)
         {
-            base.Notify_QuestSignalReceived(signal);
-            if (signal.tag == this.inSignal && this.mapParent != null && this.mapParent.HasMap)
+            base.PostSpawnSetup(respawningAfterLoad);
+            if (this.CS_on)
             {
-                List<TargetInfo> list = new List<TargetInfo>();
-                this.spawnedClusterPos = this.dropSpot;
-                if (this.spawnedClusterPos == IntVec3.Invalid)
+                int defenders = Rand.Chance(this.Props.CS_bonusDefenderChance) ? 2 : 1;
+                List<Pawn> pawns = new List<Pawn>();
+                for (int i = defenders; i > 0; i--)
                 {
-                    this.TryFindSpacedronePosition(this.mapParent.Map,out this.spawnedClusterPos);
+                    MechWeightClassDef mwcd = (ModsConfig.BiotechActive && Rand.Chance(0.5f)) ? MechWeightClassDefOf.Light:MechWeightClassDefOf.Medium;
+                    float weightClassChance = Rand.Value;
+                    if (ModsConfig.BiotechActive && weightClassChance <= this.Props.CS_ultraChance)
+                    {
+                        mwcd = MechWeightClassDefOf.UltraHeavy;
+                    } else if (weightClassChance <= this.Props.CS_ultraChance+this.Props.CS_heavyChance) {
+                        mwcd = MechWeightClassDefOf.Heavy;
+                    }
+                    PawnKindDef pkd = DefDatabase<PawnKindDef>.AllDefsListForReading.Where((PawnKindDef pk)=>pk.RaceProps.IsMechanoid && !pk.RaceProps.IsWorkMech && pk.RaceProps.mechWeightClass == mwcd).RandomElement();
+                    if (pkd != null)
+                    {
+                        Pawn pawn = PawnGenerator.GeneratePawn(pkd, this.parent.Faction??Faction.OfMechanoids, null);
+                        GenSpawn.Spawn(pawn,this.parent.PositionHeld,this.parent.MapHeld);
+                        pawns.Add(pawn);
+                    }
                 }
-                if (this.spawnedClusterPos == IntVec3.Invalid)
+                LordMaker.MakeNewLord(Faction.OfMechanoids, new LordJob_DefendPoint(this.parent.Position), this.parent.Map, pawns);
+            }
+            if (this.ET_faction != null && Rand.Chance(this.Props.ET_chance))
+            {
+                float num = Mathf.Max(this.ET_points, this.ET_faction.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat, null) * 1.05f);
+                IncidentParms incidentParms = new IncidentParms
                 {
-                    return;
-                }
-                List<Pawn> spawnedPawns = new List<Pawn>();
-                foreach (PawnKindDef pkd in this.pawnsToSpawn)
-                {
-                    spawnedPawns.Add(PawnGenerator.GeneratePawn(new PawnGenerationRequest(pkd, Faction.OfMechanoids, PawnGenerationContext.NonPlayer, this.mapParent.Tile, false, false, false, true, true, 1f, false, true, true, false, true, false, false, false, false, 0f, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null, false, false, false, false, null, null, null, null, null, 0f, DevelopmentalStage.Adult, null, null, null, false, false, false, -1, 0, false)));
-                }
-                List<Thing> toWakeUpOn = new List<Thing> {
-                    this.drone
+                    forced = true,
+                    target = this.parent.MapHeld,
+                    points = num,
+                    faction = this.ET_faction,
+                    raidArrivalMode = PawnsArrivalModeDefOf.EdgeWalkIn,
+                    raidStrategy = RaidStrategyDefOf.ImmediateAttack
                 };
-                toWakeUpOn.AddRange(spawnedPawns);
-                LordMaker.MakeNewLord(Faction.OfMechanoids, new LordJob_SleepThenMechanoidsDefendDrone(toWakeUpOn, Faction.OfMechanoids, 28f, this.spawnedClusterPos, false, false, this.sleepyTime*2500), this.mapParent.Map, spawnedPawns);
-                DropPodUtility.DropThingsNear(this.spawnedClusterPos, this.mapParent.Map, spawnedPawns.Cast<Thing>(), 110, false, false, true, true, true, null);
-                list.AddRange(spawnedPawns.Select((Pawn p) => new TargetInfo(p)));
-                GenSpawn.Spawn(SkyfallerMaker.MakeSkyfaller(ThingDefOf.CrashedShipPartIncoming, this.drone), this.spawnedClusterPos, this.mapParent.Map, WipeMode.Vanish);
-                list.Add(new TargetInfo(this.spawnedClusterPos, this.mapParent.Map, false));
-                this.spawned = true;
-                Find.LetterStack.ReceiveLetter("HVMP_DroneArrivedLabel".Translate(), "HVMP_DroneArrivedText".Translate(), LetterDefOf.ThreatBig, new TargetInfo(this.spawnedClusterPos, this.mapParent.Map, false), null, this.quest, null, null, 0, true);
+                CompHackable compHackable = this.parent.TryGetComp<CompHackable>();
+                string text = compHackable.hackingCompletedSignal;
+                if (text.NullOrEmpty())
+                {
+                    text = "RaidSignal" + Find.UniqueIDsManager.GetNextSignalTagID().ToString();
+                    compHackable.hackingCompletedSignal = text;
+                }
+                SignalAction_Incident signalAction_Incident = (SignalAction_Incident)ThingMaker.MakeThing(ThingDefOf.SignalAction_Incident, null);
+                signalAction_Incident.incident = IncidentDefOf.RaidEnemy;
+                signalAction_Incident.incidentParms = incidentParms;
+                signalAction_Incident.signalTag = text;
+                GenSpawn.Spawn(signalAction_Incident, this.parent.PositionHeld, this.parent.MapHeld, WipeMode.Vanish);
             }
         }
-        public bool TryFindSpacedronePosition(Map map, out IntVec3 spot)
+        public override void PostExposeData()
         {
-            IntVec2 size = this.drone.def.size;
-            CellRect cellRect = GenAdj.OccupiedRect(IntVec3.Zero, this.drone.def.defaultPlacingRot, this.drone.def.size);
-            IntVec3 intVec = cellRect.CenterCell + this.drone.def.interactionCellOffset;
-            cellRect = cellRect.ExpandToFit(intVec);
-            return DropCellFinder.FindSafeLandingSpot(out spot, null, map, 35, 15, 25, new IntVec2?(new IntVec2(cellRect.Width, cellRect.Height)), new IntVec3?(this.drone.def.interactionCellOffset));
+            base.PostExposeData();
+            Scribe_Values.Look<bool>(ref this.CS_on, "CS_on", false, false);
+            Scribe_References.Look<Faction>(ref this.ET_faction, "ET_faction", false);
+            Scribe_Values.Look<float>(ref this.ET_points, "ET_points", -1f, false);
         }
-        public override void ExposeData()
-        {
-            base.ExposeData();
-            Scribe_Collections.Look<PawnKindDef>(ref this.pawnsToSpawn, "pawnsToSpawn", LookMode.Def, Array.Empty<object>());
-            Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-            Scribe_Values.Look<string>(ref this.hackingCompletedSignal, "hackingCompletedSignal", null, false);
-            Scribe_Values.Look<string>(ref this.tag, "tag", null, false);
-            Scribe_References.Look<MapParent>(ref this.mapParent, "mapParent", false);
-            Scribe_Values.Look<IntVec3>(ref this.dropSpot, "dropSpot", default(IntVec3), false);
-            Scribe_Values.Look<bool>(ref this.spawned, "spawned", false, false);
-            Scribe_Values.Look<IntVec3>(ref this.spawnedClusterPos, "spawnedClusterPos", default(IntVec3), false);
-            if (!this.spawned && (this.drone == null || !(this.drone is Pawn)))
-            {
-                Scribe_Deep.Look<Thing>(ref this.drone, "drone", Array.Empty<object>());
-            } else {
-                Scribe_References.Look<Thing>(ref this.drone, "drone", false);
-            }
-            Scribe_Values.Look<int>(ref this.sleepyTime, "sleepyTime", 2500, false);
-        }
-        public string hackingCompletedSignal;
-        public Thing drone;
-        public bool spawned;
-        public List<PawnKindDef> pawnsToSpawn = new List<PawnKindDef>();
-        public string inSignal;
-        public string tag;
-        public MapParent mapParent;
-        public IntVec3 dropSpot = IntVec3.Invalid;
-        private IntVec3 spawnedClusterPos = IntVec3.Invalid;
-        public int sleepyTime;
+        public bool CS_on;
+        public Faction ET_faction;
+        public float ET_points;
     }
-    //quest things
+    public class ComplexThreatWorker_WATEH : ComplexThreatWorker
+    {
+        protected override bool CanResolveInt(ComplexResolveParams parms)
+        {
+            IntVec3 intVec;
+            return base.CanResolveInt(parms) && ComplexUtility.TryFindRandomSpawnCell(ThingDefOf.AncientFuelNode, parms.room, parms.map, out intVec, 1, null);
+        }
+        protected override void ResolveInt(ComplexResolveParams parms, ref float threatPointsUsed, List<Thing> outSpawnedThings)
+        {
+            int nodesToPlace = Rand.RangeInclusive(3, 5);
+            for (int i = nodesToPlace; i > 0; i--)
+            {
+                int tries = 30;
+                while (tries > 0)
+                {
+                    tries--;
+                    ComplexUtility.TryFindRandomSpawnCell(ThingDefOf.AncientFuelNode, parms.room, parms.map, out IntVec3 intVec, 1, null);
+                    if (intVec.IsValid && intVec.InBounds(parms.map))
+                    {
+                        Thing thing = GenSpawn.Spawn(ThingDefOf.AncientFuelNode, intVec, parms.map, WipeMode.Vanish);
+                        SignalAction_StartWick signalAction_StartWick = (SignalAction_StartWick)ThingMaker.MakeThing(ThingDefOf.SignalAction_StartWick, null);
+                        signalAction_StartWick.thingWithWick = thing;
+                        signalAction_StartWick.signalTag = parms.triggerSignal;
+                        signalAction_StartWick.completedSignalTag = "CompletedStartWickAction" + Find.UniqueIDsManager.GetNextSignalTagID().ToString();
+                        if (parms.delayTicks != null)
+                        {
+                            signalAction_StartWick.delayTicks = parms.delayTicks.Value;
+                        }
+                        GenSpawn.Spawn(signalAction_StartWick, parms.room.rects[0].CenterCell, parms.map, WipeMode.Vanish);
+                        CompExplosive compExplosive = thing.TryGetComp<CompExplosive>();
+                        float randomInRange = ComplexThreatWorker_WATEH.ExplosiveRadiusRandomRange.RandomInRange;
+                        compExplosive.customExplosiveRadius = new float?(randomInRange);
+                        break;
+                    }
+                }
+            }
+            threatPointsUsed = 2f;
+        }
+        private static readonly FloatRange ExplosiveRadiusRandomRange = new FloatRange(2f, 12f);
+    }
+    //quest: remnant
     public class QuestNode_GenerateStrangeArtifact : QuestNode
     {
         protected override bool TestRunInt(Slate slate)
@@ -989,7 +1084,7 @@ namespace HautsPermits_Ideology
             Slate slate = QuestGen.slate;
             Thing thing = ThingMaker.MakeThing(this.thingDef, null);
             int challengeRating = QuestGen.quest.challengeRating;
-            CompStudiableQuestItem cda = thing.TryGetComp<CompStudiableQuestItem>();
+            CompStudiableRemnant cda = thing.TryGetComp<CompStudiableRemnant>();
             if (cda != null)
             {
                 cda.challengeRating = challengeRating;
@@ -1024,6 +1119,45 @@ namespace HautsPermits_Ideology
                     slate.Set<string>(this.storeSecondStatAs.GetValue(slate), secondStat.defName, false);
                     slate.Set<string>(this.storeSecondStatLabelAs.GetValue(slate), secondStat.label, false);
                 }
+                bool mayhemMode = HVMP_Mod.settings.remnantX;
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.remnant1, mayhemMode))
+                {
+                    Map map = slate.Get<Map>("map", null, false) ?? Find.AnyPlayerHomeMap;
+                    IncidentParms incidentParms = new IncidentParms
+                    {
+                        target = map,
+                        forced = true,
+                        points = StorytellerUtility.DefaultThreatPointsNow(map),
+                    };
+                    cda.BJ_activationPoint = cda.reqProgress*Rand.Range(0.1f,0.9f);
+                    cda.BJ_incident = HautsUtility.badEventPool.Where((IncidentDef id) => id.Worker.CanFireNow(incidentParms)).RandomElement();
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_BJ_info", this.BJ_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_BJ_info", " ") });
+                }
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.remnant2, mayhemMode))
+                {
+                    cda.CD_on = true;
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_CD_info", this.CD_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_CD_info", " ") });
+                }
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.remnant3, mayhemMode))
+                {
+                    cda.PI_on = true;
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_PI_info", this.PI_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_PI_info", " ") });
+                }
                 QuestGen.quest.AddPart(new QuestPart_LookAtThis(thing));
             }
             slate.Set<Thing>(this.storeAs.GetValue(slate), thing, false);
@@ -1035,6 +1169,327 @@ namespace HautsPermits_Ideology
         public SlateRef<string> storeSecondStatAs;
         [NoTranslate]
         public SlateRef<string> storeSecondStatLabelAs;
+        [MustTranslate]
+        public string BJ_description;
+        [MustTranslate]
+        public string CD_description;
+        [MustTranslate]
+        public string PI_description;
+    }
+    public class CompProperties_StudiableRemnant : CompProperties_StudiableQuestItem
+    {
+        public CompProperties_StudiableRemnant()
+        {
+            this.compClass = typeof(CompStudiableRemnant);
+        }
+        public float CD_damagePerDay;
+        public int PI_maxCooldown;
+        public float PI_progressLossPerDay;
+    }
+    public class CompStudiableRemnant : CompStudiableQuestItem
+    {
+        public new CompProperties_StudiableRemnant Props
+        {
+            get
+            {
+                return (CompProperties_StudiableRemnant)this.props;
+            }
+        }
+        public override void ExtraStudyEffects(int delta, Pawn researcher, Thing brb, Thing researchBench)
+        {
+            base.ExtraStudyEffects(delta, researcher, brb, researchBench);
+            this.PI_cooldown = this.Props.PI_maxCooldown;
+            if (this.BJ_activationPoint > 0f && this.curProgress > this.BJ_activationPoint && this.BJ_incident != null)
+            {
+                IncidentParms incidentParms = new IncidentParms
+                {
+                    target = this.parent.MapHeld ?? Find.AnyPlayerHomeMap,
+                    forced = true,
+                    points = StorytellerUtility.DefaultThreatPointsNow(this.parent.MapHeld ?? Find.AnyPlayerHomeMap),
+                };
+                if (this.BJ_incident.Worker.CanFireNow(incidentParms))
+                {
+                    Find.Storyteller.incidentQueue.Add(this.BJ_incident, Find.TickManager.TicksGame + 60, incidentParms, 60000);
+                } else {
+                    Log.Error("Tried to fire " + this.BJ_incident.label + " for the Remnant quest's Bad Juju mutator, but its worker could not fire. Using a random other bad event instead...");
+                    List<IncidentDef> incidents = HautsUtility.badEventPool.Where((IncidentDef id) => id.Worker.CanFireNow(incidentParms)).ToList();
+                    Find.Storyteller.incidentQueue.Add(incidents.RandomElement(), Find.TickManager.TicksGame + 60, incidentParms, 60000);
+                }
+                this.BJ_activationPoint = -1f;
+            }
+        }
+        public override void CompTickRare()
+        {
+            base.CompTickRare();
+            if (this.CD_on)
+            {
+                if (this.parent.IsHashIntervalTick((int)(60000 / this.Props.CD_damagePerDay), 250))
+                {
+                    this.parent.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, 1f, 0f, -1f, null, null, null, DamageInfo.SourceCategory.ThingOrUnknown, null, true, true, QualityCategory.Normal, true, false));
+                }
+            }
+            if (this.PI_on)
+            {
+                if (this.PI_cooldown < 0)
+                {
+                    this.curProgress -= Math.Min(this.curProgress, this.Props.PI_progressLossPerDay / 240f);
+                } else {
+                    this.PI_cooldown -= 250;
+                }
+            }
+        }
+        public override string CompInspectStringExtra()
+        {
+            string desc = base.CompInspectStringExtra();
+            if (this.BJ_activationPoint > this.curProgress && this.BJ_incident != null)
+            {
+                desc += "\n" + "HVMP_Remnant_BJlabel".Translate();
+            }
+            if (this.CD_on)
+            {
+                desc += "\n" + "HVMP_Remnant_CDlabel".Translate(this.Props.CD_damagePerDay);
+            }
+            if (this.PI_on)
+            {
+                desc += "\n" + "HVMP_Remnant_PIlabel".Translate(this.Props.PI_maxCooldown.ToStringTicksToPeriod(true, true, true, true, true), this.Props.PI_progressLossPerDay);
+            }
+            return desc;
+        }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look<float>(ref this.BJ_activationPoint, "BJ_activationPoint", -1f, false);
+            Scribe_Defs.Look<IncidentDef>(ref this.BJ_incident, "BJ_incident");
+            Scribe_Values.Look<bool>(ref this.CD_on, "CD_on", false, false);
+            Scribe_Values.Look<int>(ref this.PI_cooldown, "PI_cooldown", -1, false);
+            Scribe_Values.Look<bool>(ref this.PI_on, "PI_on", false, false);
+        }
+        public float BJ_activationPoint;
+        public IncidentDef BJ_incident;
+        public bool CD_on;
+        public bool PI_on;
+        public int PI_cooldown;
+    }
+    //quest: satellite
+    public class QuestNode_SpawnDronePlusGuards : QuestNode
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            Quest quest = QuestGen.quest;
+            QuestPart_DronePlusGuards qpdpg = new QuestPart_DronePlusGuards();
+            qpdpg.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
+            qpdpg.tag = QuestGenUtility.HardcodedTargetQuestTagWithQuestID(this.tag.GetValue(slate));
+            qpdpg.mapParent = slate.Get<Map>("map", null, false).Parent;
+            float num = Mathf.Max(slate.Get<float>("points", 0f, false) * 0.9f, 300f);
+            string spacedroneDestroyedSignal = QuestGenUtility.HardcodedSignalWithQuestID("spacedrone.Destroyed");
+            string spacedroneHackedSignal = QuestGenUtility.HardcodedSignalWithQuestID("spacedrone.Hacked");
+            List<Pawn> list2 = PawnGroupMakerUtility.GeneratePawns(new PawnGroupMakerParms
+            {
+                groupKind = PawnGroupKindDefOf.Combat,
+                tile = slate.Get<Map>("map", null, false).Tile,
+                faction = Faction.OfMechanoids,
+                points = num
+            }, true).ToList<Pawn>();
+            qpdpg.pawnsToSpawn = new List<PawnKindDef>();
+            foreach (Pawn p in list2)
+            {
+                qpdpg.pawnsToSpawn.Add(p.kindDef);
+            }
+            bool mayhemMode = HVMP_Mod.settings.satX;
+            Thing thing;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.sat3, mayhemMode))
+            {
+                thing = ThingMaker.MakeThing(this.SW_droneDef, null);
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_SW_info", this.SW_description.Formatted())
+                });
+            } else {
+                thing = ThingMaker.MakeThing(this.nonSW_droneDef, null);
+                thing.SetFaction(Faction.OfMechanoids);
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_SW_info", " ") });
+            }
+            slate.Set<Thing>("spacedrone", thing, false);
+            QuestPart_Filter_AllThingsHacked questPart_Filter_AllThingsHacked = new QuestPart_Filter_AllThingsHacked();
+            questPart_Filter_AllThingsHacked.things.Add(thing);
+            questPart_Filter_AllThingsHacked.inSignal = spacedroneDestroyedSignal;
+            questPart_Filter_AllThingsHacked.outSignal = QuestGen.GenerateNewSignal("QuestEndSuccess", true);
+            questPart_Filter_AllThingsHacked.outSignalElse = QuestGen.GenerateNewSignal("QuestEndFailure", true);
+            quest.AddPart(questPart_Filter_AllThingsHacked);
+            qpdpg.drone = thing;
+            qpdpg.sleepyTime = this.sleepyTime.RandomInRange;
+            slate.Set<int>("timeToWake", qpdpg.sleepyTime, false);
+            List<PawnKindDef> pkdList = new List<PawnKindDef>();
+            foreach (Pawn p in list2)
+            {
+                pkdList.Add(p.kindDef);
+            }
+            qpdpg.dropSpot = this.dropSpot.GetValue(slate) ?? IntVec3.Invalid;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.sat1, mayhemMode))
+            {
+                qpdpg.DESC_on = true;
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_DESC_info", this.DESC_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_DESC_info", this.nonDESC_description.Formatted())
+                });
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.sat2, mayhemMode))
+            {
+                CompHB chb = thing.TryGetComp<CompHB>();
+                if (chb != null)
+                {
+                    chb.HB_on = true;
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_HB_info", this.HB_description.Formatted())
+                    });
+                }
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_HB_info", " ") });
+            }
+            quest.AddPart(qpdpg);
+            string text = PawnUtility.PawnKindsToLineList(pkdList, "  - ", ColoredText.ThreatColor);
+            if (text != "")
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("allThreats", text)
+                });
+            }
+            QuestGen.quest.AddPart(new QuestPart_LookAtThis(thing));
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return Find.Storyteller.difficulty.allowViolentQuests && Faction.OfMechanoids != null && slate.Get<Map>("map", null, false) != null;
+        }
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+        [NoTranslate]
+        public SlateRef<string> tag;
+        public SlateRef<float?> points;
+        public SlateRef<IntVec3?> dropSpot;
+        public IntRange sleepyTime;
+        [MustTranslate]
+        public string DESC_description;
+        [MustTranslate]
+        public string nonDESC_description;
+        [MustTranslate]
+        public string HB_description;
+        public ThingDef nonSW_droneDef;
+        public ThingDef SW_droneDef;
+        [MustTranslate]
+        public string SW_description;
+    }
+    public class QuestPart_DronePlusGuards : QuestPart
+    {
+        public override IEnumerable<GlobalTargetInfo> QuestLookTargets
+        {
+            get
+            {
+                foreach (GlobalTargetInfo globalTargetInfo in base.QuestLookTargets)
+                {
+                    yield return globalTargetInfo;
+                }
+                if (this.spawnedClusterPos.IsValid && this.mapParent != null && this.mapParent.HasMap)
+                {
+                    yield return new GlobalTargetInfo(this.spawnedClusterPos, this.mapParent.Map, false);
+                }
+                yield break;
+            }
+        }
+        public override void Notify_QuestSignalReceived(Signal signal)
+        {
+            base.Notify_QuestSignalReceived(signal);
+            if (signal.tag == this.inSignal && this.mapParent != null && this.mapParent.HasMap)
+            {
+                List<TargetInfo> list = new List<TargetInfo>();
+                this.spawnedClusterPos = this.dropSpot;
+                if (this.spawnedClusterPos == IntVec3.Invalid)
+                {
+                    this.TryFindSpacedronePosition(this.mapParent.Map, out this.spawnedClusterPos);
+                }
+                if (this.spawnedClusterPos == IntVec3.Invalid)
+                {
+                    return;
+                }
+                List<Pawn> spawnedPawns = new List<Pawn>();
+                foreach (PawnKindDef pkd in this.pawnsToSpawn)
+                {
+                    spawnedPawns.Add(PawnGenerator.GeneratePawn(new PawnGenerationRequest(pkd, Faction.OfMechanoids, PawnGenerationContext.NonPlayer, this.mapParent.Tile, false, false, false, true, true, 1f, false, true, true, false, true, false, false, false, false, 0f, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null, false, false, false, false, null, null, null, null, null, 0f, DevelopmentalStage.Adult, null, null, null, false, false, false, -1, 0, false)));
+                }
+                List<Thing> toWakeUpOn = new List<Thing> {
+                    this.drone
+                };
+                toWakeUpOn.AddRange(spawnedPawns);
+                Lord lj;
+                if (!this.DESC_on)
+                {
+                    lj = LordMaker.MakeNewLord(Faction.OfMechanoids, new LordJob_SleepThenMechanoidsDefendDrone(toWakeUpOn, Faction.OfMechanoids, 28f, this.spawnedClusterPos, false, false, this.sleepyTime * 2500), this.mapParent.Map, spawnedPawns);
+                }
+                else
+                {
+                    lj = LordMaker.MakeNewLord(Faction.OfMechanoids, new LordJob_MechanoidsDefend(toWakeUpOn, Faction.OfMechanoids, 14f, this.spawnedClusterPos, false, false), this.mapParent.Map, spawnedPawns);
+                }
+                if (this.drone is Building bdrone)
+                {
+                    lj.AddBuilding(bdrone);
+                    bdrone.SetFaction(Faction.OfMechanoids);
+                }
+                DropPodUtility.DropThingsNear(this.spawnedClusterPos, this.mapParent.Map, spawnedPawns.Cast<Thing>(), 110, false, false, true, true, true, null);
+                list.AddRange(spawnedPawns.Select((Pawn p) => new TargetInfo(p)));
+                GenSpawn.Spawn(SkyfallerMaker.MakeSkyfaller(ThingDefOf.CrashedShipPartIncoming, this.drone), this.spawnedClusterPos, this.mapParent.Map, WipeMode.Vanish);
+                list.Add(new TargetInfo(this.spawnedClusterPos, this.mapParent.Map, false));
+                this.spawned = true;
+                Find.LetterStack.ReceiveLetter("HVMP_DroneArrivedLabel".Translate(), "HVMP_DroneArrivedText".Translate(), LetterDefOf.ThreatBig, new TargetInfo(this.spawnedClusterPos, this.mapParent.Map, false), null, this.quest, null, null, 0, true);
+            }
+        }
+        public bool TryFindSpacedronePosition(Map map, out IntVec3 spot)
+        {
+            IntVec2 size = this.drone.def.size;
+            CellRect cellRect = GenAdj.OccupiedRect(IntVec3.Zero, this.drone.def.defaultPlacingRot, this.drone.def.size);
+            IntVec3 intVec = cellRect.CenterCell + this.drone.def.interactionCellOffset;
+            cellRect = cellRect.ExpandToFit(intVec);
+            return DropCellFinder.FindSafeLandingSpot(out spot, null, map, 35, 15, 25, new IntVec2?(new IntVec2(cellRect.Width, cellRect.Height)), new IntVec3?(this.drone.def.interactionCellOffset));
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Collections.Look<PawnKindDef>(ref this.pawnsToSpawn, "pawnsToSpawn", LookMode.Def, Array.Empty<object>());
+            Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
+            Scribe_Values.Look<string>(ref this.hackingCompletedSignal, "hackingCompletedSignal", null, false);
+            Scribe_Values.Look<string>(ref this.tag, "tag", null, false);
+            Scribe_References.Look<MapParent>(ref this.mapParent, "mapParent", false);
+            Scribe_Values.Look<IntVec3>(ref this.dropSpot, "dropSpot", default(IntVec3), false);
+            Scribe_Values.Look<bool>(ref this.spawned, "spawned", false, false);
+            Scribe_Values.Look<IntVec3>(ref this.spawnedClusterPos, "spawnedClusterPos", default(IntVec3), false);
+            if (!this.spawned && (this.drone == null || !(this.drone is Pawn)))
+            {
+                Scribe_Deep.Look<Thing>(ref this.drone, "drone", Array.Empty<object>());
+            }
+            else
+            {
+                Scribe_References.Look<Thing>(ref this.drone, "drone", false);
+            }
+            Scribe_Values.Look<int>(ref this.sleepyTime, "sleepyTime", 2500, false);
+            Scribe_Values.Look<bool>(ref this.DESC_on, "DESC_on", false, false);
+        }
+        public string hackingCompletedSignal;
+        public Thing drone;
+        public bool spawned;
+        public List<PawnKindDef> pawnsToSpawn = new List<PawnKindDef>();
+        public string inSignal;
+        public string tag;
+        public MapParent mapParent;
+        public IntVec3 dropSpot = IntVec3.Invalid;
+        private IntVec3 spawnedClusterPos = IntVec3.Invalid;
+        public int sleepyTime;
+        public bool DESC_on;
     }
     public class CompProperties_HackableQuestLink : CompProperties_Hackable
     {
@@ -1050,6 +1505,14 @@ namespace HautsPermits_Ideology
             get
             {
                 return (CompProperties_HackableQuestLink)this.props;
+            }
+        }
+        protected override void OnHacked(Pawn hacker = null, bool suppressMessages = false)
+        {
+            base.OnHacked(hacker, suppressMessages);
+            if (this.parent.Faction != null)
+            {
+                this.parent.SetFaction(null);
             }
         }
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
@@ -1118,138 +1581,282 @@ namespace HautsPermits_Ideology
         }
         public int sleepyTime;
     }
-    //the quest formerly known as icarus
-    public class QuestNode_Root_Blackbox : QuestNode_Sequence
+    public class CompProperties_HB : CompProperties
+    {
+        public CompProperties_HB()
+        {
+            this.compClass = typeof(CompHB);
+        }
+        public int periodicity;
+        public float pointFactor;
+        public int pointMinimum;
+    }
+    public class CompHB : ThingComp
+    {
+        public CompProperties_HB Props
+        {
+            get
+            {
+                return (CompProperties_HB) this.props;
+            }
+        }
+        public override void PostSpawnSetup(bool respawningAfterLoad)
+        {
+            base.PostSpawnSetup(respawningAfterLoad);
+            this.HB_cooldown = this.Props.periodicity;
+        }
+        public override void CompTickInterval(int delta)
+        {
+            base.CompTickInterval(delta);
+            if (this.HB_on && this.parent.Spawned)
+            {
+                CompHackable ch = this.parent.GetComp<CompHackable>();
+                if (ch != null && ch.IsHacked)
+                {
+                    this.HB_on = false;
+                    return;
+                }
+                this.HB_cooldown -= delta;
+                if (this.HB_cooldown <= 0)
+                {
+                    this.HB_cooldown = this.Props.periodicity;
+                    IncidentParms incidentParms = new IncidentParms();
+                    incidentParms.forced = true;
+                    incidentParms.target = this.parent.MapHeld;
+                    incidentParms.points = StorytellerUtility.DefaultThreatPointsNow(this.parent.MapHeld) * this.Props.pointFactor;
+                    incidentParms.faction = Faction.OfMechanoids;
+                    incidentParms.generateFightersOnly = true;
+                    incidentParms.sendLetter = true;
+                    IncidentDef incidentDef = IncidentDefOf.RaidEnemy;
+                    incidentParms.points = Mathf.Max(incidentParms.points, Faction.OfMechanoids.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat, null));
+                    if (incidentDef.Worker.CanFireNow(incidentParms))
+                    {
+                        incidentDef.Worker.TryExecute(incidentParms);
+                    }
+                }
+            }
+        }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look<bool>(ref this.HB_on, "HB_on", false, false);
+            Scribe_Values.Look<int>(ref this.HB_cooldown, "HB_cooldown", -1, false);
+        }
+        public bool HB_on;
+        public int HB_cooldown;
+    }
+    //quest: shrine
+    public class QuestNode_ArchiveShrine : QuestNode
     {
         protected override void RunInt()
         {
-            if (HVMP_Utility.TryFindArchiveFaction(out Faction faction))
+            if (!ModLister.CheckIdeology("Worshipped terminal"))
             {
-                Slate slate = QuestGen.slate;
-                Quest quest = QuestGen.quest;
-                slate.Set<Faction>("faction", faction, false);
-                slate.Set<string>("factionName", faction.Name, false);
-                slate.Set<Pawn>("asker", faction.leader, false);
-                Map map = HVMP_Utility.TryGetMap();
-                slate.Set<Map>("map", map, false);
-                PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
-                slate.Set<PlanetTile>("pTile", tile, false);
-                QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
-                qpbgfh.faction = faction;
-                QuestGen.quest.AddPart(qpbgfh);
-                HVMP_Utility.SetSettingScalingRewardValue(slate, 0.7f);
+                return;
             }
-            base.RunInt();
+            Quest quest = QuestGen.quest;
+            Slate slate = QuestGen.slate;
+            Map map = slate.Get<Map>("map", null, false) ?? Find.AnyPlayerHomeMap;
+            QuestGenUtility.RunAdjustPointsForDistantFight();
+            float num = slate.Get<float>("points", 0f, false);
+            slate.Set<Faction>("playerFaction", Faction.OfPlayer, false);
+            slate.Set<bool>("allowViolentQuests", Find.Storyteller.difficulty.allowViolentQuests, false);
+            bool mayhemMode = HVMP_Mod.settings.shrineX;
+            PlanetTile planetTile;
+            this.TryFindSiteTile(out planetTile);
+            FactionDef factionDef = DefDatabase<FactionDef>.AllDefsListForReading.Where((FactionDef fd)=>!fd.hidden&&fd.humanlikeFaction&&!fd.permanentEnemy&&!fd.naturalEnemy&&!fd.HasModExtension<EBranchQuests>()&&!fd.pawnGroupMakers.NullOrEmpty()&&fd.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm)=>pgm.kindDef == PawnGroupKindDefOf.Combat) && fd.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm) => pgm.kindDef == PawnGroupKindDefOf.Settlement)).RandomElement()??FactionDefOf.TribeCivil;
+            List<FactionRelation> list = new List<FactionRelation>();
+            foreach (Faction faction in Find.FactionManager.AllFactionsListForReading)
+            {
+                if (!faction.def.PermanentlyHostileTo(factionDef))
+                {
+                    list.Add(new FactionRelation
+                    {
+                        other = faction,
+                        kind = FactionRelationKind.Neutral
+                    });
+                }
+            }
+            FactionGeneratorParms factionGeneratorParms = new FactionGeneratorParms(factionDef, default(IdeoGenerationParms), true);
+            factionGeneratorParms.ideoGenerationParms = new IdeoGenerationParms(factionGeneratorParms.factionDef, false, null, null, null, false, false, false, false, "", null, null, false, "", false);
+            Faction shrineFaction = FactionGenerator.NewGeneratedFactionWithRelations(factionGeneratorParms, list);
+            shrineFaction.temporary = true;
+            shrineFaction.factionHostileOnHarmByPlayer = true;
+            shrineFaction.neverFlee = true;
+            Find.FactionManager.Add(shrineFaction);
+            quest.ReserveFaction(shrineFaction);
+            string text = QuestGenUtility.HardcodedSignalWithQuestID("playerFaction.BuiltBuilding");
+            string text2 = QuestGenUtility.HardcodedSignalWithQuestID("playerFaction.PlacedBlueprint");
+            bool PB_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.shrine1, mayhemMode);
+            bool TTWSD_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.shrine2, mayhemMode);
+            bool XP_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.shrine3, mayhemMode);
+            num = this.base_populationFactor *Mathf.Max(num, shrineFaction.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Settlement, null));
+            if (PB_on)
+            {
+                num *= this.PB_populationFactor;
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_PB_info", this.PB_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule>{ new Rule_String("mutator_PB_info", " ") });
+            }
+            if (XP_on)
+            {
+                num *= this.XP_populationFactor;
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_XP_info", this.XP_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_XP_info", this.nonXP_description.Formatted())
+                });
+            }
+            QuestGen.AddQuestDescriptionRules(new List<Rule>
+            {
+                new Rule_String("mutator_XP_info_nonviolent", this.nonviolent_description.Formatted())
+            });
+            SitePartParams sitePartParams = new SitePartParams
+            {
+                points = num,
+                threatPoints = num
+            };
+            Site site = QuestGen_Sites.GenerateSite(Gen.YieldSingle<SitePartDefWithParams>(new SitePartDefWithParams(HVMPDefOf.HVMP_Shrine, sitePartParams)), planetTile, shrineFaction, false, null, null);
+            site.doorsAlwaysOpenForPlayerPawns = true;
+            slate.Set<Site>("site", site, false);
+            quest.SpawnWorldObject(site, null, null);
+            int num2 = XP_on?30:25000;
+            site.GetComponent<TimedMakeFactionHostile>().SetupTimer(num2, "WorshippedTerminalFactionBecameHostileTimed".Translate(shrineFaction.Named("FACTION")), null);
+            Thing thing = site.parts[0].things.First((Thing t) => t.def == ThingDefOf.AncientTerminal_Worshipful);
+            if (TTWSD_on)
+            {
+                CompTTWSD cttwsd = thing.TryGetComp<CompTTWSD>();
+                if (cttwsd != null)
+                {
+                    cttwsd.TTWSD_on = true;
+                }
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_TTWSD_info", this.TTWSD_description.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TTWSD_info", " ") });
+            }
+            slate.Set<Thing>("terminal", thing, false);
+            string text3 = QuestGenUtility.HardcodedSignalWithQuestID("terminal.Hacked");
+            string text4 = QuestGenUtility.HardcodedSignalWithQuestID("terminal.HackingStarted");
+            string text6 = QuestGenUtility.HardcodedSignalWithQuestID("site.MapGenerated");
+            string text7 = QuestGenUtility.HardcodedSignalWithQuestID("shrineFaction.FactionMemberArrested");
+            CompHackable compHackable = thing.TryGetComp<CompHackable>();
+            compHackable.hackingStartedSignal = text4;
+            compHackable.defence = (float)QuestNode_ArchiveShrine.HackDefenceRange.RandomInRange;
+            quest.Message("[terminalHackedMessage]", null, true, null, null, text3);
+            quest.SetFactionHidden(shrineFaction, false, null);
+            if (Find.Storyteller.difficulty.allowViolentQuests)
+            {
+                quest.FactionRelationToPlayerChange(shrineFaction, FactionRelationKind.Hostile, false, text4);
+                quest.StartRecurringRaids(site, new FloatRange?(new FloatRange(24f, 24f)), new int?(2500), text4);
+                quest.BuiltNearSettlement(shrineFaction, site, delegate
+                {
+                    quest.FactionRelationToPlayerChange(shrineFaction, FactionRelationKind.Hostile, true, null);
+                }, null, text, null, null, QuestPart.SignalListenMode.OngoingOnly);
+                quest.BuiltNearSettlement(shrineFaction, site, delegate
+                {
+                    quest.Message("WarningBuildingCausesHostility".Translate(shrineFaction.Named("FACTION")), MessageTypeDefOf.CautionInput, false, null, null, null);
+                }, null, text2, null, null, QuestPart.SignalListenMode.OngoingOnly);
+                quest.FactionRelationToPlayerChange(shrineFaction, FactionRelationKind.Hostile, true, text7);
+            }
+            slate.Set<Map>("map", map, false);
+            slate.Set<int>("timer", num2, false);
+            slate.Set<Faction>("shrineFaction", shrineFaction, false);
+        }
+        private bool TryFindSiteTile(out PlanetTile tile)
+        {
+            return TileFinder.TryFindNewSiteTile(out tile, 2, 20, false, null, 0.5f, true, TileFinderMode.Near, false, false, null, null);
         }
         protected override bool TestRunInt(Slate slate)
         {
-            HVMP_Utility.SetSettingScalingRewardValue(slate);
-            return HVMP_Utility.TryFindArchiveFaction(out Faction archiveFaction) && base.TestRunInt(slate);
+            PlanetTile planetTile;
+            return this.TryFindSiteTile(out planetTile);
         }
-        [NoTranslate]
-        public SlateRef<string> inSignal;
+        private static IntRange HackDefenceRange = new IntRange(10, 100);
+        public float base_populationFactor;
+        public float PB_populationFactor;
+        [MustTranslate]
+        public string PB_description;
+        [MustTranslate]
+        public string TTWSD_description;
+        public float XP_populationFactor;
+        [MustTranslate]
+        public string XP_description;
+        [MustTranslate]
+        public string nonXP_description;
+        [MustTranslate]
+        public string nonviolent_description;
     }
-    public class SitePartWorker_CrashedShuttle : SitePartWorker
+    public class SitePartWorker_Shrine : SitePartWorker
     {
-        public override void Notify_GeneratedByQuestGen(SitePart part, Slate slate, List<Rule> outExtraDescriptionRules, Dictionary<string, string> outExtraDescriptionConstants)
+        public override void Init(Site site, SitePart sitePart)
         {
-            base.Notify_GeneratedByQuestGen(part, slate, outExtraDescriptionRules, outExtraDescriptionConstants);
-            Thing shuttle = ThingMaker.MakeThing(HVMPDefOf.HVMP_ShuttleCrashed, null);
-            List<Thing> list = new List<Thing> { shuttle };
-            part.things = new ThingOwner<Thing>(part, false, LookMode.Deep);
-            part.things.TryAddRangeOrTransfer(list, false, false);
-            slate.Set<List<Thing>>("generatedItemStashThings", list, false);
-            slate.Set<Thing>("shuttlething", shuttle, false);
-            outExtraDescriptionRules.Add(new Rule_String("itemStashContents", GenLabel.ThingsLabel(list, "  - ")));
-            outExtraDescriptionRules.Add(new Rule_String("itemStashContentsValue", GenThing.GetMarketValue(list).ToStringMoney(null)));
+            base.Init(site, sitePart);
+            sitePart.things = new ThingOwner<Thing>(sitePart);
+            Thing thing = ThingMaker.MakeThing(ThingDefOf.AncientTerminal_Worshipful, null);
+            sitePart.things.TryAdd(thing, true);
+        }
+        public override string GetArrivedLetterPart(Map map, out LetterDef preferredLetterDef, out LookTargets lookTargets)
+        {
+            return base.GetArrivedLetterPart(map, out preferredLetterDef, out lookTargets).Formatted(map.Parent.GetComponent<TimedMakeFactionHostile>().TicksLeft.Value.ToStringTicksToPeriod(true, false, true, true, false).Named("TIMER"));
         }
     }
-    public class GenStep_CrashedShuttle : GenStep_Scatterer
+    public class GenStep_MaybeTurrets : GenStep_Turrets
     {
-        public override int SeedPart
+        public override void Generate(Map map, GenStepParams parms)
+        {
+            if (Rand.Chance(this.chance))
+            {
+                base.Generate(map, parms);
+            }
+        }
+        public float chance = 0.5f;
+    }
+    public class CompProperties_TTWSD : CompProperties
+    {
+        public CompProperties_TTWSD()
+        {
+            this.compClass = typeof(CompTTWSD);
+        }
+        public ThingDef thingToSpawn;
+    }
+    public class CompTTWSD : ThingComp
+    {
+        public CompProperties_TTWSD Props
         {
             get
             {
-                return 84572345;
+                return (CompProperties_TTWSD)this.props;
             }
         }
-        protected override bool CanScatterAt(IntVec3 c, Map map)
+        public override void Notify_Hacked(Pawn hacker = null)
         {
-            if (!base.CanScatterAt(c, map))
+            base.Notify_Hacked(hacker);
+            if (this.TTWSD_on)
             {
-                return false;
-            }
-            if (!map.reachability.CanReachMapEdge(c, TraverseParms.For(TraverseMode.PassDoors, Danger.Deadly, false, false, false)))
-            {
-                return false;
-            }
-            CellRect rect = CellRect.CenteredOn(c, 7, 7);
-            List<CellRect> list;
-            if (MapGenerator.TryGetVar<List<CellRect>>("UsedRects", out list) && list.Any((CellRect x) => x.Overlaps(rect)))
-            {
-                return false;
-            }
-            foreach (IntVec3 intVec in rect)
-            {
-                if (!intVec.InBounds(map) || intVec.GetEdifice(map) != null)
+                Thing thing = ThingMaker.MakeThing(this.Props.thingToSpawn, null);
+                GenPlace.TryPlaceThing(thing, this.parent.Position, this.parent.Map, ThingPlaceMode.Near, null, null, null, 1);
+                CompExplosive ce = thing.TryGetComp<CompExplosive>();
+                if (ce != null)
                 {
-                    return false;
+                    ce.StartWick();
                 }
             }
-            return true;
         }
-        protected override void ScatterAt(IntVec3 loc, Map map, GenStepParams parms, int count = 1)
+        public override void PostExposeData()
         {
-            CellRect cellRect = CellRect.CenteredOn(loc, 7, 7).ClipInsideMap(map);
-            List<CellRect> list;
-            if (!MapGenerator.TryGetVar<List<CellRect>>("UsedRects", out list))
-            {
-                list = new List<CellRect>();
-                MapGenerator.SetVar<List<CellRect>>("UsedRects", list);
-            }
-            if (parms.sitePart != null && parms.sitePart.things != null && parms.sitePart.things.Any)
-            {
-                foreach (Thing thing in parms.sitePart.things)
-                {
-                    GenSpawn.Spawn(thing, cellRect.RandomCell, map);
-                }
-            }
-            ResolveParams resolveParams = default(ResolveParams);
-            resolveParams.rect = cellRect;
-            resolveParams.faction = map.ParentFaction;
-            resolveParams.filthDef = ThingDefOf.Filth_RubbleBuilding;
-            resolveParams.filthDensity = new FloatRange?(new FloatRange(0.025f, 0.05f));
-            BaseGen.globalSettings.map = map;
-            BaseGen.symbolStack.Push("filth", resolveParams, null);
-            BaseGen.Generate();
-            MapGenerator.SetVar<CellRect>("RectOfInterest", cellRect);
-            list.Add(cellRect);
+            base.PostExposeData();
+            Scribe_Values.Look<bool>(ref this.TTWSD_on, "TTWSD_on", false, false);
         }
-        public ThingSetMakerDef thingSetMakerDef;
-    }
-    public class CompProperties_Icarus : CompProperties
-    {
-        public CompProperties_Icarus()
-        {
-            this.compClass = typeof(CompIcarus);
-        }
-    }
-    public class CompIcarus : ThingComp
-    {
-        public CompProperties_Icarus Props
-        {
-            get
-            {
-                return (CompProperties_Icarus)this.props;
-            }
-        }
-        public override void PostDestroy(DestroyMode mode, Map previousMap)
-        {
-            base.PostDestroy(mode, previousMap);
-            if (mode == DestroyMode.Deconstruct && this.parent.questTags != null && this.parent.questTags.Count > 0)
-            {
-                QuestUtility.SendQuestTargetSignals(this.parent.questTags, "DeconstructedIcarus", this.Named("SUBJECT"), previousMap.Named("MAP"));
-            }
-        }
+        public bool TTWSD_on;
     }
 }

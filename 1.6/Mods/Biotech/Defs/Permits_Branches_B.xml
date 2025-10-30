@@ -870,64 +870,9 @@
 		<building>
 		  <combatPower>60</combatPower>
 		  <ai_combatDangerous>true</ai_combatDangerous>
-		  <turretGunDef>HVMP_Gun_GraserTurretMech</turretGunDef>
+		  <turretGunDef>LFM_Gun_GraserTurretMech</turretGunDef>
 		  <turretBurstCooldownTime>2.5</turretBurstCooldownTime>
 		</building>
 	  </ThingDef>
-		  <ThingDef ParentName="BaseWeaponTurret" MayRequire="GoGaTio.LostFactoryMechanoids">
-			<defName>HVMP_Gun_GraserTurretMech</defName>
-			<label>stationary graser</label>
-			<description>A high-energy gamma ray laser which fires a sweeping beam that pierces thick armor and burns targets. This one was made to be mounted on a turret and draw from its power source, that allows to shoot in bigger range.</description>
-			<graphicData>
-			  <texPath>Things/Item/Equipment/WeaponRanged/LFM_StationaryBeamGraser</texPath>
-			  <graphicClass>Graphic_Single</graphicClass>
-			</graphicData>
-			<statBases>
-			  <Mass>4</Mass>
-			  <DeteriorationRate>0</DeteriorationRate>
-			  <AccuracyTouch>0.75</AccuracyTouch>
-			  <AccuracyShort>0.65</AccuracyShort>
-			  <AccuracyMedium>0.60</AccuracyMedium>
-			  <AccuracyLong>0.45</AccuracyLong>
-			<RangedWeapon_Cooldown>2.8</RangedWeapon_Cooldown>
-			</statBases>
-			<verbs>
-			  <li>
-				<verbClass>Verb_ShootBeam</verbClass>
-				<warmupTime>1.0</warmupTime>
-				<range>29.9</range>
-				<minRange>2.7</minRange>
-				<beamFullWidthRange>6.9</beamFullWidthRange>
-				<burstShotCount>5</burstShotCount>
-				<beamWidth>6</beamWidth>
-				<ticksBetweenBurstShots>22</ticksBetweenBurstShots>
-				<beamDamageDef>Beam</beamDamageDef>
-				<soundCastTail>GunTail_Medium</soundCastTail>
-				<muzzleFlashScale>9</muzzleFlashScale>
-				<soundCastBeam>BeamGraser_Shooting</soundCastBeam>
-				<beamGroundFleckDef>Fleck_BeamBurn</beamGroundFleckDef>
-				<beamFleckChancePerTick>0.32</beamFleckChancePerTick>
-				<beamMaxDeviation>1.5</beamMaxDeviation>
-				<beamCurvature>0.6</beamCurvature>
-				<beamMoteDef>Mote_GraserBeamBase</beamMoteDef>
-				<beamEndEffecterDef>GraserBeam_End</beamEndEffecterDef>
-				<beamChanceToStartFire>0.85</beamChanceToStartFire>
-				<beamChanceToAttachFire>0.95</beamChanceToAttachFire>
-				<beamFireSizeRange>0.55~0.85</beamFireSizeRange>
-				<beamLineFleckDef>Fleck_BeamSpark</beamLineFleckDef>
-				<beamStartOffset>0.8</beamStartOffset>
-				<beamLineFleckChanceCurve>
-				  <points>
-					<li>(0, 0)</li>
-					<li>(0.65, 0.4)</li>
-					<li>(1, 0.75)</li>
-				  </points>
-				</beamLineFleckChanceCurve>
-			  </li>
-			</verbs>
-			<weaponTags>
-			  <li>LFM_StationaryGraserGun</li>
-			</weaponTags>
-		  </ThingDef>
   
 </Defs>

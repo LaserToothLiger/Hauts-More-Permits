@@ -19,7 +19,6 @@
     <defaultLabelColor>(0.6, 0.6, 1.0)</defaultLabelColor>
   </HediffDef>
   
-  
   <HediffDef ParentName="HVT_TraitHediffBase">
 	<defName>HVMP_GatepuncherImplant</defName>
 	<label>gatepuncher</label>
