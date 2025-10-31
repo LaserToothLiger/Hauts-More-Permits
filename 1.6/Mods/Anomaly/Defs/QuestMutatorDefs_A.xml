@@ -423,27 +423,7 @@
     <combatPower>135</combatPower>
     <ecoSystemWeight>0</ecoSystemWeight>
     <defaultFactionDef>Entities</defaultFactionDef>
-    <alternateGraphicChance>0.75</alternateGraphicChance>
-    <alternateGraphics>
-      <li>
-        <texPath>Things/Pawn/Chimera/Chimera_D</texPath>
-        <dessicatedTexPath>Things/Pawn/Chimera/Dessicated/DessicatedChimera_D</dessicatedTexPath>
-        <dessicatedGraphicData><attachPoints><li><offset>(-.2, 0, .7)</offset><type>PlatformRestraint0</type></li><li><offset>(.2, 0, .7)</offset><type>PlatformRestraint1</type></li><li><offset>(.3, 0, -.8)</offset><type>PlatformRestraint2</type></li><li><offset>(-.3, 0, -.8)</offset><type>PlatformRestraint3</type></li></attachPoints></dessicatedGraphicData> 
-        <attachPoints><li><offset>(-.3, 0, .75)</offset><type>PlatformRestraint0</type></li><li><offset>(.2, 0, .75)</offset><type>PlatformRestraint1</type></li><li><offset>(.2, 0, -.6)</offset><type>PlatformRestraint2</type></li><li><offset>(-.2, 0, -.6)</offset><type>PlatformRestraint3</type></li></attachPoints>
-      </li>
-      <li>
-        <texPath>Things/Pawn/Chimera/Chimera_C</texPath>
-        <dessicatedTexPath>Things/Pawn/Chimera/Dessicated/DessicatedChimera_C</dessicatedTexPath>
-        <dessicatedGraphicData><attachPoints><li><offset>(-.25, 0, .7)</offset><type>PlatformRestraint0</type></li><li><offset>(.2, 0, .7)</offset><type>PlatformRestraint1</type></li><li><offset>(.3, 0, -.7)</offset><type>PlatformRestraint2</type></li><li><offset>(-.3, 0, -.7)</offset><type>PlatformRestraint3</type></li></attachPoints></dessicatedGraphicData>
-        <attachPoints><li><offset>(-.4, 0, .6)</offset><type>PlatformRestraint0</type></li><li><offset>(.3, 0, .6)</offset><type>PlatformRestraint1</type></li><li><offset>(.2, 0, -.7)</offset><type>PlatformRestraint2</type></li><li><offset>(-.25, 0, -.7)</offset><type>PlatformRestraint3</type></li></attachPoints>
-     </li>
-      <li>
-        <texPath>Things/Pawn/Chimera/Chimera_B</texPath>
-        <dessicatedTexPath>Things/Pawn/Chimera/Dessicated/DessicatedChimera_B</dessicatedTexPath>
-        <dessicatedGraphicData><attachPoints><li><offset>(-.2, 0, .6)</offset><type>PlatformRestraint0</type></li><li><offset>(.2, 0, .6)</offset><type>PlatformRestraint1</type></li><li><offset>(.5, 0, -.8)</offset><type>PlatformRestraint2</type></li><li><offset>(-.5, 0, -.8)</offset><type>PlatformRestraint3</type></li></attachPoints></dessicatedGraphicData>
-       <attachPoints><li><offset>(-.4, 0, .7)</offset><type>PlatformRestraint0</type></li><li><offset>(.35, 0, .7)</offset><type>PlatformRestraint1</type></li><li><offset>(.6, 0, -.85)</offset><type>PlatformRestraint2</type></li><li><offset>(-.6, 0, -.85)</offset><type>PlatformRestraint3</type></li></attachPoints>
-      </li>
-    </alternateGraphics>
+    <!--the constructor for HautsPermits_Occult forces this to inherit the alternateGraphics and alternateGraphicChance of the regular Chimera kind def-->
     <lifeStages>
       <li>
         <bodyGraphicData>
@@ -491,17 +471,33 @@
 	  <HediffDef ParentName="HVT_TraitHediffBase">
 		<defName>HVMP_Grandsplice</defName>
 		<label>chimeral primacy</label>
-		<description>This chimera is stronger than others of its kind.</description>
+		<description>This chimera is stronger than others of its kind. Strange shapes wiggle under its bloody flesh.</description>
 		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(208, 87, 87)</defaultLabelColor>
+		<skinColorTint>(208, 87, 87)</skinColorTint>
+		<skinColorTintStrength>0.4</skinColorTintStrength>
+		<forceRenderTreeRecache>true</forceRenderTreeRecache>
 		<isBad>false</isBad>
 		<stages>
 		  <li>
 			<statFactors>
 			  <IncomingDamageFactor>0.3</IncomingDamageFactor>
 			  <MeleeDamageFactor>1.25</MeleeDamageFactor>
+			  <MeatAmount>1.5</MeatAmount>
+			  <LeatherAmount>1.5</LeatherAmount>
 			</statFactors>
 		  </li>
 		</stages>
+		<comps>
+		  <li Class="HautsPermits_Occult.HediffCompProperties_FleshbeastsOnDeath">
+			<fleshbeastCount>4~7</fleshbeastCount>
+			<fleshbeastKinds>
+			  <li>Fingerspike</li>
+			  <li>Trispike</li>
+			  <li>Toughspike</li>
+			</fleshbeastKinds>
+		  </li>
+		</comps>
 	  </HediffDef>
   <PawnKindDef>
     <defName>HVMP_CharybdisDevourer</defName>
@@ -537,51 +533,36 @@
 	  <HediffDef ParentName="HVT_TraitHediffBase">
 		<defName>HVMP_Charybdis</defName>
 		<label>charybdis strain</label>
-		<description>This devourer has been mutated by long exposure to interdimensional forces.</description>
+		<description>This devourer has been mutated by long exposure to interdimensional forces. When damaged, it may spew a retaliatory globule of acid that can travel frightening distances.</description>
 		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(74, 90, 255)</defaultLabelColor>
+		<skinColorTint>(37, 45, 165)</skinColorTint>
+		<skinColorTintStrength>0.4</skinColorTintStrength>
+		<forceRenderTreeRecache>true</forceRenderTreeRecache>
 		<isBad>false</isBad>
 		<stages>
 		  <li>
 			<statFactors>
 			  <IncomingDamageFactor>0.4</IncomingDamageFactor>
+			  <MeatAmount>1.5</MeatAmount>
+			  <LeatherAmount>1.5</LeatherAmount>
 			</statFactors>
+			<damageFactors>
+			  <AcidBurn>0.05</AcidBurn>
+			  <OTCAcid MayRequire="ObsidiaExpansion.Core">0.05</OTCAcid>
+			  <OEUnstableToxins MayRequire="ObsidiaExpansion.Core">0.05</OEUnstableToxins>
+			  <OMGNecrobane MayRequire="ObsidiaExpansion.Core">0.05</OMGNecrobane>
+			  <VEF_SecondaryAcidBurn>0.05</VEF_SecondaryAcidBurn>
+			  <AM_AcidSpit MayRequire="sarg.alphamechs">0.05</AM_AcidSpit>
+			</damageFactors>
 		  </li>
 		</stages>
 		<comps>
-		  <li Class="MVCF.Comps.HediffCompProperties_ExtendedVerbGiver">
-			<verbs>
-				<li>
-				  <verbClass>Verb_Shoot</verbClass>
-				  <label>acid globule</label>
-				  <hasStandardCommand>true</hasStandardCommand>
-				  <defaultProjectile>Bullet_Shell_AcidSpit</defaultProjectile>
-				  <warmupTime>25</warmupTime>
-				  <forcedMissRadius>3</forcedMissRadius>
-				  <minRange>6.9</minRange>
-				  <range>100</range>
-				  <burstShotCount>1</burstShotCount>
-				  <soundCast>SpitterSpit</soundCast>
-				  <requireLineOfSight>false</requireLineOfSight>
-				  <targetParams>
-					<canTargetLocations>true</canTargetLocations>
-				  </targetParams>
-				  <commandIcon>Things/Building/Fleshmass/FleshmassSpitter</commandIcon>
-				</li>
-			</verbs>
-			<verbProps>
-				<li>
-				  <label>acid globule</label>
-				  <canBeToggled>true</canBeToggled>
-				  <comps>
-				  <li Class="MVCF.VerbComps.VerbCompProperties_Turret">
-					<compClass>MVCF.VerbComps.VerbComp_Turret</compClass>
-						<invisible>true</invisible>
-						<uniqueTargets>true</uniqueTargets>
-				  </li>
-				</comps>
-				  <description>Acid mortar.</description>
-				</li>
-			</verbProps>
+		  <li Class="HautsPermits_Occult.HediffCompProperties_AcidMortarOnHit">
+			<projectile>Bullet_Shell_AcidSpit</projectile>
+			<range>44</range>
+			<cooldown>600</cooldown>
+			<chance>0.45</chance>
 		  </li>
 		</comps>
 	  </HediffDef>
@@ -623,10 +604,25 @@
 		<description>This noctol can induce unnatural darkness, and may spawn other noctols when damaged.</description>
 		<hediffClass>HediffWithComps</hediffClass>
 		<isBad>false</isBad>
+		<minSeverity>0.001</minSeverity>
+		<initialSeverity>0.001</initialSeverity>
+		<maxSeverity>1.001</maxSeverity>
 		<stages>
 		  <li>
+			<label>darkness</label>
 			<statFactors>
 			  <IncomingDamageFactor>0.4</IncomingDamageFactor>
+			  <MeatAmount>1.5</MeatAmount>
+			  <LeatherAmount>1.5</LeatherAmount>
+			</statFactors>
+			<regeneration>200</regeneration>
+		  </li>
+		  <li>
+			<minSeverity>0.3</minSeverity>
+			<statFactors>
+			  <IncomingDamageFactor>0.4</IncomingDamageFactor>
+			  <MeatAmount>1.5</MeatAmount>
+			  <LeatherAmount>1.5</LeatherAmount>
 			</statFactors>
 		  </li>
 		</stages>
@@ -635,7 +631,11 @@
 			<noctolCount>2~4</noctolCount>
 			<noctolCooldown>2500</noctolCooldown>
 			<noctolDef>Noctol</noctolDef>
-			<darknessLetterText>The noctol umbranarch is bringing forth an unnatural darkness!</darknessLetterText>
+			<effecter>StudyHoraxian</effecter>
+			<darkness>UnnaturalDarkness</darkness>
+		  </li>
+		  <li Class="HautsFramework.HediffCompProperties_LightingSeverity">
+			<plusInitialSeverity>false</plusInitialSeverity>
 		  </li>
 		</comps>
 	  </HediffDef>

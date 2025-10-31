@@ -22,7 +22,6 @@
       <Flammability>0</Flammability>
     </statBases>  
     <building>
-      <openingEffect>SecurityCrateOpened</openingEffect>
 	  <deconstructible>false</deconstructible>
 	  <isTargetable>false</isTargetable>
 	  <claimable>false</claimable>

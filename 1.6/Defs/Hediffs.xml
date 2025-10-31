@@ -413,7 +413,6 @@
 		<label>4 uses</label>
 	  </li>
 	</stages>
-    <descriptionHyperlinks><ThingDef>HVMP_Gatepuncher</ThingDef></descriptionHyperlinks>
     <abilities>
       <li>HVMP_GatepunchSkip_NPC</li>
     </abilities>
