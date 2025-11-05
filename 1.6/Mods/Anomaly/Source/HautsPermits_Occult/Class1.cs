@@ -3262,6 +3262,10 @@ namespace HautsPermits_Occult
         public ThingDef projectile;
         public float range;
         public float forcedMissRadius = 1.2f;
+        public ThingDef filthType;
+        public int filthRadius;
+        public int filthPeriodicity;
+        public IntRange filthCount;
     }
     public class HediffComp_AcidMortarOnHit : HediffComp
     {
@@ -3278,6 +3282,18 @@ namespace HautsPermits_Occult
             if (this.cooldown > 0)
             {
                 this.cooldown -= delta;
+            }
+            if (this.Pawn.Spawned && this.Pawn.IsHashIntervalTick(this.Props.filthPeriodicity,delta))
+            {
+                int filthCount = this.Props.filthCount.RandomInRange;
+                Map m = this.Pawn.Map;
+                IntVec3 iv3 = this.Pawn.Position;
+                while (filthCount > 0)
+                {
+                    IntVec3 loc = CellFinder.RandomClosewalkCellNear(iv3, m, this.Props.filthRadius, null);
+                    FilthMaker.TryMakeFilth(iv3, m, this.Props.filthType, 1, FilthSourceFlags.None, true);
+                    filthCount--;
+                }
             }
         }
         public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)

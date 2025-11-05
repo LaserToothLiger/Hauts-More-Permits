@@ -535,10 +535,6 @@
 		<label>charybdis strain</label>
 		<description>This devourer has been mutated by long exposure to interdimensional forces. When damaged, it may spew a retaliatory globule of acid that can travel frightening distances.</description>
 		<hediffClass>HediffWithComps</hediffClass>
-		<defaultLabelColor>(74, 90, 255)</defaultLabelColor>
-		<skinColorTint>(37, 45, 165)</skinColorTint>
-		<skinColorTintStrength>0.4</skinColorTintStrength>
-		<forceRenderTreeRecache>true</forceRenderTreeRecache>
 		<isBad>false</isBad>
 		<stages>
 		  <li>
@@ -563,6 +559,10 @@
 			<range>44</range>
 			<cooldown>600</cooldown>
 			<chance>0.45</chance>
+			<filthType>Filth_SpentAcid</filthType>
+			<filthRadius>2</filthRadius>
+			<filthPeriodicity>240</filthPeriodicity>
+			<filthCount>1~3</filthCount>
 		  </li>
 		</comps>
 	  </HediffDef>
@@ -601,7 +601,7 @@
 	  <HediffDef ParentName="HVT_TraitHediffBase">
 		<defName>HVMP_Umbranarch</defName>
 		<label>umbranarch</label>
-		<description>This noctol can induce unnatural darkness, and may spawn other noctols when damaged.</description>
+		<description>A leader among its kind. It is capable of inciting unnatural darkness, and may call in reinforcements when damaged.</description>
 		<hediffClass>HediffWithComps</hediffClass>
 		<isBad>false</isBad>
 		<minSeverity>0.001</minSeverity>

@@ -417,7 +417,7 @@
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_ScannerReveal</defName>
-    <label>revealing scan</label>
+    <label>anti-invisibility scan</label>
     <description>Disrupt all invisibility on the map for 2 hours.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_CauseCondition_PTargFriendly</workerClass>
     <minTitle>HVMP_ArchiveV</minTitle>
