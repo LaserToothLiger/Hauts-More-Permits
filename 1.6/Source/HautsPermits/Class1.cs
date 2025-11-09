@@ -8160,7 +8160,6 @@ namespace HautsPermits
             {
                 foreach (Caravan c in Find.WorldObjects.Caravans.InRandomOrder())
                 {
-                    Log.Error("c");
                     if (c.Tile != null && this.Tile != null && Find.WorldGrid.TraversalDistanceBetween(c.Tile, this.Tile, true) <= 6f)
                     {
                         this.Ambush(c);
