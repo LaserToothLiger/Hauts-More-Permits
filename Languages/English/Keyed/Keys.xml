@@ -3,8 +3,10 @@
 <!--Initialization-->
 <HVMP_Initialize>[Hauts' Enterprise: More Permits] active.</HVMP_Initialize>
 <!--Mod settings-->
+<HVMP_SettingSeniorityScalingPermits>Permit effects scale with permit-user's rank</HVMP_SettingSeniorityScalingPermits>
+<HVMP_TooltipSeniorityScalingPermits>If enabled, some permits increase in effect based on the user's rank. Such permits' scaling is mentioned in their descriptions.\n\nEven if this setting is disabled, the descriptions of these permits will still mention the scaling - it just won't occur.</HVMP_TooltipSeniorityScalingPermits>
 <HVMP_SettingChaosMode>E-branches issue quests on independent timers</HVMP_SettingChaosMode>
-<HVMP_TooltipChaosMode>Enterprise quests are issued to the player on a timer whose duration is set below. How the timer works is determined by this setting:\n\n-If enabled, each e-branch issues quests based on its own timer.\n\n-If disabled, there is one timer, and whenever it triggers only ONE e-branch will issue a quest.</HVMP_TooltipChaosMode>
+<HVMP_TooltipChaosMode>Enterprise-branch quests are issued to the player on a timer whose duration is set below. How the timer works is determined by this setting:\n\n-If enabled, each e-branch issues quests based on its own timer.\n\n-If disabled, there is one timer, and whenever it triggers only ONE e-branch will issue a quest.</HVMP_TooltipChaosMode>
 <HVMP_SettingMinDays>Min days between random e-branch quests</HVMP_SettingMinDays>
 <HVMP_TooltipMinDays>Each e-branch periodically offers a quest to the player. This is the minimum amount of time it takes to receive an e-branch quest. Each e-branch's first quest is unaffected by this timer - it always takes 1-10 days to occur.</HVMP_TooltipMinDays>
 <HVMP_SettingMaxDays>Max days between random e-branch quests</HVMP_SettingMaxDays>

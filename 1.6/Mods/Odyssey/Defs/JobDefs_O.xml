@@ -7,6 +7,11 @@
     <reportString>installing TargetB in TargetA.</reportString>
   </JobDef>
   <JobDef>
+    <defName>HVMP_InstallBSU</defName>
+    <driverClass>HautsPermits.JobDriver_InstallBSU</driverClass>
+    <reportString>granting TargetB a TargetA.</reportString>
+  </JobDef>
+  <JobDef>
     <defName>HVMP_AttachIngressor</defName>
     <driverClass>HautsPermits.JobDriver_ApplyIngressor</driverClass>
     <reportString>attaching TargetB to TargetA.</reportString>

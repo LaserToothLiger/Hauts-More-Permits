@@ -682,6 +682,8 @@ namespace HautsPermits
         [MayRequireOdyssey]
         public static JobDef HVMP_InstallPTargeter;
         [MayRequireOdyssey]
+        public static JobDef HVMP_InstallBSU;
+        [MayRequireOdyssey]
         public static JobDef HVMP_AttachIngressor;
 
         [MayRequireIdeology]
@@ -1937,6 +1939,94 @@ namespace HautsPermits
         public Faction faction;
         public int cooldownTicks;
     }
+    public class CompProperties_TargetEffectInstallBSU : CompProperties
+    {
+        public CompProperties_TargetEffectInstallBSU()
+        {
+            this.compClass = typeof(CompTargetEffect_InstallBSU);
+        }
+        public HediffDef hediffDef;
+        public BodyPartDef bodyPart;
+        public SoundDef soundOnUsed;
+    }
+    public class CompTargetEffect_InstallBSU : CompTargetEffect
+    {
+        public CompProperties_TargetEffectInstallBSU Props
+        {
+            get
+            {
+                return (CompProperties_TargetEffectInstallBSU)this.props;
+            }
+        }
+        public override void DoEffectOn(Pawn user, Thing target)
+        {
+            if (!user.IsColonistPlayerControlled)
+            {
+                return;
+            }
+            Job job = JobMaker.MakeJob(HVMPDefOf.HVMP_InstallBSU, target, this.parent);
+            job.count = 1;
+            job.playerForced = true;
+            user.jobs.TryTakeOrderedJob(job, new JobTag?(JobTag.Misc), false);
+        }
+    }
+    public class JobDriver_InstallBSU : JobDriver
+    {
+        private Pawn TargetPawn
+        {
+            get
+            {
+                return (Pawn)this.job.GetTarget(TargetIndex.A).Thing;
+            }
+        }
+        private Thing Item
+        {
+            get
+            {
+                return this.job.GetTarget(TargetIndex.B).Thing;
+            }
+        }
+        public override bool TryMakePreToilReservations(bool errorOnFailed)
+        {
+            return this.pawn.Reserve(this.TargetPawn, this.job, 1, -1, null, errorOnFailed, false) && this.pawn.Reserve(this.Item, this.job, 1, -1, null, errorOnFailed, false);
+        }
+        protected override IEnumerable<Toil> MakeNewToils()
+        {
+            yield return Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.Touch, false).FailOnDespawnedOrNull(TargetIndex.B).FailOnDespawnedOrNull(TargetIndex.A);
+            yield return Toils_Haul.StartCarryThing(TargetIndex.B, false, false, false, true, false);
+            yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch, false).FailOnDespawnedOrNull(TargetIndex.A);
+            Toil toil = Toils_General.WaitWith(TargetIndex.A, 60, false, true, false, TargetIndex.A, PathEndMode.Touch);
+            toil.WithProgressBarToilDelay(TargetIndex.A, false, -0.5f);
+            toil.FailOnDespawnedOrNull(TargetIndex.A);
+            toil.FailOnCannotTouch(TargetIndex.A, PathEndMode.Touch);
+            yield return toil;
+            yield return Toils_General.Do(new Action(this.Install));
+            yield break;
+        }
+        private void Install()
+        {
+            CompTargetEffect_InstallBSU ibsu = this.Item.TryGetComp<CompTargetEffect_InstallBSU>();
+            if (ibsu == null)
+            {
+                return;
+            }
+            BodyPartRecord bodyPartRecord = this.TargetPawn.RaceProps.body.GetPartsWithDef(ibsu.Props.bodyPart).FirstOrFallback(null);
+            if (bodyPartRecord == null)
+            {
+                return;
+            }
+            Hediff firstHediffOfDef = this.TargetPawn.health.hediffSet.GetFirstHediffOfDef(ibsu.Props.hediffDef, false);
+            if (firstHediffOfDef == null)
+            {
+                this.TargetPawn.health.AddHediff(ibsu.Props.hediffDef, bodyPartRecord, null, null);
+                if (this.TargetPawn.Map == Find.CurrentMap && ibsu.Props.soundOnUsed != null)
+                {
+                    ibsu.Props.soundOnUsed.PlayOneShot(SoundInfo.InMap(this.TargetPawn, MaintenanceType.None));
+                }
+                this.Item.SplitOff(1).Destroy(DestroyMode.Vanish);
+            }
+        }
+    }
     public class CompProperties_GatepunchAbility : CompProperties_AbilityEffect
     {
         public CompProperties_GatepunchAbility()
@@ -2391,6 +2481,21 @@ namespace HautsPermits
             HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
         }
     }
+    public class RoyalTitlePermitWorker_DROCSeniorityScaling_PTargFriendly : RoyalTitlePermitWorker_DROC_PTargFriendly
+    {
+        public override int ItemStackCount(PermitMoreEffects pme, Pawn caller)
+        {
+            int result = base.ItemStackCount(pme, caller);
+            if (this.faction != null)
+            {
+                float curSeniority = HVMP_Mod.settings.permitsScaleBySeniority ? caller.royalty.GetCurrentTitleInFaction(this.faction).def.seniority : this.def.minTitle.seniority;
+                float divisor = pme.phenomenonCount > 0 ? pme.phenomenonCount : 100f;
+                int seniority = Math.Max((int)(curSeniority / divisor), 1);
+                result *= seniority;
+            }
+            return result;
+        }
+    }
     public class RoyalTitlePermitWorker_GenerateQuest_PTargFriendly : RoyalTitlePermitWorker_GenerateQuest
     {
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
@@ -2404,6 +2509,20 @@ namespace HautsPermits
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
             HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+        }
+    }
+    public class RoyalTitlePermitWorker_GenerateQuestSeniorityScaling_PTargFriendly : RoyalTitlePermitWorker_GenerateQuest_PTargFriendly
+    {
+        public override int NumQuestsToGenerate(PermitMoreEffects pme, Pawn caller, Faction faction)
+        {
+            int result = base.NumQuestsToGenerate(pme, caller, faction);
+            if (faction != null)
+            {
+                float curSeniority = HVMP_Mod.settings.permitsScaleBySeniority ? caller.royalty.GetCurrentTitleInFaction(faction).def.seniority : this.def.minTitle.seniority;
+                int seniority = Math.Max((int)(curSeniority / 100f), 1);
+                result += seniority;
+            }
+            return result;
         }
     }
     public class RoyalTitlePermitWorker_GiveHediffs_PTargFriendly : RoyalTitlePermitWorker_GiveHediffs
@@ -2436,6 +2555,21 @@ namespace HautsPermits
             HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
         }
     }
+    public class RoyalTitlePermitWorker_DropResourcesStuffSeniorityScaling_PTargFriendly : RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly
+    {
+        public override int ItemStackCount(ThingDefCountClass tdcc, PermitMoreEffects pme, Pawn caller)
+        {
+            int result = base.ItemStackCount(tdcc, pme, caller);
+            if (this.faction != null)
+            {
+                float curSeniority = HVMP_Mod.settings.permitsScaleBySeniority ? caller.royalty.GetCurrentTitleInFaction(this.faction).def.seniority : this.def.minTitle.seniority;
+                float divisor = (pme != null && pme.phenomenonCount > 0) ? pme.phenomenonCount : 100f;
+                int seniority = Math.Max((int)(curSeniority / divisor), 1);
+                result *= seniority;
+            }
+            return result;
+        }
+    }
     public class RoyalTitlePermitWorker_CauseCondition_PTargFriendly : RoyalTitlePermitWorker_CauseCondition
     {
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
@@ -2464,6 +2598,21 @@ namespace HautsPermits
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
             HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+        }
+    }
+    public class RoyalTitlePermitWorker_DropBookSeniorityScaling_PTargFriendly : RoyalTitlePermitWorker_DropBook_PTargFriendly
+    {
+        public override int ItemStackCount(PermitMoreEffects pme, Pawn caller)
+        {
+            int result = base.ItemStackCount(pme, caller);
+            if (this.faction != null)
+            {
+                float curSeniority = HVMP_Mod.settings.permitsScaleBySeniority ? caller.royalty.GetCurrentTitleInFaction(this.faction).def.seniority : this.def.minTitle.seniority;
+                float divisor = (pme != null && pme.minPetness > 0) ? pme.minPetness : 100f;
+                int seniority = Math.Max((int)(curSeniority / divisor), 1);
+                result *= seniority;
+            }
+            return result;
         }
     }
     public class RoyalTitlePermitWorker_DropPawns_PTargFriendly : RoyalTitlePermitWorker_DropPawns
@@ -2688,146 +2837,6 @@ namespace HautsPermits
             HVMP_Utility.DoPTargeterCooldown(this.calledFaction, caller, this);
         }
         private Faction calledFaction;
-    }
-    [StaticConstructorOnStartup]
-    public class RoyalTitlePermitWorker_DropResourcesPTargFriendly : RoyalTitlePermitWorker_DropResources
-    {
-        public override void OrderForceTarget(LocalTargetInfo target)
-        {
-            this.CallResources(target.Cell);
-        }
-        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
-        {
-            if (map.generatorDef.isUnderground)
-            {
-                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
-                yield break;
-            }
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
-            {
-                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
-                yield break;
-            }
-            Action action = null;
-            string text = this.def.LabelCap + ": ";
-            bool free;
-            if (HVMP_Utility.ProprietaryFillAidOption(this,pawn, faction, ref text, out free))
-            {
-                action = delegate
-                {
-                    this.BeginCallResources(pawn, faction, map, free);
-                };
-            }
-            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
-            yield break;
-        }
-        public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
-        {
-            string text;
-            bool flag;
-            if (!base.FillCaravanAidOption(pawn, faction, out text, out this.free, out flag))
-            {
-                yield break;
-            }
-            Command_Action command_Action = new Command_Action
-            {
-                defaultLabel = this.def.LabelCap + " (" + pawn.LabelShort + ")",
-                defaultDesc = text,
-                icon = RoyalTitlePermitWorker_DropResourcesPTargFriendly.CommandTex,
-                action = delegate
-                {
-                    Caravan caravan = pawn.GetCaravan();
-                    float num = caravan.MassUsage;
-                    List<ThingDefCountClass> itemsToDrop = this.def.royalAid.itemsToDrop;
-                    for (int i = 0; i < itemsToDrop.Count; i++)
-                    {
-                        num += itemsToDrop[i].thingDef.BaseMass * (float)itemsToDrop[i].count;
-                    }
-                    if (num > caravan.MassCapacity)
-                    {
-                        WindowStack windowStack = Find.WindowStack;
-                        TaggedString taggedString = "DropResourcesOverweightConfirm".Translate();
-                        Action action = delegate
-                        {
-                            this.CallResourcesToCaravan(pawn, faction, this.free);
-                        };
-                        windowStack.Add(Dialog_MessageBox.CreateConfirmation(taggedString, action, true, null, WindowLayer.Dialog));
-                        return;
-                    }
-                    this.CallResourcesToCaravan(pawn, faction, this.free);
-                }
-            };
-            if (pawn.MapHeld != null && pawn.MapHeld.generatorDef.isUnderground)
-            {
-                command_Action.Disable("CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")));
-            }
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
-            {
-                command_Action.Disable("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")));
-            }
-            if (flag)
-            {
-                command_Action.Disable("CommandCallRoyalAidNotEnoughFavor".Translate());
-            }
-            yield return command_Action;
-            yield break;
-        }
-        private void BeginCallResources(Pawn caller, Faction faction, Map map, bool free)
-        {
-            this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = true;
-            this.targetingParameters.canTargetBuildings = false;
-            this.targetingParameters.canTargetPawns = false;
-            this.caller = caller;
-            this.map = map;
-            this.faction = faction;
-            this.free = free;
-            float rangeActual = base.RangeClamped;
-            this.targetingParameters.validator = (TargetInfo target) => (rangeActual <= 0f || target.Cell.DistanceTo(caller.Position) <= rangeActual) && !target.Cell.Fogged(map) && DropCellFinder.CanPhysicallyDropInto(target.Cell, map, true, true);
-            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
-        }
-        private void CallResources(IntVec3 cell)
-        {
-            List<Thing> list = new List<Thing>();
-            for (int i = 0; i < this.def.royalAid.itemsToDrop.Count; i++)
-            {
-                Thing thing = ThingMaker.MakeThing(this.def.royalAid.itemsToDrop[i].thingDef, null);
-                thing.stackCount = this.def.royalAid.itemsToDrop[i].count;
-                list.Add(thing);
-            }
-            if (list.Any<Thing>())
-            {
-                ActiveTransporterInfo activeTransporterInfo = new ActiveTransporterInfo();
-                activeTransporterInfo.innerContainer.TryAddRangeOrTransfer(list, true, false);
-                DropPodUtility.MakeDropPodAt(cell, this.map, activeTransporterInfo, null);
-                Messages.Message("MessagePermitTransportDrop".Translate(this.faction.Named("FACTION")), new LookTargets(cell, this.map), MessageTypeDefOf.NeutralEvent, true);
-                this.caller.royalty.GetPermit(this.def, this.faction).Notify_Used();
-                if (!this.free)
-                {
-                    this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
-                }
-                HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
-            }
-        }
-        private void CallResourcesToCaravan(Pawn caller, Faction faction, bool free)
-        {
-            Caravan caravan = caller.GetCaravan();
-            for (int i = 0; i < this.def.royalAid.itemsToDrop.Count; i++)
-            {
-                Thing thing = ThingMaker.MakeThing(this.def.royalAid.itemsToDrop[i].thingDef, null);
-                thing.stackCount = this.def.royalAid.itemsToDrop[i].count;
-                CaravanInventoryUtility.GiveThing(caravan, thing);
-            }
-            Messages.Message("MessagePermitTransportDropCaravan".Translate(faction.Named("FACTION"), caller.Named("PAWN")), caravan, MessageTypeDefOf.NeutralEvent, true);
-            caller.royalty.GetPermit(this.def, faction).Notify_Used();
-            if (!free)
-            {
-                caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
-            }
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
-        }
-        private Faction faction;
-        private static readonly Texture2D CommandTex = ContentFinder<Texture2D>.Get("UI/Commands/CallAid", true);
     }
     public class RoyalTitlePermitWorker_OrbitalStrikePTargFriendly : RoyalTitlePermitWorker_OrbitalStrike
     {
@@ -10282,6 +10291,7 @@ namespace HautsPermits
                         if (RE_on && RE_ambushLimit > 0 && Rand.Chance(this.RE_chance))
                         {
                             wo.RE_points = (int)(this.RE_pointsFactor * StorytellerUtility.DefaultThreatPointsNow(map));
+                            RE_ambushLimit--;
                         }
                         if (SG_on && SG_sd != null)
                         {
@@ -11340,6 +11350,7 @@ namespace HautsPermits
     //settings
     public class HVMP_Settings : ModSettings
     {
+        public bool permitsScaleBySeniority = true;
         public bool maximumChaosMode = false;
         public bool occultTiedToAnomalyActivityLevel = false;
         public float minBranchQuestInterval = 12f;
@@ -11363,6 +11374,7 @@ namespace HautsPermits
         public bool fortX, intervX, mmX, researchX, transportX, caelumX, machinaX, mundiX, populusX, voxX, atlasX, aresX, laelapsX, odysseyX, theseusX, ethnogX, excavX, remnantX, satX, shrineX, csX, ecX, fwX, hdX, raX, barkerX, fullerX, lcX, nataliX, romeroX;
         public override void ExposeData()
         {
+            Scribe_Values.Look(ref permitsScaleBySeniority, "permitsScaleBySeniority", true);
             Scribe_Values.Look(ref maximumChaosMode, "maximumChaosMode", false);
             Scribe_Values.Look(ref occultTiedToAnomalyActivityLevel, "occultTiedToAnomalyActivityLevel", false);
             Scribe_Values.Look(ref minBranchQuestInterval, "minBranchQuestInterval", 11f);
@@ -11518,6 +11530,7 @@ namespace HautsPermits
             //toggles chaos mode on or off: off by default, but if on every branch will offer quests on their own timer, leading to A LOT more quests
             Listing_Standard listingStandard = new Listing_Standard();
             listingStandard.Begin(rect2);
+            listingStandard.CheckboxLabeled("HVMP_SettingSeniorityScalingPermits".Translate(), ref settings.permitsScaleBySeniority, "HVMP_TooltipSeniorityScalingPermits".Translate());
             listingStandard.CheckboxLabeled("HVMP_SettingChaosMode".Translate(), ref settings.maximumChaosMode, "HVMP_TooltipChaosMode".Translate());
             if (ModsConfig.AnomalyActive)
             {

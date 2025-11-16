@@ -262,7 +262,7 @@
   </RoyalTitleDef>
   <RoyalTitleDef ParentName="HVMP_BaseArchiveTitle" MayRequire="Ludeon.RimWorld.Ideology">
     <defName>HVMP_ArchiveVI</defName>
-    <label>curator</label>
+    <label>Pangnostic</label>
     <description>This individual has the esteem of the Archive Branch, and may prevail upon it for all manner of favors pertaining to information, relics, and item enhancement.</description>
     <seniority>600</seniority>
     <favorCost>11</favorCost>

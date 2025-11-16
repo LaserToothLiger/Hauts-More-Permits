@@ -74,7 +74,7 @@
       <li Class="CompProperties_Targetable">
         <compClass>CompTargetable_SinglePawn</compClass>
       </li>
-      <li Class="CompProperties_TargetEffectInstallImplantInOtherPawn">
+      <li Class="HautsPermits.CompProperties_TargetEffectInstallBSU">
         <hediffDef>HVMP_BShield</hediffDef>
         <bodyPart>Brain</bodyPart>
         <soundOnUsed>EnergyShield_Reset</soundOnUsed>

@@ -2,11 +2,10 @@
 <Defs>
   
   <!--Occult level 1-->
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+  <RoyalTitlePermitDef ParentName="HVMP_DropBookSeniorityScalingBase">
     <defName>HVMP_TomeDrop</defName>
     <label>tome drop</label>
-    <description>Call for a random tome from the Occult Branch, which can be read to gain dark knowledge at the expense of potentially driving the reader mad.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropBook_PTargFriendly</workerClass>
+    <description>Call for a random tome per rank held with the Occult Branch (2 if the caller is a Tamperer; 3 if the caller is a Practitioner; and so on and so forth).\n\nTomes can be read to gain dark knowledge, at the expense of potentially driving the reader mad.</description>
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -23,11 +22,10 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+  <RoyalTitlePermitDef ParentName="HVMP_DROCSeniorityScalingBase">
 	<defName>HVMP_SerumDrop</defName>
 	<label>serum drop</label>
-	<description>Call for a drop of 2 random serums.</description>
-	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+	<description>Call for a drop of 2 random serums per rank held with the Occult Branch (4 if the caller is a Tamperer; 6 if the caller is a Practitioner; and so on and so forth).</description>
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
 	<permitPointCost>1</permitPointCost>
@@ -45,10 +43,10 @@
 		</li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Biotech">
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="Ludeon.RimWorld.Biotech">
     <defName>HVMP_SubcoreBasicDrop</defName>
     <label>basic subcore drop</label>
-    <description>Call for a drop of 4 basic subcores.</description>
+    <description>Call for a drop of 2 basic subcores per rank held with the Occult Branch (4 if the caller is a Tamperer; 6 if the caller is a Practitioner; and so on and so forth).</description>
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -57,7 +55,7 @@
     <uiPosition>(0,2)</uiPosition>
     <royalAid>
       <itemsToDrop>
-        <SubcoreBasic>4</SubcoreBasic>
+        <SubcoreBasic>2</SubcoreBasic>
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
@@ -88,7 +86,7 @@
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>12</cooldownDays>
+    <cooldownDays>3</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
     <uiPosition>(0,4)</uiPosition>
     <royalAid>
@@ -111,7 +109,7 @@
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>12</cooldownDays>
+    <cooldownDays>3</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
     <uiPosition>(0,5)</uiPosition>
     <royalAid>
@@ -134,7 +132,7 @@
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>12</cooldownDays>
+    <cooldownDays>3</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
     <uiPosition>(0,6)</uiPosition>
     <royalAid>
@@ -157,7 +155,7 @@
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>12</cooldownDays>
+    <cooldownDays>3</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
     <uiPosition>(0,7)</uiPosition>
     <royalAid>
@@ -216,18 +214,21 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_FoilHelmetDrop</defName>
     <label>foil helmet drop</label>
-    <description>Call for a drop of 1 psychic foil helmet.</description>
+    <description>Call for a drop of 1 excellent-quality psychic foil helmet.</description>
     <minTitle>HVMP_OccultII</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
+    <cooldownDays>40</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
     <uiPosition>(1,2)</uiPosition>
     <royalAid>
       <itemsToDrop>
-        <Apparel_PsychicFoilHelmet>1</Apparel_PsychicFoilHelmet>
+        <Apparel_PsychicFoilHelmet>
+			<count>1</count>
+			<quality>Excellent</quality>
+		</Apparel_PsychicFoilHelmet>
       </itemsToDrop>
-      <favorCost>3</favorCost>
+      <favorCost>4</favorCost>
     </royalAid>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
@@ -271,10 +272,10 @@
     </royalAid>
   </RoyalTitlePermitDef>
   <!--Occult level 3-->
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_FlarePackDrop</defName>
     <label>flare pack drop</label>
-    <description>Call for a drop of 1 disruptor flare pack.</description>
+    <description>Call for a drop of 1 disruptor flare pack, plus another 1 per rank held with the Occult Branch past Practitioner (4 if the caller is a Convoker; 5 if the caller is a Thaumaturge; 6 if the caller is a Revelantor).</description>
     <minTitle>HVMP_OccultIII</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -305,10 +306,10 @@
       <favorCost>4</favorCost>
     </royalAid>
   </RoyalTitlePermitDef>
-	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="VanillaExpanded.VPsycastsE">
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="VanillaExpanded.VPsycastsE">
 		<defName>HVMP_EltexDrop</defName>
 		<label>eltex drop</label>
-		<description>Call for a drop of 5 eltex.</description>
+		<description>Call for a drop of 3 eltex, plus another 3 per rank held with the Occult Branch past Practitioner (6 if the caller is a Convoker; 9 if the caller is a Thaumaturge; 12 if the caller is a Revelantor).</description>
 		<minTitle>HVMP_OccultIII</minTitle>
 		<faction>HVMP_OccultBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -317,7 +318,7 @@
 		<uiPosition>(2,1)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
-			<VPE_Eltex>5</VPE_Eltex>
+			<VPE_Eltex>3</VPE_Eltex>
 		  </itemsToDrop>
 		  <favorCost>4</favorCost>
 		</royalAid>
@@ -362,12 +363,12 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
 	<defName>HVMP_EltexGearDrop</defName>
 	<label>psycaster gear drop</label>
-	<description>Call for a drop of 1 random piece of normal-quality psycaster gear.</description>
+	<description>Call for a drop of 1 random piece of good-quality psycaster gear.</description>
 	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
     <minTitle>HVMP_OccultIV</minTitle>
     <faction>HVMP_OccultBranch</faction>
 	<permitPointCost>1</permitPointCost>
-	<cooldownDays>30</cooldownDays>
+	<cooldownDays>35</cooldownDays>
 	<uiPosition>(3,0)</uiPosition>
 	<royalAid>
 	  <favorCost>4</favorCost>
@@ -379,9 +380,26 @@
 			  <li>PsychicWeapon</li>
 			</tradeTags>
 			<numFromCategory>1</numFromCategory>
-			<extraNumber>2</extraNumber><!--can create items of Normal quality-->
+			<extraNumber>3</extraNumber><!--can create items of Normal quality-->
 		</li>
 	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Odyssey">
+    <defName>HVMP_SentienceCatalystDrop</defName>
+    <label>sentience catalyst drop</label>
+    <description>Call for a drop of 1 sentience catalyst.</description>
+    <minTitle>HVMP_OccultIV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>12</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(3,1)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <SentienceCatalyst>1</SentienceCatalyst>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_InvisibilitySuffusion</defName>
@@ -393,7 +411,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>15</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(3,1)</uiPosition>
+    <uiPosition>(3,2)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
     </royalAid>
@@ -416,7 +434,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>15</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(3,2)</uiPosition>
+    <uiPosition>(3,3)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
     </royalAid>
@@ -429,42 +447,42 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
-    <defName>HVMP_CallPsion</defName>
-    <label>call psion</label>
-    <description>Call a psion to assist you for 4 days. This level 3-4 psycaster can be controlled like one of your own colonists. You are required to keep them safe, though they will be skipped back to safety if ever downed or about to die.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallLaborersPTargFriendly</workerClass>
-    <minTitle>HVMP_OccultIV</minTitle>
-    <faction>HVMP_OccultBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <uiPosition>(3,3)</uiPosition>
-    <royalAid>
-      <favorCost>4</favorCost>
-      <pawnKindDef>HVMP_Psion</pawnKindDef>
-      <pawnCount>1</pawnCount>
-      <aidDurationDays>4</aidDurationDays>
-      <targetingRange>44.9</targetingRange>
-      <targetingRequireLOS>false</targetingRequireLOS>
-    </royalAid>
-    <cooldownDays>30</cooldownDays>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
-    <defName>HVMP_CallBattlePsion</defName>
-    <label>call battle-psions</label>
-    <description>Call two shielded, prestige-armored, eltex staff-wielding battle-psion each with 3-4 psylink levels to aid you in battle.</description>
-    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
-    <minTitle>HVMP_OccultIV</minTitle>
-    <faction>HVMP_OccultBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <uiPosition>(3,4)</uiPosition>
-    <royalAid>
-      <favorCost>4</favorCost>
-      <pawnKindDef>HVMP_BattlePsion</pawnKindDef>
-      <pawnCount>2</pawnCount>
-      <targetingRange>39.9</targetingRange>
-    </royalAid>
-    <cooldownDays>30</cooldownDays>
-  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
+		<defName>HVMP_CallPsion</defName>
+		<label>call psion</label>
+		<description>Call a psion to assist you for 4 days. This level 3-4 psycaster can be controlled like one of your own colonists. You are required to keep them safe, though they will be skipped back to safety if ever downed or about to die.</description>
+		<workerClass>HautsPermits.RoyalTitlePermitWorker_CallLaborersPTargFriendly</workerClass>
+		<minTitle>HVMP_OccultIV</minTitle>
+		<faction>HVMP_OccultBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<uiPosition>(3,4)</uiPosition>
+		<royalAid>
+		  <favorCost>4</favorCost>
+		  <pawnKindDef>HVMP_Psion</pawnKindDef>
+		  <pawnCount>1</pawnCount>
+		  <aidDurationDays>4</aidDurationDays>
+		  <targetingRange>44.9</targetingRange>
+		  <targetingRequireLOS>false</targetingRequireLOS>
+		</royalAid>
+		<cooldownDays>30</cooldownDays>
+	  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
+		<defName>HVMP_CallBattlePsion</defName>
+		<label>call battle-psions</label>
+		<description>Call two shielded, prestige-armored, eltex staff-wielding battle-psion each with 3-4 psylink levels to aid you in battle.</description>
+		<workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+		<minTitle>HVMP_OccultIV</minTitle>
+		<faction>HVMP_OccultBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<uiPosition>(3,5)</uiPosition>
+		<royalAid>
+		  <favorCost>4</favorCost>
+		  <pawnKindDef>HVMP_BattlePsion</pawnKindDef>
+		  <pawnCount>2</pawnCount>
+		  <targetingRange>39.9</targetingRange>
+		</royalAid>
+		<cooldownDays>30</cooldownDays>
+	  </RoyalTitlePermitDef>
   <!--Occult level 5-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Biotech">
     <defName>HVMP_SubcoreHighDrop</defName>
@@ -483,99 +501,82 @@
       <favorCost>5</favorCost>
     </royalAid>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Odyssey">
-    <defName>HVMP_SentienceCatalystDrop</defName>
-    <label>sentience catalyst drop</label>
-    <description>Call for a drop of 1 sentience catalyst.</description>
-    <minTitle>HVMP_OccultV</minTitle>
-    <faction>HVMP_OccultBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>12</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(5,2)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <SentienceCatalyst>1</SentienceCatalyst>
-      </itemsToDrop>
-      <favorCost>3</favorCost>
-    </royalAid>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
-    <defName>HVMP_CallPsionIIa</defName>
-    <label>call master psion</label>
-    <description>Call a master psion to assist you for 4 days. This level 6 psycaster has many psycasts, and can be controlled like one of your own colonists. You are required to keep them safe, though they will be skipped back to safety if ever downed or about to die.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallLaborersPTargFriendly</workerClass>
-    <minTitle>HVMP_OccultV</minTitle>
-    <faction>HVMP_OccultBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <uiPosition>(4,0)</uiPosition>
-	<prerequisite>HVMP_CallPsion</prerequisite>
-    <royalAid>
-      <favorCost>8</favorCost>
-      <pawnKindDef>HVMP_PsionMaster</pawnKindDef>
-      <pawnCount>1</pawnCount>
-      <aidDurationDays>4</aidDurationDays>
-      <targetingRange>44.9</targetingRange>
-      <targetingRequireLOS>false</targetingRequireLOS>
-    </royalAid>
-    <cooldownDays>40</cooldownDays>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
-    <defName>HVMP_CallPsionIIb</defName>
-    <label>call psion cabal</label>
-    <description>Call a group of 4 psions to assist you for 4 days. These level 3-4 psycasters can be controlled like your own colonists. You are required to keep them safe, though they will be skipped back to safety if ever downed or about to die.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallLaborersPTargFriendly</workerClass>
-    <minTitle>HVMP_OccultV</minTitle>
-    <faction>HVMP_OccultBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <uiPosition>(4,1)</uiPosition>
-	<prerequisite>HVMP_CallPsion</prerequisite>
-    <royalAid>
-      <favorCost>8</favorCost>
-      <pawnKindDef>HVMP_Psion</pawnKindDef>
-      <pawnCount>4</pawnCount>
-      <aidDurationDays>4</aidDurationDays>
-      <targetingRange>44.9</targetingRange>
-      <targetingRequireLOS>false</targetingRequireLOS>
-    </royalAid>
-    <cooldownDays>40</cooldownDays>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
-    <defName>HVMP_CallBattlePsionIIa</defName>
-    <label>call war-psions</label>
-    <description>Call two shielded, prestige-armored, persona monosword-wielding war-psions each with 6 psylink levels and a multitude of psycasts to aid you in battle.</description>
-    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
-    <minTitle>HVMP_OccultV</minTitle>
-    <faction>HVMP_OccultBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <uiPosition>(4,3)</uiPosition>
-	<prerequisite>HVMP_CallBattlePsion</prerequisite>
-    <royalAid>
-      <favorCost>8</favorCost>
-      <pawnKindDef>HVMP_WarPsion</pawnKindDef>
-      <pawnCount>2</pawnCount>
-      <targetingRange>39.9</targetingRange>
-    </royalAid>
-    <cooldownDays>40</cooldownDays>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
-    <defName>HVMP_CallBattlePsionIIb</defName>
-    <label>call battle-cabal</label>
-    <description>Call five shielded, prestige-armored, eltex staff-wielding battle-psions each with 3-4 psylink levels to aid you in battle.</description>
-    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
-    <minTitle>HVMP_OccultV</minTitle>
-    <faction>HVMP_OccultBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <uiPosition>(4,4)</uiPosition>
-	<prerequisite>HVMP_CallBattlePsion</prerequisite>
-    <royalAid>
-      <favorCost>8</favorCost>
-      <pawnKindDef>HVMP_BattlePsion</pawnKindDef>
-      <pawnCount>5</pawnCount>
-      <targetingRange>39.9</targetingRange>
-    </royalAid>
-    <cooldownDays>40</cooldownDays>
-  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
+		<defName>HVMP_CallPsionIIa</defName>
+		<label>call master psion</label>
+		<description>Call a master psion to assist you for 4 days. This level 6 psycaster has many psycasts, and can be controlled like one of your own colonists. You are required to keep them safe, though they will be skipped back to safety if ever downed or about to die.</description>
+		<workerClass>HautsPermits.RoyalTitlePermitWorker_CallLaborersPTargFriendly</workerClass>
+		<minTitle>HVMP_OccultV</minTitle>
+		<faction>HVMP_OccultBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<uiPosition>(4,0)</uiPosition>
+		<prerequisite>HVMP_CallPsion</prerequisite>
+		<royalAid>
+		  <favorCost>8</favorCost>
+		  <pawnKindDef>HVMP_PsionMaster</pawnKindDef>
+		  <pawnCount>1</pawnCount>
+		  <aidDurationDays>4</aidDurationDays>
+		  <targetingRange>44.9</targetingRange>
+		  <targetingRequireLOS>false</targetingRequireLOS>
+		</royalAid>
+		<cooldownDays>40</cooldownDays>
+	  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
+		<defName>HVMP_CallPsionIIb</defName>
+		<label>call psion cabal</label>
+		<description>Call a group of 4 psions to assist you for 4 days. These level 3-4 psycasters can be controlled like your own colonists. You are required to keep them safe, though they will be skipped back to safety if ever downed or about to die.</description>
+		<workerClass>HautsPermits.RoyalTitlePermitWorker_CallLaborersPTargFriendly</workerClass>
+		<minTitle>HVMP_OccultV</minTitle>
+		<faction>HVMP_OccultBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<uiPosition>(4,1)</uiPosition>
+		<prerequisite>HVMP_CallPsion</prerequisite>
+		<royalAid>
+		  <favorCost>8</favorCost>
+		  <pawnKindDef>HVMP_Psion</pawnKindDef>
+		  <pawnCount>4</pawnCount>
+		  <aidDurationDays>4</aidDurationDays>
+		  <targetingRange>44.9</targetingRange>
+		  <targetingRequireLOS>false</targetingRequireLOS>
+		</royalAid>
+		<cooldownDays>40</cooldownDays>
+	  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
+		<defName>HVMP_CallBattlePsionIIa</defName>
+		<label>call war-psions</label>
+		<description>Call two shielded, prestige-armored, persona monosword-wielding war-psions each with 6 psylink levels and a multitude of psycasts to aid you in battle.</description>
+		<workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+		<minTitle>HVMP_OccultV</minTitle>
+		<faction>HVMP_OccultBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<uiPosition>(4,3)</uiPosition>
+		<prerequisite>HVMP_CallBattlePsion</prerequisite>
+		<royalAid>
+		  <favorCost>8</favorCost>
+		  <pawnKindDef>HVMP_WarPsion</pawnKindDef>
+		  <pawnCount>2</pawnCount>
+		  <targetingRange>39.9</targetingRange>
+		</royalAid>
+		<cooldownDays>40</cooldownDays>
+	  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
+		<defName>HVMP_CallBattlePsionIIb</defName>
+		<label>call battle-cabal</label>
+		<description>Call five shielded, prestige-armored, eltex staff-wielding battle-psions each with 3-4 psylink levels to aid you in battle.</description>
+		<workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+		<minTitle>HVMP_OccultV</minTitle>
+		<faction>HVMP_OccultBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<uiPosition>(4,4)</uiPosition>
+		<prerequisite>HVMP_CallBattlePsion</prerequisite>
+		<royalAid>
+		  <favorCost>8</favorCost>
+		  <pawnKindDef>HVMP_BattlePsion</pawnKindDef>
+		  <pawnCount>5</pawnCount>
+		  <targetingRange>39.9</targetingRange>
+		</royalAid>
+		<cooldownDays>40</cooldownDays>
+	  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef>
     <defName>HVMP_CallGhoulCyberIIa</defName>
     <label>call bionic ghoul</label>

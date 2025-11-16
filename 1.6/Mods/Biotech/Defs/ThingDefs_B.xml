@@ -96,7 +96,7 @@
         <compClass>HautsPermits_Biotech.CompTargetable_AnyHumanlikeWillDo</compClass>
       </li>
       <li Class="HautsPermits_Biotech.CompProperties_HackableRA">
-        <defence>60000</defence>
+        <defence>15000</defence>
 		<lockoutPermanently>true</lockoutPermanently>
         <effectHacking>HackingTerminal</effectHacking>
         <notHackedInspectString>Cannot be injected unless hacked.</notHackedInspectString>
@@ -282,11 +282,11 @@
         <effecter>HVMP_BlightSprayMist</effecter>
 		<sound>JumpPackLaunch</sound>
       </li>
-      <li Class="CompProperties_DestroyAfterDelay">
+      <!--<li Class="CompProperties_DestroyAfterDelay">
         <delayTicks>900000</delayTicks>
         <destroyMode>KillFinalize</destroyMode>
         <countdownLabel>Self-destruct in</countdownLabel>
-      </li>
+      </li>-->
 	  <li Class="HautsFramework.CompProperties_FactionColored">
 		<colorFactor>0.85</colorFactor>
 	  </li>

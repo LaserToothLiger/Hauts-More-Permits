@@ -54,11 +54,10 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+  <RoyalTitlePermitDef ParentName="HVMP_DropBookSeniorityScalingBase">
     <defName>HVMP_SchematicDrop</defName>
     <label>schematic drop</label>
-    <description>Call for a random schematic from the Archive Branch, which can be read to gain progress towards a research project.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropBook_PTargFriendly</workerClass>
+    <description>Call for a random schematic per rank held with the Archive Branch (2 if the caller is an Archivist; 3 if the caller is a Docent; and so on and so forth).\n\nSchematics can be read to gain progress towards a research project.</description>
     <minTitle>HVMP_ArchiveI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -75,11 +74,10 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+  <RoyalTitlePermitDef ParentName="HVMP_DropBookSeniorityScalingBase">
     <defName>HVMP_TextbookDrop</defName>
     <label>textbook drop</label>
-    <description>Call for an instructional textbook from the Archive Branch.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropBook_PTargFriendly</workerClass>
+    <description>Call for an instructional textbook per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic).\n\nTextbooks can be read to gain skill experience.</description>
     <minTitle>HVMP_ArchiveI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -93,13 +91,14 @@
 			<phenomenonCount>1</phenomenonCount>
 			<bookDef>TextBook</bookDef>
 			<bookSuperQualityChance>0</bookSuperQualityChance>
+			<minPetness>200</minPetness><!--I'm using this instead of phenomenonCount to modify the seniority divisor for book drops, since phenomenonCount is already being used to determine the base number of books-->
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+  <RoyalTitlePermitDef ParentName="HVMP_DropBookSeniorityScalingBase">
     <defName>HVMP_ObscureScriptureDrop</defName>
     <label>obscure scripture drop</label>
-    <description>Call for a random ideoligious tract from the Archive Branch, which can be read to learn about an ideoligion from a distant world and time. Non-believers will slowly be converted while reading the scripture, while believers will gain certainty from reading it.</description>
+    <description>Call for a random ideoligious tract per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic).\n\nTracts can be read to learn about an ideoligion from a distant world and time. Non-believers will slowly be converted while reading the scripture, while believers will gain certainty from reading it.</description>
     <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
     <minTitle>HVMP_ArchiveI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
@@ -115,14 +114,14 @@
 			<phenomenonCount>1</phenomenonCount>
 			<bookDef>HVMP_ObscureScripture</bookDef>
 			<bookSuperQualityChance>0.1</bookSuperQualityChance>
+			<minPetness>200</minPetness>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="DimonSever000.FactionLanguages">
+	  <RoyalTitlePermitDef ParentName="HVMP_DropBookSeniorityScalingBase" MayRequire="DimonSever000.FactionLanguages">
 		<defName>HVMP_LanguageBookDrop</defName>
 		<label>language book drop</label>
-		<description>Call for a language-teaching book from the Archive Branch.</description>
-		<workerClass>HautsPermits.RoyalTitlePermitWorker_DropBook_PTargFriendly</workerClass>
+		<description>Call for a language-teaching book per rank held with the Archive Branch (2 if the caller is an Archivist; 3 if the caller is a Docent; and so on and so forth).\n\nLanguage books can be read to make progress in learning the languages of other cultures and factions.</description>
 		<minTitle>HVMP_ArchiveI</minTitle>
 		<faction>HVMP_ArchiveBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -336,10 +335,10 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="OskarPotocki.VFE.Deserters">
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="OskarPotocki.VFE.Deserters">
 		<defName>HVMP_IntelDrop</defName>
 		<label>intel drop</label>
-		<description>Call for a drop of 6 packets of intel on the Shattered Empire.</description>
+		<description>Call for a drop of 6 packets of intel on the Shattered Empire, plus another 2 per rank held with the Archive Branch past Docent (8 if the caller is a Lorekeeper; 10 if the caller is an Antiquarian; 12 if the caller is a Pangnostic).</description>
 		<minTitle>HVMP_ArchiveIII</minTitle>
 		<faction>HVMP_ArchiveBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -348,15 +347,15 @@
 		<uiPosition>(2,4)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
-			<VFED_Intel>6</VFED_Intel>
+			<VFED_Intel>2</VFED_Intel>
 		  </itemsToDrop>
 		  <favorCost>2</favorCost>
 		</royalAid>
 	  </RoyalTitlePermitDef>
-	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="OskarPotocki.VFE.Deserters">
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="OskarPotocki.VFE.Deserters">
 		<defName>HVMP_CriticalIntelDrop</defName>
 		<label>critical intel drop</label>
-		<description>Call for a drop of 1 packet of critical intel on the Shattered Empire.</description>
+		<description>Call for a drop of 1 packet of critical intel on the Shattered Empire, or 2 if the caller is a Pangnostic.</description>
 		<minTitle>HVMP_ArchiveIII</minTitle>
 		<faction>HVMP_ArchiveBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -369,6 +368,11 @@
 		  </itemsToDrop>
 		  <favorCost>2</favorCost>
 		</royalAid>
+		<modExtensions>
+			<li Class="HautsFramework.PermitMoreEffects">
+				<phenomenonCount>299</phenomenonCount>
+			</li>
+		</modExtensions>
 	  </RoyalTitlePermitDef>
   <!--Archive level 5-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
