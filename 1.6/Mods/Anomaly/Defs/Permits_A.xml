@@ -72,7 +72,7 @@
     <usableOnWorldMap>false</usableOnWorldMap>
     <uiPosition>(0,3)</uiPosition>
     <royalAid>
-      <targetingRange>25</targetingRange>
+      <targetingRange>24.9</targetingRange>
 	  <targetingRequireLOS>false</targetingRequireLOS>
       <favorCost>2</favorCost>
 	  <radius>10</radius><!--for clamor purposes-->

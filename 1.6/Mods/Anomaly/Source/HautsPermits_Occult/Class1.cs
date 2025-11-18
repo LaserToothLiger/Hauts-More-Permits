@@ -130,22 +130,6 @@ namespace HautsPermits_Occult
     //permits
     public class RoyalTitlePermitWorker_SelfSkip : RoyalTitlePermitWorker_Targeted
     {
-        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
-        {
-            if (target.IsValid)
-            {
-                if (!base.CanHitTarget(target) || !target.Cell.Standable(this.map))
-                {
-                    if (showMessages)
-                    {
-                        Messages.Message(this.def.LabelCap + ": " + "HVMP_BadSkipSpot".Translate(), MessageTypeDefOf.RejectInput, true);
-                    }
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
         public override void OrderForceTarget(LocalTargetInfo target)
         {
             FleckCreationData dataAttachedOverlay = FleckMaker.GetDataAttachedOverlay(this.caller, FleckDefOf.PsycastSkipFlashEntry, new Vector3(-0.5f, 0f, -0.5f), 1f, -1f);
@@ -189,8 +173,7 @@ namespace HautsPermits_Occult
             }
             string text = this.def.LabelCap + ": ";
             Action action = null;
-            bool free;
-            if (HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
+            if (HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -204,26 +187,15 @@ namespace HautsPermits_Occult
         {
             this.targetingParameters = new TargetingParameters();
             this.targetingParameters.canTargetLocations = true;
-            this.targetingParameters.canTargetSelf = true;
-            this.targetingParameters.canTargetFires = true;
-            this.targetingParameters.canTargetItems = true;
+            this.targetingParameters.canTargetSelf = false;
+            this.targetingParameters.canTargetFires = false;
+            this.targetingParameters.canTargetItems = false;
             this.caller = caller;
             this.map = map;
             this.faction = faction;
             this.free = free;
-            this.targetingParameters.validator = delegate (TargetInfo target)
-            {
-                if (this.def.royalAid.targetingRange > 0f && target.Cell.DistanceTo(caller.Position) > this.def.royalAid.targetingRange)
-                {
-                    return false;
-                }
-                if (target.Cell.Fogged(map))
-                {
-                    return false;
-                }
-                RoofDef roof = target.Cell.GetRoof(map);
-                return roof == null || !roof.isThickRoof;
-            };
+            float rangeActual = this.def.royalAid.targetingRange;
+            this.targetingParameters.validator = (TargetInfo target) => (rangeActual <= 0f || target.Cell.DistanceTo(caller.Position) <= rangeActual && !target.Cell.Fogged(map) && target.Cell.Standable(map));
             Find.Targeter.BeginTargeting(this, null, false, null, null, true);
         }
         private Faction faction;
