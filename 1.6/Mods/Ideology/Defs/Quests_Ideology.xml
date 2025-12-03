@@ -74,8 +74,8 @@
         <li>questDescription(lodgersCount==1)->[asker_nameFull], [asker_faction_leaderTitle] of [asker_faction_name] is requesting a favor. One of [asker_possessive] anthropologists, [lodgers0_nameFull], is interested in studying your culture and ways of life. [asker_pronoun] wants you to host [lodgers0_objective] at [map_definite] until [lodgers0_pronoun] has completed [lodgers0_possessive] study. The questions [lodgers0_pronoun] asks have a chance to annoy or upset your colonists.[allLodgerInfo]\n\n[joinerEnding][mutatorSuffix]</li>
         <!-- Asker is faction leader, multiple joiners -->
         <li>questDescription(lodgersCount>=2,priority=1)->[asker_nameFull], [asker_faction_leaderTitle] of [asker_faction_name], has commissioned [lodgersCount] [asker_faction_pawnsPlural] to study your culture. [asker_pronoun] believes this would be better accomplished if the team could live among you, and so would like you to host them at [map_definite] until they have completed their study. The questions they ask have a chance to annoy or upset those they interact with.[allLodgerInfo]\n\n[joinerEnding][mutatorSuffix]</li>
-		<li>mutatorSuffix(lodgersCount==1)->[mutator_SS_info_singular][mutator_TT_info_singular]</li>
-		<li>mutatorSuffix(lodgersCount>=2)->[mutator_SS_info_plural][mutator_TT_info_plural]</li>
+		<li>mutatorSuffix(lodgersCount==1)->[mutator_SS_info_singular][mutator_WTU_info_singular]</li>
+		<li>mutatorSuffix(lodgersCount>=2)->[mutator_SS_info_plural][mutator_WTU_info_plural]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Ideology.QuestNode_ArchiveIntermediary">
@@ -152,7 +152,6 @@
             <storeAs>askerFaction</storeAs>
           </elseNode>
         </li>
-        <!-- Generate lodgers -->
         <li Class="QuestNode_Set">
           <name>lodgersCountToGenerate</name>
           <value>$lodgersCount</value>
@@ -175,7 +174,6 @@
             <giveDependentDrugs>true</giveDependentDrugs>
           </node>
         </li>
-        <!-- Assign home faction to lodger(s) -->
         <li Class="QuestNode_ExtraFaction">
           <factionOf>$asker</factionOf>
           <pawns>$lodgers</pawns>
@@ -185,21 +183,77 @@
             <li>lodgers.BecameMutant</li>
           </inSignalsRemovePawn>
         </li>
-        <!-- Lock their apparel -->
+        <li Class="HautsPermits_Ideology.QuestNode_WTU">
+          <pawns>$lodgers</pawns>
+		  <WTU_traitList>
+		    <Abrasive>0</Abrasive>
+		    <AnnoyingVoice>0</AnnoyingVoice>
+		    <CreepyBreathing>0</CreepyBreathing>
+		    <DrugDesire>1</DrugDesire>
+		    <DrugDesire>2</DrugDesire>
+		    <NaturalMood>-1</NaturalMood>
+		    <NaturalMood>-2</NaturalMood>
+		    <Gourmand>0</Gourmand>
+		    <Greedy>0</Greedy>
+		    <Jealous>0</Jealous>
+		    <DislikesMen>0</DislikesMen>
+		    <DislikesWomen>0</DislikesWomen>
+		    <Pyromaniac>0</Pyromaniac>
+		    <SpeedOffset>-1</SpeedOffset>
+		    <Beauty>-1</Beauty>
+		    <Beauty>-2</Beauty>
+		    <Wimp>0</Wimp>
+		    <Delicate MayRequire="Ludeon.RimWorld.Biotech">0</Delicate>
+		    <Recluse MayRequire="Ludeon.RimWorld.Biotech">0</Recluse>
+		    <HVT_Agrizoophobe MayRequire="Hautarche.HautsTraits">0</HVT_Agrizoophobe>
+		    <HVT_Judgemental MayRequire="Hautarche.HautsTraits">0</HVT_Judgemental>
+		    <HVT_Lech MayRequire="Hautarche.HautsTraits">0</HVT_Lech>
+		    <HVT_RepressedRage MayRequire="Hautarche.HautsTraits">0</HVT_RepressedRage>
+		    <HVT_Vagabond MayRequire="Hautarche.HautsTraits">0</HVT_Vagabond>
+		    <HVT_Vain MayRequire="Hautarche.HautsTraits">0</HVT_Vain>
+		    <HVT_Prideful MayRequire="Hautarche.HautsTraits">1</HVT_Prideful>
+			<HVT_Anarchist MayRequire="Ludeon.RimWorld.Royalty,Hautarche.HautsTraits">0</HVT_Anarchist>
+			<HVT_Intolerant MayRequire="Ludeon.RimWorld.Ideology,Hautarche.HautsTraits">0</HVT_Intolerant>
+			<HVT_Proclaimer MayRequire="Ludeon.RimWorld.Ideology,Hautarche.HautsTraits">0</HVT_Proclaimer>
+			<HVT_Superstitious MayRequire="Ludeon.RimWorld.Ideology,Hautarche.HautsTraits">0</HVT_Superstitious>
+			<HVT_Misopedist MayRequire="Ludeon.RimWorld.Biotech,Hautarche.HautsTraits">0</HVT_Misopedist>
+			<HVT_GenePurist MayRequire="Ludeon.RimWorld.Biotech,Hautarche.HautsTraits">0</HVT_GenePurist>
+			<HVT_Haunted MayRequire="Ludeon.RimWorld.Anomaly,Hautarche.HautsTraits">0</HVT_Haunted>
+		    <BOT_Dysgeusia MayRequire="dani.moreTraits">0</BOT_Dysgeusia>
+		    <BOT_Eclectic_Palate MayRequire="dani.moreTraits">0</BOT_Eclectic_Palate>
+		    <BOT_Hyperalgesia MayRequire="dani.moreTraits">0</BOT_Hyperalgesia>
+		    <BOT_Misanthrope MayRequire="dani.moreTraits">0</BOT_Misanthrope>
+		    <BOT_Moody MayRequire="dani.moreTraits">0</BOT_Moody>
+		    <BOT_Vulgar MayRequire="dani.moreTraits">0</BOT_Vulgar>
+		    <BOT_WeakBody MayRequire="dani.moreTraits">0</BOT_WeakBody>
+			<BOT_ChildHate MayRequire="Ludeon.RimWorld.Biotech,dani.moreTraits">0</BOT_ChildHate>
+		    <VTE_Anxious MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_Anxious>
+		    <VTE_BigBoned MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_BigBoned>
+		    <VTE_Clumsy MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_Clumsy>
+		    <VTE_Coward MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_Coward>
+		    <VTE_Insatiable MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_Insatiable>
+		    <VTE_Insomniac MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_Insomniac>
+		    <VTE_Kleptomaniac MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_Kleptomaniac>
+		    <VTE_Squeamish MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_Squeamish>
+		    <VTE_Technophobe MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_Technophobe>
+		    <VTE_ThinSkinned MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_ThinSkinned>
+		    <VTE_Wanderlust MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_Wanderlust>
+			
+		  </WTU_traitList>
+		  <WTU_description_singular>The individual assigned to this study has one or more unpalatable traits.</WTU_description_singular>
+		  <WTU_description_plural>The individuals being assigned to this study have one or more unpalatable traits.</WTU_description_plural>
+        </li>
         <li Class="QuestNode_SetAllApparelLocked">
           <pawns>$lodgers</pawns>
         </li>
         <li Class="HautsPermits.QuestNode_GiveHostileEnvironmentFilm">
           <pawns>$lodgers</pawns>
         </li>
-        <li Class="HautsPermits_Ideology.QuestNode_Give_SS_TT">
+        <li Class="HautsPermits_Ideology.QuestNode_Give_SS">
           <pawns>$lodgers</pawns>
 		  <SS_hediff>HVMP_SensitiveSoul</SS_hediff>
 		  <SS_description_singular>\nThe anthropologist, [lodgers0_nameFull], is pampered and rather weak-willed, prone to overeating, fits of boredom, and long naps.</SS_description_singular>
 		  <SS_description_plural>\nThis particular crew of anthropologists is pampered and rather weak-willed, prone to overeating, fits of boredom, and long naps.</SS_description_plural>
-		  <TT_hediff>HVMP_TactlessTongues</TT_hediff>
-		  <TT_description_singular>\nNote that [lodgers0_nameFull] cares little for politeness or phrasing; [lodgers0_pronoun] is likelier to offend with [lodgers0_possessive] questions, and the degree of offense will be more severe.</TT_description_singular>
-		  <TT_description_plural>\nThis particular crew of anthropologists care little for politeness or phrasing. They are likelier to offend with their questions, and the degree of offense will be more severe.</TT_description_plural>
         </li>
         <!-- Apply lodger conditions -->
         <li Class="QuestNode_SubScript">

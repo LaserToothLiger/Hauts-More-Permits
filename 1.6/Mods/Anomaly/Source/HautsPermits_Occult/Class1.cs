@@ -391,7 +391,7 @@ namespace HautsPermits_Occult
     {
         protected override bool TestRunInt(Slate slate)
         {
-            return base.TestRunInt(slate);
+            return base.TestRunInt(slate) && (Find.Anomaly.HighestLevelReached >= 1 || !Find.Anomaly.GenerateMonolith);
         }
         protected override void RunInt()
         {
@@ -1930,8 +1930,17 @@ namespace HautsPermits_Occult
                 return this.cachedMat;
             }
         }
+        public override string GetInspectString()
+        {
+            return base.GetInspectString() + "HVMP_OnlyOnePartyLabel".Translate();
+        }
         public void Notify_CaravanArrived(Caravan caravan)
         {
+            if (this.labyrinthMap != null)
+            {
+                Messages.Message("HVMP_LabyrinthAlreadyGenerated".Translate(), this, MessageTypeDefOf.RejectInput, false);
+                return;
+            }
             this.generating = true;
             LongEventHandler.QueueLongEvent(delegate
             {
@@ -1966,6 +1975,7 @@ namespace HautsPermits_Occult
                             Find.LetterStack.ReceiveLetter(gameCondition.LabelCap, gameCondition.LetterText, gameCondition.def.letterDef, LookTargets.Invalid, null, null, null, null, 0, true);
                         }
                     }
+                    Find.TickManager.Pause();
                 }
                 IEnumerable<Building> obelisksE = this.labyrinthMap.listerBuildings.AllBuildingsNonColonistOfDef(HVMPDefOf_A.HVMP_WarpedObelisk_Hypercube);
                 if (obelisksE != null)
@@ -2957,7 +2967,8 @@ namespace HautsPermits_Occult
             HVMP_HypercubeMapComponent hmc = map.GetComponent<HVMP_HypercubeMapComponent>();
             if (hmc != null && hmc.spatialAnomaly != null && hmc.spatialAnomaly is WorldObject_Hypercube woh && woh.DF_on)
             {
-                Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(this.Props.DF_pawnKinds.RandomElement(), Faction.OfEntities, PawnGenerationContext.NonPlayer, new PlanetTile?(map.Tile), false, false, false, true, false, 1f, false, true, false, true, true, false, false, false, false, 0f, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null, false, false, false, false, null, null, null, null, null, 0f, DevelopmentalStage.Adult, null, null, null, false, false, false, -1, 0, false));
+                PawnKindDef pkd = this.Props.DF_pawnKinds.RandomElement();
+                Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(pkd, pkd.RaceProps.Humanlike?Faction.OfHoraxCult:Faction.OfEntities, PawnGenerationContext.NonPlayer, new PlanetTile?(map.Tile), false, false, false, true, false, 1f, false, true, false, true, true, false, false, false, false, 0f, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null, false, false, false, false, null, null, null, null, null, 0f, DevelopmentalStage.Adult, null, null, null, false, false, false, -1, 0, false));
                 pawn.health.overrideDeathOnDownedChance = 0f;
                 GenSpawn.Spawn(pawn, CellFinder.RandomClosewalkCellNear(this.parent.Position, map, 12, null), map);
                 EffecterDefOf.MonolithLevelChanged.Spawn().Trigger(new TargetInfo(pawn.Position, map, false), new TargetInfo(pawn.Position, map, false), -1);

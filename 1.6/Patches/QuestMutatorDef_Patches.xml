@@ -24,33 +24,4 @@
 			</value>
 		</match>
 	</Operation>
-	<!--Pax, Populus, Worse Than Useless-->
-	<Operation Class="PatchOperationFindMod">
-		<mods>
-		  <li>[DN] Bundle Of Traits</li>
-		</mods>
-		<match Class="PatchOperationAdd">
-			<xpath>/Defs/QuestScriptDef[defName="HVMP_PaxPopulus"]/root/nodes/li[@Class="HautsPermits.QuestNode_PopulusWTU"]/WTU_traitList</xpath>
-			<value>
-				<BOT_ChildHate MayRequire="Ludeon.RimWorld.Biotech">0</BOT_ChildHate>
-			</value>
-		</match>
-	</Operation>
-	<Operation Class="PatchOperationFindMod">
-		<mods>
-		  <li>Hauts' Added Traits</li>
-		</mods>
-		<match Class="PatchOperationAdd">
-			<xpath>/Defs/QuestScriptDef[defName="HVMP_PaxPopulus"]/root/nodes/li[@Class="HautsPermits.QuestNode_PopulusWTU"]/WTU_traitList</xpath>
-			<value>
-				<HVT_Anarchist MayRequire="Ludeon.RimWorld.Royalty">0</HVT_Anarchist>
-				<HVT_Intolerant MayRequire="Ludeon.RimWorld.Ideology">0</HVT_Intolerant>
-				<HVT_Proclaimer MayRequire="Ludeon.RimWorld.Ideology">0</HVT_Proclaimer>
-				<HVT_Superstitious MayRequire="Ludeon.RimWorld.Ideology">0</HVT_Superstitious>
-				<HVT_Misopedist MayRequire="Ludeon.RimWorld.Biotech">0</HVT_Misopedist>
-				<HVT_GenePurist MayRequire="Ludeon.RimWorld.Biotech">0</HVT_GenePurist>
-				<HVT_Haunted MayRequire="Ludeon.RimWorld.Anomaly">0</HVT_Haunted>
-			</value>
-		</match>
-	</Operation>
 </Patch>

@@ -53,22 +53,13 @@ namespace HautsPermits_Ideology
             Pawn pawn = GetInstanceField(typeof(Pawn_InteractionsTracker), __instance, "pawn") as Pawn;
             if (pawn.kindDef == HVMPDefOf.HVMP_Anthropologist && recipient.needs.mood != null && recipient.IsColonist && !recipient.IsQuestLodger() && recipient.kindDef != HVMPDefOf.HVMP_Anthropologist)
             {
-                bool tt = pawn.health.hediffSet.HasHediff(HVMPDefOf.HVMP_TactlessTongues);
                 float val = Rand.Value;
-                if (tt)
-                {
-                    val *= 0.5f;
-                }
                 if (val <= 0.05f)
                 {
                     recipient.needs.mood.thoughts.memories.TryGainMemory(HVMPDefOf.HVMP_AnthroAnnoyance, pawn);
                     recipient.needs.mood.thoughts.memories.TryGainMemory(HVMPDefOf.HVMP_AnthroAnnoyance, pawn);
                 } else if (val <= 0.3f) {
                     recipient.needs.mood.thoughts.memories.TryGainMemory(HVMPDefOf.HVMP_AnthroAnnoyance, pawn);
-                    if (tt)
-                    {
-                        recipient.needs.mood.thoughts.memories.TryGainMemory(HVMPDefOf.HVMP_AnthroAnnoyance, pawn);
-                    }
                 }
                 List<Quest> questsListForReading = Find.QuestManager.QuestsListForReading;
                 for (int i = 0; i < questsListForReading.Count; i++)
@@ -547,7 +538,7 @@ namespace HautsPermits_Ideology
         [NoTranslate]
         public SlateRef<string> storeAs;
     }
-    public class QuestNode_Give_SS_TT : QuestNode
+    public class QuestNode_Give_SS : QuestNode
     {
         protected override bool TestRunInt(Slate slate)
         {
@@ -575,21 +566,6 @@ namespace HautsPermits_Ideology
             } else {
                 QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_SS_info_singular", " "), new Rule_String("mutator_SS_info_plural", " ") });
             }
-            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ethnog3, HVMP_Mod.settings.ethnogX))
-            {
-                QuestPart_Give_SS qpss = new QuestPart_Give_SS();
-                qpss.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? slate.Get<string>("inSignal", null, false);
-                qpss.pawns.AddRange(this.pawns.GetValue(slate));
-                qpss.hediff = this.TT_hediff;
-                QuestGen.quest.AddPart(qpss);
-                QuestGen.AddQuestDescriptionRules(new List<Rule>
-                {
-                    new Rule_String("mutator_TT_info_singular", this.TT_description_singular.Formatted()),
-                    new Rule_String("mutator_TT_info_plural", this.TT_description_plural.Formatted())
-                });
-            } else {
-                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TT_info_singular", " "), new Rule_String("mutator_TT_info_plural", " ") });
-            }
         }
         [NoTranslate]
         public SlateRef<string> inSignal;
@@ -599,11 +575,6 @@ namespace HautsPermits_Ideology
         public string SS_description_singular;
         [MustTranslate]
         public string SS_description_plural;
-        public HediffDef TT_hediff;
-        [MustTranslate]
-        public string TT_description_singular;
-        [MustTranslate]
-        public string TT_description_plural;
     }
     public class QuestPart_Give_SS : QuestPart
     {
@@ -637,6 +608,52 @@ namespace HautsPermits_Ideology
         public string inSignal;
         public List<Pawn> pawns = new List<Pawn>();
         public HediffDef hediff;
+    }
+    public class QuestNode_WTU : QuestNode
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            if (this.pawns.GetValue(slate) == null || this.WTU_traitList.NullOrEmpty())
+            {
+                return;
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ethnog3, HVMP_Mod.settings.ethnogX))
+            {
+                List<Pawn> pawns = this.pawns.GetValue(slate).ToList();
+                for (int i = 0; i < pawns.Count; i++)
+                {
+                    Pawn_StoryTracker story = pawns[i].story;
+                    if (story != null)
+                    {
+                        BackstoryTrait bt = this.WTU_traitList.Where((BackstoryTrait bst) => !story.traits.HasTrait(bst.def) && !story.traits.allTraits.Any((Trait tr) => bst.def.ConflictsWith(tr))).RandomElement();
+                        if (bt != null)
+                        {
+                            story.traits.GainTrait(new Trait(bt.def, bt.degree, true), false);
+                        }
+                    }
+                }
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_WTU_info_singular", this.WTU_description_singular.Formatted()),
+                    new Rule_String("mutator_WTU_info_plural", this.WTU_description_plural.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_WTU_info_singular", " ") , new Rule_String("mutator_WTU_info_plural", " ") });
+            }
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return true;
+        }
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+        public SlateRef<IEnumerable<Pawn>> pawns;
+        public List<BackstoryTrait> WTU_traitList = new List<BackstoryTrait>();
+        [MustTranslate]
+        public string WTU_description_singular;
+        [MustTranslate]
+        public string WTU_description_plural;
     }
     public class QuestNode_ShuttleAnthro : QuestNode
     {

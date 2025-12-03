@@ -4,8 +4,80 @@
   <!--archive books-->
   <ThingDef ParentName="BookBase">
     <defName>HVMP_ObscureScripture</defName>
-    <label>obscure scripture </label>
+    <label>obscure scripture</label>
     <description>A book which describes an ideoligion from a distant world. Reading it wears down the certainty of non-believers and can eventually convert them to its ideoligion, but also risks upsetting them. Believers gain certainty instead from reading the book.</description>
+    <tradeability>None</tradeability>
+    <graphicData>
+      <texPath>Things/Item/Book/Schematic/Schematic</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.8</drawSize>
+    </graphicData>
+    <uiIconPath>Things/Item/Book/Schematic/Schematic</uiIconPath>
+    <statBases>
+      <MarketValue>150</MarketValue>
+    </statBases>
+    <comps>
+      <li Class="CompProperties_Book">
+        <nameMaker>HVMP_Namer_ObscureTract</nameMaker>
+        <descriptionMaker>HVMP_ObscureTractDesc</descriptionMaker>
+        <ageYearsRange>100~500</ageYearsRange>
+        <openGraphic>
+          <texPath>Things/Item/Book/Schematic/Schematic_Open</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>0.7</drawSize>
+        </openGraphic>
+        <verticalGraphic>
+          <texPath>Things/Item/Book/Schematic/Schematic_Vertical</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <addTopAltitudeBias>true</addTopAltitudeBias>
+        </verticalGraphic>
+        <doers>
+          <li Class="HautsF_Ideology.BookOutcomeProperties_PromoteIdeo">
+            <newIdeoChance>1</newIdeoChance>
+			<chanceForPlayerFaction>0.5</chanceForPlayerFaction>
+			<conversionPerHour>
+			  <points>
+				<li>0, 0.06</li>
+				<li>1, 0.08</li>
+				<li>2, 0.1</li>
+				<li>3, 0.12</li>
+				<li>4, 0.14</li>
+				<li>5, 0.17</li>
+				<li>6, 0.2</li>
+			  </points>
+			</conversionPerHour>
+			<upsetOnFailedConversionThought>Hauts_FailedConversionByBook</upsetOnFailedConversionThought>
+			<upsetLikelihood>
+			  <points>
+				<li>0, 0.025</li>
+				<li>1, 0.0225</li>
+				<li>2, 0.02</li>
+				<li>3, 0.0175</li>
+				<li>4, 0.015</li>
+				<li>5, 0.0125</li>
+				<li>6, 0.01</li>
+			  </points>
+			</upsetLikelihood>
+			<reassurePerHour>
+			  <points>
+				<li>0, 0.06</li>
+				<li>1, 0.08</li>
+				<li>2, 0.1</li>
+				<li>3, 0.12</li>
+				<li>4, 0.14</li>
+				<li>5, 0.17</li>
+				<li>6, 0.2</li>
+			  </points>
+			</reassurePerHour>
+          </li>
+        </doers>
+      </li>
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="BookBase">
+    <defName>HVMP_IdeoPamphlet</defName>
+    <label>ideoligious pamphlet</label>
+    <description>A book which describes a particular ideoligion. Reading it wears down the certainty of non-believers and can eventually convert them to its ideoligion, but also risks upsetting them. Believers gain certainty instead from reading the book.</description>
     <tradeability>None</tradeability>
     <graphicData>
       <texPath>Things/Item/Book/Schematic/Schematic</texPath>
@@ -104,6 +176,7 @@
           <addTopAltitudeBias>true</addTopAltitudeBias>
         </verticalGraphic>
         <doers>
+          <li Class="BookOutcomeProperties_JoyFactorModifier" />
           <li Class="HautsPermits_Ideology.BookOutcomeProperties_HediffGrantingIdeoBook">
             <newIdeoChance>0</newIdeoChance>
 			<conversionPerHour>
@@ -178,6 +251,7 @@
           <addTopAltitudeBias>true</addTopAltitudeBias>
         </verticalGraphic>
         <doers>
+          <li Class="BookOutcomeProperties_JoyFactorModifier" />
           <li Class="HautsPermits_Ideology.BookOutcomeProperties_InspiringVerse">
             <newIdeoChance>0</newIdeoChance>
 			<conversionPerHour>
@@ -249,6 +323,7 @@
           <addTopAltitudeBias>true</addTopAltitudeBias>
         </verticalGraphic>
         <doers>
+          <li Class="BookOutcomeProperties_JoyFactorModifier" />
           <li Class="HautsPermits_Ideology.BookOutcomeProperties_HediffGrantingIdeoBook">
             <newIdeoChance>0</newIdeoChance>
 			<conversionPerHour>

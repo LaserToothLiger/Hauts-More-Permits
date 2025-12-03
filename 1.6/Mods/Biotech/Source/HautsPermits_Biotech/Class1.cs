@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
@@ -270,6 +271,44 @@ namespace HautsPermits_Biotech
                 }
             }
             this.AffectPawn(bestPawn, faction);
+        }
+    }
+    public class RoyalTitlePermitWorker_TendStim : RoyalTitlePermitWorker_GiveHediffs_PTargFriendly
+    {
+        public override bool IsGoodPawn(Pawn pawn)
+        {
+            return base.IsGoodPawn(pawn) && pawn.health.hediffSet.HasTendableHediff();
+        }
+        public override void GiveHediffInCaravanInner(Pawn caller, Faction faction, bool free, Caravan caravan)
+        {
+            Pawn bestPawn = caller;
+            float bestScore = 0f;
+            foreach (Pawn p in caravan.pawns)
+            {
+                float score = 0f;
+                List<Hediff> tendables = p.health.hediffSet.GetHediffsTendable().ToList();
+                foreach (Hediff h in tendables)
+                {
+                    score += h.Severity;
+                }
+                score /= Math.Max(0.5f, p.GetStatValue(StatDefOf.InjuryHealingFactor));
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestPawn = p;
+                }
+            }
+            this.AffectPawn(bestPawn, faction);
+        }
+        public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
+        {
+            List<Hediff> tendables = pawn.health.hediffSet.GetHediffsTendable().ToList();
+            float tendQuality = Math.Max(0.01f,pme.extraNumber.RandomInRange);
+            foreach (Hediff h in tendables)
+            {
+                h.Tended(tendQuality, tendQuality);
+            }
+            base.AffectPawnInner(pme, pawn, faction);
         }
     }
     [StaticConstructorOnStartup]

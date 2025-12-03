@@ -54,10 +54,10 @@
     </comps>
   </HediffDef>
   
-  <!--Pax combat assist-->
+  <!--Pax hediffs-->
   <HediffDef ParentName="HVT_TraitHediffBase">
     <defName>HVMP_CombatAssistProgram</defName>
-    <label>pax combat assistance</label>
+    <label>pax combat assist</label>
     <description>A radio link to an automated live combat assistance program.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(0.9333,0.5961,0.5961)</defaultLabelColor>
@@ -80,26 +80,27 @@
 	  </li>
     </comps>
   </HediffDef>
-  <!--Pax scalpel-->
   <HediffDef ParentName="HVT_TraitHediffBase">
-    <defName>HVMP_OrbitalScalpelMarker</defName>
-    <label>pax orbital scalpel</label>
-    <description>Get down, Mr. President!</description>
-    <hediffClass>HediffWithComps</hediffClass>
-    <defaultLabelColor>(1,0.2,0.2)</defaultLabelColor>
+    <defName>HVMP_ScalpelTracker</defName>
+    <label>Call down the thunder</label>
+    <description>and reap the whirldwind (sic).</description>
+    <hediffClass>HautsPermits.ScalpelTracker</hediffClass>
     <stages>
       <li>
 		<becomeVisible>false</becomeVisible>
       </li>
     </stages>
     <comps>
-	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
-	  <li Class="HautsPermits.HediffCompProperties_Flashlight"> <!--red light, neon light, stop light/everybody's got a little light under the sun-->
-		<ticksDelay>60</ticksDelay>
-		<impactSound>Shot_TurretSniper</impactSound>
-		<mote>HVMP_DirectLineToHeaven</mote>
-		<scale>1</scale>
-	  </li>
+      <li Class="HautsPermits.HediffCompProperties_BoomHeadshot">
+        <damageType>Bomb</damageType>
+		<damageAmount>75</damageAmount>
+		<armorPen>1</armorPen>
+		<soundDef>Shot_TurretSniper</soundDef>
+      </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>60</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
     </comps>
   </HediffDef>
   
@@ -374,7 +375,7 @@
 		  <graphicClass>Graphic_Mote</graphicClass>
 		  <texPath>Other/ShieldBubble</texPath>
 		  <shaderType>Transparent</shaderType>
-		  <color>(1,0.4353,0.45,1)</color>
+		  <color>(1,0.65,0.68,1)</color>
 		  <drawSize>1</drawSize>
 		  <shaderParameters>
 			<_DistortionTex>/Other/Ripples</_DistortionTex>

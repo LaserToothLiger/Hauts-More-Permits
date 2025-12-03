@@ -72,12 +72,15 @@
 			<bookDef>Schematic</bookDef>
 			<bookSuperQualityChance>0</bookSuperQualityChance>
         </li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a random schematic.\n\nSchematics can be read to gain progress towards a research project.</extraString>
+        </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropBookSeniorityScalingBase">
     <defName>HVMP_TextbookDrop</defName>
     <label>textbook drop</label>
-    <description>Call for an instructional textbook per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic).\n\nTextbooks can be read to gain skill experience.</description>
+    <description>Call for an instructional textbook, plus an additional textbook per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic).\n\nTextbooks can be read to gain skill experience.</description>
     <minTitle>HVMP_ArchiveI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -93,20 +96,23 @@
 			<bookSuperQualityChance>0</bookSuperQualityChance>
 			<minPetness>200</minPetness><!--I'm using this instead of phenomenonCount to modify the seniority divisor for book drops, since phenomenonCount is already being used to determine the base number of books-->
         </li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for an instructional textbook.\n\nTextbooks can be read to gain skill experience.</extraString>
+        </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropBookSeniorityScalingBase">
     <defName>HVMP_ObscureScriptureDrop</defName>
     <label>obscure scripture drop</label>
-    <description>Call for a random ideoligious tract per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic).\n\nTracts can be read to learn about an ideoligion from a distant world and time. Non-believers will slowly be converted while reading the scripture, while believers will gain certainty from reading it.</description>
+    <description>Call for a random ideoligious tract, plus an additional tract per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic).\n\nTracts can be read to learn about an ideoligion from a distant world and time. Non-believers will slowly be converted while reading the scripture, while believers will gain certainty from reading it.</description>
     <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
     <minTitle>HVMP_ArchiveI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>15</cooldownDays>
+    <cooldownDays>14</cooldownDays>
     <uiPosition>(0,5)</uiPosition>
     <royalAid>
-      <favorCost>3</favorCost>
+      <favorCost>2</favorCost>
     </royalAid>
 	<modExtensions>
 		<li Class="HautsFramework.PermitMoreEffects">
@@ -114,7 +120,36 @@
 			<phenomenonCount>1</phenomenonCount>
 			<bookDef>HVMP_ObscureScripture</bookDef>
 			<bookSuperQualityChance>0.1</bookSuperQualityChance>
+			<minPetness>200</minPetness><!--already using extraNumber for something else; this is being used as the permit-caller's seniority divisor for purposes of rank-scaling-->
+        </li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a random ideoligious tract.\n\nTracts can be read to learn about an ideoligion from a distant world and time. Non-believers will slowly be converted while reading the scripture, while believers will gain certainty from reading it.</extraString>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropBookSeniorityScalingBase">
+    <defName>HVMP_IdeoPamphletDrop</defName>
+    <label>ideoligious pamphlet drop</label>
+    <description>Call for a pamphlet of the caller's ideoligion, plus an additional tract per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic).\n\nNon-believers will slowly be converted while reading the pamphlet, while believers will gain certainty from reading it.</description>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
+    <minTitle>HVMP_ArchiveI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>14</cooldownDays>
+    <uiPosition>(0,5.75)</uiPosition>
+    <royalAid>
+      <favorCost>2</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<extraNumber>1</extraNumber><!--in this case, this is the chance the generated book is of the caller's ideo-->
+			<phenomenonCount>1</phenomenonCount>
+			<bookDef>HVMP_IdeoPamphlet</bookDef>
+			<bookSuperQualityChance>0.1</bookSuperQualityChance>
 			<minPetness>200</minPetness>
+        </li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a pamphlet of the caller's ideoligion.\n\nNon-believers will slowly be converted while reading the pamphlet, while believers will gain certainty from reading it.</extraString>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -126,7 +161,7 @@
 		<faction>HVMP_ArchiveBranch</faction>
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>15</cooldownDays>
-		<uiPosition>(0,6)</uiPosition>
+		<uiPosition>(0,6.5)</uiPosition>
 		<royalAid>
 		  <favorCost>3</favorCost>
 		</royalAid>
@@ -135,6 +170,9 @@
 				<phenomenonCount>1</phenomenonCount>
 				<bookDef>LanguageBook</bookDef>
 				<bookSuperQualityChance>0</bookSuperQualityChance>
+			</li>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a language-teaching book.\n\nLanguage books can be read to make progress in learning the languages of other cultures and factions.</extraString>
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
@@ -171,15 +209,15 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_EsotericVerseDrop</defName>
     <label>esoteric treatise drop</label>
-    <description>Call for a collection of writings relevant to the caller's ideoligion from the Archive Branch which educate the reader on the ideoligion's deeper mysteries. Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that improves multiple ideoligious stats.</description>
+    <description>Call for a book relevant to the caller's ideoligion which teaches about its deeper mysteries, plus an additional such book per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic). Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that improves multiple ideoligious stats.</description>
     <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
     <minTitle>HVMP_ArchiveII</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
+    <cooldownDays>14</cooldownDays>
     <uiPosition>(1,5)</uiPosition>
     <royalAid>
-      <favorCost>3</favorCost>
+      <favorCost>2</favorCost>
     </royalAid>
 	<modExtensions>
 		<li Class="HautsFramework.PermitMoreEffects">
@@ -187,21 +225,25 @@
 			<phenomenonCount>1</phenomenonCount>
 			<bookDef>HVMP_EsotericTract</bookDef>
 			<bookSuperQualityChance>0.1</bookSuperQualityChance>
+			<minPetness>200</minPetness>
+        </li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a book relevant to the caller's ideoligion which teaches about its deeper mysteries. Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that improves multiple ideoligious stats.</extraString>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_InspiringVerseDrop</defName>
     <label>inspiring verses drop</label>
-    <description>Call for a collection of writings relevant to the caller's ideoligion from the Archive Branch, which have an inspiring effect. Believers can read it to gain certainty and possibly also gain an inspiration.</description>
+    <description>Call for an inspirational book relevant to the caller's ideoligion, plus an additional such book per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic). Believers can read it to gain certainty and possibly also gain an inspiration.</description>
     <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
     <minTitle>HVMP_ArchiveII</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
-    <uiPosition>(1,6)</uiPosition>
+    <cooldownDays>14</cooldownDays>
+    <uiPosition>(1,5.75)</uiPosition>
     <royalAid>
-      <favorCost>3</favorCost>
+      <favorCost>2</favorCost>
     </royalAid>
 	<modExtensions>
 		<li Class="HautsFramework.PermitMoreEffects">
@@ -209,21 +251,25 @@
 			<phenomenonCount>1</phenomenonCount>
 			<bookDef>HVMP_InspiringTract</bookDef>
 			<bookSuperQualityChance>0.1</bookSuperQualityChance>
+			<minPetness>200</minPetness>
+        </li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for an inspirational book relevant to the caller's ideoligion. Believers can read it to gain certainty and possibly also gain an inspiration.</extraString>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_MeditativeVerseDrop</defName>
     <label>meditative mantra drop</label>
-    <description>Call for a collection of writings relevant to the caller's ideoligion from the Archive Branch, which have a calming and focusing effect. Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that lets them stay up longer, need recreation less often, resist stress, and meditate more effectively.</description>
+    <description>Call for a meditation-assistive book relevant to the caller's ideoligion, plus an additional such book per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic). Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that lets them stay up longer, need recreation less often, resist stress, and meditate more effectively.</description>
     <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
     <minTitle>HVMP_ArchiveII</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
-    <uiPosition>(1,7)</uiPosition>
+    <cooldownDays>14</cooldownDays>
+    <uiPosition>(1,6.5)</uiPosition>
     <royalAid>
-      <favorCost>3</favorCost>
+      <favorCost>2</favorCost>
     </royalAid>
 	<modExtensions>
 		<li Class="HautsFramework.PermitMoreEffects">
@@ -231,6 +277,10 @@
 			<phenomenonCount>1</phenomenonCount>
 			<bookDef>HVMP_MeditativeTract</bookDef>
 			<bookSuperQualityChance>0.1</bookSuperQualityChance>
+			<minPetness>200</minPetness>
+        </li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a meditation-assistive book relevant to the caller's ideoligion. Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that lets them stay up longer, need recreation less often, resist stress, and meditate more effectively.</extraString>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -351,11 +401,16 @@
 		  </itemsToDrop>
 		  <favorCost>2</favorCost>
 		</royalAid>
+		<modExtensions>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 6 random packets of intel on the Shattered Empire.</extraString>
+			</li>
+		</modExtensions>
 	  </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="OskarPotocki.VFE.Deserters">
 		<defName>HVMP_CriticalIntelDrop</defName>
 		<label>critical intel drop</label>
-		<description>Call for a drop of 1 packet of critical intel on the Shattered Empire, or 2 if the caller is a Pangnostic.</description>
+		<description>Call for a drop of 1 packet of critical intel on the Shattered Empire, or 2 if the caller has achieved the rank of Pangnostic.</description>
 		<minTitle>HVMP_ArchiveIII</minTitle>
 		<faction>HVMP_ArchiveBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -371,6 +426,9 @@
 		<modExtensions>
 			<li Class="HautsFramework.PermitMoreEffects">
 				<phenomenonCount>299</phenomenonCount>
+			</li>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 1 packet of critical intel on the Shattered Empire.</extraString>
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
@@ -589,7 +647,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Odyssey">
 	<defName>HVMP_UniqueWeaponDrop</defName>
 	<label>unique weapon drop</label>
-	<description>Call for a drop of 1 random normal-quality unique weapon.\n\nCosts two permit points.</description>
+	<description>Call for a drop of 1 random good-quality unique weapon.\n\nCosts two permit points.</description>
 	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
     <minTitle>HVMP_ArchiveVI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
@@ -605,7 +663,7 @@
 			  <li>WeaponsUnique</li>
 			</thingCategories>
 			<numFromCategory>1</numFromCategory>
-			<extraNumber>2</extraNumber><!--can create items of Normal quality-->
+			<extraNumber>3</extraNumber><!--can create items of Good quality-->
 		</li>
 	</modExtensions>
   </RoyalTitlePermitDef>

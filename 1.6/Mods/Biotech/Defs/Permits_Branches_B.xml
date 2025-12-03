@@ -18,48 +18,76 @@
       </itemsToDrop>
       <favorCost>2</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 4 herbal medicine.</extraString>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
+    <defName>HVMP_ChargecellDrop</defName>
+    <label>chargecell drop</label>
+    <description>Call for a drop of 10 chargecells per rank held with the Ecosphere Branch (20 if the caller is a Gardener; 30 if the caller is a Naturalist; and so on and so forth).\n\nChargecells can be injected into mechanoids or batteries to re-energize them.</description>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(0,1)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_Chargecell>10</HVMP_Chargecell>
+      </itemsToDrop>
+      <favorCost>2</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 10 chargecells.\n\nChargecells can be injected into mechanoids or batteries to re-energize them.</extraString>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
+    <defName>HVMP_GasMaskDrop</defName>
+    <label>gas mask drop</label>
+    <description>Call for a drop of 1 excellent-quality gas mask per rank held with the Ecosphere Branch (2 if the caller is a Gardener; 3 if the caller is a Naturalist; and so on and so forth).</description>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>12</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(0,2)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <Apparel_GasMask>
+			<count>1</count>
+			<quality>Excellent</quality>
+		</Apparel_GasMask>
+      </itemsToDrop>
+      <favorCost>2</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 1 excellent-quality gas mask.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_SmallLivestockDrop</defName>
-    <label>small livestock drop</label>
-    <description>Call for the delivery of a random, tame, small livestock animal from the Ecosphere Branch.</description>
+    <defName>HVMP_LivestockDrop</defName>
+    <label>livestock drop</label>
+    <description>Call for the delivery of a random, tame, livestock animal from the Ecosphere Branch.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
     <minTitle>HVMP_EcosphereI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>6</cooldownDays>
-    <uiPosition>(0,1)</uiPosition>
+    <cooldownDays>10</cooldownDays>
+    <uiPosition>(0,3)</uiPosition>
     <royalAid>
       <favorCost>1</favorCost>
     </royalAid>
 	<modExtensions>
 		<li Class="HautsFramework.PermitMoreEffects">
 			<numFromCategory>1</numFromCategory>
-			<bodySizeCapRange>0~0.75</bodySizeCapRange>
-			<marketValueLimits>0~1000</marketValueLimits>
-			<allowAnimals>true</allowAnimals>
-			<needsPen>true</needsPen>
-			<startsTamed>true</startsTamed>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_LargeLivestockDrop</defName>
-    <label>large livestock drop</label>
-    <description>Call for the delivery of a random, tame, larger livestock animal from the Ecosphere Branch.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
-    <minTitle>HVMP_EcosphereI</minTitle>
-    <faction>HVMP_EcosphereBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
-    <uiPosition>(0,2)</uiPosition>
-    <royalAid>
-      <favorCost>2</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<numFromCategory>1</numFromCategory>
-			<bodySizeCapRange>0.8~3.5</bodySizeCapRange>
+			<bodySizeCapRange>0~3.5</bodySizeCapRange>
 			<marketValueLimits>0~1000</marketValueLimits>
 			<allowAnimals>true</allowAnimals>
 			<needsPen>true</needsPen>
@@ -76,7 +104,7 @@
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>10</cooldownDays>
-    <uiPosition>(0,3)</uiPosition>
+    <uiPosition>(0,4)</uiPosition>
     <royalAid>
       <favorCost>1</favorCost>
     </royalAid>
@@ -91,43 +119,6 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
-    <defName>HVMP_ChargecellDrop</defName>
-    <label>chargecell drop</label>
-    <description>Call for a drop of 10 chargecells per rank held with the Ecosphere Branch (20 if the caller is a Gardener; 30 if the caller is a Naturalist; and so on and so forth).\n\nChargecells can be injected into mechanoids or batteries to re-energize them.</description>
-    <minTitle>HVMP_EcosphereI</minTitle>
-    <faction>HVMP_EcosphereBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(0,4)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <HVMP_Chargecell>10</HVMP_Chargecell>
-      </itemsToDrop>
-      <favorCost>2</favorCost>
-    </royalAid>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
-    <defName>HVMP_GasMaskDrop</defName>
-    <label>gas mask drop</label>
-    <description>Call for a drop of 1 excellent-quality gas mask per rank held with the Ecosphere Branch (2 if the caller is a Gardener; 3 if the caller is a Naturalist; and so on and so forth).</description>
-    <minTitle>HVMP_EcosphereI</minTitle>
-    <faction>HVMP_EcosphereBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>12</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(0,5)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <Apparel_GasMask>
-			<count>1</count>
-			<quality>Excellent</quality>
-		</Apparel_GasMask>
-      </itemsToDrop>
-      <favorCost>2</favorCost>
-    </royalAid>
-  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_BlightSprayerDrop</defName>
     <label>blightsprayer drop</label>
@@ -137,7 +128,7 @@
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>30</cooldownDays>
-    <uiPosition>(0,6)</uiPosition>
+    <uiPosition>(1,0)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <HVMP_AntiBlightDispenser>1</HVMP_AntiBlightDispenser>
@@ -155,33 +146,109 @@
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>24</cooldownDays>
-    <uiPosition>(0,7)</uiPosition>
+    <uiPosition>(1,1)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <HVMP_AutoHatchery>1</HVMP_AutoHatchery>
       </itemsToDrop>
-      <favorCost>6</favorCost>
+      <favorCost>5.75</favorCost>
       <radius>3</radius>
     </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_StimulateHealing</defName>
+    <label>stimulate healing</label>
+    <description>Activate mechanites in and around the target's body to encourage faster healing. Lasts 3 days.</description>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_HealStim</workerClass>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(1,2)</uiPosition>
+    <royalAid>
+      <favorCost>2</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_StimulatedHealing</li></hediffs>
+			<soundDef>Coagulate_Cast</soundDef>
+			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_MedicalAssist</defName>
+    <label>medical assist</label>
+    <description>Link the target to an automated medical assistance program for 4 hours, improving tend speed, tend quality, and surgery success chance.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>10</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(1,3)</uiPosition>
+    <royalAid>
+      <favorCost>2</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_MedicalAssistProgram</li></hediffs>
+			<soundDef>CrateOpeningStarted</soundDef>
+			<onUseMessage>HVMP_AssistanceProgram</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+			<allowAnyNonflesh>true</allowAnyNonflesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_HandlingAssist</defName>
+    <label>handling assist</label>
+    <description>Link the target to an automated animal handling assistance program for 4 hours, improving animal tame and train chances.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>10</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(1,4)</uiPosition>
+    <royalAid>
+      <favorCost>1</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_HandlingAssistProgram</li></hediffs>
+			<soundDef>CrateOpeningStarted</soundDef>
+			<onUseMessage>HVMP_AssistanceProgram</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+			<allowAnyNonflesh>true</allowAnyNonflesh>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   
   <!--Ecosphere level 2-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_MedicineDrop</defName>
     <label>medicine drop</label>
-    <description>Call for a drop of 4 medicine, plus another 2 per rank held with the Ecosphere Branch past Gardener (6 if the caller is a Naturalist; 8 if the caller is an Edenite; and so on and so forth).</description>
+    <description>Call for a drop of 4 medicine, plus 2 per rank held with the Ecosphere Branch past Gardener (6 if the caller is a Naturalist; 8 if the caller is an Edenite; and so on and so forth).</description>
     <minTitle>HVMP_EcosphereII</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>15</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(1,0)</uiPosition>
+    <uiPosition>(2,0)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <MedicineIndustrial>2</MedicineIndustrial>
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 4 medicine.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_PredatorDrop</defName>
@@ -192,7 +259,7 @@
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
-    <uiPosition>(1,1)</uiPosition>
+    <uiPosition>(2,1)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
@@ -216,7 +283,7 @@
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>30</cooldownDays>
-    <uiPosition>(1,2)</uiPosition>
+    <uiPosition>(2,2)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
@@ -231,29 +298,6 @@
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_StimulateHealing</defName>
-    <label>stimulate healing</label>
-    <description>Activate mechanites in and around the target's body to encourage faster healing. Lasts 3 days.</description>
-    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_HealStim</workerClass>
-    <minTitle>HVMP_EcosphereII</minTitle>
-    <faction>HVMP_EcosphereBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>15</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(1,3)</uiPosition>
-    <royalAid>
-      <favorCost>2</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<hediffs><li>HVMP_StimulatedHealing</li></hediffs>
-			<soundDef>Coagulate_Cast</soundDef>
-			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>
-			<allowAnyFlesh>true</allowAnyFlesh>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_StimulateThermotolerance</defName>
     <label>stimulate thermotolerance</label>
     <description>Activate mechanites in and around the target's body to maintain homeostasis in a wider variety of temperatures. Lasts 5 days.</description>
@@ -263,7 +307,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>15</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(1,4)</uiPosition>
+    <uiPosition>(2,3)</uiPosition>
     <royalAid>
       <favorCost>2</favorCost>
     </royalAid>
@@ -281,36 +325,46 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_NeutroamineDrop</defName>
     <label>neutroamine drop</label>
-    <description>Call for a drop of 30 neutroamine, plus another 10 per rank held with the Ecosphere Branch past Naturalist (40 if the caller is an Edenite; 50 if the caller is a Gaean; 60 if the caller is a Worldshaper).</description>
+    <description>Call for a drop of 30 neutroamine, plus 10 per rank held with the Ecosphere Branch past Naturalist (40 if the caller is an Edenite; 50 if the caller is a Gaean; 60 if the caller is a Worldshaper).</description>
     <minTitle>HVMP_EcosphereIII</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(2,0)</uiPosition>
+    <uiPosition>(3,0)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <Neutroamine>10</Neutroamine>
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 30 neutroamine.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_PenoxycylineDrop</defName>
     <label>penoxycyline drop</label>
-    <description>Call for a drop of 9 doses of penoxycyline, plus another 3 per rank held with the Ecosphere Branch past Naturalist (12 if the caller is an Edenite; 15 if the caller is a Gaean; 18 if the caller is a Worldshaper).</description>
+    <description>Call for a drop of 9 doses of penoxycyline, plus 3 per rank held with the Ecosphere Branch past Naturalist (12 if the caller is an Edenite; 15 if the caller is a Gaean; 18 if the caller is a Worldshaper).</description>
     <minTitle>HVMP_EcosphereIII</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(2,1)</uiPosition>
+    <uiPosition>(3,1)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <Penoxycyline>3</Penoxycyline>
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 9 doses of penoxycyline.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
 	<defName>HVMP_ProsthesisDrop</defName>
@@ -321,7 +375,7 @@
 	<faction>HVMP_EcosphereBranch</faction>
 	<permitPointCost>1</permitPointCost>
 	<cooldownDays>8</cooldownDays>
-	<uiPosition>(2,2)</uiPosition>
+	<uiPosition>(3,2)</uiPosition>
 	<royalAid>
 	  <favorCost>3</favorCost>
 	</royalAid>
@@ -347,7 +401,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(2,3)</uiPosition>
+    <uiPosition>(3,3)</uiPosition>
     <royalAid>
       <favorCost>4</favorCost>
     </royalAid>
@@ -368,9 +422,9 @@
     <minTitle>HVMP_EcosphereIII</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
+    <cooldownDays>15</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(2,4)</uiPosition>
+    <uiPosition>(3,4)</uiPosition>
     <royalAid>
       <favorCost>4</favorCost>
     </royalAid>
@@ -388,19 +442,24 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_GlitterMedicineDrop</defName>
     <label>glitter med drop</label>
-    <description>Call for a drop of 4 glitterworld medicine, plus another 1 per rank held with the Ecosphere Branch past Edenite (5 if the caller is a Gaean; 6 if the caller is a Worldshaper).</description>
+    <description>Call for a drop of 4 glitterworld medicine, plus 1 per rank held with the Ecosphere Branch past Edenite (5 if the caller is a Gaean; 6 if the caller is a Worldshaper).</description>
     <minTitle>HVMP_EcosphereIV</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,0)</uiPosition>
+    <uiPosition>(4,0)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <MedicineUltratech>1</MedicineUltratech>
       </itemsToDrop>
       <favorCost>4</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 4 glitterworld medicine.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DROCSeniorityScalingBase" MayRequire="sarg.alphagenes">
 		<defName>HVMP_GeneToolDrop</defName>
@@ -410,7 +469,7 @@
 		<faction>HVMP_EcosphereBranch</faction>
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>24</cooldownDays>
-		<uiPosition>(3,1)</uiPosition>
+		<uiPosition>(4,1)</uiPosition>
 		<royalAid>
 		  <favorCost>4</favorCost>
 		</royalAid>
@@ -422,6 +481,9 @@
 				<maxTechLevelInCategory>Ultra</maxTechLevelInCategory>
 				<numFromCategory>2</numFromCategory>
 				<phenomenonCount>299</phenomenonCount><!--seniority is divided by this much for purposes of scaling, as opposed to the 100 default-->
+			</li>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 2 random gene tools.</extraString>
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
@@ -435,7 +497,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>55</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(4,0)</uiPosition>
+    <uiPosition>(5,0)</uiPosition>
     <royalAid>
       <favorCost>6</favorCost>
     </royalAid>
@@ -461,7 +523,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,2)</uiPosition>
+    <uiPosition>(4,2)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
@@ -485,7 +547,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,2)</uiPosition>
+    <uiPosition>(5,2)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
@@ -508,7 +570,7 @@
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
-    <uiPosition>(3,3)</uiPosition>
+    <uiPosition>(4,3)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
       <targetingRange>44.9</targetingRange>
@@ -534,7 +596,7 @@
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
-    <uiPosition>(4,3)</uiPosition>
+    <uiPosition>(5,3)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
       <targetingRange>44.9</targetingRange>
@@ -561,7 +623,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>30</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,4)</uiPosition>
+    <uiPosition>(4,4)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <Genepack>1</Genepack>
@@ -579,7 +641,7 @@
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>30</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(4,4)</uiPosition>
+		<uiPosition>(5,4)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
 			<AG_Alphapack>1</AG_Alphapack>
@@ -587,6 +649,30 @@
 		  <favorCost>4</favorCost>
 		</royalAid>
 	  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_StimulateStability</defName>
+    <label>stimulate stability</label>
+    <description>Activate mechanites in and around the target's body to instantly tend all injuries and illnesses at 50% quality, but also cause a huge amount of pain for 1 hour.</description>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_TendStim</workerClass>
+    <minTitle>HVMP_EcosphereIV</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>10</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(5,5)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_StimulatedStability</li></hediffs>
+			<soundDef>Coagulate_Cast</soundDef>
+			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+			<extraNumber>0.5</extraNumber><!--tend quality-->
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
   
   <!--Ecosphere level 5-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
@@ -598,7 +684,7 @@
     <permitPointCost>2</permitPointCost>
     <cooldownDays>40</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(5,0)</uiPosition>
+    <uiPosition>(6,0)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <ArchiteCapsule>1</ArchiteCapsule>
@@ -615,7 +701,7 @@
 	<faction>HVMP_EcosphereBranch</faction>
 	<permitPointCost>1</permitPointCost>
 	<cooldownDays>24</cooldownDays>
-	<uiPosition>(5,1)</uiPosition>
+	<uiPosition>(6,1)</uiPosition>
 	<royalAid>
 	  <favorCost>5</favorCost>
 	</royalAid>
@@ -641,7 +727,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>12</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(5,2)</uiPosition>
+    <uiPosition>(6,2)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
     </royalAid>
@@ -665,7 +751,7 @@
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>40</cooldownDays>
-    <uiPosition>(6,0)</uiPosition>
+    <uiPosition>(7,0)</uiPosition>
     <royalAid>
       <favorCost>6</favorCost>
     </royalAid>
@@ -688,7 +774,7 @@
     <permitPointCost>2</permitPointCost>
     <cooldownDays>40</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(6,1)</uiPosition>
+    <uiPosition>(7,1)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <UnstablePowerCell>
@@ -707,7 +793,7 @@
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>2</permitPointCost>
     <cooldownDays>55</cooldownDays>
-    <uiPosition>(6,2)</uiPosition>
+    <uiPosition>(7,2)</uiPosition>
     <royalAid>
       <favorCost>8</favorCost>
     </royalAid>
@@ -724,7 +810,7 @@
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>2</permitPointCost>
     <cooldownDays>55</cooldownDays>
-    <uiPosition>(6,3)</uiPosition>
+    <uiPosition>(7,3)</uiPosition>
     <royalAid>
       <favorCost>8</favorCost>
     </royalAid>
@@ -742,7 +828,7 @@
     <permitPointCost>2</permitPointCost>
     <cooldownDays>80</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(7,0)</uiPosition>
+    <uiPosition>(7,4)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <HVMP_GTDrill>

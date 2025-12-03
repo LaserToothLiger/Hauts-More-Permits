@@ -378,16 +378,5 @@
       </li>
     </stages>
   </HediffDef>
-  <HediffDef ParentName="HVT_TraitHediffBase" MayRequire="Ludeon.RimWorld.Ideology">
-    <defName>HVMP_TactlessTongues</defName>
-    <label>tactless tongue</label>
-    <description>Questions asked by this anthropologist are likelier to be offensive, and are more offensive if so.</description>
-	<hediffClass>HediffWithComps</hediffClass>
-    <stages>
-      <li>
-		<becomeVisible>false</becomeVisible>
-      </li>
-    </stages>
-  </HediffDef>
 
 </Defs>

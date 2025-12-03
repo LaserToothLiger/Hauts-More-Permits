@@ -3,8 +3,8 @@
 <!--Initialization-->
 <HVMP_Initialize>[Hauts' Enterprise: More Permits] active.</HVMP_Initialize>
 <!--Mod settings-->
-<HVMP_SettingSeniorityScalingPermits>Permit effects scale with permit-user's rank</HVMP_SettingSeniorityScalingPermits>
-<HVMP_TooltipSeniorityScalingPermits>If enabled, some permits increase in effect based on the user's rank. Such permits' scaling is mentioned in their descriptions.\n\nEven if this setting is disabled, the descriptions of these permits will still mention the scaling - it just won't occur.</HVMP_TooltipSeniorityScalingPermits>
+<HVMP_SettingSeniorityScalingPermits>Some permits' effects scale with user's rank</HVMP_SettingSeniorityScalingPermits>
+<HVMP_TooltipSeniorityScalingPermits>If enabled, some permits increase in effect based on the user's rank. Most, but not all, resource-dropping permits have this property.\n\nThe function of such permits changes as soon as you change this setting, but their descriptions in the permit selection window will not update until you restart the game.</HVMP_TooltipSeniorityScalingPermits>
 <HVMP_SettingChaosMode>E-branches issue quests on independent timers</HVMP_SettingChaosMode>
 <HVMP_TooltipChaosMode>Enterprise-branch quests are issued to the player on a timer whose duration is set below. How the timer works is determined by this setting:\n\n-If enabled, each e-branch issues quests based on its own timer.\n\n-If disabled, there is one timer, and whenever it triggers only ONE e-branch will issue a quest.</HVMP_TooltipChaosMode>
 <HVMP_SettingMinDays>Min days between random e-branch quests</HVMP_SettingMinDays>
@@ -85,7 +85,7 @@
 <HVMP_TooCloseToHatchery>Hatchery must not be too close to another hatchery.</HVMP_TooCloseToHatchery>
 <HVMP_BadSkipSpot>Cannot teleport into an obstructed space</HVMP_BadSkipSpot>
 <!--Permit activation messages-->
-<HVMP_CombatAssistance>The {FACTION_name} has rendered combat assistance.</HVMP_CombatAssistance>
+<HVMP_AssistanceProgram>The {FACTION_name} has activated its assistance program.</HVMP_AssistanceProgram>
 <HVMP_CaravanAssistance>The {FACTION_name} has marked the target for caravan assistance.</HVMP_CaravanAssistance>
 <HVMP_MessagePermitAnimal>The {FACTION_name} has deployed their remote animal pulser weapon at the requested location.</HVMP_MessagePermitAnimal>
 <HVMP_MessagePermitChiller>The {FACTION_name} has deployed their climate-cooling weapon at the requested location. It will last for 3 days.</HVMP_MessagePermitChiller>
@@ -119,6 +119,8 @@
 <HVMP_UsePermitHediffGizmo>Use {0} permits ({1} charges)</HVMP_UsePermitHediffGizmo>
 <HVMP_UsePermitHediffGizmoDesc>Call for aid using a special permit.\n\nEach permit costs a certain number of charges, which can be regained by implanting more permit targeters.</HVMP_UsePermitHediffGizmoDesc>
 <HVMP_UsePermitTargeterOption>Use {0} (cost: {1})</HVMP_UsePermitTargeterOption>
+<HVMP_PalletOpeningLabel>Upon opening the pallet, {PAWN_nameDef} finds...</HVMP_PalletOpeningLabel>
+<HVMP_Choose>Select an option.</HVMP_Choose>
 <HVMP_ProbabilityTunerActivated>The probability tuner affixed to {PAWN_nameDef} has activated, and subsequently disintegrated.</HVMP_ProbabilityTunerActivated>
 <!--Quest generique-->
 <HVMP_CCProgress>Progress: {0}/{1}</HVMP_CCProgress>
@@ -203,6 +205,8 @@
 <HVMP_LovecraftMutationLabel>Manhunter shockwave</HVMP_LovecraftMutationLabel>
 <HVMP_LovecraftMutationText>A roiling wave of psychic energy has swept over the landscape. It has reshaped the musculature of many animals in the area, turning them into terrifying creatures.</HVMP_LovecraftMutationText>
 <!--Occult Natali-->
+<HVMP_OnlyOnePartyLabel>\nOnly one group can enter.</HVMP_OnlyOnePartyLabel>
+<HVMP_LabyrinthAlreadyGenerated>The anomaly has already been entered. It will not accept new entrants.</HVMP_LabyrinthAlreadyGenerated>
 <HVMP_LetterObeliskDiscovered>{PAWN_nameDef} has discovered a large obelisk. In between its twisting prongs, {PAWN_pronoun} catches fleeting synesthetic impressions of different locations across the planet. Perhaps it can be activated to return {PAWN_objective} home.\n\nSelect {PAWN_nameDef} and right-click the obelisk to activate it.</HVMP_LetterObeliskDiscovered>
 <!--Pax offering-->
 <HVMP_GoodwillCurried>Goodwill curried: {0}/{1}</HVMP_GoodwillCurried>
@@ -289,14 +293,14 @@
 <HVMP_HardMode_Tooltip_Mundi_2>The quest has a deadline of 12-20 days.</HVMP_HardMode_Tooltip_Mundi_2>
 <HVMP_HardMode_Label_Mundi_3>The Wages of Sin</HVMP_HardMode_Label_Mundi_3>
 <HVMP_HardMode_Tooltip_Mundi_3>Goodwill losses count for twice as much against quest progress.</HVMP_HardMode_Tooltip_Mundi_3>
-<HVMP_Label_Populus>Populus</HVMP_Label_Populus>
-<HVMP_Tooltip_Populus>Take care of some refugees for several days. A raid might pursue them.</HVMP_Tooltip_Populus>
-<HVMP_HardMode_Label_Populus_1>Mass Displacement</HVMP_HardMode_Label_Populus_1>
-<HVMP_HardMode_Tooltip_Populus_1>Number of refugees increased, from anywhere from +1 to +35% of your current colonist count.</HVMP_HardMode_Tooltip_Populus_1>
-<HVMP_HardMode_Label_Populus_2>VIPs</HVMP_HardMode_Label_Populus_2>
-<HVMP_HardMode_Tooltip_Populus_2>The quest can be failed if any refugee's mood remains too low for too long.</HVMP_HardMode_Tooltip_Populus_2>
-<HVMP_HardMode_Label_Populus_3>Worse Than Useless</HVMP_HardMode_Label_Populus_3>
-<HVMP_HardMode_Tooltip_Populus_3>Each refugee has at least one negative trait.</HVMP_HardMode_Tooltip_Populus_3>
+<HVMP_Label_Populus>Proximum</HVMP_Label_Populus>
+<HVMP_Tooltip_Populus>Allow a shuttle of friendly mercenaries and noncombatants to land nearby. You must protect them (a raid is chasing them) until a rescue shuttle arrives a few hours later.\n\nUnlike other quest types, goodwill loss for failing this quest is not tied to mod settings; it's simply based on how many of the crashlanders you failed to protect.</HVMP_Tooltip_Populus>
+<HVMP_HardMode_Label_Populus_1>Every Expense Spared</HVMP_HardMode_Label_Populus_1>
+<HVMP_HardMode_Tooltip_Populus_1>None of the crashlanders are armed mercenaries.</HVMP_HardMode_Tooltip_Populus_1>
+<HVMP_HardMode_Label_Populus_2>Hell On Their Heels</HVMP_HardMode_Label_Populus_2>
+<HVMP_HardMode_Tooltip_Populus_2>The raid attacks within an hour of the shuttle crash, and is 2x as strong.</HVMP_HardMode_Tooltip_Populus_2>
+<HVMP_HardMode_Label_Populus_3>Revenge of the Space Junk</HVMP_HardMode_Label_Populus_3>
+<HVMP_HardMode_Tooltip_Populus_3>A problem causer ship part will fall down somewhere on the same map as the shuttle.</HVMP_HardMode_Tooltip_Populus_3>
 <HVMP_Label_Vox>Vox</HVMP_Label_Vox>
 <HVMP_Tooltip_Vox>Succeed at peace talks with a "minor faction".</HVMP_Tooltip_Vox>
 <HVMP_HardMode_Label_Vox_1>Allies Attract Allies</HVMP_HardMode_Label_Vox_1>
@@ -353,8 +357,8 @@
 <HVMP_HardMode_Tooltip_Ethnography_1>Twice as many questions must be asked to succeed.</HVMP_HardMode_Tooltip_Ethnography_1>
 <HVMP_HardMode_Label_Ethnography_2>Sensitive Souls</HVMP_HardMode_Label_Ethnography_2>
 <HVMP_HardMode_Tooltip_Ethnography_2>Anthropologists have 1.2x hunger rate, 1.2x rest fall rate, 1.25x joy fall rate, and +20% negative thought duration.</HVMP_HardMode_Tooltip_Ethnography_2>
-<HVMP_HardMode_Label_Ethnography_3>Tactless Tongues</HVMP_HardMode_Label_Ethnography_3>
-<HVMP_HardMode_Tooltip_Ethnography_3>Questions are twice as likely to cause mood debuffs, and always inflict an extra stack of the debuff.</HVMP_HardMode_Tooltip_Ethnography_3>
+<HVMP_HardMode_Label_Ethnography_3>Worse Than Useless</HVMP_HardMode_Label_Ethnography_3>
+<HVMP_HardMode_Tooltip_Ethnography_3>Each anthropologist has at least one negative trait.</HVMP_HardMode_Tooltip_Ethnography_3>
 <HVMP_Label_Excavation>Excavation</HVMP_Label_Excavation>
 <HVMP_Tooltip_Excavation>Hack all the terminals in an ancient complex.</HVMP_Tooltip_Excavation>
 <HVMP_HardMode_Label_Excavation_1>"Cyber" Security</HVMP_HardMode_Label_Excavation_1>

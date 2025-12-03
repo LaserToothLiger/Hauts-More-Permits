@@ -20,7 +20,8 @@
 	<useHitPoints>false</useHitPoints>
     <statBases>
       <Flammability>0</Flammability>
-    </statBases>  
+    </statBases>
+	<noRightClickDraftAttack>true</noRightClickDraftAttack>
     <building>
 	  <deconstructible>false</deconstructible>
 	  <isTargetable>false</isTargetable>
@@ -69,7 +70,7 @@
 	<baseChance>0.5</baseChance>
   </HautsPermits.HackRewardDef>
   
-  <HautsPermits.HackRewardDef>
+  <!--<HautsPermits.HackRewardDef>
     <defName>HVMP_RewardMoolah</defName>
     <itemsToDrop>
         <Silver>500</Silver>
@@ -84,6 +85,14 @@
     </itemsToDrop>
 	<guaranteedForFaction>HVMP_CommerceBranch</guaranteedForFaction>
 	<baseChance>0</baseChance>
+  </HautsPermits.HackRewardDef>-->
+  <HautsPermits.HackRewardDef>
+    <defName>HVMP_RewardLootBox</defName>
+    <itemsToDrop>
+        <HVMP_TradeGoodsPallet>1</HVMP_TradeGoodsPallet>
+    </itemsToDrop>
+	<guaranteedForFaction>HVMP_CommerceBranch</guaranteedForFaction>
+	<baseChance>0.05</baseChance>
   </HautsPermits.HackRewardDef>
   <HautsPermits.HackRewardDef>
     <defName>HVMP_RewardMoolahGeneric</defName>

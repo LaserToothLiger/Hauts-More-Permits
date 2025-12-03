@@ -84,8 +84,8 @@
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_CraftsDropI</defName>
-    <label>crafts drop</label>
-    <description>Call for a drop of 45 wood, 45 cloth, and 4 dye per rank held with the Commerce Branch (90, 90, and 8 if the caller is a Trader; 135, 135, and 12 if the caller is an Investor; and so on and so forth).</description>
+    <label>wood and dye drop</label>
+    <description>Call for a drop of 145 wood and 29 dye per rank held with the Commerce Branch (290 and 58 if the caller is a Trader; 435 and 87 if the caller is an Investor; and so on and so forth).</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -94,12 +94,16 @@
     <uiPosition>(0,2)</uiPosition>
     <royalAid>
       <itemsToDrop>
-        <WoodLog>45</WoodLog>
-        <Cloth>45</Cloth>
-        <Dye>4</Dye>
+        <WoodLog>145</WoodLog>
+        <Dye>29</Dye>
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 145 wood and 29 dye.</extraString><!--use this description instead if the rank-scaling mod setting is disabled-->
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_SteelDropI</defName>
@@ -117,11 +121,16 @@
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 132 steel.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
-    <defName>HVMP_JadeDropI</defName>
-    <label>jade drop</label>
-    <description>Call for a drop of 50 jade per rank held with the Commerce Branch (100 if the caller is a Trader; 150 if the caller is an Investor; and so on and so forth).</description>
+    <defName>HVMP_MasonryDropI</defName>
+    <label>masonry drop</label>
+    <description>Call for a drop of 1 masonry pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is an Investor; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of stone blocks of your choice.</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -130,61 +139,15 @@
     <uiPosition>(0,3.5)</uiPosition>
     <royalAid>
       <itemsToDrop>
-        <Jade>50</Jade>
+        <HVMP_MasonryPallet>1</HVMP_MasonryPallet>
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
-    <defName>HVMP_PlasteelDropI</defName>
-    <label>plasteel drop</label>
-    <description>Call for a drop of 28 plasteel per rank held with the Commerce Branch (56 if the caller is a Trader; 84 if the caller is an Investor; and so on and so forth).</description>
-    <minTitle>HVMP_CommerceI</minTitle>
-    <faction>HVMP_CommerceBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>14</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(0,4.25)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <Plasteel>28</Plasteel>
-      </itemsToDrop>
-      <favorCost>3</favorCost>
-    </royalAid>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
-    <defName>HVMP_UraniumDropI</defName>
-    <label>uranium drop</label>
-    <description>Call for a drop of 42 uranium per rank held with the Commerce Branch (84 if the caller is a Trader; 126 if the caller is an Investor; and so on and so forth).</description>
-    <minTitle>HVMP_CommerceI</minTitle>
-    <faction>HVMP_CommerceBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>14</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(1,2)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <Uranium>42</Uranium>
-      </itemsToDrop>
-      <favorCost>3</favorCost>
-    </royalAid>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
-    <defName>HVMP_CompDropI</defName>
-    <label>component drop</label>
-    <description>Call for a drop of 10 components per rank held with the Commerce Branch (20 if the caller is a Trader; 30 if the caller is an Investor; and so on and so forth).</description>
-    <minTitle>HVMP_CommerceI</minTitle>
-    <faction>HVMP_CommerceBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>14</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(1,2.75)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <ComponentIndustrial>10</ComponentIndustrial>
-      </itemsToDrop>
-      <favorCost>3</favorCost>
-    </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 1 masonry pallet. Each pallet contains 250 silver's worth of a type of stone blocks of your choice.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_FuelDropI</defName>
@@ -195,13 +158,129 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>14</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(1,3.5)</uiPosition>
+    <uiPosition>(0,4.25)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <Chemfuel>110</Chemfuel>
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 110 chemfuel.</extraString>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
+    <defName>HVMP_UraniumDropI</defName>
+    <label>uranium drop</label>
+    <description>Call for a drop of 42 uranium per rank held with the Commerce Branch (84 if the caller is a Trader; 126 if the caller is an Investor; and so on and so forth).</description>
+    <minTitle>HVMP_CommerceI</minTitle>
+    <faction>HVMP_CommerceBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>14</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(0,5)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <Uranium>42</Uranium>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 42 uranium.</extraString>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
+    <defName>HVMP_CraftsDropII</defName>
+    <label>cloth and dye drop</label>
+    <description>Call for a drop of 145 cloth and 14 dye per rank held with the Commerce Branch (290 and 28 if the caller is a Trader; 435 and 42 if the caller is an Investor; and so on and so forth).</description>
+    <minTitle>HVMP_CommerceI</minTitle>
+    <faction>HVMP_CommerceBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>14</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(1,2)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <Cloth>145</Cloth>
+        <Dye>14</Dye>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 145 cloth and 14 dye.</extraString>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
+    <defName>HVMP_PlasteelDropI</defName>
+    <label>plasteel drop</label>
+    <description>Call for a drop of 28 plasteel per rank held with the Commerce Branch (56 if the caller is a Trader; 84 if the caller is an Investor; and so on and so forth).</description>
+    <minTitle>HVMP_CommerceI</minTitle>
+    <faction>HVMP_CommerceBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>14</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(1,2.75)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <Plasteel>28</Plasteel>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 28 plasteel.</extraString>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
+    <defName>HVMP_JadeDropI</defName>
+    <label>jade drop</label>
+    <description>Call for a drop of 50 jade per rank held with the Commerce Branch (100 if the caller is a Trader; 150 if the caller is an Investor; and so on and so forth).</description>
+    <minTitle>HVMP_CommerceI</minTitle>
+    <faction>HVMP_CommerceBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>14</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(1,3.5)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <Jade>50</Jade>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 50 jade.</extraString>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
+    <defName>HVMP_CompDropI</defName>
+    <label>component drop</label>
+    <description>Call for a drop of 10 components per rank held with the Commerce Branch (20 if the caller is a Trader; 30 if the caller is an Investor; and so on and so forth).</description>
+    <minTitle>HVMP_CommerceI</minTitle>
+    <faction>HVMP_CommerceBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>14</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(1,4.25)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <ComponentIndustrial>10</ComponentIndustrial>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 10 components.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="Ludeon.RimWorld.Odyssey">
 	<defName>HVMP_ObsidianDropI</defName>
@@ -212,13 +291,18 @@
 	<permitPointCost>1</permitPointCost>
 	<cooldownDays>14</cooldownDays>
 	<usableOnWorldMap>true</usableOnWorldMap>
-	<uiPosition>(1,4.25)</uiPosition>
+	<uiPosition>(1,5)</uiPosition>
 	<royalAid>
 	  <itemsToDrop>
 		<Obsidian>50</Obsidian>
 	  </itemsToDrop>
 	  <favorCost>3</favorCost>
 	</royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 50 obsidian.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="GT.Sam.GlitterTech">
 		<defName>HVMP_TitaniumDropI</defName>
@@ -236,6 +320,11 @@
 		  </itemsToDrop>
 		  <favorCost>3</favorCost>
 		</royalAid>
+		<modExtensions>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 8 titanium.</extraString>
+			</li>
+		</modExtensions>
 	  </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="GT.Sam.GlitterTech">
 		<defName>HVMP_SiliconDropI</defName>
@@ -253,6 +342,11 @@
 		  </itemsToDrop>
 		  <favorCost>3</favorCost>
 		</royalAid>
+		<modExtensions>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 250 silicon.</extraString>
+			</li>
+		</modExtensions>
 	  </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="GT.Sam.GlitterTech">
 		<defName>HVMP_AlphaPolyDropI</defName>
@@ -270,6 +364,11 @@
 		  </itemsToDrop>
 		  <favorCost>3</favorCost>
 		</royalAid>
+		<modExtensions>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 2 alpha poly.</extraString>
+			</li>
+		</modExtensions>
 	  </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="GT.Sam.GlitterTech">
 		<defName>HVMP_BetaPolyDropI</defName>
@@ -287,11 +386,16 @@
 		  </itemsToDrop>
 		  <favorCost>3</favorCost>
 		</royalAid>
+		<modExtensions>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 1 beta poly.</extraString>
+			</li>
+		</modExtensions>
 	  </RoyalTitlePermitDef>
-	  <RoyalTitlePermitDef ParentName="HVMP_DROCSeniorityScalingBase" MayRequire="zylle.Gemstones">
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="zylle.Gemstones">
 		<defName>HVMP_GemstoneDropI</defName>
 		<label>gemstone drop</label>
-		<description>Call for a drop of 50 gemstones per rank held with the Commerce Branch (100 if the caller is a Trader; 150 if the caller is an Investor; and so on and so forth). The gemstone type is random.</description>
+		<description>Call for a drop of 1 gemstone pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is an Investor; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of gemstone of your choice.</description>
 		<minTitle>HVMP_CommerceI</minTitle>
 		<faction>HVMP_CommerceBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -299,22 +403,21 @@
 		<usableOnWorldMap>true</usableOnWorldMap>
 		<uiPosition>(3,2)</uiPosition>
 		<royalAid>
+		  <itemsToDrop>
+			<HVMP_GemstonePallet>1</HVMP_GemstonePallet>
+		  </itemsToDrop>
 		  <favorCost>3</favorCost>
 		</royalAid>
 		<modExtensions>
-			<li Class="HautsFramework.PermitMoreEffects">
-				<thingCategories>
-				  <li>Z_Gemstones</li>
-				</thingCategories>
-				<allRandomOutcomesMustBeSamePerUse>true</allRandomOutcomesMustBeSamePerUse>
-				<numFromCategory>50</numFromCategory>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 1 gemstone pallet. Each pallet contains 250 silver's worth of a type of gemstone of your choice.</extraString>
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
-	  <RoyalTitlePermitDef ParentName="HVMP_DROCSeniorityScalingBase" MayRequire="sarg.alphacrafts">
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="sarg.alphacrafts">
 		<defName>HVMP_ArtisanalDropI</defName>
 		<label>artisanal drop</label>
-		<description>Call for a drop of 4 artisanal craft products per rank held with the Commerce Branch (8 if the caller is a Trader; 12 if the caller is an Investor; and so on and so forth). The product type is random.</description><!--average market value per unit is just over 100 silver at level 1 (favoring lower if they can't reach a clean 250). However, like Component Drop you can MAKE most of these out of CHEAPER ingredients, and like Gemstone Drop the randomness of the dropped product makes them harder to use, so we treat their prices as somewhat lower.-->
+		<description>Call for a drop of 1 artisan pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is an Investor; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of artisanal craft of your choice.</description>
 		<minTitle>HVMP_CommerceI</minTitle>
 		<faction>HVMP_CommerceBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -322,15 +425,14 @@
 		<usableOnWorldMap>true</usableOnWorldMap>
 		<uiPosition>(3,2.75)</uiPosition>
 		<royalAid>
+		  <itemsToDrop>
+			<HVMP_ArtisanPallet>1</HVMP_ArtisanPallet>
+		  </itemsToDrop>
 		  <favorCost>3</favorCost>
 		</royalAid>
 		<modExtensions>
-			<li Class="HautsFramework.PermitMoreEffects">
-				<thingCategories>
-				  <li>AC_ArtisanProducts</li>
-				</thingCategories>
-				<allRandomOutcomesMustBeSamePerUse>true</allRandomOutcomesMustBeSamePerUse>
-				<numFromCategory>4</numFromCategory>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 1 artisan pallet. Each pallet contains 250 silver's worth of a type of artisanal craft of your choice.</extraString>
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
@@ -383,7 +485,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_CallDropPods</defName>
     <label>signal cargo pods</label>
-    <description>Arrange for someone to look the other way while resource-containing drop pods conveniently misfire and land near your location.\n\nAn additional set of cargo pods is sent per additional rank held with the Commerce Branch (2 if the caller is an Investor; 3 if the caller is a Financier; and so on and so forth).</description>
+    <description>Arrange for someone to look the other way while resource-containing drop pods conveniently misfire and land near your location. An additional set of cargo pods is sent per additional rank held with the Commerce Branch (2 if the caller is an Investor; 3 if the caller is a Financier; and so on and so forth).</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuestSeniorityScaling_PTargFriendly</workerClass>
     <minTitle>HVMP_CommerceII</minTitle>
     <faction>HVMP_CommerceBranch</faction>
@@ -406,13 +508,16 @@
 			  <li MayRequire="VanillaExpanded.VEE">VEE_Cargopodsapparel</li>
 			</incidentDefs>
 			<questCount>-1</questCount><!--seniority scaling grants +1x per 100 seniority, and since each title past commercefriend has +100 seniority, it fires once at title 2 and +1x per title past that. NOTE THAT THIS IS DIFFERENT from how resource seniority scaling works, which is as a multiplier!-->
-        </li>
+		</li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Arrange for someone to look the other way while resource-containing drop pods conveniently misfire and land near your location.</extraString>
+		</li>
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_CallRaidMinor</defName>
     <label>signal minor raid</label>
-    <description>Get the Commerce Branch to lure a small group of raiders by spreading news of your wealth and vulnerability to bandits. The raiders will arrive within 1-2 days.</description>
+    <description>Get the Commerce Branch to lure a small group of raiders (10% to 40% as strong as normal) by spreading news of your wealth and vulnerability to bandits. The raiders will arrive within 1-2 days.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_CallRaid</workerClass>
     <minTitle>HVMP_CommerceII</minTitle>
     <faction>HVMP_CommerceBranch</faction>
@@ -430,7 +535,7 @@
 			</incidentDefs>
 			<incidentUsesPermitFaction>false</incidentUsesPermitFaction><!--as otherwise this would make the Commerce Branch raid you-->
 			<incidentDelay>60000~120000</incidentDelay>
-			<incidentPoints>25~750</incidentPoints>
+			<defaultIncidentPointFactor>0.1~0.4</defaultIncidentPointFactor>
 			<questCount>1</questCount>
         </li>
 	</modExtensions>
@@ -493,7 +598,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_CallRaidMajor</defName>
     <label>signal major raid</label>
-    <description>Get the Commerce Branch to lure a large group of raiders by spreading news of your wealth and vulnerability to bandits. They will arrive within 1-2 days.</description>
+    <description>Get the Commerce Branch to lure a large group of raiders (as large as a typical raid) by spreading news of your wealth and vulnerability to bandits. They will arrive within 1-2 days.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_CallRaid</workerClass>
     <minTitle>HVMP_CommerceIV</minTitle>
     <faction>HVMP_CommerceBranch</faction>
@@ -511,7 +616,7 @@
 			</incidentDefs>
 			<incidentUsesPermitFaction>false</incidentUsesPermitFaction>
 			<incidentDelay>60000~120000</incidentDelay>
-			<incidentPoints>2500~5000</incidentPoints>
+			<defaultIncidentPointFactor>0.7~1.1</defaultIncidentPointFactor>
 			<questCount>1</questCount>
         </li>
 	</modExtensions>
@@ -569,7 +674,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_CallRaidExtreme</defName>
     <label>signal extreme raid</label>
-    <description>Get the Commerce Branch to lure a very large group of raiders by spreading news of your wealth and vulnerability to bandits. They will arrive within 1-2 days.</description>
+    <description>Get the Commerce Branch to lure a very large group of raiders (between 125% to 240% as large as normal) by spreading news of your wealth and vulnerability to bandits. They will arrive within 1-2 days.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_CallRaid</workerClass>
     <minTitle>HVMP_CommerceIV</minTitle>
     <faction>HVMP_CommerceBranch</faction>
@@ -587,7 +692,7 @@
 			</incidentDefs>
 			<incidentUsesPermitFaction>false</incidentUsesPermitFaction>
 			<incidentDelay>60000~120000</incidentDelay>
-			<incidentPoints>7500~15000</incidentPoints>
+			<defaultIncidentPointFactor>1.25~2.4</defaultIncidentPointFactor>
 			<questCount>1</questCount>
         </li>
 	</modExtensions>
@@ -664,6 +769,11 @@
       </itemsToDrop>
       <favorCost>2</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 3 firefoam shells.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_SmokeShellDrop</defName>
@@ -681,6 +791,11 @@
       </itemsToDrop>
       <favorCost>2</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 3 smoke shells.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="sarg.alphabiomes">
 		<defName>HVMP_TarShellDrop</defName>
@@ -698,6 +813,11 @@
 		  </itemsToDrop>
 		  <favorCost>2</favorCost>
 		</royalAid>
+		<modExtensions>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 3 tar shells.</extraString>
+			</li>
+		</modExtensions>
 	  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_CombatAssist</defName>
@@ -717,7 +837,7 @@
 		<li Class="HautsFramework.PermitMoreEffects">
 			<hediffs><li>HVMP_CombatAssistProgram</li></hediffs>
 			<soundDef>CrateOpeningStarted</soundDef>
-			<onUseMessage>HVMP_CombatAssistance</onUseMessage>
+			<onUseMessage>HVMP_AssistanceProgram</onUseMessage>
 			<allowAnyFlesh>true</allowAnyFlesh>
 			<allowAnyNonflesh>true</allowAnyNonflesh>
         </li>
@@ -726,12 +846,12 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_OrbitalScalpel</defName>
     <label>orbital scalpel</label>
-    <description>Call for a high-velocity antipersonnel round to be fired from orbit at the target creature, dealing explosive damage.\n\nA slight delay is required to ensure accurate aim against the target if it is a creature, but otherwise the attack will be instantaneous.\n\nTo conserve ammunition, no creature may be marked by more than one orbital scalpel at a time.</description>
+    <description>Call for a high-velocity antipersonnel round to be fired from orbit at the target building or creature, dealing 100 concussive damage instantly.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_OrbitalScalpel</workerClass>
     <minTitle>HVMP_PaxI</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>4</cooldownDays>
+    <cooldownDays>2</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
     <uiPosition>(0,5)</uiPosition>
     <royalAid>
@@ -739,11 +859,9 @@
     </royalAid>
 	<modExtensions>
 		<li Class="HautsFramework.PermitMoreEffects">
-			<hediffs><li>HVMP_OrbitalScalpelMarker</li></hediffs>
+			<hediffs><li>HVMP_ScalpelTracker</li></hediffs>
 			<allowAnyFlesh>true</allowAnyFlesh>
 			<allowAnyNonflesh>true</allowAnyNonflesh>
-			<soundDef>Shot_TurretSniper</soundDef>
-			<extraNumber>50</extraNumber><!--how much bomb damage you get per shot-->
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -799,7 +917,7 @@
       <favorCost>2</favorCost>
     </royalAid>
   </RoyalTitlePermitDef>
-  <!--graser turret drop goes here in the ordering, but depends on Biotech plus another mod-->
+  <!--graser turret drop goes here in the ordering (1,3), but depends on Biotech plus another mod so is written in the Biotech folder-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_MiniTurretDrop</defName>
     <label>portable turret drop</label>
@@ -824,7 +942,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_GoJuiceDrop</defName>
     <label>go-juice drop</label>
-    <description>Call for a drop of 8 go-juice canisters, plus another 4 per rank held with the Pax Branch past Adarga (12 if the caller is an Aspis; 9 if the caller is an Ishilangu; and so on and so forth).</description>
+    <description>Call for a drop of 8 go-juice canisters, plus 4 per rank held with the Pax Branch past Adarga (12 if the caller is an Aspis; 9 if the caller is an Ishilangu; and so on and so forth).</description>
     <minTitle>HVMP_PaxII</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -837,6 +955,11 @@
       </itemsToDrop>
       <favorCost>2</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 8 go-juice canisters.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <!--Pax level 4-->
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="GoGaTio.LostFactoryMechanoids">
@@ -876,7 +999,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_EMPShellDrop</defName>
     <label>EMP shell drop</label>
-    <description>Call for a drop of 4 EMP shells, plus another 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
+    <description>Call for a drop of 4 EMP shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
     <minTitle>HVMP_PaxIV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -889,11 +1012,16 @@
       </itemsToDrop>
       <favorCost>4</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 4 EMP shells.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_HEShellDrop</defName>
     <label>HE shell drop</label>
-    <description>Call for a drop of 4 high-explosive shells, plus another 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
+    <description>Call for a drop of 4 high-explosive shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
     <minTitle>HVMP_PaxIV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -906,11 +1034,16 @@
       </itemsToDrop>
       <favorCost>4</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 4 high-explosive shells.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="Ludeon.RimWorld.Biotech">
     <defName>HVMP_ToxShellDrop</defName>
     <label>tox shell drop</label>
-    <description>Call for a drop of 4 tox shells, plus another 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
+    <description>Call for a drop of 4 tox shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
     <minTitle>HVMP_PaxIV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -923,11 +1056,16 @@
       </itemsToDrop>
       <favorCost>4</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 4 tox shells.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="Ludeon.RimWorld.Anomaly">
     <defName>HVMP_DeadlifeShellDrop</defName>
     <label>deadlife shell drop</label>
-    <description>Call for a drop of 4 deadlife shells, plus another 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
+    <description>Call for a drop of 4 deadlife shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
     <minTitle>HVMP_PaxIV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -940,6 +1078,11 @@
       </itemsToDrop>
       <favorCost>4</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 4 deadlife shells.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="OskarPotocki.VFE.Deserters">
 		<defName>HVMP_ClusterShellDrop</defName>
@@ -961,12 +1104,15 @@
 			<li Class="HautsFramework.PermitMoreEffects">
 				<phenomenonCount>200</phenomenonCount><!--seniority is divided by this much for purposes of scaling, as opposed to the 100 default-->
 			</li>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 2 cluster shells.</extraString>
+			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="OskarPotocki.VFE.Deserters">
 		<defName>HVMP_PiercingShellDrop</defName>
 		<label>piercing shell drop</label>
-		<description>Call for a drop of 4 armor-piercing shells, plus another 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
+		<description>Call for a drop of 4 armor-piercing shells, plus 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
 		<minTitle>HVMP_PaxIV</minTitle>
 		<faction>HVMP_PaxBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -979,11 +1125,16 @@
 		  </itemsToDrop>
 		  <favorCost>4</favorCost>
 		</royalAid>
+		<modExtensions>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 4 armor-piercing shells.</extraString>
+			</li>
+		</modExtensions>
 	  </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="OskarPotocki.VFE.Deserters">
 		<defName>HVMP_ShrapnelShellDrop</defName>
 		<label>shrapnel shell drop</label>
-		<description>Call for a drop of 4 shrapnel shells, plus another 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
+		<description>Call for a drop of 4 shrapnel shells, plus 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
 		<minTitle>HVMP_PaxIV</minTitle>
 		<faction>HVMP_PaxBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -996,6 +1147,11 @@
 		  </itemsToDrop>
 		  <favorCost>4</favorCost>
 		</royalAid>
+		<modExtensions>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 4 shrapnel shells.</extraString>
+			</li>
+		</modExtensions>
 	  </RoyalTitlePermitDef>
   <!--Pax level 5-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
@@ -1077,7 +1233,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_EMIDisruption</defName>
     <label>EMI disruption</label>
-    <description>Activate a targeted EMI dynamo, shutting down all electronic devices in the region for 1 day, and stunning hostile buildings for 1 hour.</description>
+    <description>Activate a targeted EMI dynamo, shutting down all electronic devices in the region for 1 day, and stunning hostile buildings for the first hour.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_EMI</workerClass>
     <minTitle>HVMP_PaxV</minTitle>
     <faction>HVMP_PaxBranch</faction>
@@ -1299,6 +1455,9 @@
 			<bookTitlePack>HVMP_TravelogueTitle</bookTitlePack>
 			<bookDescPack>HVMP_TravelogueDesc</bookDescPack>
 			<bookSuperQualityChance>0.1</bookSuperQualityChance>
+		</li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a random travelogue.\n\nTravelogues make for recreational reading.</extraString>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -1382,6 +1541,11 @@
       </itemsToDrop>
       <favorCost>2</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 12 packaged survival meals.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_BeerDrop</defName>
@@ -1399,6 +1563,11 @@
       </itemsToDrop>
       <favorCost>2</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 20 beer bottles.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_CaravanForageBoost</defName>
@@ -1524,7 +1693,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_PowerDrop</defName>
     <label>power drop</label>
-    <description>Call for a drop of 100 chemfuel and 1 fully charged battery, plus another 50 chemfuel per rank held with the Rover Branch past Itinerant (150 if the caller is a Wayfarer; 200 and 4 if the caller is a Voyager; and so on and so forth).</description>
+    <description>Call for a drop of 100 chemfuel and 1 fully charged battery. Another 50 chemfuel is dropped per rank held with the Rover Branch past Itinerant (150 if the caller is a Wayfarer; 200 and 4 if the caller is a Voyager; and so on and so forth).</description>
     <minTitle>HVMP_RoverII</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1538,6 +1707,11 @@
       </itemsToDrop>
       <favorCost>2</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 100 chemfuel and 1 fully charged battery.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_TelescopeDrop</defName>
@@ -1616,6 +1790,11 @@
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 150 gravlite panels.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_LocateItemStash</defName>
@@ -1753,7 +1932,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DROCSeniorityScalingBase" MayRequire="OskarPotocki.VanillaVehiclesExpanded">
 		<defName>HVMP_CarPartDrop</defName>
 		<label>car part drop</label>
-		<description>Call for a drop of 3 random car parts, plus an additional one per rank held with the Rover Branch past Voyager (4 if the caller is a Cartographer; 5 if the caller is a Globetrotter).</description>
+		<description>Call for a drop of 3 random car parts, plus another 1 per rank held with the Rover Branch past Voyager (4 if the caller is a Cartographer; 5 if the caller is a Globetrotter).</description>
 		<minTitle>HVMP_RoverIV</minTitle>
 		<faction>HVMP_RoverBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -1769,6 +1948,9 @@
 				</thingCategories>
 				<maxTechLevelInCategory>Spacer</maxTechLevelInCategory>
 				<numFromCategory>1</numFromCategory>
+			</li>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 3 random car parts.</extraString>
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>

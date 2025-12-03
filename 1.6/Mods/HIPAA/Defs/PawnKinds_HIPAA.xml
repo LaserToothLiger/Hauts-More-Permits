@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
   
+  <!--permits, mostly-->
   <PawnKindDef Name="HVMP_PsionBase" ParentName="MercenaryGunnerBase" Abstract="True">
     <defaultFactionType>Ancients</defaultFactionType>
     <initialWillRange>12~15</initialWillRange>

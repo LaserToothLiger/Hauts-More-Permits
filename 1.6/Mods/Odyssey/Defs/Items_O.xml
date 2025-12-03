@@ -44,6 +44,47 @@
   </ThingDef>
   
   <ThingDef ParentName="MechSerumBase">
+    <defName>HVMP_TradeGoodsPallet</defName>
+    <label>trade goods pallet</label>
+    <description>A crate containing up to 5,000 silver worth of goods. You can choose what type of item is inside by opening it.</description>
+    <graphicData>
+      <texPath>Items/HVMP_MysteryPallet</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <techLevel>Ultra</techLevel>
+    <tradeTags Inherit="False" />
+    <stackLimit>1</stackLimit>
+    <statBases>
+      <MarketValue>250</MarketValue>
+	  <Mass>35</Mass><!--something something ultratech-->
+    </statBases>
+    <thingCategories Inherit="False">
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>None</tradeability>
+    <thingSetMakerTags Inherit="False" />
+    <comps>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Open {0_label}</useLabel>
+        <useDuration>10</useDuration>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+      <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
+        <!--no specified thing category. Items only need to meet the following criteria, have a non-None tradeability, and be bona fide 'items' to be valid options-->
+		<maxNumOptions>10</maxNumOptions>
+		<netMarketValueOutputCap>5000</netMarketValueOutputCap>
+		<onlyHasStackableItems>false</onlyHasStackableItems>
+		<countCantExceedStackSize>true</countCantExceedStackSize>
+		<qualityGenerator>Reward</qualityGenerator>
+      </li>
+      <li Class="CompProperties_UseEffectPlaySound">
+        <soundOnUsed>AncientHermeticCrate_Opened</soundOnUsed>
+      </li>
+    </comps>
+    <allowedArchonexusCount>2</allowedArchonexusCount>
+  </ThingDef>
+  <ThingDef ParentName="MechSerumBase">
     <defName>HVMP_BSU</defName>
     <label>blackbody shield unit</label>
     <description>A one-use high-energy repulsor field generator. Unlike conventional personal shields, this field is reinforced enough to stop any kind of attack, is resistant to EMPs, and it can absorb immense amounts of damage before failing. However, the shield generator rapidly overheats, causing itself to irreparably burn out over time. Moreover, the intensity of the shield inhibits even the movements of the wearer, and it distorts incoming light, blinding them as well.</description>

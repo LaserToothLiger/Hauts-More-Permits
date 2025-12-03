@@ -20,27 +20,30 @@
 			<bookDef>Tome</bookDef>
 			<bookSuperQualityChance>0</bookSuperQualityChance>
         </li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a random tome.\n\nTomes can be read to gain dark knowledge, at the expense of potentially driving the reader mad.</extraString>
+        </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DROCSeniorityScalingBase">
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
 	<defName>HVMP_SerumDrop</defName>
 	<label>serum drop</label>
-	<description>Call for a drop of 2 random serums per rank held with the Occult Branch (4 if the caller is a Tamperer; 6 if the caller is a Practitioner; and so on and so forth).</description>
+	<description>Call for a drop of 1 serum pallet per rank held with the Occult Branch (2 if the caller is a Tamperer; 3 if the caller is a Practitioner; and so on and so forth).\n\nEach pallet contains two serums of your choice.</description>
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
 	<permitPointCost>1</permitPointCost>
-	<cooldownDays>6</cooldownDays>
+	<cooldownDays>10</cooldownDays>
 	<uiPosition>(0,1)</uiPosition>
-	<royalAid>
-	  <favorCost>1</favorCost>
-	</royalAid>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_SerumPallet>1</HVMP_SerumPallet>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
 	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<tradeTags>
-			  <li>Serum</li>
-			</tradeTags>
-			<numFromCategory>2</numFromCategory>
-		</li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 1 serum pallet. Each pallet contains two serums of your choice.</extraString>
+        </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="Ludeon.RimWorld.Biotech">
@@ -59,6 +62,11 @@
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 2 basic subcores.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_SelfSkip</defName>
@@ -275,7 +283,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_FlarePackDrop</defName>
     <label>flare pack drop</label>
-    <description>Call for a drop of 1 disruptor flare pack, plus another 1 per rank held with the Occult Branch past Practitioner (4 if the caller is a Convoker; 5 if the caller is a Thaumaturge; 6 if the caller is a Revelantor).</description>
+    <description>Call for a drop of 1 disruptor flare pack, plus another pack per rank held with the Occult Branch past Practitioner (4 if the caller is a Convoker; 5 if the caller is a Thaumaturge; 6 if the caller is a Revelantor).</description>
     <minTitle>HVMP_OccultIII</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -288,6 +296,11 @@
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 1 disruptor flare pack.</extraString>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Biotech">
     <defName>HVMP_SubcoreStandardDrop</defName>
@@ -322,6 +335,11 @@
 		  </itemsToDrop>
 		  <favorCost>4</favorCost>
 		</royalAid>
+		<modExtensions>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 3 eltex.</extraString>
+			</li>
+		</modExtensions>
 	  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef>
     <defName>HVMP_CallGhoulCyber</defName>

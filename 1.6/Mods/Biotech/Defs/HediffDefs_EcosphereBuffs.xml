@@ -25,6 +25,54 @@
     </comps>
   </HediffDef>
   <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_MedicalAssistProgram</defName>
+    <label>ecosphere medical assist</label>
+    <description>A radio link to an automated first aid and surgery assistance program.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.4157,0.8471,0.6902)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statOffsets>
+		  <MedicalTendSpeed>0.2</MedicalTendSpeed>
+		  <MedicalTendQuality>0.3</MedicalTendQuality>
+		  <MedicalSurgerySuccessChance>0.1</MedicalSurgerySuccessChance>
+		</statOffsets>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-6</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_HandlingAssistProgram</defName>
+    <label>ecosphere handling assist</label>
+    <description>A radio link to an automated animal handling assistance program.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.4157,0.8471,0.6902)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statOffsets>
+		  <TameAnimalChance>0.09</TameAnimalChance>
+		  <TrainAnimalChance>0.25</TrainAnimalChance>
+		  <HuntingStealth>0.3</HuntingStealth>
+		</statOffsets>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-6</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
     <defName>HVMP_StimulatedThermotolerance</defName>
     <label>stimulated thermotolerance</label>
     <description>Increased resistance to extreme temperatures due to reprogrammed mechanites embedded in bodily tissues.</description>
@@ -93,6 +141,26 @@
     <comps>
 	  <li Class="HediffCompProperties_SeverityPerDay">
 		<severityPerDay>-0.1</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_StimulatedStability</defName>
+    <label>stimulated stability</label>
+    <description>Pain due to sudden tending of all injuries and illnesses from a heavy dose of mechanites.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.4157,0.8471,0.6902)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<painOffset>1</painOffset>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-24</severityPerDay>
 		<showDaysToRecover>true</showDaysToRecover>
 	  </li>
     </comps>

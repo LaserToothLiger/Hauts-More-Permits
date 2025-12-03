@@ -1061,7 +1061,7 @@
     <questDescriptionRules>
       <rulesStrings>
         <li>questDescription->The [asker_faction_name] has recently identified a spatial anomaly on the terrestrial surface, generated and maintained by the fiat of a mysterious archotech. They would like you to send an exploratory team into the anomaly and discover what lies inside.
-\nThe [asker_faction_name] projects that the anomaly will collapse within [hypercubeTimer_duration].\n[mutatorSuffix]</li>
+\nThe [asker_faction_name] projects that the anomaly will collapse within [hypercubeTimer_duration]. It will only be possible to send one team - further groups will be unable to enter.\n[mutatorSuffix]</li>
 		<li>mutatorSuffix->[mutator_AOEAH_info][mutator_COL_info][mutator_DF_info]</li>
       </rulesStrings>
     </questDescriptionRules>

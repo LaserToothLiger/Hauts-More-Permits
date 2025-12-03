@@ -274,7 +274,7 @@
   
   <FactionDef ParentName="HVMP_EBranchFactionBase">
     <defName>HVMP_PaxBranch</defName>
-    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch focuses on the cessation of hostilities across the world.\n\nIt offers jobs to fight mechanoids, facilitate orbital weapons testing, protect refugees from conflict, and strengthen relations with other factions. Those in good standing with this e-branch may solicit them to deploy defensive structures, provide combat resources, use destructive or climate-changing weaponry, and incite the appearance of non-humanoid enemies.</description>
+    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch focuses on the cessation of hostilities across the world.\n\nIt offers jobs to fight mechanoids, facilitate orbital weapons testing, protect their allies, and strengthen relations with other factions. Those in good standing with this e-branch may solicit them to deploy defensive structures, provide combat resources, use destructive or climate-changing weaponry, and incite the appearance of non-humanoid enemies.</description>
 	<fixedName>Pax Branch</fixedName>
     <label>pax branch</label>
     <royalTitleTags>
@@ -296,7 +296,7 @@
 				<li>HVMP_PaxCaelum</li>
 				<li>HVMP_PaxMachina</li>
 				<li>HVMP_PaxMundi</li>
-				<li>HVMP_PaxPopulus</li>
+				<li>HVMP_PaxProximum</li>
 				<li>HVMP_PaxVox</li>
 			</quests>
 			<donationTraderKind>HVMP_PaxDonations</donationTraderKind>
