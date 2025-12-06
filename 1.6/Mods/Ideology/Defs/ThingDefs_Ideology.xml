@@ -6,7 +6,7 @@
     <defName>HVMP_ObscureScripture</defName>
     <label>obscure scripture</label>
     <description>A book which describes an ideoligion from a distant world. Reading it wears down the certainty of non-believers and can eventually convert them to its ideoligion, but also risks upsetting them. Believers gain certainty instead from reading the book.</description>
-    <tradeability>None</tradeability>
+    <tradeability>Sellable</tradeability>
     <graphicData>
       <texPath>Things/Item/Book/Schematic/Schematic</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -78,7 +78,7 @@
     <defName>HVMP_IdeoPamphlet</defName>
     <label>ideoligious pamphlet</label>
     <description>A book which describes a particular ideoligion. Reading it wears down the certainty of non-believers and can eventually convert them to its ideoligion, but also risks upsetting them. Believers gain certainty instead from reading the book.</description>
-    <tradeability>None</tradeability>
+    <tradeability>Sellable</tradeability>
     <graphicData>
       <texPath>Things/Item/Book/Schematic/Schematic</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -150,7 +150,7 @@
     <defName>HVMP_EsotericTract</defName>
     <label>ideoligious esoterica</label>
     <description>An ideoligious book. It has a very weak persuasive effect on non-believers. Believers, however, gradually gain a buff to all ideoligious stats while reading it.</description>
-    <tradeability>None</tradeability>
+    <tradeability>Sellable</tradeability>
     <graphicData>
       <texPath>Things/Item/Book/Schematic/Schematic</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -225,7 +225,7 @@
     <defName>HVMP_InspiringTract</defName>
     <label>ideoligious inspirational</label>
     <description>An ideoligious book. It has a very weak persuasive effect on non-believers. Believers, however, can become inspired by reading it.</description>
-    <tradeability>None</tradeability>
+    <tradeability>Sellable</tradeability>
     <graphicData>
       <texPath>Things/Item/Book/Schematic/Schematic</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -297,7 +297,7 @@
     <defName>HVMP_MeditativeTract</defName>
     <label>ideoligious meditations</label>
     <description>An ideoligious book. It has a very weak persuasive effect on non-believers. Believers, however, gradually become more attuned to themselves while reading it.</description>
-    <tradeability>None</tradeability>
+    <tradeability>Sellable</tradeability>
     <graphicData>
       <texPath>Things/Item/Book/Schematic/Schematic</texPath>
       <graphicClass>Graphic_Single</graphicClass>

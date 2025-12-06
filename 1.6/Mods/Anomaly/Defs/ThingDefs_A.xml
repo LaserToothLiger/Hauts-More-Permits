@@ -2,7 +2,7 @@
 <Defs>
   
   <!--permits-->
-  <ThingDef ParentName="MechSerumBase">
+  <ThingDef ParentName="HVMP_PalletBase">
     <defName>HVMP_SerumPallet</defName>
     <label>serum pallet</label>
     <description>A crate containing two serums. You can choose what type of serum is inside by opening it.</description>
@@ -10,36 +10,14 @@
       <texPath>Items/HVMP_SerumPallet</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
-    <techLevel>Ultra</techLevel>
-    <tradeTags Inherit="False" />
-    <stackLimit>1</stackLimit>
-    <statBases>
-      <MarketValue>400</MarketValue>
-	  <Mass>35</Mass><!--consistency-->
-    </statBases>
-    <thingCategories>
-      <li>ItemsMisc</li>
-    </thingCategories>
-    <tradeability>None</tradeability>
-    <thingSetMakerTags Inherit="False" />
     <comps>
-      <li Class="CompProperties_Usable">
-        <useJob>UseItem</useJob>
-        <useLabel>Open {0_label}</useLabel>
-        <useDuration>10</useDuration>
-        <showUseGizmo>true</showUseGizmo>
-      </li>
       <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
         <allowedTradeTag>Serum</allowedTradeTag>
 		<maxNumOptions>25</maxNumOptions>
 		<netCountOutputCap>2</netCountOutputCap>
 		<countCantExceedStackSize>true</countCantExceedStackSize>
       </li>
-      <li Class="CompProperties_UseEffectPlaySound">
-        <soundOnUsed>AncientHermeticCrate_Opened</soundOnUsed>
-      </li>
     </comps>
-    <allowedArchonexusCount>10</allowedArchonexusCount>
   </ThingDef>
   <ThingDef ParentName="BuildingBase">
     <defName>HVMP_EltexInhibitor</defName>

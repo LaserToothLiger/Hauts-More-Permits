@@ -20,6 +20,7 @@
       <li>ItemsMisc</li>
     </thingCategories>
     <tradeability>Sellable</tradeability>
+	<genericMarketSellable>false</genericMarketSellable>
     <thingSetMakerTags Inherit="False" />
     <comps>
       <li Class="CompProperties_Usable">
@@ -43,7 +44,7 @@
     <allowedArchonexusCount>1</allowedArchonexusCount>
   </ThingDef>
   
-  <ThingDef ParentName="MechSerumBase">
+  <ThingDef ParentName="HVMP_PalletBase">
     <defName>HVMP_TradeGoodsPallet</defName>
     <label>trade goods pallet</label>
     <description>A crate containing up to 5,000 silver worth of goods. You can choose what type of item is inside by opening it.</description>
@@ -51,25 +52,7 @@
       <texPath>Items/HVMP_MysteryPallet</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
-    <techLevel>Ultra</techLevel>
-    <tradeTags Inherit="False" />
-    <stackLimit>1</stackLimit>
-    <statBases>
-      <MarketValue>250</MarketValue>
-	  <Mass>35</Mass><!--something something ultratech-->
-    </statBases>
-    <thingCategories Inherit="False">
-      <li>ItemsMisc</li>
-    </thingCategories>
-    <tradeability>None</tradeability>
-    <thingSetMakerTags Inherit="False" />
     <comps>
-      <li Class="CompProperties_Usable">
-        <useJob>UseItem</useJob>
-        <useLabel>Open {0_label}</useLabel>
-        <useDuration>10</useDuration>
-        <showUseGizmo>true</showUseGizmo>
-      </li>
       <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
         <!--no specified thing category. Items only need to meet the following criteria, have a non-None tradeability, and be bona fide 'items' to be valid options-->
 		<maxNumOptions>10</maxNumOptions>
@@ -77,9 +60,6 @@
 		<onlyHasStackableItems>false</onlyHasStackableItems>
 		<countCantExceedStackSize>true</countCantExceedStackSize>
 		<qualityGenerator>Reward</qualityGenerator>
-      </li>
-      <li Class="CompProperties_UseEffectPlaySound">
-        <soundOnUsed>AncientHermeticCrate_Opened</soundOnUsed>
       </li>
     </comps>
     <allowedArchonexusCount>2</allowedArchonexusCount>
@@ -95,6 +75,7 @@
     </graphicData>
     <techLevel>Ultra</techLevel>
     <tradeTags Inherit="False" />
+	<genericMarketSellable>false</genericMarketSellable>
     <stackLimit>10</stackLimit>
     <statBases>
       <MarketValue>1000</MarketValue>
@@ -134,6 +115,7 @@
     </graphicData>
     <techLevel>Ultra</techLevel>
     <tradeTags Inherit="False" />
+	<genericMarketSellable>false</genericMarketSellable>
     <stackLimit>10</stackLimit>
     <statBases>
       <MarketValue>1000</MarketValue>
@@ -173,6 +155,7 @@
     </graphicData>
     <techLevel>Ultra</techLevel>
     <tradeTags Inherit="False" />
+	<genericMarketSellable>false</genericMarketSellable>
     <stackLimit>10</stackLimit>
     <statBases>
       <MarketValue>1000</MarketValue>
@@ -214,6 +197,7 @@
     </graphicData>
     <techLevel>Ultra</techLevel>
     <tradeTags Inherit="False" />
+	<genericMarketSellable>false</genericMarketSellable>
     <statBases>
       <MarketValue>200</MarketValue>
       <Mass>0.50</Mass>
@@ -242,6 +226,7 @@
     </graphicData>
     <techLevel>Archotech</techLevel>
     <tradeTags Inherit="False" />
+	<genericMarketSellable>false</genericMarketSellable>
     <stackLimit>10</stackLimit>
     <statBases>
       <MarketValue>1000</MarketValue>

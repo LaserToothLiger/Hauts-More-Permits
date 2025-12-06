@@ -12,6 +12,34 @@
       <anticipationSound>DropPod_Fall_Mechanoid</anticipationSound>
     </skyfaller>
   </ThingDef>
+  <ThingDef ParentName="MechSerumBase" Name="HVMP_PalletBase" Abstract="True">
+    <techLevel>Ultra</techLevel>
+    <tradeTags Inherit="False" />
+    <stackLimit>1</stackLimit>
+    <statBases>
+      <MarketValue>250</MarketValue>
+	  <Mass>35</Mass><!--something something ultratech-->
+    </statBases>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>None</tradeability>
+	<genericMarketSellable>false</genericMarketSellable>
+    <thingSetMakerTags Inherit="False" />
+    <comps>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Open {0_label}</useLabel>
+        <useDuration>10</useDuration>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+	  <li Class="CompProperties_UseEffectPlaySound">
+        <soundOnUsed>AncientHermeticCrate_Opened</soundOnUsed>
+      </li>
+    </comps>
+    <allowedArchonexusCount>10</allowedArchonexusCount>
+  </ThingDef>
+  
   
   <!--commerce-->
   <ThingDef ParentName="BuildingBase">
@@ -121,7 +149,7 @@
     <tickerType>Normal</tickerType>
   </ThingDef>
   
-  <ThingDef ParentName="MechSerumBase">
+  <ThingDef ParentName="HVMP_PalletBase">
     <defName>HVMP_MasonryPallet</defName>
     <label>masonry pallet</label>
     <description>A crate containing stone blocks. You can choose what type of stone is inside by opening it.</description>
@@ -129,25 +157,7 @@
       <texPath>Items/HVMP_MasonryPallet</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
-    <techLevel>Ultra</techLevel>
-    <tradeTags Inherit="False" />
-    <stackLimit>1</stackLimit>
-    <statBases>
-      <MarketValue>250</MarketValue>
-	  <Mass>35</Mass><!--something something ultratech-->
-    </statBases>
-    <thingCategories>
-      <li>ItemsMisc</li>
-    </thingCategories>
-    <tradeability>None</tradeability>
-    <thingSetMakerTags Inherit="False" />
     <comps>
-      <li Class="CompProperties_Usable">
-        <useJob>UseItem</useJob>
-        <useLabel>Open {0_label}</useLabel>
-        <useDuration>10</useDuration>
-        <showUseGizmo>true</showUseGizmo>
-      </li>
       <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
         <thingCategoryWhitelist>StoneBlocks</thingCategoryWhitelist><!--I never got around to making this a real list, it's just one category-->
 		<maxNumOptions>25</maxNumOptions>
@@ -155,13 +165,9 @@
 		<netMarketValueOutputCap>250</netMarketValueOutputCap>
 		<countCantExceedStackSize>true</countCantExceedStackSize>
       </li>
-      <li Class="CompProperties_UseEffectPlaySound">
-        <soundOnUsed>AncientHermeticCrate_Opened</soundOnUsed>
-      </li>
-    </comps>
-    <allowedArchonexusCount>10</allowedArchonexusCount>
+	</comps>
   </ThingDef>
-	  <ThingDef ParentName="MechSerumBase" MayRequire="zylle.Gemstones">
+	  <ThingDef ParentName="HVMP_PalletBase" MayRequire="zylle.Gemstones">
 		<defName>HVMP_GemstonePallet</defName>
 		<label>gemstone pallet</label>
 		<description>A crate containing gemstones. You can choose what type of stone is inside by opening it.</description>
@@ -169,38 +175,16 @@
 		  <texPath>Items/HVMP_GemstonePallet</texPath>
 		  <graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
-		<techLevel>Ultra</techLevel>
-		<tradeTags Inherit="False" />
-		<stackLimit>1</stackLimit>
-		<statBases>
-		  <MarketValue>250</MarketValue>
-		  <Mass>35</Mass>
-		</statBases>
-		<thingCategories>
-		  <li>ItemsMisc</li>
-		</thingCategories>
-		<tradeability>None</tradeability>
-		<thingSetMakerTags Inherit="False" />
 		<comps>
-		  <li Class="CompProperties_Usable">
-			<useJob>UseItem</useJob>
-			<useLabel>Open {0_label}</useLabel>
-			<useDuration>10</useDuration>
-			<showUseGizmo>true</showUseGizmo>
-		  </li>
 		  <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
 			<thingCategoryWhitelist>Z_Gemstones</thingCategoryWhitelist>
 			<maxNumOptions>25</maxNumOptions>
 			<netMarketValueOutputCap>250</netMarketValueOutputCap>
 			<countCantExceedStackSize>true</countCantExceedStackSize>
 		  </li>
-		  <li Class="CompProperties_UseEffectPlaySound">
-			<soundOnUsed>AncientHermeticCrate_Opened</soundOnUsed>
-		  </li>
 		</comps>
-		<allowedArchonexusCount>10</allowedArchonexusCount>
 	  </ThingDef>
-	  <ThingDef ParentName="MechSerumBase" MayRequire="sarg.alphacrafts">
+	  <ThingDef ParentName="HVMP_PalletBase" MayRequire="sarg.alphacrafts">
 		<defName>HVMP_ArtisanPallet</defName>
 		<label>artisan pallet</label>
 		<description>A crate containing artisanal products. You can choose what type of product is inside by opening it.</description>
@@ -208,36 +192,14 @@
 		  <texPath>Items/HVMP_ArtisanPallet</texPath>
 		  <graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
-		<techLevel>Ultra</techLevel>
-		<tradeTags Inherit="False" />
-		<stackLimit>1</stackLimit>
-		<statBases>
-		  <MarketValue>250</MarketValue>
-		  <Mass>35</Mass>
-		</statBases>
-		<thingCategories>
-		  <li>ItemsMisc</li>
-		</thingCategories>
-		<tradeability>None</tradeability>
-		<thingSetMakerTags Inherit="False" />
 		<comps>
-		  <li Class="CompProperties_Usable">
-			<useJob>UseItem</useJob>
-			<useLabel>Open {0_label}</useLabel>
-			<useDuration>10</useDuration>
-			<showUseGizmo>true</showUseGizmo>
-		  </li>
 		  <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
 			<thingCategoryWhitelist>AC_ArtisanProducts</thingCategoryWhitelist>
 			<maxNumOptions>25</maxNumOptions>
 			<netMarketValueOutputCap>250</netMarketValueOutputCap>
 			<countCantExceedStackSize>true</countCantExceedStackSize>
 		  </li>
-		  <li Class="CompProperties_UseEffectPlaySound">
-			<soundOnUsed>AncientHermeticCrate_Opened</soundOnUsed>
-		  </li>
 		</comps>
-		<allowedArchonexusCount>10</allowedArchonexusCount>
 	  </ThingDef>
   
   <!--pax-->
@@ -868,6 +830,7 @@
       <Flammability>1</Flammability>
       <Beauty>1</Beauty>
     </statBases>
+	<genericMarketSellable>false</genericMarketSellable>
 	<thingSetMakerTags Inherit="False"/>
     <comps>
       <li Class="HautsPermits.CompProperties_StudiableAtlas">

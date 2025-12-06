@@ -3471,7 +3471,7 @@ namespace HautsPermits
     }
     public class HediffComp_BoomHeadshot : HediffComp
     {
-        public new HediffCompProperties_BoomHeadshot Props
+        public HediffCompProperties_BoomHeadshot Props
         {
             get
             {
@@ -3480,10 +3480,20 @@ namespace HautsPermits
         }
         public override void CompPostPostRemoved()
         {
-            if (!this.victim.DestroyedOrNull() && this.victim.Spawned)
+            Thing victim = this.victim;
+            if (!victim.DestroyedOrNull() && victim.Spawned)
             {
-                this.Props.soundDef.PlayOneShot(new TargetInfo(this.victim.Position, this.victim.Map, false));
-                this.victim.TakeDamage(new DamageInfo(DamageDefOf.Bomb, this.Props.damageAmount, this.Props.armorPen, instigator: this.Pawn));
+                this.Props.soundDef.PlayOneShot(new TargetInfo(victim.Position, victim.Map, false));
+                if (HautsUtility.CanBeHitByAirToSurface(victim.Position, victim.Map, false))
+                {
+                    RoofDef roof = victim.Map.roofGrid.RoofAt(victim.Position);
+                    if (roof != null && !roof.isThickRoof)
+                    {
+                        victim.Map.roofGrid.SetRoof(victim.Position,null);
+                    }
+                    this.victim.TakeDamage(new DamageInfo(DamageDefOf.Bomb, this.Props.damageAmount, this.Props.armorPen, instigator: this.Pawn));
+                }
+                //FleckMaker.ThrowSmoke(victim.DrawPos, victim.Map, 10f);
             }
             base.CompPostPostRemoved();
         }
@@ -10372,12 +10382,12 @@ namespace HautsPermits
         {
             base.PostProcessSpawnedPawns(parms, pawns);
             QuestPart_AllThreeAresMutators qpa3 = parms.quest.GetFirstPartOfType<QuestPart_AllThreeAresMutators>();
-            if (qpa3 != null)
+            if (qpa3 != null && qpa3.DRTNT_hediff != null)
             {
                 int minSpyCount = 1;
                 foreach (Pawn p in pawns.InRandomOrder())
                 {
-                    if (qpa3.DRTNT_hediff != null && (minSpyCount > 0 || Rand.Chance(qpa3.DRTNT_spyChance)))
+                    if (p.RaceProps.intelligence == Intelligence.Humanlike && (minSpyCount > 0 || Rand.Chance(qpa3.DRTNT_spyChance)))
                     {
                         p.health.AddHediff(qpa3.DRTNT_hediff);
                         minSpyCount--;

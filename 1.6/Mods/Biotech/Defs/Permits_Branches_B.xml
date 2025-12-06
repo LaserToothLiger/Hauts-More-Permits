@@ -151,7 +151,7 @@
       <itemsToDrop>
         <HVMP_AutoHatchery>1</HVMP_AutoHatchery>
       </itemsToDrop>
-      <favorCost>5.75</favorCost>
+      <favorCost>6</favorCost>
       <radius>3</radius>
     </royalAid>
   </RoyalTitlePermitDef>

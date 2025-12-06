@@ -294,13 +294,13 @@
 <HVMP_HardMode_Label_Mundi_3>The Wages of Sin</HVMP_HardMode_Label_Mundi_3>
 <HVMP_HardMode_Tooltip_Mundi_3>Goodwill losses count for twice as much against quest progress.</HVMP_HardMode_Tooltip_Mundi_3>
 <HVMP_Label_Populus>Proximum</HVMP_Label_Populus>
-<HVMP_Tooltip_Populus>Allow a shuttle of friendly mercenaries and noncombatants to land nearby. You must protect them (a raid is chasing them) until a rescue shuttle arrives a few hours later.\n\nUnlike other quest types, goodwill loss for failing this quest is not tied to mod settings; it's simply based on how many of the crashlanders you failed to protect.</HVMP_Tooltip_Populus>
+<HVMP_Tooltip_Populus>Allow a shuttle of friendly mercenaries and noncombatants to land nearby. Protect them from an incoming hostile party, and ensure they all make it onto the rescue shuttle which arrives a few hours later.\n\nUnlike other quest types, goodwill loss for failing this quest is not tied to mod settings; it's simply based on how many of the crashlanders you failed to protect.</HVMP_Tooltip_Populus>
 <HVMP_HardMode_Label_Populus_1>Every Expense Spared</HVMP_HardMode_Label_Populus_1>
 <HVMP_HardMode_Tooltip_Populus_1>None of the crashlanders are armed mercenaries.</HVMP_HardMode_Tooltip_Populus_1>
 <HVMP_HardMode_Label_Populus_2>Hell On Their Heels</HVMP_HardMode_Label_Populus_2>
 <HVMP_HardMode_Tooltip_Populus_2>The raid attacks within an hour of the shuttle crash, and is 2x as strong.</HVMP_HardMode_Tooltip_Populus_2>
 <HVMP_HardMode_Label_Populus_3>Revenge of the Space Junk</HVMP_HardMode_Label_Populus_3>
-<HVMP_HardMode_Tooltip_Populus_3>A problem causer ship part will fall down somewhere on the same map as the shuttle.</HVMP_HardMode_Tooltip_Populus_3>
+<HVMP_HardMode_Tooltip_Populus_3>A problem causer ship part (defoliator or psychic) will fall down somewhere on the same map as the shuttle.</HVMP_HardMode_Tooltip_Populus_3>
 <HVMP_Label_Vox>Vox</HVMP_Label_Vox>
 <HVMP_Tooltip_Vox>Succeed at peace talks with a "minor faction".</HVMP_Tooltip_Vox>
 <HVMP_HardMode_Label_Vox_1>Allies Attract Allies</HVMP_HardMode_Label_Vox_1>

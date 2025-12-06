@@ -101,6 +101,7 @@
         <disappearsAfterTicks>60</disappearsAfterTicks>
         <showRemainingTime>true</showRemainingTime>
       </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
     </comps>
   </HediffDef>
   

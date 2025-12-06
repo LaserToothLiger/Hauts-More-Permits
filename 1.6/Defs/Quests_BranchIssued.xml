@@ -1943,7 +1943,7 @@
         </li>
         <li Class="QuestNode_Set">
           <name>firstRaidDelayTicks</name>
-		  <value>$(roundToTicksRough(randInt(600,700)))</value><!--60000, 300000-->
+		  <value>$(roundToTicksRough(randInt(60000, 300000)))</value>
         </li>
         <li Class="QuestNode_GetFaction">
           <allowEnemy>true</allowEnemy>

@@ -534,11 +534,11 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
 	<defName>HVMP_TechprintDrop</defName>
 	<label>techprint drop</label>
-	<description>Call for a drop of 1 random techprint.\n\nCosts two permit points.</description>
+	<description>Call for a drop of 1 random techprint.</description>
 	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
     <minTitle>HVMP_ArchiveVI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
-	<permitPointCost>2</permitPointCost>
+	<permitPointCost>1</permitPointCost>
 	<cooldownDays>36</cooldownDays>
 	<uiPosition>(4,1)</uiPosition>
 	<royalAid>
@@ -556,11 +556,11 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
 	<defName>HVMP_SkilltrainerDrop</defName>
 	<label>skilltrainer drop</label>
-	<description>Call for a drop of 1 random skilltrainer.\n\nCosts two permit points.</description>
+	<description>Call for a drop of 1 random skilltrainer.</description>
 	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
     <minTitle>HVMP_ArchiveVI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
-	<permitPointCost>2</permitPointCost>
+	<permitPointCost>1</permitPointCost>
 	<cooldownDays>30</cooldownDays>
 	<uiPosition>(4,2)</uiPosition>
 	<royalAid>
@@ -600,11 +600,11 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
 	<defName>HVMP_ArtifactDrop</defName>
 	<label>artifact drop</label>
-	<description>Call for a drop of 1 random archotech artifact.\n\nCosts two permit points.</description>
+	<description>Call for a drop of 1 random archotech artifact.</description>
 	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
     <minTitle>HVMP_ArchiveVI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
-	<permitPointCost>2</permitPointCost>
+	<permitPointCost>1</permitPointCost>
 	<cooldownDays>30</cooldownDays>
 	<uiPosition>(4,4)</uiPosition>
 	<royalAid>
