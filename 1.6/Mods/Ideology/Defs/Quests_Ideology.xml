@@ -1104,7 +1104,7 @@
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription->[asker_nameDef], [asker_faction_leaderTitle] of [asker_faction_name], is making a request. [asker_possessive] surveillance has identified a databank on the planet's surface containing valuable information. However, it is surrounded by a small settlement which protects it. They aren't part of any major faction.\n\n[visitInfo]\n[mutatorSuffix]</li>
+        <li>questDescription->[asker_nameDef], [asker_faction_leaderTitle] of [asker_faction_name], is making a request. [asker_possessive] surveillance has identified a databank on the planet's surface containing valuable information. However, it is surrounded by a small [minorFactionLabel] which protects it. They aren't part of any major faction.\n\n[visitInfo]\n[mutatorSuffix]</li>
         <li>visitInfo(allowViolentQuests==true)->[mutator_XP_info]</li>
 		<li>visitInfo(allowViolentQuests==false)->[mutator_XP_info_nonviolent]</li>
 		<li>mutatorSuffix->[mutator_PB_info][mutator_TTWSD_info]</li>

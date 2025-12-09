@@ -75,7 +75,7 @@
     </stages>
     <comps>
 	  <li Class="HediffCompProperties_SeverityPerDay">
-		<severityPerDay>-6</severityPerDay>
+		<severityPerDay>-3</severityPerDay>
 		<showDaysToRecover>true</showDaysToRecover>
 	  </li>
     </comps>
@@ -352,9 +352,10 @@
 	  </li>
 	  <li Class="HautsFramework.HediffCompProperties_MoteConditionalShield">
 		<mote>HVMP_BShieldGraphic</mote>
-		<scale>1</scale>
-		<minDrawFactor>1.2</minDrawFactor>
-		<maxDrawFactor>1.5</maxDrawFactor>
+		<scale>1.25</scale>
+		<scaleWithBodySize>true</scaleWithBodySize>
+		<minDrawFactor>1.3</minDrawFactor>
+		<maxDrawFactor>1.6</maxDrawFactor>
 		<randomRotation>true</randomRotation>
 		<validRange>0.001~9999999</validRange>
 	  </li>
@@ -374,7 +375,7 @@
 		</mote>
 		<graphicData>
 		  <graphicClass>Graphic_Mote</graphicClass>
-		  <texPath>Other/ShieldBubble</texPath>
+		  <texPath>Other/ForceField</texPath>
 		  <shaderType>Transparent</shaderType>
 		  <color>(1,0.65,0.68,1)</color>
 		  <drawSize>1</drawSize>

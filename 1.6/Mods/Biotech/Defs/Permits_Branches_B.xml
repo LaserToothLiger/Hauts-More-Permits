@@ -181,7 +181,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_MedicalAssist</defName>
     <label>medical assist</label>
-    <description>Link the target to an automated medical assistance program for 4 hours, improving tend speed, tend quality, and surgery success chance.</description>
+    <description>Link the target to an automated medical assistance program for 8 hours, improving tend speed, tend quality, and surgery success chance.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
     <minTitle>HVMP_EcosphereI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
@@ -205,7 +205,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_HandlingAssist</defName>
     <label>handling assist</label>
-    <description>Link the target to an automated animal handling assistance program for 4 hours, improving animal tame and train chances.</description>
+    <description>Link the target to an automated animal handling assistance program for 8 hours, improving animal tame chance, animal train chance, and hunting stealth.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
     <minTitle>HVMP_EcosphereI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>

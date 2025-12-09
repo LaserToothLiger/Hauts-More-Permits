@@ -201,6 +201,24 @@
 		  </li>
 		</comps>
 	  </ThingDef>
+	  <ThingDef ParentName="HVMP_PalletBase" MayRequire="VanillaExpanded.VCookE">
+		<defName>HVMP_CondimentPallet</defName>
+		<label>condiment pallet</label>
+		<description>A crate containing condiments. You can choose what type of condiment is inside by opening it.</description>
+		<graphicData>
+		  <texPath>Items/HVMP_CondimentPallet</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<comps>
+		  <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
+			<thingCategoryWhitelist>VCE_Condiments</thingCategoryWhitelist>
+			<maxNumOptions>25</maxNumOptions>
+			<unitMarketValueOutputCap>50</unitMarketValueOutputCap>
+			<netMarketValueOutputCap>250</netMarketValueOutputCap>
+			<countCantExceedStackSize>true</countCantExceedStackSize>
+		  </li>
+		</comps>
+	  </ThingDef>
   
   <!--pax-->
   <ThingDef ParentName="ShuttleCrashedBase">

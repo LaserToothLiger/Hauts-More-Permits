@@ -1527,7 +1527,7 @@
 		    <li>DefoliatorShipPartCrash</li>
 		    <li>PsychicEmanatorShipPartCrash</li>
 		  </ROTSJ_incidents>
-		  <ROTSJ_description>\nThere's a low-hanging derelict ship in the shuttle's path. When it lands, it'll bring down a mechanoid ship part with it, which will fall somewhere nearby and cause trouble of some kind.</ROTSJ_description>
+		  <ROTSJ_description>\nThere's a low-hanging derelict ship in the shuttle's path. If you allow the shuttle to land at [map_definite], it'll bring down a dangerous mechanoid ship part with it.</ROTSJ_description>
         </li>
         <li Class="QuestNode_Signal">
           <inSignal>QuestSuccess</inSignal>

@@ -7118,13 +7118,10 @@ namespace HautsPermits
             }
             foreach (Hediff hediff in result.hediffs)
             {
-                if (dinfo.Def == DamageDefOf.Bite || dinfo.Def == DamageDefOf.Scratch || dinfo.Def == DamageDefOf.ScratchToxic)
+                HediffComp_Infecter hediffComp_Infecter = hediff.TryGetComp<HediffComp_Infecter>();
+                if (hediffComp_Infecter != null)
                 {
-                    HediffComp_Infecter hediffComp_Infecter = hediff.TryGetComp<HediffComp_Infecter>();
-                    if (hediffComp_Infecter != null)
-                    {
-                        hediffComp_Infecter.fromScaria = true;
-                    }
+                    hediffComp_Infecter.fromScaria = true;
                 }
             }
         }
@@ -9130,13 +9127,16 @@ namespace HautsPermits
                     List<IncidentDef> ids = this.ROTSJ_incidents.Where((IncidentDef incident)=>incident.Worker.CanFireNow(incidentParms)).ToList();
                     if (ids.Count > 0)
                     {
-                        IncidentDef id = ids.RandomElement();
-                        Find.Storyteller.incidentQueue.Add(id, Find.TickManager.TicksGame + 60, incidentParms, 0);
+                        QuestPart_Proximim_ROTSJ qpROTSJ = new QuestPart_Proximim_ROTSJ();
+                        qpROTSJ.ROTSJ_incident = ids.RandomElement();
+                        qpROTSJ.map = QuestGen.slate.Get<Map>("map", null, false);
+                        qpROTSJ.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(quest.InitiateSignal);
+                        quest.AddPart(qpROTSJ);
+                        QuestGen.AddQuestDescriptionRules(new List<Rule>
+                        {
+                            new Rule_String("mutator_ROTSJ_info", this.ROTSJ_description.Formatted())
+                        });
                     }
-                    QuestGen.AddQuestDescriptionRules(new List<Rule>
-                    {
-                        new Rule_String("mutator_ROTSJ_info", this.ROTSJ_description.Formatted())
-                    });
                 } else {
                     QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_ROTSJ_info", " ") });
                 }
@@ -9307,6 +9307,36 @@ namespace HautsPermits
         public List<IncidentDef> ROTSJ_incidents;
         [MustTranslate]
         public string ROTSJ_description;
+    }
+    public class QuestPart_Proximim_ROTSJ : QuestPart
+    {
+        public override void Notify_QuestSignalReceived(Signal signal)
+        {
+            base.Notify_QuestSignalReceived(signal);
+            if (signal.tag == this.inSignal)
+            {
+                if (this.ROTSJ_incident != null)
+                {
+                    IncidentParms incidentParms = StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map);
+                    incidentParms.forced = true;
+                    if (incidentParms.points < 500)
+                    {
+                        incidentParms.points = 500;
+                    }
+                    Find.Storyteller.incidentQueue.Add(this.ROTSJ_incident, Find.TickManager.TicksGame + 60, incidentParms, 0);
+                }
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Defs.Look<IncidentDef>(ref this.ROTSJ_incident, "ROTSJ_incident");
+            Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
+            Scribe_References.Look<Map>(ref this.map, "map", false);
+        }
+        public IncidentDef ROTSJ_incident;
+        public string inSignal;
+        public Map map;
     }
     //pax branchquest: pax vox
     public class QuestNode_GenerateVox : QuestNode

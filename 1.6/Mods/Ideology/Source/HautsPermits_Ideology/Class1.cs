@@ -1706,6 +1706,10 @@ namespace HautsPermits_Ideology
                     });
                 }
             }
+            QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("minorFactionLabel", factionDef.label)
+                });
             FactionGeneratorParms factionGeneratorParms = new FactionGeneratorParms(factionDef, default(IdeoGenerationParms), true);
             factionGeneratorParms.ideoGenerationParms = new IdeoGenerationParms(factionGeneratorParms.factionDef, false, null, null, null, false, false, false, false, "", null, null, false, "", false);
             Faction shrineFaction = FactionGenerator.NewGeneratedFactionWithRelations(factionGeneratorParms, list);

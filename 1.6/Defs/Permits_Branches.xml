@@ -130,7 +130,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_MasonryDropI</defName>
     <label>masonry drop</label>
-    <description>Call for a drop of 1 masonry pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is an Investor; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of stone blocks of your choice.</description>
+    <description>Call for a drop of 1 masonry pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is an Investor; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of terrestrial stone blocks of your choice.</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -433,6 +433,28 @@
 		<modExtensions>
 			<li Class="HautsPermits.ScalingDisabledDescription">
 				<extraString>Call for a drop of 1 artisan pallet. Each pallet contains 250 silver's worth of a type of artisanal craft of your choice.</extraString>
+			</li>
+		</modExtensions>
+	  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="VanillaExpanded.VCookE">
+		<defName>HVMP_CondimentDropI</defName>
+		<label>condiment drop</label>
+		<description>Call for a drop of 1 condiment pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is an Investor; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of condiment of your choice.</description>
+		<minTitle>HVMP_CommerceI</minTitle>
+		<faction>HVMP_CommerceBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>14</cooldownDays>
+		<usableOnWorldMap>true</usableOnWorldMap>
+		<uiPosition>(3,3.5)</uiPosition>
+		<royalAid>
+		  <itemsToDrop>
+			<HVMP_CondimentPallet>1</HVMP_CondimentPallet>
+		  </itemsToDrop>
+		  <favorCost>3</favorCost>
+		</royalAid>
+		<modExtensions>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 1 condiment pallet. Each pallet contains 250 silver's worth of a type of condiment of your choice.</extraString>
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
@@ -822,7 +844,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_CombatAssist</defName>
     <label>combat assist</label>
-    <description>Link the target to an automated combat assistance program for 4 hours, improving attack accuracy and range.</description>
+    <description>Link the target to an automated combat assistance program for 8 hours, improving attack accuracy and range.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
     <minTitle>HVMP_PaxI</minTitle>
     <faction>HVMP_PaxBranch</faction>
