@@ -19,6 +19,9 @@
     <statBases>
       <MarketValue>250</MarketValue>
 	  <Mass>35</Mass><!--something something ultratech-->
+      <MaxHitPoints>200</MaxHitPoints>
+      <DeteriorationRate>0</DeteriorationRate>
+      <Flammability>0</Flammability>
     </statBases>
     <thingCategories>
       <li>ItemsMisc</li>

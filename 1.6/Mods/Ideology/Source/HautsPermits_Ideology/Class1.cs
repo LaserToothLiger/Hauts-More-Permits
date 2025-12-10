@@ -1693,7 +1693,7 @@ namespace HautsPermits_Ideology
             bool mayhemMode = HVMP_Mod.settings.shrineX;
             PlanetTile planetTile;
             this.TryFindSiteTile(out planetTile);
-            FactionDef factionDef = DefDatabase<FactionDef>.AllDefsListForReading.Where((FactionDef fd)=>!fd.hidden&&fd.humanlikeFaction&&!fd.permanentEnemy&&!fd.naturalEnemy&&!fd.HasModExtension<EBranchQuests>()&&!fd.pawnGroupMakers.NullOrEmpty()&&fd.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm)=>pgm.kindDef == PawnGroupKindDefOf.Combat) && fd.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm) => pgm.kindDef == PawnGroupKindDefOf.Settlement)).RandomElement()??FactionDefOf.TribeCivil;
+            FactionDef factionDef = DefDatabase<FactionDef>.AllDefsListForReading.Where((FactionDef fd)=>!fd.hidden&&fd.humanlikeFaction&&!fd.permanentEnemy&&!fd.naturalEnemy&&!fd.HasModExtension<EBranchQuests>()&&fd.canGenerateQuestSites && !fd.pawnGroupMakers.NullOrEmpty()&&fd.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm)=>pgm.kindDef == PawnGroupKindDefOf.Combat) && fd.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm) => pgm.kindDef == PawnGroupKindDefOf.Settlement)).RandomElement()??FactionDefOf.TribeCivil;
             List<FactionRelation> list = new List<FactionRelation>();
             foreach (Faction faction in Find.FactionManager.AllFactionsListForReading)
             {
