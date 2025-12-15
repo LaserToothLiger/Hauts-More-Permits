@@ -92,6 +92,7 @@
 			<allowAnimals>true</allowAnimals>
 			<needsPen>true</needsPen>
 			<startsTamed>true</startsTamed>
+			<hediffs><li>HVMP_HostileEnvironmentFilm</li></hediffs>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -116,6 +117,7 @@
 			<allowAnimals>true</allowAnimals>
 			<minPetness>0.5</minPetness>
 			<startsTamed>true</startsTamed>
+			<hediffs><li>HVMP_HostileEnvironmentFilm</li></hediffs>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -226,6 +228,30 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_SmallRepopulationDrop</defName>
+    <label>small repopulation drop</label>
+    <description>Call for the delivery of a wild animal of the same species as the target. The species of the target animal must have an adulthood body size no larger than 1.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DupeAnimal</workerClass>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>12</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(1,5)</uiPosition>
+    <royalAid>
+      <favorCost>1</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<numFromCategory>1</numFromCategory>
+			<bodySizeCapRange>0~1</bodySizeCapRange>
+			<allowAnimals>true</allowAnimals>
+			<invalidTargetMessage>HVMP_RepopLimits</invalidTargetMessage>
+			<hediffs><li>HVMP_HostileEnvironmentFilm</li></hediffs>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
   
   <!--Ecosphere level 2-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
@@ -271,6 +297,7 @@
 			<allowAnimals>true</allowAnimals>
 			<mustBePredator>true</mustBePredator>
 			<startsTamed>true</startsTamed>
+			<hediffs><li>HVMP_HostileEnvironmentFilm</li></hediffs>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -294,6 +321,7 @@
 			<marketValueLimits>0~1000</marketValueLimits>
 			<allowAnimals>true</allowAnimals>
 			<startsTamed>true</startsTamed>
+			<hediffs><li>HVMP_HostileEnvironmentFilm</li></hediffs>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -317,6 +345,30 @@
 			<soundDef>Coagulate_Cast</soundDef>
 			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>
 			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_LargeRepopulationDrop</defName>
+    <label>large repopulation drop</label>
+    <description>Call for the delivery of a wild animal of the same species as the target. The species of the target animal must have an adulthood body size no larger than 3.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DupeAnimal</workerClass>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>24</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(2,4)</uiPosition>
+    <royalAid>
+      <favorCost>2</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<numFromCategory>1</numFromCategory>
+			<bodySizeCapRange>0~3</bodySizeCapRange>
+			<allowAnimals>true</allowAnimals>
+			<invalidTargetMessage>HVMP_RepopLimits</invalidTargetMessage>
+			<hediffs><li>HVMP_HostileEnvironmentFilm</li></hediffs>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -392,6 +444,24 @@
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_BotanicalPylonDrop</defName>
+    <label>botanical pylon drop</label>
+    <description>Call for a stationary botanical pylon, which multiplicatively increases the growth rate of plants in a 7x7 square (corners excepted) centered on itself.</description>
+	<workerClass>HautsPermits.RoyalTitlePermitWorker_DropFactionThing</workerClass>
+    <minTitle>HVMP_EcosphereIII</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>30</cooldownDays>
+    <uiPosition>(3,3)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_BotanicalPylon>1</HVMP_BotanicalPylon>
+      </itemsToDrop>
+      <favorCost>4</favorCost>
+      <radius>3.9</radius><!--purely for the targeting graphic-->
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_StimulateImmunity</defName>
     <label>stimulate immunity</label>
     <description>Activate mechanites in and around the target's body to encourage a more robust immune response to disease. Lasts 3 days.</description>
@@ -401,7 +471,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,3)</uiPosition>
+    <uiPosition>(3,4)</uiPosition>
     <royalAid>
       <favorCost>4</favorCost>
     </royalAid>
@@ -424,7 +494,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>15</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,4)</uiPosition>
+    <uiPosition>(3,5)</uiPosition>
     <royalAid>
       <favorCost>4</favorCost>
     </royalAid>
@@ -461,29 +531,27 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-	  <RoyalTitlePermitDef ParentName="HVMP_DROCSeniorityScalingBase" MayRequire="sarg.alphagenes">
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="sarg.alphagenes">
 		<defName>HVMP_GeneToolDrop</defName>
 		<label>gene tool drop</label>
-		<description>Call for a drop of 2 random gene tools, or 4 if the caller has achieved the rank of Worldshaper.</description>
+		<description>Call for a drop of 2 gene tool pallets, or 3 if the caller has achieved the rank of Worldshaper.\n\nEach pallet contains 1 gene tool of your choice.</description>
 		<minTitle>HVMP_EcosphereIV</minTitle>
 		<faction>HVMP_EcosphereBranch</faction>
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>24</cooldownDays>
 		<uiPosition>(4,1)</uiPosition>
 		<royalAid>
+		  <itemsToDrop>
+			<HVMP_GeneToolPallet>1</HVMP_GeneToolPallet>
+		  </itemsToDrop>
 		  <favorCost>4</favorCost>
 		</royalAid>
 		<modExtensions>
 			<li Class="HautsFramework.PermitMoreEffects">
-				<thingCategories>
-				  <li>AG_GeneTools</li>
-				</thingCategories>
-				<maxTechLevelInCategory>Ultra</maxTechLevelInCategory>
-				<numFromCategory>2</numFromCategory>
-				<phenomenonCount>299</phenomenonCount><!--seniority is divided by this much for purposes of scaling, as opposed to the 100 default-->
+				<phenomenonCount>200</phenomenonCount>
 			</li>
 			<li Class="HautsPermits.ScalingDisabledDescription">
-				<extraString>Call for a drop of 2 random gene tools.</extraString>
+				<extraString>Call for a drop of 2 gene tool pallets. Each pallet contains 1 gene tool of your choice.</extraString>
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
@@ -590,7 +658,7 @@
   <RoyalTitlePermitDef>
     <defName>HVMP_SoilEnrichment</defName>
     <label>soil enrichment</label>
-    <description>Extract stationary toxic particles from the soil and seed it with nutrients, enriching the fertility of sand and soil in a small area around the target point.\n\nCan only create fertile soil in biomes that can naturally have fertile soil.\n\nAlso creates a smoke blast in a smaller radius.</description>
+    <description>Extract stationary toxic particles from the soil and seed it with nutrients, enriching the fertility of sand and soil in a 5x5 area around the target point.\n\nCan only create fertile soil in biomes that can naturally have fertile soil.\n\nAlso creates a smoke blast in a smaller radius.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_SoilEnrichment</workerClass>
     <minTitle>HVMP_EcosphereIV</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
@@ -600,7 +668,7 @@
     <royalAid>
       <favorCost>5</favorCost>
       <targetingRange>44.9</targetingRange>
-      <radius>2</radius>
+      <radius>2.9</radius>
     </royalAid>
 	<modExtensions>
 		<li Class="HautsFramework.PermitMoreEffects">
@@ -670,6 +738,29 @@
 			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>
 			<allowAnyFlesh>true</allowAnyFlesh>
 			<extraNumber>0.5</extraNumber><!--tend quality-->
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_MegaRepopulationDrop</defName>
+    <label>mega repopulation drop</label>
+    <description>Call for the delivery of a wild animal of the same species as the target.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DupeAnimal</workerClass>
+    <minTitle>HVMP_EcosphereI</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>36</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(5,6)</uiPosition>
+    <royalAid>
+      <favorCost>4</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<numFromCategory>1</numFromCategory>
+			<allowAnimals>true</allowAnimals>
+			<invalidTargetMessage>HVMP_RepopLimits</invalidTargetMessage>
+			<hediffs><li>HVMP_HostileEnvironmentFilm</li></hediffs>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -761,6 +852,7 @@
 			<marketValueLimits>590~999999</marketValueLimits>
 			<allowAnimals>true</allowAnimals>
 			<maxWildness>-1</maxWildness>
+			<hediffs><li>HVMP_HostileEnvironmentFilm</li></hediffs>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>

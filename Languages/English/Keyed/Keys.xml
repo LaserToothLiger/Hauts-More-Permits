@@ -76,6 +76,7 @@
 <HVMP_TargetToLegendary>Only usable on masterwork, non-artifact, non-artwork, non-building items of masterwork quality</HVMP_TargetToLegendary>
 <HVMP_TargetDamaged>Only usable on damaged items or buildings</HVMP_TargetDamaged>
 <HVMP_TargetDamagedOrTainted>Only uasble on damaged, tainted, or broken-down items or buildings</HVMP_TargetDamagedOrTainted>
+<HVMP_RepopLimits>Target must be an animal and within the permit's size limit.</HVMP_RepopLimits>
 <HVMP_TargetTMD>Target must be suffering from a mechanite disease</HVMP_TargetTMD>
 <HVMP_CommandCallRoyalAidMapTooWatery>Cannot drill a geothermal vent in this area.</HVMP_CommandCallRoyalAidMapTooWatery>
 <HVMP_TooCloseToGeyser>Drill must not be too close to another drill or existing steam geyser.</HVMP_TooCloseToGeyser>

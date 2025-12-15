@@ -20,11 +20,11 @@
       </xenotypeChances>
     </xenotypeSet>
     <apparelColor>(155,19,191)</apparelColor>
-    <startingHediffs>
+    <forcedTraits>
       <li>
-        <def>HVPAA_EmergencySkipBeacon</def>
+        <def>HVPAA_BranchPsion</def>
       </li>
-    </startingHediffs>
+    </forcedTraits>
   </PawnKindDef>
   <PawnKindDef ParentName="HVMP_PsionBase">
     <defName>HVMP_Psion</defName>
@@ -157,17 +157,23 @@
       <li>MeleeWeapon_MonoSwordBladelink</li>
     </weaponTags>
   </PawnKindDef>
-	  <HediffDef ParentName="HVT_TraitHediffBase">
-		<defName>HVPAA_EmergencySkipBeacon</defName>
-		<label>emergency skip beacon</label>
-		<description>A skipgate will relocate this pawn to safety if downed or about to die.</description>
-		<hediffClass>HVMP_HVPAA.Hediff_EmergencySkipOut</hediffClass>
-		<isBad>false</isBad>
-		<stages>
+	  <TraitDef ParentName="HVT_TransTrait">
+		<commonality>0</commonality>
+		<canBeSuppressed>false</canBeSuppressed>
+		<defName>HVPAA_BranchPsion</defName>
+		<degreeDatas>
 		  <li>
-			<becomeVisible>false</becomeVisible>
+			<label>branch psion</label>
+			<description>{PAWN_nameDef} is protected by psychic mechanisms. If {PAWN_pronoun} is in mortal danger, {PAWN_pronoun} will be skipped to the safety of a distant offworld medical facility.</description>
 		  </li>
-		</stages>
-	  </HediffDef>
+		</degreeDatas>
+		<modExtensions>
+			<li Class="HautsFramework.ExciseTraitExempt" />
+			<li Class="HautsFramework.VanishOnDeath">
+				<triggerOnRemoval>true</triggerOnRemoval>
+			<skipgateOut>true</skipgateOut>
+			</li>
+		</modExtensions>
+	  </TraitDef>
   
 </Defs>

@@ -233,7 +233,7 @@
     <statBases>
       <MaxHitPoints>200</MaxHitPoints>
       <Flammability>0</Flammability>
-      <MarketValue>1000</MarketValue>
+      <MarketValue>100</MarketValue>
       <WorkToBuild>300</WorkToBuild>
       <Beauty>-20</Beauty>
     </statBases>
@@ -283,11 +283,6 @@
         <effecter>HVMP_BlightSprayMist</effecter>
 		<sound>JumpPackLaunch</sound>
       </li>
-      <!--<li Class="CompProperties_DestroyAfterDelay">
-        <delayTicks>900000</delayTicks>
-        <destroyMode>KillFinalize</destroyMode>
-        <countdownLabel>Self-destruct in</countdownLabel>
-      </li>-->
 	  <li Class="HautsFramework.CompProperties_FactionColored">
 		<colorFactor>0.85</colorFactor>
 	  </li>
@@ -342,7 +337,7 @@
     <statBases>
       <MaxHitPoints>200</MaxHitPoints>
       <Flammability>0</Flammability>
-      <MarketValue>1000</MarketValue>
+      <MarketValue>100</MarketValue>
       <WorkToBuild>300</WorkToBuild>
       <Beauty>-20</Beauty>
     </statBases>
@@ -398,6 +393,90 @@
 	</modExtensions>
   </ThingDef>
   
+  <!--Gene Tool pallet (Alpha Genes)-->
+	  <ThingDef ParentName="HVMP_PalletBase" MayRequire="sarg.alphagenes">
+		<defName>HVMP_GeneToolPallet</defName>
+		<label>gene tool pallet</label>
+		<description>A crate containing a gene tool. You can choose what type of gene tool is inside by opening it.</description>
+		<graphicData>
+		  <texPath>Items/HVMP_GeneToolPallet</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<comps>
+		  <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
+			<thingCategoryWhitelist>AG_GeneTools</thingCategoryWhitelist>
+			<netCountOutputCap>1</netCountOutputCap>
+			<onlyHasStackableItems>false</onlyHasStackableItems>
+			<countCantExceedStackSize>true</countCantExceedStackSize>
+		  </li>
+		</comps>
+	  </ThingDef>
+  
+  <!--botanical pylon-->
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_BotanicalPylon</defName>
+    <label>botanical pylon</label>
+    <description>A stationary device which increases the growth rate of nearby plants. It threads artificial roots into adjacent terrain. These roots tap into the vascular systems of plants they come in contact with, analyzing their health and determining what nutritive or medical assistance each such plant requires. Internal biochemical forges then generate the necessary solutions, which are distributed to each plant through the artificial root network.</description>
+    <size>(1,1)</size>
+    <receivesSignals>true</receivesSignals>
+    <statBases>
+      <MaxHitPoints>200</MaxHitPoints>
+      <Flammability>0</Flammability>
+      <MarketValue>100</MarketValue>
+      <WorkToBuild>300</WorkToBuild>
+      <Beauty>-20</Beauty>
+    </statBases>
+    <graphicData>
+      <texPath>Things/Building/Mech/AncientMechGestatorIntact_Empty/AncientMechGestatorIntact_Empty</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <shadowData>
+        <volume>(0.6, 0.4, 0.6)</volume>
+      </shadowData>
+      <damageData>
+        <rect>(0.2, 0.2, 0.6, 0.6)</rect>
+      </damageData>
+    </graphicData>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Small</destroySound>
+      <roofCollapseDamageMultiplier>0.2</roofCollapseDamageMultiplier>
+      <claimable>false</claimable>
+    </building>
+    <repairEffect>ConstructMetal</repairEffect>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <placeWorkers>
+      <li>PlaceWorker_ShowProjectileInterceptorRadius</li>
+    </placeWorkers>
+    <altitudeLayer>Building</altitudeLayer>
+    <pathCost>30</pathCost>
+    <fillPercent>1.0</fillPercent>
+    <tickerType>Normal</tickerType>
+    <rotatable>true</rotatable>
+    <selectable>true</selectable>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+    <damageMultipliers>
+      <li>
+        <damageDef>Flame</damageDef>
+        <multiplier>0</multiplier>
+      </li>
+    </damageMultipliers>
+    <comps>
+      <li Class="HautsPermits.CompProperties_PlantGrow">
+        <radius>3.9</radius>
+		<periodicity>2000</periodicity>
+		<growthAmount>235</growthAmount>
+      </li>
+	  <li Class="HautsFramework.CompProperties_FactionColored">
+		<colorFactor>0.85</colorFactor>
+	  </li>
+    </comps>
+	<modExtensions>
+	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+	</modExtensions>
+  </ThingDef>
+  
   <!--Geothermal Drill-->
   <ThingDef ParentName="BuildingBase">
     <defName>HVMP_GTDrill</defName>
@@ -433,6 +512,7 @@
       <MaxHitPoints>550</MaxHitPoints>
       <Flammability>0.1</Flammability>
       <Beauty>-20</Beauty>
+      <MarketValue>100</MarketValue>
     </statBases>
 	<damageMultipliers>
       <li>

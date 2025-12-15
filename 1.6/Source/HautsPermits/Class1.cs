@@ -4771,6 +4771,60 @@ namespace HautsPermits
         private Hediff toReplace;
         private HediffDef toGive;
     }
+    public class RoyalTitlePermitWorker_DupeAnimal : RoyalTitlePermitWorker_TargetPawn
+    {
+        public override bool IsGoodPawn(Pawn pawn)
+        {
+            if (pawn.IsAnimal && !pawn.RaceProps.Dryad)
+            {
+                PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+                if (pme != null && (pme.bodySizeCapRange == null || pme.bodySizeCapRange.Includes(pawn.RaceProps.baseBodySize)))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
+        {
+            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+        }
+        public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
+        {
+            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+        }
+        public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
+        {
+            base.AffectPawnInner(pme, pawn, faction);
+            List<Pawn> list = new List<Pawn>();
+            Pawn p = PawnGenerator.GeneratePawn(pawn.kindDef, pme.startsTamed ? this.caller.Faction : null);
+            if (pme.hediffs != null)
+            {
+                foreach (HediffDef hd in pme.hediffs)
+                {
+                    p.health.AddHediff(hd);
+                }
+            }
+            list.Add(p);
+            if (list.Any<Pawn>())
+            {
+                ActiveTransporterInfo activeTransporterInfo = new ActiveTransporterInfo();
+                activeTransporterInfo.innerContainer.TryAddRangeOrTransfer(list, true, false);
+                DropPodUtility.MakeDropPodAt(pawn.Position, this.map, activeTransporterInfo, null);
+                Messages.Message("MessagePermitTransportDrop".Translate(faction.Named("FACTION")), new LookTargets(pawn.Position, this.map), MessageTypeDefOf.NeutralEvent, true);
+                this.caller.royalty.GetPermit(this.def, faction).Notify_Used();
+                if (!this.free)
+                {
+                    this.caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
+                }
+                this.DoOtherEffect(this.caller, faction);
+            }
+        }
+        public override void DoOtherEffect(Pawn caller, Faction faction)
+        {
+            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+        }
+    }
     public class RoyalTitlePermitWorker_PollutionScoop : RoyalTitlePermitWorker_Targeted
     {
         public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
@@ -5363,6 +5417,10 @@ namespace HautsPermits
                 return (CompProperties_BlightBlast)this.props;
             }
         }
+        public override void PostDrawExtraSelectionOverlays()
+        {
+            GenDraw.DrawRadiusRing(this.parent.Position, this.Props.radius);
+        }
         public override void CompTickInterval(int delta)
         {
             base.CompTickInterval(delta);
@@ -5436,6 +5494,56 @@ namespace HautsPermits
                         if (wb != null)
                         {
                             wb.Population += this.Props.fishPerTrigger;
+                        }
+                    }
+                    this.ticksToNextBlast = this.Props.periodicity;
+                }
+            }
+        }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look<int>(ref this.ticksToNextBlast, "ticksToNextBlast", 0, false);
+        }
+        public int ticksToNextBlast = 0;
+    }
+    public class CompProperties_PlantGrow : CompProperties
+    {
+        public CompProperties_PlantGrow()
+        {
+            this.compClass = typeof(CompPlantGrow);
+        }
+        public float radius;
+        public int periodicity;
+        public float growthAmount;
+    }
+    public class CompPlantGrow : ThingComp
+    {
+        public CompProperties_PlantGrow Props
+        {
+            get
+            {
+                return (CompProperties_PlantGrow)this.props;
+            }
+        }
+        public override void PostDrawExtraSelectionOverlays()
+        {
+            GenDraw.DrawRadiusRing(this.parent.Position, this.Props.radius);
+        }
+        public override void CompTickInterval(int delta)
+        {
+            base.CompTickInterval(delta);
+            if (this.parent.Spawned)
+            {
+                this.ticksToNextBlast -= delta;
+                if (this.ticksToNextBlast <= 0)
+                {
+                    foreach (Plant plant in GenRadial.RadialDistinctThingsAround(this.parent.Position, this.parent.Map, this.Props.radius, true).OfType<Plant>().Distinct<Plant>())
+                    {
+                        if (!plant.Blighted )
+                        {
+                            plant.Growth += (this.Props.growthAmount * this.Props.periodicity * plant.GrowthRate) / (60000f * plant.def.plant.growDays);
+                            plant.DirtyMapMesh(plant.Map);
                         }
                     }
                     this.ticksToNextBlast = this.Props.periodicity;
@@ -11645,7 +11753,7 @@ namespace HautsPermits
                 b.MakeMinified();
             }
             GenDrop.TryDropSpawn(thing, pawn.Position, pawn.Map, ThingPlaceMode.Near, out Thing theThing, null, null, true);
-            pallet.Destroy();
+            pallet.SplitOff(1).Destroy();
         }
         public static Faction AssignFallbackFactionToPermitTargeter()
         {

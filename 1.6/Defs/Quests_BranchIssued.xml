@@ -2109,10 +2109,10 @@
 				  <Mech_CentipedeGunner>4</Mech_CentipedeGunner>
 				  <Mech_CentipedeBurner>4</Mech_CentipedeBurner>
 				  <Mech_Centurion MayRequire="Ludeon.RimWorld.Biotech">4</Mech_Centurion>
-				  <AM_Mech_Polychoron MayRequire="sarg.alphamechs">3</AM_Mech_Polychoron>
+				  <AM_Mech_Polychoron MayRequire="Ludeon.RimWorld.Biotech,sarg.alphamechs">3</AM_Mech_Polychoron>
 				  <Mech_Diabolus MayRequire="Ludeon.RimWorld.Biotech">2</Mech_Diabolus>
 				  <Mech_Warqueen MayRequire="Ludeon.RimWorld.Biotech">2</Mech_Warqueen>
-				  <AM_Starfire MayRequire="sarg.alphamechs">1</AM_Starfire>
+				  <AM_Starfire MayRequire="Ludeon.RimWorld.Biotech,sarg.alphamechs">1</AM_Starfire>
 				  <AM_Siegebreaker MayRequire="sarg.alphamechs">1</AM_Siegebreaker>
 				  <AV_Mech_Tarantula MayRequire="Veltaris.Mechtech">1</AV_Mech_Tarantula>
 				</options>
@@ -2123,7 +2123,7 @@
 				  <Drone_Wasp MayRequire="Ludeon.RimWorld.Odyssey">8</Drone_Wasp>
 				  <Mech_Lancer>2</Mech_Lancer>
 				  <Mech_Legionary MayRequire="Ludeon.RimWorld.Biotech">3</Mech_Legionary>
-				  <AM_Mech_Optio MayRequire="sarg.alphamechs">1</AM_Mech_Optio>
+				  <AM_Mech_Optio MayRequire="Ludeon.RimWorld.Biotech,sarg.alphamechs">1</AM_Mech_Optio>
 				</options>
 			  </li>
 		  </AW_pawnRosterOtherwise>
