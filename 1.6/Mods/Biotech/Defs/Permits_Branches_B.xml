@@ -533,7 +533,7 @@
   </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="sarg.alphagenes">
 		<defName>HVMP_GeneToolDrop</defName>
-		<label>gene tool drop</label>
+		<label>gene tool pallet drop</label>
 		<description>Call for a drop of 2 gene tool pallets, or 3 if the caller has achieved the rank of Worldshaper.\n\nEach pallet contains 1 gene tool of your choice.</description>
 		<minTitle>HVMP_EcosphereIV</minTitle>
 		<faction>HVMP_EcosphereBranch</faction>
