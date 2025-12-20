@@ -1875,9 +1875,10 @@ namespace HautsPermits_Occult
                 }
                 if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.natali3, mayhemMode))
                 {
-                    wohc.DF_on = true;
+                    wohc.DF_monsterKind = this.DF_pawnKinds.RandomElement();
                     QuestGen.AddQuestDescriptionRules(new List<Rule>
                     {
+                        new Rule_String("DF_monster", wohc.DF_monsterKind.label),
                         new Rule_String("mutator_DF_info", this.DF_description.Formatted())
                     });
                 } else {
@@ -1909,6 +1910,7 @@ namespace HautsPermits_Occult
         public string COL_description;
         [MustTranslate]
         public string DF_description;
+        public List<PawnKindDef> DF_pawnKinds;
     }
     public class WorldObject_Hypercube : WorldObject
     {
@@ -2010,13 +2012,13 @@ namespace HautsPermits_Occult
             Scribe_References.Look<Map>(ref this.labyrinthMap, "labyrinthMap", false);
             Scribe_Defs.Look<GameConditionDef>(ref this.AOEAH_condition, "AOEAH_condition");
             Scribe_Values.Look<bool>(ref this.COL_on, "COL_on", false, false);
-            Scribe_Values.Look<bool>(ref this.DF_on, "DF_on", false, false);
+            Scribe_Defs.Look<PawnKindDef>(ref this.DF_monsterKind, "DF_monsterKind");
         }
         private Material cachedMat;
         public Map labyrinthMap;
         public GameConditionDef AOEAH_condition;
         public bool COL_on;
-        public bool DF_on;
+        public PawnKindDef DF_monsterKind;
         private bool generating;
 
     }
@@ -2945,7 +2947,6 @@ namespace HautsPermits_Occult
         }
         [MustTranslate]
         public string messageActivating;
-        public List<PawnKindDef> DF_pawnKinds;
     }
     public class CompObelisk_Hypercube : CompInteractable
     {
@@ -2965,9 +2966,9 @@ namespace HautsPermits_Occult
                 QuestUtility.SendQuestTargetSignals(spatialAnomaly.questTags, "NataliResolved", spatialAnomaly.Named("SUBJECT"));
             }
             HVMP_HypercubeMapComponent hmc = map.GetComponent<HVMP_HypercubeMapComponent>();
-            if (hmc != null && hmc.spatialAnomaly != null && hmc.spatialAnomaly is WorldObject_Hypercube woh && woh.DF_on)
+            if (hmc != null && hmc.spatialAnomaly != null && hmc.spatialAnomaly is WorldObject_Hypercube woh && woh.DF_monsterKind != null)
             {
-                PawnKindDef pkd = this.Props.DF_pawnKinds.RandomElement();
+                PawnKindDef pkd = woh.DF_monsterKind;
                 Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(pkd, pkd.RaceProps.Humanlike?Faction.OfHoraxCult:Faction.OfEntities, PawnGenerationContext.NonPlayer, new PlanetTile?(map.Tile), false, false, false, true, false, 1f, false, true, false, true, true, false, false, false, false, 0f, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null, false, false, false, false, null, null, null, null, null, 0f, DevelopmentalStage.Adult, null, null, null, false, false, false, -1, 0, false));
                 pawn.health.overrideDeathOnDownedChance = 0f;
                 GenSpawn.Spawn(pawn, CellFinder.RandomClosewalkCellNear(this.parent.Position, map, 12, null), map);

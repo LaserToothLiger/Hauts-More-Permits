@@ -1088,7 +1088,15 @@
 		  <AOEAH_condition>HVMP_AOEAH</AOEAH_condition>
 		  <AOEAH_description>\nCorrosive psychic radiation has been detected emanating in spurts from the anomaly. Those inside it will be exposed to the full force of the corrosion, gradually depleting their mood and wakefulness.</AOEAH_description>
 		  <COL_description>\nThere's no telling what might be inside - the [asker_faction_name] notes that this anomaly is particularly unusual, even by their standards. It could be very dangerous.</COL_description>
-		  <DF_description>\nThe anomaly bears the comingled signature of a subdimension in which particularly ghastly Void entities have been imprisoned. Attempting to exit from the anomaly will pull one of the prisoners out as well.</DF_description>
+		  <DF_description>\nThe anomaly bears the comingled signature of a subdimension in which particularly ghastly Void entities have been imprisoned. Attempting to exit from the anomaly will cause a [DF_monster] to emerge as well.</DF_description>
+		  <DF_pawnKinds>
+			  <li>HVMP_PrimedNociosphere</li>
+			  <li>HVMP_PrimedFleshmassNucleus</li>
+			  <li>HVMP_GrandspliceChimera</li>
+			  <li>HVMP_CharybdisDevourer</li>
+			  <li>HVMP_NoctolUmbranarch</li>
+			  <li MayRequire="Hautarche.HVPAA">HVPAA_ArchHeretic</li>
+		  </DF_pawnKinds>
         </li>
         <li Class="QuestNode_SpawnWorldObjects">
           <worldObjects>$hypercubeDoorway</worldObjects>

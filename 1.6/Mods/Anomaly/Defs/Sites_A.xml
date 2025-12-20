@@ -103,14 +103,6 @@
           <canTargetMechs>false</canTargetMechs>
           <onlyTargetControlledPawns>true</onlyTargetControlledPawns>
         </targetingParameters>
-		<DF_pawnKinds>
-		  <li>HVMP_PrimedNociosphere</li>
-		  <li>HVMP_PrimedFleshmassNucleus</li>
-		  <li>HVMP_GrandspliceChimera</li>
-		  <li>HVMP_CharybdisDevourer</li>
-		  <li>HVMP_NoctolUmbranarch</li>
-		  <li MayRequire="Hautarche.HVPAA">HVPAA_ArchHeretic</li>
-		</DF_pawnKinds>
       </li>
     </comps>
   </ThingDef>
