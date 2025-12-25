@@ -353,7 +353,7 @@
     <label>large repopulation drop</label>
     <description>Call for the delivery of a wild animal of the same species as the target. The species of the target animal must have an adulthood body size no larger than 3.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_DupeAnimal</workerClass>
-    <minTitle>HVMP_EcosphereI</minTitle>
+    <minTitle>HVMP_EcosphereII</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>24</cooldownDays>

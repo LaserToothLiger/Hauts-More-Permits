@@ -10,7 +10,7 @@
       <li TKey="HVMP_CommerceDesertion">The Desertion Bribe permit from the Commerce Branch forces a single sapient foe to flee. Use it on powerful enemies, such as rocket launcher wielders.</li>
       <li TKey="HVMP_PaxTurrets">Certain permits from the Pax Branch summon defensive turrets. Like regular turrets, they can explode when destroyed - and since enemies attack them, it might be best to place them very close to your foes.</li>
       <li TKey="HVMP_RoverRescues">The Find Rescuee permit from the Rover Branch locates potential new recruits for the colony. Unlike regular rescuees, you can see all of their traits, skills, and health conditions through the quest tab.</li>
-      <li TKey="HVMP_PalletStorage">Pallets (such as those from the Masonry Pallet Drop permit) can be turned into one of several different kinds of goods of your choice. They are also compact and low-wealth. It might be better to leave them unopened until you actually need the resources inside.</li>
+      <!--<li TKey="HVMP_PalletStorage">Pallets (such as those from the Masonry Pallet Drop permit) can be turned into one of several different kinds of goods of your choice. They are also compact and low-wealth. It might be better to leave them unopened until you actually need the resources inside.</li>-->
     </tips>
   </TipSetDef>
 
