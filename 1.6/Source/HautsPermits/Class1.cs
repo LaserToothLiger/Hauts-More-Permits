@@ -721,6 +721,9 @@ namespace HautsPermits
         public static FleckDef HVMP_BribeGlow;
         public static FleckDef HVMP_ScalpelBLAST;
         public static FleckDef HVMP_RepairGlow;
+        public static FleckDef HVMP_DecryptGlow;
+        public static FleckDef HVMP_QualityGlow;
+        public static FleckDef HVMP_VaalOrNoBaals;
 
         [MayRequireIdeology]
         public static ThoughtDef HVMP_AnthroAnnoyance;
@@ -4269,8 +4272,10 @@ namespace HautsPermits
             {
                 if (Rand.Chance(pme.gambaFactorRange.RandomInRange))
                 {
+                    HVMP_Utility.ThrowQualityDestroyGlow(thing.PositionHeld.ToVector3(), this.map, 1f);
                     thing.Destroy();
                 } else {
+                    HVMP_Utility.ThrowQualityUpgradeGlow(thing.PositionHeld.ToVector3(), this.map, 1f);
                     MinifiedThing minifiedThing = thing as MinifiedThing;
                     CompQuality coq = ((minifiedThing != null) ? minifiedThing.InnerThing.TryGetComp<CompQuality>() : thing.TryGetComp<CompQuality>());
                     if (coq != null)
@@ -4620,6 +4625,7 @@ namespace HautsPermits
             PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
             if (pme != null)
             {
+                HVMP_Utility.ThrowDecryptionGlow(target.Cell.ToVector3(), this.map, 1f);
                 foreach (Thing t in target.Cell.GetThingList(this.caller.Map))
                 {
                     CompBiocodable comp = t.TryGetComp<CompBiocodable>();
@@ -5540,7 +5546,7 @@ namespace HautsPermits
                 {
                     foreach (Plant plant in GenRadial.RadialDistinctThingsAround(this.parent.Position, this.parent.Map, this.Props.radius, true).OfType<Plant>().Distinct<Plant>())
                     {
-                        if (!plant.Blighted )
+                        if (!plant.Blighted && plant.LifeStage > PlantLifeStage.Sowing)
                         {
                             plant.Growth += (this.Props.growthAmount * this.Props.periodicity * plant.GrowthRate) / (60000f * plant.def.plant.growDays);
                             plant.DirtyMapMesh(plant.Map);
@@ -11733,6 +11739,42 @@ namespace HautsPermits
             FleckCreationData dataStatic = FleckMaker.GetDataStatic(loc + new Vector3(0.5f,0f,0.5f), map, HVMPDefOf.HVMP_RepairGlow, size);
             dataStatic.rotationRate = Rand.Range(-3f, 3f);
             dataStatic.velocityAngle = 340f + Rand.Range(0f,40f);
+            dataStatic.velocitySpeed = 0.6f;
+            map.flecks.CreateFleck(dataStatic);
+        }
+        public static void ThrowDecryptionGlow(Vector3 loc, Map map, float size)
+        {
+            if (!loc.ShouldSpawnMotesAt(map, true))
+            {
+                return;
+            }
+            FleckCreationData dataStatic = FleckMaker.GetDataStatic(loc + new Vector3(0.5f, 0f, 0.5f), map, HVMPDefOf.HVMP_DecryptGlow, size);
+            dataStatic.rotationRate = Rand.Range(-3f, 3f);
+            dataStatic.velocityAngle = 340f + Rand.Range(0f, 40f);
+            dataStatic.velocitySpeed = 0.6f;
+            map.flecks.CreateFleck(dataStatic);
+        }
+        public static void ThrowQualityUpgradeGlow(Vector3 loc, Map map, float size)
+        {
+            if (!loc.ShouldSpawnMotesAt(map, true))
+            {
+                return;
+            }
+            FleckCreationData dataStatic = FleckMaker.GetDataStatic(loc + new Vector3(0.5f, 0f, 0.5f), map, HVMPDefOf.HVMP_QualityGlow, size);
+            dataStatic.rotationRate = Rand.Range(-3f, 3f);
+            dataStatic.velocityAngle = 340f + Rand.Range(0f, 40f);
+            dataStatic.velocitySpeed = 0.6f;
+            map.flecks.CreateFleck(dataStatic);
+        }
+        public static void ThrowQualityDestroyGlow(Vector3 loc, Map map, float size)
+        {
+            if (!loc.ShouldSpawnMotesAt(map, true))
+            {
+                return;
+            }
+            FleckCreationData dataStatic = FleckMaker.GetDataStatic(loc + new Vector3(0.5f, 0f, 0.5f), map, HVMPDefOf.HVMP_VaalOrNoBaals, size);
+            dataStatic.rotationRate = Rand.Range(-3f, 3f);
+            dataStatic.velocityAngle = 340f + Rand.Range(0f, 40f);
             dataStatic.velocitySpeed = 0.6f;
             map.flecks.CreateFleck(dataStatic);
         }

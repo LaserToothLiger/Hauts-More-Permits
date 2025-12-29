@@ -9,7 +9,7 @@
     <cooldownDays>45</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
     <royalAid>
-      <targetingRange>39.9</targetingRange>
+      <targetingRange>-1</targetingRange>
     </royalAid>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" Name="HVMP_DropResourcesSeniorityScalingBase" Abstract="True">
@@ -1762,7 +1762,7 @@
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>15</cooldownDays>
-    <uiPosition>(2,2)</uiPosition>
+    <uiPosition>(2,3)</uiPosition>
     <royalAid>
       <favorCost>2</favorCost>
     </royalAid>
@@ -1897,6 +1897,27 @@
       <targetingRange>44.9</targetingRange>
       <targetingRequireLOS>false</targetingRequireLOS>
     </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="veterano.mythicages.megafaunabestiary">
+    <defName>HVMP_DirehorseDrop</defName>
+    <label>direhorse drop</label>
+    <description>Call for the delivery of 1 tame direhorse from the Rover Branch.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <minTitle>HVMP_RoverIII</minTitle>
+    <faction>HVMP_RoverBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>36</cooldownDays>
+    <uiPosition>(2,4)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<numFromCategory>1</numFromCategory>
+			<allowedPawnKinds><li>MA_Direhorse</li></allowedPawnKinds>
+			<startsTamed>true</startsTamed>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <!--Rover level 4-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">

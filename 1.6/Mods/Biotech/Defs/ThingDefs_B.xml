@@ -466,7 +466,7 @@
       <li Class="HautsPermits.CompProperties_PlantGrow">
         <radius>3.9</radius>
 		<periodicity>2000</periodicity>
-		<growthAmount>235</growthAmount>
+		<growthAmount>1</growthAmount>
       </li>
 	  <li Class="HautsFramework.CompProperties_FactionColored">
 		<colorFactor>0.85</colorFactor>

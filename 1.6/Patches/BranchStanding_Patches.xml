@@ -1323,29 +1323,6 @@
 					<match Class="PatchOperationSequence">
 						<operations>
 							<li Class="PatchOperationConditional">
-								<xpath>/Defs/ThingDef[defName="SentienceCatalyst"]/statBases/RoyalFavorValue</xpath>
-								<nomatch Class="PatchOperationAdd">
-									<xpath>/Defs/ThingDef[defName="SentienceCatalyst"]/statBases</xpath>
-									<value>
-										<RoyalFavorValue>0.25</RoyalFavorValue>
-									</value>
-								</nomatch>
-								<match Class="PatchOperationReplace">
-									<xpath>/Defs/ThingDef[defName="SentienceCatalyst"]/statBases/RoyalFavorValue</xpath>
-									<value>
-										<RoyalFavorValue>0.25</RoyalFavorValue>
-									</value>
-								</match>
-							</li>
-							<li Class="PatchOperationAdd">
-								<xpath>/Defs/TraderKindDef[defName="HVMP_OccultDonations"]/stockGenerators</xpath>
-								<value>
-								  <li Class="StockGenerator_BuySingleDef">
-									<thingDef>SentienceCatalyst</thingDef>
-								  </li>
-								</value>
-							</li>
-							<li Class="PatchOperationConditional">
 								<xpath>/Defs/ThingDef[defName="Apparel_CerebrexNode"]/statBases/RoyalFavorValue</xpath>
 								<nomatch Class="PatchOperationAdd">
 									<xpath>/Defs/ThingDef[defName="Apparel_CerebrexNode"]/statBases</xpath>

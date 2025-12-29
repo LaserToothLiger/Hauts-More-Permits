@@ -39,4 +39,41 @@
     <fadeOutTime>0.35</fadeOutTime>
   </FleckDef>
   
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>HVMP_DecryptGlow</defName>
+    <graphicData>
+      <texPath>UI/Commands/Hack</texPath>
+      <shaderType>MoteGlow</shaderType>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0.08</fadeInTime>
+    <solidTime>0.08</solidTime>
+    <fadeOutTime>0.35</fadeOutTime>
+  </FleckDef>
+  
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>HVMP_QualityGlow</defName>
+    <graphicData>
+      <texPath>UI/Overlays/Arrow</texPath>
+      <shaderType>MoteGlow</shaderType>
+	  <color>(219,219,0)</color>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0.08</fadeInTime>
+    <solidTime>0.08</solidTime>
+    <fadeOutTime>0.35</fadeOutTime>
+  </FleckDef>
+  
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>HVMP_VaalOrNoBaals</defName>
+    <graphicData>
+      <texPath>UI/Buttons/AbandonSpecificCount</texPath>
+      <shaderType>MoteGlow</shaderType>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0.08</fadeInTime>
+    <solidTime>0.08</solidTime>
+    <fadeOutTime>0.35</fadeOutTime>
+  </FleckDef>
+  
 </Defs>
