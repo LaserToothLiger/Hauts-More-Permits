@@ -131,10 +131,10 @@
     <stages>
       <li>
 		<statOffsets>
-		  <ToxicEnvironmentResistance>0.5</ToxicEnvironmentResistance>
-		  <ToxicResistance>0.1</ToxicResistance>
-		  <Mashed_Ashlands_AshResistance MayRequire="SirMashedPotato.Ashlands">0.6</Mashed_Ashlands_AshResistance>
-		  <P42_AllergicSensitivity MayRequire="phil42.allergies">-0.8</P42_AllergicSensitivity>
+		  <ToxicEnvironmentResistance>1</ToxicEnvironmentResistance>
+		  <ToxicResistance>0.25</ToxicResistance>
+		  <Mashed_Ashlands_AshResistance MayRequire="SirMashedPotato.Ashlands">1</Mashed_Ashlands_AshResistance>
+		  <P42_AllergicSensitivity MayRequire="phil42.allergies">-1</P42_AllergicSensitivity>
 		</statOffsets>
       </li>
     </stages>

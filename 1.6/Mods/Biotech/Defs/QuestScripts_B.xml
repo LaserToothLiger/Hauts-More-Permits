@@ -1232,7 +1232,7 @@
 				  <hiddenSitePartsPossible>false</hiddenSitePartsPossible>
 				  <worldObjects>$sites</worldObjects>
 				  <storeAs>sites</storeAs>
-				  <siteDistRange>5~12</siteDistRange>
+				  <siteDistRange>2~12</siteDistRange>
 				  <destroyedStrings>$destroyedStrings</destroyedStrings>
 				  <storeStringsAs>destroyedStrings</storeStringsAs>
 				  <iterator>$GBiterator</iterator>

@@ -396,7 +396,7 @@
   </RoyalTitleDef>
   <RoyalTitleDef ParentName="HVMP_BaseOccultTitle" MayRequire="Ludeon.RimWorld.Anomaly">
     <defName>HVMP_OccultVI</defName>
-    <label>Archite</label>
+    <label>Archon</label>
     <description>This individual has the esteem of the Occult Branch, and may prevail upon it for all manner of powerful favors.</description>
     <seniority>600</seniority>
     <favorCost>11</favorCost>

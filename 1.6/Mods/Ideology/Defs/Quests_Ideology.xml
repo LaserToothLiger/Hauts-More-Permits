@@ -682,7 +682,7 @@
       <nodes>
         <li Class="QuestNode_Set">
           <name>siteDistRange</name>
-          <value>5~13</value>
+          <value>2~13</value>
         </li>
         <li Class="QuestNode_GetMap">
 		  <canBeSpace>true</canBeSpace>

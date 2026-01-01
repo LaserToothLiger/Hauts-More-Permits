@@ -85,7 +85,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_CraftsDropI</defName>
     <label>wood and dye drop</label>
-    <description>Call for a drop of 145 wood and 29 dye per rank held with the Commerce Branch (290 and 58 if the caller is a Trader; 435 and 87 if the caller is an Investor; and so on and so forth).</description>
+    <description>Call for a drop of 145 wood and 29 dye per rank held with the Commerce Branch (290 and 58 if the caller is a Trader; 435 and 87 if the caller is a Financier; and so on and so forth).</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -108,7 +108,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_SteelDropI</defName>
     <label>steel drop</label>
-    <description>Call for a drop of 132 steel per rank held with the Commerce Branch (264 if the caller is a Trader; 396 if the caller is an Investor; and so on and so forth).</description>
+    <description>Call for a drop of 132 steel per rank held with the Commerce Branch (264 if the caller is a Trader; 396 if the caller is a Financier; and so on and so forth).</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -130,7 +130,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_MasonryDropI</defName>
     <label>masonry drop</label>
-    <description>Call for a drop of 1 masonry pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is an Investor; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of terrestrial stone blocks of your choice.</description>
+    <description>Call for a drop of 1 masonry pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is a Financier; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of terrestrial stone blocks of your choice.</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -152,7 +152,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_FuelDropI</defName>
     <label>fuel drop</label>
-    <description>Call for a drop of 110 chemfuel per rank held with the Commerce Branch (220 if the caller is a Trader; 330 if the caller is an Investor; and so on and so forth).</description>
+    <description>Call for a drop of 110 chemfuel per rank held with the Commerce Branch (220 if the caller is a Trader; 330 if the caller is a Financier; and so on and so forth).</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -174,7 +174,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_UraniumDropI</defName>
     <label>uranium drop</label>
-    <description>Call for a drop of 42 uranium per rank held with the Commerce Branch (84 if the caller is a Trader; 126 if the caller is an Investor; and so on and so forth).</description>
+    <description>Call for a drop of 42 uranium per rank held with the Commerce Branch (84 if the caller is a Trader; 126 if the caller is a Financier; and so on and so forth).</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -196,7 +196,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_CraftsDropII</defName>
     <label>cloth and dye drop</label>
-    <description>Call for a drop of 145 cloth and 14 dye per rank held with the Commerce Branch (290 and 28 if the caller is a Trader; 435 and 42 if the caller is an Investor; and so on and so forth).</description>
+    <description>Call for a drop of 145 cloth and 14 dye per rank held with the Commerce Branch (290 and 28 if the caller is a Trader; 435 and 42 if the caller is a Financier; and so on and so forth).</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -219,7 +219,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_PlasteelDropI</defName>
     <label>plasteel drop</label>
-    <description>Call for a drop of 28 plasteel per rank held with the Commerce Branch (56 if the caller is a Trader; 84 if the caller is an Investor; and so on and so forth).</description>
+    <description>Call for a drop of 28 plasteel per rank held with the Commerce Branch (56 if the caller is a Trader; 84 if the caller is a Financier; and so on and so forth).</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -241,7 +241,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_JadeDropI</defName>
     <label>jade drop</label>
-    <description>Call for a drop of 50 jade per rank held with the Commerce Branch (100 if the caller is a Trader; 150 if the caller is an Investor; and so on and so forth).</description>
+    <description>Call for a drop of 50 jade per rank held with the Commerce Branch (100 if the caller is a Trader; 150 if the caller is a Financier; and so on and so forth).</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -263,7 +263,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_CompDropI</defName>
     <label>component drop</label>
-    <description>Call for a drop of 10 components per rank held with the Commerce Branch (20 if the caller is a Trader; 30 if the caller is an Investor; and so on and so forth).</description>
+    <description>Call for a drop of 10 components per rank held with the Commerce Branch (20 if the caller is a Trader; 30 if the caller is a Financier; and so on and so forth).</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -285,7 +285,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="Ludeon.RimWorld.Odyssey">
 	<defName>HVMP_ObsidianDropI</defName>
 	<label>obsidian drop</label>
-	<description>Call for a drop of 50 obsidian per rank held with the Commerce Branch (100 if the caller is a Trader; 150 if the caller is an Investor; and so on and so forth).</description>
+	<description>Call for a drop of 50 obsidian per rank held with the Commerce Branch (100 if the caller is a Trader; 150 if the caller is a Financier; and so on and so forth).</description>
 	<minTitle>HVMP_CommerceI</minTitle>
 	<faction>HVMP_CommerceBranch</faction>
 	<permitPointCost>1</permitPointCost>
@@ -307,7 +307,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="GT.Sam.GlitterTech">
 		<defName>HVMP_TitaniumDropI</defName>
 		<label>titanium drop</label>
-		<description>Call for a drop of 8 titanium per rank held with the Commerce Branch (16 if the caller is a Trader; 24 if the caller is an Investor; and so on and so forth).</description>
+		<description>Call for a drop of 8 titanium per rank held with the Commerce Branch (16 if the caller is a Trader; 24 if the caller is a Financier; and so on and so forth).</description>
 		<minTitle>HVMP_CommerceI</minTitle>
 		<faction>HVMP_CommerceBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -329,7 +329,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="GT.Sam.GlitterTech">
 		<defName>HVMP_SiliconDropI</defName>
 		<label>silicon drop</label>
-		<description>Call for a drop of 250 silicon per rank held with the Commerce Branch (500 if the caller is a Trader; 750 if the caller is an Investor; and so on and so forth).</description>
+		<description>Call for a drop of 250 silicon per rank held with the Commerce Branch (500 if the caller is a Trader; 750 if the caller is a Financier; and so on and so forth).</description>
 		<minTitle>HVMP_CommerceI</minTitle>
 		<faction>HVMP_CommerceBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -351,7 +351,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="GT.Sam.GlitterTech">
 		<defName>HVMP_AlphaPolyDropI</defName>
 		<label>alpha poly drop</label>
-		<description>Call for a drop of 2 alpha poly per rank held with the Commerce Branch (4 if the caller is a Trader; 6 if the caller is an Investor; and so on and so forth).</description>
+		<description>Call for a drop of 2 alpha poly per rank held with the Commerce Branch (4 if the caller is a Trader; 6 if the caller is a Financier; and so on and so forth).</description>
 		<minTitle>HVMP_CommerceI</minTitle>
 		<faction>HVMP_CommerceBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -373,7 +373,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="GT.Sam.GlitterTech">
 		<defName>HVMP_BetaPolyDropI</defName>
 		<label>beta poly drop</label>
-		<description>Call for a drop of 1 beta poly per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is an Investor; and so on and so forth).</description>
+		<description>Call for a drop of 1 beta poly per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is a Financier; and so on and so forth).</description>
 		<minTitle>HVMP_CommerceI</minTitle>
 		<faction>HVMP_CommerceBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -395,7 +395,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="zylle.Gemstones">
 		<defName>HVMP_GemstoneDropI</defName>
 		<label>gemstone drop</label>
-		<description>Call for a drop of 1 gemstone pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is an Investor; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of gemstone of your choice.</description>
+		<description>Call for a drop of 1 gemstone pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is a Financier; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of gemstone of your choice.</description>
 		<minTitle>HVMP_CommerceI</minTitle>
 		<faction>HVMP_CommerceBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -417,7 +417,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="sarg.alphacrafts">
 		<defName>HVMP_ArtisanalDropI</defName>
 		<label>artisanal drop</label>
-		<description>Call for a drop of 1 artisan pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is an Investor; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of artisanal craft of your choice.</description>
+		<description>Call for a drop of 1 artisan pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is a Financier; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of artisanal craft of your choice.</description>
 		<minTitle>HVMP_CommerceI</minTitle>
 		<faction>HVMP_CommerceBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -439,7 +439,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="VanillaExpanded.VCookE">
 		<defName>HVMP_CondimentDropI</defName>
 		<label>condiment drop</label>
-		<description>Call for a drop of 1 condiment pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is an Investor; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of condiment of your choice.</description>
+		<description>Call for a drop of 1 condiment pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is a Financier; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of condiment of your choice.</description>
 		<minTitle>HVMP_CommerceI</minTitle>
 		<faction>HVMP_CommerceBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -507,7 +507,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_CallDropPods</defName>
     <label>signal cargo pods</label>
-    <description>Arrange for someone to look the other way while resource-containing drop pods conveniently misfire and land near your location. An additional set of cargo pods is sent per additional rank held with the Commerce Branch (2 if the caller is an Investor; 3 if the caller is a Financier; and so on and so forth).</description>
+    <description>Arrange for someone to look the other way while resource-containing drop pods conveniently misfire and land near your location. An additional set of cargo pods is sent per additional rank held with the Commerce Branch (2 if the caller is a Financier; 3 if the caller is a Marketeer; and so on and so forth).</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuestSeniorityScaling_PTargFriendly</workerClass>
     <minTitle>HVMP_CommerceII</minTitle>
     <faction>HVMP_CommerceBranch</faction>
@@ -1021,7 +1021,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_EMPShellDrop</defName>
     <label>EMP shell drop</label>
-    <description>Call for a drop of 4 EMP shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
+    <description>Call for a drop of 4 EMP shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Citadel).</description>
     <minTitle>HVMP_PaxIV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1043,7 +1043,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_HEShellDrop</defName>
     <label>HE shell drop</label>
-    <description>Call for a drop of 4 high-explosive shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
+    <description>Call for a drop of 4 high-explosive shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Citadel).</description>
     <minTitle>HVMP_PaxIV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1065,7 +1065,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="Ludeon.RimWorld.Biotech">
     <defName>HVMP_ToxShellDrop</defName>
     <label>tox shell drop</label>
-    <description>Call for a drop of 4 tox shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
+    <description>Call for a drop of 4 tox shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Citadel).</description>
     <minTitle>HVMP_PaxIV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1087,7 +1087,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="Ludeon.RimWorld.Anomaly">
     <defName>HVMP_DeadlifeShellDrop</defName>
     <label>deadlife shell drop</label>
-    <description>Call for a drop of 4 deadlife shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
+    <description>Call for a drop of 4 deadlife shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Citadel).</description>
     <minTitle>HVMP_PaxIV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1109,7 +1109,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="OskarPotocki.VFE.Deserters">
 		<defName>HVMP_ClusterShellDrop</defName>
 		<label>cluster shell drop</label>
-		<description>Call for a drop of 2 cluster shells, or 3 if the caller has achieved the rank of Fortress.</description>
+		<description>Call for a drop of 2 cluster shells, or 3 if the caller has achieved the rank of Citadel.</description>
 		<minTitle>HVMP_PaxIV</minTitle>
 		<faction>HVMP_PaxBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -1134,7 +1134,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="OskarPotocki.VFE.Deserters">
 		<defName>HVMP_PiercingShellDrop</defName>
 		<label>piercing shell drop</label>
-		<description>Call for a drop of 4 armor-piercing shells, plus 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
+		<description>Call for a drop of 4 armor-piercing shells, plus 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Citadel).</description>
 		<minTitle>HVMP_PaxIV</minTitle>
 		<faction>HVMP_PaxBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -1156,7 +1156,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="OskarPotocki.VFE.Deserters">
 		<defName>HVMP_ShrapnelShellDrop</defName>
 		<label>shrapnel shell drop</label>
-		<description>Call for a drop of 4 shrapnel shells, plus 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Fortress).</description>
+		<description>Call for a drop of 4 shrapnel shells, plus 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Citadel).</description>
 		<minTitle>HVMP_PaxIV</minTitle>
 		<faction>HVMP_PaxBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -1799,7 +1799,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="Ludeon.RimWorld.Odyssey">
     <defName>HVMP_GravlitePanelDrop</defName>
     <label>gravlite panel drop</label>
-    <description>Call for a drop of 150 gravlite panels, plus another 50 per rank held with the Rover Branch past Wayfarer (200 if the caller is a Voyager; 250 if the caller is a Cartographer; 300 if the caller is a Globetrotter).</description>
+    <description>Call for a drop of 150 gravlite panels, plus another 50 per rank held with the Rover Branch past Wayfarer (200 if the caller is a Voyager; 250 if the caller is a Globetrotter; 300 if the caller is a Boundless).</description>
     <minTitle>HVMP_RoverIII</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1975,7 +1975,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DROCSeniorityScalingBase" MayRequire="OskarPotocki.VanillaVehiclesExpanded">
 		<defName>HVMP_CarPartDrop</defName>
 		<label>car part drop</label>
-		<description>Call for a drop of 3 random car parts, plus another 1 per rank held with the Rover Branch past Voyager (4 if the caller is a Cartographer; 5 if the caller is a Globetrotter).</description>
+		<description>Call for a drop of 3 random car parts, plus another 1 per rank held with the Rover Branch past Voyager (4 if the caller is a Globetrotter; 5 if the caller is a Boundless).</description>
 		<minTitle>HVMP_RoverIV</minTitle>
 		<faction>HVMP_RoverBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -2037,7 +2037,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Ideology">
     <defName>HVMP_LocateWorkSites</defName>
     <label>find work sites</label>
-    <description>Learn about the locations of two nearby work sites.</description>
+    <description>Learn about the locations of two nearby work sites.\n\nDue to technical issues, this permit does not work correctly if you use it while you have a colony on a tiny landlocked island.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
     <minTitle>HVMP_RoverIV</minTitle>
     <faction>HVMP_RoverBranch</faction>

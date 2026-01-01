@@ -6084,7 +6084,7 @@ namespace HautsPermits
             qp.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
             qp.worldObjects = this.siteToDestroy.GetValue(slate);
             Map map = slate.Get<Map>("map");
-            if (this.faction != null)
+            if (this.faction != null && this.outcome.GetValue(slate) == QuestEndOutcome.Fail)
             {
                 QuestPart_BranchGoodwillChange qpbgc = new QuestPart_BranchGoodwillChange();
                 qpbgc.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);

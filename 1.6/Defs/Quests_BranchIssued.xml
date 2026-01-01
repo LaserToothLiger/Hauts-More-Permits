@@ -913,8 +913,8 @@
       <nodes>
         <li Class="HautsPermits.QuestNode_NRNSN">
           <name>siteDistRange</name>
-          <value>8~20</value>
-		  <valueIfNRNSN>8~99999</valueIfNRNSN>
+          <value>2~20</value>
+		  <valueIfNRNSN>2~99999</valueIfNRNSN>
           <NRNSN_timeName>TAAH_tradeTimerMalus</NRNSN_timeName>
           <NRNSN_timeValue>$(randInt(4,7)*60000)</NRNSN_timeValue>
         </li>
@@ -1600,7 +1600,7 @@
       <nodes>
         <li Class="QuestNode_Set">
           <name>siteDistRange</name>
-          <value>5~13</value>
+          <value>2~13</value>
         </li>
         <li Class="QuestNode_GetMap">
 		  <canBeSpace>true</canBeSpace>
@@ -1778,6 +1778,31 @@
         <li Class="HautsPermits.QuestNode_LookOverHere">
           <worldObjects>$worldObject</worldObjects>
         </li>
+		<li Class="QuestNode_Signal">
+          <inSignal>bookObject.StudiableItemFinished</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Set">
+                <name>sendStandardLetter</name>
+                <value>true</value>
+              </li>
+              <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				<faction>$faction</faction>
+                <customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+                <customLetterText TKey="LetterTextPaymentArrived">You have revised the atlas!\n\nThe Rover Branch's respect for you has increased.</customLetterText>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndAndDestroySite">
+                <outcome>Success</outcome>
+				<siteToDestroy>$worldObject</siteToDestroy>
+                <sendStandardLetter>$sendStandardLetter</sendStandardLetter>
+				<faction>HVMP_RoverBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_DestroyOrPassToWorldOnCleanup">
+          <things>$bookObject</things>
+        </li>
         <li Class="QuestNode_Signal">
           <inSignal>bookObject.StudiableItemDestroyed</inSignal>
           <node Class="QuestNode_Sequence">
@@ -1796,31 +1821,6 @@
             </nodes>
           </node>
         </li>
-		<li Class="QuestNode_Signal">
-          <inSignal>bookObject.StudiableItemFinished</inSignal>
-          <node Class="QuestNode_Sequence">
-            <nodes>
-              <li Class="QuestNode_Set">
-                <name>sendStandardLetter</name>
-                <value>true</value>
-              </li>
-              <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
-				<faction>$faction</faction>
-                <customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
-                <customLetterText TKey="LetterTextPaymentArrived">You have revised the atlas!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
-              </li>
-              <li Class="HautsPermits.QuestNode_EndAndDestroySite">
-                <outcome>Success</outcome>
-				<siteToDestroy>$worldObject</siteToDestroy>
-                <sendStandardLetter>$sendStandardLetter</sendStandardLetter>
-				<faction>HVMP_RoverBranch</faction>
-              </li>
-            </nodes>
-          </node>
-        </li>
-        <li Class="QuestNode_DestroyOrPassToWorldOnCleanup">
-          <things>$bookObject</things>
-        </li>
         <li Class="QuestNode_Set">
           <name>timeout</name>
           <value>$(3600000)</value>
@@ -1833,7 +1833,7 @@
             <nodes>
               <li Class="QuestNode_Letter">
                 <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
-                <text TKey="LetterTextQuestExpired">The window of time to revise the regional atlas has expired. The [asker_faction_name]'s respect for you has slightly diminished.</text>
+                <text TKey="LetterTextQuestExpired">The window of time to revise the regional atlas has expired. The Rover Branch's respect for you has slightly diminished.</text>
               </li>
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
@@ -1849,7 +1849,7 @@
             <nodes>
               <li Class="QuestNode_Letter">
                 <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
-                <text TKey="LetterTextQuestExpired">The window of time to revise the regional atlas has expired. The [asker_faction_name]'s respect for you has slightly diminished.</text>
+                <text TKey="LetterTextQuestExpired">The window of time to revise the regional atlas has expired. The Rover Branch's respect for you has slightly diminished.</text>
               </li>
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>

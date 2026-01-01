@@ -283,7 +283,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_FlarePackDrop</defName>
     <label>flare pack drop</label>
-    <description>Call for a drop of 1 disruptor flare pack, plus another pack per rank held with the Occult Branch past Practitioner (4 if the caller is a Convoker; 5 if the caller is a Thaumaturge; 6 if the caller is a Revelantor).</description>
+    <description>Call for a drop of 1 disruptor flare pack, plus another pack per rank held with the Occult Branch past Practitioner (4 if the caller is a Convoker; 5 if the caller is a Thaumaturge; 6 if the caller is an Archon).</description>
     <minTitle>HVMP_OccultIII</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -322,7 +322,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="VanillaExpanded.VPsycastsE">
 		<defName>HVMP_EltexDrop</defName>
 		<label>eltex drop</label>
-		<description>Call for a drop of 3 eltex, plus another 3 per rank held with the Occult Branch past Practitioner (6 if the caller is a Convoker; 9 if the caller is a Thaumaturge; 12 if the caller is a Revelantor).</description>
+		<description>Call for a drop of 3 eltex, plus another 3 per rank held with the Occult Branch past Practitioner (6 if the caller is a Convoker; 9 if the caller is a Thaumaturge; 12 if the caller is an Archon).</description>
 		<minTitle>HVMP_OccultIII</minTitle>
 		<faction>HVMP_OccultBranch</faction>
 		<permitPointCost>1</permitPointCost>

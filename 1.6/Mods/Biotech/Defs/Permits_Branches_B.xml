@@ -746,7 +746,7 @@
     <label>mega repopulation drop</label>
     <description>Call for the delivery of a wild animal of the same species as the target.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_DupeAnimal</workerClass>
-    <minTitle>HVMP_EcosphereI</minTitle>
+    <minTitle>HVMP_EcosphereIV</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>36</cooldownDays>
