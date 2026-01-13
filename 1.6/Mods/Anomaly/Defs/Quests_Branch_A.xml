@@ -250,7 +250,7 @@
       </include>
       <rulesStrings>
         <!-- Asker is faction leader, single prisoner -->
-        <li>questDescription(asker_factionLeader==True,lodgersCount==1)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], wants you to hold prisoner a cultist for [asker_objective]. The prisoner, a [lodgers0_age]-year-old cultist named [lodgers0_nameFull], [cultistKnows], which makes [lodgers0_objective] to the [asker_faction_name]. You only need to keep the cultist for [shuttleDelayTicks_duration] until [asker_possessive] interrogation facilities are ready.[threatsInfo3]\n[mutatorSuffix]</li>
+        <li>questDescription(asker_factionLeader==True,lodgersCount==1)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], wants you to hold prisoner a cultist for [asker_objective]. The prisoner, a [lodgers0_age]-year-old cultist named [lodgers0_nameFull], [cultistKnows], which makes [lodgers0_objective] of interest to the [asker_faction_name]. You only need to keep the cultist for [shuttleDelayTicks_duration] until [asker_possessive] interrogation facilities are ready.[threatsInfo3]\n[mutatorSuffix]</li>
         <li>threatsInfo3(generateThreats==true)->\n\nUnfortunately, [lodgersFaction_name] has contracted mercenary forces to rescue [lodgers0_nameDef]. [pawnKindsParagraph]</li>
 		 <li>threatsInfo3(generateThreats==false)-></li>
 
