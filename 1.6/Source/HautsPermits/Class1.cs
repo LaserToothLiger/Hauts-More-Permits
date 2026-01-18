@@ -712,8 +712,6 @@ namespace HautsPermits
         public static ThingDef HVMP_DelayedPowerBeam;
         public static ThingDef HVMP_DatedAtlas;
         public static ThingDef HVMP_TunnelHiveSpawner;
-        [MayRequireIdeology]
-        public static ThingDef HVMP_AncientTerminal;
         [MayRequireOdyssey]
         public static ThingDef HVMP_EnterpriseSecurityCrate;
         [MayRequireOdyssey]
@@ -799,7 +797,7 @@ namespace HautsPermits
                 {
                     WorldObject worldObject = WorldObjectMaker.MakeWorldObject(HVMPDefOf.HVMP_BranchPlatform);
                     worldObject.SetFaction(f2);
-                    worldObject.Tile = TileFinder.RandomSettlementTileFor(Find.WorldGrid.Orbit, f2, false, null);
+                    worldObject.Tile = TileFinder.RandomSettlementTileFor(Find.WorldGrid.Orbit??Find.WorldGrid.Surface, f2, false, null);
                     INameableWorldObject nameableWorldObject = worldObject as INameableWorldObject;
                     if (nameableWorldObject != null)
                     {
@@ -6741,171 +6739,138 @@ namespace HautsPermits
 
     }
     //commerce branchquest: fortification
-    public class QuestNode_Root_Fortification : QuestNode_Sequence
+    public class QuestNode_CommerceFortification : QuestNode_CommerceIntermediary
     {
         protected override void RunInt()
         {
-            if (HVMP_Utility.TryFindCommerceFaction(out Faction faction))
+            Slate slate = QuestGen.slate;
+            PawnKindDef pawnKindDef;
+            if (pawnKinds.TryRandomElement(out pawnKindDef))
             {
-                Slate slate = QuestGen.slate;
-                Quest quest = QuestGen.quest;
-                slate.Set<Faction>("faction", faction, false);
-                slate.Set<Pawn>("asker", faction.leader, false);
-                bool TTOT_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fort2, HVMP_Mod.settings.fortX);
-                slate.Set<bool>("punishmentOnDestroy", TTOT_on || Rand.Chance(0.5f), false);
-                if (TTOT_on)
-                {
-                    QuestGen.AddQuestDescriptionRules(new List<Rule>
-                    {
-                        new Rule_String("mutator_TTOT_info", this.TTOT_description.Formatted())
-                    });
-                } else {
-                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TTOT_info", " ") });
-                }
-                slate.Set<bool>(this.storeTTOT.GetValue(slate), TTOT_on, false);
-                Map map = HVMP_Utility.TryGetMap();
-                slate.Set<Map>("map", map, false);
-                PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
-                slate.Set<PlanetTile>("pTile", tile, false);
-                QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
-                qpbgfh.faction = faction;
-                QuestGen.quest.AddPart(qpbgfh);
-                HVMP_Utility.SetSettingScalingRewardValue(slate);
+                slate.Set<PawnKindDef>(this.storePawnKindAs.GetValue(slate), pawnKindDef, false);
             }
             base.RunInt();
         }
+        [NoTranslate]
+        public SlateRef<string> storePawnKindAs;
+        public List<PawnKindDef> pawnKinds;
+    }
+    public class QuestNode_Fort_AllThreeMutators : QuestNode
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            if (this.pawns.GetValue(slate) == null)
+            {
+                return;
+            }
+            bool mayhemMode = HVMP_Mod.settings.fortX;
+            if (!this.PTTMD_hediffs.NullOrEmpty() && HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fort1, mayhemMode))
+            {
+                List<Pawn> pawns = this.pawns.GetValue(slate).ToList();
+                for (int i = 0; i < pawns.Count; i++)
+                {
+                    Hediff h = HediffMaker.MakeHediff(this.PTTMD_hediffs.RandomElement(), pawns[i]);
+                    pawns[i].health.AddHediff(h);
+                }
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_PTTMD_info_singular", this.PTTMD_description_singular.Formatted()),
+                    new Rule_String("mutator_PTTMD_info_plural", this.PTTMD_description_plural.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_PTTMD_info_singular", " "), new Rule_String("mutator_PTTMD_info_plural", " ") });
+            }
+            if (this.R2R_hediff != null && HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fort2, mayhemMode))
+            {
+                List<Pawn> pawns = this.pawns.GetValue(slate).ToList();
+                for (int i = 0; i < pawns.Count; i++)
+                {
+                    Hediff h = HediffMaker.MakeHediff(this.R2R_hediff, pawns[i]);
+                    pawns[i].health.AddHediff(h);
+                }
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_R2R_info_singular", this.R2R_description_singular.Formatted()),
+                    new Rule_String("mutator_R2R_info_plural", this.R2R_description_plural.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_R2R_info_singular", " "), new Rule_String("mutator_R2R_info_plural", " ") });
+            }
+            if (this.WBY_hediff != null && HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fort3, mayhemMode))
+            {
+                List<Pawn> pawns = this.pawns.GetValue(slate).ToList();
+                for (int i = 0; i < pawns.Count; i++)
+                {
+                    Hediff h = HediffMaker.MakeHediff(this.WBY_hediff, pawns[i]);
+                    pawns[i].health.AddHediff(h);
+                }
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_WBY_info_singular", this.WBY_description_singular.Formatted()),
+                    new Rule_String("mutator_WBY_info_plural", this.WBY_description_plural.Formatted())
+                });
+            } else {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_WBY_info_singular", " "), new Rule_String("mutator_WBY_info_plural", " ") });
+            }
+        }
         protected override bool TestRunInt(Slate slate)
         {
-            HVMP_Utility.SetSettingScalingRewardValue(slate);
-            return HVMP_Utility.TryFindCommerceFaction(out Faction commerceFaction) && base.TestRunInt(slate);
+            return true;
         }
         [NoTranslate]
         public SlateRef<string> inSignal;
-        [NoTranslate]
-        public SlateRef<string> storeTTOT;
+        public SlateRef<IEnumerable<Pawn>> pawns;
+        public List<HediffDef> PTTMD_hediffs;
         [MustTranslate]
-        public string TTOT_description;
+        public string PTTMD_description_singular;
+        [MustTranslate]
+        public string PTTMD_description_plural;
+        public HediffDef R2R_hediff;
+        [MustTranslate]
+        public string R2R_description_singular;
+        [MustTranslate]
+        public string R2R_description_plural;
+        public HediffDef WBY_hediff;
+        [MustTranslate]
+        public string WBY_description_singular;
+        [MustTranslate]
+        public string WBY_description_plural;
     }
-    public class QuestNode_Fortification_TTOT : QuestNode
+    public class HediffCompProperties_SeverityPerDay_WBY : HediffCompProperties_SeverityPerDay
     {
-        protected override bool TestRunInt(Slate slate)
+        public HediffCompProperties_SeverityPerDay_WBY()
         {
-            this.SetVars(slate);
-            return true;
+            this.compClass = typeof(HediffComp_SeverityPerDay_WBY);
         }
-        protected override void RunInt()
-        {
-            this.SetVars(QuestGen.slate);
-        }
-        private void SetVars(Slate slate)
-        {
-            slate.Set<int>(this.nameTime.GetValue(slate), (int)(this.valueTime.RandomInRange * this.valueTimeUnits * (this.TTOT_enabled.GetValue(slate) ? this.timeFactorTTOT : 1f)), false);
-            slate.Set<int>(this.nameGoodwill.GetValue(slate), (int)(this.valueGoodwill * (this.TTOT_enabled.GetValue(slate) ? this.goodwillFactorTTOT : 1f)), false);
-        }
-        [NoTranslate]
-        public SlateRef<string> nameTime;
-        public IntRange valueTime;
-        public int valueTimeUnits;
-        public float timeFactorTTOT;
-        [NoTranslate]
-        public SlateRef<string> nameGoodwill;
-        public int valueGoodwill;
-        public float goodwillFactorTTOT;
-        public SlateRef<bool> TTOT_enabled;
+        public float infestationMTB;
     }
-    public class QuestNode_Multiply_RM : QuestNode
+    public class HediffComp_SeverityPerDay_WBY : HediffComp_SeverityPerDay
     {
-        protected override bool TestRunInt(Slate slate)
+        private HediffCompProperties_SeverityPerDay_WBY Props
         {
-            return !this.storeAs.GetValue(slate).NullOrEmpty();
-        }
-        protected override void RunInt()
-        {
-            Slate slate = QuestGen.slate;
-            slate.Set<double>(this.storeAs.GetValue(slate), this.value1.GetValue(slate) * this.value2.GetValue(slate) * (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fort1, HVMP_Mod.settings.fortX) ? this.RM_factor : 1d), false);
-        }
-        public SlateRef<double> value1;
-        public SlateRef<double> value2;
-        public double RM_factor;
-        [NoTranslate]
-        public SlateRef<string> storeAs;
-    }
-    public class QuestNode_Fortification_UTTN : QuestNode
-    {
-        protected override bool TestRunInt(Slate slate)
-        {
-            int largestSize = this.GetLargestSize(slate);
-            slate.Set<int>(this.storeAs.GetValue(slate), largestSize, false);
-            return largestSize >= this.failIfSmaller.GetValue(slate);
-        }
-        protected override void RunInt()
-        {
-            Slate slate = QuestGen.slate;
-            int largestSize = this.GetLargestSize(slate);
-            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.fort3, HVMP_Mod.settings.fortX))
+            get
             {
-                largestSize = (int)Math.Max(largestSize * this.UTTN_factor, largestSize + this.UTTN_minBonus);
-                slate.Set<float>(this.UTTN_scalarSaveAs.GetValue(slate), this.UTTN_scalarIfOn, false);
-            } else {
-                slate.Set<float>(this.UTTN_scalarSaveAs.GetValue(slate), this.UTTN_scalarIfOff, false);
+                return (HediffCompProperties_SeverityPerDay_WBY)this.props;
             }
-            slate.Set<int>(this.storeAs.GetValue(slate), largestSize, false);
         }
-        private int GetLargestSize(Slate slate)
+        public override void CompPostTickInterval(ref float severityAdjustment, int delta)
         {
-            Map mapResolved = this.map.GetValue(slate) ?? slate.Get<Map>("map", null, false);
-            if (mapResolved == null)
+            base.CompPostTickInterval(ref severityAdjustment, delta);
+            if (this.Pawn.SpawnedOrAnyParentSpawned && this.Pawn.IsHashIntervalTick(500, delta))
             {
-                return 0;
-            }
-            int value = this.max.GetValue(slate);
-            CellRect cellRect = LargestAreaFinder.FindLargestRect(mapResolved, (IntVec3 x) => this.IsClear(x, mapResolved), value);
-            return Mathf.Min(new int[] { cellRect.Width, cellRect.Height, value });
-        }
-        private bool IsClear(IntVec3 c, Map map)
-        {
-            if (!c.GetAffordances(map).Contains(TerrainAffordanceDefOf.Heavy))
-            {
-                return false;
-            }
-            List<Thing> thingList = c.GetThingList(map);
-            for (int i = 0; i < thingList.Count; i++)
-            {
-                if (thingList[i].def.IsBuildingArtificial && thingList[i].Faction == Faction.OfPlayer)
+                if (this.Props.infestationMTB > 0f && Rand.MTBEventOccurs(this.Props.infestationMTB, 60000f, 500))
                 {
-                    return false;
-                }
-                if (thingList[i].def.mineable)
-                {
-                    bool flag = false;
-                    for (int j = 0; j < 8; j++)
-                    {
-                        IntVec3 intVec = c + GenAdj.AdjacentCells[j];
-                        if (intVec.InBounds(map) && intVec.GetFirstMineable(map) == null)
-                        {
-                            flag = true;
-                            break;
-                        }
-                    }
-                    if (!flag)
-                    {
-                        return false;
-                    }
+                    IncidentParms incidentParms = new IncidentParms();
+                    incidentParms.target = this.Pawn.MapHeld;
+                    incidentParms.points = StorytellerUtility.DefaultThreatPointsNow(this.Pawn.MapHeld);
+                    incidentParms.infestationLocOverride = new IntVec3?(this.Pawn.PositionHeld);
+                    incidentParms.forced = true;
+                    IncidentDefOf.Infestation.Worker.TryExecute(incidentParms);
+                    this.Pawn.health.RemoveHediff(this.parent);
                 }
             }
-            return true;
         }
-        public SlateRef<Map> map;
-        [NoTranslate]
-        public SlateRef<string> storeAs;
-        public SlateRef<int> failIfSmaller;
-        public SlateRef<int> max;
-        public int UTTN_minBonus;
-        public float UTTN_factor = 1f;
-        [NoTranslate]
-        public SlateRef<string> UTTN_scalarSaveAs;
-        public float UTTN_scalarIfOff;
-        public float UTTN_scalarIfOn;
     }
     //commerce branchquest: intervention
     public class QuestNode_InterventionInner : QuestNode
@@ -11938,10 +11903,10 @@ namespace HautsPermits
         public bool fort1, fort2, fort3, interv1, interv2, interv3, mm1, mm2, mm3, research1, research2, research3, transport1, transport2, transport3;
         public bool caelum1, caelum2, caelum3, machina1, machina2, machina3, mundi1, mundi2, mundi3, prox1, prox2, prox3, vox1, vox2, vox3;
         public bool atlas1, atlas2, atlas3, ares1, ares2, ares3, laelaps1, laelaps2, laelaps3, odyssey1, odyssey2, odyssey3, theseus1, theseus2, theseus3;
-        public bool ethnog1, ethnog2, ethnog3, excav1, excav2, excav3, remnant1, remnant2, remnant3, sat1, sat2, sat3, shrine1, shrine2, shrine3;
+        public bool ethnog1, ethnog2, ethnog3, remnant1, remnant2, remnant3, replica1, replica2, replica3, sat1, sat2, sat3, shrine1, shrine2, shrine3;
         public bool cs1, cs2, cs3, ec1, ec2, ec3, fw1, fw2, fw3, hd1, hd2, hd3, ra1, ra2, ra3;
         public bool barker1, barker2, barker3, fuller1, fuller2, fuller3, lc1, lc2, lc3, natali1, natali2, natali3, romero1, romero2, romero3;
-        public bool fortX, intervX, mmX, researchX, transportX, caelumX, machinaX, mundiX, proxX, voxX, atlasX, aresX, laelapsX, odysseyX, theseusX, ethnogX, excavX, remnantX, satX, shrineX, csX, ecX, fwX, hdX, raX, barkerX, fullerX, lcX, nataliX, romeroX;
+        public bool fortX, intervX, mmX, researchX, transportX, caelumX, machinaX, mundiX, proxX, voxX, atlasX, aresX, laelapsX, odysseyX, theseusX, ethnogX, remnantX, replicaX, satX, shrineX, csX, ecX, fwX, hdX, raX, barkerX, fullerX, lcX, nataliX, romeroX;
         public override void ExposeData()
         {
             Scribe_Values.Look(ref permitsScaleBySeniority, "permitsScaleBySeniority", false);
@@ -12027,14 +11992,14 @@ namespace HautsPermits
             Scribe_Values.Look(ref ethnog2, "ethnog2", false);
             Scribe_Values.Look(ref ethnog3, "ethnog3", false);
             Scribe_Values.Look(ref ethnogX, "ethnogX", false);
-            Scribe_Values.Look(ref excav1, "excav1", false);
-            Scribe_Values.Look(ref excav2, "excav2", false);
-            Scribe_Values.Look(ref excav3, "excav3", false);
-            Scribe_Values.Look(ref excavX, "excavX", false);
             Scribe_Values.Look(ref remnant1, "remnant1", false);
             Scribe_Values.Look(ref remnant2, "remnant2", false);
             Scribe_Values.Look(ref remnant3, "remnant3", false);
             Scribe_Values.Look(ref remnantX, "remnantX", false);
+            Scribe_Values.Look(ref replica1, "replica1", false);
+            Scribe_Values.Look(ref replica2, "replica2", false);
+            Scribe_Values.Look(ref replica3, "replica3", false);
+            Scribe_Values.Look(ref replicaX, "replicaX", false);
             Scribe_Values.Look(ref sat1, "sat1", false);
             Scribe_Values.Look(ref sat2, "sat2", false);
             Scribe_Values.Look(ref sat3, "sat3", false);
@@ -12583,36 +12548,36 @@ namespace HautsPermits
                 settings.ethnogX = flagAAX;
                 listing_Standard2.Gap(10f);
                 Text.Font = GameFont.Small;
-                listing_Standard2.Label("HVMP_Label_Excavation".Translate(), -1, "HVMP_Tooltip_Excavation".Translate());
-                Text.Font = GameFont.Tiny;
-                bool flagAB1 = settings.excav1;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Excavation".Translate() + ": " + "HVMP_HardMode_Label_Excavation_1".Translate(), ref flagAB1, "HVMP_HardMode_Tooltip_Excavation_1".Translate());
-                settings.excav1 = flagAB1;
-                bool flagAB2 = settings.excav2;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Excavation".Translate() + ": " + "HVMP_HardMode_Label_Excavation_2".Translate(), ref flagAB2, "HVMP_HardMode_Tooltip_Excavation_2".Translate());
-                settings.excav2 = flagAB2;
-                bool flagAB3 = settings.excav3;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Excavation".Translate() + ": " + "HVMP_HardMode_Label_Excavation_3".Translate(), ref flagAB3, "HVMP_HardMode_Tooltip_Excavation_3".Translate());
-                settings.excav3 = flagAB3;
-                bool flagABX = settings.excavX;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagABX, "HVMP_Tooltip_MayhemMode".Translate());
-                settings.excavX = flagABX;
-                listing_Standard2.Gap(10f);
-                Text.Font = GameFont.Small;
                 listing_Standard2.Label("HVMP_Label_Remnant".Translate(), -1, "HVMP_Tooltip_Remnant".Translate());
                 Text.Font = GameFont.Tiny;
-                bool flagAC1 = settings.remnant1;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Remnant".Translate() + ": " + "HVMP_HardMode_Label_Remnant_1".Translate(), ref flagAC1, "HVMP_HardMode_Tooltip_Remnant_1".Translate());
-                settings.remnant1 = flagAC1;
-                bool flagAC2 = settings.remnant2;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Remnant".Translate() + ": " + "HVMP_HardMode_Label_Remnant_2".Translate(), ref flagAC2, "HVMP_HardMode_Tooltip_Remnant_2".Translate());
-                settings.remnant2 = flagAC2;
-                bool flagAC3 = settings.remnant3;
-                listing_Standard2.CheckboxLabeled("HVMP_Label_Remnant".Translate() + ": " + "HVMP_HardMode_Label_Remnant_3".Translate(), ref flagAC3, "HVMP_HardMode_Tooltip_Remnant_3".Translate());
-                settings.remnant3 = flagAC3;
-                bool flagACX = settings.remnantX;
+                bool flagAB1 = settings.remnant1;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Remnant".Translate() + ": " + "HVMP_HardMode_Label_Remnant_1".Translate(), ref flagAB1, "HVMP_HardMode_Tooltip_Remnant_1".Translate());
+                settings.remnant1 = flagAB1;
+                bool flagAB2 = settings.remnant2;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Remnant".Translate() + ": " + "HVMP_HardMode_Label_Remnant_2".Translate(), ref flagAB2, "HVMP_HardMode_Tooltip_Remnant_2".Translate());
+                settings.remnant2 = flagAB2;
+                bool flagAB3 = settings.remnant3;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Remnant".Translate() + ": " + "HVMP_HardMode_Label_Remnant_3".Translate(), ref flagAB3, "HVMP_HardMode_Tooltip_Remnant_3".Translate());
+                settings.remnant3 = flagAB3;
+                bool flagABX = settings.remnantX;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagABX, "HVMP_Tooltip_MayhemMode".Translate());
+                settings.remnantX = flagABX;
+                listing_Standard2.Gap(10f);
+                Text.Font = GameFont.Small;
+                listing_Standard2.Label("HVMP_Label_Replica".Translate(), -1, "HVMP_Tooltip_Replica".Translate());
+                Text.Font = GameFont.Tiny;
+                bool flagAC1 = settings.replica1;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Replica".Translate() + ": " + "HVMP_HardMode_Label_Replica_1".Translate(), ref flagAC1, "HVMP_HardMode_Tooltip_Replica_1".Translate());
+                settings.replica1 = flagAC1;
+                bool flagAC2 = settings.replica2;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Replica".Translate() + ": " + "HVMP_HardMode_Label_Replica_2".Translate(), ref flagAC2, "HVMP_HardMode_Tooltip_Replica_2".Translate());
+                settings.replica2 = flagAC2;
+                bool flagAC3 = settings.replica3;
+                listing_Standard2.CheckboxLabeled("HVMP_Label_Replica".Translate() + ": " + "HVMP_HardMode_Label_Replica_3".Translate(), ref flagAC3, "HVMP_HardMode_Tooltip_Replica_3".Translate());
+                settings.replica3 = flagAC3;
+                bool flagACX = settings.replicaX;
                 listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagACX, "HVMP_Tooltip_MayhemMode".Translate());
-                settings.remnantX = flagACX;
+                settings.replicaX = flagACX;
                 listing_Standard2.Gap(10f);
                 Text.Font = GameFont.Small;
                 listing_Standard2.Label("HVMP_Label_Satellite".Translate(), -1, "HVMP_Tooltip_Satellite".Translate());

@@ -162,8 +162,6 @@
 <HVMP_ShuttleAnthroInspectString>Departing on shuttle after {0} questions have been asked</HVMP_ShuttleAnthroInspectString>
 <HVMP_ShuttleAnthroArrivesIn>Shuttle arrives after {0} questions asked</HVMP_ShuttleAnthroArrivesIn>
 <HVMP_ShuttleAnthroArrivesOn>Shuttle arrives after anthropologists' inquiries are resolved, consisting of {0} questions</HVMP_ShuttleAnthroArrivesOn>
-<!--Archive excavation-->
-<HVMP_AncientTerminalDiscovered>You've discovered an ancient terminal with valuable information!</HVMP_AncientTerminalDiscovered>
 <!--Archive remnant-->
 <HVMP_RemnantSkills>Study speed scales with </HVMP_RemnantSkills>
 <HVMP_RemnantStats>Study speed scales with the following stats: </HVMP_RemnantStats>
@@ -230,13 +228,13 @@
 <HVMP_Tooltip_MayhemMode>If enabled, disabled mutators still have a 35% chance to apply to any quest of this type.</HVMP_Tooltip_MayhemMode>
 <HVMP_Label_Commerce>COMMERCE BRANCH</HVMP_Label_Commerce>
 <HVMP_Label_Fortification>Fortification</HVMP_Label_Fortification>
-<HVMP_Tooltip_Fortification>Erect a large building. You may also be tasked to keep it safe for a while after completion.</HVMP_Tooltip_Fortification>
-<HVMP_HardMode_Label_Fortification_1>Rushmore</HVMP_HardMode_Label_Fortification_1>
-<HVMP_HardMode_Tooltip_Fortification_1>The deadline for completing the landmark is only 70% as long.</HVMP_HardMode_Tooltip_Fortification_1>
-<HVMP_HardMode_Label_Fortification_2>The Test of Time</HVMP_HardMode_Label_Fortification_2>
-<HVMP_HardMode_Tooltip_Fortification_2>The landmark must be guarded for slightly longer than normal after completion. Failure to guard inflicts twice the goodwill penalty (-20 instead of -10), and also triggers a bad event such as an infestation, mech cluster, raid, or forced weather.</HVMP_HardMode_Tooltip_Fortification_2>
-<HVMP_HardMode_Label_Fortification_3>Up to the Name</HVMP_HardMode_Label_Fortification_3>
-<HVMP_HardMode_Tooltip_Fortification_3>Landmark blueprints are approximately 33% larger, and the maximum allowed size is either 1.2x longer or +5 cells longer on the longest side, whichever would be larger.</HVMP_HardMode_Tooltip_Fortification_3>
+<HVMP_Tooltip_Fortification>Host some traders who are down on their luck. They won't do work. You'll have to keep their mood above a minimum threshold, as well as possibly defend against a threat chasing them.</HVMP_Tooltip_Fortification>
+<HVMP_HardMode_Label_Fortification_1>Props to the Makeup Department</HVMP_HardMode_Label_Fortification_1>
+<HVMP_HardMode_Tooltip_Fortification_1>Traders have random diseases, and will therefore require medical treatment to keep alive.</HVMP_HardMode_Tooltip_Fortification_1>
+<HVMP_HardMode_Label_Fortification_2>Riches to Ruins</HVMP_HardMode_Label_Fortification_2>
+<HVMP_HardMode_Tooltip_Fortification_2>Traders have -12 mood due to 'luxurious expectations'.</HVMP_HardMode_Tooltip_Fortification_2>
+<HVMP_HardMode_Label_Fortification_3>What's Bugging You?</HVMP_HardMode_Label_Fortification_3>
+<HVMP_HardMode_Tooltip_Fortification_3>Traders are suffused with insectoid pheromones. This condition can cause infestations to occur near them, removing the triggering condition.</HVMP_HardMode_Tooltip_Fortification_3>
 <HVMP_Label_Intervention>Intervention</HVMP_Label_Intervention>
 <HVMP_Tooltip_Intervention>Fight 3-6 waves of insectoids.</HVMP_Tooltip_Intervention>
 <HVMP_HardMode_Label_Intervention_1>Burning, Unadulterated Burning</HVMP_HardMode_Label_Intervention_1>
@@ -360,14 +358,6 @@
 <HVMP_HardMode_Tooltip_Ethnography_2>Anthropologists have 1.2x hunger rate, 1.2x rest fall rate, 1.25x joy fall rate, and +20% negative thought duration.</HVMP_HardMode_Tooltip_Ethnography_2>
 <HVMP_HardMode_Label_Ethnography_3>Worse Than Useless</HVMP_HardMode_Label_Ethnography_3>
 <HVMP_HardMode_Tooltip_Ethnography_3>Each anthropologist has at least one negative trait.</HVMP_HardMode_Tooltip_Ethnography_3>
-<HVMP_Label_Excavation>Excavation</HVMP_Label_Excavation>
-<HVMP_Tooltip_Excavation>Hack all the terminals in an ancient complex.</HVMP_Tooltip_Excavation>
-<HVMP_HardMode_Label_Excavation_1>"Cyber" Security</HVMP_HardMode_Label_Excavation_1>
-<HVMP_HardMode_Tooltip_Excavation_1>The complex is patrolled by 1-2 mechanoids per terminal.</HVMP_HardMode_Tooltip_Excavation_1>
-<HVMP_HardMode_Label_Excavation_2>Enemy Terminals</HVMP_HardMode_Label_Excavation_2>
-<HVMP_HardMode_Tooltip_Excavation_2>Each terminal has a 25% chance to call a raid when hacked.</HVMP_HardMode_Tooltip_Excavation_2>
-<HVMP_HardMode_Label_Excavation_3>Why Are These Even Here</HVMP_HardMode_Label_Excavation_3>
-<HVMP_HardMode_Tooltip_Excavation_3>The complex is full of unstable fuel nodes.</HVMP_HardMode_Tooltip_Excavation_3>
 <HVMP_Label_Remnant>Remnant</HVMP_Label_Remnant>
 <HVMP_Tooltip_Remnant>Study an ancient artifact.</HVMP_Tooltip_Remnant>
 <HVMP_HardMode_Label_Remnant_1>Bad Juju</HVMP_HardMode_Label_Remnant_1>
@@ -376,6 +366,14 @@
 <HVMP_HardMode_Tooltip_Remnant_2>The artifact loses 2.5 hp (out of 200) each day.</HVMP_HardMode_Tooltip_Remnant_2>
 <HVMP_HardMode_Label_Remnant_3>Perplexicon</HVMP_HardMode_Label_Remnant_3>
 <HVMP_HardMode_Tooltip_Remnant_3>If nobody has studied the artifact in the last hour, study progress decays at a rate of 6 per day.</HVMP_HardMode_Tooltip_Remnant_3>
+<HVMP_Label_Replica>Replica</HVMP_Label_Replica>
+<HVMP_Tooltip_Replica>Erect a large building. You may also be tasked to keep it safe for a while after completion.</HVMP_Tooltip_Replica>
+<HVMP_HardMode_Label_Replica_1>Holy Cungadero</HVMP_HardMode_Label_Replica_1>
+<HVMP_HardMode_Tooltip_Replica_1>Replica blueprints are approximately 33% larger, and the maximum allowed size is either 1.2x longer or +5 cells longer on the longest side, whichever would be larger.</HVMP_HardMode_Tooltip_Replica_1>
+<HVMP_HardMode_Label_Replica_2>Operation CWAL</HVMP_HardMode_Label_Replica_2>
+<HVMP_HardMode_Tooltip_Replica_2>The deadline for completing the replica is only 70% as long.</HVMP_HardMode_Tooltip_Replica_2>
+<HVMP_HardMode_Label_Replica_3>The Test of Time</HVMP_HardMode_Label_Replica_3>
+<HVMP_HardMode_Tooltip_Replica_3>The replica must be guarded for slightly longer than normal after completion. Failure to guard inflicts twice the goodwill penalty (-20 instead of -10), and also triggers a bad event such as an infestation, mech cluster, raid, or forced weather.</HVMP_HardMode_Tooltip_Replica_3>
 <HVMP_Label_Satellite>Satellite</HVMP_Label_Satellite>
 <HVMP_Tooltip_Satellite>Hack a crashed spacedrone. It is guarded by mechs which are initially dormant.</HVMP_Tooltip_Satellite>
 <HVMP_HardMode_Label_Satellite_1>Descend</HVMP_HardMode_Label_Satellite_1>
@@ -442,14 +440,14 @@
 <HVMP_HardMode_Tooltip_Barker_2>Accepting the quest also provokes the Void.</HVMP_HardMode_Tooltip_Barker_2>
 <HVMP_HardMode_Label_Barker_3>Twin Terrors</HVMP_HardMode_Label_Barker_3>
 <HVMP_HardMode_Tooltip_Barker_3>Drops an additional anomalous object.</HVMP_HardMode_Tooltip_Barker_3>
-<HVMP_Label_Fuller>Fuller</HVMP_Label_Fuller>
-<HVMP_Tooltip_Fuller>Keep some Horaxian cultists as prisoners. Raids might attack as a consequence of accepting the quest.</HVMP_Tooltip_Fuller>
-<HVMP_HardMode_Label_Fuller_1>Faith Well Kept</HVMP_HardMode_Label_Fuller_1>
-<HVMP_HardMode_Tooltip_Fuller_1>The prisoners have bonus death refusals. Also, additional cultist raiders will infrequently skip to the prisoners' position to help them escape and take vengeance on you.</HVMP_HardMode_Tooltip_Fuller_1>
-<HVMP_HardMode_Label_Fuller_2>Stark Raving Mad</HVMP_HardMode_Label_Fuller_2>
-<HVMP_HardMode_Tooltip_Fuller_2>The prisoners have -100 mood while imprisoned. They are immune to anesthetic and effects which would render them unconscious; when such a condition would be inflicted on them, they attempt a prison break instead.</HVMP_HardMode_Tooltip_Fuller_2>
-<HVMP_HardMode_Label_Fuller_3>What Lurks Within</HVMP_HardMode_Label_Fuller_3>
-<HVMP_HardMode_Tooltip_Fuller_3>If not given medical treatment twice daily, the prisoners turn into ghouls. Even one turning into a ghoul results in failure.</HVMP_HardMode_Tooltip_Fuller_3>
+<HVMP_Label_Fuller>empty slot</HVMP_Label_Fuller>
+<HVMP_Tooltip_Fuller>This quest has been removed, and will be replaced with a new quest type in a later patch.</HVMP_Tooltip_Fuller>
+<HVMP_HardMode_Label_Fuller_1>blank</HVMP_HardMode_Label_Fuller_1>
+<HVMP_HardMode_Tooltip_Fuller_1>Declarative.</HVMP_HardMode_Tooltip_Fuller_1>
+<HVMP_HardMode_Label_Fuller_2>also blank</HVMP_HardMode_Label_Fuller_2>
+<HVMP_HardMode_Tooltip_Fuller_2>Interrogative?</HVMP_HardMode_Tooltip_Fuller_2>
+<HVMP_HardMode_Label_Fuller_3>also also blank</HVMP_HardMode_Label_Fuller_3>
+<HVMP_HardMode_Tooltip_Fuller_3>Exclamatory!</HVMP_HardMode_Tooltip_Fuller_3>
 <HVMP_Label_Lovecraft>Lovecraft</HVMP_Label_Lovecraft>
 <HVMP_Tooltip_Lovecraft>Endure a random psychic or atmospheric condition. You do not know what the condition is until you accept the quest. Most, but not all, possible conditions are negative.</HVMP_Tooltip_Lovecraft>
 <HVMP_HardMode_Label_Lovecraft_1>Escape From Tartarus</HVMP_HardMode_Label_Lovecraft_1>

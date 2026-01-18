@@ -114,6 +114,7 @@
     <canRequestOrbitalTrader>true</canRequestOrbitalTrader>
     <canGenerateQuestSites>false</canGenerateQuestSites>
     <layerWhitelist MayRequire="Ludeon.RimWorld.Odyssey">
+	  <li>Surface</li>
       <li MayRequire="Ludeon.RimWorld.Odyssey">Orbit</li>
     </layerWhitelist>
 	<allowedArrivalTemperatureRange>-1000~1000</allowedArrivalTemperatureRange>
@@ -355,8 +356,8 @@
 		<li Class="HautsPermits.EBranchQuests">
 			<quests>
 				<li>HVMP_ArchiveEthnography</li>
-				<li>HVMP_ArchiveExcavation</li>
 				<li>HVMP_ArchiveRemnant</li>
+				<li>HVMP_ArchiveReplica</li>
 				<li>HVMP_ArchiveSatellite</li>
 				<li>HVMP_ArchiveShrine</li>
 			</quests>
@@ -501,10 +502,9 @@
 		<li Class="HautsPermits.EBranchQuests">
 			<quests>
 				<li>HVMP_OccultBarker</li><!--hey look, a mysterious object! I sure hope no malevolent monolithic entity from a lifeless hell dimension serviced by posthuman monstrosities is waiting for us to tamper with it-->
-				<li>HVMP_OccultFuller</li><!--til Hannibal in the show is not actually in prison, he's just like around.-->
 				<li>HVMP_OccultLovecraft</li><!--for the Nic Cage movie-->
+				<li>HVMP_OccultNatali</li><!--not The Cube your colonists are thinking of, but a golden one nonetheless-->
 				<li>HVMP_OccultRomero</li><!--quintessential 'zombies'-->
-				<li>HVMP_OccultNatali</li><!--not the cube your colonists are thinking of, but a golden one nonetheless-->
 			</quests>
 			<donationTraderKind>HVMP_OccultDonations</donationTraderKind>
 			<tiedToAnomalyThreatFraction>true</tiedToAnomalyThreatFraction><!--WON'T ISSUE QUESTS IF the Anomaly playstyle is set to disabled. If set to your regularly scheduled monolith, it only starts offering quests once the thing activates; if in Ambient Horror, likelihood of offering quests is tied to the current Anomaly threat fraction.-->

@@ -810,297 +810,6 @@ namespace HautsPermits_Ideology
         public string expiryInfoPart;
         public string expiryInfoPartTip;
     }
-    //quest: excavation
-    public class QuestNode_GenerateAncientComplex : QuestNode_Root_AncientComplex
-    {
-        protected override void RunInt()
-        {
-            Slate slate = QuestGen.slate;
-            Quest quest = QuestGen.quest;
-            Map map = QuestGen_Get.GetMap(false, null);
-            float points = slate.Get<float>("points", 0f, false);
-            string text = QuestGenUtility.HardcodedSignalWithQuestID("terminals.Destroyed");
-            string text2 = QuestGen.GenerateNewSignal("TerminalHacked", true);
-            string text3 = QuestGen.GenerateNewSignal("AllTerminalsHacked", true);
-            LayoutStructureSketch layoutStructureSketch = this.QuestSetupComplex(quest, points);
-            float num3 = (Find.Storyteller.difficulty.allowViolentQuests ? this.threatPointsOverPointsCurve.Evaluate(points) : 0f);
-            SitePartParams sitePartParams = new SitePartParams
-            {
-                ancientLayoutStructureSketch = layoutStructureSketch,
-                ancientComplexRewardMaker = ThingSetMakerDefOf.MapGen_AncientComplexRoomLoot_Default,
-                threatPoints = num3
-            };
-            Site site = QuestGen_Sites.GenerateSite(Gen.YieldSingle<SitePartDefWithParams>(new SitePartDefWithParams(SitePartDefOf.AncientComplex, sitePartParams)), this.tile.GetValue(slate), Faction.OfAncients, false, null);
-            quest.SpawnWorldObject(site, null, null);
-            TimedDetectionRaids component = site.GetComponent<TimedDetectionRaids>();
-            if (component != null)
-            {
-                component.alertRaidsArrivingIn = true;
-            }
-            if (this.storeAs.GetValue(slate) != null)
-            {
-                QuestGen.slate.Set<WorldObject>(this.storeAs.GetValue(slate), site, false);
-            }
-            quest.Message("[terminalHackedMessage]", null, true, null, null, text2);
-            quest.Message("[allTerminalsHackedMessage]", MessageTypeDefOf.PositiveEvent, false, null, null, text3);
-            QuestGen.slate.Set<string>(this.successSignal.GetValue(slate), text3, false);
-            this.TryFindEnemyFaction(out Faction faction);
-            if (Find.Storyteller.difficulty.allowViolentQuests && Rand.Chance(0.5f) && faction != null)
-            {
-                quest.RandomRaid(site, this.randomRaidPointsFactorRange * num3, faction, text3, PawnsArrivalModeDefOf.EdgeWalkIn, RaidStrategyDefOf.ImmediateAttack, null, null);
-            }
-            QuestPart_Filter_Hacked questPart_Filter_Hacked = new QuestPart_Filter_Hacked();
-            questPart_Filter_Hacked.inSignal = text;
-            questPart_Filter_Hacked.outSignalElse = QuestGen.GenerateNewSignal("FailQuestTerminalDestroyed", true);
-            quest.AddPart(questPart_Filter_Hacked);
-            quest.End(QuestEndOutcome.Fail, 0, null, questPart_Filter_Hacked.outSignalElse, QuestPart.SignalListenMode.OngoingOnly, true, false);
-            slate.Set<List<Thing>>("terminals", layoutStructureSketch.thingsToSpawn, false);
-            slate.Set<int>("terminalCount", layoutStructureSketch.thingsToSpawn.Count, false);
-            slate.Set<Map>("map", map, false);
-            slate.Set<Site>("site", site, false);
-            quest.AddPart(new QuestPart_LookOverHere(site));
-        }
-        public override LayoutStructureSketch QuestSetupComplex(Quest quest, float points)
-        {
-            LayoutStructureSketch layoutStructureSketch = this.GenerateStructureSketch(points, true);
-            layoutStructureSketch.thingDiscoveredMessage = "HVMP_AncientTerminalDiscovered".Translate();
-            string text = QuestGen.GenerateNewSignal("AllTerminalsHacked", false);
-            string text2 = QuestGen.GenerateNewSignal("TerminalHacked", false);
-            List<string> list = new List<string>();
-            for (int i = 0; i < layoutStructureSketch.thingsToSpawn.Count; i++)
-            {
-                Thing thing = layoutStructureSketch.thingsToSpawn[i];
-                string text3 = QuestGenUtility.HardcodedTargetQuestTagWithQuestID("terminal" + i);
-                QuestUtility.AddQuestTag(thing, text3);
-                string text4 = QuestGenUtility.HardcodedSignalWithQuestID(text3 + ".Hacked");
-                list.Add(text4);
-                thing.TryGetComp<CompHackable>().defence = (float)(Rand.Chance(0.5f) ? this.hackDefenceRange.min : this.hackDefenceRange.max);
-            }
-            QuestPart_PassAllActivable questPart_PassAllActivable;
-            if (!quest.TryGetFirstPartOfType<QuestPart_PassAllActivable>(out questPart_PassAllActivable))
-            {
-                questPart_PassAllActivable = quest.AddPart<QuestPart_PassAllActivable>();
-                questPart_PassAllActivable.inSignalEnable = QuestGen.slate.Get<string>("inSignal", null, false);
-                questPart_PassAllActivable.expiryInfoPartKey = "TerminalsHacked";
-            }
-            questPart_PassAllActivable.inSignals = list;
-            questPart_PassAllActivable.outSignalsCompleted.Add(text);
-            questPart_PassAllActivable.outSignalAny = text2;
-            return layoutStructureSketch;
-        }
-        protected override LayoutStructureSketch GenerateStructureSketch(float points, bool generateTerminals = true)
-        {
-            int num = (int)this.complexSizeOverPointsCurve.Evaluate(points);
-            StructureGenParams structureGenParams = new StructureGenParams
-            {
-                size = new IntVec2(num, num)
-            };
-            bool mayhemMode = HVMP_Mod.settings.excavX;
-            bool WATEH_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.excav3, mayhemMode);
-            if (WATEH_on)
-            {
-                QuestGen.AddQuestDescriptionRules(new List<Rule>
-                {
-                    new Rule_String("mutator_WATEH_info", this.WATEH_description.Formatted())
-                });
-            } else {
-                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_WATEH_info", " ") });
-            }
-            LayoutDef ld = WATEH_on ?this.WATEH_layoutDef:this.layoutDef;
-            LayoutStructureSketch layoutStructureSketch = ld.Worker.GenerateStructureSketch(structureGenParams);
-            if (generateTerminals)
-            {
-                int num2 = Mathf.FloorToInt(this.terminalsOverRoomCountCurve.Evaluate((float)layoutStructureSketch.structureLayout.Rooms.Count));
-                bool CS_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.excav1, mayhemMode);
-                bool ET_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.excav2, mayhemMode);
-                Faction ET_faction = Find.FactionManager.RandomRaidableEnemyFaction(false, false, false, TechLevel.Undefined);
-                for (int i = 0; i < num2; i++)
-                {
-                    Thing thing = ThingMaker.MakeThing(HVMPDefOf.HVMP_AncientTerminal, null);
-                    CompExcavationMutatorHandler cemh = thing.TryGetComp<CompExcavationMutatorHandler>();
-                    if (cemh != null)
-                    {
-                        if (CS_on)
-                        {
-                            cemh.CS_on = true;
-                            QuestGen.AddQuestDescriptionRules(new List<Rule>
-                            {
-                                new Rule_String("mutator_CS_info", this.CS_description.Formatted())
-                            });
-                        } else {
-                            QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_CS_info", " ") });
-                        }
-                        if (ET_on && ET_faction != null)
-                        {
-                            cemh.ET_points = Math.Max(points * this.ET_pointFactor,this.ET_minPoints);
-                            cemh.ET_faction = ET_faction;
-                            QuestGen.AddQuestDescriptionRules(new List<Rule>
-                            {
-                                new Rule_String("mutator_ET_info", this.ET_description.Formatted())
-                            });
-                        } else {
-                            QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_ET_info", " ") });
-                        }
-                    }
-                    layoutStructureSketch.thingsToSpawn.Add(thing);
-                }
-            }
-            return layoutStructureSketch;
-        }
-        private bool TryFindEnemyFaction(out Faction enemyFaction)
-        {
-            enemyFaction = Find.FactionManager.RandomRaidableEnemyFaction(false, false, true, TechLevel.Undefined);
-            return enemyFaction != null;
-        }
-        protected override bool TestRunInt(Slate slate)
-        {
-            return true;
-        }
-        public SlateRef<PlanetTile> tile;
-        [NoTranslate]
-        public SlateRef<string> storeAs;
-        [NoTranslate]
-        public SlateRef<string> successSignal;
-        public FloatRange randomRaidPointsFactorRange;
-        public IntRange hackDefenceRange;
-        public SimpleCurve threatPointsOverPointsCurve;
-        public SimpleCurve terminalsOverRoomCountCurve;
-        public SimpleCurve complexSizeOverPointsCurve;
-        public LayoutDef layoutDef;
-        [MustTranslate]
-        public string CS_description;
-        public float ET_pointFactor;
-        public float ET_minPoints;
-        [MustTranslate]
-        public string ET_description;
-        public LayoutDef WATEH_layoutDef;
-        [MustTranslate]
-        public string WATEH_description;
-    }
-    public class CompProperties_ExcavationMutatorHandler : CompProperties_Hackable
-    {
-        public CompProperties_ExcavationMutatorHandler()
-        {
-            this.compClass = typeof(CompExcavationMutatorHandler);
-        }
-        public float CS_heavyChance;
-        public float CS_ultraChance;
-        public float CS_bonusDefenderChance;
-        public float ET_chance;
-    }
-    public class CompExcavationMutatorHandler : CompHackable
-    {
-        public new CompProperties_ExcavationMutatorHandler Props
-        {
-            get
-            {
-                return (CompProperties_ExcavationMutatorHandler)this.props;
-            }
-        }
-        public override void PostSpawnSetup(bool respawningAfterLoad)
-        {
-            base.PostSpawnSetup(respawningAfterLoad);
-            if (this.CS_on)
-            {
-                int defenders = Rand.Chance(this.Props.CS_bonusDefenderChance) ? 2 : 1;
-                List<Pawn> pawns = new List<Pawn>();
-                for (int i = defenders; i > 0; i--)
-                {
-                    MechWeightClassDef mwcd = (ModsConfig.BiotechActive && Rand.Chance(0.5f)) ? MechWeightClassDefOf.Light:MechWeightClassDefOf.Medium;
-                    float weightClassChance = Rand.Value;
-                    if (ModsConfig.BiotechActive && weightClassChance <= this.Props.CS_ultraChance)
-                    {
-                        mwcd = MechWeightClassDefOf.UltraHeavy;
-                    } else if (weightClassChance <= this.Props.CS_ultraChance+this.Props.CS_heavyChance) {
-                        mwcd = MechWeightClassDefOf.Heavy;
-                    }
-                    PawnKindDef pkd = DefDatabase<PawnKindDef>.AllDefsListForReading.Where((PawnKindDef pk)=>pk.RaceProps.IsMechanoid && !pk.RaceProps.IsWorkMech && pk.RaceProps.mechWeightClass == mwcd).RandomElement();
-                    if (pkd != null)
-                    {
-                        Pawn pawn = PawnGenerator.GeneratePawn(pkd, this.parent.Faction??Faction.OfMechanoids, null);
-                        GenSpawn.Spawn(pawn,this.parent.PositionHeld,this.parent.MapHeld);
-                        pawns.Add(pawn);
-                    }
-                }
-                LordMaker.MakeNewLord(Faction.OfMechanoids, new LordJob_DefendPoint(this.parent.Position), this.parent.Map, pawns);
-            }
-            if (this.ET_faction != null && Rand.Chance(this.Props.ET_chance))
-            {
-                float num = Mathf.Max(this.ET_points, this.ET_faction.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat, null) * 1.05f);
-                IncidentParms incidentParms = new IncidentParms
-                {
-                    forced = true,
-                    target = this.parent.MapHeld,
-                    points = num,
-                    faction = this.ET_faction,
-                    raidArrivalMode = PawnsArrivalModeDefOf.EdgeWalkIn,
-                    raidStrategy = RaidStrategyDefOf.ImmediateAttack
-                };
-                CompHackable compHackable = this.parent.TryGetComp<CompHackable>();
-                string text = compHackable.hackingCompletedSignal;
-                if (text.NullOrEmpty())
-                {
-                    text = "RaidSignal" + Find.UniqueIDsManager.GetNextSignalTagID().ToString();
-                    compHackable.hackingCompletedSignal = text;
-                }
-                SignalAction_Incident signalAction_Incident = (SignalAction_Incident)ThingMaker.MakeThing(ThingDefOf.SignalAction_Incident, null);
-                signalAction_Incident.incident = IncidentDefOf.RaidEnemy;
-                signalAction_Incident.incidentParms = incidentParms;
-                signalAction_Incident.signalTag = text;
-                GenSpawn.Spawn(signalAction_Incident, this.parent.PositionHeld, this.parent.MapHeld, WipeMode.Vanish);
-            }
-        }
-        public override void PostExposeData()
-        {
-            base.PostExposeData();
-            Scribe_Values.Look<bool>(ref this.CS_on, "CS_on", false, false);
-            Scribe_References.Look<Faction>(ref this.ET_faction, "ET_faction", false);
-            Scribe_Values.Look<float>(ref this.ET_points, "ET_points", -1f, false);
-        }
-        public bool CS_on;
-        public Faction ET_faction;
-        public float ET_points;
-    }
-    public class ComplexThreatWorker_WATEH : ComplexThreatWorker
-    {
-        protected override bool CanResolveInt(ComplexResolveParams parms)
-        {
-            IntVec3 intVec;
-            return base.CanResolveInt(parms) && ComplexUtility.TryFindRandomSpawnCell(ThingDefOf.AncientFuelNode, parms.room, parms.map, out intVec, 1, null);
-        }
-        protected override void ResolveInt(ComplexResolveParams parms, ref float threatPointsUsed, List<Thing> outSpawnedThings)
-        {
-            int nodesToPlace = Rand.RangeInclusive(3, 5);
-            for (int i = nodesToPlace; i > 0; i--)
-            {
-                int tries = 30;
-                while (tries > 0)
-                {
-                    tries--;
-                    ComplexUtility.TryFindRandomSpawnCell(ThingDefOf.AncientFuelNode, parms.room, parms.map, out IntVec3 intVec, 1, null);
-                    if (intVec.IsValid && intVec.InBounds(parms.map))
-                    {
-                        Thing thing = GenSpawn.Spawn(ThingDefOf.AncientFuelNode, intVec, parms.map, WipeMode.Vanish);
-                        SignalAction_StartWick signalAction_StartWick = (SignalAction_StartWick)ThingMaker.MakeThing(ThingDefOf.SignalAction_StartWick, null);
-                        signalAction_StartWick.thingWithWick = thing;
-                        signalAction_StartWick.signalTag = parms.triggerSignal;
-                        signalAction_StartWick.completedSignalTag = "CompletedStartWickAction" + Find.UniqueIDsManager.GetNextSignalTagID().ToString();
-                        if (parms.delayTicks != null)
-                        {
-                            signalAction_StartWick.delayTicks = parms.delayTicks.Value;
-                        }
-                        GenSpawn.Spawn(signalAction_StartWick, parms.room.rects[0].CenterCell, parms.map, WipeMode.Vanish);
-                        CompExplosive compExplosive = thing.TryGetComp<CompExplosive>();
-                        float randomInRange = ComplexThreatWorker_WATEH.ExplosiveRadiusRandomRange.RandomInRange;
-                        compExplosive.customExplosiveRadius = new float?(randomInRange);
-                        break;
-                    }
-                }
-            }
-            threatPointsUsed = 2f;
-        }
-        private static readonly FloatRange ExplosiveRadiusRandomRange = new FloatRange(2f, 12f);
-    }
     //quest: remnant
     public class QuestNode_GenerateStrangeArtifact : QuestNode
     {
@@ -1298,6 +1007,173 @@ namespace HautsPermits_Ideology
         public bool CD_on;
         public bool PI_on;
         public int PI_cooldown;
+    }
+    //quest: replica
+    public class QuestNode_Root_Replica : QuestNode_Sequence
+    {
+        protected override void RunInt()
+        {
+            if (HVMP_Utility.TryFindArchiveFaction(out Faction faction))
+            {
+                Slate slate = QuestGen.slate;
+                Quest quest = QuestGen.quest;
+                slate.Set<Faction>("faction", faction, false);
+                slate.Set<Pawn>("asker", faction.leader, false);
+                bool TTOT_on = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.replica3, HVMP_Mod.settings.replicaX);
+                slate.Set<bool>("punishmentOnDestroy", TTOT_on || Rand.Chance(0.5f), false);
+                if (TTOT_on)
+                {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_TTOT_info", this.TTOT_description.Formatted())
+                    });
+                } else {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TTOT_info", " ") });
+                }
+                slate.Set<bool>(this.storeTTOT.GetValue(slate), TTOT_on, false);
+                Map map = HVMP_Utility.TryGetMap();
+                slate.Set<Map>("map", map, false);
+                PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
+                slate.Set<PlanetTile>("pTile", tile, false);
+                QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
+                qpbgfh.faction = faction;
+                QuestGen.quest.AddPart(qpbgfh);
+                HVMP_Utility.SetSettingScalingRewardValue(slate);
+            }
+            base.RunInt();
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            HVMP_Utility.SetSettingScalingRewardValue(slate);
+            return HVMP_Utility.TryFindCommerceFaction(out Faction commerceFaction) && base.TestRunInt(slate);
+        }
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+        [NoTranslate]
+        public SlateRef<string> storeTTOT;
+        [MustTranslate]
+        public string TTOT_description;
+    }
+    public class QuestNode_Replica_TTOT : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            this.SetVars(slate);
+            return true;
+        }
+        protected override void RunInt()
+        {
+            this.SetVars(QuestGen.slate);
+        }
+        private void SetVars(Slate slate)
+        {
+            slate.Set<int>(this.nameTime.GetValue(slate), (int)(this.valueTime.RandomInRange * this.valueTimeUnits * (this.TTOT_enabled.GetValue(slate) ? this.timeFactorTTOT : 1f)), false);
+            slate.Set<int>(this.nameGoodwill.GetValue(slate), (int)(this.valueGoodwill * (this.TTOT_enabled.GetValue(slate) ? this.goodwillFactorTTOT : 1f)), false);
+        }
+        [NoTranslate]
+        public SlateRef<string> nameTime;
+        public IntRange valueTime;
+        public int valueTimeUnits;
+        public float timeFactorTTOT;
+        [NoTranslate]
+        public SlateRef<string> nameGoodwill;
+        public int valueGoodwill;
+        public float goodwillFactorTTOT;
+        public SlateRef<bool> TTOT_enabled;
+    }
+    public class QuestNode_Multiply_OCWAL : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return !this.storeAs.GetValue(slate).NullOrEmpty();
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            slate.Set<double>(this.storeAs.GetValue(slate), this.value1.GetValue(slate) * this.value2.GetValue(slate) * (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.replica2, HVMP_Mod.settings.replicaX) ? this.OCWAL_factor : 1d), false);
+        }
+        public SlateRef<double> value1;
+        public SlateRef<double> value2;
+        public double OCWAL_factor;
+        [NoTranslate]
+        public SlateRef<string> storeAs;
+    }
+    public class QuestNode_Replica_HC : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            int largestSize = this.GetLargestSize(slate);
+            slate.Set<int>(this.storeAs.GetValue(slate), largestSize, false);
+            return largestSize >= this.failIfSmaller.GetValue(slate);
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            int largestSize = this.GetLargestSize(slate);
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.replica1, HVMP_Mod.settings.replicaX))
+            {
+                largestSize = (int)Math.Max(largestSize * this.HC_factor, largestSize + this.HC_minBonus);
+                slate.Set<float>(this.HC_scalarSaveAs.GetValue(slate), this.HC_scalarIfOn, false);
+            } else {
+                slate.Set<float>(this.HC_scalarSaveAs.GetValue(slate), this.HC_scalarIfOff, false);
+            }
+            slate.Set<int>(this.storeAs.GetValue(slate), largestSize, false);
+        }
+        private int GetLargestSize(Slate slate)
+        {
+            Map mapResolved = this.map.GetValue(slate) ?? slate.Get<Map>("map", null, false);
+            if (mapResolved == null)
+            {
+                return 0;
+            }
+            int value = this.max.GetValue(slate);
+            CellRect cellRect = LargestAreaFinder.FindLargestRect(mapResolved, (IntVec3 x) => this.IsClear(x, mapResolved), value);
+            return Mathf.Min(new int[] { cellRect.Width, cellRect.Height, value });
+        }
+        private bool IsClear(IntVec3 c, Map map)
+        {
+            if (!c.GetAffordances(map).Contains(TerrainAffordanceDefOf.Heavy))
+            {
+                return false;
+            }
+            List<Thing> thingList = c.GetThingList(map);
+            for (int i = 0; i < thingList.Count; i++)
+            {
+                if (thingList[i].def.IsBuildingArtificial && thingList[i].Faction == Faction.OfPlayer)
+                {
+                    return false;
+                }
+                if (thingList[i].def.mineable)
+                {
+                    bool flag = false;
+                    for (int j = 0; j < 8; j++)
+                    {
+                        IntVec3 intVec = c + GenAdj.AdjacentCells[j];
+                        if (intVec.InBounds(map) && intVec.GetFirstMineable(map) == null)
+                        {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (!flag)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        public SlateRef<Map> map;
+        [NoTranslate]
+        public SlateRef<string> storeAs;
+        public SlateRef<int> failIfSmaller;
+        public SlateRef<int> max;
+        public int HC_minBonus;
+        public float HC_factor = 1f;
+        [NoTranslate]
+        public SlateRef<string> HC_scalarSaveAs;
+        public float HC_scalarIfOff;
+        public float HC_scalarIfOn;
     }
     //quest: satellite
     public class QuestNode_SpawnDronePlusGuards : QuestNode

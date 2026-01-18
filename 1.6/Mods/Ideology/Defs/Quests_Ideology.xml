@@ -632,167 +632,6 @@
     </root>
   </QuestScriptDef>
   
-  <!--Archive: excavation-->
-  <QuestScriptDef>
-    <defName>HVMP_ArchiveExcavation</defName>
-	<isRootSpecial>true</isRootSpecial>
-    <rootSelectionWeight>0</rootSelectionWeight>
-    <rootMinPoints>350</rootMinPoints>
-    <defaultChallengeRating>1</defaultChallengeRating>
-    <expireDaysRange>4~8</expireDaysRange>
-    <questNameRules>
-      <rulesStrings>
-        <li>questName(p=6)->The [complexAdj] [complex]</li>
-        <li>questName->The [dig]</li>
-        <li>complexAdj->ancient</li>
-        <li>complexAdj->old</li>
-        <li>complexAdj->dusty</li>
-        <li>complexAdj->secret</li>
-
-        <li>complex->complex</li>
-        <li>complex->compound</li>
-        <li>complex->installation</li>
-        <li>complex->ruin</li>
-        <li>complex->base</li>
-        <li>complex->crypt</li>
-        <li>complex->vault</li>
-
-        <li>dig->dig</li>
-        <li>dig->excavation</li>
-        <li>dig->expedition</li>
-        <li>dig->exploration</li>
-        <li>dig->archive</li>
-
-      </rulesStrings>
-    </questNameRules>
-    <questDescriptionRules>
-      <rulesStrings>
-        <li>questDescription->Tbe Archive Branch is informing us of an ancient complex nearby. It is said to contain valuable information about the past of this world. They would like you to break into the structure and hack the computers inside to collect that information.\n\nWatch out - there may be all manner of dangers inside, and other enemies may also be attracted by activity at the structure.\n\nIf you don't make it to the complex within [timeout_duration], scavengers will pick it apart and make away with the data.\n[mutatorSuffix]</li>
-		<li>mutatorSuffix->[mutator_CS_info][mutator_ET_info][mutator_WATEH_info]</li>
-      </rulesStrings>
-    </questDescriptionRules>
-    <questContentRules>
-      <rulesStrings>
-        <li>terminalHackedMessage->Terminal hacked. {COUNT} / [terminalCount] complete.</li>
-        <li>allTerminalsHackedMessage->You've hacked all of the terminals and secured their information for the Archive Branch! You can now leave.</li>
-
-      </rulesStrings>
-    </questContentRules>
-    <root Class="HautsPermits_Ideology.QuestNode_ArchiveIntermediary">
-      <nodes>
-        <li Class="QuestNode_Set">
-          <name>siteDistRange</name>
-          <value>2~13</value>
-        </li>
-        <li Class="QuestNode_GetMap">
-		  <canBeSpace>true</canBeSpace>
-		</li>
-        <li Class="QuestNode_GetPlayerFaction">
-          <storeAs>playerFaction</storeAs>
-        </li>
-        <li Class="QuestNode_GetSiteTile">
-          <storeAs>tile</storeAs>
-        </li>
-        <li Class="QuestNode_Set">
-          <name>timeout</name>
-          <value>$(randInt(9,21)*60000)</value>
-        </li>
-        <li Class="QuestNode_SubScript">
-          <def>Util_RandomizePointsChallengeRating</def>
-          <parms>
-            <pointsFactorTwoStar>1.5</pointsFactorTwoStar>
-            <pointsFactorThreeStar>2</pointsFactorThreeStar>
-          </parms>
-        </li>
-        <li Class="HautsPermits_Ideology.QuestNode_GenerateAncientComplex">
-          <tile>$tile</tile>
-          <storeAs>ancientComplex</storeAs>
-		  <successSignal>allHackedSignal</successSignal>
-		  <randomRaidPointsFactorRange>0.25~0.35</randomRaidPointsFactorRange><!--this and the other values below are vanilla properties of Ancient Complex Hacks, just opened up to XML instead of being hardcoded. Don't delete them or you'll get errors.-->
-		  <hackDefenceRange>300~1000</hackDefenceRange>
-		  <threatPointsOverPointsCurve>
-			<points>
-			  <li>(31, 50)</li>
-			  <li>(350, 200)</li>
-			  <li>(8725, 4250)</li>
-			</points>
-		  </threatPointsOverPointsCurve>
-		  <terminalsOverRoomCountCurve>
-			<points>
-			  <li>(0, 1)</li>
-			  <li>(10, 4)</li>
-			  <li>(20, 6)</li>
-			  <li>(50, 10)</li>
-			</points>
-		  </terminalsOverRoomCountCurve>
-		  <complexSizeOverPointsCurve>
-			<points>
-			  <li>(0, 30)</li>
-			  <li>(10000, 50)</li>
-			</points>
-		  </complexSizeOverPointsCurve>
-		  <layoutDef>AncientComplex</layoutDef>
-		  <WATEH_layoutDef>HVMP_AncientComplex_WATEH</WATEH_layoutDef>
-		  <CS_description>\nWhoever built the complex made use of mechanoid guardians, which are likely still patrolling its halls even to this day.</CS_description>
-		  <ET_pointFactor>0.3</ET_pointFactor>
-		  <ET_minPoints>400</ET_minPoints>
-		  <ET_description>\nThe terminals are linked to a broadcasting platform which anyone can listen to. Each terminal has a 25% chance to emit a message through that platform upon being hacked, which will draw a hostile raid.</ET_description>
-		  <WATEH_description>\nRemote scanning seems to indicate the complex is, for some reason, chock-full of unstable fuel nodes. Your arrival is liable to disturb them.</WATEH_description>
-        </li>
-        <li Class="QuestNode_WorldObjectTimeout">
-          <worldObject>$site</worldObject>
-          <delayTicks>$timeout</delayTicks>
-          <inSignalDisable>site.MapGenerated</inSignalDisable>
-          <isQuestTimeout>true</isQuestTimeout>
-          <node Class="QuestNode_Sequence">
-            <nodes>
-              <li Class="QuestNode_Letter">
-                <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
-                <text TKey="LetterTextQuestExpired">Others have already looted the ancient complex for everything of value, including the data the Archive Branch wanted. The [asker_faction_name]'s respect for you has slightly diminished.</text>
-              </li>
-              <li Class="HautsPermits.QuestNode_EndBranch">
-                <outcome>Fail</outcome>
-                <goodwillChangeReason>HVMP_QuestExpired</goodwillChangeReason>
-				<faction>HVMP_ArchiveBranch</faction>
-              </li>
-            </nodes>
-          </node>
-        </li>
-        <li Class="QuestNode_Signal">
-          <inSignal>site.Destroyed</inSignal>
-          <node Class="QuestNode_Sequence">
-            <nodes>
-              <li Class="QuestNode_Letter">
-                <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
-                <text TKey="LetterTextQuestExpired">Others have already looted the ancient complex for everything of value, including the data the Archive Branch wanted. The [asker_faction_name]'s respect for you has slightly diminished.</text>
-              </li>
-              <li Class="HautsPermits.QuestNode_EndBranch">
-                <outcome>Fail</outcome>
-                <goodwillChangeReason>HVMP_QuestExpired</goodwillChangeReason>
-				<faction>HVMP_ArchiveBranch</faction>
-              </li>
-            </nodes>
-          </node>
-        </li>
-        <li Class="QuestNode_Signal">
-          <inSignal>$allHackedSignal</inSignal>
-          <node Class="QuestNode_Sequence">
-            <nodes>
-			  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
-				<faction>$faction</faction>
-				<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
-				<customLetterText TKey="LetterTextPaymentArrived">You have successfully obtained all information from the ancient complex!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
-			  </li>
-              <li Class="QuestNode_End">
-                <outcome>Success</outcome>
-              </li>
-            </nodes>
-          </node>
-        </li>
-      </nodes>
-    </root>
-  </QuestScriptDef>
-  
   <!--archive: remnant-->
   <QuestScriptDef>
     <defName>HVMP_ArchiveRemnant</defName>
@@ -931,6 +770,440 @@
       </nodes>
     </root>
   </QuestScriptDef>
+  
+  <!--archive: replica-->
+  <QuestScriptDef>
+    <defName>HVMP_ArchiveReplica</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+    <questNameRules>
+      <include><li>HVMP_ReplicaName</li></include>
+    </questNameRules>
+    <questDescriptionRules>
+      <include><li>HVMP_ReplicaDesc</li></include>
+      <rulesStrings>
+		  <li>commonEnding(punishmentOnDestroy==false)->The replica is [monumentSize] in size and will require these resources (total value [monumentRequiredResourcesMarketValue_money]):
+	\n[monumentRequiredResources]
+	\nConstruction must be completed within [constructionTimeoutTicks_duration] of accepting the task. You'll receive the rewards when you finish construction.</li>
+		  <li>commonEnding(punishmentOnDestroy==true)->>The replica is [monumentSize] in size and will require these resources (total value [monumentRequiredResourcesMarketValue_money]):
+	\n[monumentRequiredResources]
+	\nConstruction must be completed within [constructionTimeoutTicks_duration] of accepting the task.
+	\nAfter completion, you'll have to protect the replica for [keepMonumentTicks_duration]. If any piece of it is destroyed, you will lose [goodwillChangeIfMonumentDestroyed] goodwill with [asker_faction_name].[mutator_TTOT_info]
+	\nYou'll receive the rewards when you finish construction.</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>rewardOnCompletion</name>
+          <value>true</value>
+        </li>
+        <li Class="QuestNode_SubScript">
+          <def>HVMP_ReplicaWorker</def>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  <QuestScriptDef>
+    <defName>HVMP_ReplicaWorker</defName>
+    <root Class="HautsPermits_Ideology.QuestNode_Root_Replica">
+	  <storeTTOT>TTOT_on</storeTTOT>
+	  <TTOT_description>\nThe [asker_faction_name] will be upset if you abandon it during this time. If any piece of it is destroyed, their enforcement system will activate and [threatDescription]</TTOT_description>
+	  <nodes>
+        <li Class="HautsPermits_Ideology.QuestNode_Replica_TTOT">
+          <nameTime>keepMonumentTicks</nameTime>
+          <valueTime>20~40</valueTime>
+		  <valueTimeUnits>60000</valueTimeUnits>
+		  <timeFactorTTOT>1.1</timeFactorTTOT>
+          <nameGoodwill>goodwillChangeIfMonumentDestroyed</nameGoodwill>
+          <valueGoodwill>-10</valueGoodwill>
+		  <goodwillFactorTTOT>2</goodwillFactorTTOT>
+		  <TTOT_enabled>$TTOT_on</TTOT_enabled>
+        </li>
+        <li Class="QuestNode_GetMap" />
+        <li Class="HautsPermits_Ideology.QuestNode_Replica_HC">
+          <map>$map</map>
+          <storeAs>largestClearArea</storeAs>
+          <failIfSmaller>10</failIfSmaller>
+          <max>70</max>
+		  <HC_minBonus>5</HC_minBonus>
+		  <HC_factor>1.2</HC_factor>
+		  <HC_scalarSaveAs>HC_scalar</HC_scalarSaveAs>
+		  <HC_scalarIfOff>6.0</HC_scalarIfOff>
+		  <HC_scalarIfOn>4.5</HC_scalarIfOn>
+        </li>
+        <li Class="QuestNode_GetMonumentSketch">
+          <storeAs>monumentSketch</storeAs>
+          <pointsPerArea>$HC_scalar</pointsPerArea>
+          <useOnlyResourcesAvailableOnMap>$map</useOnlyResourcesAvailableOnMap>
+          <maxSize>$largestClearArea</maxSize>
+        </li>
+        <li Class="QuestNode_GenerateMonumentMarker">
+          <storeAs>monumentMarker</storeAs>
+          <sketch>$monumentSketch</sketch>
+        </li>
+        <li Class="QuestNode_DestroyOrPassToWorldOnCleanup">
+          <things>$monumentMarker</things>
+        </li>
+        <li Class="QuestNode_GetMonumentRequiredResourcesString">
+          <monumentMarker>$monumentMarker</monumentMarker>
+          <storeAs>monumentRequiredResources</storeAs>
+          <storeMarketValueAs>monumentRequiredResourcesMarketValue</storeMarketValueAs>
+        </li>
+        <li Class="QuestNode_IsTrue">
+          <value>$punishmentOnDestroy</value>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Multiply">
+                <value1>$rewardValue</value1>
+                <value2>1.1</value2>
+                <storeAs>rewardValue</storeAs>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_IsTrue">
+          <value>$rewardOnCompletion</value>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Signal">
+                <inSignal>monumentMarker.MonumentCompleted</inSignal>
+				  <node Class="HautsPermits.QuestNode_GiveRewardsBranch">
+					<faction>$faction</faction>
+					<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+					<customLetterText TKey="LetterTextPaymentArrived">You have completed building the landmark!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
+				  </node>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_IsTrue">
+          <value>$punishmentOnDestroy</value>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Equal">
+                <value1>$challengeRating</value1>
+                <value2>1</value2>
+                <node Class="QuestNode_Multiply">
+                  <value1>$keepMonumentTicks</value1>
+                  <value2>1</value2>
+                  <storeAs>keepMonumentTicks</storeAs>
+                </node>
+              </li>
+              <li Class="QuestNode_Equal">
+                <value1>$challengeRating</value1>
+                <value2>2</value2>
+                <node Class="QuestNode_Multiply">
+                  <value1>$keepMonumentTicks</value1>
+                  <value2>1.5</value2>
+                  <storeAs>keepMonumentTicks</storeAs>
+                </node>
+              </li>
+              <li Class="QuestNode_Equal">
+                <value1>$challengeRating</value1>
+                <value2>3</value2>
+                <node Class="QuestNode_Multiply">
+                  <value1>$keepMonumentTicks</value1>
+                  <value2>2</value2>
+                  <storeAs>keepMonumentTicks</storeAs>
+                </node>
+              </li>
+              <li Class="QuestNode_Signal">
+                <inSignal>monumentMarker.MonumentDestroyed</inSignal>
+                <node Class="QuestNode_Sequence">
+                  <nodes>
+					<li Class="QuestNode_IsTrue">
+					  <value>$TTOT_on</value>
+					  <node Class="QuestNode_SetAndRestore">
+						  <name>points</name>
+						  <value>$($pointsOriginal * 2.1875)</value>
+						  <node Class="QuestNode_ViolentQuestsAllowed">
+							<node Class="QuestNode_RandomNode">
+							  <nodes>
+							   <li Class="QuestNode_SubScript"><def>Util_Raid</def></li>
+								<li Class="QuestNode_SubScript"><def>Util_ManhunterPack</def></li>
+								<li Class="QuestNode_SubScript"><def>Util_Infestation</def></li>
+								<li Class="QuestNode_SubScript"><def>Util_SpawnSiteThreat</def></li>
+								<li Class="QuestNode_SubScript"><def>Util_GameConditionNegativeRandom</def></li>
+								<li Class="QuestNode_Subscript"><def>Util_MechCluster</def></li>
+							  </nodes>
+							</node>
+							<elseNode Class="QuestNode_SubScript">
+							  <def>Util_GameConditionNegativeRandom</def>
+							</elseNode>
+						  </node>
+					  </node>
+					</li>
+                    <li Class="QuestNode_Message">
+                      <text TKey="MessageMonumentViolated">The landmark for the quest '[resolvedQuestName]' has been violated.\n\nThe [asker_faction_name]'s respect for you has decreased.</text>
+                      <lookTargets>monumentMarker</lookTargets>
+                      <messageType>NegativeEvent</messageType>
+                    </li>
+					<li Class="QuestNode_ChangeFactionGoodwill">
+					  <change>$goodwillChangeIfMonumentDestroyed</change>
+					  <factionOf>$asker</factionOf>
+					  <reason>HVMP_LandmarkDestroyed</reason>
+					</li>
+					<li Class="HautsPermits.QuestNode_EndBranch">
+					  <outcome>Fail</outcome>
+					  <faction>HVMP_CommerceBranch</faction>
+					</li>
+                  </nodes>
+                </node>
+              </li>
+              <li Class="QuestNode_Delay">
+                <inSignalEnable>monumentMarker.MonumentCompleted</inSignalEnable>
+                <delayTicks>$keepMonumentTicks</delayTicks>
+                <expiryInfoPart TKey="ProtectMonumentForDays">Protect the landmark for {0}</expiryInfoPart>
+                <expiryInfoPartTip TKey="ProtectMonumentForDaysTip">Protect the landmark until {0}</expiryInfoPartTip>
+                <inspectString TKey="ProtectMonument">Protect for {0}</inspectString>
+                <inspectStringTargets>$monumentMarker</inspectStringTargets>
+                <node Class="QuestNode_End">
+                  <outcome>Success</outcome>
+                  <sendStandardLetter>true</sendStandardLetter>
+                </node>
+              </li>
+            </nodes>
+          </node>
+          <elseNode Class="QuestNode_IsNull">
+            <value>$asker</value>
+            <node Class="QuestNode_End">
+              <inSignal>monumentMarker.MonumentCompleted</inSignal>
+              <outcome>Success</outcome>
+              <sendStandardLetter>true</sendStandardLetter>
+            </node>
+            <elseNode Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_GetFactionOf">
+                  <thing>$asker</thing>
+                  <storeAs>askerFaction</storeAs>
+                </li>
+                <li Class="QuestNode_IsNull">
+                  <value>$askerFaction</value>
+                  <node Class="QuestNode_End">
+                    <inSignal>monumentMarker.MonumentCompleted</inSignal>
+                    <outcome>Success</outcome>
+                    <sendStandardLetter>true</sendStandardLetter>
+                  </node>
+                  <elseNode Class="QuestNode_IsPermanentEnemy">
+                    <thing>$asker</thing>
+                    <node Class="QuestNode_Sequence">
+                      <nodes>
+                        <li Class="QuestNode_End">
+                          <inSignal>monumentMarker.MonumentCompleted</inSignal>
+                          <outcome>Success</outcome>
+                          <sendStandardLetter>true</sendStandardLetter>
+                        </li>
+                      </nodes>
+                    </node>
+                    <elseNode Class="QuestNode_Signal">
+                      <inSignal>monumentMarker.MonumentCompleted</inSignal>
+                      <node Class="QuestNode_Sequence">
+                        <nodes>
+                          <li Class="QuestNode_Letter">
+                            <label TKey="LetterLabelMonumentConstructed">Landmark completed</label>
+                            <letterDef>PositiveEvent</letterDef>
+                            <text TKey="LetterTextMonumentConstructed">You completed construction of the landmark.\n\nYou must not destroy it for at least [keepMonumentTicks_duration], otherwise you will anger [asker_factionName] ([goodwillChangeIfMonumentDestroyed] goodwill).</text>
+                          </li>
+                          <li Class="QuestNode_Signal">
+                            <inSignal>monumentMarker.MonumentDestroyed</inSignal>
+                            <node Class="QuestNode_Sequence">
+                              <nodes>
+                                <li Class="QuestNode_Letter">
+                                  <text TKey="LetterTextMonumentRuined">[asker_nameDef] is dismayed that the landmark was defaced so quickly after its completion.\n\nYour relations with [asker_faction_name] have fallen by [goodwillChangeIfMonumentDestroyed].</text>
+                                  <label TKey="LetterLabelMonumentRuined">Landmark destroyed</label>
+                                </li>
+                                <li Class="QuestNode_ChangeFactionGoodwill">
+                                  <change>$goodwillChangeIfMonumentDestroyed</change>
+                                  <factionOf>$asker</factionOf>
+                                  <reason>HVMP_LandmarkDestroyed</reason>
+                                </li>
+                                <li Class="HautsPermits.QuestNode_EndBranch">
+                                  <outcome>Fail</outcome>
+								  <faction>HVMP_CommerceBranch</faction>
+                                </li>
+                              </nodes>
+                            </node>
+                          </li>
+                          <li Class="QuestNode_Delay">
+                            <delayTicks>$keepMonumentTicks</delayTicks>
+                            <expiryInfoPart TKey="DontDestroyMonumentForDays">Do not destroy the landmark for {0}</expiryInfoPart>
+                            <expiryInfoPartTip TKey="DontDestroyMonumentForDaysTip">Do not destroy the landmark for {0}</expiryInfoPartTip>
+                            <inspectString TKey="KeepMonument">Keep landmark {0}</inspectString>
+                            <inspectStringTargets>$monumentMarker</inspectStringTargets>
+                            <node Class="QuestNode_Sequence">
+                              <nodes>
+                                <li Class="QuestNode_End">
+                                  <outcome>Success</outcome>
+                                </li>
+                              </nodes>
+                            </node>
+                          </li>
+                        </nodes>
+                      </node>
+                    </elseNode>
+                  </elseNode>
+                </li>
+              </nodes>
+            </elseNode>
+          </elseNode>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>map.MapRemoved</inSignal>
+          <node Class="HautsPermits.QuestNode_EndBranch">
+			<outcome>Fail</outcome>
+			<goodwillChangeReason>HVMP_LandmarkConstructionMapRemoved</goodwillChangeReason>
+			<faction>HVMP_CommerceBranch</faction>
+		  </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>monumentMarker.Destroyed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_DropMonumentMarkerCopy">
+                <outSignalResult>DroppedMonumentMarkerCopy</outSignalResult>
+                <destroyOrPassToWorldOnCleanup>true</destroyOrPassToWorldOnCleanup>
+              </li>
+              <li Class="QuestNode_Letter">
+                <inSignal>DroppedMonumentMarkerCopy</inSignal>
+                <label TKey="LetterLabelMonumentMarkerArrived">New landmark marker arrived</label>
+                <text TKey="LetterTextMonumentMarkerArrived">Since the landmark marker has been destroyed, a new one has been sent.</text>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>constructionTimeoutTicks</name>
+          <value>$(roundToTicksRough(randInt(10, 16)*60000))</value> <!-- 8~14 days at minimum -->
+        </li>
+        <li Class="QuestNode_EvaluateSimpleCurve">
+          <value>$points</value>
+          <storeAs>timeoutFactorForPoints</storeAs> <!-- Multiply construction time for really big monuments -->
+          <curve>
+            <points>
+              <li>( 800, 1)</li>
+              <li>(2000, 2)</li>
+              <li>(4000, 3)</li>
+            </points>
+          </curve>
+        </li>
+        <li Class="HautsPermits_Ideology.QuestNode_Multiply_OCWAL">
+          <value1>$constructionTimeoutTicks</value1>
+          <value2>$timeoutFactorForPoints</value2>
+		  <OCWAL_factor>0.7</OCWAL_factor>
+          <storeAs>constructionTimeoutTicks</storeAs>
+        </li>
+        <li Class="QuestNode_Delay">
+          <delayTicks>$constructionTimeoutTicks</delayTicks>
+          <inSignalDisable>monumentMarker.MonumentCompleted</inSignalDisable>
+          <isQuestTimeout>true</isQuestTimeout>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelTimeExpired">Landmark time expired</label>
+                <text TKey="LetterTextTimeExpired">Your time limit to construct the landmark has expired. [failLetterEndingCommon]</text>
+              </li>
+			  <li Class="HautsPermits.QuestNode_EndBranch">
+				<outcome>Fail</outcome>
+				<goodwillChangeReason>HVMP_LandmarkConstructionExpired</goodwillChangeReason>
+				<faction>HVMP_CommerceBranch</faction>
+			  </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_MakeMinified">
+          <storeAs>monumentMarkerMinified</storeAs>
+          <thing>$monumentMarker</thing>
+        </li>
+        <li Class="QuestNode_AddToList">
+          <name>thingsToDrop</name>
+          <value>$monumentMarkerMinified</value>
+        </li>
+        <li Class="QuestNode_GenerateNonBuildableMonumentRequiredResources">
+          <addToList>thingsToDrop</addToList>
+          <monumentMarker>$monumentMarker</monumentMarker>
+        </li>
+        <li Class="QuestNode_DropPods">
+          <contents>$thingsToDrop</contents>
+          <useTradeDropSpot>true</useTradeDropSpot>
+          <thingsToExcludeFromHyperlinks>$monumentMarkerMinified</thingsToExcludeFromHyperlinks>
+        </li>
+        <li Class="QuestNode_GetMonumentSize">
+          <monumentMarker>$monumentMarker</monumentMarker>
+          <storeAs>monumentSize</storeAs>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  <RulePackDef>
+    <defName>HVMP_ReplicaName</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>questName->[constAdj] [construction]</li>
+        <li>questName->A [constAdj] [construction]</li>
+        <li>questName->The [constAdj] [construction]</li>
+        <li>constAdj(p=20)->[AdjectiveLarge]</li>
+        <li>constAdj->imposing</li>
+        <li>constAdj->great</li>
+        <li>constAdj->grand</li>
+        <li>constAdj->stunning</li>
+        <li>constAdj->monumental</li>
+        <li>constAdj->extravagant</li>
+        <li>constAdj->memorable</li>
+        <li>constAdj->spectacular</li>
+        <li>constAdj->looming</li>
+        <li>constAdj->notable</li>
+        <li>constAdj->awesome</li>
+        <li>constAdj->unique</li>
+        <li>constAdj->timeless</li>
+        <li>constAdj->glittering</li>
+        <li>constAdj->shining</li>
+        <li>constAdj->wondrous</li>
+        <li>constAdj->enduring</li>
+        <li>construction(p=3)->construction</li>
+        <li>construction(p=2)->structure</li>
+        <li>construction(p=2)->building</li>
+        <li>construction->monument</li>
+        <li>construction->edifice</li>
+        <li>construction->beacon</li>
+        <li>construction->landmark</li>
+        <li>construction->structure</li>
+        <li>construction->assembly</li>
+        <li>construction->erection</li>
+        <li>construction->model</li>
+        <li>construction->replica</li>
+        <li>construction->fabrication</li>
+        <li>construction->reproduction</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+  <RulePackDef>
+    <defName>HVMP_ReplicaDesc</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>questDescription(asker_factionLeader==True)->[asker_faction_leaderTitle] [asker_nameFull] of the [asker_faction_name] is requesting that you build [originalStructure].\n[commonEnding]</li>
+        <li>questDescription(asker_factionLeader==False)->[asker_nameFull] of the [asker_faction_name] is requesting that you build [originalStructure].\n[commonEnding]</li>
+        <li>asker2(asker_factionLeader==True)->[asker_nameDef]</li>
+        <li>originalStructure->a recreation of well-known cultural landmark from another world</li>
+        <li>originalStructure->a replicated portion of a historical palace</li>
+        <li>originalStructure->a structure based on descriptions of a long-gone historical building</li>
+        <li>originalStructure->a model of what certain ancient ruins might have looked like in their heyday</li>
+        <li>originalStructure->some sort of architectural work whose blueprints were provided by a convivial archotech</li>
+        <li>originalStructure->an artist's interpretation of a structure that was historically attested, but never directly observed</li>
+        <li>originalStructure->an extrapolated structure generated by a high-order AI's analysis of the ruins of a bombed-out dead world</li>
+        <li>originalStructure->a local version of a popular landmark found on many planets</li>
+        <li>originalStructure->a modern version of an ancient ruin, to test what kinds of construction methods could have been employed to create it</li>
+
+        <li>failLetterEndingCommon->You have failed the quest '[resolvedQuestName]'.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
   
   <!--Archive: satellite-->
   <QuestScriptDef>

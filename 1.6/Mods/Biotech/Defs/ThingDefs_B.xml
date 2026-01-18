@@ -182,7 +182,7 @@
   <ThingDef ParentName="ResourceBase">
     <defName>HVMP_Chargecell</defName>
     <label>chargecell</label>
-    <description>A single-use hand-sized device that stores energy for later injection into a mechanoid or battery. Restores 100% energy to a mech of 1 body size, or 350Wd to a battery.</description>
+    <description>A single-use hand-sized device that stores energy for later injection into a mechanoid or battery. Restores 100% energy to a mech of 1 body size (less to larger mechs, more to smaller ones); restores 350Wd to a battery.</description>
     <graphicData>
       <texPath>Things/Item/Resource/Medicine/MedicineIndustrial</texPath>
       <graphicClass>Graphic_StackCount</graphicClass>
@@ -326,6 +326,18 @@
 		<solidTime>1</solidTime>
 		<fadeOutTime>2</fadeOutTime>
 	  </FleckDef>
+	  <ThoughtDef MayRequire="reo.RimScent">
+        <defName>HVMP_PesticideScent</defName>
+        <durationDays>1</durationDays>
+        <stackLimit>1</stackLimit>
+        <stages>
+            <li>
+                <label>stinging pesticide</label>
+                <description>A sharp and dry chemical scent that hurts my sinuses.</description>
+                <baseMoodEffect>-2</baseMoodEffect>
+            </li>
+        </stages>
+	  </ThoughtDef>
   
   <!--Autohatchery-->
   <ThingDef ParentName="BuildingBase" MayRequire="Ludeon.RimWorld.Odyssey">

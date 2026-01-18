@@ -7,6 +7,53 @@
     <workerClass>PawnGroupKindWorker_Normal</workerClass>
   </PawnGroupKindDef>
   
+  <!--COMMERCE Fortification
+		Riches to Ruins-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_LifeOfLuxury</defName>
+    <label>pampered</label>
+    <description>This character is used to the luxurious life of a wealthy trader. Even the grandest colony on the Rim pales in comparison.</description>
+    <defaultLabelColor>(1.0, 1.0, 1.0)</defaultLabelColor>
+	<maxSeverity>1</maxSeverity>
+	<initialSeverity>1</initialSeverity>
+    <stages>
+      <li>
+		<becomeVisible>false</becomeVisible>
+	  </li>
+    </stages>
+  </HediffDef>
+  <ThoughtDef>
+    <defName>HVMP_LOLmood</defName>
+    <workerClass>ThoughtWorker_Hediff</workerClass>
+    <hediff>HVMP_LifeOfLuxury</hediff>
+    <validWhileDespawned>true</validWhileDespawned>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <stages>
+      <li>
+        <label>life of luxury</label>
+        <description>Even the grandest colony on this backwater planet is squalor, compared to the comforts a merchant of my station is entitled to.</description>
+        <baseMoodEffect>-12</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  <!--What's Bugging You?-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_BugPheromones</defName>
+    <label>insectoid pheromones</label>
+    <description>Chemicals which may attract insectoid infestations. When such an infestation surfaces, the pheromones will be overwritten by the insectoids' own scents.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(164, 196, 122)</defaultLabelColor>
+	<maxSeverity>18</maxSeverity>
+	<initialSeverity>18</initialSeverity>
+    <comps>
+	  <li Class="HautsPermits.HediffCompProperties_SeverityPerDay_WBY">
+		<severityPerDay>-1</severityPerDay>
+		<showHoursToRecover>true</showHoursToRecover>
+		<infestationMTB>10</infestationMTB>
+	  </li>
+    </comps>
+  </HediffDef>
+  
   <!--COMMERCE Intervention
 		Burning, Unadulterated Burning-->
   <HediffDef ParentName="HVT_TraitHediffBase">
@@ -193,6 +240,9 @@
           <li><capacity>Sight</capacity><offset>-0.15</offset></li>
           <li><capacity>Hearing</capacity><offset>-0.15</offset></li>
         </capMods>
+		<statOffsets>
+		  <RimScent_SmellSensitivity MayRequire="reo.RimScent">-0.15</RimScent_SmellSensitivity>
+		</statOffsets>
       </li>
       <li>
         <minSeverity>1</minSeverity>
@@ -200,6 +250,9 @@
           <li><capacity>Sight</capacity><offset>-0.3</offset></li>
           <li><capacity>Hearing</capacity><offset>-0.3</offset></li>
         </capMods>
+		<statOffsets>
+		  <RimScent_SmellSensitivity MayRequire="reo.RimScent">-0.3</RimScent_SmellSensitivity>
+		</statOffsets>
       </li>
       <li>
         <minSeverity>2</minSeverity>
@@ -207,6 +260,9 @@
           <li><capacity>Sight</capacity><offset>-0.45</offset></li>
           <li><capacity>Hearing</capacity><offset>-0.45</offset></li>
         </capMods>
+		<statOffsets>
+		  <RimScent_SmellSensitivity MayRequire="reo.RimScent">-0.45</RimScent_SmellSensitivity>
+		</statOffsets>
       </li>
       <li>
         <minSeverity>3</minSeverity>
@@ -214,6 +270,9 @@
           <li><capacity>Sight</capacity><offset>-0.6</offset></li>
           <li><capacity>Hearing</capacity><offset>-0.6</offset></li>
         </capMods>
+		<statOffsets>
+		  <RimScent_SmellSensitivity MayRequire="reo.RimScent">-0.6</RimScent_SmellSensitivity>
+		</statOffsets>
       </li>
       <li>
         <minSeverity>4</minSeverity>
@@ -221,6 +280,9 @@
           <li><capacity>Sight</capacity><offset>-0.75</offset></li>
           <li><capacity>Hearing</capacity><offset>-0.75</offset></li>
         </capMods>
+		<statOffsets>
+		  <RimScent_SmellSensitivity MayRequire="reo.RimScent">-0.75</RimScent_SmellSensitivity>
+		</statOffsets>
       </li>
     </stages>
 	<comps>

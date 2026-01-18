@@ -369,23 +369,6 @@
     </comps>
   </ThingDef>
   
-  <!--archive quests: excavation-->
-  <ThingDef ParentName="AncientTerminal">
-    <defName>HVMP_AncientTerminal</defName>
-    <statBases>
-      <Flammability>0.04</Flammability>
-    </statBases>
-    <comps>
-      <li Class="HautsPermits_Ideology.CompProperties_ExcavationMutatorHandler">
-        <CS_heavyChance>0.09</CS_heavyChance>
-		<CS_ultraChance>0.01</CS_ultraChance>
-		<CS_bonusDefenderChance>0.12</CS_bonusDefenderChance>
-		<ET_chance>10.25</ET_chance>
-      </li>
-    </comps>
-    <tickerType>Normal</tickerType>
-  </ThingDef>
-  
   <!--archive quests: shrine-->
   <ThingDef ParentName="TrapIEDBase">
     <defName>HVMP_TrapTTWSD</defName>

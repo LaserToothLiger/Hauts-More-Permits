@@ -42,6 +42,7 @@
 		</statOffsets>
 		<statFactors>
 		  <IncomingDamageFactor>0.5</IncomingDamageFactor>
+		  <RimScent_SmellSensitivity MayRequire="reo.RimScent">0</RimScent_SmellSensitivity>
 		</statFactors>
         <totalBleedFactor>0.025</totalBleedFactor>
       </li>
