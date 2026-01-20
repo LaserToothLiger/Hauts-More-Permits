@@ -992,7 +992,7 @@ namespace HautsPermits_Biotech
             if (this.numTends >= this.Props.tendDiscoveryRange.min && !this.cureDiscovered && (this.numTends >= this.Props.tendDiscoveryRange.max || Rand.Chance(this.Props.chanceTendRevealsCureMethod)))
             {
                 this.cureDiscovered = true;
-                Messages.Message("HVMP_NeopathyCureDiscovered".Translate().CapitalizeFirst().Formatted(this.Pawn.Named("PAWN")).AdjustedFor(this.Pawn, "PAWN", true).Resolve(), this.Pawn,MessageTypeDefOf.PositiveEvent,true);
+                Find.LetterStack.ReceiveLetter("HVMP_NeopathyCureDiscoveredLabel".Translate(), "HVMP_NeopathyCureDiscoveredText".Translate().Formatted(this.Pawn.Named("PAWN")).AdjustedFor(this.Pawn, "PAWN", true).Resolve(), LetterDefOf.PositiveEvent, this.Pawn);
             }
         }
         public override void CompPostPostRemoved()

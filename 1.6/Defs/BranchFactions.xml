@@ -246,7 +246,7 @@
   
   <FactionDef ParentName="HVMP_EBranchFactionBase">
     <defName>HVMP_CommerceBranch</defName>
-    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch lays the foundation for healthy, wide-reaching trade networks.\n\nIt offers jobs to create displays of wealth, fulfill trade requests, accommodate dangerous resource scans, and manipulate the market. Those in good standing with this e-branch may solicit them for investment opportunities, valuable materials, and traders, as well as to influence others by leaning on their massive wealth.</description>
+    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch lays the foundation for healthy, wide-reaching trade networks.\n\nIt offers jobs to protect disenfranchised traders, fulfill trade requests, accommodate dangerous resource scans, and manipulate the market. Those in good standing with this e-branch may solicit them for investment opportunities, valuable materials, and traders, as well as to influence others by leaning on their massive wealth.</description>
 	<fixedName>Commerce Branch</fixedName>
     <label>commerce branch</label>
     <royalTitleTags>
@@ -336,7 +336,7 @@
   
   <FactionDef ParentName="HVMP_EBranchFactionBase" MayRequire="Ludeon.RimWorld.Ideology">
     <defName>HVMP_ArchiveBranch</defName>
-    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch focuses on the recording and preservation of human cultures.\n\nIt offers jobs to retrieve and study artifacts and data, as well as to consent to anthropological studies. Those in good standing with this e-branch may solicit them to repair and enhance items; share ideoligious, technical, or philosophical knowledge; employ their scanning technology; or provide powerful items.</description>
+    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch focuses on the recording and preservation of human cultures.\n\nIt offers jobs to retrieve and study artifacts and data, as well as to consent to anthropological studies or create replicas of ancient buildings. Those in good standing with this e-branch may solicit them to repair and enhance items; share ideoligious, technical, or philosophical knowledge; employ their scanning technology; or provide powerful items.</description>
 	<fixedName>Archive Branch</fixedName>
     <label>archive branch</label>
     <royalTitleTags>
@@ -424,7 +424,7 @@
   
   <FactionDef ParentName="HVMP_EBranchFactionBase" MayRequire="Ludeon.RimWorld.Anomaly">
     <defName>HVMP_OccultBranch</defName>
-    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch focuses on minimizing the danger of psychic phenomena.\n\nIt offers jobs to dispatch unnatural entities, weather psychic storms, keep cultists for interrogation, and investigate or suppress powerful anomalies. Those in good standing with this e-branch may solicit them for psychic equipment, teleportation effects, infusions of psychic energy, and even the assistance of their archotech-influenced transhumans.</description>
+    <description>A branch of an interstellar, largely automated fleet which travels to rimworlds and civilizes them over the course of centuries by carefully manipulating the locals.\n\nThis particular e-branch focuses on minimizing the danger of psychic phenomena.\n\nIt offers jobs to dispatch unnatural entities, weather psychic storms, and investigate or suppress powerful anomalies. Those in good standing with this e-branch may solicit them for psychic equipment, teleportation effects, infusions of psychic energy, and even the assistance of their archotech-influenced transhumans.</description>
 	<fixedName>Occult Branch</fixedName>
     <label>Occult Branch</label>
     <royalTitleTags>

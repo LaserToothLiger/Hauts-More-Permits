@@ -759,4 +759,142 @@
   </QuestScriptDef>
 
   
+  <!--occult: vandermeer-->
+  <QuestScriptDef>
+    <defName>HVMP_OccultVanderMeer</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->the [unseen] [halfLife]</li>
+        <li>questName->[capturing] a [halfLife]</li>
+        <li>questName->to [chain] a [halfLife]</li>
+        <li>questName->[halfLife] [detected]</li>
+        <li>questName->a [halfLife] [strikes]</li>
+		
+        <li>unseen->Unseen</li>
+        <li>unseen->Invisible</li>
+        <li>unseen->Intangible</li>
+        <li>unseen->Ethereal</li>
+        <li>unseen->Spectral</li>
+        <li>unseen->Unheard</li>
+        <li>unseen->Whispering</li>
+        <li>unseen->Sibilant</li>
+        <li>unseen->Soundless</li>
+        <li>unseen->Silent</li>
+        <li>unseen->Hidden</li>
+        <li>unseen->Veiled</li>
+        <li>unseen->Shrouded</li>
+        <li>unseen->Furtive</li>
+        <li>unseen->Creeping</li>
+        <li>unseen->Skulking</li>
+		
+        <li>halfLife->Witness</li>
+        <li>halfLife->Observer</li>
+        <li>halfLife->Wraith</li>
+        <li>halfLife->Haunt</li>
+        <li>halfLife->Shade</li>
+        <li>halfLife->Shadow</li>
+        <li>halfLife->Geist</li>
+        <li>halfLife->Wisp</li>
+        <li>halfLife->Lemure</li>
+        <li>halfLife->Eidolon</li>
+        <li>halfLife->Prowler</li>
+        <li>halfLife->Impresence</li>
+        <li>halfLife->Silhouette</li>
+        <li>halfLife->Apparition</li>
+		
+        <li>capturing->Capturing</li>
+        <li>capturing->Chaining</li>
+        <li>capturing->Catching</li>
+        <li>capturing->Apprehending</li>
+        <li>capturing->Snaring</li>
+        <li>capturing->Securing</li>
+        <li>capturing->Abducting</li>
+        <li>capturing->Attaining</li>
+        <li>capturing->Obtaining</li>
+        <li>capturing->Possessing</li>
+		
+        <li>capture->Capture</li>
+        <li>capture->Chain</li>
+        <li>capture->Catch</li>
+        <li>capture->Apprehend</li>
+        <li>capture->Snare</li>
+        <li>capture->Bottle</li>
+        <li>capture->Net</li>
+        <li>capture->Attain</li>
+        <li>capture->Clutch</li>
+        <li>capture->Touch</li>
+        <li>capture->Lay Hands On</li>
+		
+        <li>strikes->Strikes</li>
+        <li>strikes->Lurks</li>
+        <li>strikes->Skulks</li>
+        <li>strikes->Roams Free</li>
+        <li>strikes->Appears</li>
+        <li>strikes->Manifests</li>
+        <li>strikes->Is Revealed</li>
+		
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->The Occult Branch tracks down objects with potentially anomalous origins and properties. They have found [mutator_TT_info] in the possession of other, less trustworthy parties on your world, and would like to transfer ownership of it to you for safeguarding.\n[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_LGTH_info][mutator_RR_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits_Occult.QuestNode_OccultIntermediary">
+      <nodes>
+		<li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		</li>
+        <li Class="QuestNode_GetFactionOf">
+          <thing>$asker</thing>
+          <storeAs>faction</storeAs>
+        </li>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+        </li>
+		<li Class="QuestNode_Delay">
+			<delayTicks>$120</delayTicks>
+			<node Class="QuestNode_Sequence">
+			  <nodes>
+				  <li Class="QuestNode_Set">
+					<name>sendStandardLetter</name>
+					<value>true</value>
+				  </li>
+				  <li Class="HautsPermits_Occult.QuestNode_GiveRewardsBarker">
+					<faction>$faction</faction>
+					<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+					<customLetterText TKey="LetterTextPaymentArrived">By agreeing to safeguard a dangerous object, the Occult Branch's respect for you has increased.</customLetterText>
+					<possibleQuests>
+					  <li>HVMP_BarkerCorpse</li>
+					  <li>HVMP_BarkerCube</li>
+					  <li>HVMP_BarkerNucleus</li>
+					  <li>HVMP_BarkerSphere</li>
+					  <!--<li>HVMP_BarkerSpine</li> this is just a free shard since you can kill revenant spines in one shot-->
+					</possibleQuests>
+					<LGTH_storeAs>LGTH_on</LGTH_storeAs>
+					<LGTH_description>\nThe object is already agitated, and may activate soon.</LGTH_description>
+					<RR_provocationDelayHoursRange>1</RR_provocationDelayHoursRange>
+					<RR_description>\nThe Void is possessive of these trinkets; by accepting this quest, you will provoke it. A random anomalous incident will occur shortly thereafter.</RR_description>
+					<TT_bonusItems>1</TT_bonusItems>
+					<nonTT_description>one</nonTT_description>
+					<TT_description>not one, but two such objects</TT_description>
+				  </li>
+				  <li Class="QuestNode_End">
+					<outcome>Success</outcome>
+					<!--<sendStandardLetter>$sendStandardLetter</sendStandardLetter>-->
+				  </li>
+			  </nodes>
+			</node>
+		</li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
 </Defs>

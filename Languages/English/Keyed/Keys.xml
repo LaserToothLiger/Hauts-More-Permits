@@ -173,7 +173,8 @@
 <HVMP_DroneArrivedText>The spacedrone has arrived. It is guarded by mechanoids.</HVMP_DroneArrivedText>
 <HVMP_DroneHacked>You've finished hacking the {0} on behalf of the Archive Branch.</HVMP_DroneHacked>
 <!--Ecosphere case study-->
-<HVMP_NeopathyCureDiscovered>By studying and tending to {PAWN_nameDef}, a cure has been found for {PAWN_possessive} malady!</HVMP_NeopathyCureDiscovered>
+<HVMP_NeopathyCureDiscoveredLabel>Neopathy cure found</HVMP_NeopathyCureDiscoveredLabel>
+<HVMP_NeopathyCureDiscoveredText>By studying and tending to {PAWN_nameDef}, a cure has been found for {PAWN_possessive} malady!</HVMP_NeopathyCureDiscoveredText>
 <HVMP_QuestPartShuttleArriveOnCure>Shuttle arrives when neopathy is cured</HVMP_QuestPartShuttleArriveOnCure>
 <HVMP_QuestPartShuttleArriveOnCureDesc>A shuttle will arrive once the neopathy is cured. The quest {0} requires you to load the following people or items onto the shuttle before it leaves:\n{1}</HVMP_QuestPartShuttleArriveOnCureDesc>
 <HVMP_NeopathyCureFailed>{0} was unable to cure the neopathy of {1} on this attempt. Perhaps a future attempt will work, however.</HVMP_NeopathyCureFailed>

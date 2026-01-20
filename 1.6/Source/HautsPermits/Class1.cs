@@ -763,7 +763,7 @@ namespace HautsPermits
             if (this.newSettlementTick > 0)
             {
                 this.newSettlementTick--;
-            } else if (ModsConfig.OdysseyActive) {
+            } else if (ModsConfig.OdysseyActive && Find.WorldGrid.Orbit != null) {
                 WorldComponent_HautsFactionComps WCFC = (WorldComponent_HautsFactionComps)Find.World.GetComponent(typeof(WorldComponent_HautsFactionComps));
                 List<Faction> factionsToMakePlatformsFor = new List<Faction>();
                 foreach (Faction f in Find.FactionManager.AllFactionsVisible)
@@ -797,7 +797,7 @@ namespace HautsPermits
                 {
                     WorldObject worldObject = WorldObjectMaker.MakeWorldObject(HVMPDefOf.HVMP_BranchPlatform);
                     worldObject.SetFaction(f2);
-                    worldObject.Tile = TileFinder.RandomSettlementTileFor(Find.WorldGrid.Orbit??Find.WorldGrid.Surface, f2, false, null);
+                    worldObject.Tile = TileFinder.RandomSettlementTileFor(Find.WorldGrid.Orbit, f2, false, null);
                     INameableWorldObject nameableWorldObject = worldObject as INameableWorldObject;
                     if (nameableWorldObject != null)
                     {
