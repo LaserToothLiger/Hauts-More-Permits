@@ -565,6 +565,7 @@
 		  </li>
 		</comps>
 	  </HediffDef>
+	  
   <!--Romero
 		Night of the Everliving Dead-->
   <HediffDef>
@@ -576,6 +577,51 @@
       <li>
         <minSeverity>0</minSeverity>
         <regeneration>7</regeneration>
+      </li>
+    </stages>
+  </HediffDef>
+  
+  <!--Wells
+		First Strike-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_BurstCapacitators</defName>
+	<label>Assassination frenzy</label>
+	<description>You're all gonna die.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<isBad>false</isBad>
+	<initialSeverity>0.5</initialSeverity>
+	<maxSeverity>0.5</maxSeverity>
+	<defaultLabelColor>(1, 0.6, 0.6)</defaultLabelColor>
+	<comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-24</severityPerDay>
+	  </li>
+	  <li Class="VEF.AnimalBehaviours.HediffCompProperties_Floating"/>
+	</comps>
+	<stages>
+	  <li>
+		<statOffsets>
+		  <MeleeDamageFactor>0.6</MeleeDamageFactor>
+		  <VEF_RangeAttackDamageFactor>0.6</VEF_RangeAttackDamageFactor>
+		</statOffsets>
+	  </li>
+	</stages>
+  </HediffDef>
+  <!--Never Say Die-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_TisButAScratch</defName>
+    <label>rapid regeneration</label>
+    <hediffClass>Hediff_RapidRegeneration</hediffClass>
+    <description>This creature has stored an incredible amount of healing energy. While not unlimited, it will rapidly regenerate until its energy has been exhausted.</description>
+    <preventsDeath>true</preventsDeath>
+    <keepOnBodyPartRestoration>True</keepOnBodyPartRestoration>
+    <stages>
+      <li>
+        <regeneration>2500</regeneration>
+		<totalBleedFactor>0</totalBleedFactor>
+		<statFactors>
+		  <IncomingDamageFactor>0.85</IncomingDamageFactor>
+		</statFactors>
       </li>
     </stages>
   </HediffDef>

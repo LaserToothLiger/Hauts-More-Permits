@@ -142,4 +142,60 @@
     </startingHediffs>
   </PawnKindDef>
   
+  <PawnKindDef ParentName="HoraxianBase">
+    <defName>HVMP_HoraxianUsher</defName>
+    <label>usher</label>
+    <combatPower>90</combatPower>
+    <apparelAllowHeadgearChance>0</apparelAllowHeadgearChance>
+    <apparelRequired>
+      <li>Apparel_FlakVest</li>
+      <li>Apparel_ShieldBelt</li>
+      <li>Apparel_FlakPants</li>
+    </apparelRequired>
+    <specificApparelRequirements>
+      <li>
+        <bodyPartGroup>FullHead</bodyPartGroup>
+        <requiredTag>HoraxianCeremonial</requiredTag>
+        <useRandomStyleDef>true</useRandomStyleDef>
+      </li>
+      <li>
+        <color>(85, 85, 85)</color>
+      </li>
+    </specificApparelRequirements>
+    <weaponTags>
+	  <li>MedievalMeleeDecent</li>
+      <!--<li>NerveSpiker</li> shield belt renders useless
+	  <li>ShortShots</li>-->
+    </weaponTags>
+    <weaponMoney>300~900</weaponMoney>
+    <startingHediffs>
+      <li>
+        <def>Metalblood</def>
+        <durationTicksRange>60000~300000</durationTicksRange> <!-- 1~5 days -->
+      </li>
+      <li>
+        <def>HVMP_UsherStats</def>
+      </li>
+    </startingHediffs>
+    <skills>
+      <li>
+        <skill>Melee</skill>
+        <range>8~20</range>
+      </li>
+      <li>
+        <skill>Shooting</skill>
+        <range>8~20</range>
+      </li>
+    </skills>
+    <disallowedTraits>
+      <li>Wimp</li>
+    </disallowedTraits>
+    <requiredWorkTags>
+      <li>Violent</li>
+    </requiredWorkTags>
+    <forcedTraits>
+      <BodyMastery />
+    </forcedTraits>
+  </PawnKindDef>
+  
 </Defs>

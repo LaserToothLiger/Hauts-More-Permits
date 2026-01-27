@@ -20,6 +20,35 @@
 	</comps>
   </HediffDef>
   
+  <!--usher stats-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_UsherStats</defName>
+	<label>Horaxian usher</label>
+	<description>This character will turn into a ghoul if recruited or imprisoned.</description>
+	<hediffClass>HautsPermits_Occult.Hediff_SpontaneousGhoulization</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+		<statOffsets>
+		  <ToxicResistance>0.5</ToxicResistance>
+		  <ArmorRating_Blunt>0.55</ArmorRating_Blunt>
+		  <ArmorRating_Sharp>0.75</ArmorRating_Sharp>
+		  <ArmorRating_Heat>0.45</ArmorRating_Heat>
+		  <VacuumResistance MayRequire="Ludeon.RimWorld.Odyssey">1</VacuumResistance>
+		  <P42_AllergicSensitivity MayRequire="phil42.allergies">-1</P42_AllergicSensitivity>
+		  <SmokeSensitivity MayRequire="CETeam.CombatExtended">-0.5</SmokeSensitivity>
+		  <Radiation MayRequire="Dubwise.Rimatomics">-1</Radiation>
+		  <Mashed_Ashlands_AshResistance MayRequire="SirMashedPotato.Ashlands">0.5</Mashed_Ashlands_AshResistance>
+		</statOffsets>
+		<statFactors>
+		  <PawnTrapSpringChance>0.3</PawnTrapSpringChance>
+		</statFactors>
+		<regeneration>70</regeneration>
+		<painFactor>0</painFactor>
+	    <becomeVisible>false</becomeVisible>
+	  </li>
+	</stages>
+  </HediffDef>
   <!--nociosphere instantly activates-->
   <HediffDef ParentName="HVT_TraitHediffBase">
 	<defName>HVMP_ArentYouTiredOfBeingNice</defName>

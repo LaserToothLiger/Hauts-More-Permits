@@ -473,4 +473,12 @@
 <HVMP_HardMode_Tooltip_Romero_2>Additional unnatural entities of other kinds are added to the shambler waves.</HVMP_HardMode_Tooltip_Romero_2>
 <HVMP_HardMode_Label_Romero_3>Night of the Everliving Dead</HVMP_HardMode_Label_Romero_3>
 <HVMP_HardMode_Tooltip_Romero_3>Shamblers last 3x as long, and regenerate 7 hp/day.</HVMP_HardMode_Tooltip_Romero_3>
+<HVMP_Label_Wells>Wells</HVMP_Label_Wells>
+<HVMP_Tooltip_Wells>Fight a cult assassin that appears out of thin air after a random amount of time.</HVMP_Tooltip_Wells>
+<HVMP_HardMode_Label_Wells_1>First Strike</HVMP_HardMode_Label_Wells_1>
+<HVMP_HardMode_Tooltip_Wells_1>For half an hour after its appearance, the assassin deals more damage and ignores slowdown from terrain types.</HVMP_HardMode_Tooltip_Wells_1>
+<HVMP_HardMode_Label_Wells_2>Never Say Die</HVMP_HardMode_Label_Wells_2>
+<HVMP_HardMode_Tooltip_Wells_2>The assassin can't die until it's regenerated at least 550 points of damage, and it both takes less damage and regenerates faster.</HVMP_HardMode_Tooltip_Wells_2>
+<HVMP_HardMode_Label_Wells_3>Tandemonium</HVMP_HardMode_Label_Wells_3>
+<HVMP_HardMode_Tooltip_Wells_3>There may be multiple assassins. The attack is accompanied by multiple sightstealers.</HVMP_HardMode_Tooltip_Wells_3>
 </LanguageData>

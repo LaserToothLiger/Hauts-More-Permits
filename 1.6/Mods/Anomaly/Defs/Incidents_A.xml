@@ -151,5 +151,34 @@
     <pointsScaleable>true</pointsScaleable>
     <tale>Raid</tale>
   </IncidentDef>
+  <!--Wells-->
+  <IncidentDef>
+    <defName>HVMP_UsherStrike</defName>
+    <label>usher strike</label>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>HautsPermits_Occult.IncidentWorker_WellsStrike</workerClass>
+    <baseChance>0</baseChance>
+    <minAnomalyThreatLevel>0</minAnomalyThreatLevel>
+    <minRefireDays>0.01</minRefireDays>
+    <category>ThreatBig</category>
+    <minThreatPoints>15</minThreatPoints>
+    <pointsScaleable>true</pointsScaleable>
+    <tale>Raid</tale>
+  </IncidentDef>
+	  <PawnsArrivalModeDef>
+		<defName>HVMP_UsherArrival</defName>
+		<workerClass>HautsPermits_Occult.PawnsArrivalModeWorker_Wells</workerClass>
+		<selectionWeightCurve>
+		  <points>
+			<li>(0, 0)</li>
+		  </points>
+		</selectionWeightCurve>
+		<textEnemy>A cult assassin is attacking!</textEnemy>
+		<textFriendly>A friendly cult assassin (what?) is counterattacking!</textFriendly>
+		<textWillArrive>A cult assassin is lurking somewhere nearby.</textWillArrive>
+		<walkIn>true</walkIn>
+	  </PawnsArrivalModeDef>
   
 </Defs>

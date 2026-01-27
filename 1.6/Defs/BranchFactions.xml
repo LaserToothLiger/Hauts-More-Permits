@@ -505,6 +505,7 @@
 				<li>HVMP_OccultLovecraft</li><!--for the Nic Cage movie-->
 				<li>HVMP_OccultNatali</li><!--not The Cube your colonists are thinking of, but a golden one nonetheless-->
 				<li>HVMP_OccultRomero</li><!--quintessential 'zombies'-->
+				<li>HVMP_OccultWells</li><!--The Invisible Man-->
 			</quests>
 			<donationTraderKind>HVMP_OccultDonations</donationTraderKind>
 			<tiedToAnomalyThreatFraction>true</tiedToAnomalyThreatFraction><!--WON'T ISSUE QUESTS IF the Anomaly playstyle is set to disabled. If set to your regularly scheduled monolith, it only starts offering quests once the thing activates; if in Ambient Horror, likelihood of offering quests is tied to the current Anomaly threat fraction.-->

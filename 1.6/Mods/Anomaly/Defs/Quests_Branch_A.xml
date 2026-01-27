@@ -757,101 +757,87 @@
       </nodes>
     </root>
   </QuestScriptDef>
-
   
-  <!--occult: vandermeer-->
+  <!--occult: wells-->
   <QuestScriptDef>
-    <defName>HVMP_OccultVanderMeer</defName>
+    <defName>HVMP_OccultWells</defName>
 	<isRootSpecial>true</isRootSpecial>
     <rootSelectionWeight>0</rootSelectionWeight>
     <rootMinPoints>350</rootMinPoints>
     <defaultChallengeRating>1</defaultChallengeRating>
     <expireDaysRange>4~8</expireDaysRange>
-	<everAcceptableInSpace>true</everAcceptableInSpace>
     <questNameRules>
       <rulesStrings>
-        <li>questName->the [unseen] [halfLife]</li>
-        <li>questName->[capturing] a [halfLife]</li>
-        <li>questName->to [chain] a [halfLife]</li>
-        <li>questName->[halfLife] [detected]</li>
-        <li>questName->a [halfLife] [strikes]</li>
+        <li>questName->The [cultAdj] [assassin]</li>
+        <li>questName->[cultAdj] [assassination]</li>
+        <li>questName->[retribution] of [cultNoun]</li>
+        <li>questName->[lurking] [retribution]</li>
 		
-        <li>unseen->Unseen</li>
-        <li>unseen->Invisible</li>
-        <li>unseen->Intangible</li>
-        <li>unseen->Ethereal</li>
-        <li>unseen->Spectral</li>
-        <li>unseen->Unheard</li>
-        <li>unseen->Whispering</li>
-        <li>unseen->Sibilant</li>
-        <li>unseen->Soundless</li>
-        <li>unseen->Silent</li>
-        <li>unseen->Hidden</li>
-        <li>unseen->Veiled</li>
-        <li>unseen->Shrouded</li>
-        <li>unseen->Furtive</li>
-        <li>unseen->Creeping</li>
-        <li>unseen->Skulking</li>
+		<li>cultAdj(p=3)->Cult</li>
+		<li>cultAdj(p=3)->Horaxian</li>
+		<li>cultAdj->Void</li>
+		<li>cultAdj->Dark</li>
+		<li>cultAdj->Inhuman</li>
+		<li>cultAdj->Sinister</li>
+		<li>cultAdj->Shadowy</li>
+		<li>cultAdj->Nightmare</li>
 		
-        <li>halfLife->Witness</li>
-        <li>halfLife->Observer</li>
-        <li>halfLife->Wraith</li>
-        <li>halfLife->Haunt</li>
-        <li>halfLife->Shade</li>
-        <li>halfLife->Shadow</li>
-        <li>halfLife->Geist</li>
-        <li>halfLife->Wisp</li>
-        <li>halfLife->Lemure</li>
-        <li>halfLife->Eidolon</li>
-        <li>halfLife->Prowler</li>
-        <li>halfLife->Impresence</li>
-        <li>halfLife->Silhouette</li>
-        <li>halfLife->Apparition</li>
+        <li>assassin->Assassin</li>
+        <li>assassin->Usher</li>
+        <li>assassin->Specialist</li>
+        <li>assassin->Ambusher</li>
+        <li>assassin->Lurker</li>
+        <li>assassin->Killer</li>
+        <li>assassin->Executioner</li>
+        <li>assassin->Enforcer</li>
+        <li>assassin->Slayer</li>
+        <li>assassin->Slasher</li>
+        <li>assassin->Death-dealer</li>
 		
-        <li>capturing->Capturing</li>
-        <li>capturing->Chaining</li>
-        <li>capturing->Catching</li>
-        <li>capturing->Apprehending</li>
-        <li>capturing->Snaring</li>
-        <li>capturing->Securing</li>
-        <li>capturing->Abducting</li>
-        <li>capturing->Attaining</li>
-        <li>capturing->Obtaining</li>
-        <li>capturing->Possessing</li>
+        <li>assassination->Assassination</li>
+        <li>assassination->Wetwork</li>
+        <li>assassination->Slaying</li>
+        <li>assassination->Excision</li>
+        <li>assassination->Murders</li>
+        <li>assassination->Silencing</li>
 		
-        <li>capture->Capture</li>
-        <li>capture->Chain</li>
-        <li>capture->Catch</li>
-        <li>capture->Apprehend</li>
-        <li>capture->Snare</li>
-        <li>capture->Bottle</li>
-        <li>capture->Net</li>
-        <li>capture->Attain</li>
-        <li>capture->Clutch</li>
-        <li>capture->Touch</li>
-        <li>capture->Lay Hands On</li>
+        <li>retribution->Retribution</li>
+        <li>retribution->Malice</li>
+        <li>retribution->Revenge</li>
+        <li>retribution->Strike</li>
+        <li>retribution->Reprisal</li>
+        <li>retribution->Fury</li>
+        <li>retribution->Threat</li>
 		
-        <li>strikes->Strikes</li>
-        <li>strikes->Lurks</li>
-        <li>strikes->Skulks</li>
-        <li>strikes->Roams Free</li>
-        <li>strikes->Appears</li>
-        <li>strikes->Manifests</li>
-        <li>strikes->Is Revealed</li>
+        <li>cultNoun->the Cult</li>
+        <li>cultNoun->Horax</li>
+        <li>cultNoun->the Void</li>
+        <li>cultNoun->the Dark</li>
+        <li>cultNoun->the Mad</li>
+        <li>cultNoun->the Inhuman</li>
+        <li>cultNoun->the Nightmare Deep</li>
+        <li>cultNoun->the Black Ocean</li>
 		
+		<li>lurking->Lurking</li>
+		<li>lurking->Looming</li>
+		<li>lurking->Approaching</li>
+		<li>lurking->Veiled</li>
+		<li>lurking->Silent</li>
+		<li>lurking->Whispered</li>
+		<li>lurking->Hushed</li>
+		<li>lurking->Cursed</li>
+		<li>lurking->Baneful</li>
+
       </rulesStrings>
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription->The Occult Branch tracks down objects with potentially anomalous origins and properties. They have found [mutator_TT_info] in the possession of other, less trustworthy parties on your world, and would like to transfer ownership of it to you for safeguarding.\n[mutatorSuffix]</li>
-		<li>mutatorSuffix->[mutator_LGTH_info][mutator_RR_info]</li>
+        <li>questDescription->The [asker_faction_name] is asking you for help. A Void-worshipping cult has deployed one of its Ushers, their semi-invisible assassins, to thwart the activities of the [asker_faction_name]. They want to lure it to your location so you can remove it from the board.\n\nIf you accept, the Usher will strike soon - no later than a quadrum from now.\n[mutatorSuffix]\n\nAbout Ushers: these cultists use invisibility to infiltrate settlements, then shed it to strike. They feel no pain, their flesh is far tougher than an ordinary person's, and they seem to lack conventional biological needs such as food, air, or rest. The few that have been successfully captured for study have rapidly degenerated into a ghoulish state, so there is no use in keeping them alive outside of combat.</li>
+        <li>mutatorSuffix->[raid0/mutator_FS_info][raid0/mutator_NSD_info][raid0/mutator_TANDY_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Occult.QuestNode_OccultIntermediary">
       <nodes>
-		<li Class="QuestNode_GetMap">
-		  <canBeSpace>true</canBeSpace>
-		</li>
         <li Class="QuestNode_GetFactionOf">
           <thing>$asker</thing>
           <storeAs>faction</storeAs>
@@ -859,42 +845,151 @@
         <li Class="QuestNode_SubScript">
           <def>Util_RandomizePointsChallengeRating</def>
         </li>
-		<li Class="QuestNode_Delay">
-			<delayTicks>$120</delayTicks>
-			<node Class="QuestNode_Sequence">
-			  <nodes>
-				  <li Class="QuestNode_Set">
-					<name>sendStandardLetter</name>
-					<value>true</value>
+        <li Class="QuestNode_GetMap" />
+        <!-- Raid(s) -->
+        <li Class="QuestNode_Set">
+          <name>raidCount</name>
+          <value>1</value>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>firstRaidDelayTicks</name>
+          <value>$(roundToTicksRough(randInt(300, 90000)))</value>
+        </li>
+		<li Class="QuestNode_Sequence">
+		  <nodes>
+			<li Class="HautsPermits_Occult.QuestNode_GetHoraxFaction">
+			  <storeAs>enemyFaction</storeAs>
+			  <storeArrivalModeAs>arrivalMode</storeArrivalModeAs>
+			</li>
+			<li Class="QuestNode_Set"><!--left in so that you can give it more waves, if you want to-->
+			  <name>nextRaidDelayTicks</name>
+			  <value>$firstRaidDelayTicks</value>
+			</li>
+			<li Class="QuestNode_Set">
+			  <name>raidCountMinusOne</name>
+			  <value>$raidCount</value>
+			</li>
+			<li Class="QuestNode_Subtract">
+			  <value1>$raidCountMinusOne</value1>
+			  <value2>1</value2>
+			  <storeAs>raidCountMinusOne</storeAs>
+			</li>
+			<li Class="QuestNode_LoopCount">
+			  <loopCount>$raidCount</loopCount>
+			  <storeLoopCounterAs>raidLoopCounter</storeLoopCounterAs>
+			  <node Class="QuestNode_Sequence">
+				<nodes>
+				  <!-- Try using specific delay -->
+				  <li Class="QuestNode_IsNull">
+					<value>$raid(($raidLoopCounter))/raidDelayTicks</value>
+					<elseNode Class="QuestNode_Set">
+					  <name>nextRaidDelayTicks</name>
+					  <value>$raid(($raidLoopCounter))/raidDelayTicks</value>
+					</elseNode>
 				  </li>
-				  <li Class="HautsPermits_Occult.QuestNode_GiveRewardsBarker">
-					<faction>$faction</faction>
-					<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
-					<customLetterText TKey="LetterTextPaymentArrived">By agreeing to safeguard a dangerous object, the Occult Branch's respect for you has increased.</customLetterText>
-					<possibleQuests>
-					  <li>HVMP_BarkerCorpse</li>
-					  <li>HVMP_BarkerCube</li>
-					  <li>HVMP_BarkerNucleus</li>
-					  <li>HVMP_BarkerSphere</li>
-					  <!--<li>HVMP_BarkerSpine</li> this is just a free shard since you can kill revenant spines in one shot-->
-					</possibleQuests>
-					<LGTH_storeAs>LGTH_on</LGTH_storeAs>
-					<LGTH_description>\nThe object is already agitated, and may activate soon.</LGTH_description>
-					<RR_provocationDelayHoursRange>1</RR_provocationDelayHoursRange>
-					<RR_description>\nThe Void is possessive of these trinkets; by accepting this quest, you will provoke it. A random anomalous incident will occur shortly thereafter.</RR_description>
-					<TT_bonusItems>1</TT_bonusItems>
-					<nonTT_description>one</nonTT_description>
-					<TT_description>not one, but two such objects</TT_description>
+
+				  <li Class="QuestNode_Delay">
+					<delayTicks>$nextRaidDelayTicks</delayTicks>
+					<node Class="QuestNode_Sequence">
+					  <nodes>
+						<li Class="QuestNode_SubScript">
+						  <prefix>raid$raidLoopCounter</prefix>
+						  <def>HVMP_UsherStrike</def>
+						  <parms>
+							<tag>lord</tag>
+							<inSignal>$inSignal</inSignal>
+							<map>$map</map>
+							<enemyFaction>$enemyFaction</enemyFaction>
+							<points>$($points * 0.5)</points>
+							<walkInSpot>$walkInSpot</walkInSpot>
+							<customLetterLabel>$customLetterLabel</customLetterLabel>
+							<customLetterText>$customLetterText</customLetterText>
+							<customLetterLabelRules>$customLetterLabelRules</customLetterLabelRules>
+							<customLetterTextRules>$customLetterTextRules</customLetterTextRules>
+						  </parms>
+						</li>
+						<li Class="QuestNode_Equal">
+						  <value1>$raidLoopCounter</value1>
+						  <value2>$($raidCount - 1)</value2>
+						  <compareAs>int</compareAs>
+						  <node Class="QuestNode_SendSignals">
+							<outSignals>AllRaidsSent</outSignals>
+						  </node>
+						</li>
+					  </nodes>
+					</node>
 				  </li>
-				  <li Class="QuestNode_End">
-					<outcome>Success</outcome>
-					<!--<sendStandardLetter>$sendStandardLetter</sendStandardLetter>-->
+				  <li Class="QuestNode_Add">
+					<value1>$nextRaidDelayTicks</value1>
+					<value2>13000</value2>
+					<storeAs>nextRaidDelayTicks</storeAs>
 				  </li>
-			  </nodes>
-			</node>
+				</nodes>
+			  </node>
+			</li>
+		  </nodes>
 		</li>
+        <li Class="QuestNode_AllSignals">
+          <inSignals>
+            <li>AllRaidsSent</li>
+            <li>raid$($raidCountMinusOne)/lord.AllEnemiesDefeated</li>
+          </inSignals>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Delay">
+                <delayTicks>300</delayTicks>
+                <node Class="QuestNode_Sequence">
+                  <nodes>
+					  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+						<faction>$faction</faction>
+						<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+						<customLetterText TKey="LetterTextPaymentArrived">You have defeated the Usher! The Occult Branch's respect for you has increased.</customLetterText>
+					  </li>
+					<li Class="QuestNode_End">
+						<outcome>Success</outcome>
+						<!--<sendStandardLetter>$sendStandardLetter</sendStandardLetter>-->
+					</li>
+                  </nodes>
+                </node>
+              </li>
+            </nodes>
+          </node>
+        </li>
       </nodes>
     </root>
   </QuestScriptDef>
-  
+  <QuestScriptDef>
+    <defName>HVMP_UsherStrike</defName>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>threatDescription->cult assassins will attack you, appearing from thin air close to one of your colonists.</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+        <li Class="HautsPermits_Occult.QuestNode_Wells">
+          <tag>$tag</tag>
+          <customLetterLabel>$customLetterLabel</customLetterLabel>
+          <customLetterText>$customLetterText</customLetterText>
+          <customLetterLabelRules>$customLetterLabelRules</customLetterLabelRules>
+          <customLetterTextRules>$customLetterTextRules</customLetterTextRules>
+          <arrivalMode>$arrivalMode</arrivalMode>
+          <canTimeoutOrFlee>$canTimeoutOrFlee</canTimeoutOrFlee>
+          <raidPawnKind>$raidPawnKind</raidPawnKind>
+          <inSignalLeave>EndRaid</inSignalLeave>
+		  <usherKind>HVMP_HoraxianUsher</usherKind>
+		  <FS_hediff>HVMP_BurstCapacitators</FS_hediff>
+		  <NSD_hediff>HVMP_TisButAScratch</NSD_hediff>
+		  <NSD_hpThreshold>550</NSD_hpThreshold>
+		  <TANDY_bonusUsherChance>0.35</TANDY_bonusUsherChance>
+		  <TANDY_bonusUsherChanceCanExplode>false</TANDY_bonusUsherChanceCanExplode><!--if true, a successful roll of bonus usher chance prompts another roll, chaining up to 9 bonus ushers-->
+		  <TANDY_bonusPawnTypes><li>Sightstealer</li></TANDY_bonusPawnTypes>
+		  <TANDY_bonusPawnCount>2~5</TANDY_bonusPawnCount>
+		  <FS_description>\nThis Usher is known for its devastating first strikes. When it first appears, it will deal more damage and won't be slowed down by terrain.</FS_description>
+		  <NSD_description>\nThe Usher's regenerative abilities have been greatly amplified, and it can't die until they've been fully exhausted.</NSD_description>
+		  <TANDY_description>\nUnlike most of its kind, this Usher rarely strikes alone. It might be accompanied by an additional Usher, or assisted by a small pack of sightstealers.</TANDY_description>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
 </Defs>
