@@ -120,9 +120,12 @@
   </GameConditionDef>
   <GameConditionDef>
     <defName>HVMP_TOTU_EldritchViscosity</defName>
-    <conditionClass>HautsPermits_Occult.GameCondition_PsychicViscosity</conditionClass>
+    <conditionClass>HautsPermits_Occult.GameCondition_InflictHediff_Lovecraft</conditionClass>
     <label>psychic viscosity</label>
     <description>Powerful psychic currents pull at the motor nervous systems of living creatures, slowing them down as if moving in molasses.</description>
+	<modExtensions>
+		<li Class="HautsFramework.InflictedHediff"><hediff>HVMP_TOTU_PsychicViscosity</hediff></li>
+	</modExtensions>
   </GameConditionDef>
 	  <HediffDef ParentName="DiseaseBase">
 		<defName>HVMP_TOTU_PsychicViscosity</defName>
@@ -131,7 +134,7 @@
 		<isBad>true</isBad>
 		<everCurableByItem>false</everCurableByItem>
 		<comps>
-		  <li Class="HautsPermits.HediffCompProperties_ReliantOnGameCondition">
+		  <li Class="HautsFramework.HediffCompProperties_ReliantOnGameCondition">
 			<gameCondition>HVMP_TOTU_EldritchViscosity</gameCondition>
 			<dontAffectAnomalies>true</dontAffectAnomalies>
 			<dontAffectMechs>true</dontAffectMechs>
@@ -156,9 +159,12 @@
 	  </HediffDef>
   <GameConditionDef>
     <defName>HVMP_TOTU_Mindfire</defName>
-    <conditionClass>HautsPermits_Occult.GameCondition_Mindfire</conditionClass>
+    <conditionClass>HautsPermits_Occult.GameCondition_InflictHediff_Lovecraft</conditionClass>
     <label>mindfire</label>
     <description>A skew in the psychic manifold sets every living creature in the region on edge.</description>
+	<modExtensions>
+		<li Class="HautsFramework.InflictedHediff"><hediff>HVMP_Mindfire_hediff</hediff></li>
+	</modExtensions>
   </GameConditionDef>
 	  <HediffDef ParentName="DiseaseBase">
 		<defName>HVMP_Mindfire_hediff</defName>
@@ -166,7 +172,7 @@
 		<description>A skew in the psychic manifold.</description>
 		<isBad>false</isBad>
 		<comps>
-		  <li Class="HautsPermits.HediffCompProperties_ReliantOnGameCondition">
+		  <li Class="HautsFramework.HediffCompProperties_ReliantOnGameCondition">
 			<gameCondition>HVMP_TOTU_Mindfire</gameCondition>
 			<dontAffectAnomalies>true</dontAffectAnomalies>
 			<dontAffectMechs>true</dontAffectMechs>
@@ -182,9 +188,12 @@
 	  </HediffDef>
   <GameConditionDef>
     <defName>HVMP_TOTU_WeaknessOfFlesh</defName>
-    <conditionClass>HautsPermits_Occult.GameCondition_WeaknessOfFlesh</conditionClass>
+    <conditionClass>HautsPermits_Occult.GameCondition_InflictHediff_Lovecraft</conditionClass>
     <label>dissolution of the flesh</label>
     <description>A foul psychic emanation seeps into the flesh of living creatures, making them easier to destroy.</description>
+	<modExtensions>
+		<li Class="HautsFramework.InflictedHediff"><hediff>HVMP_WeaknessOfFlesh_hediff</hediff></li>
+	</modExtensions>
   </GameConditionDef>
 	  <HediffDef ParentName="DiseaseBase">
 		<defName>HVMP_WeaknessOfFlesh_hediff</defName>
@@ -192,7 +201,7 @@
 		<description>Foul psychic energy which irritates living cells and weakens tissue.</description>
 		<isBad>false</isBad>
 		<comps>
-		  <li Class="HautsPermits.HediffCompProperties_ReliantOnGameCondition">
+		  <li Class="HautsFramework.HediffCompProperties_ReliantOnGameCondition">
 			<gameCondition>HVMP_TOTU_WeaknessOfFlesh</gameCondition>
 			<dontAffectAnomalies>true</dontAffectAnomalies>
 			<dontAffectMechs>true</dontAffectMechs>
@@ -211,12 +220,15 @@
 		Absence of Energy and Happiness-->
   <GameConditionDef>
     <defName>HVMP_AOEAH</defName>
-    <conditionClass>HautsPermits_Occult.GameCondition_AOEAH</conditionClass>
+    <conditionClass>HautsPermits_Occult.GameCondition_InflictHediff_Lovecraft</conditionClass>
     <label>psychic upset</label>
     <description>An otherworldly engine of psychic antipathy eats at the restfulness of everyone in the labyrinth, and causes their mood to worsen progressively.</description>
     <letterText>Within the anomaly's confines, psychic antipathy eats away at wakefulness and mood.</letterText>
     <letterDef>NegativeEvent</letterDef>
     <canBePermanent>true</canBePermanent>
+	<modExtensions>
+		<li Class="HautsFramework.InflictedHediff"><hediff>HVMP_AOEAH_hediff</hediff></li>
+	</modExtensions>
   </GameConditionDef>
 	  <HediffDef ParentName="DiseaseBase">
 		<defName>HVMP_AOEAH_hediff</defName>
@@ -227,7 +239,7 @@
 		<initialSeverity>1</initialSeverity>
 		<maxSeverity>66.6</maxSeverity>
 		<comps>
-		  <li Class="HautsPermits.HediffCompProperties_ReliantOnGameCondition">
+		  <li Class="HautsFramework.HediffCompProperties_ReliantOnGameCondition">
 			<gameCondition>HVMP_AOEAH</gameCondition>
 			<dontAffectAnomalies>true</dontAffectAnomalies>
 			<dontAffectMechs>true</dontAffectMechs>

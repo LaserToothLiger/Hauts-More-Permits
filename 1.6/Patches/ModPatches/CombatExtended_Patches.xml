@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Combat Extended</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<!--tooltips-->
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_CombatAssist"]/description</xpath>
+					<value>
+						<description>Link the target to an automated combat assistance program for 8 hours, improving attack accuracy, range, and resistance to suppression.</description>
+					</value>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+
+</Patch>

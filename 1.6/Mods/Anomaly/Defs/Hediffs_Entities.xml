@@ -42,6 +42,7 @@
 		</statOffsets>
 		<statFactors>
 		  <PawnTrapSpringChance>0.3</PawnTrapSpringChance>
+		  <Suppressability MayRequire="CETeam.CombatExtended">0</Suppressability>
 		</statFactors>
 		<regeneration>70</regeneration>
 		<painFactor>0</painFactor>

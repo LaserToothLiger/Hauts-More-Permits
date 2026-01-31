@@ -6353,48 +6353,6 @@ namespace HautsPermits
         public bool worksOnEntities = true;
         public GameConditionDef requiredCondition;
     }
-    public class HediffCompProperties_ReliantOnGameCondition : HediffCompProperties
-    {
-        public HediffCompProperties_ReliantOnGameCondition()
-        {
-            this.compClass = typeof(HediffComp_ReliantOnGameCondition);
-        }
-        public GameConditionDef gameCondition;
-        public bool dontAffectAnomalies;
-        public bool dontAffectMechs;
-    }
-    public class HediffComp_ReliantOnGameCondition : HediffComp
-    {
-        public HediffCompProperties_ReliantOnGameCondition Props
-        {
-            get
-            {
-                return (HediffCompProperties_ReliantOnGameCondition)this.props;
-            }
-        }
-        public override bool CompShouldRemove
-        {
-            get
-            {
-                if (this.Props.dontAffectMechs && !this.Pawn.RaceProps.IsFlesh)
-                {
-                    return true;
-                }
-                if (ModsConfig.AnomalyActive && this.Props.dontAffectAnomalies && (this.Pawn.IsMutant || this.Pawn.IsEntity))
-                {
-                    return true;
-                }
-                if (base.Pawn.SpawnedOrAnyParentSpawned)
-                {
-                    if (this.Pawn.MapHeld.gameConditionManager.ConditionIsActive(this.Props.gameCondition))
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
-    }
     //branchquest mechanics: studiable items
     public class CompProperties_StudiableQuestItem : CompProperties_Interactable
     {

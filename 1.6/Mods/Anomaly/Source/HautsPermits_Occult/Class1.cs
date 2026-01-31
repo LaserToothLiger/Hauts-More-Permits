@@ -107,10 +107,6 @@ namespace HautsPermits_Occult
         public static HediffDef HVMP_LightHypnotized;
         public static HediffDef HVMP_LGTH;
         public static HediffDef HVMP_LGTH_Corpse;
-        public static HediffDef HVMP_TOTU_PsychicViscosity;
-        public static HediffDef HVMP_Mindfire_hediff;
-        public static HediffDef HVMP_WeaknessOfFlesh_hediff;
-        public static HediffDef HVMP_AOEAH_hediff;
 
         public static IncidentDef HVMP_LovecraftAlignment;
 
@@ -1426,79 +1422,11 @@ namespace HautsPermits_Occult
             }
         }
     }
-    public class GameCondition_PsychicViscosity : GameCondition
+    public class GameCondition_InflictHediff_Lovecraft : GameCondition_InflictHediff
     {
-        public override void Init()
+        public override bool CheckPawnInner(Pawn pawn, InflictedHediff ih)
         {
-            base.Init();
-        }
-        public static void CheckPawn(Pawn pawn)
-        {
-            if (pawn.RaceProps.IsFlesh && !pawn.IsMutant && !pawn.IsEntity && !pawn.health.hediffSet.HasHediff(HVMPDefOf_A.HVMP_TOTU_PsychicViscosity, false))
-            {
-                pawn.health.AddHediff(HVMPDefOf_A.HVMP_TOTU_PsychicViscosity, null, null, null);
-            }
-        }
-        public override void GameConditionTick()
-        {
-            foreach (Map map in base.AffectedMaps)
-            {
-                List<Pawn> allPawns = map.mapPawns.AllPawns;
-                for (int i = 0; i < allPawns.Count; i++)
-                {
-                    GameCondition_PsychicViscosity.CheckPawn(allPawns[i]);
-                }
-            }
-        }
-    }
-    public class GameCondition_Mindfire : GameCondition
-    {
-        public override void Init()
-        {
-            base.Init();
-        }
-        public static void CheckPawn(Pawn pawn)
-        {
-            if (pawn.RaceProps.IsFlesh && !pawn.IsMutant && !pawn.IsEntity && !pawn.health.hediffSet.HasHediff(HVMPDefOf_A.HVMP_Mindfire_hediff, false))
-            {
-                pawn.health.AddHediff(HVMPDefOf_A.HVMP_Mindfire_hediff, null, null, null);
-            }
-        }
-        public override void GameConditionTick()
-        {
-            foreach (Map map in base.AffectedMaps)
-            {
-                List<Pawn> allPawns = map.mapPawns.AllPawns;
-                for (int i = 0; i < allPawns.Count; i++)
-                {
-                    GameCondition_Mindfire.CheckPawn(allPawns[i]);
-                }
-            }
-        }
-    }
-    public class GameCondition_WeaknessOfFlesh : GameCondition
-    {
-        public override void Init()
-        {
-            base.Init();
-        }
-        public static void CheckPawn(Pawn pawn)
-        {
-            if (pawn.RaceProps.IsFlesh && !pawn.IsMutant && !pawn.IsEntity && !pawn.health.hediffSet.HasHediff(HVMPDefOf_A.HVMP_WeaknessOfFlesh_hediff, false))
-            {
-                pawn.health.AddHediff(HVMPDefOf_A.HVMP_WeaknessOfFlesh_hediff, null, null, null);
-            }
-        }
-        public override void GameConditionTick()
-        {
-            foreach (Map map in base.AffectedMaps)
-            {
-                List<Pawn> allPawns = map.mapPawns.AllPawns;
-                for (int i = 0; i < allPawns.Count; i++)
-                {
-                    GameCondition_WeaknessOfFlesh.CheckPawn(allPawns[i]);
-                }
-            }
+            return pawn.RaceProps.IsFlesh && !pawn.IsMutant && !pawn.IsEntity && base.CheckPawnInner(pawn, ih);
         }
     }
     //natali
@@ -2755,31 +2683,6 @@ namespace HautsPermits_Occult
         }
         public WorldObject spatialAnomaly;
         public bool didCOL;
-    }
-    public class GameCondition_AOEAH : GameCondition
-    {
-        public override void Init()
-        {
-            base.Init();
-        }
-        public static void CheckPawn(Pawn pawn)
-        {
-            if (pawn.RaceProps.IsFlesh && !pawn.IsMutant && !pawn.IsEntity && !pawn.health.hediffSet.HasHediff(HVMPDefOf_A.HVMP_AOEAH_hediff, false))
-            {
-                pawn.health.AddHediff(HVMPDefOf_A.HVMP_AOEAH_hediff, null, null, null);
-            }
-        }
-        public override void GameConditionTick()
-        {
-            foreach (Map map in base.AffectedMaps)
-            {
-                List<Pawn> allPawns = map.mapPawns.AllPawns;
-                for (int i = 0; i < allPawns.Count; i++)
-                {
-                    GameCondition_AOEAH.CheckPawn(allPawns[i]);
-                }
-            }
-        }
     }
     public class Thought_AOEAH : Thought_Situational
     {

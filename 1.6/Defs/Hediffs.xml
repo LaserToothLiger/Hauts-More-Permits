@@ -71,6 +71,7 @@
 		  <MeleeHitChance>3</MeleeHitChance>
 		  <MeleeDodgeChance>3</MeleeDodgeChance>
 		  <VEF_VerbRangeFactor>0.2</VEF_VerbRangeFactor>
+		  <Suppressability MayRequire="CETeam.CombatExtended">-0.5</Suppressability>
 		</statOffsets>
       </li>
     </stages>
