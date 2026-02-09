@@ -39,6 +39,7 @@
 		  <P42_AllergicSensitivity MayRequire="phil42.allergies">-2</P42_AllergicSensitivity>
 		  <Mashed_Ashlands_AshResistance MayRequire="SirMashedPotato.Ashlands">2</Mashed_Ashlands_AshResistance>
 		  <Radiation MayRequire="Dubwise.Rimatomics">-2</Radiation>
+		  <SmokeSensitivity MayRequire="CETeam.CombatExtended">-1</SmokeSensitivity>
 		</statOffsets>
 		<statFactors>
 		  <IncomingDamageFactor>0.5</IncomingDamageFactor>
@@ -68,6 +69,7 @@
       <li>
 		<statOffsets>
 		  <ShootingAccuracyPawn>3</ShootingAccuracyPawn>
+		  <AimingAccuracy MayRequire="CETeam.CombatExtended">0.1</AimingAccuracy>
 		  <MeleeHitChance>3</MeleeHitChance>
 		  <MeleeDodgeChance>3</MeleeDodgeChance>
 		  <VEF_VerbRangeFactor>0.2</VEF_VerbRangeFactor>

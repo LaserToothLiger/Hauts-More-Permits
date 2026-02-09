@@ -29,7 +29,7 @@
     </genStep>
   </GenStepDef>
 
-  <GenStepDef><!--never does anything. ...whatever.-->
+  <GenStepDef><!--never managed to make this work correctly. ...whatever. snot super important-->
     <defName>HVMP_ShrineTurrets</defName>
     <linkWithSite>HVMP_Shrine</linkWithSite>
     <order>420</order>

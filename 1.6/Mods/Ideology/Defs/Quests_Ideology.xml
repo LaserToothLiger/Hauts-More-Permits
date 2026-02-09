@@ -238,6 +238,7 @@
 		    <VTE_Technophobe MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_Technophobe>
 		    <VTE_ThinSkinned MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_ThinSkinned>
 		    <VTE_Wanderlust MayRequire="VanillaExpanded.VanillaTraitsExpanded">0</VTE_Wanderlust>
+		    <Bravery MayRequire="CETeam.CombatExtended">-1</Bravery>
 			
 		  </WTU_traitList>
 		  <WTU_description_singular>The individual assigned to this study has one or more unpalatable traits.</WTU_description_singular>

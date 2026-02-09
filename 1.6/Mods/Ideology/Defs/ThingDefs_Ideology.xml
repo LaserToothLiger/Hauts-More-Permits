@@ -427,6 +427,7 @@
       <Beauty>1</Beauty>
       <MarketValue>500</MarketValue>
       <DeteriorationRate>2.0</DeteriorationRate>
+	  <Bulk MayRequire="CETeam.CombatExtended">1</Bulk>
     </statBases>
     <comps>
       <li Class="HautsPermits_Ideology.CompProperties_StudiableRemnant">

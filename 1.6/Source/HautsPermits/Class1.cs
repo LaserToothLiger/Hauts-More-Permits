@@ -637,6 +637,13 @@ namespace HautsPermits
             {
                 wo.Destroy();
             }
+            foreach (FactionDef fd in DefDatabase<FactionDef>.AllDefsListForReading)
+            {
+                if (fd.HasModExtension<EBranchQuests>() && !Find.FactionManager.AllFactionsListForReading.Any((Faction f)=>f.def == fd))
+                {
+                    FactionGenerator.CreateFactionAndAddToManager(fd);
+                }
+            }
         }
         public static bool HVMP_Settlement_CanTradeNowPrefix(ref bool __result)
         {

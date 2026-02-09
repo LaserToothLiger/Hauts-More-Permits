@@ -1898,27 +1898,27 @@
       <targetingRequireLOS>false</targetingRequireLOS>
     </royalAid>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="veterano.mythicages.megafaunabestiary">
-    <defName>HVMP_DirehorseDrop</defName>
-    <label>direhorse drop</label>
-    <description>Call for the delivery of 1 tame direhorse from the Rover Branch.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
-    <minTitle>HVMP_RoverIII</minTitle>
-    <faction>HVMP_RoverBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>36</cooldownDays>
-    <uiPosition>(2,4)</uiPosition>
-    <royalAid>
-      <favorCost>5</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<numFromCategory>1</numFromCategory>
-			<allowedPawnKinds><li>MA_Direhorse</li></allowedPawnKinds>
-			<startsTamed>true</startsTamed>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="veterano.mythicages.megafaunabestiary">
+		<defName>HVMP_DirehorseDrop</defName>
+		<label>direhorse drop</label>
+		<description>Call for the delivery of 1 tame direhorse from the Rover Branch.</description>
+		<workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+		<minTitle>HVMP_RoverIII</minTitle>
+		<faction>HVMP_RoverBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>36</cooldownDays>
+		<uiPosition>(2,4)</uiPosition>
+		<royalAid>
+		  <favorCost>5</favorCost>
+		</royalAid>
+		<modExtensions>
+			<li Class="HautsFramework.PermitMoreEffects">
+				<numFromCategory>1</numFromCategory>
+				<allowedPawnKinds><li>MA_Direhorse</li></allowedPawnKinds>
+				<startsTamed>true</startsTamed>
+			</li>
+		</modExtensions>
+	  </RoyalTitlePermitDef>
   <!--Rover level 4-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_JumpPackDrop</defName>

@@ -209,6 +209,8 @@
 				  <li>Heart</li>
 				  <li>Lung</li>
 				  <li>Kidney</li>
+				  <li>Liver</li>
+				  <li>Stomach</li>
 				</partsToAffect>
 			  </li>
 			</hediffGivers>

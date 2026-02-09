@@ -114,7 +114,6 @@
     <canRequestOrbitalTrader>true</canRequestOrbitalTrader>
     <canGenerateQuestSites>false</canGenerateQuestSites>
     <layerWhitelist MayRequire="Ludeon.RimWorld.Odyssey">
-	  <li>Surface</li>
       <li MayRequire="Ludeon.RimWorld.Odyssey">Orbit</li>
     </layerWhitelist>
 	<allowedArrivalTemperatureRange>-1000~1000</allowedArrivalTemperatureRange>
@@ -211,6 +210,7 @@
       <li MayRequire="Sarg.AlphaMemes">AM_Structure_Scavenger</li>
       <li MayRequire="Sarg.AlphaMemes">AM_Structure_Alienism</li>
       <li MayRequire="Sarg.AlphaMemes">AM_Structure_Corsair</li>
+	  <li MayRequire="Sarg.AlphaMemes,VanillaExpanded.VMemesE">AM_NonViolence</li>
       <li MayRequire="Ludeon.RimWorld.Ideology">Blindsight</li>
       <li MayRequire="Ludeon.RimWorld.Ideology">FleshPurity</li>
       <li MayRequire="Ludeon.RimWorld.Ideology">Nudism</li>

@@ -22,6 +22,7 @@
       <MaxHitPoints>200</MaxHitPoints>
       <DeteriorationRate>0</DeteriorationRate>
       <Flammability>0</Flammability>
+	  <Bulk MayRequire="CETeam.CombatExtended">125</Bulk>
     </statBases>
     <thingCategories>
       <li>ItemsMisc</li>
@@ -746,7 +747,7 @@
   
 	  <ThingDef ParentName="BuildingBase" MayRequire="GoGaTio.LostFactoryMechanoids">
 		<defName>HVMP_ChainTurret</defName>
-		<label>pax charge turret</label>
+		<label>pax chain turret</label>
 		<description>A self-powered turret mounted with a charge blaster. It cannot sense targets at very short ranges. Self-destructs after 2 days.</description>
 		<thingClass>Building_TurretGun</thingClass>
 		<drawerType>MapMeshAndRealTime</drawerType>
@@ -850,6 +851,7 @@
       <Mass>0.50</Mass>
       <Flammability>1</Flammability>
       <Beauty>1</Beauty>
+	  <Bulk MayRequire="CETeam.CombatExtended">1</Bulk>
     </statBases>
 	<genericMarketSellable>false</genericMarketSellable>
 	<thingSetMakerTags Inherit="False"/>

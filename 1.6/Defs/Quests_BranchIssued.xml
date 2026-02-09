@@ -1865,7 +1865,7 @@
 		  <MK_description>\n\nThe weapon emits a form of lingering radiation which will worsen the mood of your colonists.</MK_description>
 		  <SO_hediff>HVMP_SensoryOverload</SO_hediff>
 		  <SO_stunDuration>180</SO_stunDuration>
-		  <SO_description>\n\nWhen the weapon fires, it will briefly overwhelm the senses of all living creatures, stunning them and inflicting lowered sight and hearing for 5 days.</SO_description>
+		  <SO_description>\n\nWhen the weapon fires, it will briefly overwhelm the senses of all living creatures, stunning them, as well as inflicting lowered sight and hearing for 5 days.</SO_description>
 		  <TE_gameCondition>$gameCondition2</TE_gameCondition>
           <TE_duration>$gameConditionDuration2</TE_duration>
 		  <TE_durationPct>0.25~0.5</TE_durationPct>

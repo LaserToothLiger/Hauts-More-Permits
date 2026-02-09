@@ -51,7 +51,7 @@
 		</verbProperties>
 		<comps>
 		  <li Class="CompProperties_AbilitySprayLiquid">
-			<projectileDef>Proj_Acid</projectileDef>
+			<projectileDef>HVMP_Proj_Acid</projectileDef>
 			<numCellsToHit>1</numCellsToHit>
 			<sprayEffecter>AcidSpray_Directional</sprayEffecter>
 		  </li>
@@ -68,7 +68,7 @@
 		</modExtensions>
 	  </AbilityDef>
 	  <ThingDef>
-		<defName>Proj_Acid</defName>
+		<defName>HVMP_Proj_Acid</defName>
 		<label>acid</label>
 		<thingClass>Projectile_Liquid</thingClass>
 		<category>Projectile</category>
@@ -298,6 +298,7 @@
 			<ArmorRating_Heat>0.3</ArmorRating_Heat>
 			<ArmorRating_Blunt>0.1</ArmorRating_Blunt>
 			<ArmorRating_Sharp>0.1</ArmorRating_Sharp>
+			<SmokeSensitivity MayRequire="CETeam.CombatExtended">-0.5</SmokeSensitivity>
 		</statOffsets>
 		<capMods>
 		  <li>
