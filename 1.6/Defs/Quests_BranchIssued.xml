@@ -939,7 +939,7 @@
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
                 <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
-				<faction>HVMP_PaxBranch</faction>
+				<faction>HVMP_CommerceBranch</faction>
               </li>
             </nodes>
           </node>
@@ -957,7 +957,7 @@
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
                 <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
-				<faction>HVMP_PaxBranch</faction>
+				<faction>HVMP_CommerceBranch</faction>
               </li>
             </nodes>
           </node>
@@ -975,7 +975,7 @@
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
                 <goodwillChangeReason>QuestPrisonerRecruited</goodwillChangeReason>
-				<faction>HVMP_PaxBranch</faction>
+				<faction>HVMP_CommerceBranch</faction>
               </li>
             </nodes>
           </node>
@@ -993,7 +993,7 @@
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
                 <goodwillChangeReason>QuestPrisonerEnslaved</goodwillChangeReason>
-				<faction>HVMP_PaxBranch</faction>
+				<faction>HVMP_CommerceBranch</faction>
               </li>
             </nodes>
           </node>
@@ -1011,7 +1011,7 @@
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
                 <goodwillChangeReason>PerformedHarmfulSurgery</goodwillChangeReason>
-				<faction>HVMP_PaxBranch</faction>
+				<faction>HVMP_CommerceBranch</faction>
               </li>
             </nodes>
           </node>
@@ -1029,7 +1029,7 @@
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
                 <goodwillChangeReason>XenogermAbsorbed</goodwillChangeReason>
-				<faction>HVMP_PaxBranch</faction>
+				<faction>HVMP_CommerceBranch</faction>
               </li>
             </nodes>
           </node>
@@ -1047,7 +1047,7 @@
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
                 <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
-				<faction>HVMP_PaxBranch</faction>
+				<faction>HVMP_CommerceBranch</faction>
               </li>
             </nodes>
           </node>
@@ -1065,7 +1065,7 @@
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
                 <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
-				<faction>HVMP_PaxBranch</faction>
+				<faction>HVMP_CommerceBranch</faction>
               </li>
             </nodes>
           </node>
@@ -1087,7 +1087,7 @@
                 <li Class="HautsPermits.QuestNode_EndBranch">
                   <outcome>Fail</outcome>
                   <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
-				  <faction>HVMP_PaxBranch</faction>
+				  <faction>HVMP_CommerceBranch</faction>
                 </li>
               </nodes>
             </node>
@@ -1134,7 +1134,7 @@
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
                 <goodwillChangeReason>ShuttleDestroyed</goodwillChangeReason>
-				<faction>HVMP_PaxBranch</faction>
+				<faction>HVMP_CommerceBranch</faction>
               </li>
             </nodes>
           </node>
@@ -1174,7 +1174,7 @@
               <li Class="HautsPermits.QuestNode_EndBranch">
                 <outcome>Fail</outcome>
                 <goodwillChangeReason>MemberMissedShuttle</goodwillChangeReason>
-				<faction>HVMP_PaxBranch</faction>
+				<faction>HVMP_CommerceBranch</faction>
               </li>
             </nodes>
           </node>
@@ -1649,11 +1649,6 @@
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <!--<li>questDescription->The Commerce Branch is informing us of a trade opportunity with [settlement_label]. They would like to purchase:
-\n  [requestedThingCount]x [requestedThing_label] [qualityInfo](worth [requestedThingMarketValue_money])
-\nIf you want to make the trade, send a caravan with the requested items. The estimated travel time is [estimatedTravelTime_duration].[mutator_AAH_info]</li>
-        <li>qualityInfo(requestedThingHasQuality==True,priority=1)->of normal+ quality </li>
-        <li>qualityInfo-></li>-->
         <li>questDescription->The Commerce Branch would like you to fulfill an anonymous trade request by delivering the following to a temporary drop point:
 \n  [requestedThingCount]x [requestedThing_label] [qualityInfo](worth [requestedThingMarketValue_money])
 \nIf you want to make the trade, send a caravan with the requested items.[mutatorSuffix]</li>
@@ -1762,6 +1757,303 @@
 			  </li>
             </nodes>
           </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--pax: bellum-->
+  <QuestScriptDef>
+    <defName>HVMP_PaxBellum</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[enemyFaction_pawnsPlural] of [banditSuffix]</li>
+        <li>questName->[eliminate] the [bandits]</li>
+        <li>questName->[bandits] of [banditSuffix]</li>
+		<li>questName->The [banditPrefix] [bandits]</li>
+		
+		<li>eliminate->Deal with</li>
+		<li>eliminate->Divert</li>
+		<li>eliminate->Defeat</li>
+		<li>eliminate->Eradicate</li>
+		<li>eliminate->Vanquish</li>
+		<li>eliminate->Dominate</li>
+		<li>eliminate->Crush</li>
+		<li>eliminate->Rout</li>
+		
+        <li>bandits->Bandits</li>
+        <li>bandits->Scum</li>
+        <li>bandits->Warriors</li>
+        <li>bandits->Scourges</li>
+        <li>bandits->Muggers</li>
+        <li>bandits->Despoilers</li>
+        <li>bandits->Brigands</li>
+        <li>bandits->Ruffians</li>
+        <li>bandits->Highwaymen</li>
+        <li>bandits->Ransackers</li>
+        <li>bandits->Malcontents</li>
+        <li>bandits->Hounds</li>
+		
+        <li>banditSuffix->Terror</li>
+        <li>banditSuffix->Duplicity</li>
+        <li>banditSuffix->Savagery</li>
+        <li>banditSuffix->Anarchy</li>
+        <li>banditSuffix->Destruction</li>
+        <li>banditSuffix->Barbarity</li>
+        <li>banditSuffix->Misfortune</li>
+		
+        <li>banditPrefix->Loathsome</li>
+        <li>banditPrefix->Disruptive</li>
+        <li>banditPrefix->Savage</li>
+        <li>banditPrefix->Fearsome</li>
+        <li>banditPrefix->Despicable</li>
+        <li>banditPrefix->Foolish</li>
+        <li>banditPrefix->Selfish</li>
+        <li>banditPrefix->Irredeemable</li>
+        <li>banditPrefix->Barbaric</li>
+
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription(asker_factionLeader==True)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], wants you to clear the area near [map_definite] of a band of belligerents. [asker_nameDef] wants you to signal (*Threat)[numGroupsOf] [enemyFaction_pawnsPlural](/Threat) from [enemyFaction_name] to draw them away from the caravan - and towards you.[endingCommon]</li>
+        <li>groupsOf(raidCount==1,priority=1)->[enemyFaction_pawnsPlural]</li>
+        <li>groupsOf->[numGroupsOf] [enemyFaction_pawnsPlural]</li>        
+        <li>endingCommon->\n\n[pawnKindsParagraph]\n\nIf you accept, the [enemyFaction_pawnsPlural] will arrive in [firstRaidDelayTicks_duration].</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits.QuestNode_PaxIntermediary">
+      <nodes>
+        <li Class="QuestNode_GetFactionOf">
+          <thing>$asker</thing>
+          <storeAs>faction</storeAs>
+        </li>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+        </li>
+        <li Class="QuestNode_GetMap" />
+        <!-- Raid(s) -->
+        <li Class="QuestNode_GetRandomInRangeInt">
+          <storeAs>raidCount</storeAs>
+          <range>1~2</range>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>firstRaidDelayTicks</name>
+		  <value>$(roundToTicksRough(randInt(60000, 300000)))</value>
+        </li>
+        <li Class="QuestNode_GetFaction">
+          <allowEnemy>true</allowEnemy>
+          <mustBePermanentEnemy>true</mustBePermanentEnemy>
+          <storeAs>enemyFaction</storeAs>
+        </li>
+        <li Class="QuestNode_Subscript">
+          <def>HVMP_RaidDelayRepeatable</def>
+          <parms>
+            <points>$($points * 0.7)</points>
+          </parms>
+        </li>
+        <li Class="QuestNode_AllSignals">
+          <inSignals>
+            <li>AllRaidsSent</li>
+            <li>raid$($raidCountMinusOne)/lord.AllEnemiesDefeated</li>
+          </inSignals>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Delay">
+                <delayTicks>300</delayTicks>
+                <node Class="QuestNode_Sequence">
+                  <nodes>
+					  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+						<faction>$faction</faction>
+						<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+						<customLetterText TKey="LetterTextPaymentArrived">You have defeated the bandits!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
+					  </li>
+					<li Class="QuestNode_End">
+						<outcome>Success</outcome>
+					</li>
+                  </nodes>
+                </node>
+              </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  <QuestScriptDef>
+    <defName>HVMP_RaidDelayRepeatable</defName>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>pawnKindsParagraph(raidCount==1)->The group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\n[raid0/raidArrivalModeInfo][mutatorSuffix]</li>
+        <li>pawnKindsParagraph(raidCount==2)->The first group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\nThe second similar-sized group will follow soon after.[mutatorSuffix]</li>
+        <li>pawnKindsParagraph(raidCount==3)->The first group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\nTwo similar-sized groups will follow soon after.[mutatorSuffix]</li>
+        <li>pawnKindsParagraph(raidCount>=4)->The first group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\n[raidCountMinusOne] similar-sized groups will follow soon after.[mutatorSuffix]</li>
+        <li>numGroupsOf(raidCount==1)-></li>
+        <li>numGroupsOf(raidCount==2)->two groups of</li>
+        <li>numGroupsOf(raidCount==3)->three groups of</li>
+        <li>numGroupsOf(raidCount>=4)->[raidCount] groups of</li>
+		<li>mutatorSuffix->[raid0/mutator_AW_info][raid0/mutator_DRTNT_info][raid0/mutator_TG_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+        <li Class="QuestNode_GetFaction">
+          <allowEnemy>true</allowEnemy>
+          <mustBePermanentEnemy>true</mustBePermanentEnemy>
+          <storeAs>enemyFaction</storeAs>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>nextRaidDelayTicks</name>
+          <value>$firstRaidDelayTicks</value>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>raidCountMinusOne</name>
+          <value>$raidCount</value>
+        </li>
+        <li Class="QuestNode_Subtract">
+          <value1>$raidCountMinusOne</value1>
+          <value2>1</value2>
+          <storeAs>raidCountMinusOne</storeAs>
+        </li>
+        <li Class="QuestNode_LoopCount">
+          <loopCount>$raidCount</loopCount>
+          <storeLoopCounterAs>raidLoopCounter</storeLoopCounterAs>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_IsNull">
+                <value>$raid(($raidLoopCounter))/raidDelayTicks</value>
+                <elseNode Class="QuestNode_Set">
+                  <name>nextRaidDelayTicks</name>
+                  <value>$raid(($raidLoopCounter))/raidDelayTicks</value>
+                </elseNode>
+              </li>
+              <li Class="QuestNode_Delay">
+                <delayTicks>$nextRaidDelayTicks</delayTicks>
+                <waitUntilPlayerHasHomeMap>true</waitUntilPlayerHasHomeMap>
+                <node Class="QuestNode_Sequence">
+                  <nodes>
+                    <li Class="QuestNode_SubScript">
+                      <prefix>raid$raidLoopCounter</prefix>
+                      <def>HVMP_Raid</def>
+                      <parms>
+                        <tag>lord</tag>
+                        <inSignal>$inSignal</inSignal>
+                        <map>$map</map>
+                        <enemyFaction>$enemyFaction</enemyFaction>
+                        <points>$points</points>
+                        <walkInSpot>$walkInSpot</walkInSpot>
+                        <customLetterLabel>$customLetterLabel</customLetterLabel>
+                        <customLetterText>$customLetterText</customLetterText>
+                        <customLetterLabelRules>$customLetterLabelRules</customLetterLabelRules>
+                        <customLetterTextRules>$customLetterTextRules</customLetterTextRules>
+                      </parms>
+                    </li>
+                    <li Class="QuestNode_Equal">
+                      <value1>$raidLoopCounter</value1>
+                      <value2>$($raidCount - 1)</value2>
+                      <compareAs>int</compareAs>
+                      <node Class="QuestNode_SendSignals">
+                        <outSignals>AllRaidsSent</outSignals>
+                      </node>
+                    </li>
+                  </nodes>
+                </node>
+              </li>
+              <li Class="QuestNode_Add"> <!-- next raid comes 9000 ticks after the previous -->
+                <value1>$nextRaidDelayTicks</value1>
+                <value2>9000</value2>
+                <storeAs>nextRaidDelayTicks</storeAs>
+              </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  <QuestScriptDef>
+    <defName>HVMP_Raid</defName>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>threatDescription->[enemyFaction_pawnsPlural] from [enemyFaction_name] will attack you. Their group is composed of:\n\n[raidPawnKinds]\n\n[raidArrivalModeInfo]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+        <li Class="HautsPermits.QuestNode_AllThreeBellumMutators"><!--behaves like a QuestNode_Raid, but has additional functions if any of the Bellum mutators are active-->
+          <tag>$tag</tag>
+          <customLetterLabel>$customLetterLabel</customLetterLabel>
+          <customLetterText>$customLetterText</customLetterText>
+          <customLetterLabelRules>$customLetterLabelRules</customLetterLabelRules>
+          <customLetterTextRules>$customLetterTextRules</customLetterTextRules>
+          <arrivalMode>$arrivalMode</arrivalMode>
+          <canTimeoutOrFlee>$canTimeoutOrFlee</canTimeoutOrFlee>
+          <raidPawnKind>$raidPawnKind</raidPawnKind>
+          <inSignalLeave>EndRaid</inSignalLeave>
+		  <!--Advanced Weaponry: either causes one of the following incidents when a raid spawns, or adds certain kinds of pawns to it.-->
+		  <AW_conditionChance>0.6</AW_conditionChance>
+		  <AW_conditions>
+			<li>EMIField</li>
+			<li>HVMP_TargetedPsychicSuppression</li>
+			<li>PsychicDrone</li>
+		  </AW_conditions>
+		  <AW_conditionHours>2~5</AW_conditionHours>
+		  <AW_pawnRosterOtherwise>
+			  <li>
+				<kindDef>HVMP_BonusQeustPawns</kindDef>
+				<options>
+				  <Mech_CentipedeBlaster>4</Mech_CentipedeBlaster>
+				  <Mech_CentipedeGunner>4</Mech_CentipedeGunner>
+				  <Mech_CentipedeBurner>4</Mech_CentipedeBurner>
+				  <Mech_Centurion MayRequire="Ludeon.RimWorld.Biotech">4</Mech_Centurion>
+				  <AM_Mech_Polychoron MayRequire="Ludeon.RimWorld.Biotech,sarg.alphamechs">3</AM_Mech_Polychoron>
+				  <Mech_Diabolus MayRequire="Ludeon.RimWorld.Biotech">2</Mech_Diabolus>
+				  <Mech_Warqueen MayRequire="Ludeon.RimWorld.Biotech">2</Mech_Warqueen>
+				  <AM_Starfire MayRequire="Ludeon.RimWorld.Biotech,sarg.alphamechs">1</AM_Starfire>
+				  <AM_Siegebreaker MayRequire="sarg.alphamechs">1</AM_Siegebreaker>
+				  <AV_Mech_Tarantula MayRequire="Veltaris.Mechtech">1</AV_Mech_Tarantula>
+				</options>
+			  </li>
+			  <li>
+				<kindDef>HVMP_BonusQeustPawns</kindDef>
+				<options>
+				  <Drone_Wasp MayRequire="Ludeon.RimWorld.Odyssey">8</Drone_Wasp>
+				  <Mech_Lancer>2</Mech_Lancer>
+				  <Mech_Legionary MayRequire="Ludeon.RimWorld.Biotech">3</Mech_Legionary>
+				  <AM_Mech_Optio MayRequire="Ludeon.RimWorld.Biotech,sarg.alphamechs">1</AM_Mech_Optio>
+				</options>
+			  </li>
+		  </AW_pawnRosterOtherwise>
+		  <AW_bonusPoints>$($points * 0.2)</AW_bonusPoints>
+		  <AW_description>\n\n{0_pawnsPluralDef} are making use of ill-gotten advanced technology. They may be accompanied by robotic combatants, or strike in tandem with the activation of an electronics-disabling field or wide-area psychic affector.</AW_description>
+		  <!--Dead Raiders Tell No Tales: gives some of the pawns this hediff-->
+		  <DRTNT_spyChance>0.18</DRTNT_spyChance>
+		  <DRTNT_hediff>HVMP_DRTNT</DRTNT_hediff>
+		  <DRTNT_description>\n\n{0_pawnsPluralDef} are career raiders. Some among them make a living by selling information about colonies they've encountered to other interested parties - if allowed to escape, they'll empower future raids from hostile factions. These scouts have been visually marked for easy identification.</DRTNT_description>
+		  <!--Traitor Guard: some pawns gain these hediffs, and a bonus amount of mercs are added to the raid-->
+		  <TG_hediffChances>
+			<li><key>HVMP_BShield</key><value>0.04</value></li>
+			<li><key>HVMP_HostileEnvironmentFilm</key><value>0.08</value></li>
+		  </TG_hediffChances>
+		  <TG_pawnRoster>
+			  <li>
+				<kindDef>Combat</kindDef>
+				<options>
+				  <Mercenary_Gunner_Acidifier>12</Mercenary_Gunner_Acidifier>
+				  <Grenadier_Destructive>4</Grenadier_Destructive>
+				  <Mercenary_Slasher>4</Mercenary_Slasher>
+				  <Mercenary_Sniper_Acidifier>3</Mercenary_Sniper_Acidifier>
+				  <Mercenary_Heavy>3</Mercenary_Heavy>
+				  <Grenadier_Smoke>1</Grenadier_Smoke>
+				</options>
+			  </li>
+		  </TG_pawnRoster>
+		  <TG_bonusPoints>$($points * 0.25)</TG_bonusPoints>
+		  <TG_description>\n\n{0_pawnsPluralDef} are assisted by former guards who defected to the raiders. These mercenaries will fight alongside them, and have distributed defensive technology to some of the [enemyFaction_pawnsPlural].</TG_description>
         </li>
       </nodes>
     </root>
@@ -2116,193 +2408,6 @@
     </root>
   </QuestScriptDef>
   
-  <!--pax: proximum-->
-  <QuestScriptDef>
-    <defName>HVMP_PaxProximum</defName>
-	<isRootSpecial>true</isRootSpecial>
-    <rootSelectionWeight>0</rootSelectionWeight>
-    <rootMinPoints>350</rootMinPoints>
-    <defaultChallengeRating>1</defaultChallengeRating>
-    <expireDaysRange>0.6~1</expireDaysRange>
-    <everAcceptableInSpace>true</everAcceptableInSpace>
-    <defaultCharity>true</defaultCharity>
-    <successHistoryEvent MayRequire="Ludeon.RimWorld.Ideology">CharityFulfilled_ShuttleCrashRescue</successHistoryEvent>
-    <failedOrExpiredHistoryEvent MayRequire="Ludeon.RimWorld.Ideology">CharityRefused_ShuttleCrashRescue</failedOrExpiredHistoryEvent>
-    <questNameRules>
-      <rulesStrings>
-        <li>questName->[ship] [crash]</li>
-        <li>questName->[damaged] [ship]</li>
-        <li>questName->[asker_nameDef]'s [damaged] [ship]</li>
-        <li>questName->[emergency] [landing]</li>
-        <li>questName->[asker_nameDef]'s [emergency] [landing]</li>
-		
-        <li>ship->spaceship</li>
-        <li>ship->transporter</li>
-        <li>ship->ship</li>
-        <li>ship->barge</li>
-        <li>ship->shuttle</li>
-        <li>ship->skimmer</li>
-        <li>ship->flightcraft</li>
-
-        <li>crash->crash</li>
-        <li>crash->down</li>
-        <li>crash->earthbound</li>
-        <li>crash->[landing]</li>
-        
-        <li>damaged->damaged</li>
-        <li>damaged->busted</li>
-        <li>damaged->failing</li>
-        <li>damaged->wounded</li>
-        <li>damaged->sputtering</li>
-        <li>damaged->spiraling</li>
-        <li>damaged->falling</li>
-        <li>damaged->plummeting</li>
-        <li>damaged->injured</li>
-        <li>damaged->clipped</li>
-        <li>damaged->trashed</li>
-        <li>damaged->wrecked</li>
-        
-        <li>emergency->emergency</li>
-        <li>emergency->forced</li>
-        <li>emergency->desperate</li>
-        <li>emergency->rapid</li>
-        <li>emergency->sudden</li>
-        <li>emergency->catastrophic</li>
-        <li>emergency->unplanned</li>
-        <li>emergency->hectic</li>
-        
-        <li>landing->landing</li>
-        <li>landing->descent</li>
-        <li>landing->approach</li>
-        <li>landing->landfall</li>
-        <li>landing->crash</li>
-        <li>landing->crash-landing</li>
-        <li>landing->fall</li>
-        <li>landing->touchdown</li>
-        <li>landing->nosedive</li>
-
-      </rulesStrings>
-    </questNameRules>
-    <questDescriptionAndNameRules>
-      <rulesStrings>
-        <li>pawnLabel->non-combatant</li>
-        <li>pawnLabelPlural->non-combatants</li>
-      </rulesStrings>
-    </questDescriptionAndNameRules>
-    <questDescriptionRules>
-      <rulesStrings>
-        <li>questDescription->A shuttle from a group allied with the [asker_faction_name] has taken damage and parts of its crew are seeking a place to land. Its commander [asker_nameDef] wants to land at [map_definite].\n\n[enemyFaction_pawnsPlural] from [enemyFaction_name] will attack the crashed shuttle site in an attempt to kill its occupants. You must defend them.\n\nThe shuttle contains [asker_nameDef][andOtherCivilians] [soldierCountKinds]. The commander [andCivilians] must be rescued[soldiersAreFodder].\n\nAfter [rescueDelay_duration], a rescue shuttle will come to pick up the survivors. You'll need to get them all on board within [leaveDelay_duration], and you'll lose goodwill with the [asker_faction_name] if any of them are dead or were left behind.\n[mutatorSuffix]</li>
-        
-        <li>pawnLabelSingleOrPlural(civilians_count==1)->[pawnLabel]</li>
-        <li>pawnLabelSingleOrPlural(civilians_count>=2)->[pawnLabelPlural]</li>
-        <li>andOtherCivilians(civilians_count==1)-></li>
-        <li>andOtherCivilians(civilians_count==2)->, as well as another [pawnLabel],</li>
-        <li>andOtherCivilians(civilians_count>=3)->, as well as [civilianCountMinusOne] other [pawnLabelSingleOrPlural],</li>
-        <li>andCivilians(civilians_count==1)-></li>
-        <li>andCivilians(civilians_count==2)->and [pawnLabel]</li>
-        <li>andCivilians(civilians_count>=3)->and [pawnLabelPlural]</li>
-        <li>soldierCountKinds(soldiers_count==0)->but no combatants</li>
-        <li>soldierCountKinds(soldiers_count==1)->and [soldiers_count] mercenary soldier</li>
-        <li>soldierCountKinds(soldiers_count>1)->and [soldiers_count] mercenary soldiers</li>
-		<li>soldiersAreFodder(soldiers_count==0)-></li>
-		<li>soldiersAreFodder(soldiers_count>0)->, but the [soldiers0_kindPlural] may be sacrificed</li>
-		
-		<li>mutatorSuffix->[mutator_HOTH_info][mutator_ROTSJ_info]</li>
-      </rulesStrings>
-    </questDescriptionRules>
-    <questContentRules>
-      <rulesStrings>
-        <li>failLetterEndingCommon->You have failed the quest '[resolvedQuestName]'.</li>
-        <li>successLetterEndingCommon->You have successfully completed the quest '[resolvedQuestName]'.</li>
-        <li>goodwillSomeCiviliansLost->Not all the people could be rescued. [goodwillNegativelyAffected]</li>
-        <li>goodwillAllCiviliansLost->None of the people could be rescued. [goodwillNegativelyAffected]</li>
-        <li>goodwillNegativelyAffected->Your goodwill with [asker_faction_name] has been negatively affected for every crash-lander left.</li>
-        <li>commanderLandingDesc->[asker_nameDef], the commander who asked to land [asker_possessive] shuttle at [map_definite]</li>
-        <li>raidArrivedLetterLabel->Raid: [enemyFaction_name]</li>
-        <li>raidArrivedLetterText->[enemyFaction_pawnsPlural] from the [enemyFaction_name] have arrived. They will attack the people who crashed at [map_definite].\n\nDefend them until their rescue shuttle arrives in [rescueShuttleAfterRaidDelay_duration].</li>
-        <li>rescueShuttleArrivedLetterLabel->Rescue shuttle arrived</li>
-        <li>rescueShuttleArrivedLetterText->The rescue shuttle has arrived to collect the crash survivors. Make sure to have these people on the shuttle before it leaves in [leaveDelay_duration]:\n\n[civilians]</li>
-        <li>questCompletedSuccessLetterLabel->Quest completed: [resolvedQuestName]</li>
-        <li>questCompletedSuccessLetterText->[commanderLandingDesc], has escaped. [asker_pronoun] is grateful for the help [asker_pronoun] received at [map_definite].\n\n[successLetterEndingCommon]</li>
-        <li>questCompletedCiviliansLostSuccessLetterLabel->Quest completed: [resolvedQuestName]</li>
-        <li>questCompletedCiviliansLostSuccessLetterText->[commanderLandingDesc], has escaped.\n\n[goodwillSomeCiviliansLost]\n\n[successLetterEndingCommon]</li>
-        <li>askerLostLetterLabel->Quest failed: [resolvedQuestName]</li>
-        <li>askerLostLetterText->[commanderLandingDesc] was not on board when the shuttle departed.\n\n[goodwillSomeCiviliansLost]\n\n[failLetterEndingCommon]</li>
-        <li>allLostLetterLabel->Quest failed: [resolvedQuestName]</li>
-        <li>allLostLetterText->The rescue shuttle for the crash survivors has departed without anyone on board.\n\n[goodwillAllCiviliansLost]\n\n[failLetterEndingCommon]</li>
-        <li>askerDiedLetterLabel->Quest failed: [resolvedQuestName]</li>
-        <li>askerDiedLetterText->[commanderLandingDesc] has died.\n\n[failLetterEndingCommon]</li>
-        <li>civilianDiedLetterLabel->Quest failed: [resolvedQuestName]</li>
-        <li>civilianDiedLetterText->a non-combatant has died.\n\n[failLetterEndingCommon]</li>
-        <li>shuttleDestroyedLetterLabel->Quest failed: [resolvedQuestName]</li>
-        <li>shuttleDestroyedLetterText->The shuttle sent to collect the crash survivors has been destroyed. They will now leave on foot.\n\n[failLetterEndingCommon]</li>
-        <li>shuttleLeftBehindLetterLabel->Quest failed: [resolvedQuestName]</li>
-        <li>shuttleLeftBehindLetterText->The shuttle sent to collect the crash survivors has been left behind. They will now leave on foot.\n\n[failLetterEndingCommon]</li>
-        <li>mapRemovedLetterLabel->Quest failed: [resolvedQuestName]</li>
-        <li>mapRemovedLetterText->The map was left behind before the crash survivors could be collected. They will now leave on foot.\n\n[failLetterEndingCommon]</li>
-      </rulesStrings>
-    </questContentRules>
-    <root Class="HautsPermits.QuestNode_PaxIntermediary">
-      <nodes>
-        <li Class="QuestNode_GetMap">
-		  <canBeSpace>true</canBeSpace>
-		</li>
-        <li Class="QuestNode_GetPlayerFaction">
-          <storeAs>playerFaction</storeAs>
-        </li>
-        <li Class="HautsPermits.QuestNode_PaxProximum">
-          <maxCiviliansByPointsCurve>
-            <points>
-              <li>(0, 1)</li>
-              <li>(100, 3)</li>
-              <li>(500, 6)</li>
-            </points>
-		  </maxCiviliansByPointsCurve>
-		  <soldierDefs>
-		    <li>Grenadier_Destructive</li>
-		    <li>Mercenary_Gunner_Acidifier</li>
-		    <li>Mercenary_Sniper_Acidifier</li>
-		    <li>Mercenary_Slasher_Acidifier</li>
-		    <li>Mercenary_Heavy</li>
-		  </soldierDefs>
-		  <maxSoldiersByPointsCurve>
-            <points>
-              <li>(0, 1)</li>
-              <li>(100, 3)</li>
-              <li>(500, 6)</li>
-            </points>
-		  </maxSoldiersByPointsCurve>
-		  <shuttleDef>HVMP_ShuttleCrashedProximum</shuttleDef>
-		  <HOTH_raidScalar_on>2</HOTH_raidScalar_on>
-		  <HOTH_raidScalar_off>1</HOTH_raidScalar_off>
-		  <HOTH_delay_on>900~2000</HOTH_delay_on>
-		  <HOTH_delay_off>8000~12000</HOTH_delay_off>
-		  <HOTH_description>\nThe large horde of enemies pursuing [asker_nameDef] is already close by. They are likely to attack within an hour of the shuttle's crashing.</HOTH_description>
-		  <ROTSJ_incidents>
-		    <li>DefoliatorShipPartCrash</li>
-		    <li>PsychicEmanatorShipPartCrash</li>
-		  </ROTSJ_incidents>
-		  <ROTSJ_description>\nThere's a low-hanging derelict ship in the shuttle's path. If you allow the shuttle to land at [map_definite], it'll bring down a dangerous mechanoid ship part with it.</ROTSJ_description>
-        </li>
-        <li Class="QuestNode_Signal">
-          <inSignal>QuestSuccess</inSignal>
-          <node Class="QuestNode_Sequence">
-            <nodes>
-			  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
-				<faction>$faction</faction>
-				<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
-				<customLetterText TKey="LetterTextPaymentArrived">You have successfully protected the crash survivors!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
-			  </li>
-              <li Class="QuestNode_End">
-                <outcome>Success</outcome>
-              </li>
-            </nodes>
-          </node>
-        </li>
-	  </nodes>
-	</root>
-  </QuestScriptDef>
-  
   <!--pax: vox-->
   <QuestScriptDef>
     <defName>HVMP_PaxVox</defName>
@@ -2616,301 +2721,191 @@
 	</root>
   </QuestScriptDef>
   
-  <!--rover: ares-->
+  <!--rover: icarus-->
   <QuestScriptDef>
-    <defName>HVMP_RoverAres</defName>
+    <defName>HVMP_RoverIcarus</defName>
 	<isRootSpecial>true</isRootSpecial>
     <rootSelectionWeight>0</rootSelectionWeight>
     <rootMinPoints>350</rootMinPoints>
     <defaultChallengeRating>1</defaultChallengeRating>
-    <expireDaysRange>4~8</expireDaysRange>
+    <expireDaysRange>0.6~1</expireDaysRange>
+    <everAcceptableInSpace>true</everAcceptableInSpace>
+    <defaultCharity>true</defaultCharity>
+    <successHistoryEvent MayRequire="Ludeon.RimWorld.Ideology">CharityFulfilled_ShuttleCrashRescue</successHistoryEvent>
+    <failedOrExpiredHistoryEvent MayRequire="Ludeon.RimWorld.Ideology">CharityRefused_ShuttleCrashRescue</failedOrExpiredHistoryEvent>
     <questNameRules>
       <rulesStrings>
-        <li>questName->[enemyFaction_pawnsPlural] of [banditSuffix]</li>
-        <li>questName->[eliminate] the [bandits]</li>
-        <li>questName->[bandits] of [banditSuffix]</li>
-		<li>questName->The [banditPrefix] [bandits]</li>
+        <li>questName->[ship] [crash]</li>
+        <li>questName->[damaged] [ship]</li>
+        <li>questName->[asker_nameDef]'s [damaged] [ship]</li>
+        <li>questName->[emergency] [landing]</li>
+        <li>questName->[asker_nameDef]'s [emergency] [landing]</li>
 		
-		<li>eliminate->Deal with</li>
-		<li>eliminate->Divert</li>
-		<li>eliminate->Defeat</li>
-		<li>eliminate->Eradicate</li>
-		<li>eliminate->Vanquish</li>
-		<li>eliminate->Dominate</li>
-		<li>eliminate->Crush</li>
-		<li>eliminate->Rout</li>
-		
-        <li>bandits->Bandits</li>
-        <li>bandits->Scum</li>
-        <li>bandits->Warriors</li>
-        <li>bandits->Scourges</li>
-        <li>bandits->Muggers</li>
-        <li>bandits->Despoilers</li>
-        <li>bandits->Brigands</li>
-        <li>bandits->Ruffians</li>
-        <li>bandits->Highwaymen</li>
-        <li>bandits->Ransackers</li>
-        <li>bandits->Malcontents</li>
-        <li>bandits->Hounds</li>
-		
-        <li>banditSuffix->Terror</li>
-        <li>banditSuffix->Duplicity</li>
-        <li>banditSuffix->Savagery</li>
-        <li>banditSuffix->Anarchy</li>
-        <li>banditSuffix->Destruction</li>
-        <li>banditSuffix->Barbarity</li>
-        <li>banditSuffix->Misfortune</li>
-		
-        <li>banditPrefix->Loathsome</li>
-        <li>banditPrefix->Disruptive</li>
-        <li>banditPrefix->Savage</li>
-        <li>banditPrefix->Fearsome</li>
-        <li>banditPrefix->Despicable</li>
-        <li>banditPrefix->Foolish</li>
-        <li>banditPrefix->Selfish</li>
-        <li>banditPrefix->Irredeemable</li>
-        <li>banditPrefix->Barbaric</li>
+        <li>ship->spaceship</li>
+        <li>ship->transporter</li>
+        <li>ship->ship</li>
+        <li>ship->barge</li>
+        <li>ship->shuttle</li>
+        <li>ship->skimmer</li>
+        <li>ship->flightcraft</li>
+
+        <li>crash->crash</li>
+        <li>crash->down</li>
+        <li>crash->earthbound</li>
+        <li>crash->[landing]</li>
+        
+        <li>damaged->damaged</li>
+        <li>damaged->busted</li>
+        <li>damaged->failing</li>
+        <li>damaged->wounded</li>
+        <li>damaged->sputtering</li>
+        <li>damaged->spiraling</li>
+        <li>damaged->falling</li>
+        <li>damaged->plummeting</li>
+        <li>damaged->injured</li>
+        <li>damaged->clipped</li>
+        <li>damaged->trashed</li>
+        <li>damaged->wrecked</li>
+        
+        <li>emergency->emergency</li>
+        <li>emergency->forced</li>
+        <li>emergency->desperate</li>
+        <li>emergency->rapid</li>
+        <li>emergency->sudden</li>
+        <li>emergency->catastrophic</li>
+        <li>emergency->unplanned</li>
+        <li>emergency->hectic</li>
+        
+        <li>landing->landing</li>
+        <li>landing->descent</li>
+        <li>landing->approach</li>
+        <li>landing->landfall</li>
+        <li>landing->crash</li>
+        <li>landing->crash-landing</li>
+        <li>landing->fall</li>
+        <li>landing->touchdown</li>
+        <li>landing->nosedive</li>
 
       </rulesStrings>
     </questNameRules>
+    <questDescriptionAndNameRules>
+      <rulesStrings>
+        <li>pawnLabel->non-combatant</li>
+        <li>pawnLabelPlural->non-combatants</li>
+      </rulesStrings>
+    </questDescriptionAndNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription(asker_factionLeader==True)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], wants you to clear the area near [map_definite] of those who would prey on travelers. [asker_nameDef] wants you to signal (*Threat)[numGroupsOf] [enemyFaction_pawnsPlural](/Threat) from [enemyFaction_name] to draw them away from the caravan - and towards you.[endingCommon]</li>
-        <li>groupsOf(raidCount==1,priority=1)->[enemyFaction_pawnsPlural]</li>
-        <li>groupsOf->[numGroupsOf] [enemyFaction_pawnsPlural]</li>        
-        <li>endingCommon->\n\n[pawnKindsParagraph]\n\nIf you accept, the [enemyFaction_pawnsPlural] will arrive in [firstRaidDelayTicks_duration].</li>
+        <li>questDescription->A traveling shuttle with the [asker_faction_name] has taken damage and part of its crew are seeking a place to land. Its commander [asker_nameDef] wants to land at [map_definite].\n\n[enemyFaction_pawnsPlural] from [enemyFaction_name] will attack the crashed shuttle site in an attempt to kill its occupants. You must defend them.\n\nThe shuttle contains [asker_nameDef][andOtherCivilians] [soldierCountKinds]. The commander [andCivilians] must be rescued[soldiersAreFodder].\n\nAfter [rescueDelay_duration], a rescue shuttle will come to pick up the survivors. You'll need to get them all on board within [leaveDelay_duration], and you'll lose goodwill with the [asker_faction_name] if any of them are dead or were left behind.\n[mutatorSuffix]</li>
+        
+        <li>pawnLabelSingleOrPlural(civilians_count==1)->[pawnLabel]</li>
+        <li>pawnLabelSingleOrPlural(civilians_count>=2)->[pawnLabelPlural]</li>
+        <li>andOtherCivilians(civilians_count==1)-></li>
+        <li>andOtherCivilians(civilians_count==2)->, as well as another [pawnLabel],</li>
+        <li>andOtherCivilians(civilians_count>=3)->, as well as [civilianCountMinusOne] other [pawnLabelSingleOrPlural],</li>
+        <li>andCivilians(civilians_count==1)-></li>
+        <li>andCivilians(civilians_count==2)->and [pawnLabel]</li>
+        <li>andCivilians(civilians_count>=3)->and [pawnLabelPlural]</li>
+        <li>soldierCountKinds(soldiers_count==0)->but no combatants</li>
+        <li>soldierCountKinds(soldiers_count==1)->and [soldiers_count] mercenary soldier</li>
+        <li>soldierCountKinds(soldiers_count>1)->and [soldiers_count] mercenary soldiers</li>
+		<li>soldiersAreFodder(soldiers_count==0)-></li>
+		<li>soldiersAreFodder(soldiers_count>0)->, but the [soldiers0_kindPlural] may be sacrificed</li>
+		
+		<li>mutatorSuffix->[mutator_HOTH_info][mutator_ROTSJ_info]</li>
       </rulesStrings>
     </questDescriptionRules>
+    <questContentRules>
+      <rulesStrings>
+        <li>failLetterEndingCommon->You have failed the quest '[resolvedQuestName]'.</li>
+        <li>successLetterEndingCommon->You have successfully completed the quest '[resolvedQuestName]'.</li>
+        <li>goodwillSomeCiviliansLost->Not all the people could be rescued. [goodwillNegativelyAffected]</li>
+        <li>goodwillAllCiviliansLost->None of the people could be rescued. [goodwillNegativelyAffected]</li>
+        <li>goodwillNegativelyAffected->Your goodwill with [asker_faction_name] has been negatively affected for every crash-lander left.</li>
+        <li>commanderLandingDesc->[asker_nameDef], the commander who asked to land [asker_possessive] shuttle at [map_definite]</li>
+        <li>raidArrivedLetterLabel->Raid: [enemyFaction_name]</li>
+        <li>raidArrivedLetterText->[enemyFaction_pawnsPlural] from the [enemyFaction_name] have arrived. They will attack the people who crashed at [map_definite].\n\nDefend them until their rescue shuttle arrives in [rescueShuttleAfterRaidDelay_duration].</li>
+        <li>rescueShuttleArrivedLetterLabel->Rescue shuttle arrived</li>
+        <li>rescueShuttleArrivedLetterText->The rescue shuttle has arrived to collect the crash survivors. Make sure to have these people on the shuttle before it leaves in [leaveDelay_duration]:\n\n[civilians]</li>
+        <li>questCompletedSuccessLetterLabel->Quest completed: [resolvedQuestName]</li>
+        <li>questCompletedSuccessLetterText->[commanderLandingDesc], has escaped. [asker_pronoun] is grateful for the help [asker_pronoun] received at [map_definite].\n\n[successLetterEndingCommon]</li>
+        <li>questCompletedCiviliansLostSuccessLetterLabel->Quest completed: [resolvedQuestName]</li>
+        <li>questCompletedCiviliansLostSuccessLetterText->[commanderLandingDesc], has escaped.\n\n[goodwillSomeCiviliansLost]\n\n[successLetterEndingCommon]</li>
+        <li>askerLostLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>askerLostLetterText->[commanderLandingDesc] was not on board when the shuttle departed.\n\n[goodwillSomeCiviliansLost]\n\n[failLetterEndingCommon]</li>
+        <li>allLostLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>allLostLetterText->The rescue shuttle for the crash survivors has departed without anyone on board.\n\n[goodwillAllCiviliansLost]\n\n[failLetterEndingCommon]</li>
+        <li>askerDiedLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>askerDiedLetterText->[commanderLandingDesc] has died.\n\n[failLetterEndingCommon]</li>
+        <li>civilianDiedLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>civilianDiedLetterText->a non-combatant has died.\n\n[failLetterEndingCommon]</li>
+        <li>shuttleDestroyedLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>shuttleDestroyedLetterText->The shuttle sent to collect the crash survivors has been destroyed. They will now leave on foot.\n\n[failLetterEndingCommon]</li>
+        <li>shuttleLeftBehindLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>shuttleLeftBehindLetterText->The shuttle sent to collect the crash survivors has been left behind. They will now leave on foot.\n\n[failLetterEndingCommon]</li>
+        <li>mapRemovedLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>mapRemovedLetterText->The map was left behind before the crash survivors could be collected. They will now leave on foot.\n\n[failLetterEndingCommon]</li>
+      </rulesStrings>
+    </questContentRules>
     <root Class="HautsPermits.QuestNode_RoverIntermediary">
       <nodes>
-        <li Class="QuestNode_GetFactionOf">
-          <thing>$asker</thing>
-          <storeAs>faction</storeAs>
+        <li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		</li>
+        <li Class="QuestNode_GetPlayerFaction">
+          <storeAs>playerFaction</storeAs>
         </li>
-        <li Class="QuestNode_SubScript">
-          <def>Util_RandomizePointsChallengeRating</def>
+        <li Class="HautsPermits.QuestNode_Icarus">
+          <maxCiviliansByPointsCurve>
+            <points>
+              <li>(0, 1)</li>
+              <li>(100, 3)</li>
+              <li>(500, 6)</li>
+            </points>
+		  </maxCiviliansByPointsCurve>
+		  <soldierDefs>
+		    <li>Grenadier_Destructive</li>
+		    <li>Mercenary_Gunner_Acidifier</li>
+		    <li>Mercenary_Sniper_Acidifier</li>
+		    <li>Mercenary_Slasher_Acidifier</li>
+		    <li>Mercenary_Heavy</li>
+		  </soldierDefs>
+		  <maxSoldiersByPointsCurve>
+            <points>
+              <li>(0, 1)</li>
+              <li>(100, 3)</li>
+              <li>(500, 6)</li>
+            </points>
+		  </maxSoldiersByPointsCurve>
+		  <shuttleDef>HVMP_ShuttleCrashedIcarus</shuttleDef>
+		  <HOTH_raidScalar_on>2</HOTH_raidScalar_on>
+		  <HOTH_raidScalar_off>1</HOTH_raidScalar_off>
+		  <HOTH_delay_on>900~2000</HOTH_delay_on>
+		  <HOTH_delay_off>8000~12000</HOTH_delay_off>
+		  <HOTH_description>\nThe large horde of enemies pursuing [asker_nameDef] is already close by. They are likely to attack within an hour of the shuttle's crashing.</HOTH_description>
+		  <ROTSJ_incidents>
+		    <li>DefoliatorShipPartCrash</li>
+		    <li>PsychicEmanatorShipPartCrash</li>
+		  </ROTSJ_incidents>
+		  <ROTSJ_description>\nThere's a low-hanging derelict ship in the shuttle's path. If you allow the shuttle to land at [map_definite], it'll bring down a dangerous mechanoid ship part with it.</ROTSJ_description>
         </li>
-        <li Class="QuestNode_GetMap" />
-        <!-- Raid(s) -->
-        <li Class="QuestNode_GetRandomInRangeInt">
-          <storeAs>raidCount</storeAs>
-          <range>1~2</range>
-        </li>
-        <li Class="QuestNode_Set">
-          <name>firstRaidDelayTicks</name>
-		  <value>$(roundToTicksRough(randInt(60000, 300000)))</value>
-        </li>
-        <li Class="QuestNode_GetFaction">
-          <allowEnemy>true</allowEnemy>
-          <mustBePermanentEnemy>true</mustBePermanentEnemy>
-          <storeAs>enemyFaction</storeAs>
-        </li>
-        <li Class="QuestNode_Subscript">
-          <def>HVMP_RaidDelayRepeatable</def>
-          <parms>
-            <points>$($points * 0.7)</points>
-          </parms>
-        </li>
-        <li Class="QuestNode_AllSignals">
-          <inSignals>
-            <li>AllRaidsSent</li>
-            <li>raid$($raidCountMinusOne)/lord.AllEnemiesDefeated</li>
-          </inSignals>
+        <li Class="QuestNode_Signal">
+          <inSignal>QuestSuccess</inSignal>
           <node Class="QuestNode_Sequence">
             <nodes>
-              <li Class="QuestNode_Delay">
-                <delayTicks>300</delayTicks>
-                <node Class="QuestNode_Sequence">
-                  <nodes>
-					  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
-						<faction>$faction</faction>
-						<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
-						<customLetterText TKey="LetterTextPaymentArrived">You have defeated the bandits!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
-					  </li>
-					<li Class="QuestNode_End">
-						<outcome>Success</outcome>
-					</li>
-                  </nodes>
-                </node>
+			  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				<faction>$faction</faction>
+				<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+				<customLetterText TKey="LetterTextPaymentArrived">You have successfully protected the crash survivors!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
+			  </li>
+              <li Class="QuestNode_End">
+                <outcome>Success</outcome>
               </li>
             </nodes>
           </node>
         </li>
-      </nodes>
-    </root>
-  </QuestScriptDef>
-  <QuestScriptDef>
-    <defName>HVMP_RaidDelayRepeatable</defName>
-    <questDescriptionRules>
-      <rulesStrings>
-        <li>pawnKindsParagraph(raidCount==1)->The group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\n[raid0/raidArrivalModeInfo][mutatorSuffix]</li>
-        <li>pawnKindsParagraph(raidCount==2)->The first group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\nThe second similar-sized group will follow soon after.[mutatorSuffix]</li>
-        <li>pawnKindsParagraph(raidCount==3)->The first group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\nTwo similar-sized groups will follow soon after.[mutatorSuffix]</li>
-        <li>pawnKindsParagraph(raidCount>=4)->The first group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\n[raidCountMinusOne] similar-sized groups will follow soon after.[mutatorSuffix]</li>
-        <li>numGroupsOf(raidCount==1)-></li>
-        <li>numGroupsOf(raidCount==2)->two groups of</li>
-        <li>numGroupsOf(raidCount==3)->three groups of</li>
-        <li>numGroupsOf(raidCount>=4)->[raidCount] groups of</li>
-		<li>mutatorSuffix->[raid0/mutator_AW_info][raid0/mutator_DRTNT_info][raid0/mutator_TG_info]</li>
-      </rulesStrings>
-    </questDescriptionRules>
-    <root Class="QuestNode_Sequence">
-      <nodes>
-        <li Class="QuestNode_GetFaction">
-          <allowEnemy>true</allowEnemy>
-          <mustBePermanentEnemy>true</mustBePermanentEnemy>
-          <storeAs>enemyFaction</storeAs>
-        </li>
-        <li Class="QuestNode_Set">
-          <name>nextRaidDelayTicks</name>
-          <value>$firstRaidDelayTicks</value>
-        </li>
-        <li Class="QuestNode_Set">
-          <name>raidCountMinusOne</name>
-          <value>$raidCount</value>
-        </li>
-        <li Class="QuestNode_Subtract">
-          <value1>$raidCountMinusOne</value1>
-          <value2>1</value2>
-          <storeAs>raidCountMinusOne</storeAs>
-        </li>
-        <li Class="QuestNode_LoopCount">
-          <loopCount>$raidCount</loopCount>
-          <storeLoopCounterAs>raidLoopCounter</storeLoopCounterAs>
-          <node Class="QuestNode_Sequence">
-            <nodes>
-              <li Class="QuestNode_IsNull">
-                <value>$raid(($raidLoopCounter))/raidDelayTicks</value>
-                <elseNode Class="QuestNode_Set">
-                  <name>nextRaidDelayTicks</name>
-                  <value>$raid(($raidLoopCounter))/raidDelayTicks</value>
-                </elseNode>
-              </li>
-              <li Class="QuestNode_Delay">
-                <delayTicks>$nextRaidDelayTicks</delayTicks>
-                <waitUntilPlayerHasHomeMap>true</waitUntilPlayerHasHomeMap>
-                <node Class="QuestNode_Sequence">
-                  <nodes>
-                    <li Class="QuestNode_SubScript">
-                      <prefix>raid$raidLoopCounter</prefix>
-                      <def>HVMP_Raid</def>
-                      <parms>
-                        <tag>lord</tag>
-                        <inSignal>$inSignal</inSignal>
-                        <map>$map</map>
-                        <enemyFaction>$enemyFaction</enemyFaction>
-                        <points>$points</points>
-                        <walkInSpot>$walkInSpot</walkInSpot>
-                        <customLetterLabel>$customLetterLabel</customLetterLabel>
-                        <customLetterText>$customLetterText</customLetterText>
-                        <customLetterLabelRules>$customLetterLabelRules</customLetterLabelRules>
-                        <customLetterTextRules>$customLetterTextRules</customLetterTextRules>
-                      </parms>
-                    </li>
-                    <li Class="QuestNode_Equal">
-                      <value1>$raidLoopCounter</value1>
-                      <value2>$($raidCount - 1)</value2>
-                      <compareAs>int</compareAs>
-                      <node Class="QuestNode_SendSignals">
-                        <outSignals>AllRaidsSent</outSignals>
-                      </node>
-                    </li>
-                  </nodes>
-                </node>
-              </li>
-              <li Class="QuestNode_Add"> <!-- next raid comes 9000 ticks after the previous -->
-                <value1>$nextRaidDelayTicks</value1>
-                <value2>9000</value2>
-                <storeAs>nextRaidDelayTicks</storeAs>
-              </li>
-            </nodes>
-          </node>
-        </li>
-      </nodes>
-    </root>
-  </QuestScriptDef>
-  <QuestScriptDef>
-    <defName>HVMP_Raid</defName>
-    <questDescriptionRules>
-      <rulesStrings>
-        <li>threatDescription->[enemyFaction_pawnsPlural] from [enemyFaction_name] will attack you. Their group is composed of:\n\n[raidPawnKinds]\n\n[raidArrivalModeInfo]</li>
-      </rulesStrings>
-    </questDescriptionRules>
-    <root Class="QuestNode_Sequence">
-      <nodes>
-        <li Class="HautsPermits.QuestNode_AllThreeAresMutators"><!--behaves like a QuestNode_Raid, but has additional functions if any of the Ares mutators are active-->
-          <tag>$tag</tag>
-          <customLetterLabel>$customLetterLabel</customLetterLabel>
-          <customLetterText>$customLetterText</customLetterText>
-          <customLetterLabelRules>$customLetterLabelRules</customLetterLabelRules>
-          <customLetterTextRules>$customLetterTextRules</customLetterTextRules>
-          <arrivalMode>$arrivalMode</arrivalMode>
-          <canTimeoutOrFlee>$canTimeoutOrFlee</canTimeoutOrFlee>
-          <raidPawnKind>$raidPawnKind</raidPawnKind>
-          <inSignalLeave>EndRaid</inSignalLeave>
-		  <!--Advanced Weaponry: either causes one of the following incidents when a raid spawns, or adds certain kinds of pawns to it.-->
-		  <AW_conditionChance>0.6</AW_conditionChance>
-		  <AW_conditions>
-			<li>EMIField</li>
-			<li>HVMP_TargetedPsychicSuppression</li>
-			<li>PsychicDrone</li>
-		  </AW_conditions>
-		  <AW_conditionHours>2~5</AW_conditionHours>
-		  <AW_pawnRosterOtherwise>
-			  <li>
-				<kindDef>HVMP_BonusQeustPawns</kindDef>
-				<options>
-				  <Mech_CentipedeBlaster>4</Mech_CentipedeBlaster>
-				  <Mech_CentipedeGunner>4</Mech_CentipedeGunner>
-				  <Mech_CentipedeBurner>4</Mech_CentipedeBurner>
-				  <Mech_Centurion MayRequire="Ludeon.RimWorld.Biotech">4</Mech_Centurion>
-				  <AM_Mech_Polychoron MayRequire="Ludeon.RimWorld.Biotech,sarg.alphamechs">3</AM_Mech_Polychoron>
-				  <Mech_Diabolus MayRequire="Ludeon.RimWorld.Biotech">2</Mech_Diabolus>
-				  <Mech_Warqueen MayRequire="Ludeon.RimWorld.Biotech">2</Mech_Warqueen>
-				  <AM_Starfire MayRequire="Ludeon.RimWorld.Biotech,sarg.alphamechs">1</AM_Starfire>
-				  <AM_Siegebreaker MayRequire="sarg.alphamechs">1</AM_Siegebreaker>
-				  <AV_Mech_Tarantula MayRequire="Veltaris.Mechtech">1</AV_Mech_Tarantula>
-				</options>
-			  </li>
-			  <li>
-				<kindDef>HVMP_BonusQeustPawns</kindDef>
-				<options>
-				  <Drone_Wasp MayRequire="Ludeon.RimWorld.Odyssey">8</Drone_Wasp>
-				  <Mech_Lancer>2</Mech_Lancer>
-				  <Mech_Legionary MayRequire="Ludeon.RimWorld.Biotech">3</Mech_Legionary>
-				  <AM_Mech_Optio MayRequire="Ludeon.RimWorld.Biotech,sarg.alphamechs">1</AM_Mech_Optio>
-				</options>
-			  </li>
-		  </AW_pawnRosterOtherwise>
-		  <AW_bonusPoints>$($points * 0.2)</AW_bonusPoints>
-		  <AW_description>\n\n{0_pawnsPluralDef} are making use of ill-gotten advanced technology. They may be accompanied by robotic combatants, or strike in tandem with the activation of an electronics-disabling field or wide-area psychic affector.</AW_description>
-		  <!--Dead Raiders Tell No Tales: gives some of the pawns this hediff-->
-		  <DRTNT_spyChance>0.18</DRTNT_spyChance>
-		  <DRTNT_hediff>HVMP_DRTNT</DRTNT_hediff>
-		  <DRTNT_description>\n\n{0_pawnsPluralDef} are career raiders. Some among them make a living by selling information about colonies they've encountered to other interested parties - if allowed to escape, they'll empower future raids from hostile factions. These scouts have been visually marked for easy identification.</DRTNT_description>
-		  <!--Traitor Guard: some pawns gain these hediffs, and a bonus amount of mercs are added to the raid-->
-		  <TG_hediffChances>
-			<li><key>HVMP_BShield</key><value>0.04</value></li>
-			<li><key>HVMP_HostileEnvironmentFilm</key><value>0.08</value></li>
-		  </TG_hediffChances>
-		  <TG_pawnRoster>
-			  <li>
-				<kindDef>Combat</kindDef>
-				<options>
-				  <Mercenary_Gunner_Acidifier>12</Mercenary_Gunner_Acidifier>
-				  <Grenadier_Destructive>4</Grenadier_Destructive>
-				  <Mercenary_Slasher>4</Mercenary_Slasher>
-				  <Mercenary_Sniper_Acidifier>3</Mercenary_Sniper_Acidifier>
-				  <Mercenary_Heavy>3</Mercenary_Heavy>
-				  <Grenadier_Smoke>1</Grenadier_Smoke>
-				</options>
-			  </li>
-		  </TG_pawnRoster>
-		  <TG_bonusPoints>$($points * 0.25)</TG_bonusPoints>
-		  <TG_description>\n\n{0_pawnsPluralDef} are assisted by former guards who defected to the raiders. These mercenaries will fight alongside them, and have distributed defensive technology to some of the [enemyFaction_pawnsPlural].</TG_description>
-        </li>
-      </nodes>
-    </root>
+	  </nodes>
+	</root>
   </QuestScriptDef>
   
   <!--rover: laelaps-->

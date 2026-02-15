@@ -214,6 +214,33 @@ namespace HautsPermits_Occult
             }
         }
     }
+    public class RoyalTitlePermitWorker_EntityStunner : RoyalTitlePermitWorker_GiveHediffs
+    {
+        public override bool IsGoodPawn(Pawn pawn)
+        {
+            return (pawn.IsMutant || pawn.IsEntity) && base.IsGoodPawn(pawn);
+        }
+        public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
+        {
+            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+        }
+        public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
+        {
+            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+        }
+        public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
+        {
+            base.AffectPawnInner(pme, pawn, faction);
+            if (pawn.stances.stunner != null)
+            {
+                pawn.stances.stunner.StunFor((int)pme.extraNumber.RandomInRange,null);
+            }
+        }
+        public override void DoOtherEffect(Pawn caller, Faction faction)
+        {
+            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+        }
+    }
     public class RoyalTitlePermitWorker_Rehumanizer : RoyalTitlePermitWorker_GiveHediffs
     {
         public override bool IsGoodPawn(Pawn pawn)

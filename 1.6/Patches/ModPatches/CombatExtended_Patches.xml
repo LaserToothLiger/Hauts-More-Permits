@@ -409,6 +409,80 @@
 				
 				<li Class="PatchOperationFindMod">
 					<mods>
+						<li>Ideology</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<!--spacedrones need more durability, and the turret needs to be able to shoot-->
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/ThingDef[@Name="HVMP_Spacedrone"]/statBases/MaxHitPoints</xpath>
+								<value>
+									<MaxHitPoints>2500</MaxHitPoints>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/statBases/MaxHitPoints</xpath>
+								<value>
+									<MaxHitPoints>3000</MaxHitPoints>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/thingClass</xpath>
+								<value>
+									<thingClass>CombatExtended.Building_CIWS_CE</thingClass>
+								</value>
+							</li>
+							<li Class="PatchOperationRemove">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/comps/li[@Class="CompProperties_Stunnable"]/affectedDamageDefs/li[.="Stun"]</xpath>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/statBases</xpath>
+								<value>
+									<AimingAccuracy>0.5</AimingAccuracy>
+									<NightVisionEfficiency>0.6</NightVisionEfficiency>
+									<Mass>500</Mass>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/statBases/ShootingAccuracyTurret</xpath>
+								<value>
+									<ShootingAccuracyTurret>1.0</ShootingAccuracyTurret>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/fillPercent</xpath>
+								<value>
+									<fillPercent>0.85</fillPercent>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/building/turretBurstCooldownTime</xpath>
+								<value>
+									<turretBurstCooldownTime>2.0</turretBurstCooldownTime>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/building/turretGunDef</xpath>
+								<value>
+									<turretGunDef>Gun_ChargeBlasterHeavyTurret</turretGunDef>
+								</value>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/comps</xpath>
+								<value>
+									<li>
+										<compClass>CombatExtended.CompVerbDisabler</compClass>
+									</li>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+				
+				
+				
+				<li Class="PatchOperationFindMod">
+					<mods>
 						<li>Biotech</li>
 					</mods>
 					<match Class="PatchOperationSequence">

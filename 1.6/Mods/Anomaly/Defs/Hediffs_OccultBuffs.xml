@@ -18,6 +18,18 @@
   
   <!--Level 1-->
   <HediffDef ParentName="HVMP_OccultSuffusionBase">
+    <defName>HVMP_EntitySubdual</defName>
+    <label>entity subdual</label>
+    <description>A distant psychic influence is making this entity more docile.</description>
+    <stages>
+      <li>
+		<statFactors>
+		  <MinimumContainmentStrength>0.5</MinimumContainmentStrength>
+		</statFactors>
+      </li>
+    </stages>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_OccultSuffusionBase">
     <defName>HVMP_SuffusedClosedMind</defName>
     <label>closed-mind suffusion</label>
     <description>A distant psychic influence is suppressing certain brain functions.</description>

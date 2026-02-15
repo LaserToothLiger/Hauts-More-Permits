@@ -206,6 +206,111 @@
     <isBad>false</isBad>
   </HediffDef>
   
+  <!--PAX Bellum
+		pertinent to all three-->
+  <IncidentDef>
+    <defName>HVMP_RaidBellum</defName>
+    <label>enemy raid</label>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>HautsPermits.IncidentWorker_RaidBellum</workerClass>
+    <baseChance>0</baseChance>
+    <category>ThreatBig</category>
+    <pointsScaleable>true</pointsScaleable>
+    <tale>Raid</tale>
+    <ignoreRecentSelectionWeighting>true</ignoreRecentSelectionWeighting>
+    <canOccurOnAllPlanetLayers>true</canOccurOnAllPlanetLayers>
+  </IncidentDef>
+  <!--	Advanced Weaponry-->
+  <GameConditionDef>
+    <defName>HVMP_TargetedPsychicSuppression</defName>
+    <conditionClass>HautsPermits.HVMP_GameCondition_TargetedPsychicSuppression</conditionClass>
+    <label>lesser psychic suppression</label>
+    <description>A targeted psychic suppression field is affecting {0}s and slightly reducing their consciousness. The effect is modulated by an individual's psychic sensitivity.</description>
+    <descriptionFuture>a targeted psychic suppression wave will slightly reduce the consciousness of all [psychicSuppressorGender]s around [map_definite] for [gameConditionDuration_duration]</descriptionFuture>
+    <endMessage>The targeted psychic suppressor field has dissipated.</endMessage>
+    <letterText>A targeted psychic suppressor field has begun slightly reducing the consciousness of {0}s across the whole region. The effect is modulated by an individual's psychic sensitivity.</letterText>
+    <letterDef>NegativeEvent</letterDef>
+    <canBePermanent>false</canBePermanent>
+    <natural>false</natural>
+  </GameConditionDef>
+	  <HediffDef ParentName="DiseaseBase">
+		<defName>HVMP_TargetedPsychicSuppression</defName>
+		<label>lesser psychic suppression</label>
+		<description>The effect of a targeted psychic suppression field. Coordination and reasoning are muddled.</description>
+		<isBad>true</isBad>
+		<everCurableByItem>false</everCurableByItem>
+		<comps>
+		  <li Class="HediffCompProperties">
+			<compClass>HautsPermits.HediffComp_TargetedPsychicSuppression</compClass>
+		  </li>
+		</comps>
+		<stages>
+		  <li>
+			<capMods>
+			  <li>
+				<capacity>Consciousness</capacity>
+				<setMaxCurveOverride>
+				  <points>
+					<li>0, 1</li>
+					<li>1, 0.75</li>
+				  </points>
+				</setMaxCurveOverride>
+				<setMaxCurveEvaluateStat>PsychicSensitivity</setMaxCurveEvaluateStat>
+			  </li>
+			</capMods>
+		  </li>
+		</stages>
+	  </HediffDef>
+  <!--	Dead Raiders Tell No Tales-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_DRTNT</defName>
+    <hediffClass>HediffWithComps</hediffClass>
+    <label>raiding scout</label>
+    <description>This raider collects information on your colony. Should they escape, they will sell that information to interested parties, granting a temporary reserve of extra 'raid power' to four random hostile factions. This effect scales with sight, hearing, Construction skill, and Intellectual skill.</description>
+	<comps>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	  <li Class="HautsFramework.HediffCompProperties_Espionage">
+		<unscalableFlatSpyPoints>40</unscalableFlatSpyPoints>
+		<baseSpyPoints>18</baseSpyPoints>
+		<relevantSkills>
+			<li>Construction</li>
+			<li>Intellectual</li>
+		</relevantSkills>
+		<fallbackIfNoSkillLevel>1</fallbackIfNoSkillLevel>
+		<relevantCapacities>
+			<li>Sight</li>
+			<li>Hearing</li>
+		</relevantCapacities>
+		<spyPointAttribution>RandomHostileFactions</spyPointAttribution>
+		<randomFactionCount>4</randomFactionCount>
+	  </li>
+	  <li Class="HautsFramework.HediffCompProperties_MoteConditional">
+		<mote>HVMP_EyeSpy</mote>
+		<scale>1</scale>
+	  </li>
+	</comps>
+  </HediffDef>
+  <ThingDef ParentName="MoteBase">
+	<defName>HVMP_EyeSpy</defName>
+	<thingClass>MoteAttached</thingClass>
+	<altitudeLayer>MoteOverhead</altitudeLayer>
+	<mote>
+		<fadeInTime>1.05</fadeInTime>
+		<fadeOutTime>1.05</fadeOutTime>
+		<solidTime>1.05</solidTime>
+		<needsMaintenance>true</needsMaintenance>
+	</mote>
+	<graphicData>
+	  <graphicClass>Graphic_Single</graphicClass>
+	  <color>(0.44,0.067,0.067,1)</color>
+	  <texPath>Other/ForceField</texPath>
+	  <drawSize>0.65</drawSize>
+      <drawOffset>(0,0,1)</drawOffset>
+	</graphicData>
+  </ThingDef>
+  
   <!--PAX Caelum
 		Mood Killer-->
   <GameConditionDef>
@@ -314,111 +419,6 @@
       </li>
     </stages>
   </ThoughtDef>
-  
-  <!--ROVER Ares
-		pertinent to all three-->
-  <IncidentDef>
-    <defName>HVMP_RaidAres</defName>
-    <label>enemy raid</label>
-    <targetTags>
-      <li>Map_PlayerHome</li>
-    </targetTags>
-    <workerClass>HautsPermits.IncidentWorker_RaidAres</workerClass>
-    <baseChance>0</baseChance>
-    <category>ThreatBig</category>
-    <pointsScaleable>true</pointsScaleable>
-    <tale>Raid</tale>
-    <ignoreRecentSelectionWeighting>true</ignoreRecentSelectionWeighting>
-    <canOccurOnAllPlanetLayers>true</canOccurOnAllPlanetLayers>
-  </IncidentDef>
-  <!--	Advanced Weaponry-->
-  <GameConditionDef>
-    <defName>HVMP_TargetedPsychicSuppression</defName>
-    <conditionClass>HautsPermits.HVMP_GameCondition_TargetedPsychicSuppression</conditionClass>
-    <label>lesser psychic suppression</label>
-    <description>A targeted psychic suppression field is affecting {0}s and slightly reducing their consciousness. The effect is modulated by an individual's psychic sensitivity.</description>
-    <descriptionFuture>a targeted psychic suppression wave will slightly reduce the consciousness of all [psychicSuppressorGender]s around [map_definite] for [gameConditionDuration_duration]</descriptionFuture>
-    <endMessage>The targeted psychic suppressor field has dissipated.</endMessage>
-    <letterText>A targeted psychic suppressor field has begun slightly reducing the consciousness of {0}s across the whole region. The effect is modulated by an individual's psychic sensitivity.</letterText>
-    <letterDef>NegativeEvent</letterDef>
-    <canBePermanent>false</canBePermanent>
-    <natural>false</natural>
-  </GameConditionDef>
-	  <HediffDef ParentName="DiseaseBase">
-		<defName>HVMP_TargetedPsychicSuppression</defName>
-		<label>lesser psychic suppression</label>
-		<description>The effect of a targeted psychic suppression field. Coordination and reasoning are muddled.</description>
-		<isBad>true</isBad>
-		<everCurableByItem>false</everCurableByItem>
-		<comps>
-		  <li Class="HediffCompProperties">
-			<compClass>HautsPermits.HediffComp_TargetedPsychicSuppression</compClass>
-		  </li>
-		</comps>
-		<stages>
-		  <li>
-			<capMods>
-			  <li>
-				<capacity>Consciousness</capacity>
-				<setMaxCurveOverride>
-				  <points>
-					<li>0, 1</li>
-					<li>1, 0.75</li>
-				  </points>
-				</setMaxCurveOverride>
-				<setMaxCurveEvaluateStat>PsychicSensitivity</setMaxCurveEvaluateStat>
-			  </li>
-			</capMods>
-		  </li>
-		</stages>
-	  </HediffDef>
-  <!--	Dead Raiders Tell No Tales-->
-  <HediffDef ParentName="HVT_TraitHediffBase">
-    <defName>HVMP_DRTNT</defName>
-    <hediffClass>HediffWithComps</hediffClass>
-    <label>raiding scout</label>
-    <description>This raider collects information on your colony. Should they escape, they will sell that information to interested parties, granting a temporary reserve of extra 'raid power' to four random hostile factions. This effect scales with sight, hearing, Construction skill, and Intellectual skill.</description>
-	<comps>
-	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
-	  <li Class="HautsFramework.HediffCompProperties_Espionage">
-		<unscalableFlatSpyPoints>40</unscalableFlatSpyPoints>
-		<baseSpyPoints>18</baseSpyPoints>
-		<relevantSkills>
-			<li>Construction</li>
-			<li>Intellectual</li>
-		</relevantSkills>
-		<fallbackIfNoSkillLevel>1</fallbackIfNoSkillLevel>
-		<relevantCapacities>
-			<li>Sight</li>
-			<li>Hearing</li>
-		</relevantCapacities>
-		<spyPointAttribution>RandomHostileFactions</spyPointAttribution>
-		<randomFactionCount>4</randomFactionCount>
-	  </li>
-	  <li Class="HautsFramework.HediffCompProperties_MoteConditional">
-		<mote>HVMP_EyeSpy</mote>
-		<scale>1</scale>
-	  </li>
-	</comps>
-  </HediffDef>
-  <ThingDef ParentName="MoteBase">
-	<defName>HVMP_EyeSpy</defName>
-	<thingClass>MoteAttached</thingClass>
-	<altitudeLayer>MoteOverhead</altitudeLayer>
-	<mote>
-		<fadeInTime>1.05</fadeInTime>
-		<fadeOutTime>1.05</fadeOutTime>
-		<solidTime>1.05</solidTime>
-		<needsMaintenance>true</needsMaintenance>
-	</mote>
-	<graphicData>
-	  <graphicClass>Graphic_Single</graphicClass>
-	  <color>(0.44,0.067,0.067,1)</color>
-	  <texPath>Other/ForceField</texPath>
-	  <drawSize>0.65</drawSize>
-      <drawOffset>(0,0,1)</drawOffset>
-	</graphicData>
-  </ThingDef>
   
   <!--ARCHIVE Ethnography
 		Sensitive Souls-->
