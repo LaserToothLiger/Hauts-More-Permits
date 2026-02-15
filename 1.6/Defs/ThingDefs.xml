@@ -225,6 +225,20 @@
 	  </ThingDef>
   
   <!--pax-->
+  <ThingDef ParentName="ShuttleCrashedBase">
+    <defName>HVMP_ShuttleCrashedProximum</defName>
+    <costList Inherit="False">
+      <Steel>40</Steel>
+      <Plasteel>70</Plasteel>
+      <ComponentIndustrial>10</ComponentIndustrial>
+    </costList>
+    <building Inherit="False">
+      <destroySound>BuildingDestroyed_Metal_Big</destroySound>
+      <claimable>false</claimable>
+      <alwaysDeconstructible>true</alwaysDeconstructible>
+    </building>
+  </ThingDef>
+  
   <ThingDef ParentName="BuildingBase">
     <defName>HVMP_SlugTurret</defName>
     <label>pax mini turret</label>
@@ -873,20 +887,6 @@
 		<DTS_thoughtGiverCooldown>750</DTS_thoughtGiverCooldown>
       </li>
     </comps>
-  </ThingDef>
-  
-  <ThingDef ParentName="ShuttleCrashedBase">
-    <defName>HVMP_ShuttleCrashedIcarus</defName>
-    <costList Inherit="False">
-      <Steel>40</Steel>
-      <Plasteel>70</Plasteel>
-      <ComponentIndustrial>10</ComponentIndustrial>
-    </costList>
-    <building Inherit="False">
-      <destroySound>BuildingDestroyed_Metal_Big</destroySound>
-      <claimable>false</claimable>
-      <alwaysDeconstructible>true</alwaysDeconstructible>
-    </building>
   </ThingDef>
   
 </Defs>

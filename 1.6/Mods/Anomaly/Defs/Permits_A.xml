@@ -87,31 +87,6 @@
     </royalAid>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_EntitySubdual</defName>
-    <label>entity subdual</label>
-    <description>Stun the target unnatural entity for a quarter of an hour, and make it significantly easier to contain for five days afterwards.</description>
-    <workerClass>HautsPermits_Occult.RoyalTitlePermitWorker_EntityStunner</workerClass>
-    <minTitle>HVMP_OccultI</minTitle>
-    <faction>HVMP_OccultBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>1</cooldownDays>
-    <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(0,3.75)</uiPosition>
-    <royalAid>
-      <favorCost>1</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<hediffs><li>HVMP_EntitySubdual</li></hediffs>
-			<soundDef>AgonyPulse_Cast</soundDef>
-			<allowAnyFlesh>true</allowAnyFlesh>
-			<allowAnyNonflesh>true</allowAnyNonflesh>
-			<extraNumber>625</extraNumber><!--stun ticks-->
-			<soundDef>AgonyPulse_Cast</soundDef>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_ClosedMindSuffusion</defName>
     <label>closed mind suffusion</label>
     <description>Suffuse the target with psychic energies which numb the mind, reducing mental break threshold, psychic sensitivity, and learning speed. Lasts 3 days.</description>
@@ -121,7 +96,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>3</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(0,4.75)</uiPosition>
+    <uiPosition>(0,4)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
@@ -144,7 +119,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>3</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(0,5.5)</uiPosition>
+    <uiPosition>(0,5)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
@@ -167,7 +142,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>3</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(0,6.25)</uiPosition>
+    <uiPosition>(0,6)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>

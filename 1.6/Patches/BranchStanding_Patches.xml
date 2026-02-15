@@ -155,22 +155,6 @@
 					  </li>
 					</value>
 				</li>
-				<!--Ecosphere and Occult-->
-				<li Class="PatchOperationConditional">
-					<xpath>/Defs/ThingDef[defName="AA_HugeAnimaPearl"]/statBases/RoyalFavorValue</xpath>
-					<nomatch Class="PatchOperationAdd">
-						<xpath>/Defs/ThingDef[defName="AA_HugeAnimaPearl"]/statBases</xpath>
-						<value>
-							<RoyalFavorValue>1</RoyalFavorValue>
-						</value>
-					</nomatch>
-					<match Class="PatchOperationReplace">
-						<xpath>/Defs/ThingDef[defName="AA_HugeAnimaPearl"]/statBases/RoyalFavorValue</xpath>
-						<value>
-							<RoyalFavorValue>1</RoyalFavorValue>
-						</value>
-					</match>
-				</li>
 			</operations>
 		</match>
 	</Operation>
@@ -1397,19 +1381,6 @@
 				</li>
 				<li Class="PatchOperationFindMod">
 					<mods>
-						<li>Alpha Animals</li>
-					</mods>
-					<match Class="PatchOperationAdd">
-						<xpath>/Defs/TraderKindDef[defName="HVMP_EcosphereDonations"]/stockGenerators</xpath>
-						<value>
-						  <li Class="StockGenerator_BuySingleDef">
-							<thingDef>AA_HugeAnimaPearl</thingDef>
-						  </li>
-						</value>
-					</match>
-				</li>
-				<li Class="PatchOperationFindMod">
-					<mods>
 						<li>Anomaly</li>
 					</mods>
 					<match Class="PatchOperationSequence">
@@ -1666,19 +1637,6 @@
 						</operations>
 					</match>
 				</li>
-				<li Class="PatchOperationFindMod">
-					<mods>
-						<li>Alpha Animals</li>
-					</mods>
-					<match Class="PatchOperationAdd">
-						<xpath>/Defs/TraderKindDef[defName="HVMP_OccultDonations"]/stockGenerators</xpath>
-						<value>
-						  <li Class="StockGenerator_BuySingleDef">
-							<thingDef>AA_HugeAnimaPearl</thingDef>
-						  </li>
-						</value>
-					</match>
-				</li>
 			</operations>
 		</match>
 	</Operation>
@@ -1742,13 +1700,13 @@
 					<nomatch Class="PatchOperationAdd">
 						<xpath>/Defs/ThingDef[defName="ShuttleEngine"]/statBases</xpath>
 						<value>
-							<RoyalFavorValue>2</RoyalFavorValue>
+							<RoyalFavorValue>5</RoyalFavorValue>
 						</value>
 					</nomatch>
 					<match Class="PatchOperationReplace">
 						<xpath>/Defs/ThingDef[defName="ShuttleEngine"]/statBases/RoyalFavorValue</xpath>
 						<value>
-							<RoyalFavorValue>2</RoyalFavorValue>
+							<RoyalFavorValue>5</RoyalFavorValue>
 						</value>
 					</match>
 				</li>

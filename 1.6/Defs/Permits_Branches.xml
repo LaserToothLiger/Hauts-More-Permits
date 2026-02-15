@@ -83,9 +83,9 @@
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
-    <defName>HVMP_WoodDropI</defName>
-    <label>wood drop</label>
-    <description>Call for a drop of 210 wood per rank held with the Commerce Branch (420 if the caller is a Trader; 630 if the caller is a Financier; and so on and so forth).</description>
+    <defName>HVMP_CraftsDropI</defName>
+    <label>wood and dye drop</label>
+    <description>Call for a drop of 145 wood and 29 dye per rank held with the Commerce Branch (290 and 58 if the caller is a Trader; 435 and 87 if the caller is a Financier; and so on and so forth).</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -94,13 +94,14 @@
     <uiPosition>(0,2)</uiPosition>
     <royalAid>
       <itemsToDrop>
-        <WoodLog>210</WoodLog>
+        <WoodLog>145</WoodLog>
+        <Dye>29</Dye>
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
 	<modExtensions>
 		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for a drop of 210 wood.</extraString><!--use this description instead if the rank-scaling mod setting is disabled-->
+			<extraString>Call for a drop of 145 wood and 29 dye.</extraString><!--use this description instead if the rank-scaling mod setting is disabled-->
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -193,9 +194,9 @@
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
-    <defName>HVMP_ClothDropI</defName>
-    <label>cloth drop</label>
-    <description>Call for a drop of 180 cloth per rank held with the Commerce Branch (360 if the caller is a Trader; 540 if the caller is a Financier; and so on and so forth).</description>
+    <defName>HVMP_CraftsDropII</defName>
+    <label>cloth and dye drop</label>
+    <description>Call for a drop of 145 cloth and 14 dye per rank held with the Commerce Branch (290 and 28 if the caller is a Trader; 435 and 42 if the caller is a Financier; and so on and so forth).</description>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -204,13 +205,14 @@
     <uiPosition>(1,2)</uiPosition>
     <royalAid>
       <itemsToDrop>
-        <Cloth>180</Cloth>
+        <Cloth>145</Cloth>
+        <Dye>14</Dye>
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
 	<modExtensions>
 		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for a drop of 180 cloth.</extraString>
+			<extraString>Call for a drop of 145 cloth and 14 dye.</extraString>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -280,28 +282,6 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
-    <defName>HVMP_DyeDropI</defName>
-    <label>dye drop</label>
-    <description>Call for a drop of 95 dye per rank held with the Commerce Branch (190 if the caller is a Trader; 285 if the caller is a Financier; and so on and so forth).</description>
-    <minTitle>HVMP_CommerceI</minTitle>
-    <faction>HVMP_CommerceBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>14</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(1,5)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <Dye>95</Dye>
-      </itemsToDrop>
-      <favorCost>3</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for a drop of 95 dye.</extraString>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="Ludeon.RimWorld.Odyssey">
 	<defName>HVMP_ObsidianDropI</defName>
 	<label>obsidian drop</label>
@@ -311,7 +291,7 @@
 	<permitPointCost>1</permitPointCost>
 	<cooldownDays>14</cooldownDays>
 	<usableOnWorldMap>true</usableOnWorldMap>
-	<uiPosition>(2,2)</uiPosition>
+	<uiPosition>(1,5)</uiPosition>
 	<royalAid>
 	  <itemsToDrop>
 		<Obsidian>50</Obsidian>
@@ -333,7 +313,7 @@
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>14</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(2,2.75)</uiPosition>
+		<uiPosition>(2,2)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
 			<Titanium>8</Titanium>
@@ -355,7 +335,7 @@
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>14</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(2,3.5)</uiPosition>
+		<uiPosition>(2,2.75)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
 			<Silicon>250</Silicon>
@@ -377,7 +357,7 @@
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>14</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(2,4.25)</uiPosition>
+		<uiPosition>(2,3.5)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
 			<AlphaPoly>2</AlphaPoly>
@@ -399,7 +379,7 @@
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>14</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(2,5)</uiPosition>
+		<uiPosition>(2,4.25)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
 			<BetaPoly>1</BetaPoly>
@@ -412,6 +392,28 @@
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="zylle.Gemstones">
+		<defName>HVMP_GemstoneDropI</defName>
+		<label>gemstone drop</label>
+		<description>Call for a drop of 1 gemstone pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is a Financier; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of gemstone of your choice.</description>
+		<minTitle>HVMP_CommerceI</minTitle>
+		<faction>HVMP_CommerceBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>14</cooldownDays>
+		<usableOnWorldMap>true</usableOnWorldMap>
+		<uiPosition>(3,2)</uiPosition>
+		<royalAid>
+		  <itemsToDrop>
+			<HVMP_GemstonePallet>1</HVMP_GemstonePallet>
+		  </itemsToDrop>
+		  <favorCost>3</favorCost>
+		</royalAid>
+		<modExtensions>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 1 gemstone pallet. Each pallet contains 250 silver's worth of a type of gemstone of your choice.</extraString>
+			</li>
+		</modExtensions>
+	  </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="sarg.alphacrafts">
 		<defName>HVMP_ArtisanalDropI</defName>
 		<label>artisanal drop</label>
@@ -421,7 +423,7 @@
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>14</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(3,2)</uiPosition>
+		<uiPosition>(3,2.75)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
 			<HVMP_ArtisanPallet>1</HVMP_ArtisanPallet>
@@ -443,7 +445,7 @@
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>14</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(3,2.75)</uiPosition>
+		<uiPosition>(3,3.5)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
 			<HVMP_CondimentPallet>1</HVMP_CondimentPallet>
