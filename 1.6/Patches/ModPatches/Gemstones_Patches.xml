@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Gemstones</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_JadeDropI"]/royalAid/itemsToDrop/Jade</xpath>
+					<value>
+						<HVMP_GemstonePallet>1</HVMP_GemstonePallet>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_JadeDropI"]/label</xpath>
+					<value>
+						<label>gemstone drop</label>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_JadeDropI"]/description</xpath>
+					<value>
+						<description>Call for a drop of 1 gemstone pallet per rank held with the Commerce Branch (2 if the caller is a Trader; 3 if the caller is a Financier; and so on and so forth).\n\nEach pallet contains 250 silver's worth of a type of gemstone of your choice.</description>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_JadeDropI"]/modExtensions/li[@Class="HautsPermits.ScalingDisabledDescription"]/extraString</xpath>
+					<value>
+						<extraString>Call for a drop of 1 gemstone pallet. Each pallet contains 250 silver's worth of a type of gemstone of your choice.</extraString>
+					</value>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+</Patch>

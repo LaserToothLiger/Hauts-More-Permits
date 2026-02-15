@@ -1567,8 +1567,7 @@ namespace HautsPermits_Ideology
             slate.Set<Faction>("playerFaction", Faction.OfPlayer, false);
             slate.Set<bool>("allowViolentQuests", Find.Storyteller.difficulty.allowViolentQuests, false);
             bool mayhemMode = HVMP_Mod.settings.shrineX;
-            PlanetTile planetTile;
-            this.TryFindSiteTile(out planetTile);
+            this.TryFindSiteTile(out PlanetTile planetTile);
             FactionDef factionDef = DefDatabase<FactionDef>.AllDefsListForReading.Where((FactionDef fd)=>!fd.hidden&&fd.humanlikeFaction&&!fd.permanentEnemy&&!fd.naturalEnemy&&!fd.HasModExtension<EBranchQuests>()&&fd.canGenerateQuestSites && !fd.pawnGroupMakers.NullOrEmpty()&&fd.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm)=>pgm.kindDef == PawnGroupKindDefOf.Combat) && fd.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm) => pgm.kindDef == PawnGroupKindDefOf.Settlement)).RandomElement()??FactionDefOf.TribeCivil;
             List<FactionRelation> list = new List<FactionRelation>();
             foreach (Faction faction in Find.FactionManager.AllFactionsListForReading)
@@ -1687,8 +1686,7 @@ namespace HautsPermits_Ideology
         }
         protected override bool TestRunInt(Slate slate)
         {
-            PlanetTile planetTile;
-            return this.TryFindSiteTile(out planetTile);
+            return this.TryFindSiteTile(out PlanetTile planetTile);
         }
         private static IntRange HackDefenceRange = new IntRange(10, 100);
         public float base_populationFactor;

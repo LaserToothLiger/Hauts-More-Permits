@@ -685,7 +685,7 @@ namespace HautsPermits
         public static HistoryEventDef HVMP_IgnoredQuest;
         public static HistoryEventDef HVMP_IngratiationAccepted;
 
-        public static IncidentDef HVMP_RaidAres;
+        public static IncidentDef HVMP_RaidBellum;
         [MayRequireBiotech]
         public static IncidentDef HVMP_MutantManhunterPack;
         [MayRequireAnomaly]
@@ -8567,6 +8567,490 @@ namespace HautsPermits
         public string outSignalFulfilled;
         private static readonly Texture2D TradeCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/FulfillTradeRequest", true);
     }
+    //pax branchquest: pax bellum
+    public class QuestNode_AllThreeBellumMutators : QuestNode
+    {
+        protected override bool TestRunInt(Slate slate)
+        {
+            return Find.Storyteller.difficulty.allowViolentQuests && slate.Exists("map", false) && slate.Exists("enemyFaction", false);
+        }
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            Map map = QuestGen.slate.Get<Map>("map", null, false);
+            float num = QuestGen.slate.Get<float>("points", 0f, false);
+            Faction faction = QuestGen.slate.Get<Faction>("enemyFaction", null, false);
+            QuestPart_Incident questPart_Incident = new QuestPart_Incident();
+            questPart_Incident.debugLabel = "raid";
+            questPart_Incident.incident = HVMPDefOf.HVMP_RaidBellum;
+            int num2 = 0;
+            IncidentParms incidentParms;
+            PawnGroupMakerParms defaultPawnGroupMakerParms;
+            IEnumerable<PawnKindDef> enumerable;
+            do
+            {
+                incidentParms = this.GenerateIncidentParms(map, num, faction, slate, questPart_Incident);
+                defaultPawnGroupMakerParms = IncidentParmsUtility.GetDefaultPawnGroupMakerParms(PawnGroupKindDefOf.Combat, incidentParms, true);
+                defaultPawnGroupMakerParms.points = IncidentWorker_Raid.AdjustedRaidPoints(defaultPawnGroupMakerParms.points, incidentParms.raidArrivalMode, incidentParms.raidStrategy, defaultPawnGroupMakerParms.faction, PawnGroupKindDefOf.Combat, incidentParms.target, null);
+                enumerable = PawnGroupMakerUtility.GeneratePawnKindsExample(defaultPawnGroupMakerParms);
+                num2++;
+            }
+            while (!enumerable.Any<PawnKindDef>() && num2 < 50);
+            if (!enumerable.Any<PawnKindDef>())
+            {
+                string[] array = new string[6];
+                array[0] = "No pawnkinds example for ";
+                array[1] = QuestGen.quest.root.defName;
+                array[2] = " parms=";
+                int num3 = 3;
+                PawnGroupMakerParms pawnGroupMakerParms = defaultPawnGroupMakerParms;
+                array[num3] = ((pawnGroupMakerParms != null) ? pawnGroupMakerParms.ToString() : null);
+                array[4] = " iterations=";
+                array[5] = num2.ToString();
+                Log.Error(string.Concat(array));
+            }
+            IncidentWorker_RaidBellum iwrf = (IncidentWorker_RaidBellum)questPart_Incident.incident.Worker;
+            this.ImplementQuestMutators(slate, faction);
+            questPart_Incident.SetIncidentParmsAndRemoveTarget(incidentParms);
+            questPart_Incident.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
+            QuestGen.quest.AddPart(questPart_Incident);
+            QuestGen.AddQuestDescriptionRules(new List<Rule>
+            {
+                new Rule_String("raidPawnKinds", PawnUtility.PawnKindsToLineList(enumerable, "  - ", ColoredText.ThreatColor)),
+                new Rule_String("raidArrivalModeInfo", incidentParms.raidArrivalMode.textWillArrive.Formatted(faction))
+            });
+        }
+        private IncidentParms GenerateIncidentParms(Map map, float points, Faction faction, Slate slate, QuestPart_Incident questPart)
+        {
+            IncidentParms incidentParms = new IncidentParms
+            {
+                forced = true,
+                target = map,
+                points = Mathf.Max(points, faction.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat, null)),
+                faction = faction,
+                pawnGroupMakerSeed = new int?(Rand.Int),
+                inSignalEnd = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignalLeave.GetValue(slate)),
+                questTag = QuestGenUtility.HardcodedTargetQuestTagWithQuestID(this.tag.GetValue(slate)),
+                canTimeoutOrFlee = (map.CanEverExit && (this.canTimeoutOrFlee.GetValue(slate) ?? true))
+            };
+            if (this.raidPawnKind.GetValue(slate) != null)
+            {
+                incidentParms.pawnKind = this.raidPawnKind.GetValue(slate);
+                incidentParms.pawnCount = Mathf.Max(1, Mathf.RoundToInt(incidentParms.points / incidentParms.pawnKind.combatPower));
+            }
+            if (this.arrivalMode.GetValue(slate) != null)
+            {
+                incidentParms.raidArrivalMode = this.arrivalMode.GetValue(slate);
+            }
+            if (!this.customLetterLabel.GetValue(slate).NullOrEmpty() || this.customLetterLabelRules.GetValue(slate) != null)
+            {
+                QuestGen.AddTextRequest("root", delegate (string x)
+                {
+                    incidentParms.customLetterLabel = x;
+                }, QuestGenUtility.MergeRules(this.customLetterLabelRules.GetValue(slate), this.customLetterLabel.GetValue(slate), "root"));
+            }
+            if (!this.customLetterText.GetValue(slate).NullOrEmpty() || this.customLetterTextRules.GetValue(slate) != null)
+            {
+                QuestGen.AddTextRequest("root", delegate (string x)
+                {
+                    incidentParms.customLetterText = x;
+                }, QuestGenUtility.MergeRules(this.customLetterTextRules.GetValue(slate), this.customLetterText.GetValue(slate), "root"));
+            }
+            IncidentWorker_RaidBellum iwrf = (IncidentWorker_RaidBellum)questPart.incident.Worker;
+            iwrf.ResolveRaidStrategy(incidentParms, PawnGroupKindDefOf.Combat);
+            iwrf.ResolveRaidArriveMode(incidentParms);
+            iwrf.ResolveRaidAgeRestriction(incidentParms);
+            if (incidentParms.raidArrivalMode.walkIn)
+            {
+                incidentParms.spawnCenter = this.walkInSpot.GetValue(slate) ?? QuestGen.slate.Get<IntVec3?>("walkInSpot", null, false) ?? IntVec3.Invalid;
+            }
+            else
+            {
+                incidentParms.spawnCenter = this.dropSpot.GetValue(slate) ?? QuestGen.slate.Get<IntVec3?>("dropSpot", null, false) ?? IntVec3.Invalid;
+            }
+            return incidentParms;
+        }
+        public void ImplementQuestMutators(Slate slate, Faction faction)
+        {
+            QuestPart_AllThreeBellumMutators qpa3 = new QuestPart_AllThreeBellumMutators();
+            bool mayhemMode = HVMP_Mod.settings.bellumX;
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.bellum1, mayhemMode))
+            {
+                if (Rand.Chance(this.AW_conditionChance))
+                {
+                    qpa3.AW_condition = this.AW_conditions.RandomElement();
+                    qpa3.AW_conditionTicks = (int)(this.AW_conditionHours.RandomInRange * 2500);
+                }
+                else
+                {
+                    qpa3.AW_bonusPoints = (float)this.AW_bonusPoints.GetValue(slate);
+                    qpa3.AW_pawnRosterOtherwise = this.AW_pawnRosterOtherwise.RandomElement();
+                }
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                {
+                    new Rule_String("mutator_AW_info", this.AW_description.Formatted(faction))
+                });
+            }
+            else
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_AW_info", " ") });
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.bellum2, mayhemMode))
+            {
+                qpa3.DRTNT_hediff = this.DRTNT_hediff;
+                qpa3.DRTNT_spyChance = this.DRTNT_spyChance;
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_DRTNT_info", this.DRTNT_description.Formatted(faction))
+                    });
+            }
+            else
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_DRTNT_info", " ") });
+            }
+            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.bellum3, mayhemMode))
+            {
+                qpa3.TG_hediffChances = this.TG_hediffChances;
+                qpa3.TG_bonusPoints = (float)this.TG_bonusPoints.GetValue(slate);
+                qpa3.TG_pawnRoster = this.TG_pawnRoster.RandomElement();
+                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_TG_info", this.TG_description.Formatted(faction))
+                    });
+            }
+            else
+            {
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TG_info", " ") });
+            }
+            QuestGen.quest.AddPart(qpa3);
+        }
+        [NoTranslate]
+        public SlateRef<string> inSignal;
+        public SlateRef<IntVec3?> walkInSpot;
+        public SlateRef<IntVec3?> dropSpot;
+        public SlateRef<string> customLetterLabel;
+        public SlateRef<string> customLetterText;
+        public SlateRef<RulePack> customLetterLabelRules;
+        public SlateRef<RulePack> customLetterTextRules;
+        public SlateRef<PawnsArrivalModeDef> arrivalMode;
+        public SlateRef<PawnKindDef> raidPawnKind;
+        public SlateRef<bool?> canTimeoutOrFlee;
+        [NoTranslate]
+        public SlateRef<string> inSignalLeave;
+        [NoTranslate]
+        public SlateRef<string> tag;
+        public float AW_conditionChance;
+        public List<GameConditionDef> AW_conditions;
+        public FloatRange AW_conditionHours;
+        public List<PawnGroupMaker> AW_pawnRosterOtherwise;
+        public SlateRef<float?> AW_bonusPoints;
+        [MustTranslate]
+        public string AW_description;
+        public float DRTNT_spyChance;
+        public HediffDef DRTNT_hediff;
+        [MustTranslate]
+        public string DRTNT_description;
+        public Dictionary<HediffDef, float> TG_hediffChances;
+        public List<PawnGroupMaker> TG_pawnRoster;
+        public SlateRef<float?> TG_bonusPoints;
+        [MustTranslate]
+        public string TG_description;
+    }
+    public class QuestPart_AllThreeBellumMutators : QuestPart
+    {
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Defs.Look<GameConditionDef>(ref this.AW_condition, "AW_condition");
+            Scribe_Values.Look<int>(ref this.AW_conditionTicks, "AW_conditionTicks", 0, false);
+            Scribe_Values.Look<PawnGroupMaker>(ref this.AW_pawnRosterOtherwise, "AW_pawnRosterOtherwise", null, false);
+            Scribe_Values.Look<float>(ref this.AW_bonusPoints, "AW_bonusPoints", 0f, false);
+            Scribe_Values.Look<float>(ref this.DRTNT_spyChance, "DRTNT_spyChance", 0f, false);
+            Scribe_Defs.Look<HediffDef>(ref this.DRTNT_hediff, "DRTNT_hediff");
+            Scribe_Collections.Look<HediffDef, float>(ref this.TG_hediffChances, "TG_hediffChances", LookMode.Def, LookMode.Value, ref this.tmpHediffs, ref this.tmpChances);
+            Scribe_Values.Look<PawnGroupMaker>(ref this.TG_pawnRoster, "TG_pawnRoster", null, false);
+            Scribe_Values.Look<float>(ref this.TG_bonusPoints, "TG_bonusPoints", 0f, false);
+        }
+        public GameConditionDef AW_condition;
+        public int AW_conditionTicks;
+        public PawnGroupMaker AW_pawnRosterOtherwise;
+        public float AW_bonusPoints;
+        public float DRTNT_spyChance;
+        public HediffDef DRTNT_hediff;
+        public Dictionary<HediffDef, float> TG_hediffChances;
+        public PawnGroupMaker TG_pawnRoster;
+        public float TG_bonusPoints;
+        private List<HediffDef> tmpHediffs;
+        private List<float> tmpChances;
+    }
+    public class IncidentWorker_RaidBellum : IncidentWorker_RaidEnemy
+    {
+        protected override bool TryExecuteWorker(IncidentParms parms)
+        {
+            List<Pawn> list;
+            if (!this.TryGenerateRaidInfo(parms, out list, false))
+            {
+                return false;
+            }
+            List<Pawn> listMut = new List<Pawn>();
+            PawnGroupMakerParms pgmp = new PawnGroupMakerParms();
+            pgmp.tile = parms.target.Tile;
+            pgmp.faction = parms.faction;
+            pgmp.traderKind = parms.traderKind;
+            pgmp.generateFightersOnly = parms.generateFightersOnly;
+            pgmp.raidStrategy = parms.raidStrategy;
+            pgmp.forceOneDowned = parms.raidForceOneDowned;
+            pgmp.seed = parms.pawnGroupMakerSeed;
+            pgmp.ideo = parms.pawnIdeo;
+            pgmp.raidAgeRestriction = parms.raidAgeRestriction;
+            QuestPart_AllThreeBellumMutators qpa3 = parms.quest.GetFirstPartOfType<QuestPart_AllThreeBellumMutators>();
+            if (qpa3 != null)
+            {
+                if (qpa3.AW_pawnRosterOtherwise != null)
+                {
+                    pgmp.groupKind = qpa3.AW_pawnRosterOtherwise.kindDef;
+                    if (!pgmp.faction.def.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm) => pgm.kindDef == pgmp.groupKind))
+                    {
+                        pgmp.faction.def.pawnGroupMakers.Add(qpa3.AW_pawnRosterOtherwise);
+                    }
+                    float minPoints = 200f;
+                    foreach (PawnGenOption pgo in qpa3.AW_pawnRosterOtherwise.options)
+                    {
+                        float combatPower = pgo.kind.combatPower;
+                        if (combatPower > minPoints)
+                        {
+                            minPoints = combatPower;
+                        }
+                    }
+                    pgmp.points = Math.Max(qpa3.AW_bonusPoints, minPoints * 4f);
+                    foreach (Pawn pawn in qpa3.AW_pawnRosterOtherwise.GeneratePawns(pgmp, true))
+                    {
+                        listMut.Add(pawn);
+                    }
+                }
+                if (qpa3.TG_pawnRoster != null)
+                {
+                    pgmp.groupKind = qpa3.TG_pawnRoster.kindDef;
+                    if (!pgmp.faction.def.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm) => pgm.kindDef == pgmp.groupKind))
+                    {
+                        pgmp.faction.def.pawnGroupMakers.Add(qpa3.AW_pawnRosterOtherwise);
+                    }
+                    float minPoints = 200f;
+                    foreach (PawnGenOption pgo in qpa3.TG_pawnRoster.options)
+                    {
+                        float combatPower = pgo.kind.combatPower;
+                        if (combatPower > minPoints)
+                        {
+                            minPoints = combatPower;
+                        }
+                    }
+                    pgmp.points = Math.Max(qpa3.TG_bonusPoints, minPoints * 4f);
+                    foreach (Pawn pawn in qpa3.TG_pawnRoster.GeneratePawns(pgmp, true))
+                    {
+                        pawn.health.AddHediff(HVMPDefOf.HVMP_HostileEnvironmentFilm);
+                        listMut.Add(pawn);
+                    }
+                }
+                if (!listMut.NullOrEmpty())
+                {
+                    parms.raidArrivalMode.Worker.Arrive(listMut, parms);
+                }
+                if (qpa3.AW_condition != null)
+                {
+                    GameCondition gameCondition = GameConditionMaker.MakeCondition(qpa3.AW_condition, qpa3.AW_conditionTicks);
+                    gameCondition.forceDisplayAsDuration = true;
+                    gameCondition.Permanent = false;
+                    gameCondition.quest = parms.quest;
+                    Map map = (Map)parms.target;
+                    if (map == null)
+                    {
+                        MapParent mapParent = gameCondition.quest.TryFindNewSuitableMapParentForRetarget();
+                        map = ((mapParent != null) ? mapParent.Map : null) ?? Find.AnyPlayerHomeMap;
+                    }
+                    if (map != null)
+                    {
+                        List<Rule> listRule = new List<Rule>();
+                        Dictionary<string, string> dictionary = new Dictionary<string, string>();
+                        gameCondition.RandomizeSettings(parms.points, map, listRule, dictionary);
+                        map.gameConditionManager.RegisterCondition(gameCondition);
+                    }
+                    Find.LetterStack.ReceiveLetter(gameCondition.LabelCap, gameCondition.LetterText, gameCondition.def.letterDef, LookTargets.Invalid, null, gameCondition.quest, null, null, 0, true);
+                }
+            }
+            TaggedString taggedString = this.GetLetterLabel(parms);
+            TaggedString taggedString2 = this.GetLetterText(parms, list);
+            PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter(list, ref taggedString, ref taggedString2, this.GetRelatedPawnsInfoLetterText(parms), true, true);
+            List<TargetInfo> list2 = new List<TargetInfo>();
+            if (parms.pawnGroups != null)
+            {
+                List<List<Pawn>> list3 = IncidentParmsUtility.SplitIntoGroups(list, parms.pawnGroups);
+                if (!listMut.NullOrEmpty())
+                {
+                    list3.Add(listMut);
+                }
+                List<Pawn> list4 = list3.MaxBy((List<Pawn> x) => x.Count);
+                if (list4.Any<Pawn>())
+                {
+                    list2.Add(list4[0]);
+                }
+                for (int i = 0; i < list3.Count; i++)
+                {
+                    if (list3[i] != list4 && list3[i].Any<Pawn>())
+                    {
+                        list2.Add(list3[i][0]);
+                    }
+                }
+            }
+            else if (list.Any<Pawn>())
+            {
+                foreach (Pawn pawn in list)
+                {
+                    list2.Add(pawn);
+                }
+            }
+            base.SendStandardLetter(taggedString, taggedString2, this.GetLetterDef(), parms, list2, Array.Empty<NamedArgument>());
+            if (parms.controllerPawn == null || parms.controllerPawn.Faction != Faction.OfPlayer)
+            {
+                if (!listMut.NullOrEmpty())
+                {
+                    list.AddRange(listMut);
+                }
+                parms.raidStrategy.Worker.MakeLords(parms, list);
+            }
+            LessonAutoActivator.TeachOpportunity(ConceptDefOf.EquippingWeapons, OpportunityType.Critical);
+            if (!PlayerKnowledgeDatabase.IsComplete(ConceptDefOf.ShieldBelts))
+            {
+                for (int j = 0; j < list.Count; j++)
+                {
+                    Pawn pawn2 = list[j];
+                    if (pawn2.apparel != null)
+                    {
+                        if (pawn2.apparel.WornApparel.Any((Apparel ap) => ap.def == ThingDefOf.Apparel_ShieldBelt))
+                        {
+                            LessonAutoActivator.TeachOpportunity(ConceptDefOf.ShieldBelts, OpportunityType.Critical);
+                            break;
+                        }
+                    }
+                }
+            }
+            if (DebugSettings.logRaidInfo)
+            {
+                Log.Message(string.Format("Raid: {0} ({1}) {2} {3} c={4} p={5}", new object[]
+                {
+                    parms.faction.Name,
+                    parms.faction.def.defName,
+                    parms.raidArrivalMode.defName,
+                    parms.raidStrategy.defName,
+                    parms.spawnCenter,
+                    parms.points
+                }));
+            }
+            return true;
+        }
+        protected override void PostProcessSpawnedPawns(IncidentParms parms, List<Pawn> pawns)
+        {
+            base.PostProcessSpawnedPawns(parms, pawns);
+            QuestPart_AllThreeBellumMutators qpa3 = parms.quest.GetFirstPartOfType<QuestPart_AllThreeBellumMutators>();
+            if (qpa3 != null && qpa3.DRTNT_hediff != null)
+            {
+                int minSpyCount = 1;
+                foreach (Pawn p in pawns.InRandomOrder())
+                {
+                    if (p.RaceProps.intelligence == Intelligence.Humanlike && (minSpyCount > 0 || Rand.Chance(qpa3.DRTNT_spyChance)))
+                    {
+                        p.health.AddHediff(qpa3.DRTNT_hediff);
+                        minSpyCount--;
+                    }
+                    if (!qpa3.TG_hediffChances.NullOrEmpty())
+                    {
+                        foreach (KeyValuePair<HediffDef, float> kvp in qpa3.TG_hediffChances)
+                        {
+                            if (Rand.Chance(kvp.Value))
+                            {
+                                p.health.AddHediff(kvp.Key);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public class HVMP_GameCondition_TargetedPsychicSuppression : GameCondition
+    {
+        public override string LetterText
+        {
+            get
+            {
+                return base.LetterText.Formatted(this.gender.GetLabel(false).ToLower());
+            }
+        }
+        public override string Description
+        {
+            get
+            {
+                return base.Description.Formatted(this.gender.GetLabel(false).ToLower());
+            }
+        }
+        public override void Init()
+        {
+            base.Init();
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<Gender>(ref this.gender, "gender", Gender.None, false);
+        }
+        public static void CheckPawn(Pawn pawn, Gender targetGender)
+        {
+            if (pawn.RaceProps.Humanlike && pawn.gender == targetGender && (pawn.Faction == null || pawn.Faction == Faction.OfPlayer || !pawn.Faction.HostileTo(Faction.OfPlayer)) && !pawn.health.hediffSet.HasHediff(HVMPDefOf.HVMP_TargetedPsychicSuppression, false))
+            {
+                pawn.health.AddHediff(HVMPDefOf.HVMP_TargetedPsychicSuppression, null, null, null);
+            }
+        }
+        public override void GameConditionTick()
+        {
+            foreach (Map map in base.AffectedMaps)
+            {
+                List<Pawn> allPawns = map.mapPawns.AllPawns;
+                for (int i = 0; i < allPawns.Count; i++)
+                {
+                    HVMP_GameCondition_TargetedPsychicSuppression.CheckPawn(allPawns[i], this.gender);
+                }
+            }
+        }
+        public override void RandomizeSettings(float points, Map map, List<Rule> outExtraDescriptionRules, Dictionary<string, string> outExtraDescriptionConstants)
+        {
+            base.RandomizeSettings(points, map, outExtraDescriptionRules, outExtraDescriptionConstants);
+            if (map.mapPawns.FreeColonistsCount > 0)
+            {
+                this.gender = map.mapPawns.FreeColonists.RandomElement<Pawn>().gender;
+            }
+            else
+            {
+                this.gender = Rand.Element<Gender>(Gender.Male, Gender.Female);
+            }
+            outExtraDescriptionRules.Add(new Rule_String("psychicSuppressorGender", this.gender.GetLabel(false)));
+        }
+        public Gender gender;
+    }
+    public class HediffComp_TargetedPsychicSuppression : HediffComp
+    {
+        public override bool CompShouldRemove
+        {
+            get
+            {
+                if (base.Pawn.SpawnedOrAnyParentSpawned)
+                {
+                    HVMP_GameCondition_TargetedPsychicSuppression activeCondition = base.Pawn.MapHeld.gameConditionManager.GetActiveCondition<HVMP_GameCondition_TargetedPsychicSuppression>();
+                    if (activeCondition != null && base.Pawn.gender == activeCondition.gender)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+    }
     //pax branchquest: pax caelum
     public class QuestNode_AllThreeCaelumMutators : QuestNode_GameCondition
     {
@@ -9055,334 +9539,6 @@ namespace HautsPermits
         public QuestNode node;
         [MustTranslate]
         public string PIOL_description;
-    }
-    //pax branchquest: pax proximum
-    public class QuestNode_PaxProximum : QuestNode
-    {
-        private static QuestGen_Pawns.GetPawnParms CivilianPawnParams
-        {
-            get
-            {
-                return new QuestGen_Pawns.GetPawnParms
-                {
-                    mustBeOfFaction = QuestGen.slate.Get<Faction>("faction", null, false),
-                    canGeneratePawn = true,
-                    mustBeWorldPawn = true
-                };
-            }
-        }
-        protected override void RunInt()
-        {
-            if (!ModLister.CheckRoyalty("Shuttle crash rescue"))
-            {
-                return;
-            }
-            Quest quest = QuestGen.quest;
-            Slate slate = QuestGen.slate;
-            Map map = QuestGen_Get.GetMap(false, null, false);
-            Faction faction = QuestGen.slate.Get<Faction>("faction", null, false);
-            this.TryFindEnemyFaction(out Faction enemyFaction, faction);
-            float questPoints = Math.Min(slate.Get<float>("points", 500f, false),500f);
-            slate.Set<Map>("map", map, false);
-            slate.Set<int>("rescueDelay", 20000, false);
-            slate.Set<int>("leaveDelay", 30000, false);
-            slate.Set<int>("rescueShuttleAfterRaidDelay", 10000, false);
-            string text = QuestGenUtility.HardcodedTargetQuestTagWithQuestID("civilian");
-            int num = Mathf.FloorToInt(this.maxCiviliansByPointsCurve.Evaluate(questPoints));
-            Thing crashedShuttle = ThingMaker.MakeThing(this.shuttleDef, null);
-            this.TryFindShuttleCrashPosition(map, faction, crashedShuttle.def.size, new IntVec3?(crashedShuttle.def.interactionCellOffset), out IntVec3 shuttleCrashPosition);
-            List<Pawn> civilians = new List<Pawn>();
-            List<Pawn> list = new List<Pawn>();
-            for (int i = 0; i < Rand.Range(1, num) - 1; i++)
-            {
-                Pawn pawn = quest.GetPawn(QuestNode_PaxProximum.CivilianPawnParams);
-                QuestUtility.AddQuestTag(ref pawn.questTags, text);
-                pawn.health.AddHediff(HVMPDefOf.HVMP_HostileEnvironmentFilm,null);
-                civilians.Add(pawn);
-                list.Add(pawn);
-            }
-            Pawn asker = quest.GetPawn(new QuestGen_Pawns.GetPawnParms
-            {
-                mustBeOfFaction = faction,
-                canGeneratePawn = true,
-                mustBeWorldPawn = true,
-                seniorityRange = new FloatRange(0f),
-                mustHaveRoyalTitleInCurrentFaction = false
-            });
-            asker.health.AddHediff(HVMPDefOf.HVMP_HostileEnvironmentFilm, null);
-            civilians.Add(asker);
-            List<Pawn> soldiers = new List<Pawn>();
-            bool mayhemMode = HVMP_Mod.settings.proxX;
-            int soldierCount = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.prox1,mayhemMode) ? 0 : Rand.Range(1, Mathf.FloorToInt(this.maxSoldiersByPointsCurve.Evaluate(questPoints)));
-            for (int j = 0; j < soldierCount; j++)
-            {
-                Pawn pawn2 = quest.GetPawn(new QuestGen_Pawns.GetPawnParms
-                {
-                    mustBeOfFaction = faction,
-                    canGeneratePawn = true,
-                    mustBeOfKind = this.soldierDefs.RandomElement(),
-                    mustBeWorldPawn = true,
-                    mustBeCapableOfViolence = true
-                });
-                pawn2.health.AddHediff(HVMPDefOf.HVMP_HostileEnvironmentFilm, null);
-                soldiers.Add(pawn2);
-            }
-            List<Pawn> allPassengers = new List<Pawn>();
-            allPassengers.AddRange(soldiers);
-            allPassengers.AddRange(civilians);
-            quest.BiocodeWeapons(allPassengers, null);
-            Thing rescueShuttle = QuestGen_Shuttle.GenerateShuttle(Faction.OfEmpire, allPassengers, null, false, false, false, -1, false, false, false, false, null, null, -1, null, false, true, false, false, false);
-            string text2 = QuestGenUtility.HardcodedSignalWithQuestID("soldiers.Rescued");
-            quest.RemoveFromRequiredPawnsOnRescue(rescueShuttle, soldiers, text2);
-            quest.Delay(120, delegate
-            {
-                quest.Letter(LetterDefOf.NegativeEvent, null, null, null, null, false, QuestPart.SignalListenMode.OngoingOnly, Gen.YieldSingle<Thing>(crashedShuttle), false, "LetterTextShuttleCrashed".Translate(), null, "LetterLabelShuttleCrashed".Translate(), null, null);
-                quest.SpawnSkyfaller(map, ThingDefOf.ShuttleCrashing, Gen.YieldSingle<Thing>(crashedShuttle), Faction.OfPlayer, new IntVec3?(shuttleCrashPosition), null, false, false, null, null);
-                IEnumerable<Thing> allPassengers2 = allPassengers;
-                IntVec3? intVec = new IntVec3?(shuttleCrashPosition);
-                quest.DropPods(map.Parent, allPassengers2, null, null, null, null, new bool?(false), false, false, false, null, null, QuestPart.SignalListenMode.OngoingOnly, intVec, true, false, false, false, null);
-                quest.DefendPoint(map.Parent, asker, shuttleCrashPosition, soldiers, faction, null, null, new float?((float)12), false, false);
-                IntVec3 intVec2 = shuttleCrashPosition + IntVec3.South;
-                quest.WaitForEscort(map.Parent, civilians, faction, intVec2, null, false);
-                string text17 = QuestGenUtility.HardcodedSignalWithQuestID("rescueShuttle.Spawned");
-                quest.ExitOnShuttle(map.Parent, allPassengers, faction, rescueShuttle, text17, false);
-                Quest quest3 = quest;
-                int num5 = 20000;
-                IEnumerable<Pawn> civilians2 = civilians;
-                Action action = (delegate
-                {
-                    quest.Letter(LetterDefOf.NeutralEvent, null, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, Gen.YieldSingle<Thing>(rescueShuttle), false, "[rescueShuttleArrivedLetterText]", null, "[rescueShuttleArrivedLetterLabel]", null, null);
-                    TransportShip transportShip = quest.GenerateTransportShip(TransportShipDefOf.Ship_Shuttle, null, rescueShuttle, null).transportShip;
-                    quest.SendTransportShipAwayOnCleanup(transportShip, false, TransportShipDropMode.NonRequired);
-                    IntVec3 intVec3;
-                    DropCellFinder.TryFindDropSpotNear(shuttleCrashPosition, map, out intVec3, false, false, false, new IntVec2?(ThingDefOf.Shuttle.Size + new IntVec2(2, 2)), false);
-                    quest.AddShipJob_Arrive(transportShip, map.Parent, null, new IntVec3?(intVec3), ShipJobStartMode.Instant, faction, null);
-                    quest.AddShipJob_WaitTime(transportShip, 30000, true, allPassengers.Cast<Thing>().ToList<Thing>(), null);
-                    quest.ShuttleLeaveDelay(rescueShuttle, 30000, null, null, null, null);
-                    quest.AddShipJob_FlyAway(transportShip, null, null, TransportShipDropMode.None, null);
-                });
-                quest3.ShuttleDelay(num5, civilians2, action, null, null, true);
-                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.prox3, mayhemMode) && !this.ROTSJ_incidents.NullOrEmpty())
-                {
-                    IncidentParms incidentParms = StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map);
-                    incidentParms.forced = true;
-                    if (incidentParms.points < 500)
-                    {
-                        incidentParms.points = 500;
-                    }
-                    List<IncidentDef> ids = this.ROTSJ_incidents.Where((IncidentDef incident)=>incident.Worker.CanFireNow(incidentParms)).ToList();
-                    if (ids.Count > 0)
-                    {
-                        QuestPart_Proximim_ROTSJ qpROTSJ = new QuestPart_Proximim_ROTSJ();
-                        qpROTSJ.ROTSJ_incident = ids.RandomElement();
-                        qpROTSJ.map = QuestGen.slate.Get<Map>("map", null, false);
-                        qpROTSJ.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(quest.InitiateSignal);
-                        quest.AddPart(qpROTSJ);
-                        QuestGen.AddQuestDescriptionRules(new List<Rule>
-                        {
-                            new Rule_String("mutator_ROTSJ_info", this.ROTSJ_description.Formatted())
-                        });
-                    }
-                } else {
-                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_ROTSJ_info", " ") });
-                }
-                this.TryFindRaidWalkInPosition(map, shuttleCrashPosition, out IntVec3 walkIntSpot);
-                float soldiersTotalCombatPower = 0f;
-                for (int k = 0; k < soldiers.Count; k++)
-                {
-                    soldiersTotalCombatPower += soldiers[k].kindDef.combatPower;
-                }
-                int raidDelay = this.HOTH_delay_off.RandomInRange;
-                float raidScalar = this.HOTH_raidScalar_off;
-                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.prox2, mayhemMode))
-                {
-                    raidScalar = this.HOTH_raidScalar_on;
-                    raidDelay = this.HOTH_delay_on.RandomInRange;
-                    QuestGen.AddQuestDescriptionRules(new List<Rule>
-                    {
-                        new Rule_String("mutator_HOTH_info", this.HOTH_description.Formatted())
-                    });
-                } else {
-                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_HOTH_info", " ") });
-                }
-                quest.Delay(raidDelay, delegate
-                {
-                    List<Pawn> list2 = PawnGroupMakerUtility.GeneratePawns(new PawnGroupMakerParms
-                    {
-                        faction = enemyFaction,
-                        groupKind = PawnGroupKindDefOf.Combat,
-                        points = Math.Max(questPoints * raidScalar,enemyFaction.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat,null)*1.05f),
-                        generateFightersOnly = true,
-                        tile = map.Tile
-                    }, true).ToList<Pawn>();
-                    for (int l = 0; l < list2.Count; l++)
-                    {
-                        Find.WorldPawns.PassToWorld(list2[l], PawnDiscardDecideMode.Decide);
-                        QuestGen.AddToGeneratedPawns(list2[l]);
-                    }
-                    QuestPart_PawnsArrive questPart_PawnsArrive = new QuestPart_PawnsArrive();
-                    questPart_PawnsArrive.pawns.AddRange(list2);
-                    questPart_PawnsArrive.arrivalMode = PawnsArrivalModeDefOf.EdgeWalkIn;
-                    questPart_PawnsArrive.joinPlayer = false;
-                    questPart_PawnsArrive.mapParent = map.Parent;
-                    questPart_PawnsArrive.spawnNear = walkIntSpot;
-                    questPart_PawnsArrive.inSignal = QuestGen.slate.Get<string>("inSignal", null, false);
-                    questPart_PawnsArrive.sendStandardLetter = false;
-                    quest.AddPart(questPart_PawnsArrive);
-                    quest.AssaultThings(map.Parent, list2, enemyFaction, allPassengers, null, null, true);
-                    quest.Letter(LetterDefOf.ThreatBig, null, null, enemyFaction, null, false, QuestPart.SignalListenMode.OngoingOnly, list2, false, "[raidArrivedLetterText]", null, "[raidArrivedLetterLabel]", null, null);
-                }, null, null, null, false, null, null, false, null, null, "RaidDelay", false, QuestPart.SignalListenMode.OngoingOnly, false);
-            }, null, null, null, false, null, null, false, null, null, null, false, QuestPart.SignalListenMode.OngoingOnly, false);
-            string text3 = QuestGenUtility.HardcodedSignalWithQuestID("rescueShuttle.SentSatisfied");
-            string text4 = QuestGenUtility.HardcodedSignalWithQuestID("rescueShuttle.SentUnsatisfied");
-            string[] array = new string[] { text3, text4 };
-            string text5 = QuestGenUtility.HardcodedSignalWithQuestID("rescueShuttle.Destroyed");
-            string text6 = QuestGenUtility.HardcodedSignalWithQuestID("rescueShuttle.LeftBehind");
-            string text7 = QuestGenUtility.HardcodedSignalWithQuestID("asker.Destroyed");
-            string text8 = QuestGenUtility.HardcodedSignalWithQuestID("civilian.Destroyed");
-            string text9 = QuestGenUtility.HardcodedSignalWithQuestID("map.MapRemoved");
-            quest.GoodwillChangeShuttleSentThings(faction, list, -5, null, array, text5, HistoryEventDefOf.ShuttleGuardsMissedShuttle, true, false, QuestPart.SignalListenMode.Always);
-            quest.GoodwillChangeShuttleSentThings(faction, Gen.YieldSingle<Pawn>(asker), -10, null, array, text5, HistoryEventDefOf.ShuttleCommanderMissedShuttle, true, false, QuestPart.SignalListenMode.Always);
-            quest.Leave(allPassengers, "", false, true, null, false);
-            quest.Letter(LetterDefOf.PositiveEvent, text3, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, null, false, "[questCompletedSuccessLetterText]", null, "[questCompletedSuccessLetterLabel]", null, null);
-            string questSuccess = QuestGen.GenerateNewSignal("QuestSuccess", true);
-            quest.SignalPass(null, text3, questSuccess);
-            quest.AnyOnTransporter(allPassengers, rescueShuttle, delegate
-            {
-                Quest quest5 = quest;
-                IEnumerable<Pawn> enumerable = Gen.YieldSingle<Pawn>(asker);
-                Thing rescueShuttle2 = rescueShuttle;
-                Action action2= (delegate
-                {
-                    quest.Letter(LetterDefOf.PositiveEvent, null, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, null, false, "[questCompletedCiviliansLostSuccessLetterText]", null, "[questCompletedCiviliansLostSuccessLetterLabel]", null, null);
-                    quest.SignalPass(null, null, questSuccess);
-                });
-                Action action3= (delegate
-                {
-                    quest.Letter(LetterDefOf.NegativeEvent, null, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, null, false, "[askerLostLetterText]", null, "[askerLostLetterLabel]", null, null);
-                    quest.End(QuestEndOutcome.Fail, 0, null, null, QuestPart.SignalListenMode.OngoingOnly, false, false);
-                });
-                quest5.AnyOnTransporter(enumerable, rescueShuttle2, action2, action3, null, null, null, QuestPart.SignalListenMode.OngoingOnly);
-            }, delegate {
-                quest.Letter(LetterDefOf.NegativeEvent, null, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, null, false, "[allLostLetterText]", null, "[allLostLetterLabel]", null, null);
-                quest.End(QuestEndOutcome.Fail, 0, null, null, QuestPart.SignalListenMode.OngoingOnly, false, false);
-            }, text4, null, null, QuestPart.SignalListenMode.OngoingOnly);
-            quest.Letter(LetterDefOf.NegativeEvent, text7, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, Gen.YieldSingle<Pawn>(asker), false, "[askerDiedLetterText]", null, "[askerDiedLetterLabel]", null, null);
-            quest.End(QuestEndOutcome.Fail, 0, null, text7, QuestPart.SignalListenMode.OngoingOnly, false, false);
-            quest.Letter(LetterDefOf.NegativeEvent, text8, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, civilians, false, "[civilianDiedLetterText]", null, "[civilianDiedLetterLabel]", null, null);
-            quest.End(QuestEndOutcome.Fail, 0, null, text8, QuestPart.SignalListenMode.OngoingOnly, false, false);
-            quest.Letter(LetterDefOf.NegativeEvent, text5, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, Gen.YieldSingle<Thing>(rescueShuttle), false, "[shuttleDestroyedLetterText]", null, "[shuttleDestroyedLetterLabel]", null, null);
-            quest.End(QuestEndOutcome.Fail, 0, null, text5, QuestPart.SignalListenMode.OngoingOnly, false, false);
-            quest.Letter(LetterDefOf.NegativeEvent, text6, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, Gen.YieldSingle<Thing>(rescueShuttle), false, "[shuttleLeftBehindLetterText]", null, "[shuttleLeftBehindLetterLabel]", null, null);
-            quest.End(QuestEndOutcome.Fail, 0, null, text6, QuestPart.SignalListenMode.OngoingOnly, false, false);
-            quest.End(QuestEndOutcome.Fail, 0, null, QuestGenUtility.HardcodedSignalWithQuestID("asker.LeftMap"), QuestPart.SignalListenMode.OngoingOnly, true, false);
-            string text10 = QuestGenUtility.HardcodedSignalWithQuestID("askerFaction.BecameHostileToPlayer");
-            quest.End(QuestEndOutcome.Fail, 0, null, text10, QuestPart.SignalListenMode.OngoingOnly, true, false);
-            quest.End(QuestEndOutcome.InvalidPreAcceptance, 0, null, text10, QuestPart.SignalListenMode.NotYetAcceptedOnly, false, false);
-            quest.Letter(LetterDefOf.NegativeEvent, text9, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, Gen.YieldSingle<Pawn>(asker), false, "[mapRemovedLetterText]", null, "[mapRemovedLetterLabel]", null, null);
-            quest.End(QuestEndOutcome.Fail, 0, null, text9, QuestPart.SignalListenMode.OngoingOnly, false, false);
-            slate.Set<Pawn>("asker", asker, false);
-            slate.Set<Faction>("askerFaction", faction, false);
-            slate.Set<Faction>("enemyFaction", enemyFaction, false);
-            slate.Set<List<Pawn>>("soldiers", soldiers, false);
-            slate.Set<List<Pawn>>("civilians", civilians, false);
-            slate.Set<int>("civilianCountMinusOne", civilians.Count - 1, false);
-            slate.Set<Thing>("rescueShuttle", rescueShuttle, false);
-        }
-        private bool TryFindEnemyFaction(out Faction enemyFaction, Faction faction)
-        {
-            return Find.FactionManager.AllFactionsVisible.Where((Faction f) => f.HostileTo(faction) && f.HostileTo(Faction.OfPlayer)).TryRandomElement(out enemyFaction);
-        }
-        private bool TryFindShuttleCrashPosition(Map map, Faction faction, IntVec2 size, IntVec3? interactionCell, out IntVec3 spot)
-        {
-            return DropCellFinder.FindSafeLandingSpot(out spot, faction, map, 35, 15, 25, new IntVec2?(size), interactionCell);
-        }
-        private bool TryFindRaidWalkInPosition(Map map, IntVec3 shuttleCrashSpot, out IntVec3 spawnSpot)
-        {
-            Predicate<IntVec3> predicate = (IntVec3 p) => (map.TileInfo.AllowRoofedEdgeWalkIn || !map.roofGrid.Roofed(p)) && p.Walkable(map) && map.reachability.CanReach(p, shuttleCrashSpot, PathEndMode.OnCell, TraverseMode.NoPassClosedDoors, Danger.Some);
-            if (RCellFinder.TryFindEdgeCellFromPositionAvoidingColony(shuttleCrashSpot, map, predicate, out spawnSpot))
-            {
-                return true;
-            }
-            if (CellFinder.TryFindRandomEdgeCellWith(predicate, map, CellFinder.EdgeRoadChance_Hostile, out spawnSpot))
-            {
-                return true;
-            }
-            spawnSpot = IntVec3.Invalid;
-            return false;
-        }
-        protected override bool TestRunInt(Slate slate)
-        {
-            if (!Find.Storyteller.difficulty.allowViolentQuests)
-            {
-                return false;
-            }
-            Faction faction = QuestGen.slate.Get<Faction>("faction", null, false);
-            if (faction == null)
-            {
-                HVMP_Utility.TryFindPaxFaction(out faction);
-            }
-            if (faction == null)
-            {
-                return false;
-            }
-            Pawn pawn;
-            if (!QuestGen_Pawns.GetPawnTest(QuestNode_PaxProximum.CivilianPawnParams, out pawn))
-            {
-                return false;
-            }
-            Faction enemyFaction;
-            if (!this.TryFindEnemyFaction(out enemyFaction, faction))
-            {
-                return false;
-            }
-            Map map = QuestGen_Get.GetMap(false, null, true);
-            return map != null && this.TryFindShuttleCrashPosition(map, faction, ThingDefOf.ShuttleCrashed.size, new IntVec3?(ThingDefOf.ShuttleCrashed.interactionCellOffset), out IntVec3 intVec) && this.TryFindRaidWalkInPosition(map, intVec, out IntVec3 intVec2);
-        }
-        public FactionDef faction;
-        public SimpleCurve maxCiviliansByPointsCurve;
-        public SimpleCurve maxSoldiersByPointsCurve;
-        public List<PawnKindDef> soldierDefs;
-        public ThingDef shuttleDef;
-        public float HOTH_raidScalar_on;
-        public float HOTH_raidScalar_off;
-        public IntRange HOTH_delay_on;
-        public IntRange HOTH_delay_off;
-        [MustTranslate]
-        public string HOTH_description;
-        public List<IncidentDef> ROTSJ_incidents;
-        [MustTranslate]
-        public string ROTSJ_description;
-    }
-    public class QuestPart_Proximim_ROTSJ : QuestPart
-    {
-        public override void Notify_QuestSignalReceived(Signal signal)
-        {
-            base.Notify_QuestSignalReceived(signal);
-            if (signal.tag == this.inSignal)
-            {
-                if (this.ROTSJ_incident != null)
-                {
-                    IncidentParms incidentParms = StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map);
-                    incidentParms.forced = true;
-                    if (incidentParms.points < 500)
-                    {
-                        incidentParms.points = 500;
-                    }
-                    Find.Storyteller.incidentQueue.Add(this.ROTSJ_incident, Find.TickManager.TicksGame + 60, incidentParms, 0);
-                }
-            }
-        }
-        public override void ExposeData()
-        {
-            base.ExposeData();
-            Scribe_Defs.Look<IncidentDef>(ref this.ROTSJ_incident, "ROTSJ_incident");
-            Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-            Scribe_References.Look<Map>(ref this.map, "map", false);
-        }
-        public IncidentDef ROTSJ_incident;
-        public string inSignal;
-        public Map map;
     }
     //pax branchquest: pax vox
     public class QuestNode_GenerateVox : QuestNode
@@ -10076,487 +10232,337 @@ namespace HautsPermits
         [MustTranslate]
         public string TPBU_description;
     }
-    //rover branchquest: ares
-    public class QuestNode_AllThreeAresMutators : QuestNode
+    //rover branchquest: icarus
+    public class QuestNode_Icarus : QuestNode
     {
-        protected override bool TestRunInt(Slate slate)
+        private static QuestGen_Pawns.GetPawnParms CivilianPawnParams
         {
-            return Find.Storyteller.difficulty.allowViolentQuests && slate.Exists("map", false) && slate.Exists("enemyFaction", false);
+            get
+            {
+                return new QuestGen_Pawns.GetPawnParms
+                {
+                    mustBeOfFaction = QuestGen.slate.Get<Faction>("faction", null, false),
+                    canGeneratePawn = true,
+                    mustBeWorldPawn = true
+                };
+            }
         }
         protected override void RunInt()
         {
+            if (!ModLister.CheckRoyalty("Shuttle crash rescue"))
+            {
+                return;
+            }
+            Quest quest = QuestGen.quest;
             Slate slate = QuestGen.slate;
-            Map map = QuestGen.slate.Get<Map>("map", null, false);
-            float num = QuestGen.slate.Get<float>("points", 0f, false);
-            Faction faction = QuestGen.slate.Get<Faction>("enemyFaction", null, false);
-            QuestPart_Incident questPart_Incident = new QuestPart_Incident();
-            questPart_Incident.debugLabel = "raid";
-            questPart_Incident.incident = HVMPDefOf.HVMP_RaidAres;
-            int num2 = 0;
-            IncidentParms incidentParms;
-            PawnGroupMakerParms defaultPawnGroupMakerParms;
-            IEnumerable<PawnKindDef> enumerable;
-            do
+            Map map = QuestGen_Get.GetMap(false, null, false);
+            Faction faction = QuestGen.slate.Get<Faction>("faction", null, false);
+            this.TryFindEnemyFaction(out Faction enemyFaction, faction);
+            float questPoints = Math.Min(slate.Get<float>("points", 500f, false), 500f);
+            slate.Set<Map>("map", map, false);
+            slate.Set<int>("rescueDelay", 20000, false);
+            slate.Set<int>("leaveDelay", 30000, false);
+            slate.Set<int>("rescueShuttleAfterRaidDelay", 10000, false);
+            string text = QuestGenUtility.HardcodedTargetQuestTagWithQuestID("civilian");
+            int num = Mathf.FloorToInt(this.maxCiviliansByPointsCurve.Evaluate(questPoints));
+            Thing crashedShuttle = ThingMaker.MakeThing(this.shuttleDef, null);
+            this.TryFindShuttleCrashPosition(map, faction, crashedShuttle.def.size, new IntVec3?(crashedShuttle.def.interactionCellOffset), out IntVec3 shuttleCrashPosition);
+            List<Pawn> civilians = new List<Pawn>();
+            List<Pawn> list = new List<Pawn>();
+            for (int i = 0; i < Rand.Range(1, num) - 1; i++)
             {
-                incidentParms = this.GenerateIncidentParms(map, num, faction, slate, questPart_Incident);
-                defaultPawnGroupMakerParms = IncidentParmsUtility.GetDefaultPawnGroupMakerParms(PawnGroupKindDefOf.Combat, incidentParms, true);
-                defaultPawnGroupMakerParms.points = IncidentWorker_Raid.AdjustedRaidPoints(defaultPawnGroupMakerParms.points, incidentParms.raidArrivalMode, incidentParms.raidStrategy, defaultPawnGroupMakerParms.faction, PawnGroupKindDefOf.Combat, incidentParms.target, null);
-                enumerable = PawnGroupMakerUtility.GeneratePawnKindsExample(defaultPawnGroupMakerParms);
-                num2++;
+                Pawn pawn = quest.GetPawn(QuestNode_Icarus.CivilianPawnParams);
+                QuestUtility.AddQuestTag(ref pawn.questTags, text);
+                pawn.health.AddHediff(HVMPDefOf.HVMP_HostileEnvironmentFilm, null);
+                civilians.Add(pawn);
+                list.Add(pawn);
             }
-            while (!enumerable.Any<PawnKindDef>() && num2 < 50);
-            if (!enumerable.Any<PawnKindDef>())
+            Pawn asker = quest.GetPawn(new QuestGen_Pawns.GetPawnParms
             {
-                string[] array = new string[6];
-                array[0] = "No pawnkinds example for ";
-                array[1] = QuestGen.quest.root.defName;
-                array[2] = " parms=";
-                int num3 = 3;
-                PawnGroupMakerParms pawnGroupMakerParms = defaultPawnGroupMakerParms;
-                array[num3] = ((pawnGroupMakerParms != null) ? pawnGroupMakerParms.ToString() : null);
-                array[4] = " iterations=";
-                array[5] = num2.ToString();
-                Log.Error(string.Concat(array));
-            }
-            IncidentWorker_RaidAres iwrf = (IncidentWorker_RaidAres)questPart_Incident.incident.Worker;
-            this.ImplementQuestMutators(slate, faction);
-            questPart_Incident.SetIncidentParmsAndRemoveTarget(incidentParms);
-            questPart_Incident.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal", null, false);
-            QuestGen.quest.AddPart(questPart_Incident);
-            QuestGen.AddQuestDescriptionRules(new List<Rule>
-            {
-                new Rule_String("raidPawnKinds", PawnUtility.PawnKindsToLineList(enumerable, "  - ", ColoredText.ThreatColor)),
-                new Rule_String("raidArrivalModeInfo", incidentParms.raidArrivalMode.textWillArrive.Formatted(faction))
+                mustBeOfFaction = faction,
+                canGeneratePawn = true,
+                mustBeWorldPawn = true,
+                seniorityRange = new FloatRange(0f),
+                mustHaveRoyalTitleInCurrentFaction = false
             });
-        }
-        private IncidentParms GenerateIncidentParms(Map map, float points, Faction faction, Slate slate, QuestPart_Incident questPart)
-        {
-            IncidentParms incidentParms = new IncidentParms
+            asker.health.AddHediff(HVMPDefOf.HVMP_HostileEnvironmentFilm, null);
+            civilians.Add(asker);
+            List<Pawn> soldiers = new List<Pawn>();
+            bool mayhemMode = HVMP_Mod.settings.icarusX;
+            int soldierCount = HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.icarus1, mayhemMode) ? 0 : Rand.Range(1, Mathf.FloorToInt(this.maxSoldiersByPointsCurve.Evaluate(questPoints)));
+            for (int j = 0; j < soldierCount; j++)
             {
-                forced = true,
-                target = map,
-                points = Mathf.Max(points, faction.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat, null)),
-                faction = faction,
-                pawnGroupMakerSeed = new int?(Rand.Int),
-                inSignalEnd = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignalLeave.GetValue(slate)),
-                questTag = QuestGenUtility.HardcodedTargetQuestTagWithQuestID(this.tag.GetValue(slate)),
-                canTimeoutOrFlee = (map.CanEverExit && (this.canTimeoutOrFlee.GetValue(slate) ?? true))
-            };
-            if (this.raidPawnKind.GetValue(slate) != null)
-            {
-                incidentParms.pawnKind = this.raidPawnKind.GetValue(slate);
-                incidentParms.pawnCount = Mathf.Max(1, Mathf.RoundToInt(incidentParms.points / incidentParms.pawnKind.combatPower));
-            }
-            if (this.arrivalMode.GetValue(slate) != null)
-            {
-                incidentParms.raidArrivalMode = this.arrivalMode.GetValue(slate);
-            }
-            if (!this.customLetterLabel.GetValue(slate).NullOrEmpty() || this.customLetterLabelRules.GetValue(slate) != null)
-            {
-                QuestGen.AddTextRequest("root", delegate (string x)
+                Pawn pawn2 = quest.GetPawn(new QuestGen_Pawns.GetPawnParms
                 {
-                    incidentParms.customLetterLabel = x;
-                }, QuestGenUtility.MergeRules(this.customLetterLabelRules.GetValue(slate), this.customLetterLabel.GetValue(slate), "root"));
+                    mustBeOfFaction = faction,
+                    canGeneratePawn = true,
+                    mustBeOfKind = this.soldierDefs.RandomElement(),
+                    mustBeWorldPawn = true,
+                    mustBeCapableOfViolence = true
+                });
+                pawn2.health.AddHediff(HVMPDefOf.HVMP_HostileEnvironmentFilm, null);
+                soldiers.Add(pawn2);
             }
-            if (!this.customLetterText.GetValue(slate).NullOrEmpty() || this.customLetterTextRules.GetValue(slate) != null)
+            List<Pawn> allPassengers = new List<Pawn>();
+            allPassengers.AddRange(soldiers);
+            allPassengers.AddRange(civilians);
+            quest.BiocodeWeapons(allPassengers, null);
+            Thing rescueShuttle = QuestGen_Shuttle.GenerateShuttle(Faction.OfEmpire, allPassengers, null, false, false, false, -1, false, false, false, false, null, null, -1, null, false, true, false, false, false);
+            string text2 = QuestGenUtility.HardcodedSignalWithQuestID("soldiers.Rescued");
+            quest.RemoveFromRequiredPawnsOnRescue(rescueShuttle, soldiers, text2);
+            quest.Delay(120, delegate
             {
-                QuestGen.AddTextRequest("root", delegate (string x)
+                quest.Letter(LetterDefOf.NegativeEvent, null, null, null, null, false, QuestPart.SignalListenMode.OngoingOnly, Gen.YieldSingle<Thing>(crashedShuttle), false, "LetterTextShuttleCrashed".Translate(), null, "LetterLabelShuttleCrashed".Translate(), null, null);
+                quest.SpawnSkyfaller(map, ThingDefOf.ShuttleCrashing, Gen.YieldSingle<Thing>(crashedShuttle), Faction.OfPlayer, new IntVec3?(shuttleCrashPosition), null, false, false, null, null);
+                IEnumerable<Thing> allPassengers2 = allPassengers;
+                IntVec3? intVec = new IntVec3?(shuttleCrashPosition);
+                quest.DropPods(map.Parent, allPassengers2, null, null, null, null, new bool?(false), false, false, false, null, null, QuestPart.SignalListenMode.OngoingOnly, intVec, true, false, false, false, null);
+                quest.DefendPoint(map.Parent, asker, shuttleCrashPosition, soldiers, faction, null, null, new float?((float)12), false, false);
+                IntVec3 intVec2 = shuttleCrashPosition + IntVec3.South;
+                quest.WaitForEscort(map.Parent, civilians, faction, intVec2, null, false);
+                string text17 = QuestGenUtility.HardcodedSignalWithQuestID("rescueShuttle.Spawned");
+                quest.ExitOnShuttle(map.Parent, allPassengers, faction, rescueShuttle, text17, false);
+                Quest quest3 = quest;
+                int num5 = 20000;
+                IEnumerable<Pawn> civilians2 = civilians;
+                Action action = (delegate
                 {
-                    incidentParms.customLetterText = x;
-                }, QuestGenUtility.MergeRules(this.customLetterTextRules.GetValue(slate), this.customLetterText.GetValue(slate), "root"));
-            }
-            IncidentWorker_RaidAres iwrf = (IncidentWorker_RaidAres)questPart.incident.Worker;
-            iwrf.ResolveRaidStrategy(incidentParms, PawnGroupKindDefOf.Combat);
-            iwrf.ResolveRaidArriveMode(incidentParms);
-            iwrf.ResolveRaidAgeRestriction(incidentParms);
-            if (incidentParms.raidArrivalMode.walkIn)
-            {
-                incidentParms.spawnCenter = this.walkInSpot.GetValue(slate) ?? QuestGen.slate.Get<IntVec3?>("walkInSpot", null, false) ?? IntVec3.Invalid;
-            }
-            else
-            {
-                incidentParms.spawnCenter = this.dropSpot.GetValue(slate) ?? QuestGen.slate.Get<IntVec3?>("dropSpot", null, false) ?? IntVec3.Invalid;
-            }
-            return incidentParms;
-        }
-        public void ImplementQuestMutators(Slate slate, Faction faction)
-        {
-            QuestPart_AllThreeAresMutators qpa3 = new QuestPart_AllThreeAresMutators();
-            bool mayhemMode = HVMP_Mod.settings.aresX;
-            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ares1, mayhemMode))
-            {
-                if (Rand.Chance(this.AW_conditionChance))
+                    quest.Letter(LetterDefOf.NeutralEvent, null, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, Gen.YieldSingle<Thing>(rescueShuttle), false, "[rescueShuttleArrivedLetterText]", null, "[rescueShuttleArrivedLetterLabel]", null, null);
+                    TransportShip transportShip = quest.GenerateTransportShip(TransportShipDefOf.Ship_Shuttle, null, rescueShuttle, null).transportShip;
+                    quest.SendTransportShipAwayOnCleanup(transportShip, false, TransportShipDropMode.NonRequired);
+                    IntVec3 intVec3;
+                    DropCellFinder.TryFindDropSpotNear(shuttleCrashPosition, map, out intVec3, false, false, false, new IntVec2?(ThingDefOf.Shuttle.Size + new IntVec2(2, 2)), false);
+                    quest.AddShipJob_Arrive(transportShip, map.Parent, null, new IntVec3?(intVec3), ShipJobStartMode.Instant, faction, null);
+                    quest.AddShipJob_WaitTime(transportShip, 30000, true, allPassengers.Cast<Thing>().ToList<Thing>(), null);
+                    quest.ShuttleLeaveDelay(rescueShuttle, 30000, null, null, null, null);
+                    quest.AddShipJob_FlyAway(transportShip, null, null, TransportShipDropMode.None, null);
+                });
+                quest3.ShuttleDelay(num5, civilians2, action, null, null, true);
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.icarus3, mayhemMode) && !this.ROTSJ_incidents.NullOrEmpty())
                 {
-                    qpa3.AW_condition = this.AW_conditions.RandomElement();
-                    qpa3.AW_conditionTicks = (int)(this.AW_conditionHours.RandomInRange * 2500);
+                    IncidentParms incidentParms = StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map);
+                    incidentParms.forced = true;
+                    if (incidentParms.points < 500)
+                    {
+                        incidentParms.points = 500;
+                    }
+                    List<IncidentDef> ids = this.ROTSJ_incidents.Where((IncidentDef incident) => incident.Worker.CanFireNow(incidentParms)).ToList();
+                    if (ids.Count > 0)
+                    {
+                        QuestPart_Proximim_ROTSJ qpROTSJ = new QuestPart_Proximim_ROTSJ();
+                        qpROTSJ.ROTSJ_incident = ids.RandomElement();
+                        qpROTSJ.map = QuestGen.slate.Get<Map>("map", null, false);
+                        qpROTSJ.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(quest.InitiateSignal);
+                        quest.AddPart(qpROTSJ);
+                        QuestGen.AddQuestDescriptionRules(new List<Rule>
+                        {
+                            new Rule_String("mutator_ROTSJ_info", this.ROTSJ_description.Formatted())
+                        });
+                    }
                 }
                 else
                 {
-                    qpa3.AW_bonusPoints = (float)this.AW_bonusPoints.GetValue(slate);
-                    qpa3.AW_pawnRosterOtherwise = this.AW_pawnRosterOtherwise.RandomElement();
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_ROTSJ_info", " ") });
                 }
-                QuestGen.AddQuestDescriptionRules(new List<Rule>
+                this.TryFindRaidWalkInPosition(map, shuttleCrashPosition, out IntVec3 walkIntSpot);
+                float soldiersTotalCombatPower = 0f;
+                for (int k = 0; k < soldiers.Count; k++)
                 {
-                    new Rule_String("mutator_AW_info", this.AW_description.Formatted(faction))
+                    soldiersTotalCombatPower += soldiers[k].kindDef.combatPower;
+                }
+                int raidDelay = this.HOTH_delay_off.RandomInRange;
+                float raidScalar = this.HOTH_raidScalar_off;
+                if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.icarus2, mayhemMode))
+                {
+                    raidScalar = this.HOTH_raidScalar_on;
+                    raidDelay = this.HOTH_delay_on.RandomInRange;
+                    QuestGen.AddQuestDescriptionRules(new List<Rule>
+                    {
+                        new Rule_String("mutator_HOTH_info", this.HOTH_description.Formatted())
+                    });
+                }
+                else
+                {
+                    QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_HOTH_info", " ") });
+                }
+                quest.Delay(raidDelay, delegate
+                {
+                    List<Pawn> list2 = PawnGroupMakerUtility.GeneratePawns(new PawnGroupMakerParms
+                    {
+                        faction = enemyFaction,
+                        groupKind = PawnGroupKindDefOf.Combat,
+                        points = Math.Max(questPoints * raidScalar, enemyFaction.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat, null) * 1.05f),
+                        generateFightersOnly = true,
+                        tile = map.Tile
+                    }, true).ToList<Pawn>();
+                    for (int l = 0; l < list2.Count; l++)
+                    {
+                        Find.WorldPawns.PassToWorld(list2[l], PawnDiscardDecideMode.Decide);
+                        QuestGen.AddToGeneratedPawns(list2[l]);
+                    }
+                    QuestPart_PawnsArrive questPart_PawnsArrive = new QuestPart_PawnsArrive();
+                    questPart_PawnsArrive.pawns.AddRange(list2);
+                    questPart_PawnsArrive.arrivalMode = PawnsArrivalModeDefOf.EdgeWalkIn;
+                    questPart_PawnsArrive.joinPlayer = false;
+                    questPart_PawnsArrive.mapParent = map.Parent;
+                    questPart_PawnsArrive.spawnNear = walkIntSpot;
+                    questPart_PawnsArrive.inSignal = QuestGen.slate.Get<string>("inSignal", null, false);
+                    questPart_PawnsArrive.sendStandardLetter = false;
+                    quest.AddPart(questPart_PawnsArrive);
+                    quest.AssaultThings(map.Parent, list2, enemyFaction, allPassengers, null, null, true);
+                    quest.Letter(LetterDefOf.ThreatBig, null, null, enemyFaction, null, false, QuestPart.SignalListenMode.OngoingOnly, list2, false, "[raidArrivedLetterText]", null, "[raidArrivedLetterLabel]", null, null);
+                }, null, null, null, false, null, null, false, null, null, "RaidDelay", false, QuestPart.SignalListenMode.OngoingOnly, false);
+            }, null, null, null, false, null, null, false, null, null, null, false, QuestPart.SignalListenMode.OngoingOnly, false);
+            string text3 = QuestGenUtility.HardcodedSignalWithQuestID("rescueShuttle.SentSatisfied");
+            string text4 = QuestGenUtility.HardcodedSignalWithQuestID("rescueShuttle.SentUnsatisfied");
+            string[] array = new string[] { text3, text4 };
+            string text5 = QuestGenUtility.HardcodedSignalWithQuestID("rescueShuttle.Destroyed");
+            string text6 = QuestGenUtility.HardcodedSignalWithQuestID("rescueShuttle.LeftBehind");
+            string text7 = QuestGenUtility.HardcodedSignalWithQuestID("asker.Destroyed");
+            string text8 = QuestGenUtility.HardcodedSignalWithQuestID("civilian.Destroyed");
+            string text9 = QuestGenUtility.HardcodedSignalWithQuestID("map.MapRemoved");
+            quest.GoodwillChangeShuttleSentThings(faction, list, -5, null, array, text5, HistoryEventDefOf.ShuttleGuardsMissedShuttle, true, false, QuestPart.SignalListenMode.Always);
+            quest.GoodwillChangeShuttleSentThings(faction, Gen.YieldSingle<Pawn>(asker), -10, null, array, text5, HistoryEventDefOf.ShuttleCommanderMissedShuttle, true, false, QuestPart.SignalListenMode.Always);
+            quest.Leave(allPassengers, "", false, true, null, false);
+            quest.Letter(LetterDefOf.PositiveEvent, text3, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, null, false, "[questCompletedSuccessLetterText]", null, "[questCompletedSuccessLetterLabel]", null, null);
+            string questSuccess = QuestGen.GenerateNewSignal("QuestSuccess", true);
+            quest.SignalPass(null, text3, questSuccess);
+            quest.AnyOnTransporter(allPassengers, rescueShuttle, delegate
+            {
+                Quest quest5 = quest;
+                IEnumerable<Pawn> enumerable = Gen.YieldSingle<Pawn>(asker);
+                Thing rescueShuttle2 = rescueShuttle;
+                Action action2 = (delegate
+                {
+                    quest.Letter(LetterDefOf.PositiveEvent, null, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, null, false, "[questCompletedCiviliansLostSuccessLetterText]", null, "[questCompletedCiviliansLostSuccessLetterLabel]", null, null);
+                    quest.SignalPass(null, null, questSuccess);
                 });
-            }
-            else
-            {
-                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_AW_info", " ") });
-            }
-            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ares2, mayhemMode))
-            {
-                qpa3.DRTNT_hediff = this.DRTNT_hediff;
-                qpa3.DRTNT_spyChance = this.DRTNT_spyChance;
-                QuestGen.AddQuestDescriptionRules(new List<Rule>
-                    {
-                        new Rule_String("mutator_DRTNT_info", this.DRTNT_description.Formatted(faction))
-                    });
-            }
-            else
-            {
-                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_DRTNT_info", " ") });
-            }
-            if (HVMP_Utility.MutatorEnabled(HVMP_Mod.settings.ares3, mayhemMode))
-            {
-                qpa3.TG_hediffChances = this.TG_hediffChances;
-                qpa3.TG_bonusPoints = (float)this.TG_bonusPoints.GetValue(slate);
-                qpa3.TG_pawnRoster = this.TG_pawnRoster.RandomElement();
-                QuestGen.AddQuestDescriptionRules(new List<Rule>
-                    {
-                        new Rule_String("mutator_TG_info", this.TG_description.Formatted(faction))
-                    });
-            }
-            else
-            {
-                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TG_info", " ") });
-            }
-            QuestGen.quest.AddPart(qpa3);
+                Action action3 = (delegate
+                {
+                    quest.Letter(LetterDefOf.NegativeEvent, null, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, null, false, "[askerLostLetterText]", null, "[askerLostLetterLabel]", null, null);
+                    quest.End(QuestEndOutcome.Fail, 0, null, null, QuestPart.SignalListenMode.OngoingOnly, false, false);
+                });
+                quest5.AnyOnTransporter(enumerable, rescueShuttle2, action2, action3, null, null, null, QuestPart.SignalListenMode.OngoingOnly);
+            }, delegate {
+                quest.Letter(LetterDefOf.NegativeEvent, null, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, null, false, "[allLostLetterText]", null, "[allLostLetterLabel]", null, null);
+                quest.End(QuestEndOutcome.Fail, 0, null, null, QuestPart.SignalListenMode.OngoingOnly, false, false);
+            }, text4, null, null, QuestPart.SignalListenMode.OngoingOnly);
+            quest.Letter(LetterDefOf.NegativeEvent, text7, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, Gen.YieldSingle<Pawn>(asker), false, "[askerDiedLetterText]", null, "[askerDiedLetterLabel]", null, null);
+            quest.End(QuestEndOutcome.Fail, 0, null, text7, QuestPart.SignalListenMode.OngoingOnly, false, false);
+            quest.Letter(LetterDefOf.NegativeEvent, text8, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, civilians, false, "[civilianDiedLetterText]", null, "[civilianDiedLetterLabel]", null, null);
+            quest.End(QuestEndOutcome.Fail, 0, null, text8, QuestPart.SignalListenMode.OngoingOnly, false, false);
+            quest.Letter(LetterDefOf.NegativeEvent, text5, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, Gen.YieldSingle<Thing>(rescueShuttle), false, "[shuttleDestroyedLetterText]", null, "[shuttleDestroyedLetterLabel]", null, null);
+            quest.End(QuestEndOutcome.Fail, 0, null, text5, QuestPart.SignalListenMode.OngoingOnly, false, false);
+            quest.Letter(LetterDefOf.NegativeEvent, text6, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, Gen.YieldSingle<Thing>(rescueShuttle), false, "[shuttleLeftBehindLetterText]", null, "[shuttleLeftBehindLetterLabel]", null, null);
+            quest.End(QuestEndOutcome.Fail, 0, null, text6, QuestPart.SignalListenMode.OngoingOnly, false, false);
+            quest.End(QuestEndOutcome.Fail, 0, null, QuestGenUtility.HardcodedSignalWithQuestID("asker.LeftMap"), QuestPart.SignalListenMode.OngoingOnly, true, false);
+            string text10 = QuestGenUtility.HardcodedSignalWithQuestID("askerFaction.BecameHostileToPlayer");
+            quest.End(QuestEndOutcome.Fail, 0, null, text10, QuestPart.SignalListenMode.OngoingOnly, true, false);
+            quest.End(QuestEndOutcome.InvalidPreAcceptance, 0, null, text10, QuestPart.SignalListenMode.NotYetAcceptedOnly, false, false);
+            quest.Letter(LetterDefOf.NegativeEvent, text9, null, faction, null, false, QuestPart.SignalListenMode.OngoingOnly, Gen.YieldSingle<Pawn>(asker), false, "[mapRemovedLetterText]", null, "[mapRemovedLetterLabel]", null, null);
+            quest.End(QuestEndOutcome.Fail, 0, null, text9, QuestPart.SignalListenMode.OngoingOnly, false, false);
+            slate.Set<Pawn>("asker", asker, false);
+            slate.Set<Faction>("askerFaction", faction, false);
+            slate.Set<Faction>("enemyFaction", enemyFaction, false);
+            slate.Set<List<Pawn>>("soldiers", soldiers, false);
+            slate.Set<List<Pawn>>("civilians", civilians, false);
+            slate.Set<int>("civilianCountMinusOne", civilians.Count - 1, false);
+            slate.Set<Thing>("rescueShuttle", rescueShuttle, false);
         }
-        [NoTranslate]
-        public SlateRef<string> inSignal;
-        public SlateRef<IntVec3?> walkInSpot;
-        public SlateRef<IntVec3?> dropSpot;
-        public SlateRef<string> customLetterLabel;
-        public SlateRef<string> customLetterText;
-        public SlateRef<RulePack> customLetterLabelRules;
-        public SlateRef<RulePack> customLetterTextRules;
-        public SlateRef<PawnsArrivalModeDef> arrivalMode;
-        public SlateRef<PawnKindDef> raidPawnKind;
-        public SlateRef<bool?> canTimeoutOrFlee;
-        [NoTranslate]
-        public SlateRef<string> inSignalLeave;
-        [NoTranslate]
-        public SlateRef<string> tag;
-        public float AW_conditionChance;
-        public List<GameConditionDef> AW_conditions;
-        public FloatRange AW_conditionHours;
-        public List<PawnGroupMaker> AW_pawnRosterOtherwise;
-        public SlateRef<float?> AW_bonusPoints;
-        [MustTranslate]
-        public string AW_description;
-        public float DRTNT_spyChance;
-        public HediffDef DRTNT_hediff;
-        [MustTranslate]
-        public string DRTNT_description;
-        public Dictionary<HediffDef, float> TG_hediffChances;
-        public List<PawnGroupMaker> TG_pawnRoster;
-        public SlateRef<float?> TG_bonusPoints;
-        [MustTranslate]
-        public string TG_description;
-    }
-    public class QuestPart_AllThreeAresMutators : QuestPart
-    {
-        public override void ExposeData()
+        private bool TryFindEnemyFaction(out Faction enemyFaction, Faction faction)
         {
-            base.ExposeData();
-            Scribe_Defs.Look<GameConditionDef>(ref this.AW_condition, "AW_condition");
-            Scribe_Values.Look<int>(ref this.AW_conditionTicks, "AW_conditionTicks", 0, false);
-            Scribe_Values.Look<PawnGroupMaker>(ref this.AW_pawnRosterOtherwise, "AW_pawnRosterOtherwise", null, false);
-            Scribe_Values.Look<float>(ref this.AW_bonusPoints, "AW_bonusPoints", 0f, false);
-            Scribe_Values.Look<float>(ref this.DRTNT_spyChance, "DRTNT_spyChance", 0f, false);
-            Scribe_Defs.Look<HediffDef>(ref this.DRTNT_hediff, "DRTNT_hediff");
-            Scribe_Collections.Look<HediffDef, float>(ref this.TG_hediffChances, "TG_hediffChances", LookMode.Def, LookMode.Value, ref this.tmpHediffs, ref this.tmpChances);
-            Scribe_Values.Look<PawnGroupMaker>(ref this.TG_pawnRoster, "TG_pawnRoster", null, false);
-            Scribe_Values.Look<float>(ref this.TG_bonusPoints, "TG_bonusPoints", 0f, false);
+            return Find.FactionManager.AllFactionsVisible.Where((Faction f) => f.HostileTo(faction) && f.HostileTo(Faction.OfPlayer)).TryRandomElement(out enemyFaction);
         }
-        public GameConditionDef AW_condition;
-        public int AW_conditionTicks;
-        public PawnGroupMaker AW_pawnRosterOtherwise;
-        public float AW_bonusPoints;
-        public float DRTNT_spyChance;
-        public HediffDef DRTNT_hediff;
-        public Dictionary<HediffDef, float> TG_hediffChances;
-        public PawnGroupMaker TG_pawnRoster;
-        public float TG_bonusPoints;
-        private List<HediffDef> tmpHediffs;
-        private List<float> tmpChances;
-    }
-    public class IncidentWorker_RaidAres : IncidentWorker_RaidEnemy
-    {
-        protected override bool TryExecuteWorker(IncidentParms parms)
+        private bool TryFindShuttleCrashPosition(Map map, Faction faction, IntVec2 size, IntVec3? interactionCell, out IntVec3 spot)
         {
-            List<Pawn> list;
-            if (!this.TryGenerateRaidInfo(parms, out list, false))
+            return DropCellFinder.FindSafeLandingSpot(out spot, faction, map, 35, 15, 25, new IntVec2?(size), interactionCell);
+        }
+        private bool TryFindRaidWalkInPosition(Map map, IntVec3 shuttleCrashSpot, out IntVec3 spawnSpot)
+        {
+            Predicate<IntVec3> predicate = (IntVec3 p) => (map.TileInfo.AllowRoofedEdgeWalkIn || !map.roofGrid.Roofed(p)) && p.Walkable(map) && map.reachability.CanReach(p, shuttleCrashSpot, PathEndMode.OnCell, TraverseMode.NoPassClosedDoors, Danger.Some);
+            if (RCellFinder.TryFindEdgeCellFromPositionAvoidingColony(shuttleCrashSpot, map, predicate, out spawnSpot))
+            {
+                return true;
+            }
+            if (CellFinder.TryFindRandomEdgeCellWith(predicate, map, CellFinder.EdgeRoadChance_Hostile, out spawnSpot))
+            {
+                return true;
+            }
+            spawnSpot = IntVec3.Invalid;
+            return false;
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            if (!Find.Storyteller.difficulty.allowViolentQuests)
             {
                 return false;
             }
-            List<Pawn> listMut = new List<Pawn>();
-            PawnGroupMakerParms pgmp = new PawnGroupMakerParms();
-            pgmp.tile = parms.target.Tile;
-            pgmp.faction = parms.faction;
-            pgmp.traderKind = parms.traderKind;
-            pgmp.generateFightersOnly = parms.generateFightersOnly;
-            pgmp.raidStrategy = parms.raidStrategy;
-            pgmp.forceOneDowned = parms.raidForceOneDowned;
-            pgmp.seed = parms.pawnGroupMakerSeed;
-            pgmp.ideo = parms.pawnIdeo;
-            pgmp.raidAgeRestriction = parms.raidAgeRestriction;
-            QuestPart_AllThreeAresMutators qpa3 = parms.quest.GetFirstPartOfType<QuestPart_AllThreeAresMutators>();
-            if (qpa3 != null)
+            Faction faction = QuestGen.slate.Get<Faction>("faction", null, false);
+            if (faction == null)
             {
-                if (qpa3.AW_pawnRosterOtherwise != null)
-                {
-                    pgmp.groupKind = qpa3.AW_pawnRosterOtherwise.kindDef;
-                    if (!pgmp.faction.def.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm) => pgm.kindDef == pgmp.groupKind))
-                    {
-                        pgmp.faction.def.pawnGroupMakers.Add(qpa3.AW_pawnRosterOtherwise);
-                    }
-                    float minPoints = 200f;
-                    foreach (PawnGenOption pgo in qpa3.AW_pawnRosterOtherwise.options)
-                    {
-                        float combatPower = pgo.kind.combatPower;
-                        if (combatPower > minPoints)
-                        {
-                            minPoints = combatPower;
-                        }
-                    }
-                    pgmp.points = Math.Max(qpa3.AW_bonusPoints, minPoints * 4f);
-                    foreach (Pawn pawn in qpa3.AW_pawnRosterOtherwise.GeneratePawns(pgmp, true))
-                    {
-                        listMut.Add(pawn);
-                    }
-                }
-                if (qpa3.TG_pawnRoster != null)
-                {
-                    pgmp.groupKind = qpa3.TG_pawnRoster.kindDef;
-                    if (!pgmp.faction.def.pawnGroupMakers.ContainsAny((PawnGroupMaker pgm) => pgm.kindDef == pgmp.groupKind))
-                    {
-                        pgmp.faction.def.pawnGroupMakers.Add(qpa3.AW_pawnRosterOtherwise);
-                    }
-                    float minPoints = 200f;
-                    foreach (PawnGenOption pgo in qpa3.TG_pawnRoster.options)
-                    {
-                        float combatPower = pgo.kind.combatPower;
-                        if (combatPower > minPoints)
-                        {
-                            minPoints = combatPower;
-                        }
-                    }
-                    pgmp.points = Math.Max(qpa3.TG_bonusPoints, minPoints * 4f);
-                    foreach (Pawn pawn in qpa3.TG_pawnRoster.GeneratePawns(pgmp, true))
-                    {
-                        pawn.health.AddHediff(HVMPDefOf.HVMP_HostileEnvironmentFilm);
-                        listMut.Add(pawn);
-                    }
-                }
-                if (!listMut.NullOrEmpty())
-                {
-                    parms.raidArrivalMode.Worker.Arrive(listMut, parms);
-                }
-                if (qpa3.AW_condition != null)
-                {
-                    GameCondition gameCondition = GameConditionMaker.MakeCondition(qpa3.AW_condition, qpa3.AW_conditionTicks);
-                    gameCondition.forceDisplayAsDuration = true;
-                    gameCondition.Permanent = false;
-                    gameCondition.quest = parms.quest;
-                    Map map = (Map)parms.target;
-                    if (map == null)
-                    {
-                        MapParent mapParent = gameCondition.quest.TryFindNewSuitableMapParentForRetarget();
-                        map = ((mapParent != null) ? mapParent.Map : null) ?? Find.AnyPlayerHomeMap;
-                    }
-                    if (map != null)
-                    {
-                        List<Rule> listRule = new List<Rule>();
-                        Dictionary<string, string> dictionary = new Dictionary<string, string>();
-                        gameCondition.RandomizeSettings(parms.points, map, listRule, dictionary);
-                        map.gameConditionManager.RegisterCondition(gameCondition);
-                    }
-                    Find.LetterStack.ReceiveLetter(gameCondition.LabelCap, gameCondition.LetterText, gameCondition.def.letterDef, LookTargets.Invalid, null, gameCondition.quest, null, null, 0, true);
-                }
+                HVMP_Utility.TryFindPaxFaction(out faction);
             }
-            TaggedString taggedString = this.GetLetterLabel(parms);
-            TaggedString taggedString2 = this.GetLetterText(parms, list);
-            PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter(list, ref taggedString, ref taggedString2, this.GetRelatedPawnsInfoLetterText(parms), true, true);
-            List<TargetInfo> list2 = new List<TargetInfo>();
-            if (parms.pawnGroups != null)
+            if (faction == null)
             {
-                List<List<Pawn>> list3 = IncidentParmsUtility.SplitIntoGroups(list, parms.pawnGroups);
-                if (!listMut.NullOrEmpty())
-                {
-                    list3.Add(listMut);
-                }
-                List<Pawn> list4 = list3.MaxBy((List<Pawn> x) => x.Count);
-                if (list4.Any<Pawn>())
-                {
-                    list2.Add(list4[0]);
-                }
-                for (int i = 0; i < list3.Count; i++)
-                {
-                    if (list3[i] != list4 && list3[i].Any<Pawn>())
-                    {
-                        list2.Add(list3[i][0]);
-                    }
-                }
-            } else if (list.Any<Pawn>()) {
-                foreach (Pawn pawn in list)
-                {
-                    list2.Add(pawn);
-                }
+                return false;
             }
-            base.SendStandardLetter(taggedString, taggedString2, this.GetLetterDef(), parms, list2, Array.Empty<NamedArgument>());
-            if (parms.controllerPawn == null || parms.controllerPawn.Faction != Faction.OfPlayer)
+            Pawn pawn;
+            if (!QuestGen_Pawns.GetPawnTest(QuestNode_Icarus.CivilianPawnParams, out pawn))
             {
-                if (!listMut.NullOrEmpty())
-                {
-                    list.AddRange(listMut);
-                }
-                parms.raidStrategy.Worker.MakeLords(parms, list);
+                return false;
             }
-            LessonAutoActivator.TeachOpportunity(ConceptDefOf.EquippingWeapons, OpportunityType.Critical);
-            if (!PlayerKnowledgeDatabase.IsComplete(ConceptDefOf.ShieldBelts))
+            Faction enemyFaction;
+            if (!this.TryFindEnemyFaction(out enemyFaction, faction))
             {
-                for (int j = 0; j < list.Count; j++)
-                {
-                    Pawn pawn2 = list[j];
-                    if (pawn2.apparel != null)
-                    {
-                        if (pawn2.apparel.WornApparel.Any((Apparel ap) => ap.def == ThingDefOf.Apparel_ShieldBelt))
-                        {
-                            LessonAutoActivator.TeachOpportunity(ConceptDefOf.ShieldBelts, OpportunityType.Critical);
-                            break;
-                        }
-                    }
-                }
+                return false;
             }
-            if (DebugSettings.logRaidInfo)
-            {
-                Log.Message(string.Format("Raid: {0} ({1}) {2} {3} c={4} p={5}", new object[]
-                {
-                    parms.faction.Name,
-                    parms.faction.def.defName,
-                    parms.raidArrivalMode.defName,
-                    parms.raidStrategy.defName,
-                    parms.spawnCenter,
-                    parms.points
-                }));
-            }
-            return true;
+            Map map = QuestGen_Get.GetMap(false, null, true);
+            return map != null && this.TryFindShuttleCrashPosition(map, faction, ThingDefOf.ShuttleCrashed.size, new IntVec3?(ThingDefOf.ShuttleCrashed.interactionCellOffset), out IntVec3 intVec) && this.TryFindRaidWalkInPosition(map, intVec, out IntVec3 intVec2);
         }
-        protected override void PostProcessSpawnedPawns(IncidentParms parms, List<Pawn> pawns)
-        {
-            base.PostProcessSpawnedPawns(parms, pawns);
-            QuestPart_AllThreeAresMutators qpa3 = parms.quest.GetFirstPartOfType<QuestPart_AllThreeAresMutators>();
-            if (qpa3 != null && qpa3.DRTNT_hediff != null)
-            {
-                int minSpyCount = 1;
-                foreach (Pawn p in pawns.InRandomOrder())
-                {
-                    if (p.RaceProps.intelligence == Intelligence.Humanlike && (minSpyCount > 0 || Rand.Chance(qpa3.DRTNT_spyChance)))
-                    {
-                        p.health.AddHediff(qpa3.DRTNT_hediff);
-                        minSpyCount--;
-                    }
-                    if (!qpa3.TG_hediffChances.NullOrEmpty())
-                    {
-                        foreach (KeyValuePair<HediffDef, float> kvp in qpa3.TG_hediffChances)
-                        {
-                            if (Rand.Chance(kvp.Value))
-                            {
-                                p.health.AddHediff(kvp.Key);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        public FactionDef faction;
+        public SimpleCurve maxCiviliansByPointsCurve;
+        public SimpleCurve maxSoldiersByPointsCurve;
+        public List<PawnKindDef> soldierDefs;
+        public ThingDef shuttleDef;
+        public float HOTH_raidScalar_on;
+        public float HOTH_raidScalar_off;
+        public IntRange HOTH_delay_on;
+        public IntRange HOTH_delay_off;
+        [MustTranslate]
+        public string HOTH_description;
+        public List<IncidentDef> ROTSJ_incidents;
+        [MustTranslate]
+        public string ROTSJ_description;
     }
-    public class HVMP_GameCondition_TargetedPsychicSuppression : GameCondition
+    public class QuestPart_Proximim_ROTSJ : QuestPart
     {
-        public override string LetterText
+        public override void Notify_QuestSignalReceived(Signal signal)
         {
-            get
+            base.Notify_QuestSignalReceived(signal);
+            if (signal.tag == this.inSignal)
             {
-                return base.LetterText.Formatted(this.gender.GetLabel(false).ToLower());
+                if (this.ROTSJ_incident != null)
+                {
+                    IncidentParms incidentParms = StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map);
+                    incidentParms.forced = true;
+                    if (incidentParms.points < 500)
+                    {
+                        incidentParms.points = 500;
+                    }
+                    Find.Storyteller.incidentQueue.Add(this.ROTSJ_incident, Find.TickManager.TicksGame + 60, incidentParms, 0);
+                }
             }
-        }
-        public override string Description
-        {
-            get
-            {
-                return base.Description.Formatted(this.gender.GetLabel(false).ToLower());
-            }
-        }
-        public override void Init()
-        {
-            base.Init();
         }
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look<Gender>(ref this.gender, "gender", Gender.None, false);
+            Scribe_Defs.Look<IncidentDef>(ref this.ROTSJ_incident, "ROTSJ_incident");
+            Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
+            Scribe_References.Look<Map>(ref this.map, "map", false);
         }
-        public static void CheckPawn(Pawn pawn, Gender targetGender)
-        {
-            if (pawn.RaceProps.Humanlike && pawn.gender == targetGender && (pawn.Faction == null || pawn.Faction == Faction.OfPlayer || !pawn.Faction.HostileTo(Faction.OfPlayer)) && !pawn.health.hediffSet.HasHediff(HVMPDefOf.HVMP_TargetedPsychicSuppression, false))
-            {
-                pawn.health.AddHediff(HVMPDefOf.HVMP_TargetedPsychicSuppression, null, null, null);
-            }
-        }
-        public override void GameConditionTick()
-        {
-            foreach (Map map in base.AffectedMaps)
-            {
-                List<Pawn> allPawns = map.mapPawns.AllPawns;
-                for (int i = 0; i < allPawns.Count; i++)
-                {
-                    HVMP_GameCondition_TargetedPsychicSuppression.CheckPawn(allPawns[i], this.gender);
-                }
-            }
-        }
-        public override void RandomizeSettings(float points, Map map, List<Rule> outExtraDescriptionRules, Dictionary<string, string> outExtraDescriptionConstants)
-        {
-            base.RandomizeSettings(points, map, outExtraDescriptionRules, outExtraDescriptionConstants);
-            if (map.mapPawns.FreeColonistsCount > 0)
-            {
-                this.gender = map.mapPawns.FreeColonists.RandomElement<Pawn>().gender;
-            }
-            else
-            {
-                this.gender = Rand.Element<Gender>(Gender.Male, Gender.Female);
-            }
-            outExtraDescriptionRules.Add(new Rule_String("psychicSuppressorGender", this.gender.GetLabel(false)));
-        }
-        public Gender gender;
-    }
-    public class HediffComp_TargetedPsychicSuppression : HediffComp
-    {
-        public override bool CompShouldRemove
-        {
-            get
-            {
-                if (base.Pawn.SpawnedOrAnyParentSpawned)
-                {
-                    HVMP_GameCondition_TargetedPsychicSuppression activeCondition = base.Pawn.MapHeld.gameConditionManager.GetActiveCondition<HVMP_GameCondition_TargetedPsychicSuppression>();
-                    if (activeCondition != null && base.Pawn.gender == activeCondition.gender)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
+        public IncidentDef ROTSJ_incident;
+        public string inSignal;
+        public Map map;
     }
     //rover branchquest: laelaps
     public class QuestNode_GenerateShuttle_EMMM : QuestNode
@@ -11423,52 +11429,11 @@ namespace HautsPermits
         }
         public static Map TryGetMap()
         {
-            List<Map> mapCandidates = new List<Map>();
-            foreach (Map map in Find.Maps)
-            {
-                if (map.IsPlayerHome && !map.generatorDef.isUnderground && map.Tile.Layer.IsRootSurface)
-                {
-                    mapCandidates.Add(map);
-                }
-            }
-            if (mapCandidates.Count > 0)
-            {
-                return mapCandidates.RandomElementWithFallback(null);
-            }
-            mapCandidates.Clear();
-            foreach (Map map in Find.Maps)
-            {
-                if (map.IsPlayerHome && !map.generatorDef.isUnderground)
-                {
-                    mapCandidates.Add(map);
-                }
-            }
-            if (mapCandidates.Count > 0)
-            {
-                return mapCandidates.RandomElementWithFallback(null);
-            }
-            mapCandidates.Clear();
-            foreach (Map map in Find.Maps)
-            {
-                if (!map.generatorDef.isUnderground && map.mapPawns.FreeColonists.Count > 0)
-                {
-                    mapCandidates.Add(map);
-                }
-            }
-            if (mapCandidates.Count > 0)
-            {
-                return mapCandidates.RandomElementWithFallback(null);
-            }
-            return null;
+            return HautsUtility.Quest_TryGetMap();
         }
         public static PlanetTile TryGetPlanetTile()
         {
-            Map m = HVMP_Utility.TryGetMap();
-            if (m != null)
-            {
-                return m.Tile;
-            }
-            return TileFinder.RandomStartingTile();
+            return HautsUtility.Quest_TryGetPlanetTile();
         }
         public static float TryGetPoints(Pawn caller)
         {
@@ -11868,12 +11833,12 @@ namespace HautsPermits
         public float authorizerCooldownDays = 3f;
         public float authorizerStandingGain = 6f;
         public bool fort1, fort2, fort3, interv1, interv2, interv3, mm1, mm2, mm3, research1, research2, research3, transport1, transport2, transport3;
-        public bool caelum1, caelum2, caelum3, machina1, machina2, machina3, mundi1, mundi2, mundi3, prox1, prox2, prox3, vox1, vox2, vox3;
-        public bool atlas1, atlas2, atlas3, ares1, ares2, ares3, laelaps1, laelaps2, laelaps3, odyssey1, odyssey2, odyssey3, theseus1, theseus2, theseus3;
+        public bool bellum1, bellum2, bellum3, caelum1, caelum2, caelum3, machina1, machina2, machina3, mundi1, mundi2, mundi3, vox1, vox2, vox3;
+        public bool atlas1, atlas2, atlas3, icarus1, icarus2, icarus3, laelaps1, laelaps2, laelaps3, odyssey1, odyssey2, odyssey3, theseus1, theseus2, theseus3;
         public bool ethnog1, ethnog2, ethnog3, remnant1, remnant2, remnant3, replica1, replica2, replica3, sat1, sat2, sat3, shrine1, shrine2, shrine3;
         public bool cs1, cs2, cs3, ec1, ec2, ec3, fw1, fw2, fw3, hd1, hd2, hd3, ra1, ra2, ra3;
         public bool barker1, barker2, barker3, lc1, lc2, lc3, natali1, natali2, natali3, romero1, romero2, romero3, wells1, wells2, wells3;
-        public bool fortX, intervX, mmX, researchX, transportX, caelumX, machinaX, mundiX, proxX, voxX, atlasX, aresX, laelapsX, odysseyX, theseusX, ethnogX, remnantX, replicaX, satX, shrineX, csX, ecX, fwX, hdX, raX, barkerX, lcX, nataliX, romeroX, wellsX;
+        public bool fortX, intervX, mmX, researchX, transportX, bellumX, caelumX, machinaX, mundiX, voxX, atlasX, icarusX, laelapsX, odysseyX, theseusX, ethnogX, remnantX, replicaX, satX, shrineX, csX, ecX, fwX, hdX, raX, barkerX, lcX, nataliX, romeroX, wellsX;
         public override void ExposeData()
         {
             Scribe_Values.Look(ref permitsScaleBySeniority, "permitsScaleBySeniority", false);
@@ -11915,6 +11880,10 @@ namespace HautsPermits
             Scribe_Values.Look(ref transport2, "transport2", false);
             Scribe_Values.Look(ref transport3, "transport3", false);
             Scribe_Values.Look(ref transportX, "transportX", false);
+            Scribe_Values.Look(ref bellum1, "bellum1", false);
+            Scribe_Values.Look(ref bellum2, "bellum2", false);
+            Scribe_Values.Look(ref bellum3, "bellum3", false);
+            Scribe_Values.Look(ref bellumX, "bellumX", false);
             Scribe_Values.Look(ref caelum1, "caelum1", false);
             Scribe_Values.Look(ref caelum2, "caelum2", false);
             Scribe_Values.Look(ref caelum3, "caelum3", false);
@@ -11927,10 +11896,6 @@ namespace HautsPermits
             Scribe_Values.Look(ref mundi2, "mundi2", false);
             Scribe_Values.Look(ref mundi3, "mundi3", false);
             Scribe_Values.Look(ref mundiX, "mundiX", false);
-            Scribe_Values.Look(ref prox1, "prox1", false);
-            Scribe_Values.Look(ref prox2, "prox2", false);
-            Scribe_Values.Look(ref prox3, "prox3", false);
-            Scribe_Values.Look(ref proxX, "proxX", false);
             Scribe_Values.Look(ref vox1, "vox1", false);
             Scribe_Values.Look(ref vox2, "vox2", false);
             Scribe_Values.Look(ref vox3, "vox3", false);
@@ -11939,10 +11904,10 @@ namespace HautsPermits
             Scribe_Values.Look(ref atlas2, "atlas2", false);
             Scribe_Values.Look(ref atlas3, "atlas3", false);
             Scribe_Values.Look(ref atlasX, "atlasX", false);
-            Scribe_Values.Look(ref ares1, "ares1", false);
-            Scribe_Values.Look(ref ares2, "ares2", false);
-            Scribe_Values.Look(ref ares3, "ares3", false);
-            Scribe_Values.Look(ref aresX, "aresX", false);
+            Scribe_Values.Look(ref icarus1, "icarus1", false);
+            Scribe_Values.Look(ref icarus2, "icarus2", false);
+            Scribe_Values.Look(ref icarus3, "icarus3", false);
+            Scribe_Values.Look(ref icarusX, "icarusX", false);
             Scribe_Values.Look(ref laelaps1, "laelaps1", false);
             Scribe_Values.Look(ref laelaps2, "laelaps2", false);
             Scribe_Values.Look(ref laelaps3, "laelaps3", false);
@@ -12335,68 +12300,68 @@ namespace HautsPermits
             listing_Standard2.Gap(20f);
             Text.Font = GameFont.Small;
             listing_Standard2.Label("HVMP_Label_Pax".Translate());
+            listing_Standard2.Label("HVMP_Label_Bellum".Translate(), -1, "HVMP_Tooltip_Bellum".Translate());
+            Text.Font = GameFont.Tiny;
+            bool flagPA1 = settings.bellum1;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Bellum".Translate() + ": " + "HVMP_HardMode_Label_Bellum_1".Translate(), ref flagPA1, "HVMP_HardMode_Tooltip_Bellum_1".Translate());
+            settings.bellum1 = flagPA1;
+            bool flagPA2 = settings.bellum2;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Bellum".Translate() + ": " + "HVMP_HardMode_Label_Bellum_2".Translate(), ref flagPA2, "HVMP_HardMode_Tooltip_Bellum_2".Translate());
+            settings.bellum2 = flagPA2;
+            bool flagPA3 = settings.bellum3;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Bellum".Translate() + ": " + "HVMP_HardMode_Label_Bellum_3".Translate(), ref flagPA3, "HVMP_HardMode_Tooltip_Bellum_3".Translate());
+            settings.bellum3 = flagPA3;
+            bool flagPAX = settings.bellumX;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagPAX, "HVMP_Tooltip_MayhemMode".Translate());
+            settings.bellumX = flagPAX;
+            listing_Standard2.Gap(10f);
+            Text.Font = GameFont.Small;
             listing_Standard2.Label("HVMP_Label_Caelum".Translate(), -1, "HVMP_Tooltip_Caelum".Translate());
             Text.Font = GameFont.Tiny;
-            bool flagPA1 = settings.caelum1;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Caelum".Translate() + ": " + "HVMP_HardMode_Label_Caelum_1".Translate(), ref flagPA1, "HVMP_HardMode_Tooltip_Caelum_1".Translate());
-            settings.caelum1 = flagPA1;
-            bool flagPA2 = settings.caelum2;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Caelum".Translate() + ": " + "HVMP_HardMode_Label_Caelum_2".Translate(), ref flagPA2, "HVMP_HardMode_Tooltip_Caelum_2".Translate());
-            settings.caelum2 = flagPA2;
-            bool flagPA3 = settings.caelum3;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Caelum".Translate() + ": " + "HVMP_HardMode_Label_Caelum_3".Translate(), ref flagPA3, "HVMP_HardMode_Tooltip_Caelum_3".Translate());
-            settings.caelum3 = flagPA3;
-            bool flagPAX = settings.caelumX;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagPAX, "HVMP_Tooltip_MayhemMode".Translate());
-            settings.caelumX = flagPAX;
+            bool flagPB1 = settings.caelum1;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Caelum".Translate() + ": " + "HVMP_HardMode_Label_Caelum_1".Translate(), ref flagPB1, "HVMP_HardMode_Tooltip_Caelum_1".Translate());
+            settings.caelum1 = flagPB1;
+            bool flagPB2 = settings.caelum2;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Caelum".Translate() + ": " + "HVMP_HardMode_Label_Caelum_2".Translate(), ref flagPB2, "HVMP_HardMode_Tooltip_Caelum_2".Translate());
+            settings.caelum2 = flagPB2;
+            bool flagPB3 = settings.caelum3;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Caelum".Translate() + ": " + "HVMP_HardMode_Label_Caelum_3".Translate(), ref flagPB3, "HVMP_HardMode_Tooltip_Caelum_3".Translate());
+            settings.caelum3 = flagPB3;
+            bool flagPBX = settings.caelumX;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagPBX, "HVMP_Tooltip_MayhemMode".Translate());
+            settings.caelumX = flagPBX;
             listing_Standard2.Gap(10f);
             Text.Font = GameFont.Small;
             listing_Standard2.Label("HVMP_Label_Machina".Translate(), -1, "HVMP_Tooltip_Machina".Translate());
             Text.Font = GameFont.Tiny;
-            bool flagPB1 = settings.machina1;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Machina".Translate() + ": " + "HVMP_HardMode_Label_Machina_1".Translate(), ref flagPB1, "HVMP_HardMode_Tooltip_Machina_1".Translate());
-            settings.machina1 = flagPB1;
-            bool flagPB2 = settings.machina2;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Machina".Translate() + ": " + "HVMP_HardMode_Label_Machina_2".Translate(), ref flagPB2, "HVMP_HardMode_Tooltip_Machina_2".Translate());
-            settings.machina2 = flagPB2;
-            bool flagPB3 = settings.machina3;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Machina".Translate() + ": " + "HVMP_HardMode_Label_Machina_3".Translate(), ref flagPB3, "HVMP_HardMode_Tooltip_Machina_3".Translate());
-            settings.machina3 = flagPB3;
-            bool flagPBX = settings.machinaX;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagPBX, "HVMP_Tooltip_MayhemMode".Translate());
-            settings.machinaX = flagPBX;
+            bool flagPC1 = settings.machina1;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Machina".Translate() + ": " + "HVMP_HardMode_Label_Machina_1".Translate(), ref flagPC1, "HVMP_HardMode_Tooltip_Machina_1".Translate());
+            settings.machina1 = flagPC1;
+            bool flagPC2 = settings.machina2;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Machina".Translate() + ": " + "HVMP_HardMode_Label_Machina_2".Translate(), ref flagPC2, "HVMP_HardMode_Tooltip_Machina_2".Translate());
+            settings.machina2 = flagPC2;
+            bool flagPC3 = settings.machina3;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Machina".Translate() + ": " + "HVMP_HardMode_Label_Machina_3".Translate(), ref flagPC3, "HVMP_HardMode_Tooltip_Machina_3".Translate());
+            settings.machina3 = flagPC3;
+            bool flagPCX = settings.machinaX;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagPCX, "HVMP_Tooltip_MayhemMode".Translate());
+            settings.machinaX = flagPCX;
             listing_Standard2.Gap(10f);
             Text.Font = GameFont.Small;
             listing_Standard2.Label("HVMP_Label_Mundi".Translate(), -1, "HVMP_Tooltip_Mundi".Translate());
             Text.Font = GameFont.Tiny;
-            bool flagPC1 = settings.mundi1;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Mundi".Translate() + ": " + "HVMP_HardMode_Label_Mundi_1".Translate(), ref flagPC1, "HVMP_HardMode_Tooltip_Mundi_1".Translate());
-            settings.mundi1 = flagPC1;
-            bool flagPC2 = settings.mundi2;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Mundi".Translate() + ": " + "HVMP_HardMode_Label_Mundi_2".Translate(), ref flagPC2, "HVMP_HardMode_Tooltip_Mundi_2".Translate());
-            settings.mundi2 = flagPC2;
-            bool flagPC3 = settings.mundi3;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Mundi".Translate() + ": " + "HVMP_HardMode_Label_Mundi_3".Translate(), ref flagPC3, "HVMP_HardMode_Tooltip_Mundi_3".Translate());
-            settings.mundi3 = flagPC3;
-            bool flagPCX = settings.mundiX;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagPCX, "HVMP_Tooltip_MayhemMode".Translate());
-            settings.mundiX = flagPCX;
-            listing_Standard2.Gap(10f);
-            Text.Font = GameFont.Small;
-            listing_Standard2.Label("HVMP_Label_Populus".Translate(), -1, "HVMP_Tooltip_Populus".Translate());
-            Text.Font = GameFont.Tiny;
-            bool flagPD1 = settings.prox1;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Populus".Translate() + ": " + "HVMP_HardMode_Label_Populus_1".Translate(), ref flagPD1, "HVMP_HardMode_Tooltip_Populus_1".Translate());
-            settings.prox1 = flagPD1;
-            bool flagPD2 = settings.prox2;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Populus".Translate() + ": " + "HVMP_HardMode_Label_Populus_2".Translate(), ref flagPD2, "HVMP_HardMode_Tooltip_Populus_2".Translate());
-            settings.prox2 = flagPD2;
-            bool flagPD3 = settings.prox3;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Populus".Translate() + ": " + "HVMP_HardMode_Label_Populus_3".Translate(), ref flagPD3, "HVMP_HardMode_Tooltip_Populus_3".Translate());
-            settings.prox3 = flagPD3;
-            bool flagPDX = settings.proxX;
+            bool flagPD1 = settings.mundi1;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Mundi".Translate() + ": " + "HVMP_HardMode_Label_Mundi_1".Translate(), ref flagPD1, "HVMP_HardMode_Tooltip_Mundi_1".Translate());
+            settings.mundi1 = flagPD1;
+            bool flagPD2 = settings.mundi2;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Mundi".Translate() + ": " + "HVMP_HardMode_Label_Mundi_2".Translate(), ref flagPD2, "HVMP_HardMode_Tooltip_Mundi_2".Translate());
+            settings.mundi2 = flagPD2;
+            bool flagPD3 = settings.mundi3;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Mundi".Translate() + ": " + "HVMP_HardMode_Label_Mundi_3".Translate(), ref flagPD3, "HVMP_HardMode_Tooltip_Mundi_3".Translate());
+            settings.mundi3 = flagPD3;
+            bool flagPDX = settings.mundiX;
             listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagPDX, "HVMP_Tooltip_MayhemMode".Translate());
-            settings.proxX = flagPDX;
+            settings.mundiX = flagPDX;
             listing_Standard2.Gap(10f);
             Text.Font = GameFont.Small;
             listing_Standard2.Label("HVMP_Label_Vox".Translate(), -1, "HVMP_Tooltip_Vox".Translate());
@@ -12432,20 +12397,20 @@ namespace HautsPermits
             settings.atlasX = flagRAX;
             listing_Standard2.Gap(10f);
             Text.Font = GameFont.Small;
-            listing_Standard2.Label("HVMP_Label_Ares".Translate(), -1, "HVMP_Tooltip_Ares".Translate());
+            listing_Standard2.Label("HVMP_Label_Icarus".Translate(), -1, "HVMP_Tooltip_Icarus".Translate());
             Text.Font = GameFont.Tiny;
-            bool flagRB1 = settings.ares1;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Ares".Translate() + ": " + "HVMP_HardMode_Label_Ares_1".Translate(), ref flagRB1, "HVMP_HardMode_Tooltip_Ares_1".Translate());
-            settings.ares1 = flagRB1;
-            bool flagRB2 = settings.ares2;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Ares".Translate() + ": " + "HVMP_HardMode_Label_Ares_2".Translate(), ref flagRB2, "HVMP_HardMode_Tooltip_Ares_2".Translate());
-            settings.ares2 = flagRB2;
-            bool flagRB3 = settings.ares3;
-            listing_Standard2.CheckboxLabeled("HVMP_Label_Ares".Translate() + ": " + "HVMP_HardMode_Label_Ares_3".Translate(), ref flagRB3, "HVMP_HardMode_Tooltip_Ares_3".Translate());
-            settings.ares3 = flagRB3;
-            bool flagRBX = settings.aresX;
+            bool flagRB1 = settings.icarus1;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Icarus".Translate() + ": " + "HVMP_HardMode_Label_Icarus_1".Translate(), ref flagRB1, "HVMP_HardMode_Tooltip_Icarus_1".Translate());
+            settings.icarus1 = flagRB1;
+            bool flagRB2 = settings.icarus2;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Icarus".Translate() + ": " + "HVMP_HardMode_Label_Icarus_2".Translate(), ref flagRB2, "HVMP_HardMode_Tooltip_Icarus_2".Translate());
+            settings.icarus2 = flagRB2;
+            bool flagRB3 = settings.icarus3;
+            listing_Standard2.CheckboxLabeled("HVMP_Label_Icarus".Translate() + ": " + "HVMP_HardMode_Label_Icarus_3".Translate(), ref flagRB3, "HVMP_HardMode_Tooltip_Icarus_3".Translate());
+            settings.icarus3 = flagRB3;
+            bool flagRBX = settings.icarusX;
             listing_Standard2.CheckboxLabeled("HVMP_Label_MayhemMode".Translate(), ref flagRBX, "HVMP_Tooltip_MayhemMode".Translate());
-            settings.aresX = flagRBX;
+            settings.icarusX = flagRBX;
             listing_Standard2.Gap(10f);
             Text.Font = GameFont.Small;
             listing_Standard2.Label("HVMP_Label_Laelaps".Translate(), -1, "HVMP_Tooltip_Laelaps".Translate());
