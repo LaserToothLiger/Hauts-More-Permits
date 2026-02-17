@@ -253,8 +253,8 @@
       <li>HVMP_CommerceTitle</li>
     </royalTitleTags>
 	<colorSpectrum>
-      <li>(0.6824,0.6589,0.0745)</li>
-      <li>(0.6,0.6,0.62)</li>
+      <li>(115,111,0)</li>
+      <li>(232,232,154)</li>
     </colorSpectrum>
 	<requiredMemes>
 	  <li MayRequire="VanillaExpanded.VMemesE">VME_Trader</li>
@@ -284,8 +284,8 @@
       <li>HVMP_PaxTitle</li>
     </royalTitleTags>
 	<colorSpectrum>
-      <li>(1,0.5804,0.5804)</li>
-      <li>(1,0.97,0.97)</li>
+      <li>(230,122,129)</li>
+      <li>(255,247,247)</li>
     </colorSpectrum>
 	<requiredMemes>
 	  <li MayRequire="seti.millitarism">Seti_Militarism</li><!--we will teach the world of our peaceful ways. by FORCE-->
@@ -318,8 +318,8 @@
       <li>HVMP_RoverTitle</li>
     </royalTitleTags>
 	<colorSpectrum>
-      <li>(0.6039, 0.4941, 0.4941)</li>
-      <li>(0.9216, 0.9137, 0.7294)</li>
+      <li>(110,79,69)</li>
+      <li>(194,192,138)</li>
     </colorSpectrum>
 	<requiredMemes>
 	  <li MayRequire="VanillaExpanded.VMemesE">VME_Nomad</li>
@@ -349,8 +349,8 @@
       <li>HVMP_ArchiveTitle</li>
     </royalTitleTags>
 	<colorSpectrum>
-      <li>(0.956,0.956,0.948)</li>
-      <li>(0.69,0.69,0.624)</li>
+      <li>(244,244,242)</li>
+      <li>(149, 167, 232)</li>
     </colorSpectrum>
 	<requiredMemes>
       <li MayRequire="VanillaExpanded.VMemesE">VME_CraftCulture</li>
@@ -383,8 +383,8 @@
       <li>HVMP_EcosphereTitle</li>
     </royalTitleTags>
 	<colorSpectrum>
-      <li>(0.4706,0.6157,0.749)</li>
-      <li>(0.3412,0.7529,0.4235)</li>
+      <li>(11, 121, 222)</li>
+      <li>(64, 143, 80)</li>
     </colorSpectrum>
 	<requiredMemes>
 	  <li MayRequire="MortStrudel.MortIdeologyEnv">MI_Environmentalist</li>
@@ -441,8 +441,8 @@
       <li>HVMP_OccultTitle</li>
     </royalTitleTags>
 	<colorSpectrum>
-      <li>(0.7019,0,0.5843)</li>
-      <li>(0.0471,0,0.7019)</li>
+      <li>(122, 55, 111)</li>
+      <li>(13, 0, 196)</li>
     </colorSpectrum>
 	<requiredMemes>
 	  <li>Ritualist</li>

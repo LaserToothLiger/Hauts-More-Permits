@@ -1,28 +1,29 @@
-﻿using RimWorld.Planet;
+﻿using HarmonyLib;
+using HautsFramework;
 using RimWorld;
+using RimWorld.BaseGen;
+using RimWorld.Planet;
+using RimWorld.QuestGen;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Verse;
-using UnityEngine;
-using HarmonyLib;
-using RimWorld.QuestGen;
-using HautsFramework;
-using Verse.AI;
-using Verse.Grammar;
-using RimWorld.BaseGen;
-using Verse.Sound;
-using Verse.AI.Group;
-using System.Xml;
-using static System.Collections.Specialized.BitVector32;
 using System.Net.NetworkInformation;
-using System.Collections;
-using Verse.Noise;
-using static UnityEngine.GraphicsBuffer;
-using VEF;
-using System.Text.RegularExpressions;
+using System.Reflection;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
+using System.Xml;
+using UnityEngine;
+using VEF;
+using Verse;
+using Verse.AI;
+using Verse.AI.Group;
+using Verse.Grammar;
+using Verse.Noise;
+using Verse.Sound;
+using static HarmonyLib.Code;
+using static System.Collections.Specialized.BitVector32;
+using static UnityEngine.GraphicsBuffer;
 
 namespace HautsPermits
 {
@@ -1535,7 +1536,6 @@ namespace HautsPermits
             Faction faction = this.GetFaction(map);
             if (this.generatePawns)
             {
-                Lord lord = LordMaker.MakeNewLord(faction, new LordJob_DefendBase(faction, cellRect.CenterCell, 25000, false), map, null);
                 int defMulti = this.defenderMulti.RandomInRange;
                 PawnGroupMakerParms pawnGroupMakerParms = new PawnGroupMakerParms
                 {
@@ -1551,13 +1551,12 @@ namespace HautsPermits
                     pawnGroupMakerParms.points = this.pointsPerPawnGen.RandomInRange;
                     CellRect cellRect2 = cellRect;
                     Faction faction2 = faction;
-                    Lord lord2 = lord;
                     PawnGroupKindDef settlement = PawnGroupKindDefOf.Settlement;
-                    MapGenUtility.GeneratePawns(map, cellRect2, faction2, lord2, settlement, pawnGroupMakerParms, null, null, null, this.requiresRoof);
+                    MapGenUtility.GeneratePawns(map, cellRect2, faction2, null, settlement, pawnGroupMakerParms, null, null, null, this.requiresRoof);
                     pawnGroupMakerParms.points = this.pointsPerPawnGen.RandomInRange;
                     CellRect cellRect3 = cellRect;
                     PawnGroupKindDef settlement2 = PawnGroupKindDefOf.Settlement_RangedOnly;
-                    MapGenUtility.GeneratePawns(map, cellRect3, faction2, lord2, settlement2, pawnGroupMakerParms, null, null, null, this.requiresRoof);
+                    MapGenUtility.GeneratePawns(map, cellRect3, faction2, null, settlement2, pawnGroupMakerParms, null, null, null, this.requiresRoof);
                 }
                 int combMulti = (int)Math.Ceiling(HVMP_Mod.settings.platformDefenderScale);
                 for (int i = 0; i < combMulti; i++)
@@ -1565,9 +1564,23 @@ namespace HautsPermits
                     pawnGroupMakerParms.points = this.pointsPerPawnGen.RandomInRange;
                     CellRect cellRect2 = cellRect;
                     Faction faction2 = faction;
-                    Lord lord2 = lord;
                     PawnGroupKindDef settlement = PawnGroupKindDefOf.Combat;
-                    MapGenUtility.GeneratePawns(map, cellRect2, faction2, lord2, settlement, pawnGroupMakerParms, null, null, null, this.requiresRoof);
+                    MapGenUtility.GeneratePawns(map, cellRect2, faction2, null, settlement, pawnGroupMakerParms, null, null, null, this.requiresRoof);
+                }
+                foreach (Pawn p in map.mapPawns.PawnsInFaction(faction).InRandomOrder())
+                {
+                    if (p.RaceProps.Humanlike)
+                    {
+                        if (p.lord != null && !(p.lord.LordJob is LordJob_DefendBase))
+                        {
+                            p.GetLord().RemovePawn(p);
+                        }
+                        if (p.lord == null)
+                        {
+                            Lord lord = LordMaker.MakeNewLord(faction, new LordJob_DefendBase(faction, p.PositionHeld, Rand.RangeInclusive(4,6)*2500, false), map, null);
+                            lord.AddPawn(p);
+                        }
+                    }
                 }
             }
             FloatRange? floatRange = this.lootMarketValue;
@@ -11562,6 +11575,10 @@ namespace HautsPermits
             if (wcbs != null)
             {
                 QuestPart_PaxMundi qppm = null;
+                if (wcbs.qppms == null)
+                {
+                    wcbs.qppms = new List<QuestPart_PaxMundi>();
+                }
                 for (int i = wcbs.qppms.Count - 1; i >= 0; i--)
                 {
                     if (wcbs.qppms[i].quest.Historical || wcbs.qppms[i].denominator <= wcbs.qppms[i].goodwillChangesInt)
@@ -11991,9 +12008,67 @@ namespace HautsPermits
         }
         public override void DoSettingsWindowContents(Rect inRect)
         {
+			Rect rect = new Rect(inRect)
+			{
+				y = inRect.y + 40f
+			};
+			Rect rect2 = rect;
+			rect = new Rect(inRect)
+			{
+				height = inRect.height - 40f,
+				y = inRect.y + 40f
+			};
+			Rect rect3 = rect;
+			Widgets.DrawMenuSection(rect3);
+			List<TabRecord> list = new List<TabRecord>
+			{
+                //why force an extra translation key? lol
+				new TabRecord("VEF_GeneralTitle".Translate(), delegate
+				{
+					this.PageIndex = 0;
+					this.WriteSettings();
+				}, this.PageIndex == 0),
+				new TabRecord("HVMP_Label_MutatorSettings".Translate(), delegate
+				{
+					this.PageIndex = 1;
+					this.WriteSettings();
+				}, this.PageIndex == 1)
+            };
+            if (ModsConfig.OdysseyActive)
+            {
+                list.Add(
+                new TabRecord("HVMP_Label_PlatformSettings".Translate(), delegate
+                {
+                    this.PageIndex = 2;
+                    this.WriteSettings();
+                }, this.PageIndex == 2));
+            }
+			TabDrawer.DrawTabs<TabRecord>(rect2, list, 200f);
+			switch (this.PageIndex)
+			{
+			case 0:
+				this.MainSettings(rect3.ContractedBy(15f));
+				return;
+			case 1:
+				this.MutatorSettings(rect3.ContractedBy(15f));
+				return;
+			case 2:
+                if (ModsConfig.OdysseyActive)
+                {
+                    this.BranchPlatformSettings(rect3.ContractedBy(15f));
+                } else {
+                    this.MainSettings(rect3.ContractedBy(15f));
+                }
+                return;
+			default:
+                    base.DoSettingsWindowContents(inRect);
+                    return;
+			}
+        }
+        private void MainSettings(Rect inRect)
+        {
             Rect rect = new Rect(inRect.xMin, inRect.yMin, inRect.width, inRect.height);
-            Rect rect2 = new Rect(0f, 0f, inRect.width*0.96f, 4500f);
-            Widgets.BeginScrollView(rect, ref this.scrollPosition, rect2, true);
+            Rect rect2 = new Rect(inRect.xMin, inRect.yMin, inRect.width * 0.96f, 4500f);
             //toggles chaos mode on or off: off by default, but if on every branch will offer quests on their own timer, leading to A LOT more quests
             Listing_Standard listingStandard = new Listing_Standard();
             listingStandard.Begin(rect2);
@@ -12007,7 +12082,7 @@ namespace HautsPermits
             //time in between branch quests
             displayMin = ((int)settings.minBranchQuestInterval).ToString();
             displayMax = ((int)settings.maxBranchQuestInterval).ToString();
-            float x = rect.xMin, y = rect.yMin + 70, halfWidth = rect2.width * 0.5f;
+            float x = rect.xMin, y = rect.yMin + 90, halfWidth = rect2.width * 0.5f;
             float orig = settings.minBranchQuestInterval;
             Rect questDaysMinRect = new Rect(x + 10, y, halfWidth - 15, 32);
             settings.minBranchQuestInterval = Widgets.HorizontalSlider(questDaysMinRect, settings.minBranchQuestInterval, 1f, 60f, true, "HVMP_SettingMinDays".Translate(), "1", "60", 1f);
@@ -12069,11 +12144,11 @@ namespace HautsPermits
             }
             //set whether you should be punished for failing or foregoing a quest, and if so, when that should start happening
             y += 50;
-            Rect bratBehaviorRect = new Rect(halfWidth*0.05f,y, halfWidth * 0.8f, 32);
+            Rect bratBehaviorRect = new Rect(halfWidth * 0.05f, y, halfWidth * 0.8f, 32);
             this.ExpectationLevelSelector(bratBehaviorRect);
             bb1 = this.ExpectationLabel;
             TooltipHandler.TipRegion(bratBehaviorRect.LeftPart(1f), "HVMP_TooltipExpectationLevel".Translate());
-            Rect bratBehaviorRect2 = new Rect(halfWidth*0.95f, y, halfWidth*0.8f, 32);
+            Rect bratBehaviorRect2 = new Rect(halfWidth * 0.95f, y, halfWidth * 0.8f, 32);
             bb2 = this.SeniorityLabel;
             TooltipHandler.TipRegion(bratBehaviorRect2.LeftPart(1f), "HVMP_TooltipSeniorityLevel".Translate());
             this.SeniorityLevelSelector(bratBehaviorRect2);
@@ -12115,111 +12190,25 @@ namespace HautsPermits
                     this.ParseInput(failureLoss, settings.goodwillQuestFailureLoss, out settings.goodwillQuestFailureLoss, 0, 120);
                 }
             }
-            if (ModsConfig.OdysseyActive)
-            {
-                y += 70;
-                //branch platform spawn rate
-                displayBPI = ((int)settings.makeNewBranchPlatformInterval).ToString();
-                displayAuthCD = ((int)settings.authorizerCooldownDays).ToString();
-                displayBPLimit = ((int)settings.maxPlatformsPerBranch).ToString();
-                displayPASG = ((int)settings.authorizerStandingGain).ToString();
-                displayBPD = ((int)settings.platformDefenderScale).ToString();
-                float origBPI = settings.makeNewBranchPlatformInterval;
-                Rect bpiRect = new Rect(x + 10, y, halfWidth - 15, 32);
-                settings.makeNewBranchPlatformInterval = Widgets.HorizontalSlider(bpiRect, settings.makeNewBranchPlatformInterval, 5f, 60f, true, "HVMP_SettingBranchPlatformInterval".Translate(), "5 days", "60 days", 1f);
-                TooltipHandler.TipRegion(bpiRect.LeftPart(1f), "HVMP_TooltipBranchPlatformInterval".Translate());
-                if (origBPI != settings.makeNewBranchPlatformInterval)
-                {
-                    displayBPI = ((int)settings.makeNewBranchPlatformInterval).ToString();
-                }
-                y += 32;
-                string origStringBPI = displayBPI;
-                displayBPI = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayBPI);
-                if (!displayBPI.Equals(origStringBPI))
-                {
-                    this.ParseInput(displayBPI, settings.makeNewBranchPlatformInterval, out settings.makeNewBranchPlatformInterval, 5f, 60f);
-                }
-                y -= 32;
-                //authorizer cooldown per standing cost
-                float origPACooldown = settings.authorizerCooldownDays;
-                Rect paCooldownRect = new Rect(x + 5 + halfWidth, y, halfWidth - 15, 32);
-                settings.authorizerCooldownDays = Widgets.HorizontalSlider(paCooldownRect, settings.authorizerCooldownDays, 1f, 6f, true, "HVMP_SettingAuthorizerCooldown".Translate(), "1d", "6d", 0.1f);
-                TooltipHandler.TipRegion(paCooldownRect.LeftPart(1f), "HVMP_TooltipAuthorizerCooldown".Translate());
-                if (origPACooldown != settings.authorizerCooldownDays)
-                {
-                    displayAuthCD = ((int)settings.authorizerCooldownDays).ToString();
-                }
-                y += 32;
-                string origStringPACooldown = displayAuthCD;
-                displayAuthCD = Widgets.TextField(new Rect(x + 5 + halfWidth, y, 50, 32), displayAuthCD);
-                if (!displayAuthCD.Equals(origStringPACooldown))
-                {
-                    this.ParseInput(displayAuthCD, settings.authorizerCooldownDays, out settings.authorizerCooldownDays, 1f, 6f);
-                }
-                y += 32;
-                //max platforms per branch
-                float origBPLimit = settings.maxPlatformsPerBranch;
-                Rect bplimitRect = new Rect(x + 10, y, halfWidth - 15, 32);
-                settings.maxPlatformsPerBranch = Widgets.HorizontalSlider(bplimitRect, settings.maxPlatformsPerBranch, 1f, 4f, true, "HVMP_SettingBranchPlatformLimit".Translate(), "1", "4", 1f);
-                TooltipHandler.TipRegion(bplimitRect.LeftPart(1f), "HVMP_TooltipBranchPlatformLimit".Translate());
-                if (origBPLimit != settings.maxPlatformsPerBranch)
-                {
-                    displayBPLimit = ((int)settings.maxPlatformsPerBranch).ToString();
-                }
-                y += 32;
-                string origStringBPLimit = displayBPLimit;
-                displayBPLimit = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayBPLimit);
-                if (!displayBPLimit.Equals(origStringBPLimit))
-                {
-                    this.ParseInput(displayBPLimit, settings.maxPlatformsPerBranch, out settings.maxPlatformsPerBranch, 1f, 4f);
-                }
-                y -= 32;
-                //authorizer standing gain
-                float origPASG = settings.authorizerStandingGain;
-                Rect pasgRect = new Rect(x + 5 + halfWidth, y, halfWidth - 15, 32);
-                settings.authorizerStandingGain = Widgets.HorizontalSlider(pasgRect, settings.authorizerStandingGain, 1f, 10f, true, "HVMP_SettingAuthorizerStandingGain".Translate(), "1", "10", 1f);
-                TooltipHandler.TipRegion(pasgRect.LeftPart(1f), "HVMP_TooltipAuthorizerStandingGain".Translate());
-                if (origPASG != settings.authorizerStandingGain)
-                {
-                    displayPASG = ((int)settings.authorizerStandingGain).ToString();
-                }
-                y += 32;
-                string origStringPASG = displayPASG;
-                displayPASG = Widgets.TextField(new Rect(x + 5 + halfWidth, y, 50, 32), displayPASG);
-                if (!displayPASG.Equals(origStringPASG))
-                {
-                    this.ParseInput(displayPASG, settings.authorizerStandingGain, out settings.authorizerStandingGain, 1f, 10f);
-                }
-                y += 32;
-                //branch platform defender scale
-                float origBPD = settings.platformDefenderScale;
-                Rect bpDefenderRect = new Rect(x + 10, y, halfWidth - 15, 32);
-                settings.platformDefenderScale = Widgets.HorizontalSlider(bpDefenderRect, settings.platformDefenderScale, 1f, 7f, true, "HVMP_SettingBranchPlatformDefenders".Translate(), "1x", "7x", 1f);
-                TooltipHandler.TipRegion(bpDefenderRect.LeftPart(1f), "HVMP_TooltipBranchPlatformDefenders".Translate());
-                if (origBPD != settings.platformDefenderScale)
-                {
-                    displayBPD = ((int)settings.platformDefenderScale).ToString();
-                }
-                y += 32;
-                string origStringBPD = displayBPD;
-                displayBPD = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayBPD);
-                if (!displayBPD.Equals(origStringBPD))
-                {
-                    this.ParseInput(displayBPD, settings.platformDefenderScale, out settings.platformDefenderScale, 1f, 7f);
-                }
-            }
-            y += 70;
-            Rect rect3 = new Rect(0f, y, (inRect.width - 30f) * 0.8f, 4000f);
+            base.DoSettingsWindowContents(inRect);
+        }
+        private void MutatorSettings(Rect inRect)
+        {
+            Rect rect = new Rect(inRect.xMin, inRect.yMin, inRect.width, inRect.height);
+            Rect rect2 = new Rect(inRect.xMin, inRect.yMin, inRect.width * 0.96f, 4500f);
+            Widgets.BeginScrollView(rect, ref this.scrollPosition, rect2, true);
+            float x = rect.xMin, y = rect.yMin, halfWidth = rect2.width * 0.5f;
+            Rect rect3 = new Rect(inRect.xMin, y, (inRect.width - 30f) * 0.8f, 4000f);
             Listing_Standard listing_Standard2 = new Listing_Standard();
             listing_Standard2.Begin(rect3);
             Text.Font = GameFont.Medium;
-            listing_Standard2.Label("HVMP_Label_QuestMutators".Translate(),30f);
+            listing_Standard2.Label("HVMP_Label_MutatorSettings".Translate(), 30f);
             //listing_Standard2.Gap(30f);
             Text.Font = GameFont.Small;
             listing_Standard2.Label("HVMP_Tooltip_QuestMutators".Translate());
             listing_Standard2.Gap(20f);
             listing_Standard2.Label("HVMP_Label_Commerce".Translate());
-            listing_Standard2.Label("HVMP_Label_Fortification".Translate(),-1,"HVMP_Tooltip_Fortification".Translate());
+            listing_Standard2.Label("HVMP_Label_Fortification".Translate(), -1, "HVMP_Tooltip_Fortification".Translate());
             Text.Font = GameFont.Tiny;
             bool flagCA1 = settings.fort1;
             listing_Standard2.CheckboxLabeled("HVMP_Label_Fortification".Translate() + ": " + "HVMP_HardMode_Label_Fortification_1".Translate(), ref flagCA1, "HVMP_HardMode_Tooltip_Fortification_1".Translate());
@@ -12290,7 +12279,7 @@ namespace HautsPermits
             settings.transport1 = flagCE1;
             bool flagCE2 = settings.transport2;
             listing_Standard2.CheckboxLabeled("HVMP_Label_Transportation".Translate() + ": " + "HVMP_HardMode_Label_Transportation_2".Translate(), ref flagCE2, "HVMP_HardMode_Tooltip_Transportation_2".Translate());
-            settings.transport2= flagCE2;
+            settings.transport2 = flagCE2;
             bool flagCE3 = settings.transport3;
             listing_Standard2.CheckboxLabeled("HVMP_Label_Transportation".Translate() + ": " + "HVMP_HardMode_Label_Transportation_3".Translate(), ref flagCE3, "HVMP_HardMode_Tooltip_Transportation_3".Translate());
             settings.transport3 = flagCE3;
@@ -12715,6 +12704,111 @@ namespace HautsPermits
             Widgets.EndScrollView();
             base.DoSettingsWindowContents(inRect);
         }
+        private void BranchPlatformSettings(Rect inRect)
+        {
+            Rect rect = new Rect(inRect.xMin, inRect.yMin, inRect.width, inRect.height);
+            Rect rect2 = new Rect(inRect.xMin, inRect.yMin, inRect.width * 0.96f, 4500f);
+            float x = rect.xMin, y = rect.yMin, halfWidth = rect2.width * 0.5f;
+            //branch platform spawn rate
+            displayBPI = ((int)settings.makeNewBranchPlatformInterval).ToString();
+            displayAuthCD = ((int)settings.authorizerCooldownDays).ToString();
+            displayBPLimit = ((int)settings.maxPlatformsPerBranch).ToString();
+            displayPASG = ((int)settings.authorizerStandingGain).ToString();
+            displayBPD = ((int)settings.platformDefenderScale).ToString();
+            Rect rect3 = new Rect(inRect.xMin, y, (inRect.width - 30f) * 0.8f, 4000f);
+            Listing_Standard listing_Standard2 = new Listing_Standard();
+            listing_Standard2.Begin(rect3);
+            Text.Font = GameFont.Medium;
+            listing_Standard2.Label("HVMP_Label_PlatformSettings".Translate(), 30f);
+            //listing_Standard2.Gap(30f);
+            Text.Font = GameFont.Small;
+            listing_Standard2.Label("HVMP_Tooltip_PlatformSettings".Translate());
+            listing_Standard2.End();
+            y += 100;
+            float origBPI = settings.makeNewBranchPlatformInterval;
+            Rect bpiRect = new Rect(x + 10, y, halfWidth - 15, 32);
+            settings.makeNewBranchPlatformInterval = Widgets.HorizontalSlider(bpiRect, settings.makeNewBranchPlatformInterval, 5f, 60f, true, "HVMP_SettingBranchPlatformInterval".Translate(), "5 days", "60 days", 1f);
+            TooltipHandler.TipRegion(bpiRect.LeftPart(1f), "HVMP_TooltipBranchPlatformInterval".Translate());
+            if (origBPI != settings.makeNewBranchPlatformInterval)
+            {
+                displayBPI = ((int)settings.makeNewBranchPlatformInterval).ToString();
+            }
+            y += 32;
+            string origStringBPI = displayBPI;
+            displayBPI = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayBPI);
+            if (!displayBPI.Equals(origStringBPI))
+            {
+                this.ParseInput(displayBPI, settings.makeNewBranchPlatformInterval, out settings.makeNewBranchPlatformInterval, 5f, 60f);
+            }
+            y -= 32;
+            //authorizer cooldown per standing cost
+            float origPACooldown = settings.authorizerCooldownDays;
+            Rect paCooldownRect = new Rect(x + 5 + halfWidth, y, halfWidth - 15, 32);
+            settings.authorizerCooldownDays = Widgets.HorizontalSlider(paCooldownRect, settings.authorizerCooldownDays, 1f, 6f, true, "HVMP_SettingAuthorizerCooldown".Translate(), "1d", "6d", 0.1f);
+            TooltipHandler.TipRegion(paCooldownRect.LeftPart(1f), "HVMP_TooltipAuthorizerCooldown".Translate());
+            if (origPACooldown != settings.authorizerCooldownDays)
+            {
+                displayAuthCD = ((int)settings.authorizerCooldownDays).ToString();
+            }
+            y += 32;
+            string origStringPACooldown = displayAuthCD;
+            displayAuthCD = Widgets.TextField(new Rect(x + 5 + halfWidth, y, 50, 32), displayAuthCD);
+            if (!displayAuthCD.Equals(origStringPACooldown))
+            {
+                this.ParseInput(displayAuthCD, settings.authorizerCooldownDays, out settings.authorizerCooldownDays, 1f, 6f);
+            }
+            y += 32;
+            //max platforms per branch
+            float origBPLimit = settings.maxPlatformsPerBranch;
+            Rect bplimitRect = new Rect(x + 10, y, halfWidth - 15, 32);
+            settings.maxPlatformsPerBranch = Widgets.HorizontalSlider(bplimitRect, settings.maxPlatformsPerBranch, 1f, 4f, true, "HVMP_SettingBranchPlatformLimit".Translate(), "1", "4", 1f);
+            TooltipHandler.TipRegion(bplimitRect.LeftPart(1f), "HVMP_TooltipBranchPlatformLimit".Translate());
+            if (origBPLimit != settings.maxPlatformsPerBranch)
+            {
+                displayBPLimit = ((int)settings.maxPlatformsPerBranch).ToString();
+            }
+            y += 32;
+            string origStringBPLimit = displayBPLimit;
+            displayBPLimit = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayBPLimit);
+            if (!displayBPLimit.Equals(origStringBPLimit))
+            {
+                this.ParseInput(displayBPLimit, settings.maxPlatformsPerBranch, out settings.maxPlatformsPerBranch, 1f, 4f);
+            }
+            y -= 32;
+            //authorizer standing gain
+            float origPASG = settings.authorizerStandingGain;
+            Rect pasgRect = new Rect(x + 5 + halfWidth, y, halfWidth - 15, 32);
+            settings.authorizerStandingGain = Widgets.HorizontalSlider(pasgRect, settings.authorizerStandingGain, 1f, 10f, true, "HVMP_SettingAuthorizerStandingGain".Translate(), "1", "10", 1f);
+            TooltipHandler.TipRegion(pasgRect.LeftPart(1f), "HVMP_TooltipAuthorizerStandingGain".Translate());
+            if (origPASG != settings.authorizerStandingGain)
+            {
+                displayPASG = ((int)settings.authorizerStandingGain).ToString();
+            }
+            y += 32;
+            string origStringPASG = displayPASG;
+            displayPASG = Widgets.TextField(new Rect(x + 5 + halfWidth, y, 50, 32), displayPASG);
+            if (!displayPASG.Equals(origStringPASG))
+            {
+                this.ParseInput(displayPASG, settings.authorizerStandingGain, out settings.authorizerStandingGain, 1f, 10f);
+            }
+            y += 32;
+            //branch platform defender scale
+            float origBPD = settings.platformDefenderScale;
+            Rect bpDefenderRect = new Rect(x + 10, y, halfWidth - 15, 32);
+            settings.platformDefenderScale = Widgets.HorizontalSlider(bpDefenderRect, settings.platformDefenderScale, 1f, 7f, true, "HVMP_SettingBranchPlatformDefenders".Translate(), "1x", "7x", 1f);
+            TooltipHandler.TipRegion(bpDefenderRect.LeftPart(1f), "HVMP_TooltipBranchPlatformDefenders".Translate());
+            if (origBPD != settings.platformDefenderScale)
+            {
+                displayBPD = ((int)settings.platformDefenderScale).ToString();
+            }
+            y += 32;
+            string origStringBPD = displayBPD;
+            displayBPD = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayBPD);
+            if (!displayBPD.Equals(origStringBPD))
+            {
+                this.ParseInput(displayBPD, settings.platformDefenderScale, out settings.platformDefenderScale, 1f, 7f);
+            }
+        }
         private void ExpectationLevelSelector(Rect rect)
         {
             if (Widgets.ButtonText(rect, "HVMP_TooltipMinExpectationLevel".Translate(bb1), true, true, true, null))
@@ -12849,5 +12943,6 @@ namespace HautsPermits
         public static HVMP_Settings settings;
         public string displayMin, displayMax, displayQuestRewardFactor, refusalLoss, failureLoss, bb1, bb2, displayBPI, displayBPLimit, displayBPD, displayAuthCD, displayPASG;
         public Vector2 scrollPosition = Vector2.zero;
+        private int PageIndex;
     }
 }

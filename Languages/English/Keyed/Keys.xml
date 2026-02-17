@@ -26,6 +26,9 @@
 <HVMP_TooltipGoodwillFailure>If you fulfill either the 'minimum expectation' or 'minimum title' conditions set above, you will lose this much goodwill whenever you fail an accepted e-branch quest.\n\nIf both a minimum expectation and title have been selected, both conditions must be fulfilled.\n\nChanging this value will only affect the penalty for FUTURE quests, not ones that have already been generated.</HVMP_TooltipGoodwillFailure>
 <HVMP_SettingAnomalyActivityLevel>Occult Branch can always be encountered</HVMP_SettingAnomalyActivityLevel>
 <HVMP_TooltipAnomalyActivityLevel>By default, the Occult Branch will only show up after the monolith has been activated (if using the standard Anomaly playstyle), have its frequency of contact multiplied by the anomaly activity level (if using Ambient Horror), or otherwise not be active at all.\n\nIf you enable this setting, they will not be subject to these rules, instead appearing as frequently as other e-branches.</HVMP_TooltipAnomalyActivityLevel>
+<!--Mod settings: Branch Platforms-->
+<HVMP_Label_PlatformSettings>Branch Platforms</HVMP_Label_PlatformSettings>
+<HVMP_Tooltip_PlatformSettings>Each e-branch has their own orbital platforms. Raiding one will make you enemies with all e-branches, but they store powerful, exclusive technology, including implants that allow pawns to use permits without needing to do quests or donations.</HVMP_Tooltip_PlatformSettings>
 <HVMP_SettingBranchPlatformInterval>Time between branch platform spawns</HVMP_SettingBranchPlatformInterval>
 <HVMP_TooltipBranchPlatformInterval>The rate at which new branch platforms appear in orbit. Spawning occurs at the same time and the same rate for all e-branch factions. Each e-branch can only gain one platform per spawning incidence, even if they would need more than one platform to reach their limit.</HVMP_TooltipBranchPlatformInterval>
 <HVMP_SettingBranchPlatformLimit>Max platforms per branch</HVMP_SettingBranchPlatformLimit>
@@ -223,7 +226,7 @@
 
 
 <!--Mod settings for quest mutators-->
-<HVMP_Label_QuestMutators>Quest Mutators</HVMP_Label_QuestMutators>
+<HVMP_Label_MutatorSettings>Quest Mutators</HVMP_Label_MutatorSettings>
 <HVMP_Tooltip_QuestMutators>If you feel like a particular quest type is too easy, you can use the modifiers below to make it more difficult. Changes in this menu only apply to future quests, not those that have already been generated.</HVMP_Tooltip_QuestMutators>
 <HVMP_Label_MayhemMode>Mayhem Mode</HVMP_Label_MayhemMode>
 <HVMP_Tooltip_MayhemMode>If enabled, disabled mutators still have a 35% chance to apply to any quest of this type.</HVMP_Tooltip_MayhemMode>
