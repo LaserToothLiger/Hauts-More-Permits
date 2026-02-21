@@ -123,7 +123,7 @@
 	<leaderTitle>administrator</leaderTitle>
 	<leaderTitleFemale>administrator</leaderTitleFemale>
     <royalFavorLabel>standing</royalFavorLabel>
-	<royalFavorIconPath>UI/Icons/RoyalFavor</royalFavorIconPath><!--remember to change this later on once art-->
+	<royalFavorIconPath>UI/HVMP_StandingIcon</royalFavorIconPath>
     <categoryTag>HVMP_EBranch</categoryTag>
 	<raidsForbidden>true</raidsForbidden>
 	<requiredCountAtGameStart>1</requiredCountAtGameStart>
