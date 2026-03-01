@@ -3320,7 +3320,7 @@ namespace HautsPermits
             HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
         }
     }
-    public class RoyalTitlePermitWorker_OrbitalScalpel : RoyalTitlePermitWorker_Targeted
+    public class RoyalTitlePermitWorker_OrbitalScalpel : RoyalTitlePermitWorker_Targeted, ITargetingSource
     {
         public AcceptanceReport IsValidThing(LocalTargetInfo lti)
         {
@@ -3374,25 +3374,19 @@ namespace HautsPermits
             PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
             if (pme != null)
             {
-                bool checkBuildings = true;
-                foreach (Thing t in target.Cell.GetThingList(this.caller.Map))
+                if (target.Thing != null)
                 {
-                    if ((t is Pawn p && !p.IsPsychologicallyInvisible()))
+                    if (target.Thing is Building b)
+                    {
+                        if (b.def.useHitPoints && b.def.building.canBeDamagedByAttacks)
+                        {
+                            this.InstantiateEffect(b, pme);
+                        }
+                        return;
+                    }
+                    if (target.Thing is Pawn p)
                     {
                         this.InstantiateEffect(p, pme);
-                        checkBuildings = false;
-                        break;
-                    }
-                }
-                if (checkBuildings)
-                {
-                    foreach (Thing t in target.Cell.GetThingList(this.caller.Map))
-                    {
-                        if (t is Building && t.def.useHitPoints && t.def.building.canBeDamagedByAttacks)
-                        {
-                            this.InstantiateEffect(t, pme);
-                            break;
-                        }
                     }
                 }
             }
@@ -3452,12 +3446,12 @@ namespace HautsPermits
                 return;
             }
             this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = true;
-            this.targetingParameters.canTargetSelf = false;
-            this.targetingParameters.canTargetPawns = false;
+            this.targetingParameters.canTargetLocations = false;
+            this.targetingParameters.canTargetSelf = true;
+            this.targetingParameters.canTargetPawns = true;
             this.targetingParameters.canTargetFires = false;
-            this.targetingParameters.canTargetBuildings = false;
-            this.targetingParameters.canTargetItems = true;
+            this.targetingParameters.canTargetBuildings = true;
+            this.targetingParameters.canTargetItems = false;
             this.targetingParameters.validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange;
             this.caller = pawn;
             this.map = map;
@@ -4182,7 +4176,7 @@ namespace HautsPermits
             yield break;
         }
     }
-    public class RoyalTitlePermitWorker_AlterItemQuality : RoyalTitlePermitWorker_Targeted
+    public class RoyalTitlePermitWorker_AlterItemQuality : RoyalTitlePermitWorker_Targeted, ITargetingSource
     {
         public AcceptanceReport IsValidThing(LocalTargetInfo lti)
         {
@@ -4196,8 +4190,9 @@ namespace HautsPermits
                 } else {
                     if (pme.extraNumber != null)
                     {
-                        foreach (Thing t in lti.Cell.GetThingList(this.caller.Map))
+                        if (lti.Thing != null)
                         {
+                            Thing t = lti.Thing;
                             if (t.def.category == ThingCategory.Item && t.TryGetQuality(out QualityCategory qc) && t.def.thingCategories != null && (float)qc >= pme.extraNumber.min && (float)qc <= pme.extraNumber.max && (pme.thingCategories == null || t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.thingCategories.Contains(tcd))) && (pme.forbiddenThingCategories == null || !t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.forbiddenThingCategories.Contains(tcd))))
                             {
                                 return AcceptanceReport.WasAccepted;
@@ -4229,15 +4224,12 @@ namespace HautsPermits
         public override void OrderForceTarget(LocalTargetInfo target)
         {
             PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
-            if (pme != null && pme.extraNumber != null)
+            if (pme != null && pme.extraNumber != null && target.Thing != null)
             {
-                foreach (Thing t in target.Cell.GetThingList(this.caller.Map))
+                Thing t = target.Thing;
+                if (t.def.category == ThingCategory.Item && t.TryGetQuality(out QualityCategory qc) && (float)qc >= pme.extraNumber.min && (float)qc <= pme.extraNumber.max && (pme.forbiddenThingCategories == null || !t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.forbiddenThingCategories.Contains(tcd))))
                 {
-                    if (t.def.category == ThingCategory.Item && t.TryGetQuality(out QualityCategory qc) && (float)qc >= pme.extraNumber.min && (float)qc <= pme.extraNumber.max && (pme.forbiddenThingCategories == null || !t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.forbiddenThingCategories.Contains(tcd))))
-                    {
-                        this.ImproveQuality(t, this.calledFaction);
-                        break;
-                    }
+                    this.ImproveQuality(t, this.calledFaction);
                 }
             }
         }
@@ -4272,12 +4264,13 @@ namespace HautsPermits
                 return;
             }
             this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetLocations = false;
             this.targetingParameters.canTargetSelf = false;
             this.targetingParameters.canTargetPawns = false;
             this.targetingParameters.canTargetFires = false;
             this.targetingParameters.canTargetBuildings = false;
             this.targetingParameters.canTargetItems = true;
+            this.targetingParameters.mapObjectTargetsMustBeAutoAttackable = false;
             this.targetingParameters.validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange;
             this.caller = pawn;
             this.map = map;
@@ -4314,7 +4307,7 @@ namespace HautsPermits
         }
         private Faction calledFaction;
     }
-    public class RoyalTitlePermitWorker_RestoreItemHP : RoyalTitlePermitWorker_Targeted
+    public class RoyalTitlePermitWorker_RestoreItemHP : RoyalTitlePermitWorker_Targeted, ITargetingSource
     {
         public AcceptanceReport IsValidThing(LocalTargetInfo lti)
         {
@@ -4328,8 +4321,9 @@ namespace HautsPermits
                 } else {
                     if (pme.extraNumber != null)
                     {
-                        foreach (Thing t in lti.Cell.GetThingList(this.caller.Map))
+                        if (lti.Thing != null)
                         {
+                            Thing t = lti.Thing;
                             if (t.def.useHitPoints && (t.HitPoints < t.MaxHitPoints || this.OtherQualifiers(t)) && (t is Building || (t.def.thingCategories != null && (pme.thingCategories == null || t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.thingCategories.Contains(tcd))) && (pme.forbiddenThingCategories == null || !t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.forbiddenThingCategories.Contains(tcd))))))
                             {
                                 return AcceptanceReport.WasAccepted;
@@ -4368,22 +4362,13 @@ namespace HautsPermits
             if (pme != null && pme.extraNumber != null)
             {
                 HVMP_Utility.ThrowRepairGlow(target.Cell.ToVector3(), this.map, 1.5f);
-                Thing toHeal = null;
-                float worstMissingHp = 0;
-                foreach (Thing t in target.Cell.GetThingList(this.caller.Map))
+                if (target.Thing != null)
                 {
+                    Thing t = target.Thing;
                     if (t.def.useHitPoints && (t.HitPoints < t.MaxHitPoints || this.OtherQualifiers(t)) && (t is Building || (t.def.thingCategories != null && (pme.thingCategories == null || t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.thingCategories.Contains(tcd))) && (pme.forbiddenThingCategories == null || !t.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.forbiddenThingCategories.Contains(tcd))))))
                     {
-                        if (t.MaxHitPoints - t.HitPoints > worstMissingHp)
-                        {
-                            worstMissingHp = t.MaxHitPoints - t.HitPoints;
-                            toHeal = t;
-                        }
+                        this.Heal(t, this.calledFaction);
                     }
-                }
-                if (toHeal != null)
-                {
-                    this.Heal(toHeal, this.calledFaction);
                 }
             }
         }
@@ -4418,12 +4403,13 @@ namespace HautsPermits
                 return;
             }
             this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetLocations = false;
             this.targetingParameters.canTargetSelf = false;
             this.targetingParameters.canTargetPawns = false;
             this.targetingParameters.canTargetFires = false;
-            this.targetingParameters.canTargetBuildings = false;
+            this.targetingParameters.canTargetBuildings = true;
             this.targetingParameters.canTargetItems = true;
+            this.targetingParameters.mapObjectTargetsMustBeAutoAttackable = false;
             this.targetingParameters.validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange;
             this.caller = pawn;
             this.map = map;
@@ -4598,7 +4584,7 @@ namespace HautsPermits
         }
         private Faction faction;
     }
-    public class RoyalTitlePermitWorker_DecryptBiocoding : RoyalTitlePermitWorker_Targeted
+    public class RoyalTitlePermitWorker_DecryptBiocoding : RoyalTitlePermitWorker_Targeted, ITargetingSource
     {
         public AcceptanceReport IsValidThing(LocalTargetInfo lti)
         {
@@ -4610,9 +4596,9 @@ namespace HautsPermits
                 {
                     return new AcceptanceReport(error);
                 } else {
-                    foreach (Thing t in lti.Cell.GetThingList(this.caller.Map))
+                    if (lti.Thing != null)
                     {
-                        CompBiocodable comp = t.TryGetComp<CompBiocodable>();
+                        CompBiocodable comp = lti.Thing.TryGetComp<CompBiocodable>();
                         if (comp != null && comp.Biocoded)
                         {
                             return AcceptanceReport.WasAccepted;
@@ -4646,9 +4632,9 @@ namespace HautsPermits
             if (pme != null)
             {
                 HVMP_Utility.ThrowDecryptionGlow(target.Cell.ToVector3(), this.map, 1f);
-                foreach (Thing t in target.Cell.GetThingList(this.caller.Map))
+                if (target.Thing != null)
                 {
-                    CompBiocodable comp = t.TryGetComp<CompBiocodable>();
+                    CompBiocodable comp = target.Thing.TryGetComp<CompBiocodable>();
                     if (comp != null && comp.Biocoded)
                     {
                         comp.UnCode();
@@ -4658,8 +4644,7 @@ namespace HautsPermits
                         {
                             this.caller.royalty.TryRemoveFavor(this.calledFaction, this.def.royalAid.favorCost);
                         }
-                        HVMP_Utility.DoPTargeterCooldown(this.calledFaction,this.caller,this);
-                        break;
+                        HVMP_Utility.DoPTargeterCooldown(this.calledFaction, this.caller, this);
                     }
                 }
             }
@@ -4695,12 +4680,13 @@ namespace HautsPermits
                 return;
             }
             this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = true;
+            this.targetingParameters.canTargetLocations = false;
             this.targetingParameters.canTargetSelf = false;
             this.targetingParameters.canTargetPawns = false;
             this.targetingParameters.canTargetFires = false;
             this.targetingParameters.canTargetBuildings = false;
             this.targetingParameters.canTargetItems = true;
+            this.targetingParameters.mapObjectTargetsMustBeAutoAttackable = false;
             this.targetingParameters.validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange;
             this.caller = pawn;
             this.map = map;
