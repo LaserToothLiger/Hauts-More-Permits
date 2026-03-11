@@ -43,10 +43,6 @@
       <HintPath>..\..\..\..\Assemblies\HautsPermits.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="HautsTraits">
-      <HintPath>..\..\..\..\..\..\Hauts Added Traits\1.6\Assemblies\HautsTraits.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="HautsTraitsRoyalty">
       <HintPath>..\..\..\..\..\..\Hauts Added Traits\1.6\Mods\Royalty\Assemblies\HautsTraitsRoyalty.dll</HintPath>
       <Private>False</Private>

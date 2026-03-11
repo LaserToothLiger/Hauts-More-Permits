@@ -4,29 +4,18 @@ using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse.Grammar;
 using Verse.Sound;
 using HautsFramework;
-using static UnityEngine.GraphicsBuffer;
 using System.Reflection;
-using static RimWorld.PsychicRitualRoleDef;
 using Verse.AI.Group;
-using System.Collections;
-using System.Text.RegularExpressions;
 using Verse.AI;
-using LudeonTK;
-using System.Security.Cryptography;
 using Verse.Noise;
 using DelaunatorSharp;
 using HarmonyLib;
-using VEF.Abilities;
-using static System.Net.Mime.MediaTypeNames;
-using System.Net.NetworkInformation;
 
 namespace HautsPermits_Occult
 {
@@ -395,9 +384,9 @@ namespace HautsPermits_Occult
                 Slate slate = QuestGen.slate;
                 slate.Set<Thing>("asker", occultFaction.leader, false);
                 slate.Set<Faction>("faction", occultFaction, false);
-                Map map = HVMP_Utility.TryGetMap();
+                Map map = QuestSetupUtility.Quest_TryGetMap();
                 slate.Set<Map>("map", map, false);
-                PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
+                PlanetTile tile = QuestSetupUtility.Quest_TryGetPlanetTile();
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = occultFaction;
@@ -608,7 +597,7 @@ namespace HautsPermits_Occult
         protected virtual bool RequiresPawn { get; } = true;
         protected override bool TestRunInt(Slate slate)
         {
-            Map map = HVMP_Utility.TryGetMap();
+            Map map = QuestSetupUtility.Quest_TryGetMap();
             return map != null && (!this.RequiresPawn || QuestUtility.TryGetIdealColonist(out Pawn pawn, map, new Func<Pawn, bool>(this.ValidatePawn)));
         }
         protected override void RunInt()
@@ -616,7 +605,7 @@ namespace HautsPermits_Occult
             Quest quest = QuestGen.quest;
             Slate slate = QuestGen.slate;
             quest.hiddenInUI = true;
-            Map map = HVMP_Utility.TryGetMap();
+            Map map = QuestSetupUtility.Quest_TryGetMap();
             float points = slate.Get<float>("points", 0f, false);
             slate.Set<Map>("map", map, false);
             Pawn asker = this.FindAsker();

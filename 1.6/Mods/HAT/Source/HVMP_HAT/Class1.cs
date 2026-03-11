@@ -1,13 +1,7 @@
 ﻿using HautsFramework;
 using HautsPermits;
-using HautsTraits;
 using HautsTraitsRoyalty;
 using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace HVMP_HAT
@@ -37,7 +31,7 @@ namespace HVMP_HAT
     {
         public override bool IsGoodPawn(Pawn pawn)
         {
-            return !pawn.HostileTo(this.caller) && pawn.story != null && !PsychicAwakeningUtility.IsAwakenedPsychic(pawn,false) && !pawn.story.traits.HasTrait(HVTRoyaltyDefOf.HVT_LatentPsychic) && base.IsGoodPawn(pawn);
+            return !pawn.HostileTo(this.caller) && pawn.story != null && !PsychicTraitAndGeneCheckUtility.IsAwakenedPsychic(pawn,false) && !pawn.story.traits.HasTrait(HVTRoyaltyDefOf.HVT_LatentPsychic) && base.IsGoodPawn(pawn);
         }
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
         {

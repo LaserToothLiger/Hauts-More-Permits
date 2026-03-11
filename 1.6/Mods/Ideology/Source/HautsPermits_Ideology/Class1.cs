@@ -3,30 +3,18 @@ using HautsF_Ideology;
 using HautsFramework;
 using HautsPermits;
 using RimWorld;
-using RimWorld.BaseGen;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Reflection;
-using System.Reflection.Emit;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using Verse.AI;
 using Verse.AI.Group;
 using Verse.Grammar;
-using Verse.Noise;
 using Verse.Sound;
-using static RimWorld.QuestPart;
-using static System.Collections.Specialized.BitVector32;
-using static UnityEngine.GraphicsBuffer;
 
 namespace HautsPermits_Ideology
 {
@@ -504,9 +492,9 @@ namespace HautsPermits_Ideology
                 Slate slate = QuestGen.slate;
                 slate.Set<Thing>("asker", faction.leader, false);
                 QuestGen.slate.Set<Faction>("faction", faction, false);
-                Map map = HVMP_Utility.TryGetMap();
+                Map map = QuestSetupUtility.Quest_TryGetMap();
                 slate.Set<Map>("map", map, false);
-                PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
+                PlanetTile tile = QuestSetupUtility.Quest_TryGetPlanetTile();
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = faction;
@@ -868,7 +856,7 @@ namespace HautsPermits_Ideology
                         points = StorytellerUtility.DefaultThreatPointsNow(map),
                     };
                     cda.BJ_activationPoint = cda.reqProgress*Rand.Range(0.1f,0.9f);
-                    cda.BJ_incident = HautsUtility.badEventPool.Where((IncidentDef id) => id.Worker.CanFireNow(incidentParms)).RandomElement();
+                    cda.BJ_incident = GoodAndBadIncidentsUtility.badEventPool.Where((IncidentDef id) => id.Worker.CanFireNow(incidentParms)).RandomElement();
                     QuestGen.AddQuestDescriptionRules(new List<Rule>
                     {
                         new Rule_String("mutator_BJ_info", this.BJ_description.Formatted())
@@ -950,7 +938,7 @@ namespace HautsPermits_Ideology
                     Find.Storyteller.incidentQueue.Add(this.BJ_incident, Find.TickManager.TicksGame + 60, incidentParms, 60000);
                 } else {
                     Log.Error("Tried to fire " + this.BJ_incident.label + " for the Remnant quest's Bad Juju mutator, but its worker could not fire. Using a random other bad event instead...");
-                    List<IncidentDef> incidents = HautsUtility.badEventPool.Where((IncidentDef id) => id.Worker.CanFireNow(incidentParms)).ToList();
+                    List<IncidentDef> incidents = GoodAndBadIncidentsUtility.badEventPool.Where((IncidentDef id) => id.Worker.CanFireNow(incidentParms)).ToList();
                     Find.Storyteller.incidentQueue.Add(incidents.RandomElement(), Find.TickManager.TicksGame + 60, incidentParms, 60000);
                 }
                 this.BJ_activationPoint = -1f;
@@ -1031,9 +1019,9 @@ namespace HautsPermits_Ideology
                     QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TTOT_info", " ") });
                 }
                 slate.Set<bool>(this.storeTTOT.GetValue(slate), TTOT_on, false);
-                Map map = HVMP_Utility.TryGetMap();
+                Map map = QuestSetupUtility.Quest_TryGetMap();
                 slate.Set<Map>("map", map, false);
-                PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
+                PlanetTile tile = QuestSetupUtility.Quest_TryGetPlanetTile();
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = faction;

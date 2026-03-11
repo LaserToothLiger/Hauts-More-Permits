@@ -1,32 +1,16 @@
 ﻿using HautsFramework;
 using HautsPermits;
-using Ionic.Zlib;
 using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Verse;
 using Verse.AI;
-using Verse.AI.Group;
 using Verse.Grammar;
-using Verse.Noise;
 using Verse.Sound;
-using static RimWorld.QuestPart;
-using static System.Net.Mime.MediaTypeNames;
-using static UnityEngine.GraphicsBuffer;
 
 namespace HautsPermits_Biotech
 {
@@ -527,9 +511,9 @@ namespace HautsPermits_Biotech
                 Slate slate = QuestGen.slate;
                 slate.Set<Thing>("asker", faction.leader, false);
                 QuestGen.slate.Set<Faction>("faction", faction, false);
-                Map map = HVMP_Utility.TryGetMap();
+                Map map = QuestSetupUtility.Quest_TryGetMap();
                 slate.Set<Map>("map", map, false);
-                PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
+                PlanetTile tile = QuestSetupUtility.Quest_TryGetPlanetTile();
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = faction;
@@ -2437,7 +2421,7 @@ namespace HautsPermits_Biotech
                 CompStudiableQuestItem csqi = this.parent.GetComp<CompStudiableQuestItem>();
                 if (csqi != null && csqi.curProgress > 0f)
                 {
-                    HautsUtility.DoRandomDiseaseOutbreak(this.parent);
+                    HautsMiscUtility.DoRandomDiseaseOutbreak(this.parent);
                 }
             }
         }
@@ -2538,7 +2522,7 @@ namespace HautsPermits_Biotech
                 RetroviralEffectDef red = rinject.effectOnInjection;
                 if (rinject.BSL4_on)
                 {
-                    HautsUtility.DoRandomDiseaseOutbreak(this.Pawn);
+                    HautsMiscUtility.DoRandomDiseaseOutbreak(this.Pawn);
                 }
                 if (red != null)
                 {

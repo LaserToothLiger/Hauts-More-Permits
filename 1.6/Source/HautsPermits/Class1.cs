@@ -5,25 +5,16 @@ using RimWorld.BaseGen;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Reflection;
-using System.Security.Cryptography;
-using System.Text.RegularExpressions;
 using System.Xml;
 using UnityEngine;
-using VEF;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 using Verse.Grammar;
-using Verse.Noise;
 using Verse.Sound;
-using static HarmonyLib.Code;
-using static System.Collections.Specialized.BitVector32;
-using static UnityEngine.GraphicsBuffer;
 
 namespace HautsPermits
 {
@@ -237,9 +228,9 @@ namespace HautsPermits
                                     Slate slate0 = new Slate();
                                     slate0.Set<Faction>("branchFaction", faction, false);
                                     slate0.Set<float>("points", HVMP_Utility.TryGetPoints(negotiator), false);
-                                    Map maplike = HVMP_Utility.TryGetMap();
+                                    Map maplike = QuestSetupUtility.Quest_TryGetMap();
                                     slate0.Set<Map>("map", maplike, false);
-                                    PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
+                                    PlanetTile tile = QuestSetupUtility.Quest_TryGetPlanetTile();
                                     if (qsd.CanRun(slate0, map))
                                     {
                                         qsds.Add(qsd);
@@ -252,9 +243,9 @@ namespace HautsPermits
                                     Slate slate = new Slate();
                                     slate.Set<Faction>("branchFaction", faction, false);
                                     slate.Set<float>("points", gqp != null ? gqp.points.RandomInRange : 1000f, false);
-                                    Map maplike = HVMP_Utility.TryGetMap();
+                                    Map maplike = QuestSetupUtility.Quest_TryGetMap();
                                     slate.Set<Map>("map", gqp != null ? (gqp.needsPlayerMap ? maplike : null) : null, false);
-                                    PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
+                                    PlanetTile tile = QuestSetupUtility.Quest_TryGetPlanetTile();
                                     slate.Set<PlanetTile>("pTile", tile, false);
                                     Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(questDef, slate);
                                     if (!quest.hidden && quest.root.sendAvailableLetter)
@@ -2553,7 +2544,7 @@ namespace HautsPermits
                         this.parent.Severity += this.Props.sensPerHour * 0.024f;
                         if (Rand.MTBEventOccurs(this.Props.MTBhoursToGoodEvent, 2500f, 60))
                         {
-                            HautsUtility.MakeGoodEvent(this.Pawn);
+                            GoodAndBadIncidentsUtility.MakeGoodEvent(this.Pawn);
                             Messages.Message("HVMP_ProbabilityTunerActivated".Translate().CapitalizeFirst().Formatted(this.Pawn.Named("PAWN")).AdjustedFor(this.Pawn, "PAWN", true).Resolve(), this.Pawn, MessageTypeDefOf.PositiveEvent, true);
                             this.isActive = false;
                         }
@@ -3346,7 +3337,7 @@ namespace HautsPermits
         }
         public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
         {
-            if (target.IsValid && !HautsUtility.CanBeHitByAirToSurface(target.Cell, this.caller.Map, false))
+            if (target.IsValid && !HautsMiscUtility.CanBeHitByAirToSurface(target.Cell, this.caller.Map, false))
             {
                 if (showMessages)
                 {
@@ -3501,7 +3492,7 @@ namespace HautsPermits
             if (!victim.DestroyedOrNull() && victim.Spawned)
             {
                 this.Props.soundDef.PlayOneShot(new TargetInfo(victim.Position, victim.Map, false));
-                if (HautsUtility.CanBeHitByAirToSurface(victim.Position, victim.Map, false))
+                if (HautsMiscUtility.CanBeHitByAirToSurface(victim.Position, victim.Map, false))
                 {
                     RoofDef roof = victim.Map.roofGrid.RoofAt(victim.Position);
                     if (roof != null && !roof.isThickRoof)
@@ -5061,7 +5052,7 @@ namespace HautsPermits
                         }
                         if ((td.fertility > 0f || td.categoryType == TerrainDef.TerrainCategoryType.Sand || td.categoryType == TerrainDef.TerrainCategoryType.Soil) && !td.IsFloor && !td.affordances.Contains(TerrainAffordanceDefOf.SmoothableStone) && !td.IsRiver && !td.IsWater)
                         {
-                            List<TerrainDef> tdList = HautsUtility.FertilityTerrainDefs(this.map);
+                            List<TerrainDef> tdList = HautsMiscUtility.FertilityTerrainDefs(this.map);
                             IOrderedEnumerable<TerrainDef> source = from e in tdList.FindAll((TerrainDef e) => (double)e.fertility > (double)td.fertility && !td.IsWater && !td.IsRiver)
                                                                     orderby e.fertility
                                                                     select e;
@@ -5824,9 +5815,9 @@ namespace HautsPermits
                 Slate slate = QuestGen.slate;
                 slate.Set<Thing>("asker", commerceFaction.leader, false);
                 slate.Set<Faction>("faction", commerceFaction, false);
-                Map map = HVMP_Utility.TryGetMap();
+                Map map = QuestSetupUtility.Quest_TryGetMap();
                 slate.Set<Map>("map", map, false);
-                PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
+                PlanetTile tile = QuestSetupUtility.Quest_TryGetPlanetTile();
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = commerceFaction;
@@ -5850,9 +5841,9 @@ namespace HautsPermits
                 Slate slate = QuestGen.slate;
                 slate.Set<Thing>("asker", paxFaction.leader, false);
                 QuestGen.slate.Set<Faction>("faction", paxFaction, false);
-                Map map = HVMP_Utility.TryGetMap();
+                Map map = QuestSetupUtility.Quest_TryGetMap();
                 slate.Set<Map>("map", map, false);
-                PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
+                PlanetTile tile = QuestSetupUtility.Quest_TryGetPlanetTile();
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = paxFaction;
@@ -5876,9 +5867,9 @@ namespace HautsPermits
                 Slate slate = QuestGen.slate;
                 slate.Set<Thing>("asker", roverFaction.leader, false);
                 QuestGen.slate.Set<Faction>("faction", roverFaction, false);
-                Map map = HVMP_Utility.TryGetMap();
+                Map map = QuestSetupUtility.Quest_TryGetMap();
                 slate.Set<Map>("map", map, false);
-                PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
+                PlanetTile tile = QuestSetupUtility.Quest_TryGetPlanetTile();
                 slate.Set<PlanetTile>("pTile", tile, false);
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = roverFaction;
@@ -10103,12 +10094,12 @@ namespace HautsPermits
     {
         protected override void RunInt()
         {
-            PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
+            PlanetTile tile = QuestSetupUtility.Quest_TryGetPlanetTile();
             if (this.TryFindSiteTile(tile, out PlanetTile num) && HVMP_Utility.TryFindRoverFaction(out Faction roverFaction))
             {
                 Slate slate = QuestGen.slate;
                 Quest quest = QuestGen.quest;
-                Map map = HVMP_Utility.TryGetMap();
+                Map map = QuestSetupUtility.Quest_TryGetMap();
                 bool mayhemMode = HVMP_Mod.settings.atlasX;
                 this.TryFindSiteTile(tile, out PlanetTile num2);
                 string text = QuestGenUtility.HardcodedSignalWithQuestID("worldObject.Destroyed");
@@ -10214,8 +10205,8 @@ namespace HautsPermits
         protected override bool TestRunInt(Slate slate)
         {
             HVMP_Utility.SetSettingScalingRewardValue(slate);
-            PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
-            Map map = HVMP_Utility.TryGetMap();
+            PlanetTile tile = QuestSetupUtility.Quest_TryGetPlanetTile();
+            Map map = QuestSetupUtility.Quest_TryGetMap();
             slate.Set<Map>("map", map, false);
             return this.TryFindSiteTile(tile, out PlanetTile num) && HVMP_Utility.TryFindRoverFaction(out Faction roverFaction) && base.TestRunInt(slate);
         }
@@ -10700,8 +10691,8 @@ namespace HautsPermits
             {
                 Slate slate = QuestGen.slate;
                 Quest quest = QuestGen.quest;
-                PlanetTile tile = HVMP_Utility.TryGetPlanetTile();
-                Map map = HVMP_Utility.TryGetMap();
+                PlanetTile tile = QuestSetupUtility.Quest_TryGetPlanetTile();
+                Map map = QuestSetupUtility.Quest_TryGetMap();
                 int numSites = this.normal_siteCount.RandomInRange;
                 int timeout = (numSites - 1) * this.ticksPerSite;
                 int maxDist = 20;
@@ -10780,8 +10771,8 @@ namespace HautsPermits
         protected override bool TestRunInt(Slate slate)
         {
             HVMP_Utility.SetSettingScalingRewardValue(slate);
-            Map map = HVMP_Utility.TryGetMap();
-            PlanetTile pTile = HVMP_Utility.TryGetPlanetTile();
+            Map map = QuestSetupUtility.Quest_TryGetMap();
+            PlanetTile pTile = QuestSetupUtility.Quest_TryGetPlanetTile();
             return this.TryFindSiteTile(pTile, out PlanetTile num, 20) && HVMP_Utility.TryFindRoverFaction(out Faction roverFaction) && base.TestRunInt(slate);
         }
         [NoTranslate]
@@ -11426,14 +11417,6 @@ namespace HautsPermits
             }
             return occultBranch != null;
         }
-        public static Map TryGetMap()
-        {
-            return HautsUtility.Quest_TryGetMap();
-        }
-        public static PlanetTile TryGetPlanetTile()
-        {
-            return HautsUtility.Quest_TryGetPlanetTile();
-        }
         public static float TryGetPoints(Pawn caller)
         {
             if (caller != null && caller.Map != null && caller.Map.IsPlayerHome)
@@ -11695,6 +11678,7 @@ namespace HautsPermits
                 b.MakeMinified();
             }
             GenDrop.TryDropSpawn(thing, pawn.Position, pawn.Map, ThingPlaceMode.Near, out Thing theThing, null, null, true);
+            thing.Notify_DebugSpawned();
             pallet.SplitOff(1).Destroy();
         }
         public static Faction AssignFallbackFactionToPermitTargeter()
