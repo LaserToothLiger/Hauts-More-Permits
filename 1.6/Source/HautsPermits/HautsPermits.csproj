@@ -69,8 +69,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BranchPlatforms.cs" />
+    <Compile Include="HediffComps_Misc.cs" />
+    <Compile Include="Item_StudiableForQuests.cs" />
+    <Compile Include="Item_BlackbodyShieldUnit.cs" />
+    <Compile Include="BranchPlatform_SecurityCrate.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="DefsOf.cs" />
+    <Compile Include="Item_BranchOwnedDeployables.cs" />
+    <Compile Include="Item_Pallets.cs" />
+    <Compile Include="PeriodicBranchQuests.cs" />
+    <Compile Include="ModSettings.cs" />
+    <Compile Include="Item_PermitAuthorizer.cs" />
+    <Compile Include="PermitWorkers_CommerceBribes.cs" />
+    <Compile Include="PermitWorkers_CommerceCallRaidsAndTrades.cs" />
+    <Compile Include="PermitWorkers_SeniorityScalingVariants.cs" />
+    <Compile Include="PermitWorker_DropFactionThing.cs" />
+    <Compile Include="PermitWorkers_PermitAuthorizerFriendlyVariants.cs" />
+    <Compile Include="PermitWorkers_PaxOffensiveTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestNodesAndParts_Common.cs" />
+    <Compile Include="QuestNodes_BranchQuestBases.cs" />
+    <Compile Include="Quest_Branch_CutTiesImSorry.cs" />
+    <Compile Include="Quest_Branch_EstablishTies.cs" />
+    <Compile Include="StatPart.cs" />
+    <Compile Include="WorldComponent_BranchStuff.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

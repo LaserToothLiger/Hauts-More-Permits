@@ -269,6 +269,7 @@
 				<li>HVMP_CommerceTransportation</li>
 			</quests>
 			<donationTraderKind>HVMP_CommerceDonations</donationTraderKind>
+			<donationString>ivory or gold</donationString>
 		</li>
 	</modExtensions>
   </FactionDef>
@@ -303,6 +304,7 @@
 				<li>HVMP_PaxVox</li>
 			</quests>
 			<donationTraderKind>HVMP_PaxDonations</donationTraderKind>
+			<donationString>luciferium or shield cores</donationString>
 		</li>
 	</modExtensions>
   </FactionDef>
@@ -334,6 +336,7 @@
 				<li>HVMP_RoverTheseus</li>
 			</quests>
 			<donationTraderKind>HVMP_RoverDonations</donationTraderKind>
+			<donationString>spacer fabrics, AI persona cores, or shuttle engines</donationString>
 		</li>
 	</modExtensions>
   </FactionDef>
@@ -368,6 +371,7 @@
 				<li>HVMP_ArchiveShrine</li>
 			</quests>
 			<donationTraderKind>HVMP_ArchiveDonations</donationTraderKind>
+			<donationString>works of art</donationString>
 		</li>
 	</modExtensions>
   </FactionDef>
@@ -426,6 +430,7 @@
 				<li>HVMP_EcosphereRetroviralAgent</li>
 			</quests>
 			<donationTraderKind>HVMP_EcosphereDonations</donationTraderKind>
+			<donationString>ova, hemogen, ambrosia, or seeds</donationString>
 		</li>
 	</modExtensions>
   </FactionDef>
@@ -518,6 +523,7 @@
 				<li>HVMP_OccultWells</li><!--The Invisible Man-->
 			</quests>
 			<donationTraderKind>HVMP_OccultDonations</donationTraderKind>
+			<donationString>shards or psychic interface artifacts</donationString>
 			<tiedToAnomalyThreatFraction>true</tiedToAnomalyThreatFraction><!--WON'T ISSUE QUESTS IF the Anomaly playstyle is set to disabled. If set to your regularly scheduled monolith, it only starts offering quests once the thing activates; if in Ambient Horror, likelihood of offering quests is tied to the current Anomaly threat fraction.-->
 		</li>
 	</modExtensions>

@@ -10,13 +10,7 @@ using VFEC.Senators;
 
 namespace HVMP_VFEC
 {
-    [StaticConstructorOnStartup]
-    public class HVMP_VFEC
-    {
-        static HVMP_VFEC()
-        {
-        }
-    }
+    //gain the favor of a random senator
     [StaticConstructorOnStartup]
     public class RoyalTitlePermitWorker_BribeSenator : RoyalTitlePermitWorker_Targeted
     {

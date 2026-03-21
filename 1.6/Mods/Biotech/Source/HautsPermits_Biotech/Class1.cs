@@ -14,14 +14,6 @@ using Verse.Sound;
 
 namespace HautsPermits_Biotech
 {
-
-    [StaticConstructorOnStartup]
-    public class HautsPermits_Biotech
-    {
-        static HautsPermits_Biotech()
-        {
-        }
-    }
     [DefOf]
     public static class HVMP_BDefOf
     {

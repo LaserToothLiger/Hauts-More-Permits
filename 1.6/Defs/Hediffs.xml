@@ -469,10 +469,10 @@
 			<hpThreshold>0.2</hpThreshold>
 			<mustBeRanged>true</mustBeRanged>
 		  </li>
-		  <li Class="HautsPermits.CompProperties_GatepunchAbility">
-			<compClass>HautsPermits.CompAbilityEffect_GatepunchAbility</compClass>
-			<gatepuncherHediff>HVMP_Gatepuncher_NPC</gatepuncherHediff>
-			<chargeCost>1</chargeCost>
+		  <li Class="HautsFramework.CompProperties_AbilityCostsHediffSeverity">
+			<compClass>HautsFramework.CompAbilityEffect_CostsHediffSeverity</compClass>
+			<requisiteHediff>HVMP_Gatepuncher_NPC</requisiteHediff>
+			<severityCost>1</severityCost>
 		  </li>
 		</comps>
 	  </AbilityDef>

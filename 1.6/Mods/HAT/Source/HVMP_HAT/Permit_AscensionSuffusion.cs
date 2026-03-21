@@ -6,9 +6,7 @@ using Verse;
 
 namespace HVMP_HAT
 {
-    public class HVMP_HAT
-    {
-    }
+    //when the Ascension Suffusion's natural duration (severity decay) runs out, the pawn gains the Latent Psychic trait of a random type
     public class Hediff_Ascender : HediffWithComps
     {
         public override void PostTickInterval(int delta)
@@ -27,6 +25,7 @@ namespace HVMP_HAT
             }
         }
     }
+    //Ascension Suffusion cannot target latent or woke psychics, because that would be useless.
     public class RoyalTitlePermitWorker_Ascender : RoyalTitlePermitWorker_GiveHediffs
     {
         public override bool IsGoodPawn(Pawn pawn)

@@ -79,7 +79,7 @@
   <GenStepDef>
     <defName>HVMP_BranchPlatformerLoot</defName>
     <order>700</order>
-    <genStep Class="HautsPermits.GenStep_BigassPawnLoot">
+    <genStep Class="HautsPermits.GenStep_BigassPawnDefendersAndLoot">
       <requiresRoof>true</requiresRoof>
 	  <defenderMulti>1</defenderMulti>
 	  <pointsPerPawnGen>2000~6000</pointsPerPawnGen>

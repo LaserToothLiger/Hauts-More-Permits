@@ -510,6 +510,26 @@ namespace HautsPermits_Ideology
         }
     }
     //quest: ethnography
+    //sets storePawnKinds to a random pawn in the pawnKinds list - ONLY USED IN IDEOLOGY?
+    public class QuestNode_HospitalityPawnType : QuestNode
+    {
+        protected override void RunInt()
+        {
+            Slate slate = QuestGen.slate;
+            PawnKindDef pawnKindDef;
+            if (pawnKinds.TryRandomElement(out pawnKindDef))
+            {
+                slate.Set<PawnKindDef>(this.storePawnKindAs.GetValue(slate), pawnKindDef, false);
+            }
+        }
+        protected override bool TestRunInt(Slate slate)
+        {
+            return !this.pawnKinds.NullOrEmpty();
+        }
+        [NoTranslate]
+        public SlateRef<string> storePawnKindAs;
+        public List<PawnKindDef> pawnKinds;
+    }
     public class QuestNode_Multiply_QQ : QuestNode
     {
         protected override bool TestRunInt(Slate slate)

@@ -24,11 +24,6 @@
         <thingDef>ThrumboHorn</thingDef>
       </li>
     </stockGenerators>
-	<modExtensions>
-	  <li Class="HautsPermits.DonationTypeBeat">
-		<donationString>ivory or gold</donationString>
-	  </li>
-	</modExtensions>
   </TraderKindDef>
   <TraderKindDef>
     <defName>HVMP_PaxDonations</defName>
@@ -47,11 +42,6 @@
         <thingDef>BroadshieldCore</thingDef>
       </li>
     </stockGenerators>
-	<modExtensions>
-	  <li Class="HautsPermits.DonationTypeBeat">
-		<donationString>luciferium or shield cores</donationString>
-	  </li>
-	</modExtensions>
   </TraderKindDef>
   <TraderKindDef>
     <defName>HVMP_RoverDonations</defName>
@@ -73,11 +63,6 @@
         <thingDef>AIPersonaCore</thingDef>
       </li>
     </stockGenerators>
-	<modExtensions>
-	  <li Class="HautsPermits.DonationTypeBeat">
-		<donationString>spacer fabrics, AI persona cores, or shuttle engines</donationString>
-	  </li>
-	</modExtensions>
   </TraderKindDef>
   
   <!--DLC-->
@@ -107,11 +92,6 @@
         <thingDef>SculptureGrand</thingDef>
       </li>
     </stockGenerators>
-	<modExtensions>
-	  <li Class="HautsPermits.DonationTypeBeat">
-		<donationString>works of art</donationString>
-	  </li>
-	</modExtensions>
   </TraderKindDef>
   <TraderKindDef MayRequire="Ludeon.RimWorld.Biotech">
     <defName>HVMP_EcosphereDonations</defName>
@@ -136,11 +116,6 @@
         <thingDef>PoluxSeed</thingDef>
       </li>
     </stockGenerators>
-	<modExtensions>
-	  <li Class="HautsPermits.DonationTypeBeat">
-		<donationString>ova, hemogen, ambrosia, or seeds</donationString>
-	  </li>
-	</modExtensions>
   </TraderKindDef>
   <TraderKindDef MayRequire="Ludeon.RimWorld.Anomaly">
     <defName>HVMP_OccultDonations</defName>
@@ -159,11 +134,6 @@
         <thingDef>PsychicAmplifier</thingDef>
       </li>
     </stockGenerators>
-	<modExtensions>
-	  <li Class="HautsPermits.DonationTypeBeat">
-		<donationString>shards or psychic interface artifacts</donationString>
-	  </li>
-	</modExtensions>
   </TraderKindDef>
   
 </Defs>

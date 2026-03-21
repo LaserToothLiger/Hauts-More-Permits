@@ -80,7 +80,7 @@
     </questDescriptionRules>
     <root Class="HautsPermits_Ideology.QuestNode_ArchiveIntermediary">
 	  <nodes>
-        <li Class="HautsPermits.QuestNode_HospitalityPawnType">
+        <li Class="HautsPermits_Ideology.QuestNode_HospitalityPawnType">
           <storePawnKindAs>lodgersPawnKind</storePawnKindAs>
 		  <pawnKinds>
 			<li>HVMP_Anthropologist</li>

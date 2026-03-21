@@ -170,7 +170,6 @@
 		Communications Blackout-->
   <GameConditionDef>
     <defName>HVMP_CommsBlackout</defName>
-    <conditionClass>HautsPermits.GameCondition_MutationDummy</conditionClass>
     <label>communications blackout</label>
     <description>Machinations of the Commerce Branch. You cannot contact non-Branch factions on the comms console, you cannot trade with settlements, and traders will avoid your colonies.</description>
   </GameConditionDef>

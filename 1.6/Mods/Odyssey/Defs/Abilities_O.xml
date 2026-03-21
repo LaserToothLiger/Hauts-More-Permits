@@ -46,10 +46,10 @@
         <goodwillImpact>-15</goodwillImpact>
         <applyGoodwillImpactToLodgers>False</applyGoodwillImpactToLodgers>
       </li>
-	  <li Class="HautsPermits.CompProperties_GatepunchAbility">
-        <compClass>HautsPermits.CompAbilityEffect_GatepunchAbility</compClass>
-		<chargeCost>1</chargeCost>
-		<gatepuncherHediff>HVMP_GatepuncherImplant</gatepuncherHediff>
+	  <li Class="HautsFramework.CompProperties_AbilityCostsHediffSeverity">
+		<compClass>HautsFramework.CompAbilityEffect_CostsHediffSeverity</compClass>
+		<requisiteHediff>HVMP_GatepuncherImplant</requisiteHediff>
+		<severityCost>1</severityCost>
 	  </li>
     </comps>
   </AbilityDef>
@@ -102,10 +102,10 @@
 		<hpThreshold>0.2</hpThreshold>
 		<mustBeRanged>true</mustBeRanged>
       </li>
-	  <li Class="HautsPermits.CompProperties_GatepunchAbility">
-        <compClass>HautsPermits.CompAbilityEffect_GatepunchAbility</compClass>
-		<chargeCost>4</chargeCost>
-		<gatepuncherHediff>HVMP_GatepuncherImplant</gatepuncherHediff>
+	  <li Class="HautsFramework.CompProperties_AbilityCostsHediffSeverity">
+		<compClass>HautsFramework.CompAbilityEffect_CostsHediffSeverity</compClass>
+		<requisiteHediff>HVMP_GatepuncherImplant</requisiteHediff>
+		<severityCost>4</severityCost>
 	  </li>
     </comps>
   </AbilityDef>
