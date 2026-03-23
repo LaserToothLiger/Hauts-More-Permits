@@ -122,30 +122,30 @@
 	<baseChance>0.2</baseChance>
   </HautsPermits.HackRewardDef>
   
-  <HautsPermits.HackRewardDef>
+  <HautsPermits.HackRewardDef MayRequire="Ludeon.RimWorld.Ideology">
     <defName>HVMP_RewardIngressor</defName>
     <itemsToDrop>
         <HVMP_Ingressor>1</HVMP_Ingressor>
     </itemsToDrop>
-	<guaranteedForFaction MayRequire="Ludeon.RimWorld.Ideology">HVMP_ArchiveBranch</guaranteedForFaction>
+	<guaranteedForFaction>HVMP_ArchiveBranch</guaranteedForFaction>
 	<baseChance>0.2</baseChance>
   </HautsPermits.HackRewardDef>
   
-  <HautsPermits.HackRewardDef>
+  <HautsPermits.HackRewardDef MayRequire="Ludeon.RimWorld.Biotech">
     <defName>HVMP_RewardBiofilmMedicine</defName>
     <itemsToDrop>
         <HVMP_BiofilmMedicine>5</HVMP_BiofilmMedicine>
     </itemsToDrop>
-	<guaranteedForFaction MayRequire="Ludeon.RimWorld.Biotech">HVMP_EcosphereBranch</guaranteedForFaction>
+	<guaranteedForFaction>HVMP_EcosphereBranch</guaranteedForFaction>
 	<baseChance>0.2</baseChance>
   </HautsPermits.HackRewardDef>
   
-  <HautsPermits.HackRewardDef>
+  <HautsPermits.HackRewardDef MayRequire="Ludeon.RimWorld.Anomaly">
     <defName>HVMP_RewardProbabilityTuner</defName>
     <itemsToDrop>
         <HVMP_ProbabilityTuner>1</HVMP_ProbabilityTuner>
     </itemsToDrop>
-	<guaranteedForFaction MayRequire="Ludeon.RimWorld.Anomaly">HVMP_OccultBranch</guaranteedForFaction>
+	<guaranteedForFaction>HVMP_OccultBranch</guaranteedForFaction>
 	<baseChance>0.2</baseChance>
   </HautsPermits.HackRewardDef>
 

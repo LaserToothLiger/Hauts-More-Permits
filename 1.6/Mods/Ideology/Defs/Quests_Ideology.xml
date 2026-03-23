@@ -698,6 +698,7 @@
 		<li>skillString(statName==NegotiationAbility)->a preoccupation with dialogue and argumentation</li>
 		<li>skillString(statName==TrainAnimalChance)->their animal-centric lifestyles</li>
 		<li>skillString(statName==MeleeHitChance)->the exacting detail they placed on the tiniest details of their crafts</li>
+		<!--if you add more stats to the possible options, it would behoove you to add a matching skillString as well-->
 		
 		<li>mutatorSuffix->[mutator_BJ_info][mutator_CD_info][mutator_PI_info]</li>
       </rulesStrings>

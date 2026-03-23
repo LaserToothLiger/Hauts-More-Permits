@@ -51,9 +51,9 @@
     </abilities>
   </HediffDef>
 
-  <HediffDef ParentName="HVT_TraitHediffBase">
+  <HediffDef ParentName="HVT_TraitHediffBase" MayRequire="Ludeon.RimWorld.Anomaly">
 	<defName>HVMP_PTuning</defName>
-	<hediffClass>HautsPermits.Hediff_PTuning</hediffClass>
+	<hediffClass>HautsPermits_Occult.Hediff_PTuning</hediffClass>
 	<label>probability tuner</label>
 	<description>A loss of psychic sensitivity caused by bonding with a probability tuner.\n\nProbability tuners drain psychic sensitivity over time, eventually causing a good event. The tuner stops draining sensitivity once either a good event is created or psychic sensitivity reaches 0%.</description>
 	<initialSeverity>0.001</initialSeverity>
@@ -66,7 +66,7 @@
 	  </li>
 	</stages>
 	<comps>
-	  <li Class="HautsPermits.HediffCompProperties_PTuner">
+	  <li Class="HautsPermits_Occult.HediffCompProperties_PTuner">
 		<sensPerHour>0.1</sensPerHour>
 		<MTBhoursToGoodEvent>9</MTBhoursToGoodEvent>
 		<permanentLabel>probability tuning scar</permanentLabel>

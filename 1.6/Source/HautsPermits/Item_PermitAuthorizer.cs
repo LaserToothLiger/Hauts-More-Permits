@@ -61,7 +61,7 @@ namespace HautsPermits
                     this.faction = this.parent.Map.ParentFaction;
                     return;
                 }
-                this.faction = HVMP_Utility.AssignFallbackFactionToPermitTargeter();
+                this.faction = PermitAuthorizerUtility.AssignFallbackFactionToPermitTargeter();
             }
             this.freshFromVault = false;
         }
@@ -133,7 +133,7 @@ namespace HautsPermits
             Faction f = cteipt.faction;
             if (f == null)
             {
-                f = HVMP_Utility.AssignFallbackFactionToPermitTargeter();
+                f = PermitAuthorizerUtility.AssignFallbackFactionToPermitTargeter();
             }
             Hediff firstHediffOfDef = this.TargetPawn.health.hediffSet.GetFirstHediffOfDef(cteipt.Props.hediffDef, false);
             if (firstHediffOfDef == null && !cteipt.Props.requiresExistingHediff)

@@ -65,8 +65,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="BookOutcomeDoers.cs" />
+    <Compile Include="HarmonyPatch.cs" />
+    <Compile Include="Item_Ingressor.cs" />
+    <Compile Include="PermitWorkers_ItemAlterations.cs" />
+    <Compile Include="PermitWorker_DropIdeoBook.cs" />
+    <Compile Include="PermitWorkers_Scanners.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestNode_BranchQuestBase.cs" />
+    <Compile Include="Quest_Archive_Ethnography.cs" />
+    <Compile Include="Quest_Archive_Remnant.cs" />
+    <Compile Include="Quest_Archive_Replica.cs" />
+    <Compile Include="Quest_Archive_Satellite.cs" />
+    <Compile Include="Quest_Archive_Shrine.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -820,7 +820,7 @@
   <ThingDef ParentName="ResourceBase">
     <defName>HVMP_DatedAtlas</defName>
     <label>dated atlas</label>
-	<thingClass>HautsPermits.Book_Atlas</thingClass>
+	<thingClass>ThingWithComps</thingClass>
     <description>A collection of maps and notes describing a broad geographical region. This one is in need of severe revisions.</description>
     <graphicData>
       <texPath>Things/Item/Book/Textbook/Textbook</texPath>

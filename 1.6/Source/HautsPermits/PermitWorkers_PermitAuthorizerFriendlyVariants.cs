@@ -16,15 +16,15 @@ namespace HautsPermits
     {
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
         {
-            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
         }
         public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
         {
-            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
     //as DropBook from the Framework
@@ -32,15 +32,15 @@ namespace HautsPermits
     {
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
         {
-            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
         }
         public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
         {
-            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
     //as DropPawns from the Framework
@@ -48,15 +48,15 @@ namespace HautsPermits
     {
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
         {
-            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
         }
         public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
         {
-            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
     //as DropResourcesOfCategory from the Framework
@@ -64,15 +64,15 @@ namespace HautsPermits
     {
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
         {
-            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
         }
         public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
         {
-            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
     //as DropResourcesStuff from the Framework
@@ -80,15 +80,15 @@ namespace HautsPermits
     {
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
         {
-            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
         }
         public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
         {
-            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
     //as GenerateQuest from the Framework
@@ -96,15 +96,15 @@ namespace HautsPermits
     {
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
         {
-            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
         }
         public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
         {
-            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
     //as... you know what? Guess. Take a guess.
@@ -112,15 +112,15 @@ namespace HautsPermits
     {
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
         {
-            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
         }
         public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
         {
-            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
     //as MultiplyItemStack from the Framework
@@ -128,15 +128,15 @@ namespace HautsPermits
     {
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
         {
-            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
         }
         public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
         {
-            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
     /*the following are all vanilla (well, Royalty, obviously) permit workers
@@ -156,7 +156,7 @@ namespace HautsPermits
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
             {
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
@@ -164,7 +164,7 @@ namespace HautsPermits
             string text = this.def.LabelCap + ": ";
             Action action = null;
             bool free;
-            if (HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
+            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
             {
                 action = delegate
                 {
@@ -195,7 +195,7 @@ namespace HautsPermits
             {
                 command_Action.Disable("CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")));
             }
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
             {
                 command_Action.Disable("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")));
             }
@@ -244,14 +244,14 @@ namespace HautsPermits
                 {
                     this.caller.royalty.TryRemoveFavor(this.calledFaction, this.def.royalAid.favorCost);
                 }
-                HVMP_Utility.DoPTargeterCooldown(this.calledFaction, this.caller, this);
+                PermitAuthorizerUtility.DoPTargeterCooldown(this.calledFaction, this.caller, this);
             }
         }
         private void CallShuttleToCaravan(Pawn caller, Faction faction, bool free)
         {
             MethodInfo CSTS = typeof(RoyalTitlePermitWorker_CallShuttle).GetMethod("CallShuttleToCaravan", BindingFlags.NonPublic | BindingFlags.Instance);
             CSTS.Invoke(this, new object[] { caller, faction, free });
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
         private Faction calledFaction;
         private static readonly Texture2D CommandTex = ContentFinder<Texture2D>.Get("UI/Commands/CallShuttle", true);
@@ -271,7 +271,7 @@ namespace HautsPermits
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + text, null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
@@ -311,7 +311,7 @@ namespace HautsPermits
         }
         private void BeginCallLaborers(Pawn pawn, Map map, Faction faction, bool free)
         {
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
             {
                 return;
             }
@@ -346,7 +346,7 @@ namespace HautsPermits
             {
                 this.caller.royalty.TryRemoveFavor(this.calledFaction, this.def.royalAid.favorCost);
             }
-            HVMP_Utility.DoPTargeterCooldown(this.calledFaction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(this.calledFaction, caller, this);
         }
         private Faction calledFaction;
     }
@@ -365,7 +365,7 @@ namespace HautsPermits
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + text, null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
             {
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
@@ -446,7 +446,7 @@ namespace HautsPermits
             {
                 this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
             }
-            HVMP_Utility.DoPTargeterCooldown(this.faction, this.caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(this.faction, this.caller, this);
         }
         private Faction faction;
     }

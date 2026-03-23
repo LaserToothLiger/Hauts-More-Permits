@@ -57,8 +57,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Buildings_EcosphereDrops.cs" />
+    <Compile Include="Quest_Ecosphere_RetroviralAgent.cs" />
+    <Compile Include="DefsOf.cs" />
+    <Compile Include="Hediffs_ScariaMutations.cs" />
+    <Compile Include="Hediffs_Neopathy.cs" />
+    <Compile Include="PermitWorkers_EcosphereBuildingDrops.cs" />
+    <Compile Include="PermitWorkers_MakeXenogerms.cs" />
+    <Compile Include="PermitWorkers_Stimulations.cs" />
+    <Compile Include="Item_Chargecell.cs" />
+    <Compile Include="PermitWorker_DropGenePack.cs" />
+    <Compile Include="PermitWorker_DupeAnimal.cs" />
+    <Compile Include="PermitWorker_PollutionScoop.cs" />
+    <Compile Include="PermitWorker_SoilEnrichment.cs" />
+    <Compile Include="PermitWorker_TameMechaniteDisease.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestNode_BranchQuestBase.cs" />
+    <Compile Include="Quest_Ecosphere_CaseStudy.cs" />
+    <Compile Include="Quest_Ecosphere_EnvironmentalControl.cs" />
+    <Compile Include="Quest_Ecosphere_FieldWork.cs" />
+    <Compile Include="Quest_Ecosphere_HazardDisposal.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

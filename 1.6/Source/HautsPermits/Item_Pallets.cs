@@ -158,11 +158,31 @@ namespace HautsPermits
                 }
                 if (!usedBy.IsPlayerControlled)
                 {
-                    HVMP_Utility.OpenPallet(usedBy, this.parent, this.options.RandomElement());
+                    CompUseEffect_MultipleChoicePallet.OpenPallet(usedBy, this.parent, this.options.RandomElement());
                 }
                 MultipleChoicePalletWindow window = new MultipleChoicePalletWindow(usedBy, this);
                 Find.WindowStack.Add(window);
             }
+        }
+        public static void OpenPallet(Pawn pawn, Thing pallet, ThingDefCountClass chosenTDCC)
+        {
+            Thing thing = ThingMaker.MakeThing(chosenTDCC.thingDef, chosenTDCC.stuff);
+            thing.stackCount = chosenTDCC.count;
+            if (thing.TryGetComp(out CompQuality compQuality))
+            {
+                compQuality.SetQuality(chosenTDCC.quality, new ArtGenerationContext?(ArtGenerationContext.Outsider));
+            }
+            if (chosenTDCC.color != null && thing.TryGetComp(out CompColorable compColorable))
+            {
+                compColorable.SetColor(chosenTDCC.color.Value);
+            }
+            if (thing is Building b)
+            {
+                b.MakeMinified();
+            }
+            GenDrop.TryDropSpawn(thing, pawn.Position, pawn.Map, ThingPlaceMode.Near, out Thing theThing, null, null, true);
+            thing.Notify_DebugSpawned();
+            pallet.SplitOff(1).Destroy();
         }
         public override void PostExposeData()
         {
@@ -259,7 +279,7 @@ namespace HautsPermits
             {
                 if (acceptanceReport.Accepted)
                 {
-                    HVMP_Utility.OpenPallet(this.pawn, this.pallet, chosenTDCC);
+                    CompUseEffect_MultipleChoicePallet.OpenPallet(this.pawn, this.pallet, chosenTDCC);
                     this.Close(true);
                 }
                 else

@@ -204,7 +204,7 @@
       </li>
     </stages>
     <comps>
-	  <li Class="HautsPermits.HediffCompProperties_TMD">
+	  <li Class="HautsPermits_Biotech.HediffCompProperties_TMD">
 		<convertedFrom>FibrousMechanites</convertedFrom>
 	  </li>
     </comps>
@@ -236,7 +236,7 @@
       </li>
     </stages>
     <comps>
-	  <li Class="HautsPermits.HediffCompProperties_TMD">
+	  <li Class="HautsPermits_Biotech.HediffCompProperties_TMD">
 		<convertedFrom>SensoryMechanites</convertedFrom>
 	  </li>
     </comps>

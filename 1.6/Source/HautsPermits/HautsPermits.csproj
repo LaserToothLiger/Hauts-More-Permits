@@ -70,17 +70,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BranchPlatforms.cs" />
+    <Compile Include="BranchQuestSetupUtility.cs" />
+    <Compile Include="CosmopolitanMemeUtility.cs" />
     <Compile Include="HediffComps_Misc.cs" />
     <Compile Include="Item_StudiableForQuests.cs" />
     <Compile Include="Item_BlackbodyShieldUnit.cs" />
     <Compile Include="BranchPlatform_SecurityCrate.cs" />
-    <Compile Include="Class1.cs" />
+    <Compile Include="HarmonyPatches.cs" />
     <Compile Include="DefsOf.cs" />
     <Compile Include="Item_BranchOwnedDeployables.cs" />
     <Compile Include="Item_Pallets.cs" />
     <Compile Include="PeriodicBranchQuests.cs" />
     <Compile Include="ModSettings.cs" />
     <Compile Include="Item_PermitAuthorizer.cs" />
+    <Compile Include="PermitAuthorizerUtility.cs" />
+    <Compile Include="PermitGlowVFXUtility.cs" />
     <Compile Include="PermitWorkers_CommerceBribes.cs" />
     <Compile Include="PermitWorkers_CommerceCallRaidsAndTrades.cs" />
     <Compile Include="PermitWorkers_SeniorityScalingVariants.cs" />
@@ -92,6 +96,21 @@
     <Compile Include="QuestNodes_BranchQuestBases.cs" />
     <Compile Include="Quest_Branch_CutTiesImSorry.cs" />
     <Compile Include="Quest_Branch_EstablishTies.cs" />
+    <Compile Include="Quest_Commerce_Fortification.cs" />
+    <Compile Include="Quest_Commerce_Intervention.cs" />
+    <Compile Include="Quest_Commerce_Mastermind.cs" />
+    <Compile Include="Quest_Commerce_Research.cs" />
+    <Compile Include="Quest_Commerce_Transportation.cs" />
+    <Compile Include="Quest_Pax_Bellum.cs" />
+    <Compile Include="Quest_Pax_Caelum.cs" />
+    <Compile Include="Quest_Pax_Machina.cs" />
+    <Compile Include="Quest_Pax_Mundi.cs" />
+    <Compile Include="Quest_Pax_Vox.cs" />
+    <Compile Include="Quest_Rover_Atlas.cs" />
+    <Compile Include="Quest_Rover_Icarus.cs" />
+    <Compile Include="Quest_Rover_Laelaps.cs" />
+    <Compile Include="Quest_Rover_Odyssey.cs" />
+    <Compile Include="Quest_Rover_Theseus.cs" />
     <Compile Include="StatPart.cs" />
     <Compile Include="WorldComponent_BranchStuff.cs" />
   </ItemGroup>

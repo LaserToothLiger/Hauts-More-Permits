@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<!--make eltex inhibitors and suppressors work as intended-->
+	<Operation Class="PatchOperationAdd">
+		<xpath>/Defs/ThingDef[@Name="HoldingPlatformBase"]/comps/li[@Class="CompProperties_AffectedByFacilities"]/linkableFacilities</xpath>
+		<value>
+			<li>HVMP_EltexInhibitor</li>
+		</value>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>/Defs/ThingDef[defName="PsychicRitualSpot"]/comps/li[@Class="CompProperties_AffectedByFacilities"]/linkableFacilities</xpath>
+		<value>
+			<li>HVMP_EltexBeacon</li>
+		</value>
+	</Operation>
+</Patch>

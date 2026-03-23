@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <JobDef>
+    <defName>HVMP_AttachIngressor</defName>
+    <driverClass>HautsPermits_Ideology.JobDriver_ApplyIngressor</driverClass>
+    <reportString>attaching TargetB to TargetA.</reportString>
+  </JobDef>
+  
+  
+</Defs>

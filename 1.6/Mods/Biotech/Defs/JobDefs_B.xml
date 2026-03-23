@@ -12,14 +12,14 @@
   <!--permits-->
   <JobDef>
     <defName>HVMP_InjectChargecellBattery</defName>
-    <driverClass>HautsPermits.JobDriver_ChargecellBattery</driverClass>
+    <driverClass>HautsPermits_Biotech.JobDriver_ChargecellBattery</driverClass>
     <reportString>charging TargetA.</reportString>
     <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
   </JobDef>
   
   <JobDef>
     <defName>HVMP_InjectChargecellMech</defName>
-    <driverClass>HautsPermits.JobDriver_ChargecellMech</driverClass>
+    <driverClass>HautsPermits_Biotech.JobDriver_ChargecellMech</driverClass>
     <reportString>charging TargetA.</reportString>
     <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
   </JobDef>

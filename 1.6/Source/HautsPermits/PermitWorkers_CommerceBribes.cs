@@ -18,24 +18,24 @@ namespace HautsPermits
         }
         public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
         {
-            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
         }
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
         {
-            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
         }
         public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
         {
             base.AffectPawnInner(pme, pawn, faction);
             if (!pawn.InMentalState && pawn.Awake() && !pawn.DeadOrDowned)
             {
-                HVMP_Utility.ThrowBribeGlow(pawn.Position.ToVector3() + new Vector3(0.5f, 0f, 0.5f), this.map, 1.5f);
+                PermitGlowVFXUtility.ThrowBribeGlow(pawn.Position.ToVector3() + new Vector3(0.5f, 0f, 0.5f), this.map, 1.5f);
                 pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.PanicFlee, null, false, false, false, null, false, false, false);
             }
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
     //targets a conscious, awake, prisoner not in a mental state with non-zero resistance, offsetting its resistance
@@ -47,24 +47,24 @@ namespace HautsPermits
         }
         public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
         {
-            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
         }
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
         {
-            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
         }
         public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
         {
             base.AffectPawnInner(pme, pawn, faction);
             if (!pawn.InMentalState && pawn.Awake() && !pawn.DeadOrDowned && pawn.guest != null && pawn.guest.resistance >= float.Epsilon)
             {
-                HVMP_Utility.ThrowBribeGlow(pawn.Position.ToVector3() + new Vector3(0.5f, 0f, 0.5f), this.map, 1.5f);
+                PermitGlowVFXUtility.ThrowBribeGlow(pawn.Position.ToVector3() + new Vector3(0.5f, 0f, 0.5f), this.map, 1.5f);
                 pawn.guest.resistance += pme.extraNumber.RandomInRange;
             }
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
     //targets a conscious, awake pawn of a non-Branch faction with a numerical goodwill score, raising goodwil with that faction
@@ -76,24 +76,24 @@ namespace HautsPermits
         }
         public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
         {
-            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
         }
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
         {
-            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
         }
         public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
         {
             base.AffectPawnInner(pme, pawn, faction);
             if (!pawn.InMentalState && pawn.Awake() && !pawn.DeadOrDowned && pawn.Faction != null)
             {
-                HVMP_Utility.ThrowBribeGlow(pawn.Position.ToVector3() + new Vector3(0.5f, 0f, 0.5f), this.map, 1.5f);
+                PermitGlowVFXUtility.ThrowBribeGlow(pawn.Position.ToVector3() + new Vector3(0.5f, 0f, 0.5f), this.map, 1.5f);
                 this.CasterPawn.Faction.TryAffectGoodwillWith(pawn.Faction, (int)pme.extraNumber.RandomInRange, true, true, HVMPDefOf.HVMP_IngratiationAccepted, null);
             }
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
     //unlike the other bribes, this just forces all conscious, awake hostile humanlikes (or of humanlike faction) who aren't in a mental state to flee for their lives. Skips over prisoners, obviously, to avoid stupidity.
@@ -102,14 +102,14 @@ namespace HautsPermits
     {
         public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
         {
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            if (HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
+            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -132,7 +132,7 @@ namespace HautsPermits
                 {
                     if ((p.HostileTo(caller.Faction) || p.HostileTo(caller)) && !p.InMentalState && p.Awake() && !p.DeadOrDowned && ((p.Faction != null && p.Faction.def.humanlikeFaction) || p.RaceProps.Humanlike) && !p.IsPrisoner)
                     {
-                        HVMP_Utility.ThrowBribeGlow(p.Position.ToVector3() + new Vector3(0.5f, 0f, 0.5f), caller.MapHeld, 1.5f);
+                        PermitGlowVFXUtility.ThrowBribeGlow(p.Position.ToVector3() + new Vector3(0.5f, 0f, 0.5f), caller.MapHeld, 1.5f);
                         p.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.PanicFlee, null, false, false, false, null, false, false, false);
                     }
                 }
@@ -150,7 +150,7 @@ namespace HautsPermits
                 {
                     caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
                 }
-                HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+                PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
             }
         }
     }

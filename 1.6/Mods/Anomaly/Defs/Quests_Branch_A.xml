@@ -143,7 +143,9 @@
   
   <QuestScriptDef ParentName="MysteriousCargoBase">
     <defName>HVMP_BarkerCorpse</defName>
-    <root Class="HautsPermits_Occult.QuestNode_Root_BarkerCorpse" />
+    <root Class="HautsPermits_Occult.QuestNode_Root_BarkerCorpse">
+	  <LGTH_daysToAwaken>6~8</LGTH_daysToAwaken>
+	</root>
     <questContentRules>
       <rulesStrings>
         <li>deliveredLetterLabel->Anomalous object</li>
@@ -191,7 +193,7 @@
     </questContentRules>
   </QuestScriptDef>
   
-  <QuestScriptDef ParentName="MysteriousCargoBase">
+  <QuestScriptDef ParentName="MysteriousCargoBase"><!--unused-->
     <defName>HVMP_BarkerSpine</defName>
     <root Class="HautsPermits_Occult.QuestNode_Root_BarkerSpine" />
     <questContentRules>

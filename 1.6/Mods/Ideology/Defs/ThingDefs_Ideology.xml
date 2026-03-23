@@ -535,7 +535,6 @@
       <li Class="HautsPermits_Ideology.CompProperties_HB">
         <periodicity>20000</periodicity>
 		<pointFactor>0.4</pointFactor>
-		<pointMinimum>500</pointMinimum>
       </li>
     </comps><!--does not explode because non-Flame explosions would harm the mech guards, making the risk/reward of preemptive hacking vs hacking later even MORE stacked in the former's favor, and bc it creates an awkward spot where you can finish hacking in time for the guards
 				to wake up and down your hacker, THEN the explosion removes all hope of recovery. Technically that'd be an "issue" w the normal spacedrone quest too, but the hostiles don't spawn directly around the drone in that one, so-->

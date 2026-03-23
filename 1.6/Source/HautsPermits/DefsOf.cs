@@ -21,6 +21,7 @@ namespace HautsPermits
         public static FactionDef HVMP_OccultBranch;
 
         public static GameConditionDef HVMP_CommsBlackout;
+        public static GameConditionDef HVMP_MoodKiller;
         [MayRequireIdeology]
         public static GameConditionDef HVMP_RevealingScanEffect;
 
@@ -50,7 +51,7 @@ namespace HautsPermits
         public static JobDef HVMP_InstallPTargeter;
         [MayRequireOdyssey]
         public static JobDef HVMP_InstallBSU;
-        [MayRequireOdyssey]
+        [MayRequireIdeology]
         public static JobDef HVMP_AttachIngressor;
 
         [MayRequireIdeology]

@@ -29,7 +29,7 @@
     </genStep>
   </GenStepDef>
 
-  <GenStepDef><!--never managed to make this work correctly. ...whatever. snot super important-->
+  <!--<GenStepDef>
     <defName>HVMP_ShrineTurrets</defName>
     <linkWithSite>HVMP_Shrine</linkWithSite>
     <order>420</order>
@@ -38,7 +38,7 @@
       <guardsCountRange><min>1</min><max>1</max></guardsCountRange>
 	  <chance>0.5</chance>
     </genStep>
-  </GenStepDef>
+  </GenStepDef>-->
 
   <GenStepDef>
     <defName>WorshippedTerminalPower</defName>

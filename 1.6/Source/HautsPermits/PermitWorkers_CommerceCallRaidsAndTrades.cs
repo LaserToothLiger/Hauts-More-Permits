@@ -18,7 +18,7 @@ namespace HautsPermits
         }
         public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
         {
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
@@ -30,7 +30,7 @@ namespace HautsPermits
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            if (HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
+            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -42,7 +42,7 @@ namespace HautsPermits
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
         public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
         {
@@ -56,7 +56,7 @@ namespace HautsPermits
     {
         public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
         {
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
@@ -69,7 +69,7 @@ namespace HautsPermits
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            if (HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
+            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -81,7 +81,7 @@ namespace HautsPermits
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
         public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
         {
@@ -106,7 +106,7 @@ namespace HautsPermits
                     this.GiveQuest(pawn, faction, new IncidentParms(), this.free);
                 }
             };
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
             {
                 command_Action.Disable("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")));
             }
@@ -155,7 +155,7 @@ namespace HautsPermits
         }
         public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
         {
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
@@ -173,7 +173,7 @@ namespace HautsPermits
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            if (HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
+            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -185,7 +185,7 @@ namespace HautsPermits
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
         public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
         {

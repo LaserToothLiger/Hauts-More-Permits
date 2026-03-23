@@ -214,8 +214,8 @@
         <useDuration>10</useDuration>
         <showUseGizmo>true</showUseGizmo>
       </li>
-      <li Class="HautsPermits.CompProperties_Chargecell" />
-      <li Class="HautsPermits.CompProperties_TargetEffectChargecell">
+      <li Class="HautsPermits_Biotech.CompProperties_Chargecell" />
+      <li Class="HautsPermits_Biotech.CompProperties_TargetEffectChargecell">
 		<batteryWatts>350</batteryWatts>
 		<energyForOneBodySizeMech>100</energyForOneBodySizeMech>
         <sound>EnergyShield_Reset</sound>
@@ -276,7 +276,7 @@
       </li>
     </damageMultipliers>
     <comps>
-      <li Class="HautsPermits.CompProperties_BlightBlast">
+      <li Class="HautsPermits_Biotech.CompProperties_BlightBlast">
         <radius>7.49</radius>
 		<periodicity>2000</periodicity>
 		<damageToPlant>12</damageToPlant>
@@ -392,7 +392,7 @@
       </li>
     </damageMultipliers>
     <comps>
-      <li Class="HautsPermits.CompProperties_FishGenerator">
+      <li Class="HautsPermits_Biotech.CompProperties_FishGenerator">
 		<periodicity>2500</periodicity>
 		<fishPerTrigger>1</fishPerTrigger>
       </li>
@@ -475,7 +475,7 @@
       </li>
     </damageMultipliers>
     <comps>
-      <li Class="HautsPermits.CompProperties_PlantGrow">
+      <li Class="HautsPermits_Biotech.CompProperties_PlantGrow">
         <radius>3.9</radius>
 		<periodicity>2000</periodicity>
 		<growthAmount>1</growthAmount>

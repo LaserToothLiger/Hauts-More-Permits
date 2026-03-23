@@ -91,7 +91,7 @@ namespace HautsPermits
                         {
                             this.IssueQuest();
                         } else {
-                            int ebgl = HVMP_Utility.ExpectationBasedGoodwillLoss(null, true, true, this.ThisFaction);
+                            int ebgl = BranchQuestSetupUtility.ExpectationBasedGoodwillLoss(null, true, true, this.ThisFaction);
                             if (ebgl != 0)
                             {
                                 Faction.OfPlayer.TryAffectGoodwillWith(this.ThisFaction, ebgl, true, true, HVMPDefOf.HVMP_IgnoredQuest, null);
@@ -196,7 +196,7 @@ namespace HautsPermits
                     List<QuestScriptDef> qsds = new List<QuestScriptDef>();
                     Slate slate = new Slate();
                     slate.Set<Faction>("branchFaction", this.ThisFaction, false);
-                    slate.Set<float>("points", HVMP_Utility.TryGetPoints(null), false);
+                    slate.Set<float>("points", BranchQuestSetupUtility.TryGetPoints(null), false);
                     slate.Set<Map>("map", null, false);
                     IIncidentTarget randomPlayerHomeMap = Find.RandomSurfacePlayerHomeMap;
                     if (randomPlayerHomeMap == null)

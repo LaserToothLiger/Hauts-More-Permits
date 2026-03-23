@@ -21,7 +21,7 @@ namespace HVMP_VFEC
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
@@ -34,7 +34,7 @@ namespace HVMP_VFEC
             Action action = null;
             string text = this.def.LabelCap + ": ";
             bool free;
-            if (HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
+            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
             {
                 action = delegate
                 {
@@ -93,7 +93,7 @@ namespace HVMP_VFEC
                 {
                     caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
                 }
-                HVMP_Utility.DoPTargeterCooldown(faction,caller,this);
+                PermitAuthorizerUtility.DoPTargeterCooldown(faction,caller,this);
             }
         }
     }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationAdd">
+		<xpath>/Defs/ThingDef[defName="AncientTerminal_Worshipful"]/comps</xpath>
+		<value>
+			<li Class="HautsPermits_Ideology.CompProperties_TTWSD">
+				<thingToSpawn>HVMP_TrapTTWSD</thingToSpawn>
+			</li>
+		</value>
+	</Operation>
+</Patch>

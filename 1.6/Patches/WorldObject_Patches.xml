@@ -23,9 +23,6 @@
 			    <li>ShieldGeneratorBullets</li>
 			  </SD_turrets>
 			</li>
-			<li Class="HautsPermits.WorldObjectCompProperties_Mutator_DNLU">
-			  <DNLU_pointFactor>0.5</DNLU_pointFactor>
-			</li>
 		</value>
 	</Operation>
 </Patch>

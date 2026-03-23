@@ -6,7 +6,7 @@
     <defName>HVMP_RefineToGood</defName>
     <label>good refinement</label>
     <description>Delivers a dose of short-lived mechanites to the target non-artifact, non-artwork, non-building item, improving its quality by 1 stage. This can't bring an item above Good-quality.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_AlterItemQuality</workerClass>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_AlterItemQuality</workerClass>
     <minTitle>HVMP_ArchiveI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -35,7 +35,7 @@
     <defName>HVMP_RestoreItem</defName>
     <label>restore item</label>
     <description>Delivers a dose of short-lived mechanites to the target building or item, instantly repairing it for 100 hit points.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_RestoreItemHP</workerClass>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_RestoreItemHP</workerClass>
     <minTitle>HVMP_ArchiveI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -289,7 +289,7 @@
     <defName>HVMP_RefineToExc</defName>
     <label>excellent refinement</label>
     <description>Delivers a dose of short-lived mechanites to the target non-artifact, non-artwork, non-building item, improving its quality by 1 stage. This can't bring an item above Excellent-quality.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_AlterItemQuality</workerClass>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_AlterItemQuality</workerClass>
     <minTitle>HVMP_ArchiveIII</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -318,7 +318,7 @@
     <defName>HVMP_PerfectRestoreItem</defName>
     <label>perfectly restore item</label>
     <description>Delivers a dose of short-lived mechanites to the target building or item, instantly repairing it for 1000 hit points.\n\nAlso removes corpse taint from targeted apparel, and fixes broken-down components in targeted buildings.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_RestoreItemHP_Perfect</workerClass>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_RestoreItemHP_Perfect</workerClass>
     <minTitle>HVMP_ArchiveIII</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -342,7 +342,7 @@
     <defName>HVMP_MassRestoreStructure</defName>
     <label>mass restore structure</label>
     <description>Delivers a dose of short-lived mechanites to non-hostile buildings in the area around the target point, instantly repairing them for 100 hit points and fixing any broken components.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_RestoreItemHP_AOE</workerClass>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_RestoreItemHP_AOE</workerClass>
     <minTitle>HVMP_ArchiveIII</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -366,7 +366,7 @@
     <defName>HVMP_DecryptBiocoding</defName>
     <label>decrypt biocoding</label>
     <description>Resets the biocoding on an item, allowing it to be used by a new wielder.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DecryptBiocoding</workerClass>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DecryptBiocoding</workerClass>
     <minTitle>HVMP_ArchiveIII</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -437,7 +437,7 @@
     <defName>HVMP_RefineToMaster</defName>
     <label>masterwork refinement</label>
     <description>Delivers a dose of short-lived mechanites to the target non-artifact, non-artwork, non-building item, improving its quality by 1 stage. This can't bring an item above Masterwork-quality.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_AlterItemQuality</workerClass>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_AlterItemQuality</workerClass>
     <minTitle>HVMP_ArchiveV</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -506,7 +506,7 @@
     <defName>HVMP_RefineToLegendary</defName>
     <label>risky ultimate refinement</label>
     <description>Delivers a dose of short-lived mechanites to the target masterwork non-artifact, non-artwork, non-building item. This has a 50% chance to improve its quality by 1 stage, and a 50% chance to DESTROY it.\n\nCosts two permit points.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_AlterItemQuality</workerClass>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_AlterItemQuality</workerClass>
     <minTitle>HVMP_ArchiveVI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>2</permitPointCost>

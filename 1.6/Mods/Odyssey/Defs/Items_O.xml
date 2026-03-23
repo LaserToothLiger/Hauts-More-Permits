@@ -144,7 +144,7 @@
     </comps>
   </ThingDef>
   
-  <ThingDef ParentName="MechSerumBase">
+  <ThingDef ParentName="MechSerumBase" MayRequire="Ludeon.RimWorld.Ideology">
     <defName>HVMP_Ingressor</defName>
     <label>ingressor</label>
     <description>A one-use sabotage device. Once clamped onto a building, its subpersona core infiltrates and subverts any hackable digital system it can find. If the building is not hackable, the ingressor instead activates its powerful directional explosive, dealing 500 damage to the building.</description>
@@ -174,9 +174,9 @@
         <showUseGizmo>true</showUseGizmo>
       </li>
       <li Class="CompProperties_Targetable">
-        <compClass>HautsPermits.CompTargetable_BuildingOrItem</compClass>
+        <compClass>HautsPermits_Ideology.CompTargetable_DamageableBuildingOrHackableItem</compClass>
       </li>
-      <li Class="HautsPermits.CompProperties_TargetEffectIngression">
+      <li Class="HautsPermits_Ideology.CompProperties_TargetEffectIngression">
         <damageType>Thump</damageType>
 		<damageAmount>500</damageAmount>
 		<hackingPower>12000</hackingPower>
@@ -215,7 +215,7 @@
     <allowedArchonexusCount>10</allowedArchonexusCount>
   </ThingDef>
   
-  <ThingDef ParentName="MechSerumBase">
+  <ThingDef ParentName="MechSerumBase" MayRequire="Ludeon.RimWorld.Anomaly">
     <defName>HVMP_ProbabilityTuner</defName>
     <label>probability tuner</label>
     <description>A piece of scavenged archotechnology; one side is utterly smooth, but the other, fuzzier side clings to the skin with a feeling of static electricity. It can be applied to a living person to gradually deplete their psychic sensitivity. While connected and draining sensitivity, it has a chance to cause a good event, after which it will harmlessly disintegrate and stop draining psychic sensitivity.\n\nHas no effect if applied to someone who was previously bonded to a probability tuner.</description>

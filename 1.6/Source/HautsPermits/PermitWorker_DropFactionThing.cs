@@ -36,7 +36,7 @@ namespace HautsPermits
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
@@ -44,7 +44,7 @@ namespace HautsPermits
             Action action = null;
             string text = this.def.LabelCap + ": ";
             bool free;
-            if (HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
+            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
             {
                 action = delegate
                 {
@@ -108,7 +108,7 @@ namespace HautsPermits
             {
                 this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
             }
-            HVMP_Utility.DoPTargeterCooldown(this.faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(this.faction, caller, this);
         }
         private Faction faction;
     }

@@ -232,7 +232,7 @@
     <defName>HVMP_SmallRepopulationDrop</defName>
     <label>small repopulation drop</label>
     <description>Call for the delivery of a wild animal of the same species as the target. The species of the target animal must have an adulthood body size no larger than 1.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DupeAnimal</workerClass>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_DupeAnimal</workerClass>
     <minTitle>HVMP_EcosphereI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -352,7 +352,7 @@
     <defName>HVMP_LargeRepopulationDrop</defName>
     <label>large repopulation drop</label>
     <description>Call for the delivery of a wild animal of the same species as the target. The species of the target animal must have an adulthood body size no larger than 3.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DupeAnimal</workerClass>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_DupeAnimal</workerClass>
     <minTitle>HVMP_EcosphereII</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -559,7 +559,7 @@
     <defName>HVMP_TameMechDisease</defName>
     <label>tame mech disease</label>
     <description>Correct the wayward programming of a mechanite disease, removing its downsides. However, its remaining duration will be halved and its bonuses will be slightly less potent.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_TMD</workerClass>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_TMD</workerClass>
     <minTitle>HVMP_EcosphereIV</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -633,7 +633,7 @@
     <defName>HVMP_PollutionScoop</defName>
     <label>pollution scoop</label>
     <description>Use orbital trade matter-transmission technology to extract stationary toxic particles from the target area, unpolluting the terrain and causing any toxic wastepacks in the area to disappear.\n\nAlso creates a smoke blast in a smaller radius.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_PollutionScoop</workerClass>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_PollutionScoop</workerClass>
     <minTitle>HVMP_EcosphereIV</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -659,7 +659,7 @@
     <defName>HVMP_SoilEnrichment</defName>
     <label>soil enrichment</label>
     <description>Extract stationary toxic particles from the soil and seed it with nutrients, enriching the fertility of sand and soil in a 5x5 area around the target point.\n\nCan only create fertile soil in biomes that can naturally have fertile soil.\n\nAlso creates a smoke blast in a smaller radius.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_SoilEnrichment</workerClass>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_SoilEnrichment</workerClass>
     <minTitle>HVMP_EcosphereIV</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -685,7 +685,7 @@
     <defName>HVMP_GenepackDrop</defName>
     <label>genepack drop</label>
     <description>Call for a drop of 1 genepack.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropGenePack</workerClass>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_DropGenePack</workerClass>
     <minTitle>HVMP_EcosphereIV</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -703,7 +703,7 @@
 		<defName>HVMP_AlphapackDrop</defName>
 		<label>alphapack drop</label>
 		<description>Call for a drop of 1 alphapack.</description>
-		<workerClass>HautsPermits.RoyalTitlePermitWorker_DropGenePack</workerClass>
+		<workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_DropGenePack</workerClass>
 		<minTitle>HVMP_EcosphereIV</minTitle>
 		<faction>HVMP_EcosphereBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -745,7 +745,7 @@
     <defName>HVMP_MegaRepopulationDrop</defName>
     <label>mega repopulation drop</label>
     <description>Call for the delivery of a wild animal of the same species as the target.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DupeAnimal</workerClass>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_DupeAnimal</workerClass>
     <minTitle>HVMP_EcosphereIV</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -880,7 +880,7 @@
     <defName>HVMP_DuplicateEndogenome</defName>
     <label>duplicate endogenome</label>
     <description>Scan the target's endogenes to produce a xenogerm containing all non-archite genes from the target's endogenes.\n\nCannot be used on targets whose genes are regrowing.\n\nCosts two permit points.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_MakeXenogermOfEndo</workerClass>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_MakeXenogermOfEndo</workerClass>
     <minTitle>HVMP_EcosphereVI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>2</permitPointCost>
@@ -897,7 +897,7 @@
     <defName>HVMP_DuplicateXenogenome</defName>
     <label>duplicate xenogenome</label>
     <description>Scan the target's xenogenes to produce a xenogerm containing all non-archite genes from the target's xenogenes.\n\nCannot be used on targets whose genes are regrowing.\n\nCosts two permit points.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_MakeXenogermOfXeno</workerClass>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_MakeXenogermOfXeno</workerClass>
     <minTitle>HVMP_EcosphereVI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>2</permitPointCost>

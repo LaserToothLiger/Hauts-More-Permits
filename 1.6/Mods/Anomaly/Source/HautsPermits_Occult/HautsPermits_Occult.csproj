@@ -65,8 +65,32 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="HarmonyPatches.cs" />
+    <Compile Include="DefsOf.cs" />
+    <Compile Include="GameConditions_TouchOfTheUnfathomable.cs" />
+    <Compile Include="Hediffs_Natali_DontForget.cs" />
+    <Compile Include="Hediff_InstantKillMode.cs" />
+    <Compile Include="Incident_ActiveNociosphere.cs" />
+    <Compile Include="Incident_HypnoticLights.cs" />
+    <Compile Include="Incident_ManhunterPulse.cs" />
+    <Compile Include="Incident_MutationShockwave.cs" />
+    <Compile Include="Incident_PsychicAlignment.cs" />
+    <Compile Include="Incident_PsychicSuppression.cs" />
+    <Compile Include="Incident_SuperGhoul.cs" />
+    <Compile Include="Item_ProbabilityTuner.cs" />
+    <Compile Include="LivingCloudkill.cs" />
+    <Compile Include="PermitWorkers_MiscOccultPermits.cs" />
+    <Compile Include="PermitWorkers_Suffusions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestNode_BranchQuestBase.cs" />
+    <Compile Include="Quest_Occult_Barker_Base.cs" />
+    <Compile Include="Quest_Occult_Barker_ItemSpecificVariants.cs" />
+    <Compile Include="Quest_Occult_Lovecraft.cs" />
+    <Compile Include="Quest_Occult_Natali.cs" />
+    <Compile Include="Quest_Occult_Romero.cs" />
+    <Compile Include="Quest_Occult_Wells.cs" />
+    <Compile Include="Thought_AOEAH.cs" />
+    <Compile Include="WorldObject_NataliLabyrinth.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -105,7 +105,7 @@ namespace HautsPermits
         public override void Notify_PreCleanup()
         {
             base.Notify_PreCleanup();
-            int num = HVMP_Utility.ExpectationBasedGoodwillLoss(null, true, true, this.faction);
+            int num = BranchQuestSetupUtility.ExpectationBasedGoodwillLoss(null, true, true, this.faction);
             if (this.quest.State == QuestState.EndedOfferExpired)
             {
                 Faction.OfPlayer.TryAffectGoodwillWith(this.faction, num, true, true, HVMPDefOf.HVMP_IgnoredQuest, null);
@@ -125,7 +125,7 @@ namespace HautsPermits
         protected override void RunInt()
         {
             Slate slate = QuestGen.slate;
-            HVMP_Utility.SetSettingScalingRewardValue(slate, rewardFactor);
+            BranchQuestSetupUtility.SetSettingScalingRewardValue(slate, rewardFactor);
             base.RunInt();
         }
         protected override bool TestRunInt(Slate slate)
@@ -236,7 +236,7 @@ namespace HautsPermits
                     GlobalTargetInfo invalid2 = GlobalTargetInfo.Invalid;
                 }
                 FactionRelationKind playerRelationKind = this.faction.PlayerRelationKind;
-                int num = HVMP_Utility.ExpectationBasedGoodwillLoss(null, true, false, this.faction);
+                int num = BranchQuestSetupUtility.ExpectationBasedGoodwillLoss(null, true, false, this.faction);
                 if (this.ensureMakesHostile)
                 {
                     num = Mathf.Min(num, Faction.OfPlayer.GoodwillToMakeHostile(this.faction));

@@ -14,7 +14,7 @@ namespace HautsPermits
     {
         protected override void RunInt()
         {
-            if (HVMP_Utility.TryFindCommerceFaction(out Faction commerceFaction))
+            if (BranchQuestSetupUtility.TryFindCommerceFaction(out Faction commerceFaction))
             {
                 Slate slate = QuestGen.slate;
                 slate.Set<Thing>("asker", commerceFaction.leader, false);
@@ -26,21 +26,21 @@ namespace HautsPermits
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = commerceFaction;
                 QuestGen.quest.AddPart(qpbgfh);
-                HVMP_Utility.SetSettingScalingRewardValue(slate);
+                BranchQuestSetupUtility.SetSettingScalingRewardValue(slate);
             }
             base.RunInt();
         }
         protected override bool TestRunInt(Slate slate)
         {
-            HVMP_Utility.SetSettingScalingRewardValue(slate);
-            return HVMP_Utility.TryFindCommerceFaction(out Faction commerceFaction) && base.TestRunInt(slate);
+            BranchQuestSetupUtility.SetSettingScalingRewardValue(slate);
+            return BranchQuestSetupUtility.TryFindCommerceFaction(out Faction commerceFaction) && base.TestRunInt(slate);
         }
     }
     public class QuestNode_PaxIntermediary : QuestNode_Sequence
     {
         protected override void RunInt()
         {
-            if (HVMP_Utility.TryFindPaxFaction(out Faction paxFaction))
+            if (BranchQuestSetupUtility.TryFindPaxFaction(out Faction paxFaction))
             {
                 Slate slate = QuestGen.slate;
                 slate.Set<Thing>("asker", paxFaction.leader, false);
@@ -52,21 +52,21 @@ namespace HautsPermits
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = paxFaction;
                 QuestGen.quest.AddPart(qpbgfh);
-                HVMP_Utility.SetSettingScalingRewardValue(slate);
+                BranchQuestSetupUtility.SetSettingScalingRewardValue(slate);
             }
             base.RunInt();
         }
         protected override bool TestRunInt(Slate slate)
         {
-            HVMP_Utility.SetSettingScalingRewardValue(slate);
-            return HVMP_Utility.TryFindPaxFaction(out Faction paxFaction) && base.TestRunInt(slate);
+            BranchQuestSetupUtility.SetSettingScalingRewardValue(slate);
+            return BranchQuestSetupUtility.TryFindPaxFaction(out Faction paxFaction) && base.TestRunInt(slate);
         }
     }
     public class QuestNode_RoverIntermediary : QuestNode_Sequence
     {
         protected override void RunInt()
         {
-            if (HVMP_Utility.TryFindRoverFaction(out Faction roverFaction))
+            if (BranchQuestSetupUtility.TryFindRoverFaction(out Faction roverFaction))
             {
                 Slate slate = QuestGen.slate;
                 slate.Set<Thing>("asker", roverFaction.leader, false);
@@ -78,14 +78,14 @@ namespace HautsPermits
                 QuestPart_BranchGoodwillFailureHandler qpbgfh = new QuestPart_BranchGoodwillFailureHandler();
                 qpbgfh.faction = roverFaction;
                 QuestGen.quest.AddPart(qpbgfh);
-                HVMP_Utility.SetSettingScalingRewardValue(slate);
+                BranchQuestSetupUtility.SetSettingScalingRewardValue(slate);
             }
             base.RunInt();
         }
         protected override bool TestRunInt(Slate slate)
         {
-            HVMP_Utility.SetSettingScalingRewardValue(slate);
-            return HVMP_Utility.TryFindRoverFaction(out Faction roverFaction) && base.TestRunInt(slate);
+            BranchQuestSetupUtility.SetSettingScalingRewardValue(slate);
+            return BranchQuestSetupUtility.TryFindRoverFaction(out Faction roverFaction) && base.TestRunInt(slate);
         }
     }
 }

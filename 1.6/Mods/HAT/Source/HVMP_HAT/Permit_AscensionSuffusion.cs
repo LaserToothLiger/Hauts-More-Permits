@@ -34,15 +34,15 @@ namespace HVMP_HAT
         }
         public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
         {
-            return HVMP_Utility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
+            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
         }
         public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
         {
-            return faction.HostileTo(Faction.OfPlayer) && HVMP_Utility.GetPawnPTargeter(pawn, faction) == null;
+            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
         }
         public override void DoOtherEffect(Pawn caller, Faction faction)
         {
-            HVMP_Utility.DoPTargeterCooldown(faction, caller, this);
+            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
 }

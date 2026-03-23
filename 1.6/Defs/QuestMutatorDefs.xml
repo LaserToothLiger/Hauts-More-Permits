@@ -314,7 +314,7 @@
 		Mood Killer-->
   <GameConditionDef>
     <defName>HVMP_MoodKiller</defName>
-    <conditionClass>HautsPermits.GameCondition_MoodKiller</conditionClass>
+    <conditionClass>GameCondition</conditionClass>
     <label>synaptic irritation</label>
     <description>Exotic particles saturate the atmosphere. They suppress certain pathways in the nervous system, worsening mood.</description>
   </GameConditionDef>

@@ -372,7 +372,7 @@
 <HVMP_HardMode_Tooltip_Remnant_3>If nobody has studied the artifact in the last hour, study progress decays at a rate of 6 per day.</HVMP_HardMode_Tooltip_Remnant_3>
 <HVMP_Label_Replica>Replica</HVMP_Label_Replica>
 <HVMP_Tooltip_Replica>Erect a large building. You may also be tasked to keep it safe for a while after completion.</HVMP_Tooltip_Replica>
-<HVMP_HardMode_Label_Replica_1>Holy Cungadero</HVMP_HardMode_Label_Replica_1>
+<HVMP_HardMode_Label_Replica_1>Magnify... Enhance</HVMP_HardMode_Label_Replica_1>
 <HVMP_HardMode_Tooltip_Replica_1>Replica blueprints are approximately 33% larger, and the maximum allowed size is either 1.2x longer or +5 cells longer on the longest side, whichever would be larger.</HVMP_HardMode_Tooltip_Replica_1>
 <HVMP_HardMode_Label_Replica_2>Operation CWAL</HVMP_HardMode_Label_Replica_2>
 <HVMP_HardMode_Tooltip_Replica_2>The deadline for completing the replica is only 70% as long.</HVMP_HardMode_Tooltip_Replica_2>
@@ -444,14 +444,6 @@
 <HVMP_HardMode_Tooltip_Barker_2>Accepting the quest also provokes the Void.</HVMP_HardMode_Tooltip_Barker_2>
 <HVMP_HardMode_Label_Barker_3>Twin Terrors</HVMP_HardMode_Label_Barker_3>
 <HVMP_HardMode_Tooltip_Barker_3>Drops an additional anomalous object.</HVMP_HardMode_Tooltip_Barker_3>
-<HVMP_Label_Fuller>empty slot</HVMP_Label_Fuller>
-<HVMP_Tooltip_Fuller>This quest has been removed, and will be replaced with a new quest type in a later patch.</HVMP_Tooltip_Fuller>
-<HVMP_HardMode_Label_Fuller_1>blank</HVMP_HardMode_Label_Fuller_1>
-<HVMP_HardMode_Tooltip_Fuller_1>Declarative.</HVMP_HardMode_Tooltip_Fuller_1>
-<HVMP_HardMode_Label_Fuller_2>also blank</HVMP_HardMode_Label_Fuller_2>
-<HVMP_HardMode_Tooltip_Fuller_2>Interrogative?</HVMP_HardMode_Tooltip_Fuller_2>
-<HVMP_HardMode_Label_Fuller_3>also also blank</HVMP_HardMode_Label_Fuller_3>
-<HVMP_HardMode_Tooltip_Fuller_3>Exclamatory!</HVMP_HardMode_Tooltip_Fuller_3>
 <HVMP_Label_Lovecraft>Lovecraft</HVMP_Label_Lovecraft>
 <HVMP_Tooltip_Lovecraft>Endure a random psychic or atmospheric condition. You do not know what the condition is until you accept the quest. Most, but not all, possible conditions are negative.</HVMP_Tooltip_Lovecraft>
 <HVMP_HardMode_Label_Lovecraft_1>Escape From Tartarus</HVMP_HardMode_Label_Lovecraft_1>
