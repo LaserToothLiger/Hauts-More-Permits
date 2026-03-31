@@ -86,6 +86,10 @@
 		  <ComfyTemperatureMin>-12</ComfyTemperatureMin>
 		  <ComfyTemperatureMax>12</ComfyTemperatureMax>
 		</statOffsets>
+		<statFactors>
+		  <Hauts_ColdDamageFactor>0.7</Hauts_ColdDamageFactor>
+		  <Hauts_HeatDamageFactor>0.7</Hauts_HeatDamageFactor>
+		</statFactors>
       </li>
     </stages>
     <comps>
@@ -136,6 +140,10 @@
 		  <Mashed_Ashlands_AshResistance MayRequire="SirMashedPotato.Ashlands">1</Mashed_Ashlands_AshResistance>
 		  <P42_AllergicSensitivity MayRequire="phil42.allergies">-1</P42_AllergicSensitivity>
 		</statOffsets>
+		<statFactors>
+		  <Hauts_AcidDamageFactor>0.8</Hauts_AcidDamageFactor>
+		  <Hauts_ToxicDamageFactor>0.8</Hauts_ToxicDamageFactor>
+		</statFactors>
       </li>
     </stages>
     <comps>
