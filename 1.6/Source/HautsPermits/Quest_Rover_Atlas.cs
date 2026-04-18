@@ -3,6 +3,7 @@ using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
+using UnityEngine;
 using Verse;
 using Verse.Grammar;
 
@@ -59,6 +60,26 @@ namespace HautsPermits
      * Tresspassing Punishable By Ultratech: if TPBU_on is true, any time you bring someone here, a problem causer incident occurs. 80% chance for this effect to be disabled after each visit.*/
     public class WorldObject_AtlasPoint : WorldObject
     {
+        public override Material Material
+        {
+            get
+            {
+                if (this.cachedMat == null)
+                {
+                    Color color;
+                    if (base.Faction != null)
+                    {
+                        color = base.Faction.Color;
+                    }
+                    else
+                    {
+                        color = Color.white;
+                    }
+                    this.cachedMat = MaterialPool.MatFrom(this.def.texture, ShaderDatabase.WorldOverlayTransparentLit, color, WorldMaterials.WorldObjectRenderQueue);
+                }
+                return this.cachedMat;
+            }
+        }
         public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
         {
             foreach (FloatMenuOption o in base.GetFloatMenuOptions(caravan))
@@ -107,6 +128,7 @@ namespace HautsPermits
             Scribe_References.Look<Thing>(ref this.book, "book", false);
             Scribe_Values.Look<bool>(ref this.TPBU_on, "TPBU_on", false, false);
         }
+        private Material cachedMat;
         public Thing book;
         public bool TPBU_on;
     }

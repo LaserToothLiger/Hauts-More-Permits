@@ -288,6 +288,7 @@
 	  <li Class="HautsFramework.HediffCompProperties_MoteConditional">
 		<mote>HVMP_EyeSpy</mote>
 		<scale>1</scale>
+		<useHeadOffsetAboveOneBodySize>true</useHeadOffsetAboveOneBodySize>
 	  </li>
 	</comps>
   </HediffDef>

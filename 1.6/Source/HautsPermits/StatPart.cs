@@ -24,7 +24,7 @@ namespace HautsPermits
                 {
                     explanation += this.requiredCondition.LabelCap + ": +" + this.offset.ToStringPercent() + "\n";
                 }
-                if (this.offset != 1)
+                if (this.factor != 1)
                 {
                     explanation += this.requiredCondition.LabelCap + ": x" + this.factor.ToStringPercent();
                 }

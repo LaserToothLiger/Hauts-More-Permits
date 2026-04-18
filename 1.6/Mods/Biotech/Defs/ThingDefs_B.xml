@@ -26,7 +26,7 @@
     <canLoadIntoCaravan>false</canLoadIntoCaravan>
     <graphicData>
       <graphicClass>Graphic_Single</graphicClass>
-      <texPath>Things/Ethereal/MonumentMarkerBlueprint</texPath>
+      <texPath>Things/Ethereal/HVMI_PreserveMarkerBlueprint</texPath>
       <shaderType>Transparent</shaderType>
       <drawRotated>false</drawRotated>
       <allowFlip>false</allowFlip>
@@ -34,7 +34,7 @@
     <building>
       <blueprintGraphicData>
         <graphicClass>Graphic_Single</graphicClass>
-        <texPath>Things/Ethereal/MonumentMarkerBlueprint</texPath>
+        <texPath>Things/Ethereal/HVMI_PreserveMarkerBlueprint</texPath>
         <shaderType>Transparent</shaderType>
         <drawRotated>false</drawRotated>
         <allowFlip>false</allowFlip>

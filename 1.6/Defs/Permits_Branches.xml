@@ -2055,8 +2055,8 @@
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Anomaly">
     <defName>HVMP_LocateFleshmassInfestation</defName>
-    <label>find fleshmass outbreak</label>
-    <description>Learn about the location of a nearby fleshmass outbreak.</description>
+    <label>find distress signal</label>
+    <description>Learn about the location of a nearby settlement under assault by unnatural entities.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
     <minTitle>HVMP_RoverIV</minTitle>
     <faction>HVMP_RoverBranch</faction>

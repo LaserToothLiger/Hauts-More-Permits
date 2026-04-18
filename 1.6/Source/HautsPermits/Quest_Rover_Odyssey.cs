@@ -3,6 +3,7 @@ using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
+using UnityEngine;
 using Verse;
 using Verse.Grammar;
 
@@ -135,6 +136,26 @@ namespace HautsPermits
      * You will be ambushed on visiting this point, if RE_points is > 0. Also assigned by quest node, as mentioned above.*/
     public class WorldObject_OdysseyPoint : WorldObject
     {
+        public override Material Material
+        {
+            get
+            {
+                if (this.cachedMat == null)
+                {
+                    Color color;
+                    if (base.Faction != null)
+                    {
+                        color = base.Faction.Color;
+                    }
+                    else
+                    {
+                        color = Color.white;
+                    }
+                    this.cachedMat = MaterialPool.MatFrom(this.def.texture, ShaderDatabase.WorldOverlayTransparentLit, color, WorldMaterials.WorldObjectRenderQueue);
+                }
+                return this.cachedMat;
+            }
+        }
         public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
         {
             foreach (FloatMenuOption o in base.GetFloatMenuOptions(caravan))
@@ -230,6 +251,7 @@ namespace HautsPermits
             Scribe_Values.Look<int>(ref this.SG_level, "SG_level", 10, false);
             Scribe_Defs.Look<SkillDef>(ref this.SG_skill, "SG_skill");
         }
+        private Material cachedMat;
         public Quest linkedQuest;
         public int RE_points;
         public int SG_level;

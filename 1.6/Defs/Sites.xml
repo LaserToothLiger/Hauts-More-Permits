@@ -7,9 +7,10 @@
     <label>trade request point</label>
     <description>A  site where the Commerce Branch facilitates anonymized trades between interested parties. Such sites are established in random locations to avoid attracting raiders.</description>
     <worldObjectClass>HautsPermits.WorldObject_DeadDrop</worldObjectClass>
-    <texture>UI/Buttons/GiftMode</texture>
+    <texture>World/WorldObjects/PeaceTalks</texture>
     <expandingIcon>true</expandingIcon>
-    <expandingIconPriority>12</expandingIconPriority>
+    <expandingIconTexture>World/WorldObjects/Expanding/HVMI_PointTransportation</expandingIconTexture>
+    <expandingIconPriority>70</expandingIconPriority>
 	<allowCaravanIncidentsWhichGenerateMap>true</allowCaravanIncidentsWhichGenerateMap>
     <comps>
       <li Class="HautsPermits.WorldObjectCompProperties_DeadDrop" />
@@ -40,10 +41,10 @@
     <label>atlas revision point</label>
     <description>This region is important to an atlas you have been tasked with revising. In order for someone to be able to work on the atlas, they must visit this place first.</description>
     <worldObjectClass>HautsPermits.WorldObject_AtlasPoint</worldObjectClass>
-	<texture>World/WorldObjects/JourneyDestination</texture>
+	<texture>World/WorldObjects/Hauts_PointGoTo_TeamColorable</texture>
     <expandingIcon>true</expandingIcon>
-    <expandingIconTexture>World/WorldObjects/Expanding/JourneyDestination</expandingIconTexture>
-    <expandingIconPriority>71</expandingIconPriority>
+    <expandingIconTexture>World/WorldObjects/Expanding/HVMI_PointAtlas</expandingIconTexture>
+    <expandingIconPriority>70</expandingIconPriority>
     <comps>
       <li Class="WorldObjectCompProperties_Timeout" />
     </comps>
@@ -53,10 +54,10 @@
     <label>mapping point</label>
     <description>Visiting this place is essential to establishing a contemporary version of the Rover Branch's regional map.</description>
     <worldObjectClass>HautsPermits.WorldObject_OdysseyPoint</worldObjectClass>
-	<texture>World/WorldObjects/JourneyDestination</texture>
+	<texture>World/WorldObjects/Hauts_PointGoTo_TeamColorable</texture>
     <expandingIcon>true</expandingIcon>
-    <expandingIconTexture>World/WorldObjects/Expanding/JourneyDestination</expandingIconTexture>
-    <expandingIconPriority>71</expandingIconPriority>
+    <expandingIconTexture>World/WorldObjects/Expanding/HVMI_PointOdyssey</expandingIconTexture>
+    <expandingIconPriority>70</expandingIconPriority>
     <comps>
       <li Class="WorldObjectCompProperties_Timeout" />
     </comps>

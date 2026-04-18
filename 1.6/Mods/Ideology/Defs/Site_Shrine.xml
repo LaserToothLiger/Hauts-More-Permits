@@ -9,7 +9,7 @@
     <approachOrderString>Investigate {0}</approachOrderString>
     <disallowsAutomaticDetectionTimerStart>true</disallowsAutomaticDetectionTimerStart>
     <workerClass>HautsPermits_Ideology.SitePartWorker_Shrine</workerClass>
-    <expandingIconTexture>World/WorldObjects/Expanding/Sites/AncientRelic</expandingIconTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/HVMI_PointShrine</expandingIconTexture>
     <gravShipsCanLandOn>true</gravShipsCanLandOn>
     <tags Inherit="False">
       <li>WorshippedTerminal</li>
