@@ -17,7 +17,7 @@ namespace HautsPermits
      * Also handles all three mutators
      * icarus1: Every Expense Spared disables the generation of soldiers
      * icarus2: Hell On Their Heels multiplies the raid's threat points by HOTH_raidScalar_on and makes them arrive within HOTH_delay_on ticks (instead of HOTH_raidScalar_off and HOTH_delay_off, respectively)
-     * icarus3: Revenge of the Space Junk causes QuestPart_ROTSJ, which will fire a random incident in ROTSJ_incidents (enforcing min 500 threat points). If you have a mod that adds another ship part incident, add it to the list!*/
+     * icarus3: Revenge of the Space Junk causes QuestPart_ROTSJ, which will fire a random incident that has the ROTSJ_allowedIncidentTag tag (enforcing min 500 threat points). If you have a mod that adds another ship part incident, add it to the list!*/
     public class QuestNode_Icarus : QuestNode
     {
         private static QuestGen_Pawns.GetPawnParms CivilianPawnParams
@@ -123,7 +123,7 @@ namespace HautsPermits
                     quest.AddShipJob_FlyAway(transportShip, null, null, TransportShipDropMode.None, null);
                 });
                 quest3.ShuttleDelay(num5, civilians2, action, null, null, true);
-                if (BranchQuestSetupUtility.MutatorEnabled(HVMP_Mod.settings.icarus3, mayhemMode) && !this.ROTSJ_incidents.NullOrEmpty())
+                if (BranchQuestSetupUtility.MutatorEnabled(HVMP_Mod.settings.icarus3, mayhemMode) && this.ROTSJ_allowedIncidentTag != null)
                 {
                     IncidentParms incidentParms = StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map);
                     incidentParms.forced = true;
@@ -131,7 +131,7 @@ namespace HautsPermits
                     {
                         incidentParms.points = 500;
                     }
-                    List<IncidentDef> ids = this.ROTSJ_incidents.Where((IncidentDef incident) => incident.Worker.CanFireNow(incidentParms)).ToList();
+                    List<IncidentDef> ids = DefDatabase<IncidentDef>.AllDefsListForReading.Where((IncidentDef incident) => incident.tags != null && incident.tags.Contains(this.ROTSJ_allowedIncidentTag) && incident.Worker.CanFireNow(incidentParms)).ToList();
                     if (ids.Count > 0)
                     {
                         QuestPart_Icarus_ROTSJ qpROTSJ = new QuestPart_Icarus_ROTSJ();
@@ -311,7 +311,7 @@ namespace HautsPermits
         public IntRange HOTH_delay_off;
         [MustTranslate]
         public string HOTH_description;
-        public List<IncidentDef> ROTSJ_incidents;
+        public string ROTSJ_allowedIncidentTag;
         [MustTranslate]
         public string ROTSJ_description;
     }

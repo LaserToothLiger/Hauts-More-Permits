@@ -7,9 +7,9 @@
     <label>spatial anomaly</label>
     <description>An extra volume of space that can only be accessed from this particular spot. The Occult Branch wants you to enter it and discover what lies inside.</description>
     <worldObjectClass>HautsPermits_Occult.WorldObject_Hypercube</worldObjectClass>
-    <texture>Things/Building/Obelisk_Warped/WarpedObelisk</texture>
+    <texture>World/WorldObjects/HVMI_PointNatali</texture>
     <expandingIcon>true</expandingIcon>
-    <expandingIconTexture>Things/Building/Obelisk_Warped/WarpedObelisk</expandingIconTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/HVMI_PointNatali</expandingIconTexture>
     <expandingIconPriority>70</expandingIconPriority>
     <comps>
       <li Class="WorldObjectCompProperties_Timeout" />

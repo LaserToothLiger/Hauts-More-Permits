@@ -174,7 +174,7 @@
     </comps>
   </HediffDef>
   
-  <!--Tamed mech diseases-->
+  <!--Tamed mech diseases have only the upsides, which are only about two thirds as strong-->
   <HediffDef Abstract="True" ParentName="HVT_TraitHediffBase" Name="HVMP_TameMechanitesBase">
     <hediffClass>HediffWithComps</hediffClass>
     <makesAlert>false</makesAlert>
@@ -192,7 +192,7 @@
   <HediffDef ParentName="HVMP_TameMechanitesBase">
     <defName>HVMP_FibrousMechanites</defName>
     <label>fibrous mechanites (tamed)</label>
-    <description>Strength-enhancing mechanites which enhance the tensility, energy efficiency, and responsiveness of muscle tissue.</description>
+    <description>Strength-enhancing mechanites which improve the tensility, energy efficiency, and responsiveness of muscle tissue.</description>
     <stages>
       <li>
         <capMods>
@@ -246,6 +246,71 @@
     <comps>
 	  <li Class="HautsPermits_Biotech.HediffCompProperties_TMD">
 		<convertedFrom>SensoryMechanites</convertedFrom>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_TameMechanitesBase" MayRequire="lts.MSMD">
+    <defName>HVMI_MedicalMechanites</defName>
+    <label>medical mechanites (tamed)</label>
+    <description>Healing-enhancing mechanites which reside in the bloodstream.</description>
+    <stages>
+      <li>
+        <statOffsets>
+		  <InjuryHealingFactor>0.35</InjuryHealingFactor>
+        </statOffsets>
+		<totalBleedFactor>0.65</totalBleedFactor>
+        <capMods>
+          <li>
+            <capacity>BloodFiltration</capacity>
+            <offset>0.35</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HautsPermits_Biotech.HediffCompProperties_TMD">
+		<convertedFrom>MedicalMechanites</convertedFrom>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_TameMechanitesBase" MayRequire="lts.MSMD"><!--bonuses reduced by more than a third, since random frequent berserks are no longer an issue-->
+    <defName>HVMI_BerserkerMechanites</defName>
+    <label>berserker mechanites (tamed)</label>
+    <description>Performance-enhancing mechanites which strengthen general tissue integrity, the adrenal glands, and fast-twitch muscle fibers.\n\nHaving been tamed, these mechanites no longer induce aggressive episodes; however, they are weaker than they used to be.</description>
+    <stages>
+      <li>
+		<statFactors>
+		  <IncomingDamageFactor>0.85</IncomingDamageFactor>
+		  <MeleeDamageFactor>1.3</MeleeDamageFactor>
+		</statFactors>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HautsPermits_Biotech.HediffCompProperties_TMD">
+		<convertedFrom>BerserkerMechanites</convertedFrom>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVMP_TameMechanitesBase" MayRequire="lts.MSMD">
+    <defName>HVMI_TrainerMechanites</defName>
+    <label>trainer mechanites (tamed)</label>
+    <description>Learning- and cognition-enhancing mechanites which reside in the brain.</description>
+    <stages>
+      <li>
+        <statOffsets>
+		  <GlobalLearningFactor>0.35</GlobalLearningFactor>
+        </statOffsets>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>0.2</offset>
+          </li>
+		</capMods>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HautsPermits_Biotech.HediffCompProperties_TMD">
+		<convertedFrom>TrainerMechanites</convertedFrom>
 	  </li>
     </comps>
   </HediffDef>

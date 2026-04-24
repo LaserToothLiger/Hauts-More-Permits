@@ -574,6 +574,9 @@
 			<hediffs>
 			  <li>HVMP_FibrousMechanites</li>
 			  <li>HVMP_SensoryMechanites</li>
+			  <li MayRequire="lts.MSMD">HVMI_MedicalMechanites</li>
+			  <li MayRequire="lts.MSMD">HVMI_BerserkerMechanites</li>
+			  <li MayRequire="lts.MSMD">HVMI_TrainerMechanites</li>
 			</hediffs>
 			<soundDef>Coagulate_Cast</soundDef>
 			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>

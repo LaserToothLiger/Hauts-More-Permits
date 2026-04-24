@@ -25,14 +25,7 @@ namespace HautsPermits_Occult
             {
                 if (this.cachedMat == null)
                 {
-                    Color color;
-                    if (base.Faction != null)
-                    {
-                        color = base.Faction.Color;
-                    } else {
-                        color = Color.white;
-                    }
-                    this.cachedMat = MaterialPool.MatFrom(this.def.texture, ShaderDatabase.WorldOverlayTransparentLit, color, WorldMaterials.WorldObjectRenderQueue);
+                    this.cachedMat = MaterialPool.MatFrom(this.def.texture, ShaderDatabase.WorldOverlayTransparentLit, Color.white, WorldMaterials.WorldObjectRenderQueue);
                 }
                 return this.cachedMat;
             }

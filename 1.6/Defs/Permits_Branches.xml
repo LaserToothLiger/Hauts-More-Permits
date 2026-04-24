@@ -2136,7 +2136,7 @@
     </royalAid>
 	<modExtensions>
 		<li Class="HautsFramework.PermitMoreEffects">
-			<questScriptDefs>
+			<questScriptDefs><!--work sites are added to this list in WorksitesExpanded_Patches-->
 			  <li>HVMP_ItemStash</li>
 			  <li>HVMP_ItemStash</li>
 			  <li>HVMP_ItemStash</li>
@@ -2151,10 +2151,6 @@
 			  <li>HVMP_MineralLump</li>
 			  <li MayRequire="Ludeon.RimWorld.Ideology">OpportunitySite_AncientComplex</li>
 			  <li MayRequire="Ludeon.RimWorld.Ideology">OpportunitySite_AncientComplex</li>
-			  <li MayRequire="Ludeon.RimWorld.Ideology">OpportunitySite_WorkSite</li>
-			  <li MayRequire="Ludeon.RimWorld.Ideology">OpportunitySite_WorkSite</li>
-			  <li MayRequire="Ludeon.RimWorld.Ideology">OpportunitySite_WorkSite</li>
-			  <li MayRequire="Ludeon.RimWorld.Ideology">OpportunitySite_WorkSite</li>
 			  <li MayRequire="Ludeon.RimWorld.Anomaly">HVMP_DistressCall</li>
 			  <li MayRequire="Ludeon.RimWorld.Anomaly">HVMP_DistressCall</li>
 			  <li MayRequire="Ludeon.RimWorld.Biotech">OpportunitySite_AncientComplex_Mechanitor</li>

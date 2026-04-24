@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Worksites Expanded</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Ideology</li>
+					</mods>
+					<match Class="PatchOperationReplace">
+						<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_LocateWorkSites"]/modExtensions/li[@Class="HautsFramework.PermitMoreEffects"]/questScriptDefs</xpath>
+						<value>
+							<questScriptDefs>
+							  <li>OpportunitySite_BlackMarketOutpost</li>
+							  <li>OpportunitySite_ClothesMakingOutpost</li>
+							  <li>OpportunitySite_ComponentOutpost</li>
+							  <li>OpportunitySite_FarmingOutpost</li>
+							  <li>OpportunitySite_GunsmithingOutpost</li>
+							  <li>OpportunitySite_HomesteadOutpost</li>
+							  <li>OpportunitySite_MercenaryOutpost</li>
+							  <li>OpportunitySite_MiningOutpost</li>
+							  <li MayRequire="OskarPotocki.VanillaVehiclesExpanded">OpportunitySite_VehiclesOutpost</li>
+							  <li MayRequire="OskarPotocki.VanillaVehiclesExpandedTier3">OpportunitySite_VehiclesTier3Outpost</li>
+							</questScriptDefs>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_LocateSitesOfInterest"]/modExtensions/li[@Class="HautsFramework.PermitMoreEffects"]/questScriptDefs</xpath>
+					<value>
+					  <li>OpportunitySite_BlackMarketOutpost</li>
+					  <li>OpportunitySite_ClothesMakingOutpost</li>
+					  <li>OpportunitySite_ComponentOutpost</li>
+					  <li>OpportunitySite_FarmingOutpost</li>
+					  <li>OpportunitySite_GunsmithingOutpost</li>
+					  <li>OpportunitySite_HomesteadOutpost</li>
+					  <li>OpportunitySite_MercenaryOutpost</li>
+					  <li>OpportunitySite_MiningOutpost</li>
+					  <li MayRequire="OskarPotocki.VanillaVehiclesExpanded">OpportunitySite_VehiclesOutpost</li>
+					  <li MayRequire="OskarPotocki.VanillaVehiclesExpandedTier3">OpportunitySite_VehiclesTier3Outpost</li>
+					</value>
+				</li>
+			</operations>
+		</match>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_LocateSitesOfInterest"]/modExtensions/li[@Class="HautsFramework.PermitMoreEffects"]/questScriptDefs</xpath>
+			<value>
+			  <li MayRequire="Ludeon.RimWorld.Ideology">OpportunitySite_WorkSite</li>
+			  <li MayRequire="Ludeon.RimWorld.Ideology">OpportunitySite_WorkSite</li>
+			  <li MayRequire="Ludeon.RimWorld.Ideology">OpportunitySite_WorkSite</li>
+			  <li MayRequire="Ludeon.RimWorld.Ideology">OpportunitySite_WorkSite</li>
+			</value>
+		</nomatch>
+	</Operation>
+</Patch>

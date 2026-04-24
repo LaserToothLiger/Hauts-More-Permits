@@ -823,13 +823,13 @@
 	<thingClass>ThingWithComps</thingClass>
     <description>A collection of maps and notes describing a broad geographical region. This one is in need of severe revisions.</description>
     <graphicData>
-      <texPath>Things/Item/Book/Textbook/Textbook</texPath>
+      <texPath>Items/QuestItems/HVMP_Atlas</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>1</drawSize>
     </graphicData>
     <stackLimit>1</stackLimit>
 	<tradeability>None</tradeability>
-    <uiIconPath>Things/Item/Book/Textbook/Textbook</uiIconPath>
+    <uiIconPath>Items/QuestItems/HVMP_Atlas</uiIconPath>
     <statBases>
       <MarketValue>0</MarketValue>
       <MaxHitPoints>60</MaxHitPoints>

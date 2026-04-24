@@ -61,7 +61,7 @@ namespace HautsPermits_Occult
                         this.parent.Severity += this.Props.sensPerHour * 0.024f;
                         if (Rand.MTBEventOccurs(this.Props.MTBhoursToGoodEvent, 2500f, 60))
                         {
-                            GoodAndBadIncidentsUtility.MakeGoodEvent(this.Pawn);
+                            GoodAndBadIncidentsUtility.MakeGoodEvent(this.Pawn,0,null);
                             Messages.Message("HVMP_ProbabilityTunerActivated".Translate().CapitalizeFirst().Formatted(this.Pawn.Named("PAWN")).AdjustedFor(this.Pawn, "PAWN", true).Resolve(), this.Pawn, MessageTypeDefOf.PositiveEvent, true);
                             this.isActive = false;
                         }
