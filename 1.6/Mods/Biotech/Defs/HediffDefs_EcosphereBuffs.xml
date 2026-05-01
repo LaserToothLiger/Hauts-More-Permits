@@ -250,7 +250,7 @@
     </comps>
   </HediffDef>
   <HediffDef ParentName="HVMP_TameMechanitesBase" MayRequire="lts.MSMD">
-    <defName>HVMI_MedicalMechanites</defName>
+    <defName>HVMP_MedicalMechanites</defName>
     <label>medical mechanites (tamed)</label>
     <description>Healing-enhancing mechanites which reside in the bloodstream.</description>
     <stages>
@@ -274,7 +274,7 @@
     </comps>
   </HediffDef>
   <HediffDef ParentName="HVMP_TameMechanitesBase" MayRequire="lts.MSMD"><!--bonuses reduced by more than a third, since random frequent berserks are no longer an issue-->
-    <defName>HVMI_BerserkerMechanites</defName>
+    <defName>HVMP_BerserkerMechanites</defName>
     <label>berserker mechanites (tamed)</label>
     <description>Performance-enhancing mechanites which strengthen general tissue integrity, the adrenal glands, and fast-twitch muscle fibers.\n\nHaving been tamed, these mechanites no longer induce aggressive episodes; however, they are weaker than they used to be.</description>
     <stages>
@@ -292,7 +292,7 @@
     </comps>
   </HediffDef>
   <HediffDef ParentName="HVMP_TameMechanitesBase" MayRequire="lts.MSMD">
-    <defName>HVMI_TrainerMechanites</defName>
+    <defName>HVMP_TrainerMechanites</defName>
     <label>trainer mechanites (tamed)</label>
     <description>Learning- and cognition-enhancing mechanites which reside in the brain.</description>
     <stages>

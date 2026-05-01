@@ -292,24 +292,6 @@
 	  </li>
 	</comps>
   </HediffDef>
-  <ThingDef ParentName="MoteBase">
-	<defName>HVMP_EyeSpy</defName>
-	<thingClass>MoteAttached</thingClass>
-	<altitudeLayer>MoteOverhead</altitudeLayer>
-	<mote>
-		<fadeInTime>1.05</fadeInTime>
-		<fadeOutTime>1.05</fadeOutTime>
-		<solidTime>1.05</solidTime>
-		<needsMaintenance>true</needsMaintenance>
-	</mote>
-	<graphicData>
-	  <graphicClass>Graphic_Single</graphicClass>
-	  <color>(0.44,0.067,0.067,0.7)</color>
-	  <texPath>VFX/HVMI_RaidingScout</texPath>
-	  <drawSize>1.2</drawSize>
-      <drawOffset>(0,0,1)</drawOffset>
-	</graphicData>
-  </ThingDef>
   
   <!--PAX Caelum
 		Mood Killer-->

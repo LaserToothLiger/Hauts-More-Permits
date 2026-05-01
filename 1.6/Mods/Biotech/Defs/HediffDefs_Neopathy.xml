@@ -92,6 +92,12 @@
         <severityPerDayTended>-1</severityPerDayTended>
         <baseTendDurationHours>24</baseTendDurationHours>
       </li>
+	  <li Class="HautsFramework.HediffCompProperties_MoteConditional">
+	    <compClass>HautsPermits_Biotech.HediffComp_MoteNeopathy</compClass>
+		<mote>HVMP_CurableIndicator</mote>
+		<scale>1</scale>
+		<useHeadOffsetAboveOneBodySize>true</useHeadOffsetAboveOneBodySize>
+	  </li>
     </comps>
   </HediffDef>
 	  <HediffDef Name="HVMP_NCBase" ParentName="HVT_TraitHediffBase" Abstract="True">

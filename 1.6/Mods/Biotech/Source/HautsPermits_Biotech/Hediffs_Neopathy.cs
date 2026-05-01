@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using HautsFramework;
+using RimWorld;
 using System.Collections.Generic;
 using Verse;
 
@@ -197,6 +198,18 @@ namespace HautsPermits_Biotech
         public bool cureDiscovered;
         public bool DD_on;
         public float DEM_failureChance;
+    }
+    public class HediffComp_MoteNeopathy : HediffComp_MoteConditional
+    {
+        public override bool DisableMote()
+        {
+            HediffComp_NeopathyComplications hcnc = this.parent.GetComp<HediffComp_NeopathyComplications>();
+            if (hcnc != null && !hcnc.cureDiscovered)
+            {
+                return true;
+            }
+            return base.DisableMote();
+        }
     }
     //for Gerogenesis
     public class HediffCompProperties_AcceleratedAging : HediffCompProperties

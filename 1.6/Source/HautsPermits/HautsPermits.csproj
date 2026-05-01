@@ -111,7 +111,7 @@
     <Compile Include="Quest_Rover_Laelaps.cs" />
     <Compile Include="Quest_Rover_Odyssey.cs" />
     <Compile Include="Quest_Rover_Theseus.cs" />
-    <Compile Include="StatPart.cs" />
+    <Compile Include="StatParts.cs" />
     <Compile Include="WorldComponent_BranchStuff.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -66,6 +66,8 @@ namespace HautsPermits
         [MayRequireIdeology]
         public static SitePartDef HVMP_Shrine;
 
+        public static StatDef HVMP_StandingValue;
+
         public static ThingDef HVMP_DropPodOfFaction;
         public static ThingDef HVMP_DelayedPowerBeam;
         public static ThingDef HVMP_DatedAtlas;

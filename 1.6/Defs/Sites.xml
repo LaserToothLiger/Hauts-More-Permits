@@ -9,7 +9,7 @@
     <worldObjectClass>HautsPermits.WorldObject_DeadDrop</worldObjectClass>
     <texture>World/WorldObjects/PeaceTalks</texture>
     <expandingIcon>true</expandingIcon>
-    <expandingIconTexture>World/WorldObjects/Expanding/HVMI_PointTransportation</expandingIconTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/HVMP_PointTransportation</expandingIconTexture>
     <expandingIconPriority>70</expandingIconPriority>
 	<allowCaravanIncidentsWhichGenerateMap>true</allowCaravanIncidentsWhichGenerateMap>
     <comps>
@@ -43,7 +43,7 @@
     <worldObjectClass>HautsPermits.WorldObject_AtlasPoint</worldObjectClass>
 	<texture>World/WorldObjects/Hauts_PointGoTo_TeamColorable</texture>
     <expandingIcon>true</expandingIcon>
-    <expandingIconTexture>World/WorldObjects/Expanding/HVMI_PointAtlas</expandingIconTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/HVMP_PointAtlas</expandingIconTexture>
     <expandingIconPriority>70</expandingIconPriority>
     <comps>
       <li Class="WorldObjectCompProperties_Timeout" />
@@ -56,7 +56,7 @@
     <worldObjectClass>HautsPermits.WorldObject_OdysseyPoint</worldObjectClass>
 	<texture>World/WorldObjects/Hauts_PointGoTo_TeamColorable</texture>
     <expandingIcon>true</expandingIcon>
-    <expandingIconTexture>World/WorldObjects/Expanding/HVMI_PointOdyssey</expandingIconTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/HVMP_PointOdyssey</expandingIconTexture>
     <expandingIconPriority>70</expandingIconPriority>
     <comps>
       <li Class="WorldObjectCompProperties_Timeout" />

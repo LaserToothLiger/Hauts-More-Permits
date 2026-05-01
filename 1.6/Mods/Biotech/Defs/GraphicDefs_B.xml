@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <ThingDef ParentName="MoteBase">
+	<defName>HVMP_CurableIndicator</defName>
+	<thingClass>MoteAttached</thingClass>
+	<altitudeLayer>MoteOverhead</altitudeLayer>
+	<mote>
+		<fadeInTime>1</fadeInTime>
+		<fadeOutTime>1</fadeOutTime>
+		<solidTime>2</solidTime>
+		<needsMaintenance>true</needsMaintenance>
+	</mote>
+	<graphicData>
+	  <graphicClass>Graphic_Single</graphicClass>
+	  <color>(1,1,1,1)</color>
+	  <texPath>VFX/HVMP_NeopathyCurableIndicator</texPath>
+	  <drawSize>1</drawSize>
+      <drawOffset>(0,0,1)</drawOffset>
+	</graphicData>
+  </ThingDef>
+  
+</Defs>

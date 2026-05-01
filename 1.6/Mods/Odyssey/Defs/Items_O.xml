@@ -69,9 +69,9 @@
     <label>blackbody shield unit</label>
     <description>A one-use high-energy repulsor field generator. Unlike conventional personal shields, this field is reinforced enough to stop any kind of attack, is resistant to EMPs, and it can absorb immense amounts of damage before failing. However, the shield generator rapidly overheats, causing itself to irreparably burn out over time. Moreover, the intensity of the shield inhibits even the movements of the wearer, and it distorts incoming light, blinding them as well.</description>
     <graphicData>
-      <texPath>Things/Item/Special/MechSerumResurrector</texPath>
+      <texPath>Items/HVMP_BlackbodyShieldUnit</texPath>
       <graphicClass>Graphic_Single</graphicClass>
-		  <color>(1,0.5804,0.5804,1)</color>
+	  <drawSize>0.7</drawSize>
     </graphicData>
     <techLevel>Ultra</techLevel>
     <tradeTags Inherit="False" />
@@ -109,9 +109,9 @@
     <label>gatepuncher implant</label>
     <description>A nervegel-stimulated electronic link to the Enterprise Branch's teleportation system. Once installed, the host can activate it to open skipgates. However, after four uses (or after one use that can move the host to points outside line of sight) its unauthorized use will be detected, and it will break down harmlessly inside the body.</description>
     <graphicData>
-      <texPath>Things/Item/Special/MechSerumResurrector</texPath>
+      <texPath>Items/HVMP_Gatepuncher</texPath>
       <graphicClass>Graphic_Single</graphicClass>
-		  <color>(0.6039, 0.4941, 0.4941,1)</color>
+	  <drawSize>0.7</drawSize>
     </graphicData>
     <techLevel>Ultra</techLevel>
     <tradeTags Inherit="False" />
@@ -190,9 +190,8 @@
     <description>A kit of advanced ultra-tech medical supplies, manufactured only by the Enterprise and its branches. It is roughly as potent as regular medicine. However, in addition to its diagnostic devices, pads, and multi-purpose tools, it contains multiple vials of a techno-organic biofilm substance. The biofilm expands over the patient's body, tending all wounds in one go, and protecting them from hostile environments for the next 24 hours.</description>
     <possessionCount>3</possessionCount>
     <graphicData>
-      <texPath>Things/Item/Resource/Medicine/MedicineUltratech</texPath>
+      <texPath>Items/Resource/HVMP_MedicineBiofilm</texPath>
       <graphicClass>Graphic_StackCount</graphicClass>
-		  <color>(0.3412,0.7529,0.4235,1)</color>
       <drawSize>0.85</drawSize>
     </graphicData>
     <techLevel>Ultra</techLevel>
