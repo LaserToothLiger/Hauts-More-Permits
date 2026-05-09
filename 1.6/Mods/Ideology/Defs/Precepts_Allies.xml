@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Issues -->
+  <IssueDef>
+    <defName>HVMP_Allies</defName>
+    <label>allies</label>
+    <iconPath>UI/Issues/MiningYield</iconPath>
+  </IssueDef>
+
+  <!-- Precepts -->
+  <PreceptDef>
+    <defName>HVMP_AlliesDesired</defName>
+    <issue>HVMP_Allies</issue>
+    <label>desired</label>
+    <description>It is important to cultivate allies, and just as important to avoid making foes.</description>
+    <impact>Medium</impact>
+    <associatedMemes>
+      <li>HVMP_Cosmopolitan</li>
+    </associatedMemes>
+    <requiredMemes>
+      <li>HVMP_Cosmopolitan</li>
+    </requiredMemes>
+	<comps>
+      <li Class="PreceptComp_SituationalThought">
+        <thought>HVMP_NetAllyCount_Desired</thought>
+        <description>net ally count</description>
+      </li>
+	</comps>
+  </PreceptDef>
+  <ThoughtDef>
+    <defName>HVMP_NetAllyCount_Desired</defName>
+    <workerClass>HautsPermits_Ideology.ThoughtWorker_Precept_NetAllyToFoeCount</workerClass>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <label>allies outnumber foes</label>
+        <description>We can rest easy, knowing that more factions are allied with us than hostile to us.</description>
+        <baseMoodEffect>5</baseMoodEffect>
+      </li>
+      <li>
+        <label>foes outnumber allies</label>
+        <description>We're in grave danger, so long as there are more factions hostile to us than allied with us.</description>
+        <baseMoodEffect>-5</baseMoodEffect>
+      </li>
+    </stages>
+    <nullifyingTraits>
+      <li>Psychopath</li>
+    </nullifyingTraits>
+    <nullifyingHediffs>
+      <li MayRequire="Ludeon.RimWorld.Anomaly">Inhumanized</li>
+    </nullifyingHediffs>
+  </ThoughtDef>
+  
+  <PreceptDef>
+    <defName>HVMP_AlliesParamount</defName>
+    <issue>HVMP_Allies</issue>
+    <label>paramount</label>
+    <description>We can prosper only by building alliances with other factions; in courting adversaries, we are sure to find our doom.</description>
+    <impact>Medium</impact>
+    <associatedMemes>
+      <li>HVMP_Cosmopolitan</li>
+    </associatedMemes>
+    <requiredMemes>
+      <li>HVMP_Cosmopolitan</li>
+    </requiredMemes>
+	<comps>
+      <li Class="PreceptComp_SituationalThought">
+        <thought>HVMP_NetAllyCount_Paramount</thought>
+        <description>net ally count</description>
+      </li>
+	</comps>
+  </PreceptDef>
+  <ThoughtDef>
+    <defName>HVMP_NetAllyCount_Paramount</defName>
+    <workerClass>HautsPermits_Ideology.ThoughtWorker_Precept_NetAllyToFoeCount</workerClass>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <label>allies outnumber foes</label>
+        <description>Nothing can stand in our way - more factions are allied with us than hostile to us.</description>
+        <baseMoodEffect>10</baseMoodEffect>
+      </li>
+      <li>
+        <label>foes outnumber allies</label>
+        <description>More factions are hostile to us than allied with us. This will surely cause our downfall.</description>
+        <baseMoodEffect>-10</baseMoodEffect>
+      </li>
+    </stages>
+    <nullifyingTraits>
+      <li>Psychopath</li>
+    </nullifyingTraits>
+    <nullifyingHediffs>
+      <li MayRequire="Ludeon.RimWorld.Anomaly">Inhumanized</li>
+    </nullifyingHediffs>
+  </ThoughtDef>
+  
+</Defs>

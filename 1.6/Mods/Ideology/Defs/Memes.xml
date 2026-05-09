@@ -26,6 +26,10 @@
 	  <li>
 	    <li>HVMP_InterfactionAidImproved</li>
 	  </li>
+      <li>
+        <li>HVMP_AlliesDesired</li>
+        <li>HVMP_AlliesParamount</li>
+      </li>
     </requireOne>
     <generalRules>
       <rulesStrings>

@@ -409,10 +409,10 @@
   <!--archive quests: remnant-->
   <ThingDef ParentName="ResourceBase">
     <defName>HVMP_StrangeArtifact</defName>
-    <label>strange artifact</label>
+    <label>hermetic artifact container</label>
     <description>A strange object which the Archive Branch wants you to study on their behalf.</description>
     <graphicData>
-      <texPath>Things/Item/Relic/RelicInertBox</texPath>
+      <texPath>Items/QuestItems/HVMP_Remnant</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
     <soundInteract>Metal_Drop</soundInteract>

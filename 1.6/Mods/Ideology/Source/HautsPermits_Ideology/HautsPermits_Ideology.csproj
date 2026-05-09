@@ -71,6 +71,7 @@
     <Compile Include="PermitWorkers_ItemAlterations.cs" />
     <Compile Include="PermitWorker_DropIdeoBook.cs" />
     <Compile Include="PermitWorkers_Scanners.cs" />
+    <Compile Include="Precept_Allies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestNode_BranchQuestBase.cs" />
     <Compile Include="Quest_Archive_Ethnography.cs" />
