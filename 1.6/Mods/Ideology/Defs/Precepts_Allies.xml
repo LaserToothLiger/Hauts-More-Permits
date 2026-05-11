@@ -4,7 +4,7 @@
   <!-- Issues -->
   <IssueDef>
     <defName>HVMP_Allies</defName>
-    <label>allies</label>
+    <label>allied factions</label>
     <iconPath>UI/Issues/MiningYield</iconPath>
   </IssueDef>
 
@@ -25,6 +25,7 @@
       <li Class="PreceptComp_SituationalThought">
         <thought>HVMP_NetAllyCount_Desired</thought>
         <description>net ally count</description>
+        <tooltipShowMoodRange>true</tooltipShowMoodRange>
       </li>
 	</comps>
   </PreceptDef>
@@ -41,7 +42,7 @@
       <li>
         <label>foes outnumber allies</label>
         <description>We're in grave danger, so long as there are more factions hostile to us than allied with us.</description>
-        <baseMoodEffect>-5</baseMoodEffect>
+        <baseMoodEffect>-4</baseMoodEffect>
       </li>
     </stages>
     <nullifyingTraits>
@@ -68,6 +69,7 @@
       <li Class="PreceptComp_SituationalThought">
         <thought>HVMP_NetAllyCount_Paramount</thought>
         <description>net ally count</description>
+        <tooltipShowMoodRange>true</tooltipShowMoodRange>
       </li>
 	</comps>
   </PreceptDef>
@@ -84,7 +86,7 @@
       <li>
         <label>foes outnumber allies</label>
         <description>More factions are hostile to us than allied with us. This will surely cause our downfall.</description>
-        <baseMoodEffect>-10</baseMoodEffect>
+        <baseMoodEffect>-8</baseMoodEffect>
       </li>
     </stages>
     <nullifyingTraits>

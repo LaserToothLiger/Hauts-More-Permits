@@ -410,7 +410,7 @@
   <ThingDef ParentName="ResourceBase">
     <defName>HVMP_StrangeArtifact</defName>
     <label>hermetic artifact container</label>
-    <description>A strange object which the Archive Branch wants you to study on their behalf.</description>
+    <description>A containment unit harboring a strange object, which the Archive Branch wants you to study on their behalf.</description>
     <graphicData>
       <texPath>Items/QuestItems/HVMP_Remnant</texPath>
       <graphicClass>Graphic_Single</graphicClass>

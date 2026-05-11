@@ -50,7 +50,7 @@
     <label>gene-engineering package</label>
     <description>An encrypted hermetic container small enough to fit in one's hands. It contains a gene-altering agent of unknown effect and potency, formatted for use on humans. It can be studied at a research bench to determine its effects, but you can also learn about its effects much quicker by just injecting it into someone.</description>
     <graphicData>
-      <texPath>Things/Item/Resource/NanostructuringChip</texPath>
+      <texPath>Items/QuestItems/HVMP_RetroviralPackage</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
     <soundInteract>Metal_Drop</soundInteract>
