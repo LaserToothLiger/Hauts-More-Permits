@@ -1,6 +1,8 @@
-﻿using RimWorld;
+﻿using HautsFramework;
+using RimWorld;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
+using UnityEngine;
 using Verse;
 using Verse.AI.Group;
 
@@ -8,45 +10,41 @@ namespace HautsPermits_Occult
 {
     /*several of the boss monsters that can spawn when finishing a Natali labyrinth with the Don't Forget mutator are variant pawn kinds of classic Anomaly entities with some bonus startingHediffs.
      * Some of those hediffs do unique stuff. These are their stories.
-     * AcidMortarOnHit: for the Charybdis Devourer. On being damaged, if ...
-     * -it's been at least cooldown ticks since the last proc
-     * -a chance check is passed
-     * -and the damage instigator is within range...
-     * fire projectile with forcedMissRadius at the instigator.
+     * ScyllaMortar: it's a turret that can only fire while currently devouring something
+     * while digesting, every 3s generate filthCount filthType at random spots w/in filthRadius, and accrue stacks of digestingHediff (this hsould be a Hediff_RapidRegenerationStackable, which gains bonusRegenPerProc hp per accrual)
      * Also has a visual effect with minor mechanical effect: every filthPeriodicity ticks, drop filthCount filthType in filthRadius*/
-    public class HediffCompProperties_AcidMortarOnHit : HediffCompProperties
+    public class HediffCompProperties_ScyllaMortar : HediffCompProperties_Turret
     {
-        public HediffCompProperties_AcidMortarOnHit()
+        public HediffCompProperties_ScyllaMortar()
         {
-            this.compClass = typeof(HediffComp_AcidMortarOnHit);
+            this.compClass = typeof(HediffComp_ScyllaMortar);
         }
-        public float chance;
-        public int cooldown;
-        public ThingDef projectile;
-        public float range;
-        public float forcedMissRadius = 1.2f;
-        public ThingDef filthType;
-        public int filthRadius;
-        public int filthPeriodicity;
+        public HediffDef digestingHediff;
+        public int bonusRegenPerProc;
         public IntRange filthCount;
+        public int filthRadius;
+        public ThingDef filthType;
     }
-    public class HediffComp_AcidMortarOnHit : HediffComp
+    public class HediffComp_ScyllaMortar : HediffComp_Turret
     {
-        public HediffCompProperties_AcidMortarOnHit Props
+        public new HediffCompProperties_ScyllaMortar Props
         {
             get
             {
-                return (HediffCompProperties_AcidMortarOnHit)this.props;
+                return (HediffCompProperties_ScyllaMortar)this.props;
+            }
+        }
+        public CompDevourer DevourerComp
+        {
+            get
+            {
+                return this.Pawn.GetComp<CompDevourer>();
             }
         }
         public override void CompPostTickInterval(ref float severityAdjustment, int delta)
         {
             base.CompPostTickInterval(ref severityAdjustment, delta);
-            if (this.cooldown > 0)
-            {
-                this.cooldown -= delta;
-            }
-            if (this.Pawn.Spawned && this.Pawn.IsHashIntervalTick(this.Props.filthPeriodicity, delta))
+            if (this.Pawn.IsHashIntervalTick(180) && this.DevourerComp != null && this.DevourerComp.Digesting)
             {
                 int filthCount = this.Props.filthCount.RandomInRange;
                 Map m = this.Pawn.Map;
@@ -54,53 +52,65 @@ namespace HautsPermits_Occult
                 while (filthCount > 0)
                 {
                     IntVec3 loc = CellFinder.RandomClosewalkCellNear(iv3, m, this.Props.filthRadius, null);
-                    FilthMaker.TryMakeFilth(iv3, m, this.Props.filthType, 1, FilthSourceFlags.None, true);
+                    FilthMaker.TryMakeFilth(loc, m, this.Props.filthType, 1, FilthSourceFlags.None, true);
                     filthCount--;
                 }
-            }
-        }
-        public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
-        {
-            base.Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
-            if (this.cooldown <= 0 && this.Pawn.Spawned && Rand.Chance(this.Props.chance) && dinfo.Instigator != null)
-            {
-                Thing t = dinfo.Instigator;
-                if (t.SpawnedOrAnyParentSpawned && t.MapHeld == this.Pawn.Map)
+                if (this.Props.digestingHediff != null)
                 {
-                    ThingDef proj = this.Props.projectile;
-                    Projectile projectile2 = (Projectile)GenSpawn.Spawn(proj, this.Pawn.Position, this.Pawn.Map, WipeMode.Vanish);
-                    float num2 = VerbUtility.CalculateAdjustedForcedMiss(this.Props.forcedMissRadius, t.PositionHeld - this.Pawn.Position);
-                    if (num2 > 0.5f)
+                    Hediff h = this.Pawn.health.hediffSet.GetFirstHediffOfDef(this.Props.digestingHediff);
+                    if (h == null)
                     {
-                        IntVec3 forcedMissTarget = this.GetForcedMissTarget(num2, t.PositionHeld);
-                        if (forcedMissTarget != t.PositionHeld)
-                        {
-                            ProjectileHitFlags projectileHitFlags = ProjectileHitFlags.NonTargetWorld;
-                            if (Rand.Chance(0.5f))
-                            {
-                                projectileHitFlags = ProjectileHitFlags.All;
-                            }
-                            projectile2.Launch(this.Pawn, this.Pawn.DrawPos, forcedMissTarget, t, projectileHitFlags, false, null, null);
-                            return;
-                        }
+                        h = HediffMaker.MakeHediff(this.Props.digestingHediff,this.Pawn);
+                        this.Pawn.health.AddHediff(h);
                     }
-                    ProjectileHitFlags projectileHitFlags2 = ProjectileHitFlags.IntendedTarget;
-                    projectile2.Launch(this.Pawn, this.Pawn.DrawPos, t, t, projectileHitFlags2, false, null, null);
+                    if (h is Hediff_RapidRegenerationStackable hrr)
+                    {
+                        hrr.SetHpCapacity(this.Props.bonusRegenPerProc);
+                    }
                 }
             }
         }
-        public IntVec3 GetForcedMissTarget(float forcedMissRadius, IntVec3 targetPosition)
+        protected override bool CanShoot
         {
-            int num = GenRadial.NumCellsInRadius(forcedMissRadius);
-            int num2 = Rand.Range(0, num);
-            return targetPosition + GenRadial.RadialPattern[num2];
+            get
+            {
+                return this.DevourerComp != null && this.DevourerComp.Digesting && base.CanShoot;
+            }
         }
-        public override void CompExposeData()
+    }
+    public class Hediff_RapidRegenerationStackable : Hediff
+    {
+        public override string SeverityLabel
         {
-            base.CompExposeData();
-            Scribe_Values.Look<int>(ref this.cooldown, "cooldown", 0, false);
+            get
+            {
+                return string.Format("{0:0} / {1:0}{2}", this.hpRemaining, this.hpCapacity, "HP".Translate());
+            }
         }
-        public int cooldown = 0;
+        public override bool ShouldRemove
+        {
+            get
+            {
+                return this.hpRemaining <= 0f;
+            }
+        }
+        public void SetHpCapacity(float amount)
+        {
+            this.hpCapacity += amount;
+            this.hpRemaining += amount;
+        }
+        public override void Notify_Regenerated(float hp)
+        {
+            this.hpRemaining = Mathf.Max(this.hpRemaining - hp, 0f);
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<float>(ref this.hpRemaining, "hpRemaining", 0f, false);
+            Scribe_Values.Look<float>(ref this.hpCapacity, "hpCapacity", 0f, false);
+        }
+        public float hpRemaining = 0f;
+        public float hpCapacity = 0f;
     }
     //for the Grandsplice Chimera. Destroys the corpse on death, unleashing a viscera explosion and making fleshbeastCount pawns, each randomly drawn from the fleshbeastKinds list
     public class HediffCompProperties_FleshbeastsOnDeath : HediffCompProperties

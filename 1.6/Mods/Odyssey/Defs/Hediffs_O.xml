@@ -55,7 +55,7 @@
 	<defName>HVMP_PTuning</defName>
 	<hediffClass>HautsPermits_Occult.Hediff_PTuning</hediffClass>
 	<label>probability tuner</label>
-	<description>A loss of psychic sensitivity caused by bonding with a probability tuner.\n\nProbability tuners drain psychic sensitivity over time, eventually causing a good event. The tuner stops draining sensitivity once either a good event is created or psychic sensitivity reaches 0%.</description>
+	<description>A loss of psychic sensitivity caused by bonding with a probability tuner.\n\nProbability tuners drain psychic sensitivity over time, causing good events to occasionally occur as a result. The tuner stops draining sensitivity only once the host's psychic sensitivity reaches 0%; lost sensitivity gradually recovers afterward.</description>
 	<initialSeverity>0.001</initialSeverity>
 	<stages>
 	  <li>
@@ -67,10 +67,10 @@
 	</stages>
 	<comps>
 	  <li Class="HautsPermits_Occult.HediffCompProperties_PTuner">
-		<sensPerHour>0.1</sensPerHour>
-		<MTBhoursToGoodEvent>9</MTBhoursToGoodEvent>
+		<sensPerHour>0.03</sensPerHour>
+		<MTBhoursToGoodEvent>24</MTBhoursToGoodEvent>
 		<permanentLabel>probability tuning scar</permanentLabel>
-		<postEventRecoveryPerHour>0.005</postEventRecoveryPerHour>
+		<postEventRecoveryPerHour>0.5</postEventRecoveryPerHour>
 	  </li>
 	</comps>
   </HediffDef>

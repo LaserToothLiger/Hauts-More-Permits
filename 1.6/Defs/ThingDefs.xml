@@ -158,7 +158,7 @@
     <label>masonry pallet</label>
     <description>A crate containing stone blocks. You can choose what type of stone is inside by opening it.</description>
     <graphicData>
-      <texPath>Items/HVMP_MasonryPallet</texPath>
+      <texPath>Items/Pallets/HVMP_MasonryPallet</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
     <comps>
@@ -176,7 +176,7 @@
 		<label>gemstone pallet</label>
 		<description>A crate containing gemstones. You can choose what type of stone is inside by opening it.</description>
 		<graphicData>
-		  <texPath>Items/HVMP_GemstonePallet</texPath>
+		  <texPath>Items/Pallets/HVMP_GemstonePallet</texPath>
 		  <graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
 		<comps>
@@ -193,7 +193,7 @@
 		<label>artisan pallet</label>
 		<description>A crate containing artisanal products. You can choose what type of product is inside by opening it.</description>
 		<graphicData>
-		  <texPath>Items/HVMP_ArtisanPallet</texPath>
+		  <texPath>Items/Pallets/HVMP_ArtisanPallet</texPath>
 		  <graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
 		<comps>
@@ -210,7 +210,7 @@
 		<label>condiment pallet</label>
 		<description>A crate containing condiments. You can choose what type of condiment is inside by opening it.</description>
 		<graphicData>
-		  <texPath>Items/HVMP_CondimentPallet</texPath>
+		  <texPath>Items/Pallets/HVMP_CondimentPallet</texPath>
 		  <graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
 		<comps>

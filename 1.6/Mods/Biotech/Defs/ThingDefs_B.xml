@@ -411,7 +411,7 @@
 		<label>gene tool pallet</label>
 		<description>A crate containing a gene tool. You can choose what type of gene tool is inside by opening it.</description>
 		<graphicData>
-		  <texPath>Items/HVMP_GeneToolPallet</texPath>
+		  <texPath>Items/Pallets/HVMP_GeneToolPallet</texPath>
 		  <graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
 		<comps>

@@ -49,7 +49,7 @@
     <label>trade goods pallet</label>
     <description>A crate containing up to 5,000 silver worth of goods. You can choose what type of item is inside by opening it.</description>
     <graphicData>
-      <texPath>Items/HVMP_MysteryPallet</texPath>
+      <texPath>Items/Pallets/HVMP_MysteryPallet</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
     <comps>
@@ -71,7 +71,7 @@
     <graphicData>
       <texPath>Items/HVMP_BlackbodyShieldUnit</texPath>
       <graphicClass>Graphic_Single</graphicClass>
-	  <drawSize>0.7</drawSize>
+	  <drawSize>0.9</drawSize>
     </graphicData>
     <techLevel>Ultra</techLevel>
     <tradeTags Inherit="False" />
@@ -111,7 +111,7 @@
     <graphicData>
       <texPath>Items/HVMP_Gatepuncher</texPath>
       <graphicClass>Graphic_Single</graphicClass>
-	  <drawSize>0.7</drawSize>
+	  <drawSize>0.9</drawSize>
     </graphicData>
     <techLevel>Ultra</techLevel>
     <tradeTags Inherit="False" />
@@ -149,9 +149,9 @@
     <label>ingressor</label>
     <description>A one-use sabotage device. Once clamped onto a building, its subpersona core infiltrates and subverts any hackable digital system it can find. If the building is not hackable, the ingressor instead activates its powerful directional explosive, dealing 500 damage to the building.</description>
     <graphicData>
-      <texPath>Things/Item/Special/MechSerumResurrector</texPath>
+      <texPath>Items/HVMP_Ingressor</texPath>
       <graphicClass>Graphic_Single</graphicClass>
-		  <color>(0.898,0.6,0.6,1)</color>
+	  <drawSize>0.9</drawSize>
     </graphicData>
     <techLevel>Ultra</techLevel>
     <tradeTags Inherit="False" />
@@ -217,11 +217,11 @@
   <ThingDef ParentName="MechSerumBase" MayRequire="Ludeon.RimWorld.Anomaly">
     <defName>HVMP_ProbabilityTuner</defName>
     <label>probability tuner</label>
-    <description>A piece of scavenged archotechnology; one side is utterly smooth, but the other, fuzzier side clings to the skin with a feeling of static electricity. It can be applied to a living person to gradually deplete their psychic sensitivity. While connected and draining sensitivity, it has a chance to cause a good event, after which it will harmlessly disintegrate and stop draining psychic sensitivity.\n\nHas no effect if applied to someone who was previously bonded to a probability tuner.</description>
+    <description>A piece of scavenged archotechnology crudely welded to a bio-electric interface. It can be applied to a living person to gradually deplete their psychic sensitivity. While connected and draining sensitivity, it can cause good events randomly. It harmlessly disintegrates once the victim loses all psychic sensitivity, which then recovers over time.</description>
     <graphicData>
-      <texPath>Things/Item/Special/MechSerumResurrector</texPath>
+      <texPath>Items/HVMP_ProbTuner</texPath>
       <graphicClass>Graphic_Single</graphicClass>
-		  <color>(0.7019,0,0.5843,1)</color>
+	  <drawSize>0.9</drawSize>
     </graphicData>
     <techLevel>Archotech</techLevel>
     <tradeTags Inherit="False" />

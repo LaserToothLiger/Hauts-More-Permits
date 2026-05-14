@@ -125,7 +125,7 @@
 <HVMP_UsePermitTargeterOption>Use {0} (cost: {1})</HVMP_UsePermitTargeterOption>
 <HVMP_PalletOpeningLabel>Upon opening the pallet, {PAWN_nameDef} finds...</HVMP_PalletOpeningLabel>
 <HVMP_Choose>Select an option.</HVMP_Choose>
-<HVMP_ProbabilityTunerActivated>The probability tuner affixed to {PAWN_nameDef} has activated, and subsequently disintegrated.</HVMP_ProbabilityTunerActivated>
+<HVMP_ProbabilityTunerActivated>The probability tuner affixed to {PAWN_nameDef} has activated, inciting a good event.</HVMP_ProbabilityTunerActivated>
 <!--Quest generique-->
 <HVMP_CCProgress>Progress: {0}/{1}</HVMP_CCProgress>
 <!--Commerce intervention-->

@@ -7,7 +7,7 @@
     <label>serum pallet</label>
     <description>A crate containing two serums. You can choose what type of serum is inside by opening it.</description>
     <graphicData>
-      <texPath>Items/HVMP_SerumPallet</texPath>
+      <texPath>Items/Pallets/HVMP_SerumPallet</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
     <comps>

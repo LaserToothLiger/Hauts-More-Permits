@@ -462,7 +462,7 @@
 	  <HediffDef ParentName="HVT_TraitHediffBase">
 		<defName>HVMP_Charybdis</defName>
 		<label>charybdis strain</label>
-		<description>This devourer has been mutated by long exposure to interdimensional forces. When damaged, it may spew a retaliatory globule of acid that can travel frightening distances.</description>
+		<description>This devourer has been mutated by long exposure to interdimensional forces. While digesting a creature, it gains a powerful reserve of healing energy and sprays powerful acids at distant hostiles.</description>
 		<hediffClass>HediffWithComps</hediffClass>
 		<isBad>false</isBad>
 		<stages>
@@ -471,29 +471,82 @@
 			  <IncomingDamageFactor>0.4</IncomingDamageFactor>
 			  <MeatAmount>1.5</MeatAmount>
 			  <LeatherAmount>1.5</LeatherAmount>
+			  <Hauts_AcidDamageFactor>0</Hauts_AcidDamageFactor>
+			  <Hauts_ToxicDamageFactor>0.1</Hauts_ToxicDamageFactor>
 			</statFactors>
-			<damageFactors>
-			  <AcidBurn>0.05</AcidBurn>
-			  <OTCAcid MayRequire="ObsidiaExpansion.Core">0.05</OTCAcid>
-			  <OEUnstableToxins MayRequire="ObsidiaExpansion.Core">0.05</OEUnstableToxins>
-			  <OMGNecrobane MayRequire="ObsidiaExpansion.Core">0.05</OMGNecrobane>
-			  <VEF_SecondaryAcidBurn>0.05</VEF_SecondaryAcidBurn>
-			  <AM_AcidSpit MayRequire="sarg.alphamechs">0.05</AM_AcidSpit>
-			</damageFactors>
+			<statOffsets>
+			  <Hauts_JumpRangeFactor>1</Hauts_JumpRangeFactor>
+			</statOffsets>
 		  </li>
 		</stages>
 		<comps>
-		  <li Class="HautsPermits_Occult.HediffCompProperties_AcidMortarOnHit">
-			<projectile>Bullet_Shell_AcidSpit</projectile>
-			<range>44</range>
-			<cooldown>600</cooldown>
-			<chance>0.45</chance>
+		  <li Class="HautsPermits_Occult.HediffCompProperties_ScyllaMortar">
+			<turretDef>HVMP_ScyllaMortar</turretDef>
+			<digestingHediff>HVMP_MortalityBuffer</digestingHediff>
+			<bonusRegenPerProc>150</bonusRegenPerProc>
 			<filthType>Filth_SpentAcid</filthType>
 			<filthRadius>2</filthRadius>
-			<filthPeriodicity>240</filthPeriodicity>
 			<filthCount>1~3</filthCount>
+			<!--<attackCooldown>360~900</attackCooldown>
+			<projCount>2</projCount>
+			<projectile>Bullet_Shell_AcidSpit</Bullet_Shell_AcidSpit>
+			<minRange>9.9</minRnage>
+			<range>500</range>-->
 		  </li>
 		</comps>
+	  </HediffDef>
+	  <ThingDef ParentName="BaseArtilleryWeapon">
+		<defName>HVMP_ScyllaMortar</defName>
+		<label>scylla mortar</label>
+		<description>Vitriolic siege weapon.</description>
+		<tradeability>None</tradeability>
+		<destroyOnDrop>true</destroyOnDrop>
+		<graphicData>
+		  <texPath>Things/Pawn/Fleshbeast/Fingerspike/Attachments/Fingerspike_TopLimb</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<statBases>
+		  <Mass>2.6</Mass>
+		  <AccuracyTouch>0.9</AccuracyTouch>
+		  <AccuracyShort>0.8</AccuracyShort>
+		  <AccuracyMedium>0.7</AccuracyMedium>
+		  <AccuracyLong>0.6</AccuracyLong>
+		</statBases>
+		<verbs>
+		  <li>
+			<verbClass>Verb_Shoot</verbClass>
+			<forcedMissRadius>3</forcedMissRadius>
+			<defaultProjectile>Bullet_Shell_AcidSpit</defaultProjectile>
+			<isMortar>true</isMortar>
+			<requireLineOfSight>false</requireLineOfSight>
+			<minRange>9.9</minRange>
+			<range>500</range>
+			<burstShotCount>2</burstShotCount>
+			<soundCast>SpitterSpit</soundCast>
+			<targetParams>
+			  <canTargetLocations>true</canTargetLocations>
+			</targetParams>
+			<defaultCooldownTime>3.8</defaultCooldownTime>
+			<ticksBetweenBurstShots>150</ticksBetweenBurstShots>
+		  </li>
+		</verbs>
+	  </ThingDef>
+	  <HediffDef>
+		<defName>HVMP_MortalityBuffer</defName>
+		<label>mortality buffer</label>
+		<hediffClass>HautsPermits_Occult.Hediff_RapidRegenerationStackable</hediffClass>
+		<description>Healing energy which must first be depleted before this creature can be killed.</description>
+		<isBad>false</isBad>
+		<preventsDeath>true</preventsDeath>
+		<keepOnBodyPartRestoration>True</keepOnBodyPartRestoration>
+		<stages>
+		  <li>
+			<minSeverity>0</minSeverity>
+			<regeneration>30000</regeneration>
+			<showRegenerationStat>false</showRegenerationStat>
+			<painFactor>0.1</painFactor>
+		  </li>
+		</stages>
 	  </HediffDef>
   <PawnKindDef>
     <defName>HVMP_NoctolUmbranarch</defName>

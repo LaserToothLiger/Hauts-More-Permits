@@ -63,7 +63,6 @@ namespace HautsPermits_Occult
                         {
                             GoodAndBadIncidentsUtility.MakeGoodEvent(this.Pawn,0,null);
                             Messages.Message("HVMP_ProbabilityTunerActivated".Translate().CapitalizeFirst().Formatted(this.Pawn.Named("PAWN")).AdjustedFor(this.Pawn, "PAWN", true).Resolve(), this.Pawn, MessageTypeDefOf.PositiveEvent, true);
-                            this.isActive = false;
                         }
                     } else {
                         this.isActive = false;
