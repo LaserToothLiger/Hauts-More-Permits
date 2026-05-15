@@ -211,6 +211,8 @@
 <HVMP_OnlyOnePartyLabel>\nOnly one group can enter.</HVMP_OnlyOnePartyLabel>
 <HVMP_LabyrinthAlreadyGenerated>The anomaly has already been entered. It will not accept new entrants.</HVMP_LabyrinthAlreadyGenerated>
 <HVMP_LetterObeliskDiscovered>{PAWN_nameDef} has discovered a large obelisk. In between its twisting prongs, {PAWN_pronoun} catches fleeting synesthetic impressions of different locations across the planet. Perhaps it can be activated to return {PAWN_objective} home.\n\nSelect {PAWN_nameDef} and right-click the obelisk to activate it.</HVMP_LetterObeliskDiscovered>
+<!--Occult Wells-->
+<HVMP_VoidChargeInspectString>Detonation will unearth a fleshbeast pit burrow.</HVMP_VoidChargeInspectString>
 <!--Pax offering-->
 <HVMP_GoodwillCurried>Goodwill curried: {0}/{1}</HVMP_GoodwillCurried>
 <!--Pax talks-->
@@ -469,11 +471,11 @@
 <HVMP_HardMode_Label_Romero_3>Night of the Everliving Dead</HVMP_HardMode_Label_Romero_3>
 <HVMP_HardMode_Tooltip_Romero_3>Shamblers last 3x as long, and regenerate 7 hp/day.</HVMP_HardMode_Tooltip_Romero_3>
 <HVMP_Label_Wells>Wells</HVMP_Label_Wells>
-<HVMP_Tooltip_Wells>Fight a cult assassin that appears out of thin air after a random amount of time.</HVMP_Tooltip_Wells>
-<HVMP_HardMode_Label_Wells_1>First Strike</HVMP_HardMode_Label_Wells_1>
-<HVMP_HardMode_Tooltip_Wells_1>For half an hour after its appearance, the assassin deals more damage and ignores slowdown from terrain types.</HVMP_HardMode_Tooltip_Wells_1>
-<HVMP_HardMode_Label_Wells_2>Never Say Die</HVMP_HardMode_Label_Wells_2>
-<HVMP_HardMode_Tooltip_Wells_2>The assassin can't die until it's regenerated at least 550 points of damage, and it both takes less damage and regenerates faster.</HVMP_HardMode_Tooltip_Wells_2>
-<HVMP_HardMode_Label_Wells_3>Tandemonium</HVMP_HardMode_Label_Wells_3>
-<HVMP_HardMode_Tooltip_Wells_3>There may be multiple assassins. The attack is accompanied by multiple sightstealers.</HVMP_HardMode_Tooltip_Wells_3>
+<HVMP_Tooltip_Wells>Fight a cult assassin that appears out of thin air after a random amount of time. It turns into a ghoul after some time, or on dying.</HVMP_Tooltip_Wells>
+<HVMP_HardMode_Label_Wells_1>Blow This All to Hell</HVMP_HardMode_Label_Wells_1>
+<HVMP_HardMode_Tooltip_Wells_1>The assassin plants Void charges around the base. If not destroyed in time, they will release powerful vaporization explosions and blow open fleshbeast burrows.</HVMP_HardMode_Tooltip_Wells_1>
+<HVMP_HardMode_Label_Wells_2>To Be Nightmare</HVMP_HardMode_Label_Wells_2>
+<HVMP_HardMode_Tooltip_Wells_2>The assassin enters three invulnerability phases during which it teleports around, causing mayhem. After the third invulnerability phase, it can be killed.</HVMP_HardMode_Tooltip_Wells_2>
+<HVMP_HardMode_Label_Wells_3>Wetwork Frankenstein</HVMP_HardMode_Label_Wells_3>
+<HVMP_HardMode_Tooltip_Wells_3>The assassin gains two random buffs based on unnatural entities.</HVMP_HardMode_Tooltip_Wells_3>
 </LanguageData>

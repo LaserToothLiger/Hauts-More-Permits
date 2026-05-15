@@ -607,25 +607,6 @@
 									<ArmorRating_Sharp>7</ArmorRating_Sharp>
 								</value>
 							</li>
-							<!--quest mutator stuff-->
-							<li Class="PatchOperationReplace">
-								<xpath>/Defs/HediffDef[defName="HVMP_BurstCapacitators"]/stages/li/statOffsets/MeleeDamageFactor</xpath>
-								<value>
-									<MeleeDamageFactor>0.3</MeleeDamageFactor>
-								</value>
-							</li>
-							<li Class="PatchOperationReplace">
-								<xpath>/Defs/HediffDef[defName="HVMP_BurstCapacitators"]/stages/li/statOffsets/VEF_RangeAttackDamageFactor</xpath>
-								<value>
-									<VEF_RangeAttackDamageFactor>0.3</VEF_RangeAttackDamageFactor>
-								</value>
-							</li>
-							<li Class="PatchOperationReplace">
-								<xpath>/Defs/HediffDef[defName="HVMP_TisButAScratch"]/stages/li/statFactors/IncomingDamageFactor</xpath>
-								<value>
-									<IncomingDamageFactor>0.9</IncomingDamageFactor>
-								</value>
-							</li>
 						</operations>
 					</match>
 				</li>

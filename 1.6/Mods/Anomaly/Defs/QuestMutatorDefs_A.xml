@@ -638,48 +638,207 @@
   </HediffDef>
   
   <!--Wells
-		First Strike-->
+		Blow This All To Hell-->
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_VoidCharge</defName>
+    <label>Void charge</label>
+    <description>A psychically-charged mass of bioferrite with a miniature explosive embedded partway into it. When it detonates, it will immolate the surrounding area, but most of the explosion's force will be directed downward to bore a shaft to the deeps. Fleshbeasts attracted by the detonation's psychic shockwave will emerge from this shaft.\n\nVoid charges cannot be uninstalled, claimed, or deconstructed; they can only be disarmed. Disarming attempts should ideally be made by colonists with high Construction skill.</description>
+    <graphicData>
+      <graphicClass>Graphic_Single</graphicClass>
+      <texPath>Things/Building/Obelisk_Corrupted/CorruptedObelisk</texPath>
+      <drawSize>1.1</drawSize>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>1250</MaxHitPoints>
+    </statBases>
+	<tickerType>Normal</tickerType>
+    <costList>
+      <Bioferrite>80</Bioferrite>
+    </costList>
+    <comps>
+      <li Class="HautsPermits_Occult.CompProperties_VoidCharge">
+		<explosiveRadius>7.9</explosiveRadius>
+        <explosiveDamageType>Vaporize</explosiveDamageType>
+		<chanceToStartFire>0.75</chanceToStartFire>
+		<damageFalloff>true</damageFalloff>
+        <countdownTicks>20000</countdownTicks>
+		<extraInspectStringKey>HVMP_VoidChargeInspectString</extraInspectStringKey>
+		<fleshbeastThreatPointFactor>0.25</fleshbeastThreatPointFactor>
+		<!--<explosionSound>Explosion_Vaporize</explosionSound>-->
+      </li>
+    </comps>
+    <specialDisplayRadius>3.9</specialDisplayRadius>
+	<modExtensions>
+	  <li Class="HautsTraits.SabotageExplosive"/>
+	</modExtensions>
+  </ThingDef>
+  <!--To Be Nightmare-->
   <HediffDef ParentName="HVT_TraitHediffBase">
-	<defName>HVMP_BurstCapacitators</defName>
-	<label>Assassination frenzy</label>
-	<description>You're all gonna die.</description>
+	<defName>HVMP_Malachai</defName>
+	<label>Periodic invulnerability</label>
+	<description>Dark psychic energies course through this creature. Until this energy is depleted, it will periodically become invulnerable and teleport around, sowing pain and destruction.</description>
 	<hediffClass>HediffWithComps</hediffClass>
+    <preventsDeath>true</preventsDeath>
 	<isBad>false</isBad>
-	<initialSeverity>0.5</initialSeverity>
-	<maxSeverity>0.5</maxSeverity>
-	<defaultLabelColor>(1, 0.6, 0.6)</defaultLabelColor>
-	<comps>
-	  <li Class="HediffCompProperties_SeverityPerDay">
-		<severityPerDay>-24</severityPerDay>
-	  </li>
-	  <li Class="VEF.AnimalBehaviours.HediffCompProperties_Floating"/>
-	</comps>
+	<initialSeverity>3</initialSeverity>
+	<maxSeverity>4</maxSeverity>
+	<defaultLabelColor>(1, 0.2, 0.2)</defaultLabelColor>
 	<stages>
 	  <li>
-		<statOffsets>
-		  <MeleeDamageFactor>0.6</MeleeDamageFactor>
-		  <VEF_RangeAttackDamageFactor>0.6</VEF_RangeAttackDamageFactor>
-		</statOffsets>
+	    <minSeverity>0.001</minSeverity>
+		<label>1 remaining</label>
+	  </li>
+	  <li>
+	    <minSeverity>1.001</minSeverity>
+		<label>2 remaining</label>
+	  </li>
+	  <li>
+	    <minSeverity>2.001</minSeverity>
+		<label>3 remaining</label>
+	  </li>
+	  <li>
+	    <minSeverity>3.001</minSeverity>
+		<label>active</label>
+		<statFactors>
+		  <IncomingDamageFactor>0</IncomingDamageFactor>
+		  <MoveSpeed>0.001</MoveSpeed>
+		</statFactors>
+        <regeneration>30000</regeneration>
+		<totalBleedFactor>0</totalBleedFactor>
 	  </li>
 	</stages>
+	<comps>
+	  <li Class="HautsPermits_Occult.HediffCompProperties_NightmareMode">
+		<severityPerTrigger>-1</severityPerTrigger>
+		<ticksToNextTrigger>1200~3000</ticksToNextTrigger>
+		<invulnDurationTicks>1200</invulnDurationTicks>
+		<clamorType>Ability</clamorType>
+		<clamorRadius>10</clamorRadius>
+		<abilities>
+		  <li>AgonyPulse</li>
+		  <li>FleshmelterBolt</li>
+		</abilities>
+		<teleportRadius>10</teleportRadius>
+	  </li>
+	</comps>
   </HediffDef>
-  <!--Never Say Die-->
+  <!--Wetwork Frankenstein-->
   <HediffDef ParentName="HVT_TraitHediffBase">
-    <defName>HVMP_TisButAScratch</defName>
+    <defName>HVMP_WWF_RageSpeed</defName>
+    <label>chimeric aggression</label>
+    <hediffClass>HediffWithComps</hediffClass>
+    <description>Spliced chimera tissue causes this assassin to become enraged on taking damage.</description>
+    <keepOnBodyPartRestoration>True</keepOnBodyPartRestoration>
+	<comps>
+	  <li Class="HautsPermits_Occult.HediffCompProperties_WWF_Chimera">
+		<rageEndHealthPercentThreshold>0.98</rageEndHealthPercentThreshold>
+	  </li>
+	</comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>HVMP_WWF_RapidRegeneration</defName>
     <label>rapid regeneration</label>
-    <hediffClass>Hediff_RapidRegeneration</hediffClass>
-    <description>This creature has stored an incredible amount of healing energy. While not unlimited, it will rapidly regenerate until its energy has been exhausted.</description>
+    <hediffClass>HautsPermits_Occult.Hediff_WWF_RapidRegeneration</hediffClass>
+    <description>Spliced residue from a living corpse carries an incredible amount of healing energy. While not unlimited, this assassin will rapidly regenerate until its energy has been exhausted.</description>
+    <isBad>false</isBad>
     <preventsDeath>true</preventsDeath>
     <keepOnBodyPartRestoration>True</keepOnBodyPartRestoration>
+	<maxSeverity>600</maxSeverity><!--used by the hediff class as the hp reservoir-->
     <stages>
       <li>
-        <regeneration>2500</regeneration>
-		<totalBleedFactor>0</totalBleedFactor>
-		<statFactors>
-		  <IncomingDamageFactor>0.85</IncomingDamageFactor>
-		</statFactors>
+        <minSeverity>0</minSeverity>
+        <regeneration>30000</regeneration>
+        <showRegenerationStat>false</showRegenerationStat>
+        <statOffsets>
+          <PainShockThreshold>10</PainShockThreshold>
+        </statOffsets>
       </li>
     </stages>
   </HediffDef>
-  
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_WWF_GorehulkSpines</defName>
+    <label>gorehulk spines</label>
+    <hediffClass>HediffWithComps</hediffClass>
+    <description>Spliced gorehulk tissue automatically fires keratinous spikes at nearby foes and increase melee damage.</description>
+    <keepOnBodyPartRestoration>True</keepOnBodyPartRestoration>
+    <stages>
+      <li>
+        <statOffsets>
+          <MeleeDamageFactor>0.5</MeleeDamageFactor>
+        </statOffsets>
+      </li>
+    </stages>
+	<comps>
+      <li Class="HautsFramework.HediffCompProperties_Turret">
+        <turretDef>HVMP_TurretGorehulkSpines</turretDef>
+        <angleOffset>-90</angleOffset>
+      </li>
+	</comps>
+  </HediffDef>
+	  <ThingDef ParentName="BaseWeaponTurret">
+		<defName>HVMP_TurretGorehulkSpines</defName>
+		<label>urticating spines</label>
+		<description>Spliced gorehulk tissue automatically fires keratinous spikes at nearby foes and increase melee damage.</description>
+		<tradeability>None</tradeability>
+		<destroyOnDrop>true</destroyOnDrop>
+		<graphicData>
+		  <texPath>Things/Pawn/Fleshbeast/Fingerspike/Attachments/Fingerspike_TopLimb</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<statBases>
+		  <Mass>2.6</Mass>
+		  <AccuracyTouch>0.9</AccuracyTouch>
+		  <AccuracyShort>0.8</AccuracyShort>
+		  <AccuracyMedium>0.7</AccuracyMedium>
+		  <AccuracyLong>0.6</AccuracyLong>
+		</statBases>
+		<verbs>
+		  <li>
+			<verbClass>Verb_Shoot</verbClass>
+			<defaultProjectile>Spine_Gorehulk</defaultProjectile>
+			<range>17.9</range>
+			<soundCast>Gorehulk_Spine_Launch</soundCast>
+			<defaultCooldownTime>2.2</defaultCooldownTime>
+			<ticksBetweenBurstShots>150</ticksBetweenBurstShots>
+		  </li>
+		</verbs>
+	  </ThingDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_WWF_DevourerLeap</defName>
+    <label>devourer coils</label>
+    <description>Spliced devourer tissue enables this assassin to make terrific leaps.</description>
+    <keepOnBodyPartRestoration>True</keepOnBodyPartRestoration>
+    <abilities>
+      <li>ConsumeLeap_Devourer</li>
+    </abilities>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_WWF_PersonalDeathPall</defName>
+    <label>deadlife nova</label>
+    <hediffClass>HediffWithComps</hediffClass>
+    <description>This assassin's body fuels a colony of corrupted archites, which are periodically emitted to raise nearby corpses and seize control of nearby shamblers.</description>
+    <keepOnBodyPartRestoration>True</keepOnBodyPartRestoration>
+	<comps>
+	  <li Class="HautsPermits_Occult.HediffCompProperties_WWF_DeathPall">
+		<deadlifePeriodicity>500</deadlifePeriodicity>
+		<deadlifeRadius>5.9</deadlifeRadius>
+		<effecter>Hauts_DarkPsychicShockwave</effecter>
+	  </li>
+	</comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_WWF_AgonyPulse</defName>
+    <label>agony nova</label>
+    <hediffClass>HediffWithComps</hediffClass>
+    <description>Surgically implanted nociosphere shards allow this assassin to release psychic shockwaves which induce pain.</description>
+    <keepOnBodyPartRestoration>True</keepOnBodyPartRestoration>
+	<comps>
+	  <li Class="HautsPermits_Occult.HediffCompProperties_WWF_Nociosphere">
+		<novaPeriodicity>750</novaPeriodicity>
+		<radius>2.9</radius>
+		<durationSecs>400~700</durationSecs>
+		<effecter>PsychicRitual_Complete</effecter>
+	  </li>
+	</comps>
+  </HediffDef>
 </Defs>

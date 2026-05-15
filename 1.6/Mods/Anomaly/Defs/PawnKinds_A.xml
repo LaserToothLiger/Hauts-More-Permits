@@ -175,6 +175,7 @@
       </li>
       <li>
         <def>HVMP_UsherStats</def>
+        <durationTicksRange>360000</durationTicksRange> <!-- 6 days -->
       </li>
     </startingHediffs>
     <skills>
@@ -193,9 +194,6 @@
     <requiredWorkTags>
       <li>Violent</li>
     </requiredWorkTags>
-    <forcedTraits>
-      <BodyMastery />
-    </forcedTraits>
   </PawnKindDef>
   
 </Defs>

@@ -9,6 +9,7 @@ using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 using Verse.Grammar;
+using Verse.Sound;
 
 namespace HautsPermits_Occult
 {
@@ -55,10 +56,9 @@ namespace HautsPermits_Occult
         public SlateRef<string> storeArrivalModeAs;
     }
     /*generate a HVMP_UsherStrike incident (usherKind is the pawn kind spawned). Also weaves the mutators into it
-     * wells1: First Strike gives the spawned usherKind pawns FS_hediff
-     * wells2: Never Say Die gives the spawned usherKind pawns NSD_hediff; this should be a Hediff_RapidRegeneration, so that its HP capacity can be set to NSD_hpThreshold
-     * wells3: Tandemonium has a TANDY_bonusUsherChance to spawn +1 usherKind pawn, oooooor if you turned on TANDY_bonusUsherChanceCanExplode in the XML, up to +9 via additional rolls on each success.
-     *   It also spawns a random number within TANDY_bonusPawnCount of a random pawn kind within TANDY_bonusPawnTypes*/
+     * wells1: Blow This All To Hell spawns BTATH_count of BTATH_buildings
+     * wells2: To Be Nightmare gives the spawned usherKind pawn TBN_hediff
+     * wells3: Wetwork Frankenstein gives the spawned usherKind pawn a number of different hediffs from WWF_hediffRoster equal to a random value within WWF_hediffCount*/
     public class QuestNode_Wells : QuestNode
     {
         protected override bool TestRunInt(Slate slate)
@@ -78,20 +78,7 @@ namespace HautsPermits_Occult
                 incident = HVMPDefOf.HVMP_UsherStrike
             };
             bool mayhemMode = HVMP_Mod.settings.wellsX;
-            bool tandemonium = BranchQuestSetupUtility.MutatorEnabled(HVMP_Mod.settings.wells3, mayhemMode);
             int usherCount = 1;
-            if (tandemonium)
-            {
-                if (this.TANDY_bonusUsherChanceCanExplode)
-                {
-                    while (Rand.Chance(this.TANDY_bonusUsherChance) && usherCount < 10)
-                    {
-                        usherCount++;
-                    }
-                } else if (Rand.Chance(this.TANDY_bonusUsherChance)) {
-                    usherCount++;
-                }
-            }
             IncidentParms incidentParms = this.GenerateIncidentParms(map, num, usherCount, faction, slate, questPart_Incident);
             questPart_Incident.SetIncidentParmsAndRemoveTarget(incidentParms);
             questPart_Incident.inSignal = QuestGenUtility.HardcodedSignalWithQuestID(this.inSignal.GetValue(slate)) ?? slate.Get<string>("inSignal", null, false);
@@ -101,35 +88,48 @@ namespace HautsPermits_Occult
             qpwm.usherCount = usherCount;
             if (BranchQuestSetupUtility.MutatorEnabled(HVMP_Mod.settings.wells1, mayhemMode))
             {
-                qpwm.FS_hediff = this.FS_hediff;
+                qpwm.BTATH_building = this.BTATH_building;
+                qpwm.BTATH_count = this.BTATH_count.RandomInRange;
                 QuestGen.AddQuestDescriptionRules(new List<Rule>
                 {
-                    new Rule_String("mutator_FS_info", this.FS_description.Formatted())
+                    new Rule_String("mutator_BTATH_info", this.BTATH_description.Formatted())
                 });
             } else {
-                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_FS_info", " ") });
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_BTATH_info", " ") });
             }
             if (BranchQuestSetupUtility.MutatorEnabled(HVMP_Mod.settings.wells2, mayhemMode))
             {
-                qpwm.NSD_hediff = this.NSD_hediff;
-                qpwm.NSD_hpThreshold = this.NSD_hpThreshold;
+                qpwm.TBN_hediff = this.TBN_hediff;
                 QuestGen.AddQuestDescriptionRules(new List<Rule>
                 {
-                    new Rule_String("mutator_NSD_info", this.NSD_description.Formatted())
+                    new Rule_String("mutator_TBN_info", this.TBN_description.Formatted())
                 });
             } else {
-                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_NSD_info", " ") });
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TBN_info", " ") });
             }
-            if (tandemonium)
+            if (BranchQuestSetupUtility.MutatorEnabled(HVMP_Mod.settings.wells3, mayhemMode))
             {
-                qpwm.TANDY_pawnCount = this.TANDY_bonusPawnCount.RandomInRange;
-                qpwm.TANDY_pawnType = this.TANDY_bonusPawnTypes.RandomElement();
+                int hediffCount = this.WWF_hediffCount.RandomInRange;
+                qpwm.WWF_hediffs = new List<HediffDef>();
+                while (hediffCount > 0 && this.WWF_hediffRoster.Count > 0)
+                {
+                    IEnumerable<HediffDef> roster = this.WWF_hediffRoster.Where((HediffDef def) => !qpwm.WWF_hediffs.Contains(def));
+                    if (roster.Count() > 0)
+                    {
+                        HediffDef hd = roster.RandomElement();
+                        if (!qpwm.WWF_hediffs.Contains(hd))
+                        {
+                            qpwm.WWF_hediffs.Add(hd);
+                        }
+                    }
+                    hediffCount--;
+                }
                 QuestGen.AddQuestDescriptionRules(new List<Rule>
                 {
-                    new Rule_String("mutator_TANDY_info", this.TANDY_description.Formatted())
+                    new Rule_String("mutator_WWF_info", this.WWF_description.Formatted())
                 });
             } else {
-                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_TANDY_info", " ") });
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_WWF_info", " ") });
             }
             quest.AddPart(qpwm);
         }
@@ -191,19 +191,17 @@ namespace HautsPermits_Occult
         [NoTranslate]
         public SlateRef<string> tag;
         public PawnKindDef usherKind;
-        public HediffDef FS_hediff;
-        public HediffDef NSD_hediff;
-        public float NSD_hpThreshold;
-        public float TANDY_bonusUsherChance;
-        public bool TANDY_bonusUsherChanceCanExplode;
-        public List<PawnKindDef> TANDY_bonusPawnTypes;
-        public IntRange TANDY_bonusPawnCount;
+        public ThingDef BTATH_building;
+        public IntRange BTATH_count;
+        public HediffDef TBN_hediff;
+        public IntRange WWF_hediffCount;
+        public List<HediffDef> WWF_hediffRoster;
         [MustTranslate]
-        public string FS_description;
+        public string BTATH_description;
         [MustTranslate]
-        public string NSD_description;
+        public string TBN_description;
         [MustTranslate]
-        public string TANDY_description;
+        public string WWF_description;
     }
     //stores a bunch of the information needed to actually implement the mutators, for reference with the incident worker
     public class QuestPart_WellsMutators : QuestPart
@@ -212,20 +210,18 @@ namespace HautsPermits_Occult
         {
             base.ExposeData();
             Scribe_Defs.Look<PawnKindDef>(ref this.usherKind, "usherKind");
-            Scribe_Defs.Look<HediffDef>(ref this.FS_hediff, "FS_hediff");
-            Scribe_Defs.Look<HediffDef>(ref this.NSD_hediff, "NSD_hediff");
-            Scribe_Values.Look<float>(ref this.NSD_hpThreshold, "NSD_hpThreshold", 2000f, false);
+            Scribe_Defs.Look<ThingDef>(ref this.BTATH_building, "BTATH_building");
+            Scribe_Values.Look<int>(ref this.BTATH_count, "BTATH_count", 4, false);
+            Scribe_Defs.Look<HediffDef>(ref this.TBN_hediff, "TBN_hediff");
             Scribe_Values.Look<int>(ref this.usherCount, "usherCount", 1, false);
-            Scribe_Defs.Look<PawnKindDef>(ref this.TANDY_pawnType, "TANDY_pawnType");
-            Scribe_Values.Look<int>(ref this.TANDY_pawnCount, "TANDY_pawnCount", 0, false);
+            Scribe_Collections.Look<HediffDef>(ref this.WWF_hediffs, "WWF_hediffs", LookMode.Def, Array.Empty<object>());
         }
         public PawnKindDef usherKind;
-        public HediffDef FS_hediff;
-        public HediffDef NSD_hediff;
-        public float NSD_hpThreshold;
+        public ThingDef BTATH_building;
+        public int BTATH_count;
+        public HediffDef TBN_hediff;
         public int usherCount;
-        public PawnKindDef TANDY_pawnType;
-        public int TANDY_pawnCount;
+        public List<HediffDef> WWF_hediffs;
     }
     /*a raid that generates its pawns in a particular way, using references from QuestPart_WellsMutators to determine what pawns are made and what bonus hediffs they should get.
      * to minimize AI stupidity, it tells generated pawns to attack a nearby target IMMEDIATELY upon spawn*/
@@ -261,13 +257,6 @@ namespace HautsPermits_Occult
                         list.Add(pawn);
                     }
                 }
-                int stealerCount = qpwm.TANDY_pawnCount;
-                while (stealerCount > 0)
-                {
-                    Pawn stealer = PawnGenerator.GeneratePawn(qpwm.TANDY_pawnType, parms.faction, null);
-                    list.Add(stealer);
-                    stealerCount--;
-                }
                 if (list.Any<Pawn>())
                 {
                     parms.raidArrivalMode.Worker.Arrive(list, parms);
@@ -279,6 +268,21 @@ namespace HautsPermits_Occult
                 foreach (Pawn p in list)
                 {
                     list2.Add(p);
+                }
+                if (qpwm.BTATH_building != null && !list.NullOrEmpty())
+                {
+                    Pawn planter = list.Where((Pawn candidate)=>candidate.Spawned).RandomElement();
+                    while (qpwm.BTATH_count > 0)
+                    {
+                        if (CellFinder.TryFindRandomCell(map, (IntVec3 iv) => iv.IsValid && iv.Walkable(map) && map.reachability.CanReachMapEdge(iv, TraverseParms.For(TraverseMode.PassDoors, Danger.Deadly, true, false, true, false, false)), out IntVec3 iv3))
+                        {
+                            Thing voidCharge = ThingMaker.MakeThing(qpwm.BTATH_building, null);
+                            voidCharge.SetFactionDirect(planter.Faction);
+                            GenSpawn.Spawn(voidCharge, iv3, map, WipeMode.Vanish);
+                            list2.Add(voidCharge);
+                        }
+                        qpwm.BTATH_count--;
+                    }
                 }
                 base.SendStandardLetter(taggedString, taggedString2, this.GetLetterDef(), parms, list2, Array.Empty<NamedArgument>());
                 if (parms.controllerPawn == null || parms.controllerPawn.Faction != Faction.OfPlayer)
@@ -389,18 +393,17 @@ namespace HautsPermits_Occult
                 {
                     if (p.kindDef == qpwm.usherKind)
                     {
-                        if (qpwm.FS_hediff != null)
+                        if (qpwm.TBN_hediff != null)
                         {
-                            p.health.AddHediff(qpwm.FS_hediff);
-                        }
-                        if (qpwm.NSD_hediff != null)
-                        {
-                            Hediff h = HediffMaker.MakeHediff(qpwm.NSD_hediff, p);
+                            Hediff h = HediffMaker.MakeHediff(qpwm.TBN_hediff, p);
                             p.health.AddHediff(h);
-                            Hediff_RapidRegeneration hrr = h as Hediff_RapidRegeneration;
-                            if (hrr != null)
+                        }
+                        if (!qpwm.WWF_hediffs.NullOrEmpty())
+                        {
+                            foreach (HediffDef hd in qpwm.WWF_hediffs)
                             {
-                                hrr.SetHpCapacity(qpwm.NSD_hpThreshold);
+                                Hediff h = HediffMaker.MakeHediff(hd, p);
+                                p.health.AddHediff(h);
                             }
                         }
                     }
@@ -462,34 +465,422 @@ namespace HautsPermits_Occult
         }
     }
     /*Ushers have a starting hediff that grants a bunch of stats.
-     * It also turns them into a hostile ghoul (and destroys their clothes) on recruitment or imprisonment, because I don't want this quest to be a way to farm Body Mastery super soldiers.*/
-    public class Hediff_SpontaneousGhoulization : Hediff
+     * It also turns them into a hostile ghoul (and destroys their clothes) right after they die or when the buff is removed*/
+    public class Hediff_SpontaneousGhoulization : HediffWithComps
     {
-        public override void PostTickInterval(int delta)
+        public override void PostRemoved()
         {
-            base.PostTickInterval(delta);
-            if (!this.pawn.Downed && (this.pawn.IsPrisoner || (ModsConfig.IdeologyActive && this.pawn.IsSlave) || (this.pawn.Faction != null && this.pawn.Faction != Faction.OfPlayer && this.pawn.Faction.RelationKindWith(Faction.OfPlayer) != FactionRelationKind.Hostile)))
+            base.PostRemoved();
+            if (!this.pawn.IsGhoul)
             {
-                if (this.pawn.apparel != null && !this.pawn.apparel.WornApparel.NullOrEmpty())
+                this.Ghoulize();
+            }
+        }
+        public override void Notify_PawnDied(DamageInfo? dinfo, Hediff culprit = null)
+        {
+            base.Notify_PawnDied(dinfo, culprit);
+            ResurrectionUtility.TryResurrect(this.pawn,new ResurrectionParams());
+            this.Ghoulize();
+        }
+        public void Ghoulize()
+        {
+            if (this.pawn.apparel != null && !this.pawn.apparel.WornApparel.NullOrEmpty())
+            {
+                for (int i = this.pawn.apparel.WornApparel.Count - 1; i >= 0; i--)
                 {
-                    for (int i = this.pawn.apparel.WornApparel.Count - 1; i >= 0; i--)
+                    this.pawn.apparel.WornApparel[i].Destroy();
+                }
+            }
+            this.pawn.mutant = new Pawn_MutantTracker(this.pawn, MutantDefOf.Ghoul, RotStage.Fresh);
+            this.pawn.mutant.Turn(true);
+            Faction hostileFaction = Faction.OfHoraxCult;
+            if (hostileFaction == null)
+            {
+                hostileFaction = Faction.OfEntities;
+            }
+            if (hostileFaction != null)
+            {
+                this.pawn.SetFaction(hostileFaction);
+            }
+            this.pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Berserk, null, false, true, false, null, false, false, false);
+            MutantUtility.RegenerateHealth(this.pawn);
+            this.pawn.health.RemoveHediff(this);
+        }
+    }
+    /*wells1: Blow This All To Hell spawns a number of 'void charge' buildings, which have this comp. Unfortunately this can't just be a derivative of CompExplosive, cause even if we handwave away all other minor differences
+     *   simply making a Pit Burrow the post explosion spawn doesn't work. It needs to be generated via a specific method to have any fleshbeasts inside it*/
+    public class CompProperties_VoidCharge : CompProperties
+    {
+        public CompProperties_VoidCharge()
+        {
+            this.compClass = typeof(CompVoidCharge);
+        }
+        public float explosiveRadius = 1.9f;
+        public DamageDef explosiveDamageType;
+        public int damageAmountBase = -1;
+        public float armorPenetrationBase = -1f;
+        public float chanceToStartFire;
+        public bool damageFalloff;
+        public IntRange countdownTicks = new IntRange(140, 150);
+        public string extraInspectStringKey;
+        public float fleshbeastThreatPointFactor = 0.25f;
+    }
+    public class CompVoidCharge : ThingComp
+    {
+        public CompProperties_VoidCharge Props
+        {
+            get
+            {
+                return (CompProperties_VoidCharge)this.props;
+            }
+        }
+        public override void PostSpawnSetup(bool respawningAfterLoad)
+        {
+            if (this.Props.countdownTicks != null)
+            {
+                this.countdownTicksLeft = this.Props.countdownTicks.RandomInRange;
+            }
+        }
+        public override void CompTickInterval(int delta)
+        {
+            base.CompTickInterval(delta);
+            this.countdownTicksLeft -= delta;
+            if (this.countdownTicksLeft <= 0)
+            {
+                this.Detonate(this.parent.MapHeld, false);
+            }
+        }
+        public void Detonate(Map map, bool ignoreUnspawned = false)
+        {
+            if (!ignoreUnspawned && !this.parent.SpawnedOrAnyParentSpawned)
+            {
+                return;
+            }
+            IntVec3 positionHeld = this.parent.PositionHeld;
+            this.parent.Kill();
+            if (map == null)
+            {
+                Log.Warning("Tried to detonate CompVoidCharge in a null map.");
+                return;
+            }
+            GenExplosion.DoExplosion(positionHeld, map, this.Props.explosiveRadius, this.Props.explosiveDamageType, this.parent, this.Props.damageAmountBase, this.Props.armorPenetrationBase, chanceToStartFire: this.Props.chanceToStartFire, damageFalloff: this.Props.damageFalloff);
+            FleshbeastUtility.SpawnFleshbeastsFromPitBurrowEmergence(positionHeld, map, this.Props.fleshbeastThreatPointFactor* StorytellerUtility.DefaultThreatPointsNow(map), new IntRange(300,1200), new IntRange(180), true);
+        }
+        public override string CompInspectStringExtra()
+        {
+            string text = "";
+            if (this.countdownTicksLeft != -1)
+            {
+                text += "DetonationCountdown".Translate(this.countdownTicksLeft.TicksToDays().ToString("0.0"));
+            }
+            if (this.Props.extraInspectStringKey != null)
+            {
+                text += ((text != "") ? "\n" : "") + this.Props.extraInspectStringKey.Translate();
+            }
+            return text;
+        }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look<int>(ref this.countdownTicksLeft, "countdownTicksLeft", 0, false);
+        }
+        public int countdownTicksLeft = -1;
+    }
+    /*Mutator hediffs
+     * wells2: To Be Nightmare periodically causes invulnerability, stuns the pawn, and has it teleport around doing nociosphere stuff. It can't die until the responsible hediff is removed
+     * ticksToNextTrigger: when the pawn spawns, and whenever it drops out of invulnerability, it takes a random number of ticks in this range to enter its next invuln period (which is just the hediff being set to max severity)
+     * invulnDurationTicks: each invulnerability period lasts exactly this long
+     * abilities: the pawn gains these abilities while on its period, and casts them on itself every 2s
+     * teleportRadius: while on its period, teleports to a random point in this range. Causes clamorType clamor in clamorRadius
+     * severityPerTrigger: after dropping out of invulnerability, gain this much severity. (should be negative so that it eventually drops to a nonviable severity)*/
+    public class HediffCompProperties_NightmareMode : HediffCompProperties
+    {
+        public HediffCompProperties_NightmareMode()
+        {
+            this.compClass = typeof(HediffComp_NightmareMode);
+        }
+        public float severityPerTrigger;
+        public IntRange ticksToNextTrigger;
+        public int invulnDurationTicks;
+        public List<AbilityDef> abilities;
+        public float clamorRadius;
+        public ClamorDef clamorType;
+        public int teleportRadius;
+    }
+    public class HediffComp_NightmareMode : HediffComp
+    {
+        public HediffCompProperties_NightmareMode Props
+        {
+            get
+            {
+                return (HediffCompProperties_NightmareMode)this.props;
+            }
+        }
+        public override void CompPostPostAdd(DamageInfo? dinfo)
+        {
+            base.CompPostPostAdd(dinfo);
+            this.timer = this.Props.ticksToNextTrigger.RandomInRange;
+            this.storedSeverity = this.parent.Severity;
+        }
+        public bool IsActive
+        {
+            get
+            {
+                return this.parent.Severity == this.parent.def.maxSeverity;
+            }
+        }
+        public override void CompPostTickInterval(ref float severityAdjustment, int delta)
+        {
+            base.CompPostTickInterval(ref severityAdjustment, delta);
+            if (this.timer > 0)
+            {
+                this.timer -= delta;
+            }
+            if (this.timer <= 0)
+            {
+                if (!this.IsActive)
+                {
+                    this.storedSeverity = this.parent.Severity;
+                    this.parent.Severity = this.parent.def.maxSeverity;
+                    this.timer = this.Props.invulnDurationTicks;
+                    if (this.Pawn.abilities != null && this.Props.abilities != null)
                     {
-                        this.pawn.apparel.WornApparel[i].Destroy();
+                        foreach (AbilityDef ad in this.Props.abilities)
+                        {
+                            this.Pawn.abilities.GainAbility(ad);
+                        }
+                    }
+                } else {
+                    this.parent.Severity = this.storedSeverity + this.Props.severityPerTrigger;
+                    this.timer = this.Props.ticksToNextTrigger.RandomInRange;
+                    if (this.Pawn.abilities != null && this.Props.abilities != null)
+                    {
+                        foreach (AbilityDef ad in this.Props.abilities)
+                        {
+                            this.Pawn.abilities.RemoveAbility(ad);
+                        }
                     }
                 }
-                this.pawn.mutant = new Pawn_MutantTracker(this.pawn, MutantDefOf.Ghoul, RotStage.Fresh);
-                this.pawn.mutant.Turn(true);
-                Faction hostileFaction = Faction.OfHoraxCult;
-                if (hostileFaction == null)
+            }
+            if (this.IsActive && this.Pawn.IsHashIntervalTick(120))
+            {
+                Hediff h = this.Pawn.health.hediffSet.hediffs.FirstOrDefault((Hediff h2) => (h2.def.isBad && h2.def.everCurableByItem) || h2 is Hediff_MissingPart);
+                if (h != null)
                 {
-                    hostileFaction = Faction.OfEntities;
+                    HealthUtility.Cure(h);
                 }
-                if (hostileFaction != null)
+                if (this.Pawn.Spawned)
                 {
-                    this.pawn.SetFaction(hostileFaction);
+                    Pawn pawn = this.Pawn;
+                    Map map = pawn.Map;
+                    if (CellFinder.TryFindRandomCellNear(pawn.Position, map, this.Props.teleportRadius, (IntVec3 c) => c.Walkable(map) && !c.Fogged(map) && c.GetFirstPawn(map) == null && c.GetRoom(map) == pawn.Position.GetRoom(map), out IntVec3 intVec, -1))
+                    {
+                        if (intVec.IsValid)
+                        {
+                            SoundDefOf.Psycast_Skip_Exit.PlayOneShot(new TargetInfo(pawn.Position, map, false));
+                            pawn.Position = intVec;
+                            if ((pawn.Faction == Faction.OfPlayer || pawn.IsPlayerControlled) && pawn.Position.Fogged(map))
+                            {
+                                FloodFillerFog.FloodUnfog(pawn.Position, map);
+                            }
+                            pawn.Notify_Teleported(true, true);
+                            CompAbilityEffect_Teleport.SendSkipUsedSignal(pawn.Position, pawn);
+                            GenClamor.DoClamor(pawn, intVec, (float)this.Props.clamorRadius, this.Props.clamorType);
+                            FleckCreationData dataStatic = FleckMaker.GetDataStatic(pawn.Position.ToVector3Shifted(), map, FleckDefOf.PsycastSkipInnerExit, 1f);
+                            dataStatic.rotationRate = (float)Rand.Range(-30, 30);
+                            dataStatic.rotation = (float)(90 * Rand.RangeInclusive(0, 3));
+                            map.flecks.CreateFleck(dataStatic);
+                            FleckCreationData dataStatic2 = FleckMaker.GetDataStatic(pawn.Position.ToVector3Shifted(), map, FleckDefOf.PsycastSkipOuterRingExit, 1f);
+                            dataStatic2.rotationRate = (float)Rand.Range(-30, 30);
+                            dataStatic2.rotation = (float)(90 * Rand.RangeInclusive(0, 3));
+                            map.flecks.CreateFleck(dataStatic2);
+                            SoundDefOf.Psycast_Skip_Entry.PlayOneShot(new TargetInfo(intVec, map, false));
+                            if (pawn.stances != null && pawn.stances.stunner != null)
+                            {
+                                pawn.stances.stunner.StopStun();
+                            }
+                        }
+                        if (!this.Props.abilities.NullOrEmpty() && this.Pawn.abilities != null)
+                        {
+                            AbilityDef ad = this.Props.abilities.RandomElement();
+                            Ability ab = this.Pawn.abilities.GetAbility(ad);
+                            if (ab != null)
+                            {
+                                ab.ResetCooldown();
+                                LocalTargetInfo target = this.Pawn;
+                                this.Pawn.jobs.StartJob(ab.GetJob(target, null), JobCondition.InterruptForced);
+                            }
+                        }
+                    }
                 }
-                this.pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Berserk, null, false, true, false, null, false, false, false);
-                MutantUtility.RegenerateHealth(this.pawn);
+            }
+        }
+        public override void CompExposeData()
+        {
+            base.CompExposeData();
+            Scribe_Values.Look<int>(ref this.timer, "timer", 600, false);
+            Scribe_Values.Look<float>(ref this.storedSeverity, "storedSeverity", 3f, false);
+        }
+        public int timer;
+        public float storedSeverity;
+    }
+    /*wells3: Wetware Frankenstein grants three random entity-inspired buffs.
+     * Chimera: near-identical to CompChimera's rage speed mechanics
+     * RapidRegeneration: like a normal RapidRegeneration hediff, but it automatically sets its initial healing reservoir to its max severity
+     * DeathPall: every deadlifePeriodicity ticks, play effecter on own position and raise all corpses in deadlifeRadius as shamblers of the pawn's faction
+     * Nociosphere: every novaPeriodicity ticks, play effecter on own position and apply durationSecs worth of Psychic Agony to all pawns in radius of oneself*/
+    public class HediffCompProperties_WWF_Chimera : HediffCompProperties
+    {
+        public HediffCompProperties_WWF_Chimera()
+        {
+            this.compClass = typeof(HediffComp_WWF_Chimera);
+        }
+        public float rageEndHealthPercentThreshold = 0.98f;
+    }
+    public class HediffComp_WWF_Chimera : HediffComp
+    {
+        public HediffCompProperties_WWF_Chimera Props
+        {
+            get
+            {
+                return (HediffCompProperties_WWF_Chimera)this.props;
+            }
+        }
+        public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
+        {
+            base.Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
+            this.totalDamageTaken += totalDamageDealt;
+            if (!this.Pawn.Dead && this.totalDamageTaken > 0f && !this.Pawn.health.hediffSet.HasHediff(HediffDefOf.RageSpeed, false) && !this.Pawn.health.Downed)
+            {
+                this.Pawn.health.AddHediff(HediffMaker.MakeHediff(HediffDefOf.RageSpeed, this.Pawn, null), null, null, null);
+                if (this.Pawn.Spawned)
+                {
+                    EffecterDefOf.ChimeraRage.Spawn(this.Pawn.Position, this.Pawn.Map, 1f).Cleanup();
+                }
+            }
+        }
+        public override void CompPostTickInterval(ref float severityAdjustment, int delta)
+        {
+            base.CompPostTickInterval(ref severityAdjustment, delta);
+            if (this.Pawn.IsHashIntervalTick(240) && this.Pawn.health.summaryHealth.SummaryHealthPercent >= this.Props.rageEndHealthPercentThreshold)
+            {
+                Hediff firstHediffOfDef = this.Pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.RageSpeed, false);
+                if (firstHediffOfDef != null)
+                {
+                    this.Pawn.health.RemoveHediff(firstHediffOfDef);
+                    this.totalDamageTaken = 0f;
+                }
+            }
+        }
+        public override void CompExposeData()
+        {
+            base.CompExposeData();
+            Scribe_Values.Look<float>(ref this.totalDamageTaken, "totalDamageTaken", 0f, false);
+        }
+        public float totalDamageTaken;
+    }
+    public class Hediff_WWF_RapidRegeneration : Hediff_RapidRegeneration
+    {
+        public override void PostAdd(DamageInfo? dinfo)
+        {
+            base.PostAdd(dinfo);
+            this.SetHpCapacity(this.def.maxSeverity);
+        }
+    }
+    public class HediffCompProperties_WWF_DeathPall : HediffCompProperties
+    {
+        public HediffCompProperties_WWF_DeathPall()
+        {
+            this.compClass = typeof(HediffComp_WWF_DeathPall);
+        }
+        public int deadlifePeriodicity;
+        public float deadlifeRadius;
+        public EffecterDef effecter;
+    }
+    public class HediffComp_WWF_DeathPall : HediffComp
+    {
+        public HediffCompProperties_WWF_DeathPall Props
+        {
+            get
+            {
+                return (HediffCompProperties_WWF_DeathPall)this.props;
+            }
+        }
+        public override void CompPostTickInterval(ref float severityAdjustment, int delta)
+        {
+            base.CompPostTickInterval(ref severityAdjustment, delta);
+            if (this.Pawn.IsHashIntervalTick(this.Props.deadlifePeriodicity, delta) && this.Pawn.Spawned)
+            {
+                Pawn p = this.Pawn;
+                Effecter effecter = this.Props.effecter.Spawn();
+                effecter.Trigger(new TargetInfo(p.Position, p.Map, false), new TargetInfo(p.Position, p.Map, false), -1);
+                effecter.Cleanup();
+                foreach (Corpse c in GenRadial.RadialDistinctThingsAround(p.Position, p.Map, this.Props.deadlifeRadius, true).OfType<Corpse>().Distinct<Corpse>())
+                {
+                    if (MutantUtility.CanResurrectAsShambler(c))
+                    {
+                        c.InnerPawn.MarkDeadlifeDustForFaction(p.Faction);
+                        MutantUtility.ResurrectAsShambler(c.InnerPawn, 15000, c.InnerPawn.DeadlifeDustFaction);
+                    }
+                }
+            }
+        }
+    }
+    public class HediffCompProperties_WWF_Nociosphere : HediffCompProperties
+    {
+        public HediffCompProperties_WWF_Nociosphere()
+        {
+            this.compClass = typeof(HediffComp_WWF_Nociosphere);
+        }
+        public int novaPeriodicity;
+        public float radius;
+        public IntRange durationSecs;
+        public EffecterDef effecter;
+    }
+    public class HediffComp_WWF_Nociosphere : HediffComp
+    {
+        public HediffCompProperties_WWF_Nociosphere Props
+        {
+            get
+            {
+                return (HediffCompProperties_WWF_Nociosphere)this.props;
+            }
+        }
+        public override void CompPostTickInterval(ref float severityAdjustment, int delta)
+        {
+            base.CompPostTickInterval(ref severityAdjustment, delta);
+            if (this.Pawn.IsHashIntervalTick(this.Props.novaPeriodicity, delta))
+            {
+                Pawn p = this.Pawn;
+                if (p.Spawned)
+                {
+                    foreach (Pawn pawn in p.MapHeld.mapPawns.AllPawnsSpawned)
+                    {
+                        if (pawn.Position.InHorDistOf(p.Position, this.Props.radius))
+                        {
+                            this.ApplyOrRefreshHediff(pawn);
+                        }
+                    }
+                    SoundDefOf.PsychicBanshee.PlayOneShot(p);
+                    MoteMaker.MakeAttachedOverlay(p, ThingDefOf.Mote_PsychicBanshee, Vector3.zero, 1f, -1f);
+                    Effecter effecter = this.Props.effecter.Spawn();
+                    effecter.Trigger(new TargetInfo(p.Position, p.Map, false), new TargetInfo(p.Position, p.Map, false), -1);
+                    effecter.Cleanup();
+                }
+            }
+        }
+        private void ApplyOrRefreshHediff(Pawn pawn)
+        {
+            if (pawn.health.hediffSet.TryGetHediff(HediffDefOf.AgonyPulse, out Hediff hediff))
+            {
+                hediff.Severity = 0f;
+            } else {
+                hediff = pawn.health.AddHediff(HediffDefOf.AgonyPulse, null, null, null);
+            }
+            HediffComp_Disappears hediffComp_Disappears = hediff.TryGetComp<HediffComp_Disappears>();
+            if (hediffComp_Disappears != null)
+            {
+                hediffComp_Disappears.ticksToDisappear = this.Props.durationSecs.RandomInRange * 60;
             }
         }
     }

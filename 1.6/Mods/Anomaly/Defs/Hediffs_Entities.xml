@@ -23,8 +23,8 @@
   <!--usher stats-->
   <HediffDef ParentName="HVT_TraitHediffBase">
 	<defName>HVMP_UsherStats</defName>
-	<label>Horaxian usher</label>
-	<description>This character will turn into a ghoul if recruited or imprisoned.</description>
+	<label>Usher vitality</label>
+	<description>Empowerment of the body due to an unknown mechanism. After enough time, or on death, this mechanism will induce a radical one-time metamorphosis into a ghoul.</description>
 	<hediffClass>HautsPermits_Occult.Hediff_SpontaneousGhoulization</hediffClass>
 	<isBad>false</isBad>
 	<stages>
@@ -46,9 +46,17 @@
 		</statFactors>
 		<regeneration>70</regeneration>
 		<painFactor>0</painFactor>
-	    <becomeVisible>false</becomeVisible>
 	  </li>
 	</stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>360000</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+	  <li Class="HautsFramework.HediffCompProperties_GiveTrait">
+		<traitDef>BodyMastery</traitDef>
+	  </li>
+    </comps>
   </HediffDef>
   <!--nociosphere instantly activates-->
   <HediffDef ParentName="HVT_TraitHediffBase">

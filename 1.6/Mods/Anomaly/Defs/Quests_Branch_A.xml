@@ -829,13 +829,14 @@
 		<li>lurking->Hushed</li>
 		<li>lurking->Cursed</li>
 		<li>lurking->Baneful</li>
+		<li>lurking->Two-lifed</li>
 
       </rulesStrings>
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription->The [asker_faction_name] is asking you for help. A Void-worshipping cult has deployed one of its Ushers, their semi-invisible assassins, to thwart the activities of the [asker_faction_name]. They want to lure it to your location so you can remove it from the board.\n\nIf you accept, the Usher will strike soon - no later than a quadrum from now.\n[mutatorSuffix]\n\nAbout Ushers: these cultists use invisibility to infiltrate settlements, then shed it to strike. They feel no pain, their flesh is far tougher than an ordinary person's, and they seem to lack conventional biological needs such as food, air, or rest. The few that have been successfully captured for study have rapidly degenerated into a ghoulish state, so there is no use in keeping them alive outside of combat.</li>
-        <li>mutatorSuffix->[raid0/mutator_FS_info][raid0/mutator_NSD_info][raid0/mutator_TANDY_info]</li>
+        <li>questDescription->The [asker_faction_name] is asking you for help. A Void-worshipping cult has deployed one of its Ushers, their semi-invisible assassins, to thwart the activities of the [asker_faction_name]. They want to lure it to your location so you can remove it from the board.\n\nIf you accept, the Usher will strike soon - no later than a quadrum from now.\n[mutatorSuffix]\n\nAbout Ushers: these cultists use invisibility to infiltrate settlements, then shed it to strike. They feel no pain, their flesh is far tougher than an ordinary person's, and they seem to lack conventional biological needs such as food, air, or rest. They eventually degenerate into berserking ghouls, a process that triggers much faster upon death.</li>
+        <li>mutatorSuffix->[raid0/mutator_BTATH_info][raid0/mutator_TBN_info][raid0/mutator_WWF_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Occult.QuestNode_OccultIntermediary">
@@ -980,16 +981,21 @@
           <raidPawnKind>$raidPawnKind</raidPawnKind>
           <inSignalLeave>EndRaid</inSignalLeave>
 		  <usherKind>HVMP_HoraxianUsher</usherKind>
-		  <FS_hediff>HVMP_BurstCapacitators</FS_hediff>
-		  <NSD_hediff>HVMP_TisButAScratch</NSD_hediff>
-		  <NSD_hpThreshold>550</NSD_hpThreshold>
-		  <TANDY_bonusUsherChance>0.35</TANDY_bonusUsherChance>
-		  <TANDY_bonusUsherChanceCanExplode>false</TANDY_bonusUsherChanceCanExplode><!--if true, a successful roll of bonus usher chance prompts another roll, chaining up to 9 bonus ushers-->
-		  <TANDY_bonusPawnTypes><li>Sightstealer</li></TANDY_bonusPawnTypes>
-		  <TANDY_bonusPawnCount>2~5</TANDY_bonusPawnCount>
-		  <FS_description>\nThis Usher is known for its devastating first strikes. When it first appears, it will deal more damage and won't be slowed down by terrain.</FS_description>
-		  <NSD_description>\nThe Usher's regenerative abilities have been greatly amplified, and it can't die until they've been fully exhausted.</NSD_description>
-		  <TANDY_description>\nUnlike most of its kind, this Usher rarely strikes alone. It might be accompanied by an additional Usher, or assisted by a small pack of sightstealers.</TANDY_description>
+		  <BTATH_building>HVMP_VoidCharge</BTATH_building>
+		  <BTATH_count>3~4</BTATH_count>
+		  <TBN_hediff>HVMP_Malachai</TBN_hediff>
+		  <WWF_hediffCount>2</WWF_hediffCount>
+		  <WWF_hediffRoster>
+		    <li>HVMP_WWF_RageSpeed</li>
+		    <li>HVMP_WWF_RapidRegeneration</li>
+		    <li>HVMP_WWF_GorehulkSpines</li>
+		    <li>HVMP_WWF_DevourerLeap</li>
+		    <li>HVMP_WWF_PersonalDeathPall</li>
+		    <li>HVMP_WWF_AgonyPulse</li>
+		  </WWF_hediffRoster>
+		  <BTATH_description>\nThis Usher's cell utilizes Void-enhanced explosives to cause mayhem. It will plant several of these explosives before it strikes, and they will detonate shortly after it attacks. They won't just cause powerful explosions, their shaped blasts will also bore tunnels from which fleshbeasts will emerge.</BTATH_description>
+		  <TBN_description>\nThis Usher has been endowed with a terrifying energy. It can tap into this energy a limited number of times to briefly turn invulnerable and rapidly teleport around, causing different kinds of explosions after short delays. It can't die until this energy is fully exhausted.</TBN_description>
+		  <WWF_description>\nThis Usher has been spliced with pieces of various unnatural entities' corpses, giving it some of their unique powers. There's no telling what it might be able to do.</WWF_description>
         </li>
       </nodes>
     </root>
