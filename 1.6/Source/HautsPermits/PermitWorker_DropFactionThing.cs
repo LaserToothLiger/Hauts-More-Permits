@@ -1,5 +1,4 @@
-﻿using HautsFramework;
-using RimWorld;
+﻿using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,7 @@ using Verse;
 
 namespace HautsPermits
 {
-    /*drops stuff and assigns it to the faction that granted the permit in the first place.
-     * Like all permits in this mod, it can be used even when the permit-user's hostile to that faction IF the user has an off-cooldown, correct-faction permit authorizer, putting it on cooldown*/
+    //drops stuff and assigns it to the faction that granted the permit in the first place.
     [StaticConstructorOnStartup]
     public class RoyalTitlePermitWorker_DropFactionThing : RoyalTitlePermitWorker_Targeted
     {
@@ -36,15 +34,14 @@ namespace HautsPermits
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            bool free;
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -108,7 +105,6 @@ namespace HautsPermits
             {
                 this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
             }
-            PermitAuthorizerUtility.DoPTargeterCooldown(this.faction, caller, this);
         }
         private Faction faction;
     }

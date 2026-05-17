@@ -105,7 +105,7 @@
     <defName>HVMP_ObscureScriptureDrop</defName>
     <label>obscure scripture drop</label>
     <description>Call for a random ideoligious tract, plus an additional tract per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic).\n\nTracts can be read to learn about an ideoligion from a distant world and time. Non-believers will slowly be converted while reading the scripture, while believers will gain certainty from reading it.</description>
-    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBookSeniorityScaling</workerClass>
     <minTitle>HVMP_ArchiveI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -131,7 +131,7 @@
     <defName>HVMP_IdeoPamphletDrop</defName>
     <label>ideoligious pamphlet drop</label>
     <description>Call for a pamphlet of the caller's ideoligion, plus an additional tract per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic).\n\nNon-believers will slowly be converted while reading the pamphlet, while believers will gain certainty from reading it.</description>
-    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBookSeniorityScaling</workerClass>
     <minTitle>HVMP_ArchiveI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -210,7 +210,7 @@
     <defName>HVMP_EsotericVerseDrop</defName>
     <label>esoteric treatise drop</label>
     <description>Call for a book relevant to the caller's ideoligion which teaches about its deeper mysteries, plus an additional such book per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic). Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that improves multiple ideoligious stats.</description>
-    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBookSeniorityScaling</workerClass>
     <minTitle>HVMP_ArchiveII</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -236,7 +236,7 @@
     <defName>HVMP_InspiringVerseDrop</defName>
     <label>inspiring verses drop</label>
     <description>Call for an inspirational book relevant to the caller's ideoligion, plus an additional such book per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic). Believers can read it to gain certainty and possibly also gain an inspiration.</description>
-    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBookSeniorityScaling</workerClass>
     <minTitle>HVMP_ArchiveII</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -262,7 +262,7 @@
     <defName>HVMP_MeditativeVerseDrop</defName>
     <label>meditative mantra drop</label>
     <description>Call for a meditation-assistive book relevant to the caller's ideoligion, plus an additional such book per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic). Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that lets them stay up longer, need recreation less often, resist stress, and meditate more effectively.</description>
-    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBook_PTargFriendly</workerClass>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBookSeniorityScaling</workerClass>
     <minTitle>HVMP_ArchiveII</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -385,6 +385,28 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
+    <defName>HVMP_IngressorDrop</defName>
+    <label>ingressor drop</label>
+    <description>Call for a drop of 3 ingressors, plus another 1 per rank held with the Archive Branch past Docent (4 if the caller is a Lorekeeper; 5 if the caller is an Antiquarian; 6 if the caller is a Pangnostic).\n\nIngressors are one-use items that can be used to either incur extreme progress on a hackable target, or else to deal extreme damage to a destructible building target.</description>
+    <minTitle>HVMP_ArchiveIII</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>24</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(2,4)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_Ingressor>1</HVMP_Ingressor>
+      </itemsToDrop>
+      <favorCost>4</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 3 ingressors.\n\nIngressors are one-use items that can be used to either incur extreme progress on a hackable target, or else to deal extreme damage to a destructible building target.</extraString>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="OskarPotocki.VFE.Deserters">
 		<defName>HVMP_IntelDrop</defName>
 		<label>intel drop</label>
@@ -394,7 +416,7 @@
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>15</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(2,4)</uiPosition>
+		<uiPosition>(2,5)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
 			<VFED_Intel>2</VFED_Intel>
@@ -416,7 +438,7 @@
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>15</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(2,5)</uiPosition>
+		<uiPosition>(2,6)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
 			<VFED_CriticalIntel>1</VFED_CriticalIntel>
@@ -481,7 +503,7 @@
     <defName>HVMP_ScannerReveal</defName>
     <label>anti-invisibility scan</label>
     <description>Disrupt all invisibility on the map for 2 hours.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_CauseCondition_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_CauseCondition</workerClass>
     <minTitle>HVMP_ArchiveV</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -535,7 +557,7 @@
 	<defName>HVMP_TechprintDrop</defName>
 	<label>techprint drop</label>
 	<description>Call for a drop of 1 random techprint.</description>
-	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+	<workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesOfCategory</workerClass>
     <minTitle>HVMP_ArchiveVI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
 	<permitPointCost>1</permitPointCost>
@@ -557,7 +579,7 @@
 	<defName>HVMP_SkilltrainerDrop</defName>
 	<label>skilltrainer drop</label>
 	<description>Call for a drop of 1 random skilltrainer.</description>
-	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+	<workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesOfCategory</workerClass>
     <minTitle>HVMP_ArchiveVI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
 	<permitPointCost>1</permitPointCost>
@@ -579,7 +601,7 @@
 	<defName>HVMP_PsytrainerDrop</defName>
 	<label>psytrainer drop</label>
 	<description>Call for a drop of 1 random psytrainer.\n\nCosts two permit points.</description>
-	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+	<workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesOfCategory</workerClass>
     <minTitle>HVMP_ArchiveVI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
 	<permitPointCost>2</permitPointCost>
@@ -601,7 +623,7 @@
 	<defName>HVMP_ArtifactDrop</defName>
 	<label>artifact drop</label>
 	<description>Call for a drop of 1 random archotech artifact.</description>
-	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+	<workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesOfCategory</workerClass>
     <minTitle>HVMP_ArchiveVI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
 	<permitPointCost>1</permitPointCost>
@@ -625,7 +647,7 @@
 	<defName>HVMP_PersonaWeaponDrop</defName>
 	<label>persona weapon drop</label>
 	<description>Call for a drop of 1 random normal-quality persona weapon.\n\nCosts two permit points.</description>
-	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+	<workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesOfCategory</workerClass>
     <minTitle>HVMP_ArchiveVI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
 	<permitPointCost>2</permitPointCost>
@@ -648,7 +670,7 @@
 	<defName>HVMP_UniqueWeaponDrop</defName>
 	<label>unique weapon drop</label>
 	<description>Call for a drop of 1 random good-quality unique weapon.\n\nCosts two permit points.</description>
-	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+	<workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesOfCategory</workerClass>
     <minTitle>HVMP_ArchiveVI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
 	<permitPointCost>2</permitPointCost>
@@ -671,7 +693,7 @@
     <defName>HVMP_AnimusStone</defName>
     <label>animus stone drop</label>
     <description>Call for a drop of 1 animus stone.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesStuff</workerClass>
     <minTitle>HVMP_ArchiveVI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>

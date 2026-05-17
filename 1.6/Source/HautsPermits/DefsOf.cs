@@ -47,9 +47,6 @@ namespace HautsPermits
         public static JobDef HVMP_InjectChargecellBattery;
         [MayRequireBiotech]
         public static JobDef HVMP_InjectChargecellMech;
-        [MayRequireOdyssey]
-        public static JobDef HVMP_InstallPTargeter;
-        [MayRequireOdyssey]
         public static JobDef HVMP_InstallBSU;
         [MayRequireIdeology]
         public static JobDef HVMP_AttachIngressor;
@@ -72,9 +69,7 @@ namespace HautsPermits
         public static ThingDef HVMP_DelayedPowerBeam;
         public static ThingDef HVMP_DatedAtlas;
         public static ThingDef HVMP_TunnelHiveSpawner;
-        [MayRequireOdyssey]
-        public static ThingDef HVMP_EnterpriseSecurityCrate;
-        [MayRequireOdyssey]
+        [MayRequireBiotech]
         public static ThingDef HVMP_BiofilmMedicine;
         public static FleckDef HVMP_BribeGlow;
         public static FleckDef HVMP_ScalpelBLAST;
@@ -88,7 +83,5 @@ namespace HautsPermits
 
         public static WorldObjectDef HVMP_AtlasPoint;
         public static WorldObjectDef HVMP_OdysseyPoint;
-        [MayRequireOdyssey]
-        public static WorldObjectDef HVMP_BranchPlatform;
     }
 }

@@ -62,15 +62,14 @@ namespace HautsPermits_Biotech
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            bool free;
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -86,10 +85,12 @@ namespace HautsPermits_Biotech
         }
         private void BeginCallResources(Pawn caller, Faction faction, Map map, bool free)
         {
-            this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = true;
-            this.targetingParameters.canTargetBuildings = false;
-            this.targetingParameters.canTargetPawns = false;
+            this.targetingParameters = new TargetingParameters
+            {
+                canTargetLocations = true,
+                canTargetBuildings = false,
+                canTargetPawns = false
+            };
             this.caller = caller;
             this.map = map;
             this.faction = faction;
@@ -103,8 +104,7 @@ namespace HautsPermits_Biotech
             {
                 for (int i = 0; i < tdcc.count; i++)
                 {
-                    IntVec3 intVec;
-                    if (i == 0 || !DropCellFinder.TryFindDropSpotNear(cell, this.map, out intVec, false, false, false, new IntVec2?(new IntVec2(1, 1)), false))
+                    if (i == 0 || !DropCellFinder.TryFindDropSpotNear(cell, this.map, out IntVec3 intVec, false, false, false, new IntVec2?(new IntVec2(1, 1)), false))
                     {
                         intVec = cell;
                     }
@@ -121,7 +121,6 @@ namespace HautsPermits_Biotech
             {
                 this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
             }
-            PermitAuthorizerUtility.DoPTargeterCooldown(this.faction, this.caller, this);
         }
         private Faction faction;
     }
@@ -180,15 +179,14 @@ namespace HautsPermits_Biotech
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "HVMP_CommandCallRoyalAidMapTooWatery".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            bool free;
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -204,10 +202,12 @@ namespace HautsPermits_Biotech
         }
         private void BeginCallResources(Pawn caller, Faction faction, Map map, bool free)
         {
-            this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = true;
-            this.targetingParameters.canTargetBuildings = false;
-            this.targetingParameters.canTargetPawns = false;
+            this.targetingParameters = new TargetingParameters
+            {
+                canTargetLocations = true,
+                canTargetBuildings = false,
+                canTargetPawns = false
+            };
             this.caller = caller;
             this.map = map;
             this.faction = faction;
@@ -239,7 +239,6 @@ namespace HautsPermits_Biotech
             {
                 this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
             }
-            PermitAuthorizerUtility.DoPTargeterCooldown(this.faction, this.caller, this);
         }
         private Faction faction;
     }

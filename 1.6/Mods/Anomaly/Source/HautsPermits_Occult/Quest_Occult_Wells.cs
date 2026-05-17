@@ -502,89 +502,11 @@ namespace HautsPermits_Occult
             {
                 this.pawn.SetFaction(hostileFaction);
             }
+            FleshbeastUtility.MeatSplatter(Rand.RangeInclusive(1, 3), this.pawn.PositionHeld, this.pawn.MapHeld, FleshbeastUtility.ExplosionSizeFor(this.pawn));
             this.pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Berserk, null, false, true, false, null, false, false, false);
             MutantUtility.RegenerateHealth(this.pawn);
             this.pawn.health.RemoveHediff(this);
         }
-    }
-    /*wells1: Blow This All To Hell spawns a number of 'void charge' buildings, which have this comp. Unfortunately this can't just be a derivative of CompExplosive, cause even if we handwave away all other minor differences
-     *   simply making a Pit Burrow the post explosion spawn doesn't work. It needs to be generated via a specific method to have any fleshbeasts inside it*/
-    public class CompProperties_VoidCharge : CompProperties
-    {
-        public CompProperties_VoidCharge()
-        {
-            this.compClass = typeof(CompVoidCharge);
-        }
-        public float explosiveRadius = 1.9f;
-        public DamageDef explosiveDamageType;
-        public int damageAmountBase = -1;
-        public float armorPenetrationBase = -1f;
-        public float chanceToStartFire;
-        public bool damageFalloff;
-        public IntRange countdownTicks = new IntRange(140, 150);
-        public string extraInspectStringKey;
-        public float fleshbeastThreatPointFactor = 0.25f;
-    }
-    public class CompVoidCharge : ThingComp
-    {
-        public CompProperties_VoidCharge Props
-        {
-            get
-            {
-                return (CompProperties_VoidCharge)this.props;
-            }
-        }
-        public override void PostSpawnSetup(bool respawningAfterLoad)
-        {
-            if (this.Props.countdownTicks != null)
-            {
-                this.countdownTicksLeft = this.Props.countdownTicks.RandomInRange;
-            }
-        }
-        public override void CompTickInterval(int delta)
-        {
-            base.CompTickInterval(delta);
-            this.countdownTicksLeft -= delta;
-            if (this.countdownTicksLeft <= 0)
-            {
-                this.Detonate(this.parent.MapHeld, false);
-            }
-        }
-        public void Detonate(Map map, bool ignoreUnspawned = false)
-        {
-            if (!ignoreUnspawned && !this.parent.SpawnedOrAnyParentSpawned)
-            {
-                return;
-            }
-            IntVec3 positionHeld = this.parent.PositionHeld;
-            this.parent.Kill();
-            if (map == null)
-            {
-                Log.Warning("Tried to detonate CompVoidCharge in a null map.");
-                return;
-            }
-            GenExplosion.DoExplosion(positionHeld, map, this.Props.explosiveRadius, this.Props.explosiveDamageType, this.parent, this.Props.damageAmountBase, this.Props.armorPenetrationBase, chanceToStartFire: this.Props.chanceToStartFire, damageFalloff: this.Props.damageFalloff);
-            FleshbeastUtility.SpawnFleshbeastsFromPitBurrowEmergence(positionHeld, map, this.Props.fleshbeastThreatPointFactor* StorytellerUtility.DefaultThreatPointsNow(map), new IntRange(300,1200), new IntRange(180), true);
-        }
-        public override string CompInspectStringExtra()
-        {
-            string text = "";
-            if (this.countdownTicksLeft != -1)
-            {
-                text += "DetonationCountdown".Translate(this.countdownTicksLeft.TicksToDays().ToString("0.0"));
-            }
-            if (this.Props.extraInspectStringKey != null)
-            {
-                text += ((text != "") ? "\n" : "") + this.Props.extraInspectStringKey.Translate();
-            }
-            return text;
-        }
-        public override void PostExposeData()
-        {
-            base.PostExposeData();
-            Scribe_Values.Look<int>(ref this.countdownTicksLeft, "countdownTicksLeft", 0, false);
-        }
-        public int countdownTicksLeft = -1;
     }
     /*Mutator hediffs
      * wells2: To Be Nightmare periodically causes invulnerability, stuns the pawn, and has it teleport around doing nociosphere stuff. It can't die until the responsible hediff is removed
@@ -708,8 +630,17 @@ namespace HautsPermits_Occult
                             {
                                 ab.ResetCooldown();
                                 LocalTargetInfo target = this.Pawn;
+                                if (!ab.CanApplyOn(target))
+                                {
+                                    target = this.Pawn.Position;
+                                }
                                 this.Pawn.jobs.StartJob(ab.GetJob(target, null), JobCondition.InterruptForced);
                             }
+                        }
+                        MentalState ms = this.Pawn.MentalState;
+                        if (ms != null)
+                        {
+                            ms.RecoverFromState();
                         }
                     }
                 }
@@ -795,7 +726,8 @@ namespace HautsPermits_Occult
         }
         public int deadlifePeriodicity;
         public float deadlifeRadius;
-        public EffecterDef effecter;
+        public FleckDef fleck;
+        public float fleckScale;
     }
     public class HediffComp_WWF_DeathPall : HediffComp
     {
@@ -812,9 +744,7 @@ namespace HautsPermits_Occult
             if (this.Pawn.IsHashIntervalTick(this.Props.deadlifePeriodicity, delta) && this.Pawn.Spawned)
             {
                 Pawn p = this.Pawn;
-                Effecter effecter = this.Props.effecter.Spawn();
-                effecter.Trigger(new TargetInfo(p.Position, p.Map, false), new TargetInfo(p.Position, p.Map, false), -1);
-                effecter.Cleanup();
+                FleckMaker.AttachedOverlay(p, this.Props.fleck, Vector3.zero, this.Props.fleckScale, -1f);
                 foreach (Corpse c in GenRadial.RadialDistinctThingsAround(p.Position, p.Map, this.Props.deadlifeRadius, true).OfType<Corpse>().Distinct<Corpse>())
                 {
                     if (MutantUtility.CanResurrectAsShambler(c))
@@ -863,9 +793,7 @@ namespace HautsPermits_Occult
                     }
                     SoundDefOf.PsychicBanshee.PlayOneShot(p);
                     MoteMaker.MakeAttachedOverlay(p, ThingDefOf.Mote_PsychicBanshee, Vector3.zero, 1f, -1f);
-                    Effecter effecter = this.Props.effecter.Spawn();
-                    effecter.Trigger(new TargetInfo(p.Position, p.Map, false), new TargetInfo(p.Position, p.Map, false), -1);
-                    effecter.Cleanup();
+                    this.Props.effecter.SpawnMaintained(p.Position, p.Map, 1f);
                 }
             }
         }

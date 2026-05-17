@@ -1,5 +1,4 @@
 ﻿using HautsFramework;
-using HautsPermits;
 using HautsTraitsRoyalty;
 using RimWorld;
 using Verse;
@@ -31,18 +30,6 @@ namespace HVMP_HAT
         public override bool IsGoodPawn(Pawn pawn)
         {
             return !pawn.HostileTo(this.caller) && pawn.story != null && !PsychicTraitAndGeneCheckUtility.IsAwakenedPsychic(pawn,false) && !pawn.story.traits.HasTrait(HVTRoyaltyDefOf.HVT_LatentPsychic) && base.IsGoodPawn(pawn);
-        }
-        public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
-        {
-            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
-        }
-        public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
-        {
-            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
-        }
-        public override void DoOtherEffect(Pawn caller, Faction faction)
-        {
-            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
 }

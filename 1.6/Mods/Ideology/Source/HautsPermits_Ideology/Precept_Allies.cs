@@ -3,6 +3,7 @@ using Verse;
 
 namespace HautsPermits_Ideology
 {
+    //if the faction has more allied faction relations than hostile faction relations, do stage 0. If the reverse is true, do stage 1. Inactive if everything is perfectly balanced, as all things should be
     public class ThoughtWorker_Precept_NetAllyToFoeCount : ThoughtWorker_Precept
     {
         protected override ThoughtState ShouldHaveThought(Pawn p)

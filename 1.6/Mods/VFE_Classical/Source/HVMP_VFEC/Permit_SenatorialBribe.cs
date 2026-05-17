@@ -1,5 +1,4 @@
 ﻿using HautsFramework;
-using HautsPermits;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -21,7 +20,7 @@ namespace HVMP_VFEC
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
@@ -33,8 +32,7 @@ namespace HVMP_VFEC
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            bool free;
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -93,7 +91,6 @@ namespace HVMP_VFEC
                 {
                     caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
                 }
-                PermitAuthorizerUtility.DoPTargeterCooldown(faction,caller,this);
             }
         }
     }

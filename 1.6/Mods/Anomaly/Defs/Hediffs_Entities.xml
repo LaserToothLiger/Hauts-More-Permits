@@ -46,6 +46,9 @@
 		</statFactors>
 		<regeneration>70</regeneration>
 		<painFactor>0</painFactor>
+		<damageFactors>
+		  <NociosphereVaporize>0.05</NociosphereVaporize>
+		</damageFactors>
 	  </li>
 	</stages>
     <comps>

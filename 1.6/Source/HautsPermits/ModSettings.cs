@@ -16,12 +16,6 @@ namespace HautsPermits
      *   Expectation level is that of your colony. If you have multiple, it uses the highest expectation level among them.
      *   Seniority level is the "seniority" of the highest title any of your pawns hold with the faction issuing the quest. E-branch titles have a seniority = 100x their apparent rank in the hierarchy, e.g. the highest title has 600.
      * goodwillQuestRefusal|FailureLoss: how much Goodwill, you Lose, for Refusing a quest (letting it expire without accepting it) or Losing one (ewisott). Not all quests have loss conditions.
-     * |||||BRANCH PLATFORM SETTINGS|||||
-     * makeNewBranchPlatformInterval: every so often, new branch platforms are created for every branch faction. This happens at the same time for all such factions. The interval between instances of this effect = this mod setting.
-     * maxPlatformsPerBranch: a faction will not gain a new branch platform during the aforementioned process if it already has this many.
-     * platformDefenderScale: any given Branch Platform has a base amount of defenders, but then they also gain an additional stack of defenders per point in this setting.
-     * authorizerCooldownDays: using a permit via a permit authorizer puts it on cooldown for [the permit's standing cost * this many days].
-     * authorizerStandingGain: injecting a permit authorizer into a pawn gives it this much standing with the authorizer's faction.
      * |||||QUEST MUTATORS|||||
      * any given quest has three "mutators", permutations on the quest's nature that make it more challenging. Thus, each quest has three mod settings (labeled __1, __2, and __3) as well as an __X setting.
      *   Turning on one of these settings will cause its corresponding mutator to be applied to any new instance of a quest of that type.
@@ -40,11 +34,6 @@ namespace HautsPermits
         public int bratBehaviorMinSeniorityLvl = 99999;
         public int goodwillQuestRefusalLoss = 0;
         public int goodwillQuestFailureLoss = 4;
-        public float makeNewBranchPlatformInterval = 15f;
-        public float maxPlatformsPerBranch = 1f;
-        public float platformDefenderScale = 3f;
-        public float authorizerCooldownDays = 3f;
-        public float authorizerStandingGain = 6f;
         public bool fort1, fort2, fort3, interv1, interv2, interv3, mm1, mm2, mm3, research1, research2, research3, transport1, transport2, transport3;
         public bool bellum1, bellum2, bellum3, caelum1, caelum2, caelum3, machina1, machina2, machina3, mundi1, mundi2, mundi3, vox1, vox2, vox3;
         public bool atlas1, atlas2, atlas3, icarus1, icarus2, icarus3, laelaps1, laelaps2, laelaps3, odyssey1, odyssey2, odyssey3, theseus1, theseus2, theseus3;
@@ -68,11 +57,6 @@ namespace HautsPermits
             Scribe_Values.Look(ref bratBehaviorMinSeniorityLvl, "bratBehaviorMinSeniorityLvl", 99999);
             Scribe_Values.Look(ref goodwillQuestRefusalLoss, "goodwillQuestRefusalLoss", 0);
             Scribe_Values.Look(ref goodwillQuestFailureLoss, "goodwillQuestFailureLoss", 4);
-            Scribe_Values.Look(ref makeNewBranchPlatformInterval, "makeNewBranchPlatformInterval", 15f);
-            Scribe_Values.Look(ref maxPlatformsPerBranch, "maxPlatformsPerBranch", 1f);
-            Scribe_Values.Look(ref platformDefenderScale, "platformDefenderScale", 3f);
-            Scribe_Values.Look(ref authorizerCooldownDays, "authorizerCooldownDays", 3f);
-            Scribe_Values.Look(ref authorizerStandingGain, "authorizerStandingGain", 6f);
             Scribe_Values.Look(ref fort1, "fort1", false);
             Scribe_Values.Look(ref fort2, "fort2", false);
             Scribe_Values.Look(ref fort3, "fort3", false);
@@ -230,15 +214,6 @@ namespace HautsPermits
                     this.WriteSettings();
                 }, this.PageIndex == 1)
             };
-            if (ModsConfig.OdysseyActive)
-            {
-                list.Add(
-                new TabRecord("HVMP_Label_PlatformSettings".Translate(), delegate
-                {
-                    this.PageIndex = 2;
-                    this.WriteSettings();
-                }, this.PageIndex == 2));
-            }
             TabDrawer.DrawTabs<TabRecord>(rect2, list, 200f);
             switch (this.PageIndex)
             {
@@ -247,16 +222,6 @@ namespace HautsPermits
                     return;
                 case 1:
                     this.MutatorSettings(rect3.ContractedBy(15f));
-                    return;
-                case 2:
-                    if (ModsConfig.OdysseyActive)
-                    {
-                        this.BranchPlatformSettings(rect3.ContractedBy(15f));
-                    }
-                    else
-                    {
-                        this.MainSettings(rect3.ContractedBy(15f));
-                    }
                     return;
                 default:
                     base.DoSettingsWindowContents(inRect);
@@ -902,111 +867,6 @@ namespace HautsPermits
             Widgets.EndScrollView();
             base.DoSettingsWindowContents(inRect);
         }
-        private void BranchPlatformSettings(Rect inRect)
-        {
-            Rect rect = new Rect(inRect.xMin, inRect.yMin, inRect.width, inRect.height);
-            Rect rect2 = new Rect(inRect.xMin, inRect.yMin, inRect.width * 0.96f, 4500f);
-            float x = rect.xMin, y = rect.yMin, halfWidth = rect2.width * 0.5f;
-            //branch platform spawn rate
-            displayBPI = ((int)settings.makeNewBranchPlatformInterval).ToString();
-            displayAuthCD = ((int)settings.authorizerCooldownDays).ToString();
-            displayBPLimit = ((int)settings.maxPlatformsPerBranch).ToString();
-            displayPASG = ((int)settings.authorizerStandingGain).ToString();
-            displayBPD = ((int)settings.platformDefenderScale).ToString();
-            Rect rect3 = new Rect(inRect.xMin, y, (inRect.width - 30f) * 0.8f, 4000f);
-            Listing_Standard listing_Standard2 = new Listing_Standard();
-            listing_Standard2.Begin(rect3);
-            Text.Font = GameFont.Medium;
-            listing_Standard2.Label("HVMP_Label_PlatformSettings".Translate(), 30f);
-            //listing_Standard2.Gap(30f);
-            Text.Font = GameFont.Small;
-            listing_Standard2.Label("HVMP_Tooltip_PlatformSettings".Translate());
-            listing_Standard2.End();
-            y += 100;
-            float origBPI = settings.makeNewBranchPlatformInterval;
-            Rect bpiRect = new Rect(x + 10, y, halfWidth - 15, 32);
-            settings.makeNewBranchPlatformInterval = Widgets.HorizontalSlider(bpiRect, settings.makeNewBranchPlatformInterval, 5f, 60f, true, "HVMP_SettingBranchPlatformInterval".Translate(), "5 days", "60 days", 1f);
-            TooltipHandler.TipRegion(bpiRect.LeftPart(1f), "HVMP_TooltipBranchPlatformInterval".Translate());
-            if (origBPI != settings.makeNewBranchPlatformInterval)
-            {
-                displayBPI = ((int)settings.makeNewBranchPlatformInterval).ToString();
-            }
-            y += 32;
-            string origStringBPI = displayBPI;
-            displayBPI = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayBPI);
-            if (!displayBPI.Equals(origStringBPI))
-            {
-                this.ParseInput(displayBPI, settings.makeNewBranchPlatformInterval, out settings.makeNewBranchPlatformInterval, 5f, 60f);
-            }
-            y -= 32;
-            //authorizer cooldown per standing cost
-            float origPACooldown = settings.authorizerCooldownDays;
-            Rect paCooldownRect = new Rect(x + 5 + halfWidth, y, halfWidth - 15, 32);
-            settings.authorizerCooldownDays = Widgets.HorizontalSlider(paCooldownRect, settings.authorizerCooldownDays, 1f, 6f, true, "HVMP_SettingAuthorizerCooldown".Translate(), "1d", "6d", 0.1f);
-            TooltipHandler.TipRegion(paCooldownRect.LeftPart(1f), "HVMP_TooltipAuthorizerCooldown".Translate());
-            if (origPACooldown != settings.authorizerCooldownDays)
-            {
-                displayAuthCD = ((int)settings.authorizerCooldownDays).ToString();
-            }
-            y += 32;
-            string origStringPACooldown = displayAuthCD;
-            displayAuthCD = Widgets.TextField(new Rect(x + 5 + halfWidth, y, 50, 32), displayAuthCD);
-            if (!displayAuthCD.Equals(origStringPACooldown))
-            {
-                this.ParseInput(displayAuthCD, settings.authorizerCooldownDays, out settings.authorizerCooldownDays, 1f, 6f);
-            }
-            y += 32;
-            //max platforms per branch
-            float origBPLimit = settings.maxPlatformsPerBranch;
-            Rect bplimitRect = new Rect(x + 10, y, halfWidth - 15, 32);
-            settings.maxPlatformsPerBranch = Widgets.HorizontalSlider(bplimitRect, settings.maxPlatformsPerBranch, 1f, 4f, true, "HVMP_SettingBranchPlatformLimit".Translate(), "1", "4", 1f);
-            TooltipHandler.TipRegion(bplimitRect.LeftPart(1f), "HVMP_TooltipBranchPlatformLimit".Translate());
-            if (origBPLimit != settings.maxPlatformsPerBranch)
-            {
-                displayBPLimit = ((int)settings.maxPlatformsPerBranch).ToString();
-            }
-            y += 32;
-            string origStringBPLimit = displayBPLimit;
-            displayBPLimit = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayBPLimit);
-            if (!displayBPLimit.Equals(origStringBPLimit))
-            {
-                this.ParseInput(displayBPLimit, settings.maxPlatformsPerBranch, out settings.maxPlatformsPerBranch, 1f, 4f);
-            }
-            y -= 32;
-            //authorizer standing gain
-            float origPASG = settings.authorizerStandingGain;
-            Rect pasgRect = new Rect(x + 5 + halfWidth, y, halfWidth - 15, 32);
-            settings.authorizerStandingGain = Widgets.HorizontalSlider(pasgRect, settings.authorizerStandingGain, 1f, 10f, true, "HVMP_SettingAuthorizerStandingGain".Translate(), "1", "10", 1f);
-            TooltipHandler.TipRegion(pasgRect.LeftPart(1f), "HVMP_TooltipAuthorizerStandingGain".Translate());
-            if (origPASG != settings.authorizerStandingGain)
-            {
-                displayPASG = ((int)settings.authorizerStandingGain).ToString();
-            }
-            y += 32;
-            string origStringPASG = displayPASG;
-            displayPASG = Widgets.TextField(new Rect(x + 5 + halfWidth, y, 50, 32), displayPASG);
-            if (!displayPASG.Equals(origStringPASG))
-            {
-                this.ParseInput(displayPASG, settings.authorizerStandingGain, out settings.authorizerStandingGain, 1f, 10f);
-            }
-            y += 32;
-            //branch platform defender scale
-            float origBPD = settings.platformDefenderScale;
-            Rect bpDefenderRect = new Rect(x + 10, y, halfWidth - 15, 32);
-            settings.platformDefenderScale = Widgets.HorizontalSlider(bpDefenderRect, settings.platformDefenderScale, 1f, 7f, true, "HVMP_SettingBranchPlatformDefenders".Translate(), "1x", "7x", 1f);
-            TooltipHandler.TipRegion(bpDefenderRect.LeftPart(1f), "HVMP_TooltipBranchPlatformDefenders".Translate());
-            if (origBPD != settings.platformDefenderScale)
-            {
-                displayBPD = ((int)settings.platformDefenderScale).ToString();
-            }
-            y += 32;
-            string origStringBPD = displayBPD;
-            displayBPD = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayBPD);
-            if (!displayBPD.Equals(origStringBPD))
-            {
-                this.ParseInput(displayBPD, settings.platformDefenderScale, out settings.platformDefenderScale, 1f, 7f);
-            }
-        }
         private void ExpectationLevelSelector(Rect rect)
         {
             if (Widgets.ButtonText(rect, "HVMP_TooltipMinExpectationLevel".Translate(bb1), true, true, true, null))
@@ -1139,7 +999,7 @@ namespace HautsPermits
             return "Hauts' Enterprise: More Permits";
         }
         public static HVMP_Settings settings;
-        public string displayMin, displayMax, displayQuestRewardFactor, refusalLoss, failureLoss, bb1, bb2, displayBPI, displayBPLimit, displayBPD, displayAuthCD, displayPASG;
+        public string displayMin, displayMax, displayQuestRewardFactor, refusalLoss, failureLoss, bb1, bb2, displayBPI, displayBPLimit, displayBPD;
         public Vector2 scrollPosition = Vector2.zero;
         private int PageIndex;
     }

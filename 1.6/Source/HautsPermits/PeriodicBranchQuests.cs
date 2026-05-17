@@ -8,7 +8,7 @@ using Verse;
 namespace HautsPermits
 {
     /*A faction is only a branch faction if its def has this DME.
-     * Its presence makes the faction's comms console options those of e-branches, prevents them from ever being considered destroyed, and [Odyssey] allows for the creation of branch platforms.
+     * Its presence makes the faction's comms console options those of e-branches, and prevents them from ever being considered destroyed.
      *   (and possibly other properties I've forgor, but you get the gist. Go read the user manual to see what's so unique about branch factions)
      * quests: when the BranchStuff world component issues a quest for this branch faction (other than Making Ties), it pulls a random one from this list
      * donationTraderKind: when you ring them up on the comms console, this is the trader that is keyed to the donations option. See TraderKinds_Branches.xml

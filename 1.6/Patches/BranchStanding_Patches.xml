@@ -481,6 +481,19 @@
 				</li>
 				<li Class="PatchOperationFindMod">
 					<mods>
+						<li>Odyssey</li>
+					</mods>
+					<match Class="PatchOperationAdd">
+						<xpath>/Defs/TraderKindDef[defName="HVMP_ArchiveDonations"]/stockGenerators</xpath>
+						<value>
+						  <li Class="StockGenerator_BuySingleDef">
+							<thingDef>HVMP_CastellanChip</thingDef>
+						  </li>
+						</value>
+					</match>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
 						<li>Alpha Books</li>
 					</mods>
 					<match Class="PatchOperationSequence">
@@ -871,6 +884,9 @@
 								  <li Class="StockGenerator_BuySingleDef">
 									<thingDef>ArcheanSeed</thingDef>
 								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>HVMP_CastellanChip</thingDef>
+								  </li>
 								</value>
 							</li>
 						</operations>
@@ -939,6 +955,9 @@
 								<value>
 								  <li Class="StockGenerator_BuySingleDef">
 									<thingDef>Apparel_CerebrexNode</thingDef>
+								  </li>
+								  <li Class="StockGenerator_BuySingleDef">
+									<thingDef>HVMP_CastellanChip</thingDef>
 								  </li>
 								</value>
 							</li>
@@ -1042,6 +1061,17 @@
 					  <li Class="StockGenerator_BuySingleDef">
 						<thingDef>AlphaThrumboHorn</thingDef>
 					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+					    <thingDef>HVMP_CastellanChip</thingDef>
+					  </li>
+					</value>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="HVMP_PaxDonations"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+					    <thingDef>HVMP_CastellanChip</thingDef>
+					  </li>
 					</value>
 				</li>
 				<li Class="PatchOperationAdd">
@@ -1055,6 +1085,17 @@
 					<value>
 					  <li Class="StockGenerator_BuySingleDef">
 						<thingDef>ShuttleEngine</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+					    <thingDef>HVMP_CastellanChip</thingDef>
+					  </li>
+					</value>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="Empire_Caravan_TributeCollector"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+					    <thingDef>HVMP_CastellanChip</thingDef>
 					  </li>
 					</value>
 				</li>

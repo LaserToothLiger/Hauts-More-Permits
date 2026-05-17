@@ -1,5 +1,4 @@
 ﻿using HautsFramework;
-using HautsPermits;
 using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,14 +23,6 @@ namespace HautsPermits_Biotech
                 }
             }
             return false;
-        }
-        public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
-        {
-            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
-        }
-        public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
-        {
-            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
         }
         public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
         {
@@ -59,10 +50,6 @@ namespace HautsPermits_Biotech
                 }
                 this.DoOtherEffect(this.caller, faction);
             }
-        }
-        public override void DoOtherEffect(Pawn caller, Faction faction)
-        {
-            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
 }

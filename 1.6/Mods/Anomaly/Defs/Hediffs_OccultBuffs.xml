@@ -167,6 +167,32 @@
 		</stages>
 	  </ThoughtDef>
   
+  <!--Level 5-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_SuffusedProbabilityFlux</defName>
+	<hediffClass>HautsPermits_Occult.Hediff_ProbabilityFlux</hediffClass>
+	<label>probability flux suffusion</label>
+	<description>A metaphysical construct which burns psychic sensitivity to cause good events over time. The construct ceases to function once the host's psychic sensitivity reaches 0%; the lost sensitivity never recovers.</description>
+	<initialSeverity>0.001</initialSeverity>
+	<stages>
+	  <li>
+		<statOffsets>
+		  <PsychicSensitivity>-1</PsychicSensitivity>
+		</statOffsets>
+		<multiplyStatChangesBySeverity>true</multiplyStatChangesBySeverity>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HautsPermits_Occult.HediffCompProperties_ProbabilityFlux">
+		<sensPerHour>0.03</sensPerHour>
+		<MTBhoursToGoodEvent>24</MTBhoursToGoodEvent>
+		<permanentLabel>probability flux scar</permanentLabel>
+		<postEventRecoveryPerHour>0</postEventRecoveryPerHour>
+	  </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	</comps>
+  </HediffDef>
+  
   <!--Level 6-->
   <HediffDef ParentName="HVMP_OccultSuffusionBase">
     <defName>HVMP_SuffusedPsylinker</defName>
@@ -187,8 +213,6 @@
 	  </li>
     </stages>
   </HediffDef>
-  
-  <!--Level 7-->
   <HediffDef ParentName="HVMP_OccultSuffusionBase">
     <defName>HVMP_SuffusedDeghoulizer</defName>
     <label>deghoulizing suffusion</label>
@@ -210,8 +234,6 @@
 	  </li>
     </stages>
   </HediffDef>
-  
-  <!--Level 8-->
   <HediffDef ParentName="HVMP_OccultSuffusionBase" MayRequire="Hautarche.HautsTraits">
     <defName>HVMP_SuffusedAscender</defName>
     <label>ascension suffusion</label>

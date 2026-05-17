@@ -115,7 +115,7 @@
     <defName>HVMP_ClosedMindSuffusion</defName>
     <label>closed mind suffusion</label>
     <description>Suffuse the target with psychic energies which numb the mind, reducing mental break threshold, psychic sensitivity, and learning speed. Lasts 3 days.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -138,7 +138,7 @@
     <defName>HVMP_OpenMindSuffusion</defName>
     <label>open mind suffusion</label>
     <description>Suffuse the target with psychic energies which increase the volatility of the mind, increasing mental break threshold and psychic sensitivity. Lasts 3 days.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -161,7 +161,7 @@
     <defName>HVMP_ProfanitySuffusion</defName>
     <label>profanity suffusion</label>
     <description>Suffuse the target with psychic energies attuned to the Void, increasing the target's flow of insights into Void entities and their proficiency with psychic rituals. Lasts 3 days.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -184,7 +184,7 @@
     <defName>HVMP_SanctitySuffusion</defName>
     <label>sanctity suffusion</label>
     <description>Suffuse the target with psychic energies which repel those of the Void, increasing damage dealt to unnatural entities and suppression speed. Lasts 3 days.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -205,30 +205,30 @@
   </RoyalTitlePermitDef>
   <!--Occult level 2-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_EltexInhibitorDrop</defName>
-    <label>eltex inhibitor drop</label>
-    <description>Call for a drop of 1 eltex inhibitor. This device increases the containment of any holding platform it is pointed towards, and it does not require power.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <defName>HVMP_HelldrillLandmineDrop</defName>
+    <label>helldrill landmine drop</label>
+    <description>Call for a drop of 1 helldrill landmine. When triggered, this device repeatedly unleashes concrete-melting thermal blasts until it breaks down. These explosions bore a hole into the depths and attract subterranean fleshbeasts.</description>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesStuff</workerClass>
     <minTitle>HVMP_OccultII</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>16</cooldownDays>
+    <cooldownDays>12</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
     <uiPosition>(1,0)</uiPosition>
     <royalAid>
       <itemsToDrop>
-        <HVMP_EltexInhibitor>
+        <HVMP_HelldrillLandmine>
 			<count>1</count>
-		</HVMP_EltexInhibitor>
+		</HVMP_HelldrillLandmine>
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_EltexBeaconDrop</defName>
-    <label>eltex beacon drop</label>
-    <description>Call for a drop of 1 eltex beacon. This device increases the quality of any psychic ritual performed near it.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <defName>HVMP_VoidcairnDrop</defName>
+    <label>voidcairn drop</label>
+    <description>Call for a drop of 1 voidcairn. This device increases the quality of any psychic ritual performed near it, and makes it easier to contain nearby entities.</description>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesStuff</workerClass>
     <minTitle>HVMP_OccultII</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -237,9 +237,9 @@
     <uiPosition>(1,1)</uiPosition>
     <royalAid>
       <itemsToDrop>
-        <HVMP_EltexBeacon>
+        <HVMP_Voidcairn>
 			<count>1</count>
-		</HVMP_EltexBeacon>
+		</HVMP_Voidcairn>
       </itemsToDrop>
       <favorCost>5</favorCost>
     </royalAid>
@@ -407,7 +407,7 @@
 	<defName>HVMP_EltexGearDrop</defName>
 	<label>psycaster gear drop</label>
 	<description>Call for a drop of 1 random piece of good-quality psycaster gear.</description>
-	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+	<workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesOfCategory</workerClass>
     <minTitle>HVMP_OccultIV</minTitle>
     <faction>HVMP_OccultBranch</faction>
 	<permitPointCost>1</permitPointCost>
@@ -448,7 +448,7 @@
     <defName>HVMP_InvisibilitySuffusion</defName>
     <label>invisibility suffusion</label>
     <description>Suffuse the target with a psychic invisibility field. Lasts for half an hour.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_OccultIV</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -471,7 +471,7 @@
     <defName>HVMP_PsyfocusSuffusion</defName>
     <label>psyfocus suffusion</label>
     <description>Suffuse the target with a continuous inflow of psyfocus, at the expense of worsening their mood. Restores 50% psyfocus over 1 day.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_OccultIV</minTitle>
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -494,7 +494,7 @@
 		<defName>HVMP_CallPsion</defName>
 		<label>call psion</label>
 		<description>Call a psion to assist you for 4 days. This level 3-4 psycaster can be controlled like one of your own colonists. You are required to keep them safe, though they will be skipped back to safety if ever downed or about to die.</description>
-		<workerClass>HautsPermits.RoyalTitlePermitWorker_CallLaborersPTargFriendly</workerClass>
+		<workerClass>RoyalTitlePermitWorker_CallLaborers</workerClass>
 		<minTitle>HVMP_OccultIV</minTitle>
 		<faction>HVMP_OccultBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -512,7 +512,7 @@
 	  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
 		<defName>HVMP_CallBattlePsion</defName>
 		<label>call battle-psions</label>
-		<description>Call two shielded, prestige-armored, eltex staff-wielding battle-psion each with 3-4 psylink levels to aid you in battle.</description>
+		<description>Call two shielded, prestige-armored, eltex staff-wielding battle-psions each with 3-4 psylink levels to aid you in battle.</description>
 		<workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
 		<minTitle>HVMP_OccultIV</minTitle>
 		<faction>HVMP_OccultBranch</faction>
@@ -544,11 +544,34 @@
       <favorCost>5</favorCost>
     </royalAid>
   </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ProbabilityFluxSuffusion</defName>
+    <label>probability flux suffusion</label>
+    <description>Suffuse the target sapient with a multidimensional construct. The construct uses the target's psychic sensitivity to adjust causality in search of favorable outcomes; in more practical terms, it drains the target's psychic sensivitity until it's fully gone, but while this is happening it will sometimes create good events.\n\nCannot be used on a creature that has already hosted a probability flux.</description>
+    <workerClass>HautsPermits_Occult.RoyalTitlePermitWorker_ProbFlux</workerClass>
+    <minTitle>HVMP_OccultV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>36</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(5,2)</uiPosition>
+    <royalAid>
+      <favorCost>6</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_SuffusedProbabilityFlux</li></hediffs>
+			<soundDef>AgonyPulse_Cast</soundDef>
+			<onUseMessage>HVMP_PsychicAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef MayRequire="Hautarche.HVPAA">
 		<defName>HVMP_CallPsionIIa</defName>
 		<label>call master psion</label>
 		<description>Call a master psion to assist you for 4 days. This level 6 psycaster has many psycasts, and can be controlled like one of your own colonists. You are required to keep them safe, though they will be skipped back to safety if ever downed or about to die.</description>
-		<workerClass>HautsPermits.RoyalTitlePermitWorker_CallLaborersPTargFriendly</workerClass>
+		<workerClass>RoyalTitlePermitWorker_CallLaborers</workerClass>
 		<minTitle>HVMP_OccultV</minTitle>
 		<faction>HVMP_OccultBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -568,7 +591,7 @@
 		<defName>HVMP_CallPsionIIb</defName>
 		<label>call psion cabal</label>
 		<description>Call a group of 4 psions to assist you for 4 days. These level 3-4 psycasters can be controlled like your own colonists. You are required to keep them safe, though they will be skipped back to safety if ever downed or about to die.</description>
-		<workerClass>HautsPermits.RoyalTitlePermitWorker_CallLaborersPTargFriendly</workerClass>
+		<workerClass>RoyalTitlePermitWorker_CallLaborers</workerClass>
 		<minTitle>HVMP_OccultV</minTitle>
 		<faction>HVMP_OccultBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -739,7 +762,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_CallNociosphere</defName>
     <label>deploy nociosphere</label>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropPawns</workerClass>
     <description>Call for the delivery of a primed nociosphere from the Occult Branch. This eldritch weapon will activate shortly after landing, then proceed to randomly kill its way across the landscape. It is not your ally. It is not anyone's ally. Avoidance is advised.\n\nCosts two permit points.</description>
     <minTitle>HVMP_OccultVI</minTitle>
     <faction>HVMP_OccultBranch</faction>

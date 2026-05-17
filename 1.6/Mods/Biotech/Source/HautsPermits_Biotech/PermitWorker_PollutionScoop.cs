@@ -1,5 +1,4 @@
 ﻿using HautsFramework;
-using HautsPermits;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -44,14 +43,14 @@ namespace HautsPermits_Biotech
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
             string text = this.def.LabelCap + ": ";
             Action action = null;
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -63,11 +62,13 @@ namespace HautsPermits_Biotech
         }
         private void BeginScoop(Pawn caller, Faction faction, Map map, bool free)
         {
-            this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = true;
-            this.targetingParameters.canTargetSelf = true;
-            this.targetingParameters.canTargetFires = true;
-            this.targetingParameters.canTargetItems = true;
+            this.targetingParameters = new TargetingParameters
+            {
+                canTargetLocations = true,
+                canTargetSelf = true,
+                canTargetFires = true,
+                canTargetItems = true
+            };
             this.caller = caller;
             this.map = map;
             this.faction = faction;
@@ -130,7 +131,6 @@ namespace HautsPermits_Biotech
                 {
                     this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
                 }
-                PermitAuthorizerUtility.DoPTargeterCooldown(this.faction, this.caller, this);
             }
         }
         private Faction faction;

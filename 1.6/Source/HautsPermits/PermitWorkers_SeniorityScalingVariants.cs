@@ -11,10 +11,10 @@ namespace HautsPermits
         public ScalingDisabledDescription() { }
         public string extraString;
     }
-    /*the following permit workers are all derivatives of other permit authorizer-respecting permit workers in this mod.
+    /*the following permit workers are all derivatives of existing permit from the framework
      * If permitsScaleBySeniority mod setting is enabled, the magnitude of their created effects is multiplied by [the permit-user's seniority with that faction / 100].
      * Each successive title has 100 more seniority than the last, so essentially the multi is the user's rank.*/
-    public class RoyalTitlePermitWorker_DropBookSeniorityScaling_PTargFriendly : RoyalTitlePermitWorker_DropBook_PTargFriendly
+    public class RoyalTitlePermitWorker_DropBookSeniorityScaling : RoyalTitlePermitWorker_DropBook
     {
         public override int ItemStackCount(PermitMoreEffects pme, Pawn caller)
         {
@@ -29,7 +29,7 @@ namespace HautsPermits
             return result;
         }
     }
-    public class RoyalTitlePermitWorker_DROCSeniorityScaling_PTargFriendly : RoyalTitlePermitWorker_DROC_PTargFriendly
+    public class RoyalTitlePermitWorker_DROCSeniorityScaling: RoyalTitlePermitWorker_DropResourcesOfCategory
     {
         public override int ItemStackCount(PermitMoreEffects pme, Pawn caller)
         {
@@ -44,7 +44,7 @@ namespace HautsPermits
             return result;
         }
     }
-    public class RoyalTitlePermitWorker_DropResourcesStuffSeniorityScaling_PTargFriendly : RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly
+    public class RoyalTitlePermitWorker_DropResourcesStuffSeniorityScaling : RoyalTitlePermitWorker_DropResourcesStuff
     {
         public override int ItemStackCount(ThingDefCountClass tdcc, PermitMoreEffects pme, Pawn caller)
         {
@@ -59,7 +59,7 @@ namespace HautsPermits
             return result;
         }
     }
-    public class RoyalTitlePermitWorker_GenerateQuestSeniorityScaling_PTargFriendly : RoyalTitlePermitWorker_GenerateQuest_PTargFriendly
+    public class RoyalTitlePermitWorker_GenerateQuestSeniorityScaling : RoyalTitlePermitWorker_GenerateQuest
     {
         public override int NumQuestsToGenerate(PermitMoreEffects pme, Pawn caller, Faction faction)
         {

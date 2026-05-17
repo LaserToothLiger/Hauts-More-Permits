@@ -1,5 +1,4 @@
-﻿using HautsPermits;
-using RimWorld;
+﻿using RimWorld;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +6,7 @@ using Verse;
 
 namespace HautsPermits_Ideology
 {
-    /*these workers are permit authorizer friendly as usual. If you don't know what this means, go read up.
-     * unfogs the target cell (plus adjacent cells, which means if you hit a wall of a room, it'll still unfog adjacent rooms*/
+    //unfogs the target cell (plus adjacent cells, which means if you hit a wall of a room, it'll still unfog adjacent rooms
     [StaticConstructorOnStartup]
     public class RoyalTitlePermitWorker_ScannerSweep : RoyalTitlePermitWorker_Targeted
     {
@@ -18,15 +16,14 @@ namespace HautsPermits_Ideology
         }
         public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
         {
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            bool free;
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -42,10 +39,12 @@ namespace HautsPermits_Ideology
         }
         private void BeginReveal(Pawn caller, Faction faction, Map map, bool free)
         {
-            this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = true;
-            this.targetingParameters.canTargetBuildings = false;
-            this.targetingParameters.canTargetPawns = false;
+            this.targetingParameters = new TargetingParameters
+            {
+                canTargetLocations = true,
+                canTargetBuildings = false,
+                canTargetPawns = false
+            };
             this.caller = caller;
             this.map = map;
             this.faction = faction;
@@ -67,7 +66,6 @@ namespace HautsPermits_Ideology
             {
                 this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
             }
-            PermitAuthorizerUtility.DoPTargeterCooldown(this.faction, this.caller, this);
         }
         private Faction faction;
     }
@@ -77,15 +75,14 @@ namespace HautsPermits_Ideology
     {
         public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
         {
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            bool free;
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -124,7 +121,6 @@ namespace HautsPermits_Ideology
                 {
                     caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
                 }
-                PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
             }
         }
         private bool CanScatterAt(IntVec3 pos, Map map)

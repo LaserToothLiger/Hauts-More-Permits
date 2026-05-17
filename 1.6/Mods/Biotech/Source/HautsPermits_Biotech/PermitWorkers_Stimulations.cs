@@ -1,5 +1,4 @@
 ﻿using HautsFramework;
-using HautsPermits;
 using RimWorld;
 using RimWorld.Planet;
 using System;
@@ -11,7 +10,7 @@ namespace HautsPermits_Biotech
 {
     /*all permit targeter friendly. Go do some reading (in the core directory, or the manual) if you don't know what that means
      * HealStim: activating on a caravan applies it to the pawn who would take the longest to recover from their healable injuries. Does not account for regeneration effects. Defaults to permit-user*/
-    public class RoyalTitlePermitWorker_HealStim : RoyalTitlePermitWorker_GiveHediffs_PTargFriendly
+    public class RoyalTitlePermitWorker_HealStim : RoyalTitlePermitWorker_GiveHediffs
     {
         public override void GiveHediffInCaravanInner(Pawn caller, Faction faction, bool free, Caravan caravan)
         {
@@ -38,7 +37,7 @@ namespace HautsPermits_Biotech
         }
     }
     //activating ImmunityStim on a caravan applies it to the pawn who would take the longest to attain immunity to their diseases. Defaults to permit-user
-    public class RoyalTitlePermitWorker_ImmunityStim : RoyalTitlePermitWorker_GiveHediffs_PTargFriendly
+    public class RoyalTitlePermitWorker_ImmunityStim : RoyalTitlePermitWorker_GiveHediffs
     {
         public override void GiveHediffInCaravanInner(Pawn caller, Faction faction, bool free, Caravan caravan)
         {
@@ -75,7 +74,7 @@ namespace HautsPermits_Biotech
         }
     }
     //activating TempregStim on a caravan applies it to whoever is suffering the most from the temperature. Defaults to permit-user
-    public class RoyalTitlePermitWorker_TempregStim : RoyalTitlePermitWorker_GiveHediffs_PTargFriendly
+    public class RoyalTitlePermitWorker_TempregStim : RoyalTitlePermitWorker_GiveHediffs
     {
         public override void GiveHediffInCaravanInner(Pawn caller, Faction faction, bool free, Caravan caravan)
         {
@@ -106,7 +105,7 @@ namespace HautsPermits_Biotech
         }
     }
     //activating ToxtolStim on a caravan applies it to whoever would take longest to clear their toxic buildup. Defaults to permit-user
-    public class RoyalTitlePermitWorker_ToxtolStim : RoyalTitlePermitWorker_GiveHediffs_PTargFriendly
+    public class RoyalTitlePermitWorker_ToxtolStim : RoyalTitlePermitWorker_GiveHediffs
     {
         public override void GiveHediffInCaravanInner(Pawn caller, Faction faction, bool free, Caravan caravan)
         {
@@ -131,7 +130,7 @@ namespace HautsPermits_Biotech
     }
     /*activating TendStim on a caravan targets whichever pawn has the highest net severity of tendable hediffs, though pawns with higher injury healing factor are deprioritized. Defaults to permit-user
      * cannot be deliberately cast on a pawn who lacks tendable hediffs*/
-    public class RoyalTitlePermitWorker_TendStim : RoyalTitlePermitWorker_GiveHediffs_PTargFriendly
+    public class RoyalTitlePermitWorker_TendStim : RoyalTitlePermitWorker_GiveHediffs
     {
         public override bool IsGoodPawn(Pawn pawn)
         {

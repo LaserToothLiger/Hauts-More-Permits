@@ -75,7 +75,7 @@
     <defName>HVMP_LivestockDrop</defName>
     <label>livestock drop</label>
     <description>Call for the delivery of a random, tame, livestock animal from the Ecosphere Branch.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropPawns</workerClass>
     <minTitle>HVMP_EcosphereI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -100,7 +100,7 @@
     <defName>HVMP_PetDrop</defName>
     <label>pet drop</label>
     <description>Call for the delivery of a random, tame, small pet animal from the Ecosphere Branch.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropPawns</workerClass>
     <minTitle>HVMP_EcosphereI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -184,7 +184,7 @@
     <defName>HVMP_MedicalAssist</defName>
     <label>medical assist</label>
     <description>Link the target to an automated medical assistance program for 8 hours, improving tend speed, tend quality, and surgery success chance.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_EcosphereI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -208,7 +208,7 @@
     <defName>HVMP_HandlingAssist</defName>
     <label>handling assist</label>
     <description>Link the target to an automated animal handling assistance program for 8 hours, improving animal tame chance, animal train chance, and hunting stealth.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_EcosphereI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -280,7 +280,7 @@
     <defName>HVMP_PredatorDrop</defName>
     <label>predator drop</label>
     <description>Call for the delivery of a random, tame, predator animal from the Ecosphere Branch.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropPawns</workerClass>
     <minTitle>HVMP_EcosphereII</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -305,7 +305,7 @@
     <defName>HVMP_MegafaunaDrop</defName>
     <label>megafauna drop</label>
     <description>Call for the delivery of a random, tame, huge animal from the Ecosphere Branch.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropPawns</workerClass>
     <minTitle>HVMP_EcosphereII</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -422,7 +422,7 @@
 	<defName>HVMP_ProsthesisDrop</defName>
 	<label>prosthesis drop</label>
 	<description>Call for a drop of 1 artificial prosthetic body part.</description>
-	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+	<workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesOfCategory</workerClass>
 	<minTitle>HVMP_EcosphereIII</minTitle>
 	<faction>HVMP_EcosphereBranch</faction>
 	<permitPointCost>1</permitPointCost>
@@ -531,30 +531,31 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="sarg.alphagenes">
-		<defName>HVMP_GeneToolDrop</defName>
-		<label>gene tool pallet drop</label>
-		<description>Call for a drop of 2 gene tool pallets, or 3 if the caller has achieved the rank of Worldshaper.\n\nEach pallet contains 1 gene tool of your choice.</description>
-		<minTitle>HVMP_EcosphereIV</minTitle>
-		<faction>HVMP_EcosphereBranch</faction>
-		<permitPointCost>1</permitPointCost>
-		<cooldownDays>24</cooldownDays>
-		<uiPosition>(4,1)</uiPosition>
-		<royalAid>
-		  <itemsToDrop>
-			<HVMP_GeneToolPallet>1</HVMP_GeneToolPallet>
-		  </itemsToDrop>
-		  <favorCost>4</favorCost>
-		</royalAid>
-		<modExtensions>
-			<li Class="HautsFramework.PermitMoreEffects">
-				<phenomenonCount>200</phenomenonCount>
-			</li>
-			<li Class="HautsPermits.ScalingDisabledDescription">
-				<extraString>Call for a drop of 2 gene tool pallets. Each pallet contains 1 gene tool of your choice.</extraString>
-			</li>
-		</modExtensions>
-	  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
+    <defName>HVMP_BiofilmMedicineDrop</defName>
+    <label>biofilm med drop</label>
+    <description>Call for a drop of 2 biofilm medicine, or 3 if the caller has achieved the rank of Worldshaper.\n\nA single use of biofilm medicine tends all of the patient's injuries at once, and grants them resistance to environmental hazards for a day. Two biofilm medicine can be expended to grant a patient five days of environmental resistances.</description>
+    <minTitle>HVMP_EcosphereIV</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(5,0)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_BiofilmMedicine>1</HVMP_BiofilmMedicine>
+      </itemsToDrop>
+      <favorCost>4</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<phenomenonCount>200</phenomenonCount>
+		</li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 2 biofilm medicine.\n\nA single use of biofilm medicine tends all of the patient's injuries at once, and grants them resistance to environmental hazards for a day. Two biofilm medicine can be expended to grant a patient five days of environmental resistances.</extraString>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_TameMechDisease</defName>
     <label>tame mech disease</label>
@@ -563,9 +564,9 @@
     <minTitle>HVMP_EcosphereIV</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>55</cooldownDays>
+    <cooldownDays>10</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(5,0)</uiPosition>
+    <uiPosition>(4,1)</uiPosition>
     <royalAid>
       <favorCost>6</favorCost>
     </royalAid>
@@ -588,7 +589,7 @@
     <defName>HVMP_ChillingDisruption</defName>
     <label>cooling disruption</label>
     <description>Activate a targeted climate controller, inducing a cold snap for 3 days.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_CauseCondition_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_CauseCondition</workerClass>
     <minTitle>HVMP_EcosphereIV</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -612,7 +613,7 @@
     <defName>HVMP_ScorchingDisruption</defName>
     <label>heating disruption</label>
     <description>Activate a targeted climate controller, inducing a heat wave for 3 days.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_CauseCondition_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_CauseCondition</workerClass>
     <minTitle>HVMP_EcosphereIV</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -730,7 +731,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>10</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(5,5)</uiPosition>
+    <uiPosition>(4,5)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
@@ -744,6 +745,30 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="sarg.alphagenes">
+		<defName>HVMP_GeneToolDrop</defName>
+		<label>gene tool pallet drop</label>
+		<description>Call for a drop of 2 gene tool pallets, or 3 if the caller has achieved the rank of Worldshaper.\n\nEach pallet contains 1 gene tool of your choice.</description>
+		<minTitle>HVMP_EcosphereIV</minTitle>
+		<faction>HVMP_EcosphereBranch</faction>
+		<permitPointCost>1</permitPointCost>
+		<cooldownDays>20</cooldownDays>
+		<uiPosition>(5,5)</uiPosition>
+		<royalAid>
+		  <itemsToDrop>
+			<HVMP_GeneToolPallet>1</HVMP_GeneToolPallet>
+		  </itemsToDrop>
+		  <favorCost>4</favorCost>
+		</royalAid>
+		<modExtensions>
+			<li Class="HautsFramework.PermitMoreEffects">
+				<phenomenonCount>200</phenomenonCount>
+			</li>
+			<li Class="HautsPermits.ScalingDisabledDescription">
+				<extraString>Call for a drop of 2 gene tool pallets. Each pallet contains 1 gene tool of your choice.</extraString>
+			</li>
+		</modExtensions>
+	  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_MegaRepopulationDrop</defName>
     <label>mega repopulation drop</label>
@@ -790,7 +815,7 @@
 	<defName>HVMP_BionicDrop</defName>
 	<label>bionic drop</label>
 	<description>Call for a drop of 1 artificial bionic body part.</description>
-	<workerClass>HautsPermits.RoyalTitlePermitWorker_DROC_PTargFriendly</workerClass>
+	<workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesOfCategory</workerClass>
 	<minTitle>HVMP_EcosphereV</minTitle>
 	<faction>HVMP_EcosphereBranch</faction>
 	<permitPointCost>1</permitPointCost>
@@ -815,7 +840,7 @@
     <defName>HVMP_OptimizeMechanoid</defName>
     <label>optimize mechanoid</label>
     <description>Transmit a proprietary mechanite swarm into the target mechanoid, reducing its energy consumption. This effect is lost if the mechanoid dies.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_EcosphereV</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -840,7 +865,7 @@
     <defName>HVMP_ExoticCreatureDrop</defName>
     <label>exotic creature drop</label>
     <description>Call for the delivery of a random WILD exotic animal from the Ecosphere Branch.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropPawns</workerClass>
     <minTitle>HVMP_EcosphereVI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -863,7 +888,7 @@
     <defName>HVMP_PowerCellDrop</defName>
     <label>power cell drop</label>
     <description>Call for a drop of 1 unstable power cell.\n\nCosts two permit points.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesStuff</workerClass>
     <minTitle>HVMP_EcosphereVI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>2</permitPointCost>

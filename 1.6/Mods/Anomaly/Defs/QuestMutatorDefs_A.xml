@@ -640,37 +640,56 @@
   <!--Wells
 		Blow This All To Hell-->
   <ThingDef ParentName="BuildingBase">
-    <defName>HVMP_VoidCharge</defName>
-    <label>Void charge</label>
-    <description>A psychically-charged mass of bioferrite with a miniature explosive embedded partway into it. When it detonates, it will immolate the surrounding area, but most of the explosion's force will be directed downward to bore a shaft to the deeps. Fleshbeasts attracted by the detonation's psychic shockwave will emerge from this shaft.\n\nVoid charges cannot be uninstalled, claimed, or deconstructed; they can only be disarmed. Disarming attempts should ideally be made by colonists with high Construction skill.</description>
+    <defName>HVMP_HelldrillCharge</defName>
+    <label>Helldrill charge</label>
+    <description>A fragment of dark archotechnology embedded into a bioferrite-based shaped explosive. When it detonates, it will repeatedly immolate the surrounding area. Most of the explosion's force will be directed downward to bore a shaft to the deeps, and fleshbeasts attracted by the detonation's psychic shockwave will emerge from this shaft.\n\nCan be suppressed by a warden to delay its detonation.</description>
     <graphicData>
       <graphicClass>Graphic_Single</graphicClass>
-      <texPath>Things/Building/Obelisk_Corrupted/CorruptedObelisk</texPath>
+      <texPath>Things/Building/HVMP_HelldrillCharge</texPath>
       <drawSize>1.1</drawSize>
     </graphicData>
     <statBases>
-      <MaxHitPoints>1250</MaxHitPoints>
+      <MaxHitPoints>1400</MaxHitPoints>
     </statBases>
 	<tickerType>Normal</tickerType>
     <costList>
       <Bioferrite>80</Bioferrite>
     </costList>
+    <damageMultipliers>
+      <li>
+        <damageDef>Vaporize</damageDef>
+        <multiplier>0.25</multiplier>
+      </li>
+    </damageMultipliers>
     <comps>
-      <li Class="HautsPermits_Occult.CompProperties_VoidCharge">
+      <li Class="CompProperties_Activity">
+        <startingRange>0~0.1</startingRange>
+        <changePerDayBase>3</changePerDayBase>
+        <changePerDamage>0</changePerDamage>
+        <warning>0.9</warning>
+        <workerClass>ActivityWorker</workerClass>
+        <activityResearchFactorCurve>
+          <points>
+            <li>0, 0.1</li>
+          </points>
+        </activityResearchFactorCurve>
+      </li>
+      <li Class="CompProperties_Glower">
+        <glowRadius>5</glowRadius>
+        <glowColor>(201,100,97,0.5)</glowColor>
+      </li>
+      <li Class="HautsPermits_Occult.CompProperties_HelldrillCharge">
+		<detonationPeriodicity>240</detonationPeriodicity>
 		<explosiveRadius>7.9</explosiveRadius>
         <explosiveDamageType>Vaporize</explosiveDamageType>
 		<chanceToStartFire>0.75</chanceToStartFire>
 		<damageFalloff>true</damageFalloff>
-        <countdownTicks>20000</countdownTicks>
 		<extraInspectStringKey>HVMP_VoidChargeInspectString</extraInspectStringKey>
 		<fleshbeastThreatPointFactor>0.25</fleshbeastThreatPointFactor>
 		<!--<explosionSound>Explosion_Vaporize</explosionSound>-->
       </li>
     </comps>
     <specialDisplayRadius>3.9</specialDisplayRadius>
-	<modExtensions>
-	  <li Class="HautsTraits.SabotageExplosive"/>
-	</modExtensions>
   </ThingDef>
   <!--To Be Nightmare-->
   <HediffDef ParentName="HVT_TraitHediffBase">
@@ -735,12 +754,11 @@
 	  </li>
 	</comps>
   </HediffDef>
-  <HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
     <defName>HVMP_WWF_RapidRegeneration</defName>
     <label>rapid regeneration</label>
     <hediffClass>HautsPermits_Occult.Hediff_WWF_RapidRegeneration</hediffClass>
     <description>Spliced residue from a living corpse carries an incredible amount of healing energy. While not unlimited, this assassin will rapidly regenerate until its energy has been exhausted.</description>
-    <isBad>false</isBad>
     <preventsDeath>true</preventsDeath>
     <keepOnBodyPartRestoration>True</keepOnBodyPartRestoration>
 	<maxSeverity>600</maxSeverity><!--used by the hediff class as the hp reservoir-->
@@ -774,6 +792,37 @@
         <angleOffset>-90</angleOffset>
       </li>
 	</comps>
+    <renderNodeProperties>
+      <li>
+        <debugLabel>Gorehulk spines</debugLabel>
+        <workerClass>PawnRenderNodeWorker_AttachmentBody</workerClass>
+        <texPaths>
+          <li>Things/Pawn/Ghoul/Attachments/Barbs/GhoulBarb_A</li>
+          <li>Things/Pawn/Ghoul/Attachments/Barbs/GhoulBarb_B</li>
+          <li>Things/Pawn/Ghoul/Attachments/Barbs/GhoulBarb_C</li>
+          <li>Things/Pawn/Ghoul/Attachments/Barbs/GhoulBarb_D</li>
+          <li>Things/Pawn/Ghoul/Attachments/Barbs/GhoulBarb_E</li>
+          <li>Things/Pawn/Ghoul/Attachments/Barbs/GhoulBarb_F</li>
+        </texPaths>
+        <baseLayer>65</baseLayer>
+        <texSeed>1</texSeed>
+      </li>
+      <li>
+        <debugLabel>Gorehulk spines</debugLabel>
+        <workerClass>PawnRenderNodeWorker_AttachmentBody</workerClass>
+        <texPaths>
+          <li>Things/Pawn/Ghoul/Attachments/Barbs/GhoulBarb_A</li>
+          <li>Things/Pawn/Ghoul/Attachments/Barbs/GhoulBarb_B</li>
+          <li>Things/Pawn/Ghoul/Attachments/Barbs/GhoulBarb_C</li>
+          <li>Things/Pawn/Ghoul/Attachments/Barbs/GhoulBarb_D</li>
+          <li>Things/Pawn/Ghoul/Attachments/Barbs/GhoulBarb_E</li>
+          <li>Things/Pawn/Ghoul/Attachments/Barbs/GhoulBarb_F</li>
+        </texPaths>
+        <baseLayer>65</baseLayer>
+        <texSeed>2</texSeed>
+        <flipGraphic>true</flipGraphic>
+      </li>
+    </renderNodeProperties>
   </HediffDef>
 	  <ThingDef ParentName="BaseWeaponTurret">
 		<defName>HVMP_TurretGorehulkSpines</defName>
@@ -822,7 +871,8 @@
 	  <li Class="HautsPermits_Occult.HediffCompProperties_WWF_DeathPall">
 		<deadlifePeriodicity>500</deadlifePeriodicity>
 		<deadlifeRadius>5.9</deadlifeRadius>
-		<effecter>Hauts_DarkPsychicShockwave</effecter>
+		<fleck>ShamblerRaiseSplatter</fleck>
+		<fleckScale>3</fleckScale>
 	  </li>
 	</comps>
   </HediffDef>
@@ -837,7 +887,7 @@
 		<novaPeriodicity>750</novaPeriodicity>
 		<radius>2.9</radius>
 		<durationSecs>400~700</durationSecs>
-		<effecter>PsychicRitual_Complete</effecter>
+		<effecter>AgonyPulseExplosion</effecter>
 	  </li>
 	</comps>
   </HediffDef>

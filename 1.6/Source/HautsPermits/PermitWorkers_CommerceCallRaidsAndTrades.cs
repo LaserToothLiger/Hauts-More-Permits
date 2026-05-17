@@ -1,6 +1,5 @@
 ﻿using HautsFramework;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -16,73 +15,15 @@ namespace HautsPermits
         {
             return !f.IsPlayer && !f.defeated && !f.temporary && (desperate || (map != null && f.def.allowedArrivalTemperatureRange.Includes(map.mapTemperature.OutdoorTemp) && f.def.allowedArrivalTemperatureRange.Includes(map.mapTemperature.SeasonalTemp))) && !f.Hidden && f.HostileTo(Faction.OfPlayer);
         }
-        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
-        {
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
-            {
-                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
-                yield break;
-            }
-            if (!this.CandidateFactions(map, false).Any<Faction>())
-            {
-                yield return new FloatMenuOption("HVMP_NoFactionCanSendRaids".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
-                yield break;
-            }
-            Action action = null;
-            string text = this.def.LabelCap + ": ";
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
-            {
-                action = delegate
-                {
-                    this.GiveQuest(pawn, faction, new IncidentParms(), this.free);
-                };
-            }
-            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
-            yield break;
-        }
-        public override void DoOtherEffect(Pawn caller, Faction faction)
-        {
-            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
-        }
         public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
         {
             yield break;
         }
     }
     //also GenerateQuest derivative. Cannot be used if you have a Mastermind quest effect blocking traders, since otherwise this permit would just, uh, solve that quest.
-
     [StaticConstructorOnStartup]
     public class RoyalTitlePermitWorker_CallTrader : RoyalTitlePermitWorker_GenerateQuest
     {
-        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
-        {
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
-            {
-                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
-                yield break;
-            }
-            WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
-            if (wcbs != null && wcbs.tradeBlockages > 0)
-            {
-                yield return new FloatMenuOption("HVMP_CommandCallRoyalAidTradersBlocked".Translate(wcbs.tradeBlockages, faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
-                yield break;
-            }
-            Action action = null;
-            string text = this.def.LabelCap + ": ";
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
-            {
-                action = delegate
-                {
-                    this.GiveQuest(pawn, faction, new IncidentParms(), this.free);
-                };
-            }
-            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
-            yield break;
-        }
-        public override void DoOtherEffect(Pawn caller, Faction faction)
-        {
-            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
-        }
         public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
         {
             string text;
@@ -106,7 +47,7 @@ namespace HautsPermits
                     this.GiveQuest(pawn, faction, new IncidentParms(), this.free);
                 }
             };
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 command_Action.Disable("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")));
             }
@@ -120,7 +61,6 @@ namespace HautsPermits
         private static readonly Texture2D CommandTex = ContentFinder<Texture2D>.Get("UI/Commands/CallAid", true);
     }
     //derivative of CallTrader, which requires there to be a faction capable of sending a trader caravan. Because duh
-
     [StaticConstructorOnStartup]
     public class RoyalTitlePermitWorker_CallTraderCaravan : RoyalTitlePermitWorker_GenerateQuest
     {
@@ -152,40 +92,6 @@ namespace HautsPermits
                 return 0f;
             }
             return traderKind.CalculatedCommonality;
-        }
-        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
-        {
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
-            {
-                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
-                yield break;
-            }
-            WorldComponent_BranchStuff wcbs = (WorldComponent_BranchStuff)Find.World.GetComponent(typeof(WorldComponent_BranchStuff));
-            if (wcbs != null && wcbs.tradeBlockages > 0)
-            {
-                yield return new FloatMenuOption("HVMP_CommandCallRoyalAidTradersBlocked".Translate(wcbs.tradeBlockages, faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
-                yield break;
-            }
-            if (!this.CandidateFactions(map, false).Any<Faction>())
-            {
-                yield return new FloatMenuOption("HVMP_NoFactionCanSendTraders".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
-                yield break;
-            }
-            Action action = null;
-            string text = this.def.LabelCap + ": ";
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
-            {
-                action = delegate
-                {
-                    this.GiveQuest(pawn, faction, new IncidentParms(), this.free);
-                };
-            }
-            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
-            yield break;
-        }
-        public override void DoOtherEffect(Pawn caller, Faction faction)
-        {
-            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
         public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
         {

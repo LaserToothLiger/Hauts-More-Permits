@@ -369,6 +369,47 @@
     </comps>
   </ThingDef>
   
+  <!--other archive items-->
+  <ThingDef ParentName="MechSerumBase">
+    <defName>HVMP_Ingressor</defName>
+    <label>ingressor</label>
+    <description>A one-use sabotage device. Once clamped onto a building, its subpersona core infiltrates and subverts any hackable digital system it can find. If the building is not hackable, the ingressor instead activates its powerful directional explosive, dealing 500 damage to the building.</description>
+    <graphicData>
+      <texPath>Items/HVMP_Ingressor</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+	  <drawSize>0.9</drawSize>
+    </graphicData>
+    <techLevel>Ultra</techLevel>
+    <tradeTags Inherit="False" />
+	<genericMarketSellable>false</genericMarketSellable>
+    <stackLimit>10</stackLimit>
+    <statBases>
+      <MarketValue>1000</MarketValue>
+    </statBases>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>Sellable</tradeability>
+    <thingSetMakerTags Inherit="False" />
+    <comps>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Use {0_label}</useLabel>
+        <useDuration>0</useDuration>
+        <warmupMote>Mote_ResurrectAbility</warmupMote>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+      <li Class="CompProperties_Targetable">
+        <compClass>HautsPermits_Ideology.CompTargetable_DamageableBuildingOrHackableItem</compClass>
+      </li>
+      <li Class="HautsPermits_Ideology.CompProperties_TargetEffectIngression">
+        <damageType>Thump</damageType>
+		<damageAmount>500</damageAmount>
+		<hackingPower>12000</hackingPower>
+      </li>
+    </comps>
+  </ThingDef>
+  
   <!--archive quests: shrine-->
   <ThingDef ParentName="TrapIEDBase">
     <defName>HVMP_TrapTTWSD</defName>

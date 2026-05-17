@@ -92,22 +92,16 @@ namespace HautsPermits
                           prefix: new HarmonyMethod(patchType, nameof(HVMPTryAffectGoodwillWithPrefix)));
             harmony.Patch(AccessTools.Method(typeof(Faction), nameof(Faction.TryAffectGoodwillWith)),
                           postfix: new HarmonyMethod(patchType, nameof(HVMPTryAffectGoodwillWithPostfix)));
-            /*if you attack the settlement (or rather, branch platform) of one branch faction, they all become hostile.
-             * I don't know if I've mentioned this, but the only reason they're different factions in the first place is because royal titles can only be organized in a strictly linear hierarchy per faction;
-             * they're truly supposed to be "branches" of one overarching faction, just with different permit "skill trees"*/
-            harmony.Patch(AccessTools.Method(typeof(SettlementUtility), nameof(SettlementUtility.AffectRelationsOnAttacked)),
-                          postfix: new HarmonyMethod(patchType, nameof(HVMPAffectRelationsOnAttackedPostfix)));
             //branch factions are immune to being defeated by the destruction of their last settlement
             harmony.Patch(AccessTools.Method(typeof(SettlementDefeatUtility), nameof(SettlementDefeatUtility.CheckDefeated)),
                           prefix: new HarmonyMethod(patchType, nameof(HVMPCheckDefeatedPrefix)));
             //the usage of biofilm medicine to tend tends all tendable hediffs on the pawn
-            if (ModsConfig.OdysseyActive)
+            if (ModsConfig.BiotechActive)
             {
                 harmony.Patch(AccessTools.Method(typeof(TendUtility), nameof(TendUtility.DoTend)),
                               postfix: new HarmonyMethod(patchType, nameof(HVMPDoTendPostfix)));
             }
-            /*right after the game starts, destroy all initially-loaded non-branch platform world objects belonging to branch factions (i.e. the settlements the game plops down for them)
-             * and, in case something prevented them from being generated, add them into the game*/
+            /*right after the game starts, destroy all initially-loaded world objects belonging to branch factions (i.e. the settlements the game plops down for them)*/
             harmony.Patch(AccessTools.Method(typeof(WorldComponent_HautsFactionComps), nameof(WorldComponent_HautsFactionComps.ThirdTickEffects)),
                           postfix: new HarmonyMethod(patchType, nameof(HVMPThirdTickEffectsPostfix)));
             //if you turned off permit rank-scaling, subs out the descriptions of all permits whose effects scale with the permit-user's seniority within that faction for more appropriate descriptions
@@ -573,22 +567,6 @@ namespace HautsPermits
                 }
             }
         }
-        public static void HVMPAffectRelationsOnAttackedPostfix(MapParent mapParent)
-        {
-            if (mapParent.Faction != null && mapParent.Faction.def.HasModExtension<EBranchQuests>())
-            {
-                foreach (Faction f in Find.FactionManager.AllFactionsVisible)
-                {
-                    if (f != mapParent.Faction && f.def.HasModExtension<EBranchQuests>())
-                    {
-                        FactionRelationKind playerRelationKind = f.PlayerRelationKind;
-                        Faction.OfPlayer.TryAffectGoodwillWith(f, Faction.OfPlayer.GoodwillToMakeHostile(f), false, false, HistoryEventDefOf.AttackedSettlement, null);
-                        TaggedString taggedString = "Hauts_AttackedAlliedFaction".Translate();
-                        mapParent.Faction.TryAppendRelationKindChangedInfo(ref taggedString, playerRelationKind, mapParent.Faction.PlayerRelationKind, null);
-                    }
-                }
-            }
-        }
         public static bool HVMPCheckDefeatedPrefix(Settlement factionBase)
         {
             if (factionBase.Faction != null && factionBase.Faction.def.HasModExtension<EBranchQuests>())
@@ -624,7 +602,7 @@ namespace HautsPermits
             List<WorldObject> wosToDestroy = new List<WorldObject>();
             foreach (WorldObject wo in Find.WorldObjects.AllWorldObjects)
             {
-                if (wo.Faction != null && wo.Faction.def.HasModExtension<EBranchQuests>() && !(wo is BranchPlatform))
+                if (wo.Faction != null && wo.Faction.def.HasModExtension<EBranchQuests>())
                 {
                     wosToDestroy.Add(wo);
                 }
@@ -633,13 +611,13 @@ namespace HautsPermits
             {
                 wo.Destroy();
             }
-            foreach (FactionDef fd in DefDatabase<FactionDef>.AllDefsListForReading)
+            /*foreach (FactionDef fd in DefDatabase<FactionDef>.AllDefsListForReading)
             {
                 if (fd.HasModExtension<EBranchQuests>() && !Find.FactionManager.AllFactionsListForReading.Any((Faction f)=>f.def == fd))
                 {
                     FactionGenerator.CreateFactionAndAddToManager(fd);
                 }
-            }
+            }*/
         }
 
         //NOT A HARMONY PATCH - handles the assignation of goodwill to the oldest QuestPart_PaxMundi currently active, and calls itself in case of excess goodwill to hand the excess to the next oldest

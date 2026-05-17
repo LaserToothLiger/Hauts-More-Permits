@@ -1,46 +1,175 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-  <!--various loots you get from Branch Platforms-->
-  <ThingDef ParentName="MechSerumBase">
-    <defName>HVMP_PermitTargeter</defName>
-    <label>permit authorizer</label>
-    <description>An implantable surplus Enterprise subpersona core. While installed in a person, it grants them the ability to receive, initiate, and authorize requests to use permits. These are typically installed in trusted individuals high in the Enterprise's organizational structure, combining the rapid data processing power of a machine with the capacities for qualitative judgement of a person.\n\nHowever, when installed in an enemy of the Enterprise, it would instead allow them to use an e-branch's permits even while hostile to them. Whenever a permit authorizer is used in such a way, security systems will temporarily lock the authorizer out of being able to use more permits, for a duration based on the permit's standing cost.</description>
-    <graphicData>
-      <texPath>Things/Item/Special/MechSerumResurrector</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
-    </graphicData>
-    <techLevel>Ultra</techLevel>
-    <tradeTags Inherit="False" />
-    <stackLimit>1</stackLimit>
+  <!-- Mechlink -->
+  <ThingDef>
+    <defName>HVMP_CastellanChip</defName>
+    <label>castellan chip</label>
+    <description>A strange archotech fragment crudely integrated into a biogel nerve port. When pressed into the back of the throat, it integrates into the central nervous system and amplifies various esoteric psychic properties of the host.\n\nThese devices are greatly prized by the Empire and the branches of the Enterprise; they will bestow great honor upon whoever provides them with one.</description>
+    <thingClass>ThingWithComps</thingClass>
+    <category>Item</category>
+    <drawerType>MapMeshOnly</drawerType>
+    <techLevel>Archotech</techLevel>
+    <pathCost>14</pathCost>
+    <selectable>true</selectable>
+    <altitudeLayer>Item</altitudeLayer>
+    <tickerType>Never</tickerType>
+    <alwaysHaulable>true</alwaysHaulable>
+    <resourceReadoutPriority>Middle</resourceReadoutPriority>
+    <descriptionHyperlinks><HediffDef>HVMP_CastellanChipImplant</HediffDef></descriptionHyperlinks>
     <statBases>
-      <MarketValue>1000</MarketValue>
+      <MaxHitPoints>100</MaxHitPoints>
+      <Beauty>-4</Beauty>
+      <Mass>1</Mass>
+      <MarketValue>500</MarketValue>
+      <DeteriorationRate>0</DeteriorationRate>
+	  <HVMP_StandingValue>12</HVMP_StandingValue>
+	  <RoyalFavorValue>12</RoyalFavorValue>
     </statBases>
     <thingCategories>
-      <li>ItemsMisc</li>
+      <li>Artifacts</li>
     </thingCategories>
-    <tradeability>Sellable</tradeability>
-	<genericMarketSellable>false</genericMarketSellable>
-    <thingSetMakerTags Inherit="False" />
+    <graphicData>
+      <texPath>Items/HVMP_CastellanChip</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.8</drawSize>
+    </graphicData>
     <comps>
+      <li Class="CompProperties_Forbiddable"/>
       <li Class="CompProperties_Usable">
-        <useJob>UseItem</useJob>
-        <useLabel>Use {0_label}</useLabel>
-        <useDuration>0</useDuration>
-        <warmupMote>Mote_ResurrectAbility</warmupMote>
-        <showUseGizmo>true</showUseGizmo>
+        <compClass>CompUsableImplant</compClass>
+        <useJob>HVMP_InstallCastellanChip</useJob>
+        <useLabel>Install {0_label}</useLabel>
       </li>
-      <li Class="CompProperties_Targetable">
-        <compClass>CompTargetable_SinglePawn</compClass>
-      </li>
-      <li Class="HautsPermits.CompProperties_TargetEffectInstallPTargeter">
-        <hediffDef>HVMP_PTargeter</hediffDef>
+      <li Class="CompProperties_UseEffectInstallImplant">
+        <hediffDef>HVMP_CastellanChipImplant</hediffDef>
         <bodyPart>Brain</bodyPart>
-        <soundOnUsed>EnergyShield_Reset</soundOnUsed>
-		<standingGainFactorIfSecondhand>0.5</standingGainFactorIfSecondhand>
-		<canUpgrade>true</canUpgrade>
       </li>
+      <li Class="CompProperties_UseEffectPlaySound">
+        <soundOnUsed>Ability_CallMechanoids</soundOnUsed>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
     </comps>
+  </ThingDef>
+  
+    <HediffDef ParentName="ImplantHediffBase">
+      <defName>HVMP_CastellanChipImplant</defName>
+      <label>castellan chip</label>
+      <description>A strange archotech fragment crudely integrated into a biogel nerve port. When pressed into the back of the throat, it integrates into the central nervous system and amplifies various esoteric psychic properties of the host.</description>
+      <isBad>false</isBad>
+      <duplicationAllowed>false</duplicationAllowed>
+      <keepOnBodyPartRestoration>true</keepOnBodyPartRestoration>
+      <stages>
+        <li>
+          <statOffsets>
+            <Hauts_PsyfocusRegenRate MayRequire="Ludeon.RimWorld.Royalty">0.09</Hauts_PsyfocusRegenRate>
+            <Hauts_MechEnergyUsage MayRequire="Ludeon.RimWorld.Biotech">-0.09</Hauts_MechEnergyUsage>
+            <MechBandwidth MayRequire="Ludeon.RimWorld.Biotech">20</MechBandwidth>
+            <PsychicRitualQualityOffset MayRequire="Ludeon.RimWorld.Anomaly">0.1</PsychicRitualQualityOffset>
+          </statOffsets>
+        </li>
+      </stages>
+    </HediffDef>
+  
+  <ThingDef ParentName="ApparelNoQualityBase">
+    <defName>HVMP_Apparel_SkipnetPack</defName>
+    <label>aegis skipnet pack</label>
+    <description>A psionic beacon which serves as a link to a planetary skipnet. Its internal power supply is self-renewing, but the exorbitant costs of teleportation means that it can only instantiate four teleports from full power before needing to recharge. Its targeting mechanism uses satellite telemetry, and so does not require line of sight.</description>
+    <graphicData>
+      <texPath>Things/Pawn/Humanlike/Apparel/HVMP_SkipnetPack/HVMP_SkipnetPack</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <tickerType>Normal</tickerType>
+    <techLevel>Ultra</techLevel>
+    <smeltable>false</smeltable>
+    <destroyable>false</destroyable>
+    <useHitPoints>false</useHitPoints>
+    <statBases>
+      <Mass>5</Mass>
+      <Flammability>0</Flammability>
+      <EquipDelay>2</EquipDelay>
+      <MarketValue>5000</MarketValue>
+      <DeteriorationRate>0</DeteriorationRate>
+    </statBases>
+    <equippedStatOffsets>
+      <Hauts_SkipcastRangeFactor>0.1</Hauts_SkipcastRangeFactor>
+    </equippedStatOffsets>
+    <thingCategories>
+      <li>ApparelUtility</li>
+    </thingCategories>
+    <mergeVerbGizmos>false</mergeVerbGizmos>
+    <apparel>
+      <countsAsClothingForNudity>false</countsAsClothingForNudity>
+      <scoreOffset>4</scoreOffset>
+      <careIfWornByCorpse>false</careIfWornByCorpse>
+      <careIfDamaged>false</careIfDamaged>
+      <wearPerDay>0.2</wearPerDay>
+      <bodyPartGroups>
+        <li>Waist</li>
+      </bodyPartGroups>
+      <layers>
+        <li>Belt</li>
+      </layers>
+      <wornGraphicPath>Things/Pawn/Humanlike/Apparel/HVMP_SkipnetPack/HVMP_SkipnetPack</wornGraphicPath>
+      <wornGraphicData>
+        <renderUtilityAsPack>true</renderUtilityAsPack>
+        <north>
+          <offset>(0,-0.15)</offset>
+        </north>
+        <south>
+          <offset>(0,0.1)</offset>
+          <scale>(1.15,1)</scale>
+        </south>
+        <east>
+          <scale>(0.83,0.83)</scale>
+          <offset>(-0.3,-0.05)</offset>
+          <thin>
+            <offset>(0.05,0)</offset>
+          </thin>
+          <hulk>
+            <offset>(-0.1,0)</offset>
+          </hulk>
+          <fat>
+            <offset>(-0.15,0)</offset>
+          </fat>
+        </east>
+        <west>
+          <scale>(0.83,0.83)</scale>
+          <offset>(0.3,-0.05)</offset>
+          <thin>
+            <offset>(-0.05,0)</offset>
+          </thin>
+          <hulk>
+            <offset>(0.1,0)</offset>
+          </hulk>
+          <fat>
+            <offset>(0.15,0)</offset>
+          </fat>
+        </west>
+        <male>
+          <scale>(0.63,0.63)</scale>
+        </male>
+        <female>
+          <scale>(0.59,0.59)</scale>
+        </female>
+        <thin>
+          <scale>(0.59,0.59)</scale>
+        </thin>
+        <hulk>
+          <scale>(0.72,0.72)</scale>
+        </hulk>
+        <fat>
+          <scale>(0.72,0.72)</scale>
+        </fat>
+      </wornGraphicData>
+      <abilities>
+        <li>HVMP_SelfSkipnetAegis</li>
+      </abilities>
+    </apparel>
+    <tradeTags>
+      <li>Clothing</li>
+    </tradeTags>
+    <tradeability>Sellable</tradeability>
     <allowedArchonexusCount>1</allowedArchonexusCount>
   </ThingDef>
   
@@ -63,195 +192,6 @@
       </li>
     </comps>
     <allowedArchonexusCount>2</allowedArchonexusCount>
-  </ThingDef>
-  <ThingDef ParentName="MechSerumBase">
-    <defName>HVMP_BSU</defName>
-    <label>blackbody shield unit</label>
-    <description>A one-use high-energy repulsor field generator. Unlike conventional personal shields, this field is reinforced enough to stop any kind of attack, is resistant to EMPs, and it can absorb immense amounts of damage before failing. However, the shield generator rapidly overheats, causing itself to irreparably burn out over time. Moreover, the intensity of the shield inhibits even the movements of the wearer, and it distorts incoming light, blinding them as well.</description>
-    <graphicData>
-      <texPath>Items/HVMP_BlackbodyShieldUnit</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
-	  <drawSize>0.9</drawSize>
-    </graphicData>
-    <techLevel>Ultra</techLevel>
-    <tradeTags Inherit="False" />
-	<genericMarketSellable>false</genericMarketSellable>
-    <stackLimit>10</stackLimit>
-    <statBases>
-      <MarketValue>1000</MarketValue>
-    </statBases>
-    <thingCategories>
-      <li>ItemsMisc</li>
-    </thingCategories>
-    <tradeability>Sellable</tradeability>
-    <thingSetMakerTags Inherit="False" />
-    <comps>
-      <li Class="CompProperties_Usable">
-        <useJob>UseItem</useJob>
-        <useLabel>Use {0_label}</useLabel>
-        <useDuration>0</useDuration>
-        <warmupMote>Mote_ResurrectAbility</warmupMote>
-        <showUseGizmo>true</showUseGizmo>
-      </li>
-      <li Class="CompProperties_Targetable">
-        <compClass>CompTargetable_SinglePawn</compClass>
-      </li>
-      <li Class="HautsPermits.CompProperties_TargetEffectInstallBSU">
-        <hediffDef>HVMP_BShield</hediffDef>
-        <bodyPart>Brain</bodyPart>
-        <soundOnUsed>EnergyShield_Reset</soundOnUsed>
-      </li>
-    </comps>
-  </ThingDef>
-  
-  <ThingDef ParentName="MechSerumBase">
-    <defName>HVMP_Gatepuncher</defName>
-    <label>gatepuncher implant</label>
-    <description>A nervegel-stimulated electronic link to the Enterprise Branch's teleportation system. Once installed, the host can activate it to open skipgates. However, after four uses (or after one use that can move the host to points outside line of sight) its unauthorized use will be detected, and it will break down harmlessly inside the body.</description>
-    <graphicData>
-      <texPath>Items/HVMP_Gatepuncher</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
-	  <drawSize>0.9</drawSize>
-    </graphicData>
-    <techLevel>Ultra</techLevel>
-    <tradeTags Inherit="False" />
-	<genericMarketSellable>false</genericMarketSellable>
-    <stackLimit>10</stackLimit>
-    <statBases>
-      <MarketValue>1000</MarketValue>
-    </statBases>
-    <thingCategories>
-      <li>ItemsMisc</li>
-    </thingCategories>
-    <tradeability>Sellable</tradeability>
-    <thingSetMakerTags Inherit="False" />
-    <comps>
-      <li Class="CompProperties_Usable">
-        <useJob>UseItem</useJob>
-        <useLabel>Use {0_label}</useLabel>
-        <useDuration>0</useDuration>
-        <warmupMote>Mote_ResurrectAbility</warmupMote>
-        <showUseGizmo>true</showUseGizmo>
-      </li>
-      <li Class="CompProperties_Targetable">
-        <compClass>CompTargetable_SinglePawn</compClass>
-      </li>
-      <li Class="CompProperties_TargetEffectInstallImplantInOtherPawn">
-        <hediffDef>HVMP_GatepuncherImplant</hediffDef>
-        <bodyPart>Brain</bodyPart>
-        <soundOnUsed>MechSerumUsed</soundOnUsed>
-      </li>
-    </comps>
-  </ThingDef>
-  
-  <ThingDef ParentName="MechSerumBase" MayRequire="Ludeon.RimWorld.Ideology">
-    <defName>HVMP_Ingressor</defName>
-    <label>ingressor</label>
-    <description>A one-use sabotage device. Once clamped onto a building, its subpersona core infiltrates and subverts any hackable digital system it can find. If the building is not hackable, the ingressor instead activates its powerful directional explosive, dealing 500 damage to the building.</description>
-    <graphicData>
-      <texPath>Items/HVMP_Ingressor</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
-	  <drawSize>0.9</drawSize>
-    </graphicData>
-    <techLevel>Ultra</techLevel>
-    <tradeTags Inherit="False" />
-	<genericMarketSellable>false</genericMarketSellable>
-    <stackLimit>10</stackLimit>
-    <statBases>
-      <MarketValue>1000</MarketValue>
-    </statBases>
-    <thingCategories>
-      <li>ItemsMisc</li>
-    </thingCategories>
-    <tradeability>Sellable</tradeability>
-    <thingSetMakerTags Inherit="False" />
-    <comps>
-      <li Class="CompProperties_Usable">
-        <useJob>UseItem</useJob>
-        <useLabel>Use {0_label}</useLabel>
-        <useDuration>0</useDuration>
-        <warmupMote>Mote_ResurrectAbility</warmupMote>
-        <showUseGizmo>true</showUseGizmo>
-      </li>
-      <li Class="CompProperties_Targetable">
-        <compClass>HautsPermits_Ideology.CompTargetable_DamageableBuildingOrHackableItem</compClass>
-      </li>
-      <li Class="HautsPermits_Ideology.CompProperties_TargetEffectIngression">
-        <damageType>Thump</damageType>
-		<damageAmount>500</damageAmount>
-		<hackingPower>12000</hackingPower>
-      </li>
-    </comps>
-  </ThingDef>
-  
-  <ThingDef ParentName="MedicineBase">
-    <defName>HVMP_BiofilmMedicine</defName>
-    <label>biofilm medicine</label>
-    <description>A kit of advanced ultra-tech medical supplies, manufactured only by the Enterprise and its branches. It is roughly as potent as regular medicine. However, in addition to its diagnostic devices, pads, and multi-purpose tools, it contains multiple vials of a techno-organic biofilm substance. The biofilm expands over the patient's body, tending all wounds in one go, and protecting them from hostile environments for the next 24 hours.</description>
-    <possessionCount>3</possessionCount>
-    <graphicData>
-      <texPath>Items/Resource/HVMP_MedicineBiofilm</texPath>
-      <graphicClass>Graphic_StackCount</graphicClass>
-      <drawSize>0.85</drawSize>
-    </graphicData>
-    <techLevel>Ultra</techLevel>
-    <tradeTags Inherit="False" />
-	<genericMarketSellable>false</genericMarketSellable>
-    <statBases>
-      <MarketValue>200</MarketValue>
-      <Mass>0.50</Mass>
-      <Flammability>0.7</Flammability>
-      <MedicalPotency>1.00</MedicalPotency>
-      <MedicalQualityMax>1.00</MedicalQualityMax>
-      <DeteriorationRate>2</DeteriorationRate>
-      <WorkToMake>700</WorkToMake>
-    </statBases>
-    <thingCategories>
-      <li>ItemsMisc</li>
-    </thingCategories>
-    <tradeability>Sellable</tradeability>
-    <thingSetMakerTags Inherit="False" />
-    <allowedArchonexusCount>10</allowedArchonexusCount>
-  </ThingDef>
-  
-  <ThingDef ParentName="MechSerumBase" MayRequire="Ludeon.RimWorld.Anomaly">
-    <defName>HVMP_ProbabilityTuner</defName>
-    <label>probability tuner</label>
-    <description>A piece of scavenged archotechnology crudely welded to a bio-electric interface. It can be applied to a living person to gradually deplete their psychic sensitivity. While connected and draining sensitivity, it can cause good events randomly. It harmlessly disintegrates once the victim loses all psychic sensitivity, which then recovers over time.</description>
-    <graphicData>
-      <texPath>Items/HVMP_ProbTuner</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
-	  <drawSize>0.9</drawSize>
-    </graphicData>
-    <techLevel>Archotech</techLevel>
-    <tradeTags Inherit="False" />
-	<genericMarketSellable>false</genericMarketSellable>
-    <stackLimit>10</stackLimit>
-    <statBases>
-      <MarketValue>1000</MarketValue>
-    </statBases>
-    <thingCategories>
-      <li>ItemsMisc</li>
-    </thingCategories>
-    <tradeability>Sellable</tradeability>
-    <thingSetMakerTags Inherit="False" />
-    <comps>
-      <li Class="CompProperties_Usable">
-        <useJob>UseItem</useJob>
-        <useLabel>Use {0_label}</useLabel>
-        <useDuration>0</useDuration>
-        <warmupMote>Mote_ResurrectAbility</warmupMote>
-        <showUseGizmo>true</showUseGizmo>
-      </li>
-      <li Class="CompProperties_Targetable">
-        <compClass>CompTargetable_SinglePawn</compClass>
-      </li>
-      <li Class="CompProperties_TargetEffectInstallImplantInOtherPawn">
-        <hediffDef>HVMP_PTuning</hediffDef>
-        <bodyPart>Brain</bodyPart>
-        <soundOnUsed>MechSerumUsed</soundOnUsed>
-      </li>
-    </comps>
   </ThingDef>
   
   

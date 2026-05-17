@@ -26,20 +26,6 @@
 <HVMP_TooltipGoodwillFailure>If you fulfill either the 'minimum expectation' or 'minimum title' conditions set above, you will lose this much goodwill whenever you fail an accepted e-branch quest.\n\nIf both a minimum expectation and title have been selected, both conditions must be fulfilled.\n\nChanging this value will only affect the penalty for FUTURE quests, not ones that have already been generated.</HVMP_TooltipGoodwillFailure>
 <HVMP_SettingAnomalyActivityLevel>Occult Branch can always be encountered</HVMP_SettingAnomalyActivityLevel>
 <HVMP_TooltipAnomalyActivityLevel>By default, the Occult Branch will only show up after the monolith has been activated (if using the standard Anomaly playstyle), have its frequency of contact multiplied by the anomaly activity level (if using Ambient Horror), or otherwise not be active at all.\n\nIf you enable this setting, they will not be subject to these rules, instead appearing as frequently as other e-branches.</HVMP_TooltipAnomalyActivityLevel>
-<!--Mod settings: Branch Platforms-->
-<HVMP_Label_PlatformSettings>Branch Platforms</HVMP_Label_PlatformSettings>
-<HVMP_Tooltip_PlatformSettings>Each e-branch has their own orbital platforms. Raiding one will make you enemies with all e-branches, but they store powerful, exclusive technology, including implants that allow pawns to use permits without needing to do quests or donations.</HVMP_Tooltip_PlatformSettings>
-<HVMP_SettingBranchPlatformInterval>Time between branch platform spawns</HVMP_SettingBranchPlatformInterval>
-<HVMP_TooltipBranchPlatformInterval>The rate at which new branch platforms appear in orbit. Spawning occurs at the same time and the same rate for all e-branch factions. Each e-branch can only gain one platform per spawning incidence, even if they would need more than one platform to reach their limit.</HVMP_TooltipBranchPlatformInterval>
-<HVMP_SettingBranchPlatformLimit>Max platforms per branch</HVMP_SettingBranchPlatformLimit>
-<HVMP_TooltipBranchPlatformLimit>An e-branch faction will not spawn new platforms in orbit if it already has this many platforms.</HVMP_TooltipBranchPlatformLimit>
-<HVMP_SettingBranchPlatformDefenders>Additional branch platform defenders</HVMP_SettingBranchPlatformDefenders>
-<HVMP_TooltipBranchPlatformDefenders>Scales the number of defenders generated for each e-branch platform. The higher this number, the harder the fight.\n\nSetting this to higher numbers may significantly extend the time it takes for a platform map to load, and may also make the fight a very long, difficult slog.</HVMP_TooltipBranchPlatformDefenders>
-<HVMP_SettingAuthorizerCooldown>Permit authorizer cooldown per standing cost</HVMP_SettingAuthorizerCooldown>
-<HVMP_TooltipAuthorizerCooldown>Once a permit authorizer is used to use a permit from a hostile e-branch, it can't be used to do this again for a number of days equal to [the permit's standing cost] times [this value].</HVMP_TooltipAuthorizerCooldown>
-<HVMP_SettingAuthorizerStandingGain>Permit authorizer standing gain</HVMP_SettingAuthorizerStandingGain>
-<HVMP_TooltipAuthorizerStandingGain>Implanting a permit authorizer grants this much standing with its e-branch.</HVMP_TooltipAuthorizerStandingGain>
-<HVMP_GoodwillLoss>some amount</HVMP_GoodwillLoss>
 <!--Quest assignation errors-->
 <HVMP_ErrorNoQuestsFoundForBranch>Tried to give an e-branch quest from {0}, but their e-branch quest list is empty</HVMP_ErrorNoQuestsFoundForBranch>
 <HVMP_ErrorNoUsableBranchQuests>Tried to give an e-branch quest from {0}, but none of their quests' prerequisites are met and so cannot fire.</HVMP_ErrorNoUsableBranchQuests>
@@ -118,16 +104,9 @@
 <HVMP_PsychicAssistance>The {FACTION_name} has rendered psychic assistance.</HVMP_PsychicAssistance>
 <HVMP_TerrainChange>The {FACTION_name} has altered the terrain.</HVMP_TerrainChange>
 <HVMP_MechOptimized>Mechanoid optimized.</HVMP_MechOptimized>
-<!--Platform rewards-->
-<HVMP_GiveStandingFromFaction>Grants {0} standing with the {1}</HVMP_GiveStandingFromFaction>
-<HVMP_UsePermitHediffGizmo>Use {0} permits ({1} charges)</HVMP_UsePermitHediffGizmo>
-<HVMP_UsePermitHediffGizmoDesc>Call for aid using a special permit.\n\nEach permit costs a certain number of charges, which can be regained by implanting more permit targeters.</HVMP_UsePermitHediffGizmoDesc>
-<HVMP_UsePermitTargeterOption>Use {0} (cost: {1})</HVMP_UsePermitTargeterOption>
-<HVMP_PalletOpeningLabel>Upon opening the pallet, {PAWN_nameDef} finds...</HVMP_PalletOpeningLabel>
-<HVMP_Choose>Select an option.</HVMP_Choose>
-<HVMP_ProbabilityTunerActivated>The probability tuner affixed to {PAWN_nameDef} has activated, inciting a good event.</HVMP_ProbabilityTunerActivated>
 <!--Quest generique-->
 <HVMP_CCProgress>Progress: {0}/{1}</HVMP_CCProgress>
+<HVMP_GoodwillLoss>some amount</HVMP_GoodwillLoss>
 <!--Commerce intervention-->
 <HVMP_InterventionCR1>low</HVMP_InterventionCR1>
 <HVMP_InterventionCR2>moderate</HVMP_InterventionCR2>
@@ -212,7 +191,7 @@
 <HVMP_LabyrinthAlreadyGenerated>The anomaly has already been entered. It will not accept new entrants.</HVMP_LabyrinthAlreadyGenerated>
 <HVMP_LetterObeliskDiscovered>{PAWN_nameDef} has discovered a large obelisk. In between its twisting prongs, {PAWN_pronoun} catches fleeting synesthetic impressions of different locations across the planet. Perhaps it can be activated to return {PAWN_objective} home.\n\nSelect {PAWN_nameDef} and right-click the obelisk to activate it.</HVMP_LetterObeliskDiscovered>
 <!--Occult Wells-->
-<HVMP_VoidChargeInspectString>Detonation will unearth a fleshbeast pit burrow.</HVMP_VoidChargeInspectString>
+<HVMP_VoidChargeInspectString>Will explosively excavate a fleshbeast pit burrow at full activity.</HVMP_VoidChargeInspectString>
 <!--Pax offering-->
 <HVMP_GoodwillCurried>Goodwill curried: {0}/{1}</HVMP_GoodwillCurried>
 <!--Pax talks-->
@@ -225,6 +204,9 @@
 <HVMP_IdeoBookHediffGain>Per hour of reading: grants {0} stacks of the "{1}" buff to believers, lasting for {2} hours</HVMP_IdeoBookHediffGain>
 <!--other items-->
 <HVMP_ChargecellIsForMechs>Target must have an energy meter</HVMP_ChargecellIsForMechs>
+<HVMP_PalletOpeningLabel>Upon opening the pallet, {PAWN_nameDef} finds...</HVMP_PalletOpeningLabel>
+<HVMP_Choose>Select an option.</HVMP_Choose>
+<HVMP_ProbabilityFluxProc>The probability flux within {PAWN_nameDef} has created a good event.</HVMP_ProbabilityFluxProc>
 
 
 <!--Mod settings for quest mutators-->

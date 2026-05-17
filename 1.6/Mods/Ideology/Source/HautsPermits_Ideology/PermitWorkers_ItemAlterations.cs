@@ -10,8 +10,7 @@ using Verse.Sound;
 
 namespace HautsPermits_Ideology
 {
-    /*these permits all interact with permit authorizers
-     * change the target item's quality. Relies on the following PermitMoreEffects fields:
+    /*change the target item's quality. Relies on the following PermitMoreEffects fields:
      * -thingCategories: if specified, target item must have one of these categories
      * -forbiddenThingCategories: if specified, target item CAN'T have one of these categories
      * -extraNumber: target item's current quality level must be within this range (inclusive of min and max)*/
@@ -79,14 +78,14 @@ namespace HautsPermits_Ideology
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -98,19 +97,21 @@ namespace HautsPermits_Ideology
         }
         private void BeginImproveQuality(Pawn pawn, Map map, Faction faction, bool free)
         {
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 return;
             }
-            this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = false;
-            this.targetingParameters.canTargetSelf = false;
-            this.targetingParameters.canTargetPawns = false;
-            this.targetingParameters.canTargetFires = false;
-            this.targetingParameters.canTargetBuildings = false;
-            this.targetingParameters.canTargetItems = true;
-            this.targetingParameters.mapObjectTargetsMustBeAutoAttackable = false;
-            this.targetingParameters.validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange;
+            this.targetingParameters = new TargetingParameters
+            {
+                canTargetLocations = false,
+                canTargetSelf = false,
+                canTargetPawns = false,
+                canTargetFires = false,
+                canTargetBuildings = false,
+                canTargetItems = true,
+                mapObjectTargetsMustBeAutoAttackable = false,
+                validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange
+            };
             this.caller = pawn;
             this.map = map;
             this.calledFaction = faction;
@@ -141,7 +142,6 @@ namespace HautsPermits_Ideology
                 {
                     this.caller.royalty.TryRemoveFavor(this.calledFaction, this.def.royalAid.favorCost);
                 }
-                PermitAuthorizerUtility.DoPTargeterCooldown(this.calledFaction, this.caller, this);
             }
         }
         private Faction calledFaction;
@@ -222,14 +222,14 @@ namespace HautsPermits_Ideology
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -241,19 +241,21 @@ namespace HautsPermits_Ideology
         }
         private void BeginHeal(Pawn pawn, Map map, Faction faction, bool free)
         {
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 return;
             }
-            this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = false;
-            this.targetingParameters.canTargetSelf = false;
-            this.targetingParameters.canTargetPawns = false;
-            this.targetingParameters.canTargetFires = false;
-            this.targetingParameters.canTargetBuildings = true;
-            this.targetingParameters.canTargetItems = true;
-            this.targetingParameters.mapObjectTargetsMustBeAutoAttackable = false;
-            this.targetingParameters.validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange;
+            this.targetingParameters = new TargetingParameters
+            {
+                canTargetLocations = false,
+                canTargetSelf = false,
+                canTargetPawns = false,
+                canTargetFires = false,
+                canTargetBuildings = true,
+                canTargetItems = true,
+                mapObjectTargetsMustBeAutoAttackable = false,
+                validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange
+            };
             this.caller = pawn;
             this.map = map;
             this.calledFaction = faction;
@@ -273,7 +275,6 @@ namespace HautsPermits_Ideology
                 {
                     this.caller.royalty.TryRemoveFavor(this.calledFaction, this.def.royalAid.favorCost);
                 }
-                PermitAuthorizerUtility.DoPTargeterCooldown(this.calledFaction, this.caller, this);
             }
         }
         public virtual void OtherEffects(Thing thing)
@@ -339,15 +340,14 @@ namespace HautsPermits_Ideology
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
             string text = this.def.LabelCap + ": ";
             Action action = null;
-            bool free;
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free))
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -359,11 +359,13 @@ namespace HautsPermits_Ideology
         }
         private void BeginAOE(Pawn caller, Faction faction, Map map, bool free)
         {
-            this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = true;
-            this.targetingParameters.canTargetSelf = true;
-            this.targetingParameters.canTargetFires = true;
-            this.targetingParameters.canTargetItems = true;
+            this.targetingParameters = new TargetingParameters
+            {
+                canTargetLocations = true,
+                canTargetSelf = true,
+                canTargetFires = true,
+                canTargetItems = true
+            };
             this.caller = caller;
             this.map = map;
             this.faction = faction;
@@ -424,7 +426,6 @@ namespace HautsPermits_Ideology
                 {
                     this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
                 }
-                PermitAuthorizerUtility.DoPTargeterCooldown(this.faction, this.caller, this);
             }
         }
         private Faction faction;
@@ -490,7 +491,6 @@ namespace HautsPermits_Ideology
                         {
                             this.caller.royalty.TryRemoveFavor(this.calledFaction, this.def.royalAid.favorCost);
                         }
-                        PermitAuthorizerUtility.DoPTargeterCooldown(this.calledFaction, this.caller, this);
                     }
                 }
             }
@@ -502,14 +502,14 @@ namespace HautsPermits_Ideology
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -521,19 +521,21 @@ namespace HautsPermits_Ideology
         }
         private void BeginHeal(Pawn pawn, Map map, Faction faction, bool free)
         {
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 return;
             }
-            this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = false;
-            this.targetingParameters.canTargetSelf = false;
-            this.targetingParameters.canTargetPawns = false;
-            this.targetingParameters.canTargetFires = false;
-            this.targetingParameters.canTargetBuildings = false;
-            this.targetingParameters.canTargetItems = true;
-            this.targetingParameters.mapObjectTargetsMustBeAutoAttackable = false;
-            this.targetingParameters.validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange;
+            this.targetingParameters = new TargetingParameters
+            {
+                canTargetLocations = false,
+                canTargetSelf = false,
+                canTargetPawns = false,
+                canTargetFires = false,
+                canTargetBuildings = false,
+                canTargetItems = true,
+                mapObjectTargetsMustBeAutoAttackable = false,
+                validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange
+            };
             this.caller = pawn;
             this.map = map;
             this.calledFaction = faction;

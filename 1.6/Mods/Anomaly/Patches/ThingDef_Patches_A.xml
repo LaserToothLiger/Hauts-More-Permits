@@ -4,13 +4,13 @@
 	<Operation Class="PatchOperationAdd">
 		<xpath>/Defs/ThingDef[@Name="HoldingPlatformBase"]/comps/li[@Class="CompProperties_AffectedByFacilities"]/linkableFacilities</xpath>
 		<value>
-			<li>HVMP_EltexInhibitor</li>
+			<li>HVMP_Voidcairn</li>
 		</value>
 	</Operation>
 	<Operation Class="PatchOperationAdd">
 		<xpath>/Defs/ThingDef[defName="PsychicRitualSpot"]/comps/li[@Class="CompProperties_AffectedByFacilities"]/linkableFacilities</xpath>
 		<value>
-			<li>HVMP_EltexBeacon</li>
+			<li>HVMP_Voidcairn</li>
 		</value>
 	</Operation>
 </Patch>

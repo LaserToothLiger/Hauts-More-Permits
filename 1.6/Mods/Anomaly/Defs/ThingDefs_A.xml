@@ -19,75 +19,13 @@
       </li>
     </comps>
   </ThingDef>
-  <ThingDef ParentName="BuildingBase">
-    <defName>HVMP_EltexInhibitor</defName>
-    <label>eltex inhibitor</label>
-    <description>A device with inlaid psychic focusing materials which numb the neural activity of captured entities. It improves the containment strength of any holding platform that it is pointed at. The numbing effect does not work on humans or normal animals.</description>
-    <tickerType>Normal</tickerType>
-    <size>(1,2)</size>
-    <graphicData>
-      <texPath>Things/Building/ElectricInhibitor/ElectricInhibitor</texPath>
-      <graphicClass>Graphic_Multi</graphicClass>
-      <drawSize>(1,2)</drawSize>
-      <damageData>
-        <rect>(0, 0.3, 1, 1.7)</rect>
-      </damageData>
-      <shadowData>
-        <volume>(0.6, 0.5, 1.8)</volume>
-        <offset>(0, 0, 0.1)</offset>
-      </shadowData>
-	  <color>(176,212,208)</color>
-    </graphicData>
-    <drawerType>MapMeshAndRealTime</drawerType>
-    <altitudeLayer>Building</altitudeLayer>
-    <passability>PassThroughOnly</passability>
-    <fillPercent>0.9</fillPercent>
-    <pathCost>50</pathCost>
-    <defaultPlacingRot>East</defaultPlacingRot>
-    <uiOrder>105</uiOrder>
-    <canOverlapZones>false</canOverlapZones>
-    <thingCategories>
-      <li>BuildingsMisc</li>
-    </thingCategories>
-    <minifiedDef>MinifiedThing</minifiedDef>
-    <statBases>
-      <MaxHitPoints>100</MaxHitPoints>
-      <Flammability>0.7</Flammability>
-      <Mass>20</Mass>
-    </statBases>
-    <costList>
-      <ComponentIndustrial>1</ComponentIndustrial>
-      <Steel>25</Steel>
-    </costList>
-    <placeWorkers>
-      <li>PlaceWorker_ElectricInhibitor</li>
-    </placeWorkers>
-    <drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
-    <building>
-      <buildingTags>
-        <li>Anomaly</li>
-      </buildingTags>
-    </building>
-    <comps>
-      <li Class="CompProperties_Facility">
-        <maxSimultaneous>6</maxSimultaneous>
-        <maxDistance>4</maxDistance>
-        <minDistance>1</minDistance>
-        <mustBePlacedFacingThingLinear>true</mustBePlacedFacingThingLinear>
-        <statOffsets>
-          <ContainmentStrength>10</ContainmentStrength>
-        </statOffsets>
-      </li>
-    </comps>
-  </ThingDef>
   <ThingDef ParentName="TorchBase">
-    <defName>HVMP_EltexBeacon</defName>
-    <label>eltex beacon</label>
-    <description>A device with inlaid psychic focusing materials. When placed near a psychic ritual spot, it improves the ritual quality.\n\nA ritual can benefit from up to four eltex beacons.</description>
+    <defName>HVMP_Voidcairn</defName>
+    <label>voidcairn</label>
+    <description>A ritualistic device which incorporates dense wafers of crystalline eltex circuitry to alter currents in the psychic manifold. When placed near a psychic ritual spot, it improves the ritual quality; it also increases the containment strength of holding facilities in its radius.\n\nA ritual or holding facility can benefit from up to four voidcairns.</description>
     <graphicData>
-      <texPath>Things/Building/ShardBeacon</texPath>
+      <texPath>Things/Building/HVMP_Voidcairn</texPath>
       <graphicClass>Graphic_Single</graphicClass>
-	  <color>(176,212,208)</color>
     </graphicData>
     <minifiedDef>MinifiedThing</minifiedDef>
     <thingCategories>
@@ -103,6 +41,7 @@
     </costList>
     <placeWorkers>
       <li>PlaceWorker_ShowFacilitiesConnections</li>
+      <li>PlaceWorker_ShowFacilitiesRange</li>
     </placeWorkers>
     <drawPlaceWorkersWhileSelected>false</drawPlaceWorkersWhileSelected>
     <building>
@@ -116,11 +55,57 @@
       <li Class="CompProperties_Facility">
         <statOffsets>
           <PsychicRitualQuality>0.08</PsychicRitualQuality>
+          <ContainmentStrength>10</ContainmentStrength>
         </statOffsets>
         <maxSimultaneous>4</maxSimultaneous>
         <maxDistance>10</maxDistance>
       </li>
+      <li Class="CompProperties_Glower">
+        <glowRadius>2.1</glowRadius>
+        <glowColor>(120,255,214,0.3)</glowColor>
+      </li>
     </comps>
+  </ThingDef>
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_HelldrillLandmine</defName>
+    <label>Helldrill landmine</label>
+    <description>A fragment of dark archotechnology embedded into a bioferrite-based shaped explosive. Once triggered, it will repeatedly immolate the surrounding area. Most of the explosion's force will be directed downward to bore a shaft to the deeps, and fleshbeasts attracted by the detonation's psychic shockwave will emerge from this shaft.</description>
+    <thingClass>HautsPermits_Occult.Building_TrapHelldrill</thingClass>
+    <graphicData>
+      <graphicClass>Graphic_Single</graphicClass>
+      <texPath>Things/Building/HVMP_HelldrillCharge</texPath>
+      <drawSize>1.1</drawSize>
+    </graphicData>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <statBases>
+      <MaxHitPoints>1400</MaxHitPoints>
+      <Mass>7.7</Mass>
+    </statBases>
+    <thingCategories>
+      <li>Buildings</li>
+    </thingCategories>
+	<tickerType>Normal</tickerType>
+    <costList>
+      <Bioferrite>80</Bioferrite>
+    </costList>
+    <damageMultipliers>
+      <li>
+        <damageDef>Vaporize</damageDef>
+        <multiplier>0.25</multiplier>
+      </li>
+    </damageMultipliers>
+    <comps>
+      <li Class="HautsPermits_Occult.CompProperties_Helldrill">
+		<detonationPeriodicity>240</detonationPeriodicity>
+		<explosiveRadius>7.9</explosiveRadius>
+        <explosiveDamageType>Vaporize</explosiveDamageType>
+		<chanceToStartFire>0.75</chanceToStartFire>
+		<damageFalloff>true</damageFalloff>
+		<fleshbeastThreatPointFactor>0.25</fleshbeastThreatPointFactor>
+		<!--<explosionSound>Explosion_Vaporize</explosionSound>-->
+      </li>
+    </comps>
+    <specialDisplayRadius>7.9</specialDisplayRadius>
   </ThingDef>
   
 </Defs>

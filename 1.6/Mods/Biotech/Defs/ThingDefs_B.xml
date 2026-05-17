@@ -405,25 +405,6 @@
 	</modExtensions>
   </ThingDef>
   
-  <!--Gene Tool pallet (Alpha Genes)-->
-	  <ThingDef ParentName="HVMP_PalletBase" MayRequire="sarg.alphagenes">
-		<defName>HVMP_GeneToolPallet</defName>
-		<label>gene tool pallet</label>
-		<description>A crate containing a gene tool. You can choose what type of gene tool is inside by opening it.</description>
-		<graphicData>
-		  <texPath>Items/Pallets/HVMP_GeneToolPallet</texPath>
-		  <graphicClass>Graphic_Single</graphicClass>
-		</graphicData>
-		<comps>
-		  <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
-			<thingCategoryWhitelist>AG_GeneTools</thingCategoryWhitelist>
-			<netCountOutputCap>1</netCountOutputCap>
-			<onlyHasStackableItems>false</onlyHasStackableItems>
-			<countCantExceedStackSize>true</countCantExceedStackSize>
-		  </li>
-		</comps>
-	  </ThingDef>
-  
   <!--botanical pylon-->
   <ThingDef ParentName="BuildingBase">
     <defName>HVMP_BotanicalPylon</defName>
@@ -488,6 +469,56 @@
 	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
 	</modExtensions>
   </ThingDef>
+  
+  <!--Biofilm medicine-->
+  <ThingDef ParentName="MedicineBase">
+    <defName>HVMP_BiofilmMedicine</defName>
+    <label>biofilm medicine</label>
+    <description>A kit of advanced ultra-tech medical supplies, manufactured only by the Enterprise and its branches. It is roughly as potent as regular medicine. However, in addition to its diagnostic devices, pads, and multi-purpose tools, it contains multiple vials of a techno-organic biofilm substance. The biofilm expands over the patient's body, tending all wounds in one go, and protecting them from hostile environments for the next 24 hours.</description>
+    <possessionCount>3</possessionCount>
+    <graphicData>
+      <texPath>Items/Resource/HVMP_MedicineBiofilm</texPath>
+      <graphicClass>Graphic_StackCount</graphicClass>
+      <drawSize>0.85</drawSize>
+    </graphicData>
+    <techLevel>Ultra</techLevel>
+    <tradeTags Inherit="False" />
+	<genericMarketSellable>false</genericMarketSellable>
+    <statBases>
+      <MarketValue>200</MarketValue>
+      <Mass>0.50</Mass>
+      <Flammability>0.7</Flammability>
+      <MedicalPotency>1.00</MedicalPotency>
+      <MedicalQualityMax>1.00</MedicalQualityMax>
+      <DeteriorationRate>2</DeteriorationRate>
+      <WorkToMake>700</WorkToMake>
+    </statBases>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>Sellable</tradeability>
+    <thingSetMakerTags Inherit="False" />
+    <allowedArchonexusCount>10</allowedArchonexusCount>
+  </ThingDef>
+  
+  <!--Gene Tool pallet (Alpha Genes)-->
+	  <ThingDef ParentName="HVMP_PalletBase" MayRequire="sarg.alphagenes">
+		<defName>HVMP_GeneToolPallet</defName>
+		<label>gene tool pallet</label>
+		<description>A crate containing a gene tool. You can choose what type of gene tool is inside by opening it.</description>
+		<graphicData>
+		  <texPath>Items/Pallets/HVMP_GeneToolPallet</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<comps>
+		  <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
+			<thingCategoryWhitelist>AG_GeneTools</thingCategoryWhitelist>
+			<netCountOutputCap>1</netCountOutputCap>
+			<onlyHasStackableItems>false</onlyHasStackableItems>
+			<countCantExceedStackSize>true</countCantExceedStackSize>
+		  </li>
+		</comps>
+	  </ThingDef>
   
   <!--Geothermal Drill-->
   <ThingDef ParentName="BuildingBase">

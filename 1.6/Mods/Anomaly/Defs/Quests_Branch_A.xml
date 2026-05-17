@@ -981,7 +981,7 @@
           <raidPawnKind>$raidPawnKind</raidPawnKind>
           <inSignalLeave>EndRaid</inSignalLeave>
 		  <usherKind>HVMP_HoraxianUsher</usherKind>
-		  <BTATH_building>HVMP_VoidCharge</BTATH_building>
+		  <BTATH_building>HVMP_HelldrillCharge</BTATH_building>
 		  <BTATH_count>3~4</BTATH_count>
 		  <TBN_hediff>HVMP_Malachai</TBN_hediff>
 		  <WWF_hediffCount>2</WWF_hediffCount>

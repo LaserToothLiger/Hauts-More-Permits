@@ -1,20 +1,7 @@
-﻿using HautsPermits;
-using RimWorld.QuestGen;
-using RimWorld;
+﻿using RimWorld;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Verse;
-using RimWorld.Planet;
-using UnityEngine;
-using Verse.Grammar;
-using Verse.Sound;
-using HautsFramework;
 using System.Reflection;
-using Verse.AI.Group;
-using Verse.AI;
-using Verse.Noise;
-using DelaunatorSharp;
 using HarmonyLib;
 
 namespace HautsPermits_Occult

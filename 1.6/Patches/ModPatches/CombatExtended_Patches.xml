@@ -404,6 +404,30 @@
 						</operations>
 					</match>
 				</li>
+				<!--cast range scaling for netskips-->
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/AbilityDef[defName="HVMP_Skipnet"]/verbProperties/range </xpath>
+					<value>
+						<range>32</range>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/AbilityDef[defName="HVMP_SelfSkipnet" or defName="HVMP_Skipnet_NPC"]/verbProperties/range </xpath>
+					<value>
+						<range>23</range>
+					</value>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Odyssey</li>
+					</mods>
+					<match Class="PatchOperationReplace">
+						<xpath>Defs/AbilityDef[defName="HVMP_SelfSkipnetAegis"]/verbProperties/range </xpath>
+						<value>
+							<range>28</range>
+						</value>
+					</match>
+				</li>
 				
 				
 				
@@ -475,16 +499,11 @@
 									</li>
 								</value>
 							</li>
-							<li Class="PatchOperationFindMod"><!--thump damage vs walls is nerfed in Combat Extended, but we want it to still PUNCH right through them-->
-								<mods>
-									<li>Odyssey</li>
-								</mods>
-								<match Class="PatchOperationReplace">
-									<xpath>/Defs/ThingDef[defName="HVMP_Ingressor"]/comps/li[@Class="HautsPermits_Ideology.CompProperties_TargetEffectIngression"]/damageAmount</xpath>
-									<value>
-										<damageAmount>1500</damageAmount>
-									</value>
-								</match>
+							<li Class="PatchOperationReplace"><!--thump damage vs walls is nerfed in Combat Extended, but we want it to still PUNCH right through them-->
+								<xpath>/Defs/ThingDef[defName="HVMP_Ingressor"]/comps/li[@Class="HautsPermits_Ideology.CompProperties_TargetEffectIngression"]/damageAmount</xpath>
+								<value>
+									<damageAmount>1500</damageAmount>
+								</value>
 							</li>
 						</operations>
 					</match>

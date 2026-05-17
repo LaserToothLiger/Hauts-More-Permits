@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-
-
+  <!--from permit-->
   <AbilityDef>
-    <defName>HVMP_GatepunchSkip</defName>
-    <label>skip</label>
-    <description>Teleport the target to a desired position not too far from its starting point. Objects which are too large cannot be teleported.\n\nCan be used four times before the gatepuncher breaks down.</description>
+    <defName>HVMP_Skipnet</defName>
+    <label>netskip</label>
+    <description>Teleport the target to a desired position not too far from its starting point. Objects which are too large cannot be teleported.\n\nCan be used four times before authorization expires.</description>
     <iconPath>UI/Abilities/Skip</iconPath>
     <writeCombatLog>True</writeCombatLog>
     <showPsycastEffects>False</showPsycastEffects>
@@ -48,16 +47,15 @@
       </li>
 	  <li Class="HautsFramework.CompProperties_AbilityCostsHediffSeverity">
 		<compClass>HautsFramework.CompAbilityEffect_CostsHediffSeverity</compClass>
-		<requisiteHediff>HVMP_GatepuncherImplant</requisiteHediff>
+		<requisiteHediff>HVMP_SkipnetAuthorization</requisiteHediff>
 		<severityCost>1</severityCost>
 	  </li>
     </comps>
   </AbilityDef>
-  
   <AbilityDef>
-    <defName>HVMP_GatepunchSelfSkip</defName>
-    <label>emergency personal skip</label>
-    <description>Teleport to a desired position not too far away. Can target positions outside line of sight.\n\nRequires all four uses of the gatepuncher to activate.</description>
+    <defName>HVMP_SelfSkipnet</defName>
+    <label>emergency personal netskip</label>
+    <description>Teleport to a desired position not too far away. Can target positions outside line of sight.\n\nRequires all four uses of skipnet authorization to activate.</description>
     <category>Skip</category>
     <iconPath>UI/Hauts_SelfSkip</iconPath>
     <aiCanUse>true</aiCanUse>
@@ -104,9 +102,65 @@
       </li>
 	  <li Class="HautsFramework.CompProperties_AbilityCostsHediffSeverity">
 		<compClass>HautsFramework.CompAbilityEffect_CostsHediffSeverity</compClass>
-		<requisiteHediff>HVMP_GatepuncherImplant</requisiteHediff>
+		<requisiteHediff>HVMP_SkipnetAuthorization</requisiteHediff>
 		<severityCost>4</severityCost>
 	  </li>
     </comps>
+  </AbilityDef>
+  <!--for certain quest mutators-->
+  <AbilityDef>
+	<defName>HVMP_Skipnet_NPC</defName>
+	<label>jailbroken personal netskip</label>
+	<description>Teleport to a desired position not too far away. Can target positions outside line of sight.\n\nCan be used four times before the system intrusion is detected and authorization for further teleports is revoked.</description>
+	<category>Skip</category>
+	<iconPath>UI/Hauts_SelfSkip</iconPath>
+	<aiCanUse>true</aiCanUse>
+	<statBases>
+	  <Ability_Duration>0</Ability_Duration>
+	</statBases>
+	<warmupSound>PsycastCastLoop</warmupSound>
+	<cooldownTicksRange>240</cooldownTicksRange>
+	<writeCombatLog>True</writeCombatLog>
+	<showPsycastEffects>False</showPsycastEffects>
+	<verbProperties>
+	  <verbClass>Verb_CastAbility</verbClass>
+	  <violent>false</violent>
+	  <forceNormalTimeSpeed>false</forceNormalTimeSpeed>
+	  <warmupTime>0.25</warmupTime>
+	  <range>19.9</range>
+	  <requireLineOfSight>False</requireLineOfSight>
+	  <targetParams>
+		<canTargetLocations>true</canTargetLocations>
+		<canTargetPawns>false</canTargetPawns>
+		<canTargetBuildings>false</canTargetBuildings>
+	  </targetParams>
+	</verbProperties>
+	<casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+	<comps>
+	  <li Class = "HautsFramework.CompProperties_AbilityTeleportSelf">
+		<compClass>HautsFramework.CompAbilityEffect_TeleportSelf</compClass>
+		<requiresLineOfSight>False</requiresLineOfSight>
+		<clamorType>Ability</clamorType>
+		<clamorRadius>10</clamorRadius>
+		<destClamorType>Ability</destClamorType>
+		<destClamorRadius>10</destClamorRadius>
+		<stunTicks>18~60</stunTicks>
+	  </li>
+	  <li Class="HautsFramework.CompProperties_AbilityAiTargetingDistanceRange">
+		<compClass>HautsFramework.CompAbilityEffect_AiTargetingDistanceRange</compClass>
+		<distanceRange>4.5~99999</distanceRange>
+		<mustBeMelee>true</mustBeMelee>
+	  </li>
+	  <li Class="HautsFramework.CompProperties_AbilityAiUsesToRetreat">
+		<compClass>HautsFramework.CompAbilityEffect_AiUsesToRetreat</compClass>
+		<hpThreshold>0.2</hpThreshold>
+		<mustBeRanged>true</mustBeRanged>
+	  </li>
+	  <li Class="HautsFramework.CompProperties_AbilityCostsHediffSeverity">
+		<compClass>HautsFramework.CompAbilityEffect_CostsHediffSeverity</compClass>
+		<requisiteHediff>HVMP_SkipnetAuthorization_NPC</requisiteHediff>
+		<severityCost>1</severityCost>
+	  </li>
+	</comps>
   </AbilityDef>
 </Defs>

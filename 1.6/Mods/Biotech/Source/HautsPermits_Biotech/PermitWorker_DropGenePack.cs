@@ -1,5 +1,4 @@
-﻿using HautsPermits;
-using RimWorld;
+﻿using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
@@ -9,8 +8,7 @@ using Verse;
 
 namespace HautsPermits_Biotech
 {
-    /*permit authorizer-friendly (see PermitWorkers_PermitAuthorizerFriendlyVariants.cs in the core solution or read the user manual) item dropping permit.
-     * Specifically for use with Genepacks - it subs out any contained archite genes for non-archite genes*/
+    //Specifically for use with Genepacks - it subs out any contained archite genes for non-archite genes
     [StaticConstructorOnStartup]
     public class RoyalTitlePermitWorker_DropGenePack : RoyalTitlePermitWorker_Targeted
     {
@@ -25,14 +23,14 @@ namespace HautsPermits_Biotech
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
             Action action = null;
             string text = this.def.LabelCap + ": ";
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -82,7 +80,7 @@ namespace HautsPermits_Biotech
             {
                 command_Action.Disable("CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")));
             }
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 command_Action.Disable("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")));
             }
@@ -95,10 +93,12 @@ namespace HautsPermits_Biotech
         }
         private void BeginCallResources(Pawn caller, Faction faction, Map map, bool free)
         {
-            this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = true;
-            this.targetingParameters.canTargetBuildings = false;
-            this.targetingParameters.canTargetPawns = false;
+            this.targetingParameters = new TargetingParameters
+            {
+                canTargetLocations = true,
+                canTargetBuildings = false,
+                canTargetPawns = false
+            };
             this.caller = caller;
             this.map = map;
             this.faction = faction;
@@ -148,7 +148,6 @@ namespace HautsPermits_Biotech
                 {
                     this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
                 }
-                PermitAuthorizerUtility.DoPTargeterCooldown(this.faction, this.caller, this);
             }
         }
         private void CallResourcesToCaravan(Pawn caller, Faction faction, bool free)
@@ -166,7 +165,6 @@ namespace HautsPermits_Biotech
             {
                 caller.royalty.TryRemoveFavor(faction, this.def.royalAid.favorCost);
             }
-            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
         private Faction faction;
         private static readonly Texture2D CommandTex = ContentFinder<Texture2D>.Get("UI/Commands/CallAid", true);

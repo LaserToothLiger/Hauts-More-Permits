@@ -1,11 +1,10 @@
 ﻿using HautsFramework;
-using HautsPermits;
 using RimWorld;
 using Verse;
 
 namespace HautsPermits_Biotech
 {
-    /*permit authorizer friendly - if the permit-holder has an off-cooldown permit authorizer implant of the permit's issuing faction, they can use this permit even while hostile to its issuing faction
+    /*if the permit-holder has an off-cooldown permit authorizer implant of the permit's issuing faction, they can use this permit even while hostile to its issuing faction
      * Tame Mechanite Disease uses PermitMoreEffects, sepcifically its hediffs field. Load it up only with hediffs that have the TMD comp
      * can only target pawns who have a hediff that is the convertedFrom of one of their TMD comp hediffs, replacing that hediff with the corresponding hediff and giving it half its remaining duration for HediffComp_Disappears
      * XMLable in case another mod adds more mechanite diseases*/
@@ -45,14 +44,6 @@ namespace HautsPermits_Biotech
             }
             return false;
         }
-        public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
-        {
-            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
-        }
-        public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
-        {
-            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
-        }
         public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
         {
             base.AffectPawnInner(pme, pawn, faction);
@@ -70,10 +61,6 @@ namespace HautsPermits_Biotech
                 pawn.health.RemoveHediff(this.toReplace);
 
             }
-        }
-        public override void DoOtherEffect(Pawn caller, Faction faction)
-        {
-            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
         private Hediff toReplace;
         private HediffDef toGive;

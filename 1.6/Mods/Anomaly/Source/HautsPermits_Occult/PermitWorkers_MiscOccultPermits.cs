@@ -1,5 +1,4 @@
 ﻿using HautsFramework;
-using HautsPermits;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -39,7 +38,6 @@ namespace HautsPermits_Occult
             {
                 this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
             }
-            PermitAuthorizerUtility.DoPTargeterCooldown(this.faction, this.caller, this);
         }
         public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
         {
@@ -48,14 +46,14 @@ namespace HautsPermits_Occult
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
-            if (faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null)
+            if (faction.HostileTo(Faction.OfPlayer))
             {
                 yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
                 yield break;
             }
             string text = this.def.LabelCap + ": ";
             Action action = null;
-            if (PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out bool free))
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
             {
                 action = delegate
                 {
@@ -67,11 +65,13 @@ namespace HautsPermits_Occult
         }
         private void BeginSelfSkip(Pawn caller, Faction faction, Map map, bool free)
         {
-            this.targetingParameters = new TargetingParameters();
-            this.targetingParameters.canTargetLocations = true;
-            this.targetingParameters.canTargetSelf = false;
-            this.targetingParameters.canTargetFires = false;
-            this.targetingParameters.canTargetItems = false;
+            this.targetingParameters = new TargetingParameters
+            {
+                canTargetLocations = true,
+                canTargetSelf = false,
+                canTargetFires = false,
+                canTargetItems = false
+            };
             this.caller = caller;
             this.map = map;
             this.faction = faction;
@@ -89,14 +89,6 @@ namespace HautsPermits_Occult
         {
             return (pawn.IsMutant || pawn.IsEntity) && base.IsGoodPawn(pawn);
         }
-        public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
-        {
-            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
-        }
-        public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
-        {
-            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
-        }
         public override void AffectPawnInner(PermitMoreEffects pme, Pawn pawn, Faction faction)
         {
             base.AffectPawnInner(pme, pawn, faction);
@@ -104,10 +96,6 @@ namespace HautsPermits_Occult
             {
                 pawn.stances.stunner.StunFor((int)pme.extraNumber.RandomInRange, null);
             }
-        }
-        public override void DoOtherEffect(Pawn caller, Faction faction)
-        {
-            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
 }

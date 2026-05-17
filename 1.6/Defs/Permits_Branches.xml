@@ -3,7 +3,7 @@
   
   <!--base-->
   <RoyalTitlePermitDef Name="HVMP_DropResourcesBase" Abstract="True">
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesStuff</workerClass>
     <faction>Empire</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>45</cooldownDays>
@@ -13,20 +13,20 @@
     </royalAid>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" Name="HVMP_DropResourcesSeniorityScalingBase" Abstract="True">
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuffSeniorityScaling_PTargFriendly</workerClass>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuffSeniorityScaling</workerClass>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" Name="HVMP_DROCSeniorityScalingBase" Abstract="True">
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DROCSeniorityScaling_PTargFriendly</workerClass>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DROCSeniorityScaling</workerClass>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" Name="HVMP_DropBookSeniorityScalingBase" Abstract="True">
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropBookSeniorityScaling_PTargFriendly</workerClass>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropBookSeniorityScaling</workerClass>
   </RoyalTitlePermitDef>
   <!--Commerce level 1-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_SafeInvestment</defName>
     <label>safe investment</label>
     <description>Use the targeted silver or gold stack to invest in an opportunity which the Commerce Branch assures is guaranteed to have a positive - if minor - return. You will receive 110-140% of the original amount after 5 days.\n\nNo matter how large the targeted stack is, no more than 1500 units can be invested at once.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_Investment</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_MultiplyItemStack</workerClass>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -56,7 +56,7 @@
     <defName>HVMP_RiskyInvestment</defName>
     <label>risky investment</label>
     <description>Use the targeted silver or gold stack to make a volatile investment, which may result in a negative or positive return. You will receive 50-250% of the original amount after 5 days.\n\nNo matter how large the targeted stack is, no more than 6000 units can be invested at once.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_Investment</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_MultiplyItemStack</workerClass>
     <minTitle>HVMP_CommerceI</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -506,7 +506,7 @@
     <defName>HVMP_CallDropPods</defName>
     <label>signal cargo pods</label>
     <description>Arrange for someone to look the other way while resource-containing drop pods conveniently misfire and land near your location. An additional set of cargo pods is sent per additional rank held with the Commerce Branch (2 if the caller is a Financier; 3 if the caller is a Marketeer; and so on and so forth).</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuestSeniorityScaling_PTargFriendly</workerClass>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuestSeniorityScaling</workerClass>
     <minTitle>HVMP_CommerceII</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -565,7 +565,7 @@
     <defName>HVMP_FlashInvestment</defName>
     <label>flash investment</label>
     <description>Use the targeted silver or gold stack to make an extremely volatile, time-sensitive investment, which may result in a negative or positive return. You will receive 1-300% of the original amount within a few seconds.\n\nNo matter how large the targeted stack is, no more than 6000 units can be invested at once.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_Investment</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_MultiplyItemStack</workerClass>
     <minTitle>HVMP_CommerceIII</minTitle>
     <faction>HVMP_CommerceBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -843,7 +843,7 @@
     <defName>HVMP_CombatAssist</defName>
     <label>combat assist</label>
     <description>Link the target to an automated combat assistance program for 8 hours, improving attack accuracy and range.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_PaxI</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -942,7 +942,7 @@
     <defName>HVMP_MiniTurretDrop</defName>
     <label>portable turret drop</label>
     <description>Call for a drop of 1 steel mini-turret. It requires power, but it doesn't have a timed life and it can be repositioned.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesStuff</workerClass>
     <minTitle>HVMP_PaxII</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1208,6 +1208,51 @@
       <favorCost>3</favorCost>
     </royalAid>
   </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
+    <defName>HVMP_BlackbodyShieldDrop</defName>
+    <label>blackbody shield drop</label>
+    <description>Call for a drop of 1 blackbody shield unit, or 2 if the caller is a Citadel.</description>
+    <minTitle>HVMP_PaxV</minTitle>
+    <faction>HVMP_PaxBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>12</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(3,2)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_BSU>1</HVMP_BSU>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<phenomenonCount>300</phenomenonCount>
+		</li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Call for a drop of 1 blackbody shield unit.</extraString>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_OrbitalStrike</defName>
+    <label>call orbital strike</label>
+    <description>Call for an explosive shot to be fired at a target position.</description>
+    <workerClass>RoyalTitlePermitWorker_OrbitalStrike</workerClass>
+    <minTitle>HVMP_PaxV</minTitle>
+    <faction>HVMP_PaxBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(3,6)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+      <targetingRange>44.9</targetingRange>
+      <radius>2.9</radius>
+      <explosionRadiusRange>7.9</explosionRadiusRange>
+      <explosionCount>1</explosionCount>
+      <intervalTicks>60</intervalTicks>
+      <warmupTicks>120</warmupTicks>
+    </royalAid>
+  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_BaitInfestation</defName>
     <label>bait infestation</label>
@@ -1218,7 +1263,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,2)</uiPosition>
+    <uiPosition>(4,0.5)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
@@ -1238,7 +1283,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,3)</uiPosition>
+    <uiPosition>(4,1.5)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
@@ -1260,7 +1305,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,4)</uiPosition>
+    <uiPosition>(4,2.5)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
@@ -1279,13 +1324,13 @@
     <defName>HVMP_SunlightDisruption</defName>
     <label>sunlight disruption</label>
     <description>Activate a targeted sun blocker, obstructing daylight for 3 days.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_CauseCondition_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_CauseCondition</workerClass>
     <minTitle>HVMP_PaxV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,5)</uiPosition>
+    <uiPosition>(4,3.5)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
@@ -1303,13 +1348,13 @@
     <defName>HVMP_ToxicDisruption</defName>
     <label>toxic disruption</label>
     <description>Activate a targeted toxic spewer, inducing a toxic fallout for 3 days.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_CauseCondition_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_CauseCondition</workerClass>
     <minTitle>HVMP_PaxV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,6)</uiPosition>
+    <uiPosition>(4,4.5)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
@@ -1323,26 +1368,6 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef>
-    <defName>HVMP_OrbitalStrike</defName>
-    <label>call orbital strike</label>
-    <description>Call for an explosive shot to be fired at a target position.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_OrbitalStrikePTargFriendly</workerClass>
-    <minTitle>HVMP_PaxV</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
-    <uiPosition>(3,7)</uiPosition>
-    <royalAid>
-      <favorCost>5</favorCost>
-      <targetingRange>44.9</targetingRange>
-      <radius>2.9</radius>
-      <explosionRadiusRange>7.9</explosionRadiusRange>
-      <explosionCount>1</explosionCount>
-      <intervalTicks>60</intervalTicks>
-      <warmupTicks>120</warmupTicks>
-    </royalAid>
-  </RoyalTitlePermitDef>
   <!--Pax level 6-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_MassSlugTurretDrop</defName>
@@ -1353,7 +1378,7 @@
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>10</cooldownDays>
-    <uiPosition>(4,0)</uiPosition>
+    <uiPosition>(5,0)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <HVMP_SlugTurret>10</HVMP_SlugTurret>
@@ -1370,7 +1395,7 @@
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
-    <uiPosition>(4,1)</uiPosition>
+    <uiPosition>(5,1)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
       <pawnKindDef>HVMP_WaspDrone</pawnKindDef>
@@ -1387,7 +1412,7 @@
     <permitPointCost>2</permitPointCost>
     <cooldownDays>30</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,2)</uiPosition>
+    <uiPosition>(5,2)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <Shell_AntigrainWarhead>1</Shell_AntigrainWarhead>
@@ -1405,7 +1430,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>30</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,3)</uiPosition>
+    <uiPosition>(5,3)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
     </royalAid>
@@ -1419,13 +1444,13 @@
     <defName>HVMP_OrbitalVolley</defName>
     <label>call orbital volley</label>
     <description>Call for 5 explosive shots to be fired around a target position.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_OrbitalStrikePTargFriendly</workerClass>
+    <workerClass>RoyalTitlePermitWorker_OrbitalStrike</workerClass>
     <minTitle>HVMP_PaxVI</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
     <prerequisite>HVMP_OrbitalStrike</prerequisite>
     <cooldownDays>40</cooldownDays>
-    <uiPosition>(4,6)</uiPosition>
+    <uiPosition>(5,6)</uiPosition>
     <royalAid>
       <favorCost>7</favorCost>
       <targetingRange>44.9</targetingRange>
@@ -1446,7 +1471,7 @@
     <permitPointCost>1</permitPointCost>
     <prerequisite>HVMP_OrbitalStrike</prerequisite>
     <cooldownDays>46</cooldownDays>
-    <uiPosition>(4,7)</uiPosition>
+    <uiPosition>(5,7)</uiPosition>
     <royalAid>
       <favorCost>8</favorCost>
       <radius>15</radius>
@@ -1485,7 +1510,7 @@
     <defName>HVMP_CoolingGearDrop</defName>
     <label>cooling gear drop</label>
     <description>Call for a drop of 1 good-quality camelhide bedroll, 1 good-quality bearskin duster, and 1 good-quality bearskin pants.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesStuff</workerClass>
     <minTitle>HVMP_RoverI</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1517,7 +1542,7 @@
     <defName>HVMP_WarmingGearDrop</defName>
     <label>warming gear drop</label>
     <description>Call for a drop of 1 good-quality heavy fur bedroll, 1 good-quality muffalo wool parka, and 1 good-quality muffalo wool pants.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesStuff</workerClass>
     <minTitle>HVMP_RoverI</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1593,7 +1618,7 @@
     <defName>HVMP_CaravanForageBoost</defName>
     <label>aid caravan foraging</label>
     <description>Mark the target individual. For the next 5 days, any caravan the target is part of will be advised of best foraging spots and practices, enhancing the amount of food foraged.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_RoverI</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1617,7 +1642,7 @@
     <defName>HVMP_CaravanBurglaryBoost</defName>
     <label>aid caravan heisting</label>
     <description>Mark the target individual. For the next 5 days, the target is part of will be advised on the security measures of any settlement encountered while caravanning, enabling and enhancing burglary attempts.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_RoverI</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1641,7 +1666,7 @@
     <defName>HVMP_CaravanComfortBoost</defName>
     <label>comfort caravan</label>
     <description>Mark the target individual. For the next 5 days, any caravan the target is part of will have access to exclusive, high-quality radio broadcasts that enhance mood, reduce boredom, and better sleep effectiveness.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_RoverI</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1665,7 +1690,7 @@
     <defName>HVMP_CaravanStealthBoost</defName>
     <label>conceal caravan</label>
     <description>Mark the target individual. For the next 5 days, any caravan the target is part of will benefit from satellite guidance, optimizing its route to evade detection by hostile parties.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_RoverI</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1689,7 +1714,7 @@
     <defName>HVMP_CaravanSpeedBoost</defName>
     <label>hasten caravan</label>
     <description>Mark the target individual. For the next 5 days, any caravan the target is part of will benefit from satellite guidance, optimizing its route to attain maximal speed.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GiveHediffs_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_RoverI</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1737,7 +1762,7 @@
     <defName>HVMP_TelescopeDrop</defName>
     <label>telescope drop</label>
     <description>Call for a drop of 1 telescope.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropResourcesStuff_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesStuff</workerClass>
     <minTitle>HVMP_RoverII</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1755,7 +1780,7 @@
     <defName>HVMP_HorseDrop</defName>
     <label>horse drop</label>
     <description>Call for the delivery of 1 tame horse from the Rover Branch.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropPawns</workerClass>
     <minTitle>HVMP_RoverII</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1777,7 +1802,7 @@
     <defName>HVMP_MapDrop</defName>
     <label>map drop</label>
     <description>Call for two maps from the Rover Branch, which can be read to discover sites of interest.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropBook_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_DropBook</workerClass>
     <minTitle>HVMP_RoverIII</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1820,7 +1845,7 @@
     <defName>HVMP_LocateItemStash</defName>
     <label>find item stash</label>
     <description>Learn about the location of a nearby item stash.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
     <minTitle>HVMP_RoverIII</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1840,7 +1865,7 @@
     <defName>HVMP_LocateRescuee</defName>
     <label>find rescuee</label>
     <description>Learn about the location of a nearby prisoner or wounded traveler who would be willing to join up with whoever rescues them. Unlike random such rescuees, the Rover Branch is able to provide detailed information on these persons.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
     <minTitle>HVMP_RoverIII</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1863,7 +1888,7 @@
     <defName>HVMP_LocateResourceNode</defName>
     <label>find resource node</label>
     <description>Learn about the location of a nearby outcropping that can be mined for precious resources.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
     <minTitle>HVMP_RoverIII</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1883,7 +1908,7 @@
     <defName>HVMP_CallTransitShuttle</defName>
     <label>call transit shuttle A</label>
     <description>Call a shuttle for your own use. It will transport colonists, items, and animals anywhere you like within 70 world tiles.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallShuttlePTargFriendly</workerClass>
+    <workerClass>RoyalTitlePermitWorker_CallShuttle</workerClass>
     <minTitle>HVMP_RoverIII</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1900,7 +1925,7 @@
 		<defName>HVMP_DirehorseDrop</defName>
 		<label>direhorse drop</label>
 		<description>Call for the delivery of 1 tame direhorse from the Rover Branch.</description>
-		<workerClass>HautsPermits.RoyalTitlePermitWorker_DropPawns_PTargFriendly</workerClass>
+		<workerClass>HautsFramework.RoyalTitlePermitWorker_DropPawns</workerClass>
 		<minTitle>HVMP_RoverIII</minTitle>
 		<faction>HVMP_RoverBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -1999,7 +2024,7 @@
     <defName>HVMP_CallTransitShuttleB</defName>
     <label>call transit shuttle B</label>
     <description>Call a shuttle for your own use. It will transport colonists, items, and animals anywhere you like within 70 world tiles.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallShuttlePTargFriendly</workerClass>
+    <workerClass>RoyalTitlePermitWorker_CallShuttle</workerClass>
     <minTitle>HVMP_RoverIV</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -2016,7 +2041,7 @@
     <defName>HVMP_LocateAncientComplex</defName>
     <label>find ancient complex</label>
     <description>Learn about the location of a nearby ancient complex.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
     <minTitle>HVMP_RoverIV</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -2036,7 +2061,7 @@
     <defName>HVMP_LocateWorkSites</defName>
     <label>find work sites</label>
     <description>Learn about the locations of two nearby work sites.\n\nDue to technical issues, this permit does not work correctly if you use it while you have a colony on a tiny landlocked island.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
     <minTitle>HVMP_RoverIV</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -2057,7 +2082,7 @@
     <defName>HVMP_LocateFleshmassInfestation</defName>
     <label>find distress signal</label>
     <description>Learn about the location of a nearby settlement under assault by unnatural entities.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
     <minTitle>HVMP_RoverIV</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -2077,7 +2102,7 @@
     <defName>HVMP_LocateBrigandLair</defName>
     <label>find brigand lair</label>
     <description>Learn about the location of a nearby bandit camp. There is a small chance for the bandits to be an ancient mercenary company in possession of a unique weapon.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
     <minTitle>HVMP_RoverIV</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -2103,7 +2128,7 @@
 		<defName>HVMP_LocateBiotechLab</defName>
 		<label>find abandoned biotech lab</label>
 		<description>Learn about the location of a nearby abandoned biotech lab.</description>
-		<workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+		<workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
 		<minTitle>HVMP_RoverIV</minTitle>
 		<faction>HVMP_RoverBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -2121,16 +2146,40 @@
 	  </RoyalTitlePermitDef>
   <!--Rover level 5-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_AuthorizeSkipnetUse</defName>
+    <label>Skipnet authorization</label>
+    <description>Link the target to the Enterprise skipnet system, authorizing them for four uses. Each use can be expended to teleport an object to a position not too far from its starting point; alternatively, all four uses can be expended to teleport oneself to a target location, not requiring line of sight.</description>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
+    <minTitle>HVMP_RoverV</minTitle>
+    <faction>HVMP_RoverBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>12</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(6,0)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_SkipnetAuthorization</li></hediffs>
+			<soundDef>CrateOpeningStarted</soundDef>
+			<onUseMessage>HVMP_AssistanceProgram</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+			<allowAnyNonflesh>true</allowAnyNonflesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_LocateSitesOfInterest</defName>
     <label>find noteworthy sites</label>
     <description>Learn about three random, interesting nearby locations.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
     <minTitle>HVMP_RoverV</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>30</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(6,0)</uiPosition>
+    <uiPosition>(6,1.5)</uiPosition>
     <royalAid>
       <favorCost>4</favorCost>
     </royalAid>
@@ -2176,13 +2225,13 @@
     <defName>HVMP_LocateMechanitorTomb</defName>
     <label>find mechanitor tomb</label>
     <description>Learn about the location of a nearby mechanitor tomb.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
     <minTitle>HVMP_RoverV</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>36</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(6,1)</uiPosition>
+    <uiPosition>(6,2.5)</uiPosition>
     <royalAid>
       <favorCost>6</favorCost>
     </royalAid>
@@ -2196,13 +2245,13 @@
 		<defName>HVMP_LocateResearchRequest</defName>
 		<label>find research request</label>
 		<description>Learn about the location of a nearby research team in need of assistance.</description>
-		<workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+		<workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
 		<minTitle>HVMP_RoverV</minTitle>
 		<faction>HVMP_RoverBranch</faction>
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>36</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(6,2)</uiPosition>
+		<uiPosition>(6,3.5)</uiPosition>
 		<royalAid>
 		  <favorCost>6</favorCost>
 		</royalAid>
@@ -2218,7 +2267,7 @@
     <defName>HVMP_CallTransitShuttleC</defName>
     <label>call transit shuttle C</label>
     <description>Call a shuttle for your own use. It will transport colonists, items, and animals anywhere you like within 70 world tiles.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallShuttlePTargFriendly</workerClass>
+    <workerClass>RoyalTitlePermitWorker_CallShuttle</workerClass>
     <minTitle>HVMP_RoverV</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -2236,7 +2285,7 @@
     <defName>HVMP_LocateGravcore</defName>
     <label>find gravcore</label>
     <description>Learn about the location of a gravcore.\n\nCosts two permit points.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
     <minTitle>HVMP_RoverVI</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>2</permitPointCost>
@@ -2264,7 +2313,7 @@
 		<defName>HVMP_LocateLostCity</defName>
 		<label>find lost city</label>
 		<description>Learn about the location of a nearby lost city.\n\nCosts two permit points.</description>
-		<workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+		<workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
 		<minTitle>HVMP_RoverVI</minTitle>
 		<faction>HVMP_RoverBranch</faction>
 		<permitPointCost>2</permitPointCost>
@@ -2286,7 +2335,7 @@
 		<defName>HVMP_LocateShipStartup</defName>
 		<label>find starship</label>
 		<description>Learn about the location of a nearby starting-up starship.</description>
-		<workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+		<workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
 		<minTitle>HVMP_RoverVI</minTitle>
 		<faction>HVMP_RoverBranch</faction>
 		<permitPointCost>1</permitPointCost>
@@ -2308,7 +2357,7 @@
 		<defName>HVMP_LocateGlittertechSite</defName>
 		<label>find glittertech site</label>
 		<description>Learn about a location where glitterworld technology is being held.\n\nCosts two permit points.</description>
-		<workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+		<workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
 		<minTitle>HVMP_RoverVI</minTitle>
 		<faction>HVMP_RoverBranch</faction>
 		<permitPointCost>2</permitPointCost>
@@ -2331,7 +2380,7 @@
 		<defName>HVMP_LocateAbandonedBase</defName>
 		<label>find abandoned base</label>
 		<description>Learn about the location of a nearby abandoned base which formerly belonged to another colony.\n\nCosts two permit points.</description>
-		<workerClass>HautsPermits.RoyalTitlePermitWorker_GenerateQuest_PTargFriendly</workerClass>
+		<workerClass>HautsFramework.RoyalTitlePermitWorker_GenerateQuest</workerClass>
 		<minTitle>HVMP_RoverVI</minTitle>
 		<faction>HVMP_RoverBranch</faction>
 		<permitPointCost>2</permitPointCost>
@@ -2351,7 +2400,7 @@
     <defName>HVMP_CallTransitShuttleD</defName>
     <label>call transit shuttle D</label>
     <description>Call a shuttle for your own use. It will transport colonists, items, and animals anywhere you like within 70 world tiles.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_CallShuttlePTargFriendly</workerClass>
+    <workerClass>RoyalTitlePermitWorker_CallShuttle</workerClass>
     <minTitle>HVMP_RoverVI</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>

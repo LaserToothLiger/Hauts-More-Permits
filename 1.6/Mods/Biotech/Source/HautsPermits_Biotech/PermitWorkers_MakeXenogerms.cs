@@ -1,13 +1,11 @@
 ﻿using HautsFramework;
-using HautsPermits;
 using RimWorld;
 using System.Collections.Generic;
 using Verse;
 
 namespace HautsPermits_Biotech
 {
-    /*permit auth friendly. Read up iydk
-     * copy all the pawn's endogenes into a xenogerm, then drop pod it directly onto them and give them the genes regrowing condition. Does not work if target's genes are regrowing.*/
+    //copy all the pawn's endogenes into a xenogerm, then drop pod it directly onto them and give them the genes regrowing condition. Does not work if target's genes are regrowing.
     public class RoyalTitlePermitWorker_MakeXenogermOfEndo : RoyalTitlePermitWorker_TargetPawn
     {
         public override bool IsGoodPawn(Pawn pawn)
@@ -47,18 +45,6 @@ namespace HautsPermits_Biotech
             Hediff hediff = HediffMaker.MakeHediff(HediffDefOf.XenogermReplicating, target, null);
             target.health.AddHediff(hediff, null, null, null);
             return xenogerm;
-        }
-        public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
-        {
-            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
-        }
-        public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
-        {
-            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
-        }
-        public override void DoOtherEffect(Pawn caller, Faction faction)
-        {
-            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
         }
     }
     //as MakeXenogermOfXeno, but does it for xenogenes
@@ -104,15 +90,7 @@ namespace HautsPermits_Biotech
         }
         public override bool IsFactionHostileToPlayer(Faction faction, Pawn pawn)
         {
-            return faction.HostileTo(Faction.OfPlayer) && PermitAuthorizerUtility.GetPawnPTargeter(pawn, faction) == null;
-        }
-        public override bool OverridableFillAidOption(Pawn pawn, Faction faction, ref string text, out bool free)
-        {
-            return PermitAuthorizerUtility.ProprietaryFillAidOption(this, pawn, faction, ref text, out free);
-        }
-        public override void DoOtherEffect(Pawn caller, Faction faction)
-        {
-            PermitAuthorizerUtility.DoPTargeterCooldown(faction, caller, this);
+            return faction.HostileTo(Faction.OfPlayer);
         }
     }
 }

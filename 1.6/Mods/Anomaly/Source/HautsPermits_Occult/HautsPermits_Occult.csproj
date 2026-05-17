@@ -65,6 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Buildings_Helldrills.cs" />
     <Compile Include="HarmonyPatches.cs" />
     <Compile Include="DefsOf.cs" />
     <Compile Include="GameConditions_TouchOfTheUnfathomable.cs" />
@@ -77,7 +78,6 @@
     <Compile Include="Incident_PsychicAlignment.cs" />
     <Compile Include="Incident_PsychicSuppression.cs" />
     <Compile Include="Incident_SuperGhoul.cs" />
-    <Compile Include="Item_ProbabilityTuner.cs" />
     <Compile Include="LivingCloudkill.cs" />
     <Compile Include="PermitWorkers_MiscOccultPermits.cs" />
     <Compile Include="PermitWorkers_Suffusions.cs" />
