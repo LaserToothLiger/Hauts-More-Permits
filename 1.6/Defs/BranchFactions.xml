@@ -113,9 +113,6 @@
     <canRequestMilitaryAid>false</canRequestMilitaryAid>
     <canRequestOrbitalTrader>true</canRequestOrbitalTrader>
     <canGenerateQuestSites>false</canGenerateQuestSites>
-    <layerWhitelist MayRequire="Ludeon.RimWorld.Odyssey">
-      <li MayRequire="Ludeon.RimWorld.Odyssey">Orbit</li>
-    </layerWhitelist>
 	<allowedArrivalTemperatureRange>-1000~1000</allowedArrivalTemperatureRange>
 	<rescueesCanJoin>false</rescueesCanJoin>
 	<pawnSingular>member</pawnSingular>

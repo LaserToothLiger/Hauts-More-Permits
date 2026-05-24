@@ -737,6 +737,23 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_TradeGoodsDrop</defName>
+    <label>trade goods drop</label>
+    <description>Call for a drop of 1 trade goods pallet, which contains 5000 silver's worth of one of 10 totally random options of your choice.</description>
+    <minTitle>HVMP_CommerceVI</minTitle>
+    <faction>HVMP_CommerceBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>60</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(6,2)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_TradeGoodsPallet>1</HVMP_TradeGoodsPallet>
+      </itemsToDrop>
+      <favorCost>12</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="vanillaquestsexpanded.generator">
 		<defName>HVMP_ArcCompDrop</defName>
 		<label>ARC component drop</label>
@@ -746,7 +763,7 @@
 		<permitPointCost>2</permitPointCost>
 		<cooldownDays>30</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(6,2)</uiPosition>
+		<uiPosition>(6,3)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
 			<VQE_GenetronComponent>2</VQE_GenetronComponent>
@@ -2281,6 +2298,23 @@
     </royalAid>
   </RoyalTitlePermitDef>
   <!--Rover level 6-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_SkipnetPackDrop</defName>
+    <label>skipnet pack drop</label>
+    <description>Call for a drop of 1 skipnet pack.\n\nSkipnet packs boost the range of skip abilities, and they allow their wearers to teleport across the planet to the location of an ally. This has a three-day cooldown and cannot be used while on a caravan, but it is otherwise infinitely reusable.</description>
+    <minTitle>HVMP_RoverVI</minTitle>
+    <faction>HVMP_RoverBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>36</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(8,0)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_Apparel_SkipnetPack>1</HVMP_Apparel_SkipnetPack>
+      </itemsToDrop>
+      <favorCost>5</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Odyssey">
     <defName>HVMP_LocateGravcore</defName>
     <label>find gravcore</label>

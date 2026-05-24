@@ -385,6 +385,7 @@
     <stackLimit>10</stackLimit>
     <statBases>
       <MarketValue>1000</MarketValue>
+	  <Bulk MayRequire="CETeam.CombatExtended">2</Bulk>
     </statBases>
     <thingCategories>
       <li>ItemsMisc</li>

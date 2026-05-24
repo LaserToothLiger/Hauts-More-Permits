@@ -676,7 +676,7 @@
       </li>
       <li Class="CompProperties_Glower">
         <glowRadius>5</glowRadius>
-        <glowColor>(201,100,97,0.5)</glowColor>
+        <glowColor>(201,100,97,1)</glowColor>
       </li>
       <li Class="HautsPermits_Occult.CompProperties_HelldrillCharge">
 		<detonationPeriodicity>240</detonationPeriodicity>
@@ -694,29 +694,21 @@
   <!--To Be Nightmare-->
   <HediffDef ParentName="HVT_TraitHediffBase">
 	<defName>HVMP_Malachai</defName>
-	<label>Periodic invulnerability</label>
-	<description>Dark psychic energies course through this creature. Until this energy is depleted, it will periodically become invulnerable and teleport around, sowing pain and destruction.</description>
+	<label>havocbringer</label>
+	<description>Dark psychic energies course through this creature. Until this energy is depleted, it will periodically become invulnerable and teleport around, wantonly sowing pain and destruction.</description>
 	<hediffClass>HediffWithComps</hediffClass>
     <preventsDeath>true</preventsDeath>
 	<isBad>false</isBad>
-	<initialSeverity>3</initialSeverity>
-	<maxSeverity>4</maxSeverity>
+	<minSeverity>0.001</minSeverity>
+	<maxSeverity>1.001</maxSeverity>
 	<defaultLabelColor>(1, 0.2, 0.2)</defaultLabelColor>
 	<stages>
 	  <li>
 	    <minSeverity>0.001</minSeverity>
-		<label>1 remaining</label>
+		<label>charging</label>
 	  </li>
 	  <li>
-	    <minSeverity>1.001</minSeverity>
-		<label>2 remaining</label>
-	  </li>
-	  <li>
-	    <minSeverity>2.001</minSeverity>
-		<label>3 remaining</label>
-	  </li>
-	  <li>
-	    <minSeverity>3.001</minSeverity>
+	    <minSeverity>1</minSeverity>
 		<label>active</label>
 		<statFactors>
 		  <IncomingDamageFactor>0</IncomingDamageFactor>
@@ -728,19 +720,61 @@
 	</stages>
 	<comps>
 	  <li Class="HautsPermits_Occult.HediffCompProperties_NightmareMode">
-		<severityPerTrigger>-1</severityPerTrigger>
-		<ticksToNextTrigger>1200~3000</ticksToNextTrigger>
-		<invulnDurationTicks>1200</invulnDurationTicks>
-		<clamorType>Ability</clamorType>
-		<clamorRadius>10</clamorRadius>
-		<abilities>
-		  <li>AgonyPulse</li>
-		  <li>FleshmelterBolt</li>
-		</abilities>
-		<teleportRadius>10</teleportRadius>
+		<totalCycles>3</totalCycles>
+		<ticksBetweenCycles>1200~3000</ticksBetweenCycles>
+		<blastsPerCycle>5~7</blastsPerCycle>
+		<stunnedDuringCycle>true</stunnedDuringCycle>
+		<cycleOptions>
+		  <li>HVMP_CycleAgony</li>
+		  <li>HVMP_CycleAsh</li>
+		  <li>HVMP_CycleDecay</li>
+		</cycleOptions>
+		<useOneOptionPerCycle>true</useOneOptionPerCycle>
+		<useOneOptionForAllCycles>true</useOneOptionForAllCycles>
+		<rapidHealDuringCycle>true</rapidHealDuringCycle>
 	  </li>
 	</comps>
   </HediffDef>
+      <HautsPermits_Occult.CycleEffectDef Abstract="True" Name="HVMP_CycleBase_TBN">
+		<delayTicks>180</delayTicks>
+		<teleportRadius>10</teleportRadius>
+		<clamorType>Ability</clamorType>
+		<clamorRadius>10</clamorRadius>
+	  </HautsPermits_Occult.CycleEffectDef>
+      <HautsPermits_Occult.CycleEffectDef ParentName="HVMP_CycleBase_TBN">
+	    <defName>HVMP_CycleAgony</defName>
+		<label>cycle of agony</label>
+		<radius>2.9</radius>
+		<hediff>AgonyPulse</hediff>
+		<toBrain>true</toBrain>
+		<hediffDurationSecondsOverride>2000~4000</hediffDurationSecondsOverride>
+		<hediffSusceptibilityStat>PsychicSensitivity</hediffSusceptibilityStat>
+		<sound>AgonyPulse_Cast</sound>
+		<fleck>PsycastPsychicEffect</fleck>
+		<effecter>AgonyPulseExplosion</effecter>
+	  </HautsPermits_Occult.CycleEffectDef>
+	  <HautsPermits_Occult.CycleEffectDef ParentName="HVMP_CycleBase_TBN">
+	    <defName>HVMP_CycleAsh</defName>
+		<label>cycle of ash</label>
+		<radius>2.49</radius>
+		<damageType>NociosphereVaporize</damageType>
+		<damageAmount>150</damageAmount>
+		<explosionFireChance>0.75</explosionFireChance>
+		<filth>Filth_BlastMark</filth>
+	  </HautsPermits_Occult.CycleEffectDef>
+      <HautsPermits_Occult.CycleEffectDef ParentName="HVMP_CycleBase_TBN">
+	    <defName>HVMP_CycleDecay</defName>
+		<label>cycle of decay</label>
+		<radius>3.9</radius>
+		<hediff>ToxicBuildup</hediff>
+		<hediffSeverity>0.25</hediffSeverity>
+		<hediffResistStat>ToxicEnvironmentResistance</hediffResistStat>
+		<sound>SpitterSpitLands</sound>
+		<effecter>Shell_AcidSpitImpact</effecter>
+		<pollute>true</pollute>
+		<fleck>PsycastPsychicEffect</fleck>
+		<effecter>Hauts_ToxThornsMist</effecter>
+	  </HautsPermits_Occult.CycleEffectDef>
   <!--Wetwork Frankenstein-->
   <HediffDef ParentName="HVT_TraitHediffBase">
     <defName>HVMP_WWF_RageSpeed</defName>

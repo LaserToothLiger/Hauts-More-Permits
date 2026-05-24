@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-  <!-- Mechlink -->
   <ThingDef>
-    <defName>HVMP_CastellanChip</defName>
-    <label>castellan chip</label>
-    <description>A strange archotech fragment crudely integrated into a biogel nerve port. When pressed into the back of the throat, it integrates into the central nervous system and amplifies various esoteric psychic properties of the host.\n\nThese devices are greatly prized by the Empire and the branches of the Enterprise; they will bestow great honor upon whoever provides them with one.</description>
+    <defName>HVMP_Wunderchip</defName>
+    <label>wunderchip</label>
+    <description>A strange archotech fragment with a crude human-made interface. The ancients of this rimworld built these in an attempt to harness the powers of the archotechs, although they had little to show for it by the time their civilization collapsed. Nevertheless, sufficiently advanced factions such as the Empire and the Enterprise are quite interested in wunderchips, and will gladly bestow honor or standing upon anyone who furnishes them with one.</description>
     <thingClass>ThingWithComps</thingClass>
     <category>Item</category>
     <drawerType>MapMeshOnly</drawerType>
@@ -16,182 +15,86 @@
     <tickerType>Never</tickerType>
     <alwaysHaulable>true</alwaysHaulable>
     <resourceReadoutPriority>Middle</resourceReadoutPriority>
-    <descriptionHyperlinks><HediffDef>HVMP_CastellanChipImplant</HediffDef></descriptionHyperlinks>
+	<tradeability>Sellable</tradeability>
     <statBases>
       <MaxHitPoints>100</MaxHitPoints>
       <Beauty>-4</Beauty>
       <Mass>1</Mass>
-      <MarketValue>500</MarketValue>
+      <MarketValue>3000</MarketValue>
       <DeteriorationRate>0</DeteriorationRate>
 	  <HVMP_StandingValue>12</HVMP_StandingValue>
 	  <RoyalFavorValue>12</RoyalFavorValue>
+	  <Bulk MayRequire="CETeam.CombatExtended">3</Bulk>
     </statBases>
     <thingCategories>
       <li>Artifacts</li>
     </thingCategories>
     <graphicData>
-      <texPath>Items/HVMP_CastellanChip</texPath>
+      <texPath>Items/HVMP_Wunderchip</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>0.8</drawSize>
     </graphicData>
     <comps>
       <li Class="CompProperties_Forbiddable"/>
       <li Class="CompProperties_Usable">
-        <compClass>CompUsableImplant</compClass>
-        <useJob>HVMP_InstallCastellanChip</useJob>
-        <useLabel>Install {0_label}</useLabel>
+        <useJob>UseItem</useJob>
+        <useLabel>Reprogram {0_label}</useLabel>
+        <useDuration>10</useDuration>
+        <showUseGizmo>true</showUseGizmo>
       </li>
-      <li Class="CompProperties_UseEffectInstallImplant">
-        <hediffDef>HVMP_CastellanChipImplant</hediffDef>
-        <bodyPart>Brain</bodyPart>
+	  <li Class="CompProperties_UseEffectPlaySound">
+        <soundOnUsed>MechSerumUsed</soundOnUsed>
       </li>
-      <li Class="CompProperties_UseEffectPlaySound">
-        <soundOnUsed>Ability_CallMechanoids</soundOnUsed>
-      </li>
-      <li Class="CompProperties_UseEffectDestroySelf" />
-    </comps>
-  </ThingDef>
-  
-    <HediffDef ParentName="ImplantHediffBase">
-      <defName>HVMP_CastellanChipImplant</defName>
-      <label>castellan chip</label>
-      <description>A strange archotech fragment crudely integrated into a biogel nerve port. When pressed into the back of the throat, it integrates into the central nervous system and amplifies various esoteric psychic properties of the host.</description>
-      <isBad>false</isBad>
-      <duplicationAllowed>false</duplicationAllowed>
-      <keepOnBodyPartRestoration>true</keepOnBodyPartRestoration>
-      <stages>
-        <li>
-          <statOffsets>
-            <Hauts_PsyfocusRegenRate MayRequire="Ludeon.RimWorld.Royalty">0.09</Hauts_PsyfocusRegenRate>
-            <Hauts_MechEnergyUsage MayRequire="Ludeon.RimWorld.Biotech">-0.09</Hauts_MechEnergyUsage>
-            <MechBandwidth MayRequire="Ludeon.RimWorld.Biotech">20</MechBandwidth>
-            <PsychicRitualQualityOffset MayRequire="Ludeon.RimWorld.Anomaly">0.1</PsychicRitualQualityOffset>
-          </statOffsets>
-        </li>
-      </stages>
-    </HediffDef>
-  
-  <ThingDef ParentName="ApparelNoQualityBase">
-    <defName>HVMP_Apparel_SkipnetPack</defName>
-    <label>aegis skipnet pack</label>
-    <description>A psionic beacon which serves as a link to a planetary skipnet. Its internal power supply is self-renewing, but the exorbitant costs of teleportation means that it can only instantiate four teleports from full power before needing to recharge. Its targeting mechanism uses satellite telemetry, and so does not require line of sight.</description>
-    <graphicData>
-      <texPath>Things/Pawn/Humanlike/Apparel/HVMP_SkipnetPack/HVMP_SkipnetPack</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
-    </graphicData>
-    <tickerType>Normal</tickerType>
-    <techLevel>Ultra</techLevel>
-    <smeltable>false</smeltable>
-    <destroyable>false</destroyable>
-    <useHitPoints>false</useHitPoints>
-    <statBases>
-      <Mass>5</Mass>
-      <Flammability>0</Flammability>
-      <EquipDelay>2</EquipDelay>
-      <MarketValue>5000</MarketValue>
-      <DeteriorationRate>0</DeteriorationRate>
-    </statBases>
-    <equippedStatOffsets>
-      <Hauts_SkipcastRangeFactor>0.1</Hauts_SkipcastRangeFactor>
-    </equippedStatOffsets>
-    <thingCategories>
-      <li>ApparelUtility</li>
-    </thingCategories>
-    <mergeVerbGizmos>false</mergeVerbGizmos>
-    <apparel>
-      <countsAsClothingForNudity>false</countsAsClothingForNudity>
-      <scoreOffset>4</scoreOffset>
-      <careIfWornByCorpse>false</careIfWornByCorpse>
-      <careIfDamaged>false</careIfDamaged>
-      <wearPerDay>0.2</wearPerDay>
-      <bodyPartGroups>
-        <li>Waist</li>
-      </bodyPartGroups>
-      <layers>
-        <li>Belt</li>
-      </layers>
-      <wornGraphicPath>Things/Pawn/Humanlike/Apparel/HVMP_SkipnetPack/HVMP_SkipnetPack</wornGraphicPath>
-      <wornGraphicData>
-        <renderUtilityAsPack>true</renderUtilityAsPack>
-        <north>
-          <offset>(0,-0.15)</offset>
-        </north>
-        <south>
-          <offset>(0,0.1)</offset>
-          <scale>(1.15,1)</scale>
-        </south>
-        <east>
-          <scale>(0.83,0.83)</scale>
-          <offset>(-0.3,-0.05)</offset>
-          <thin>
-            <offset>(0.05,0)</offset>
-          </thin>
-          <hulk>
-            <offset>(-0.1,0)</offset>
-          </hulk>
-          <fat>
-            <offset>(-0.15,0)</offset>
-          </fat>
-        </east>
-        <west>
-          <scale>(0.83,0.83)</scale>
-          <offset>(0.3,-0.05)</offset>
-          <thin>
-            <offset>(-0.05,0)</offset>
-          </thin>
-          <hulk>
-            <offset>(0.1,0)</offset>
-          </hulk>
-          <fat>
-            <offset>(0.15,0)</offset>
-          </fat>
-        </west>
-        <male>
-          <scale>(0.63,0.63)</scale>
-        </male>
-        <female>
-          <scale>(0.59,0.59)</scale>
-        </female>
-        <thin>
-          <scale>(0.59,0.59)</scale>
-        </thin>
-        <hulk>
-          <scale>(0.72,0.72)</scale>
-        </hulk>
-        <fat>
-          <scale>(0.72,0.72)</scale>
-        </fat>
-      </wornGraphicData>
-      <abilities>
-        <li>HVMP_SelfSkipnetAegis</li>
-      </abilities>
-    </apparel>
-    <tradeTags>
-      <li>Clothing</li>
-    </tradeTags>
-    <tradeability>Sellable</tradeability>
-    <allowedArchonexusCount>1</allowedArchonexusCount>
-  </ThingDef>
-  
-  <ThingDef ParentName="HVMP_PalletBase">
-    <defName>HVMP_TradeGoodsPallet</defName>
-    <label>trade goods pallet</label>
-    <description>A crate containing up to 5,000 silver worth of goods. You can choose what type of item is inside by opening it.</description>
-    <graphicData>
-      <texPath>Items/Pallets/HVMP_MysteryPallet</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
-    </graphicData>
-    <comps>
       <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
-        <!--no specified thing category. Items only need to meet the following criteria, have a non-None tradeability, and be bona fide 'items' to be valid options-->
-		<maxNumOptions>10</maxNumOptions>
-		<netMarketValueOutputCap>5000</netMarketValueOutputCap>
-		<onlyHasStackableItems>false</onlyHasStackableItems>
+        <compClass>HautsPermits.CompUseEffect_Wunderchip</compClass>
+		<openingLabel>HVMP_WunderchipOpeningLabel</openingLabel>
+		<netCountOutputCap>1</netCountOutputCap>
+		<specificThingDefs>
+		  <PsychicAmplifier>1</PsychicAmplifier>
+		  <PsychicAmplifier>1</PsychicAmplifier>
+		  <PsychicAmplifier>1</PsychicAmplifier>
+		  <TechprofSubpersonaCore>1</TechprofSubpersonaCore>
+		  <TechprofSubpersonaCore>1</TechprofSubpersonaCore>
+		  <AIPersonaCore>1</AIPersonaCore>
+		  <MechSerumHealer>1</MechSerumHealer>
+		  <MechSerumHealer>1</MechSerumHealer>
+		  <MechSerumHealer>1</MechSerumHealer>
+		  <MechSerumResurrector>1</MechSerumResurrector>
+		  <Gravcore>1</Gravcore>
+		  <Gravcore>1</Gravcore>
+		  <Gravcore>1</Gravcore>
+		  <Apparel_CerebrexNode>1</Apparel_CerebrexNode>
+		  <ArchiteCapsule MayRequire="Ludeon.RimWorld.Biotech">2</ArchiteCapsule>
+		  <ArchiteCapsule MayRequire="Ludeon.RimWorld.Biotech">2</ArchiteCapsule>
+		  <SignalChip MayRequire="Ludeon.RimWorld.Biotech">2</SignalChip>
+		  <PowerfocusChip MayRequire="Ludeon.RimWorld.Biotech">2</PowerfocusChip>
+		  <NanostructuringChip MayRequire="Ludeon.RimWorld.Biotech">1</NanostructuringChip>
+		  <USH_Glitterheart MayRequire="Ushanka.GlittertechExpansion">1</USH_Glitterheart>
+		</specificThingDefs>
+		<maxNumOptions>3</maxNumOptions>
+		<unitMarketValueOutputCap>1.5</unitMarketValueOutputCap>
+		<netMarketValueOutputCap>250</netMarketValueOutputCap>
 		<countCantExceedStackSize>true</countCantExceedStackSize>
-		<qualityGenerator>Reward</qualityGenerator>
+      </li>
+      <li Class="HautsPermits.CompProperties_StudiableQuestItem">
+        <totalRequiredProgressHours>144~240</totalRequiredProgressHours><!--6d to 10d-->
+        <activateTexPath>UI/Icons/Study</activateTexPath>
+        <activateLabelString>Study...</activateLabelString>
+        <activateDescString>Study the wunderchip.</activateDescString>
+        <jobString>Study wunderchip</jobString>
+        <guiLabelString>Choose who should study this</guiLabelString>
+        <inspectString>Can be studied by a colonist.</inspectString>
+        <targetingParameters>
+          <canTargetBuildings>false</canTargetBuildings>
+          <canTargetAnimals>false</canTargetAnimals>
+          <canTargetMechs>false</canTargetMechs>
+          <onlyTargetControlledPawns>true</onlyTargetControlledPawns>
+        </targetingParameters>
+		<requiredSkillDefs><li>Intellectual</li></requiredSkillDefs>
+		<requiredStatDefs><li>ResearchSpeed</li></requiredStatDefs>
+		<extraStat>true</extraStat>
       </li>
     </comps>
-    <allowedArchonexusCount>2</allowedArchonexusCount>
   </ThingDef>
   
   

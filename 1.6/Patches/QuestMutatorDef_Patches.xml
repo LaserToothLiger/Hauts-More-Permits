@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Patch>
-	<!--Commerce, Mastermind, Communications Blackout-->
+	<!--Commerce, Fortification, Greed Is Good-->
 	<Operation Class="PatchOperationConditional">
 		<xpath>/Defs/StatDef[defName="TradePriceImprovement"]/parts</xpath>
 		<nomatch Class="PatchOperationAdd">

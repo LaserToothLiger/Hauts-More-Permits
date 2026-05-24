@@ -418,36 +418,5 @@
       <li>HVMP_SelfSkipnet</li>
     </abilities>
   </HediffDef>
-	  
-	  
-  <!--important for certain hard mode quests-->
-  <HediffDef ParentName="HVT_TraitHediffBase">
-	<defName>HVMP_SkipnetAuthorization_NPC</defName>
-	<label>illicit skipnet authorization</label>
-    <defaultLabelColor>(0.6, 0.6, 1.0)</defaultLabelColor>
-	<description>Spoofed authorization for the Enterprise's teleportation network. Enables the use of Personal Netskip up to four times.</description>
-	<initialSeverity>4</initialSeverity>
-	<maxSeverity>4</maxSeverity>
-	<stages>
-	  <li>
-		<label>1 use</label>
-	  </li>
-	  <li>
-		<minSeverity>1.001</minSeverity>
-		<label>2 uses</label>
-	  </li>
-	  <li>
-		<minSeverity>2.001</minSeverity>
-		<label>3 uses</label>
-	  </li>
-	  <li>
-		<minSeverity>3.001</minSeverity>
-		<label>4 uses</label>
-	  </li>
-	</stages>
-    <abilities>
-      <li>HVMP_Skipnet_NPC</li>
-    </abilities>
-  </HediffDef>
   
 </Defs>

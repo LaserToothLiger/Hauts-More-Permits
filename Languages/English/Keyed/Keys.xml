@@ -26,6 +26,15 @@
 <HVMP_TooltipGoodwillFailure>If you fulfill either the 'minimum expectation' or 'minimum title' conditions set above, you will lose this much goodwill whenever you fail an accepted e-branch quest.\n\nIf both a minimum expectation and title have been selected, both conditions must be fulfilled.\n\nChanging this value will only affect the penalty for FUTURE quests, not ones that have already been generated.</HVMP_TooltipGoodwillFailure>
 <HVMP_SettingAnomalyActivityLevel>Occult Branch can always be encountered</HVMP_SettingAnomalyActivityLevel>
 <HVMP_TooltipAnomalyActivityLevel>By default, the Occult Branch will only show up after the monolith has been activated (if using the standard Anomaly playstyle), have its frequency of contact multiplied by the anomaly activity level (if using Ambient Horror), or otherwise not be active at all.\n\nIf you enable this setting, they will not be subject to these rules, instead appearing as frequently as other e-branches.</HVMP_TooltipAnomalyActivityLevel>
+<HVMP_Label_WunderchipSettings>Wunderchip settings</HVMP_Label_WunderchipSettings>
+<HVMP_SettingMinDays_Wunder>Min days between wunderchip quests</HVMP_SettingMinDays_Wunder>
+<HVMP_TooltipMinDays_Wunder>This is the minimum amount of time it takes to receive a quest to find a wunderchip.</HVMP_TooltipMinDays_Wunder>
+<HVMP_SettingMaxDays_Wunder>Max days between wunderchip quests</HVMP_SettingMaxDays_Wunder>
+<HVMP_TooltipMaxDays_Wunder>This is the maximum amount of time it takes to receive a quest to find a wunderchip.</HVMP_TooltipMaxDays_Wunder>
+<HVMP_SettingWunderQuestDifficulty>Wunderchip quest difficulty factor</HVMP_SettingWunderQuestDifficulty>
+<HVMP_TooltipWunderQuestDifficulty>Adjusts how difficult wunderchip quests are. For most wunderchip quests, this just alters how many foes you should expect to face.</HVMP_TooltipWunderQuestDifficulty>
+<HVMP_SettingWunderTransformOptions>Wunderchip transformation option count</HVMP_SettingWunderTransformOptions>
+<HVMP_TooltipWunderTransformOptions>By studying a wunderchip, you can learn to reprogram it into one of a number of rare and valuable items. Each wunderchip can only transform into a limited, randomized roster. This is the size of that roster.</HVMP_TooltipWunderTransformOptions>
 <!--Quest assignation errors-->
 <HVMP_ErrorNoQuestsFoundForBranch>Tried to give an e-branch quest from {0}, but their e-branch quest list is empty</HVMP_ErrorNoQuestsFoundForBranch>
 <HVMP_ErrorNoUsableBranchQuests>Tried to give an e-branch quest from {0}, but none of their quests' prerequisites are met and so cannot fire.</HVMP_ErrorNoUsableBranchQuests>
@@ -186,6 +195,7 @@
 <HVMP_LovecraftManhunterText>A roiling wave of psychic energy has swept over the landscape. Many of the animals in the area have been driven insane.</HVMP_LovecraftManhunterText>
 <HVMP_LovecraftMutationLabel>Manhunter shockwave</HVMP_LovecraftMutationLabel>
 <HVMP_LovecraftMutationText>A roiling wave of psychic energy has swept over the landscape. It has reshaped the musculature of many animals in the area, turning them into terrifying creatures.</HVMP_LovecraftMutationText>
+<HVMP_LovecraftMentalBreakReason>resonant psychic discharge</HVMP_LovecraftMentalBreakReason>
 <!--Occult Natali-->
 <HVMP_OnlyOnePartyLabel>\nOnly one group can enter.</HVMP_OnlyOnePartyLabel>
 <HVMP_LabyrinthAlreadyGenerated>The anomaly has already been entered. It will not accept new entrants.</HVMP_LabyrinthAlreadyGenerated>
@@ -207,7 +217,13 @@
 <HVMP_PalletOpeningLabel>Upon opening the pallet, {PAWN_nameDef} finds...</HVMP_PalletOpeningLabel>
 <HVMP_Choose>Select an option.</HVMP_Choose>
 <HVMP_ProbabilityFluxProc>The probability flux within {PAWN_nameDef} has created a good event.</HVMP_ProbabilityFluxProc>
-
+<HVMP_WunderchipOpeningLabel>The wunderchip transforms into...</HVMP_WunderchipOpeningLabel>
+<HVMP_WunderchipMustBeStudied>must be studied at a research bench</HVMP_WunderchipMustBeStudied>
+<!--wunderchip quests-->
+<HVMP_MineralExtractorRaidLetterLabel>extractor-agitated insects</HVMP_MineralExtractorRaidLetterLabel>
+<HVMP_MineralExtractorRaidLetterText>Insectoids have been attracted to shifts in the mineral extractor's activity!\n\nThey will attack immediately.</HVMP_MineralExtractorRaidLetterText>
+<HVMP_KorhalSiteArrivedLetter>no man's land</HVMP_KorhalSiteArrivedLetter>
+<HVMP_KorhalSiteArrivedLetterText>An orbital targeting beacon is hidden within nearby ruins. Nearby creatures will be targeted by orbital weaponry, unless they are indoors and under a roof. Locate and disable the beacon to obtain a wunderchip and stop the weapon targeting.</HVMP_KorhalSiteArrivedLetterText>
 
 <!--Mod settings for quest mutators-->
 <HVMP_Label_MutatorSettings>Quest Mutators</HVMP_Label_MutatorSettings>
@@ -217,12 +233,12 @@
 <HVMP_Label_Commerce>COMMERCE BRANCH</HVMP_Label_Commerce>
 <HVMP_Label_Fortification>Fortification</HVMP_Label_Fortification>
 <HVMP_Tooltip_Fortification>Host some traders who are down on their luck. They won't do work. You'll have to keep their mood above a minimum threshold, as well as possibly defend against a threat chasing them.</HVMP_Tooltip_Fortification>
-<HVMP_HardMode_Label_Fortification_1>Props to the Makeup Department</HVMP_HardMode_Label_Fortification_1>
-<HVMP_HardMode_Tooltip_Fortification_1>Traders have random diseases, and will therefore require medical treatment to keep alive.</HVMP_HardMode_Tooltip_Fortification_1>
+<HVMP_HardMode_Label_Fortification_1>It Don't Have Ta Get Ugly</HVMP_HardMode_Label_Fortification_1>
+<HVMP_HardMode_Tooltip_Fortification_1>A raid with 1.25x strength will attack you sometime during the traders' stay, but the raid will be called off if you fail the quest before it strikes.</HVMP_HardMode_Tooltip_Fortification_1>
 <HVMP_HardMode_Label_Fortification_2>Riches to Ruins</HVMP_HardMode_Label_Fortification_2>
 <HVMP_HardMode_Tooltip_Fortification_2>Traders have -12 mood due to 'luxurious expectations'.</HVMP_HardMode_Tooltip_Fortification_2>
 <HVMP_HardMode_Label_Fortification_3>What's Bugging You?</HVMP_HardMode_Label_Fortification_3>
-<HVMP_HardMode_Tooltip_Fortification_3>Traders are suffused with insectoid pheromones. This condition can cause infestations to occur near them, removing the triggering condition.</HVMP_HardMode_Tooltip_Fortification_3>
+<HVMP_HardMode_Tooltip_Fortification_3>Traders are infected with an insectoid pathogen which can cause infestations to occur near them if they do not receive regular medical treatment.</HVMP_HardMode_Tooltip_Fortification_3>
 <HVMP_Label_Intervention>Intervention</HVMP_Label_Intervention>
 <HVMP_Tooltip_Intervention>Fight 3-6 waves of insectoids.</HVMP_Tooltip_Intervention>
 <HVMP_HardMode_Label_Intervention_1>Burning, Unadulterated Burning</HVMP_HardMode_Label_Intervention_1>
@@ -234,7 +250,7 @@
 <HVMP_Label_Mastermind>Mastermind</HVMP_Label_Mastermind>
 <HVMP_Tooltip_Mastermind>Agree to not encounter the next trade caravan or orbital trader that would visit you.</HVMP_Tooltip_Mastermind>
 <HVMP_HardMode_Label_Mastermind_1>Communications Blackout</HVMP_HardMode_Label_Mastermind_1>
-<HVMP_HardMode_Tooltip_Mastermind_1>Accepting the quest inflicts the following effects for 10 days:\n- Non-branch factions cannot be contacted on the comms console\n- Settlements will not trade with the player\n- All trade caravans and orbital traders will be diverted\n- Other kinds of traders (e.g. some visitors) will not trade\n- -100% trade price improvement</HVMP_HardMode_Tooltip_Mastermind_1>
+<HVMP_HardMode_Tooltip_Mastermind_1>Accepting the quest inflicts the following effects for 10 days:\n- Non-branch factions cannot be contacted on the comms console\n- Settlements will not trade with the player\n- All trade caravans and orbital traders will be diverted\n- Other kinds of traders (e.g. some visitors) will not trade\n- Colonists have -100% trade price improvement</HVMP_HardMode_Tooltip_Mastermind_1>
 <HVMP_HardMode_Label_Mastermind_2>Isolation Invites Predation</HVMP_HardMode_Label_Mastermind_2>
 <HVMP_HardMode_Tooltip_Mastermind_2>Accepting the quest grants a bonus cache of raid points to each hostile faction.</HVMP_HardMode_Tooltip_Mastermind_2>
 <HVMP_HardMode_Label_Mastermind_3>Untrustworthy Unreliability</HVMP_HardMode_Label_Mastermind_3>
@@ -432,8 +448,8 @@
 <HVMP_Tooltip_Lovecraft>Endure a random psychic or atmospheric condition. You do not know what the condition is until you accept the quest. Most, but not all, possible conditions are negative.</HVMP_Tooltip_Lovecraft>
 <HVMP_HardMode_Label_Lovecraft_1>Escape From Tartarus</HVMP_HardMode_Label_Lovecraft_1>
 <HVMP_HardMode_Tooltip_Lovecraft_1>30% chance for the condition to also be accompanied by a threat of some kind:\n-A nociosphere that activates after a few seconds\n-A devourer assault\n-A psychic shockwave that turns most animals on the map into fleshbeasts\n-A very powerful ghoul that wanders around</HVMP_HardMode_Tooltip_Lovecraft_1>
-<HVMP_HardMode_Label_Lovecraft_2>No Kindness Nor Succor</HVMP_HardMode_Label_Lovecraft_2>
-<HVMP_HardMode_Tooltip_Lovecraft_2>Can only result in negative conditions.\n\n(If, somehow, none of the negative conditions can fire, Lovecraft defaults to Psychic Alignment, which is a good condition but at least is never incapable of firing)</HVMP_HardMode_Tooltip_Lovecraft_2>
+<HVMP_HardMode_Label_Lovecraft_2>Staple of the Genre</HVMP_HardMode_Label_Lovecraft_2>
+<HVMP_HardMode_Tooltip_Lovecraft_2>A random colonist undergoes a mental break when the quest is accepted.</HVMP_HardMode_Tooltip_Lovecraft_2>
 <HVMP_HardMode_Label_Lovecraft_3>Touch of the Unfathomable</HVMP_HardMode_Label_Lovecraft_3>
 <HVMP_HardMode_Tooltip_Lovecraft_3>Also inflicts a bad condition for 0.5-5 days, which only affects non-anomalous non-machine pawns:\n-Randomly gives a pawn blood rot (MTB 3 hours) with 0.33x duration\n-1.25x damage taken\n-1.25x mental break threshold\n-Reduced moving, which scales with psychic sensitivity</HVMP_HardMode_Tooltip_Lovecraft_3>
 <HVMP_Label_Natali>Natali</HVMP_Label_Natali>

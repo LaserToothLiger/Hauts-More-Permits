@@ -421,6 +421,70 @@
 	
 	<Operation Class="PatchOperationFindMod">
 		<mods>
+			<li>新スランボ! (New Thrumbos!)</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<!--Commerce-->
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/ThingDef[defName="NT_ToyThrumboHorn"]/statBases</xpath>
+					<value>
+						<HVMP_StandingValue>0.25</HVMP_StandingValue>
+					</value>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/ThingDef[defName="NT_DesertThrumbohorn" or defName="NT_JungleThrumboHorn" or defName="NT_SwampThrumboHorn" or defName="NT_PrairieThrumbodome"]/statBases</xpath>
+					<value>
+						<HVMP_StandingValue>0.5</HVMP_StandingValue>
+					</value>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/ThingDef[defName="NT_AcidThrumbohorn" or defName="NT_FireThrumboHorn"]/statBases</xpath>
+					<value>
+						<HVMP_StandingValue>0.6</HVMP_StandingValue>
+					</value>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/ThingDef[defName="NT_AuroraThrumboHorn"]/statBases</xpath>
+					<value>
+						<HVMP_StandingValue>1</HVMP_StandingValue>
+					</value>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>/Defs/TraderKindDef[defName="HVMP_CommerceDonations"]/stockGenerators</xpath>
+					<value>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>NT_ToyThrumboHorn</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>NT_DesertThrumbohorn</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>NT_JungleThrumboHorn</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>NT_SwampThrumboHorn</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>NT_PrairieThrumbodome</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>NT_AcidThrumbohorn</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>NT_FireThrumboHorn</thingDef>
+					  </li>
+					  <li Class="StockGenerator_BuySingleDef">
+						<thingDef>NT_AuroraThrumboHorn</thingDef>
+					  </li>
+					</value>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+	
+	<Operation Class="PatchOperationFindMod">
+		<mods>
 			<li>Ideology</li>
 		</mods>
 		<match Class="PatchOperationSequence">
@@ -487,7 +551,7 @@
 						<xpath>/Defs/TraderKindDef[defName="HVMP_ArchiveDonations"]/stockGenerators</xpath>
 						<value>
 						  <li Class="StockGenerator_BuySingleDef">
-							<thingDef>HVMP_CastellanChip</thingDef>
+							<thingDef>HVMP_Wunderchip</thingDef>
 						  </li>
 						</value>
 					</match>
@@ -885,7 +949,7 @@
 									<thingDef>ArcheanSeed</thingDef>
 								  </li>
 								  <li Class="StockGenerator_BuySingleDef">
-									<thingDef>HVMP_CastellanChip</thingDef>
+									<thingDef>HVMP_Wunderchip</thingDef>
 								  </li>
 								</value>
 							</li>
@@ -947,7 +1011,7 @@
 							<li Class="PatchOperationAdd">
 								<xpath>/Defs/ThingDef[defName="Apparel_CerebrexNode"]/statBases</xpath>
 								<value>
-									<HVMP_StandingValue>35</HVMP_StandingValue>
+									<HVMP_StandingValue>12</HVMP_StandingValue>
 								</value>
 							</li>
 							<li Class="PatchOperationAdd">
@@ -957,7 +1021,7 @@
 									<thingDef>Apparel_CerebrexNode</thingDef>
 								  </li>
 								  <li Class="StockGenerator_BuySingleDef">
-									<thingDef>HVMP_CastellanChip</thingDef>
+									<thingDef>HVMP_Wunderchip</thingDef>
 								  </li>
 								</value>
 							</li>
@@ -1062,7 +1126,7 @@
 						<thingDef>AlphaThrumboHorn</thingDef>
 					  </li>
 					  <li Class="StockGenerator_BuySingleDef">
-					    <thingDef>HVMP_CastellanChip</thingDef>
+					    <thingDef>HVMP_Wunderchip</thingDef>
 					  </li>
 					</value>
 				</li>
@@ -1070,7 +1134,7 @@
 					<xpath>/Defs/TraderKindDef[defName="HVMP_PaxDonations"]/stockGenerators</xpath>
 					<value>
 					  <li Class="StockGenerator_BuySingleDef">
-					    <thingDef>HVMP_CastellanChip</thingDef>
+					    <thingDef>HVMP_Wunderchip</thingDef>
 					  </li>
 					</value>
 				</li>
@@ -1087,7 +1151,7 @@
 						<thingDef>ShuttleEngine</thingDef>
 					  </li>
 					  <li Class="StockGenerator_BuySingleDef">
-					    <thingDef>HVMP_CastellanChip</thingDef>
+					    <thingDef>HVMP_Wunderchip</thingDef>
 					  </li>
 					</value>
 				</li>
@@ -1095,7 +1159,7 @@
 					<xpath>/Defs/TraderKindDef[defName="Empire_Caravan_TributeCollector"]/stockGenerators</xpath>
 					<value>
 					  <li Class="StockGenerator_BuySingleDef">
-					    <thingDef>HVMP_CastellanChip</thingDef>
+					    <thingDef>HVMP_Wunderchip</thingDef>
 					  </li>
 					</value>
 				</li>

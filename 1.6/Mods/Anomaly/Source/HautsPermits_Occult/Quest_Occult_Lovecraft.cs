@@ -4,7 +4,10 @@ using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using VEF.Storyteller;
 using Verse;
+using Verse.AI;
 using Verse.Grammar;
 
 namespace HautsPermits_Occult
@@ -12,7 +15,7 @@ namespace HautsPermits_Occult
     /*generates the incident(s) for QuestPart_PsychicDischarge from the list of possibleBadIncidents and possibleOkIncidents, as well as sets up the three mutators:
      * lc1: Escape From Tartarus there's an EFT_chance to also cause a random incident from EFT_incidents.
      *   the randomly selected one gets saved to prevent save-scumming, but the others are passed on to QuestPart_EFT as otherIncidents, which get randomly drawn in case the chosen incident cannot fire when called on.
-     * lc2: No Kindness Nor Succor prevents rolling any possibleOkIncidents
+     * lc2: Staple of the Genre causes a random colonist to have a mental break
      * lc3: Touch of the Unfathomable also inflicts a random game condition from TOTU_conditions on the target map for a random amount of ticks in TOTU_durationTicks*/
     public class QuestNode_GiveRewardsLovecraft : QuestNode_GiveRewardsBranch
     {
@@ -40,10 +43,11 @@ namespace HautsPermits_Occult
             };
             bool mayhemMode = HVMP_Mod.settings.lcX;
             bool EFT_on = BranchQuestSetupUtility.MutatorEnabled(HVMP_Mod.settings.lc1, mayhemMode);
-            bool NKNS_on = BranchQuestSetupUtility.MutatorEnabled(HVMP_Mod.settings.lc2, mayhemMode);
+            bool SOTG_on = BranchQuestSetupUtility.MutatorEnabled(HVMP_Mod.settings.lc2, mayhemMode);
             bool TOTU_on = BranchQuestSetupUtility.MutatorEnabled(HVMP_Mod.settings.lc3, mayhemMode);
             List<IncidentDef> usableIncidents = new List<IncidentDef>();
             usableIncidents.AddRange(this.possibleBadIncidents);
+            usableIncidents.AddRange(this.possibleOkIncidents); //these used to be disabled by a mutator, but I found that mutator boring. Nevertheless, in case there is a need to separate these incidents again, I've left it in
             if (EFT_on)
             {
                 if (Rand.Chance(this.EFT_chance))
@@ -72,18 +76,19 @@ namespace HautsPermits_Occult
             } else {
                 QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_EFT_info", " ") });
             }
-            if (NKNS_on)
+            if (SOTG_on)
             {
+                QuestPart_SOTG qeft = new QuestPart_SOTG
+                {
+                    inSignal = QuestGenUtility.HardcodedSignalWithQuestID(quest.InitiateSignal)
+                };
+                quest.AddPart(qeft);
                 QuestGen.AddQuestDescriptionRules(new List<Rule>
                 {
-                    new Rule_String("mutator_NKNS_info", this.NKNS_description.Formatted())
+                    new Rule_String("mutator_SOTG_info", this.SOTG_description.Formatted())
                 });
             } else {
-                QuestGen.AddQuestDescriptionRules(new List<Rule>
-                {
-                    new Rule_String("mutator_NKNS_info", this.nonNKNS_description.Formatted())
-                });
-                usableIncidents.AddRange(this.possibleOkIncidents);
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_SOTG_info", " ") });
             }
             if (TOTU_on)
             {
@@ -131,9 +136,7 @@ namespace HautsPermits_Occult
         [MustTranslate]
         public string EFT_description;
         [MustTranslate]
-        public string nonNKNS_description;
-        [MustTranslate]
-        public string NKNS_description;
+        public string SOTG_description;
         public IntRange TOTU_durationTicks;
         public List<GameConditionDef> TOTU_conditions;
         [MustTranslate]
@@ -296,5 +299,51 @@ namespace HautsPermits_Occult
         public List<IncidentDef> otherIncidents;
         public IncidentParms incidentParms;
         private MapParent mapParent;
+    }
+    //mental breaks a random colonist
+    public class QuestPart_SOTG : QuestPart
+    {
+        public override void Notify_QuestSignalReceived(Signal signal)
+        {
+            base.Notify_QuestSignalReceived(signal);
+            if (signal.tag == this.inSignal)
+            {
+                foreach (Map m in Find.Maps.InRandomOrder())
+                {
+                    foreach (Pawn p in m.mapPawns.AllHumanlikeSpawned.InRandomOrder())
+                    {
+                        if (p.Faction == Faction.OfPlayerSilentFail)
+                        {
+                            this.DoMentalBreak(p);
+                            return;
+                        }
+                    }
+                }
+                foreach (Caravan c in Find.WorldObjects.Caravans.InRandomOrder())
+                {
+                    foreach (Pawn p in c.PawnsListForReading.InRandomOrder())
+                    {
+                        if (p.Faction == Faction.OfPlayerSilentFail)
+                        {
+                            this.DoMentalBreak(p);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        public void DoMentalBreak(Pawn pawn)
+        {
+            if (DefDatabase<MentalBreakDef>.AllDefsListForReading.Where((MentalBreakDef x) => x.Worker.BreakCanOccur(pawn)).TryRandomElementByWeight((MentalBreakDef x) => x.Worker.CommonalityFor(pawn, false), out MentalBreakDef mbd))
+            {
+                mbd.Worker.TryStart(pawn, "MentalStateReason_Hediff".Translate("HVMP_LovecraftMentalBreakReason".Translate()).Resolve(), false);
+            }
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
+        }
+        public string inSignal;
     }
 }

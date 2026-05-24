@@ -10,6 +10,7 @@ using Verse.AI;
 using Verse.AI.Group;
 using Verse.Grammar;
 using Verse.Sound;
+using static UnityEngine.GraphicsBuffer;
 
 namespace HautsPermits_Occult
 {
@@ -509,25 +510,29 @@ namespace HautsPermits_Occult
         }
     }
     /*Mutator hediffs
-     * wells2: To Be Nightmare periodically causes invulnerability, stuns the pawn, and has it teleport around doing nociosphere stuff. It can't die until the responsible hediff is removed
-     * ticksToNextTrigger: when the pawn spawns, and whenever it drops out of invulnerability, it takes a random number of ticks in this range to enter its next invuln period (which is just the hediff being set to max severity)
-     * invulnDurationTicks: each invulnerability period lasts exactly this long
-     * abilities: the pawn gains these abilities while on its period, and casts them on itself every 2s
-     * teleportRadius: while on its period, teleports to a random point in this range. Causes clamorType clamor in clamorRadius
-     * severityPerTrigger: after dropping out of invulnerability, gain this much severity. (should be negative so that it eventually drops to a nonviable severity)*/
+     * wells2: To Be Nightmare periodically causes invulnerability, stuns the pawn, repeatedly clears it of mental states, and has it teleport around doing CycleEffects, which are some pretty nasty juju
+     *   an invulnerability period, or "activity", is max severity. Otherwise, the hediff is at min severity
+     * totalCycles: how many activities this hediff provokes before the hediff removes itself
+     * ticksBetweenCycles: how long between the creation of this hediff and the first activity, or the end of an activity and the start of a subsequent one
+     * blastsPerCycle: how many CycleEffects are done in one activity. Once this many have been done, the activity ends. If there are further cycles required for totalCycles, the ticksBetweenCycles starts up; otherwise, lose this hediff
+     * stunnedDuringCycle: invisibly stuns the pawn for the duration of each activity (technically, a stun with the length of the CycleEffect is instantiated every time a CycleEffect is proc'd)
+     * cycleOptions: possible CycleEffects to use. If useOneOptionPerCycle is true, determine which effect to use each activity-start. Otherwise, if useOneOptionForAllCycles is true, only draw from this pool once and use it for all activities.
+     *   If neither are true, draw every time a new effect needs to be started.
+     * rapidHealDuringCycle: if true, rapidly repeatedly remove worst health condition during any activity*/
     public class HediffCompProperties_NightmareMode : HediffCompProperties
     {
         public HediffCompProperties_NightmareMode()
         {
             this.compClass = typeof(HediffComp_NightmareMode);
         }
-        public float severityPerTrigger;
-        public IntRange ticksToNextTrigger;
-        public int invulnDurationTicks;
-        public List<AbilityDef> abilities;
-        public float clamorRadius;
-        public ClamorDef clamorType;
-        public int teleportRadius;
+        public IntRange totalCycles;
+        public IntRange ticksBetweenCycles;
+        public IntRange blastsPerCycle;
+        public bool stunnedDuringCycle;
+        public List<CycleEffectDef> cycleOptions;
+        public bool useOneOptionPerCycle;
+        public bool useOneOptionForAllCycles;
+        public bool rapidHealDuringCycle;
     }
     public class HediffComp_NightmareMode : HediffComp
     {
@@ -541,8 +546,8 @@ namespace HautsPermits_Occult
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
             base.CompPostPostAdd(dinfo);
-            this.timer = this.Props.ticksToNextTrigger.RandomInRange;
-            this.storedSeverity = this.parent.Severity;
+            this.timer = this.Props.ticksBetweenCycles.RandomInRange;
+            this.cyclesRemaining = this.Props.totalCycles.RandomInRange;
         }
         public bool IsActive
         {
@@ -551,109 +556,253 @@ namespace HautsPermits_Occult
                 return this.parent.Severity == this.parent.def.maxSeverity;
             }
         }
+        public override bool CompShouldRemove => this.cyclesRemaining <= 0;
+        public override string CompLabelInBracketsExtra
+        {
+            get
+            {
+                if (this.IsActive)
+                {
+                    return this.currentCycleEffect.label + " x" + this.blastsLeftInCurrentCycle;
+                } else {
+                    return this.timer.ToStringTicksToPeriod(true, true, false);
+                }
+            }
+        }
         public override void CompPostTickInterval(ref float severityAdjustment, int delta)
         {
             base.CompPostTickInterval(ref severityAdjustment, delta);
-            if (this.timer > 0)
+            this.timer -= delta;
+            if (!this.IsActive)
             {
-                this.timer -= delta;
-            }
-            if (this.timer <= 0)
-            {
-                if (!this.IsActive)
+                if (this.timer <= 0)
                 {
-                    this.storedSeverity = this.parent.Severity;
                     this.parent.Severity = this.parent.def.maxSeverity;
-                    this.timer = this.Props.invulnDurationTicks;
-                    if (this.Pawn.abilities != null && this.Props.abilities != null)
+                    if (this.Props.useOneOptionForAllCycles && this.currentCycleEffect == null)
                     {
-                        foreach (AbilityDef ad in this.Props.abilities)
-                        {
-                            this.Pawn.abilities.GainAbility(ad);
-                        }
+                        this.currentCycleEffect = this.Props.cycleOptions.RandomElement();
+                    } else {
+                        this.currentCycleEffect = this.Props.cycleOptions.RandomElement();
                     }
-                } else {
-                    this.parent.Severity = this.storedSeverity + this.Props.severityPerTrigger;
-                    this.timer = this.Props.ticksToNextTrigger.RandomInRange;
-                    if (this.Pawn.abilities != null && this.Props.abilities != null)
+                    MoteMaker.ThrowText(this.Pawn.DrawPos, this.Pawn.Map, this.currentCycleEffect.LabelCap, -1f);
+                    this.InitializeCycleEffect();
+                    this.blastsLeftInCurrentCycle = this.Props.blastsPerCycle.RandomInRange;
+                }
+            } else {
+                if (this.currentCycleEffect == null)
+                {
+                    this.currentCycleEffect = this.Props.cycleOptions.RandomElement();
+                }
+                if (this.Props.rapidHealDuringCycle && this.Pawn.IsHashIntervalTick(100))
+                {
+                    Hediff h = this.Pawn.health.hediffSet.hediffs.FirstOrDefault((Hediff h2) => (h2.def.isBad && h2.def.everCurableByItem) || h2 is Hediff_MissingPart);
+                    if (h != null)
                     {
-                        foreach (AbilityDef ad in this.Props.abilities)
-                        {
-                            this.Pawn.abilities.RemoveAbility(ad);
-                        }
+                        HealthUtility.Cure(h);
                     }
+                }
+                if (this.timer <= 0)
+                {
+                    this.currentCycleEffect.UnleashEffect(this.Pawn);
+                    if (!this.Props.useOneOptionPerCycle)
+                    {
+                        this.currentCycleEffect = this.Props.cycleOptions.RandomElement();
+                    }
+                    this.timer = this.currentCycleEffect.delayTicks;
+                    this.InitializeCycleEffect();
+                    this.Teleport(this.Pawn,this.Pawn.Map);
+                    this.blastsLeftInCurrentCycle--;
+                }
+                if (this.blastsLeftInCurrentCycle <= 0)
+                {
+                    this.cyclesRemaining--;
+                    this.parent.Severity = this.parent.def.minSeverity;
+                    this.timer = this.Props.ticksBetweenCycles.RandomInRange;
                 }
             }
-            if (this.IsActive && this.Pawn.IsHashIntervalTick(120))
+        }
+        public void InitializeCycleEffect()
+        {
+            this.timer = this.currentCycleEffect.delayTicks;
+            if (this.Props.stunnedDuringCycle)
             {
-                Hediff h = this.Pawn.health.hediffSet.hediffs.FirstOrDefault((Hediff h2) => (h2.def.isBad && h2.def.everCurableByItem) || h2 is Hediff_MissingPart);
-                if (h != null)
+                this.Pawn.stances.stunner.StunFor(this.currentCycleEffect.delayTicks, this.Pawn,false,false,true);
+            }
+        }
+        public void Teleport(Pawn pawn, Map map)
+        {
+            if (CellFinder.TryFindRandomCellNear(pawn.Position, map, this.currentCycleEffect.teleportRadius, (IntVec3 c) => c.Walkable(map) && !c.Fogged(map) && c.GetFirstPawn(map) == null && c.GetRoom(map) == pawn.Position.GetRoom(map), out IntVec3 intVec, -1))
+            {
+                if (intVec.IsValid)
                 {
-                    HealthUtility.Cure(h);
-                }
-                if (this.Pawn.Spawned)
-                {
-                    Pawn pawn = this.Pawn;
-                    Map map = pawn.Map;
-                    if (CellFinder.TryFindRandomCellNear(pawn.Position, map, this.Props.teleportRadius, (IntVec3 c) => c.Walkable(map) && !c.Fogged(map) && c.GetFirstPawn(map) == null && c.GetRoom(map) == pawn.Position.GetRoom(map), out IntVec3 intVec, -1))
+                    FleckCreationData dataAttachedOverlay = FleckMaker.GetDataAttachedOverlay(pawn, FleckDefOf.PsycastSkipFlashEntry, new Vector3(-0.5f, 0f, -0.5f), 1f, -1f);
+                    dataAttachedOverlay.link.detachAfterTicks = 5;
+                    pawn.Map.flecks.CreateFleck(dataAttachedOverlay);
+                    SoundDefOf.Psycast_Skip_Exit.PlayOneShot(new TargetInfo(pawn.Position, map, false));
+                    pawn.Position = intVec;
+                    if ((pawn.Faction == Faction.OfPlayer || pawn.IsPlayerControlled) && pawn.Position.Fogged(map))
                     {
-                        if (intVec.IsValid)
-                        {
-                            SoundDefOf.Psycast_Skip_Exit.PlayOneShot(new TargetInfo(pawn.Position, map, false));
-                            pawn.Position = intVec;
-                            if ((pawn.Faction == Faction.OfPlayer || pawn.IsPlayerControlled) && pawn.Position.Fogged(map))
-                            {
-                                FloodFillerFog.FloodUnfog(pawn.Position, map);
-                            }
-                            pawn.Notify_Teleported(true, true);
-                            CompAbilityEffect_Teleport.SendSkipUsedSignal(pawn.Position, pawn);
-                            GenClamor.DoClamor(pawn, intVec, (float)this.Props.clamorRadius, this.Props.clamorType);
-                            FleckCreationData dataStatic = FleckMaker.GetDataStatic(pawn.Position.ToVector3Shifted(), map, FleckDefOf.PsycastSkipInnerExit, 1f);
-                            dataStatic.rotationRate = (float)Rand.Range(-30, 30);
-                            dataStatic.rotation = (float)(90 * Rand.RangeInclusive(0, 3));
-                            map.flecks.CreateFleck(dataStatic);
-                            FleckCreationData dataStatic2 = FleckMaker.GetDataStatic(pawn.Position.ToVector3Shifted(), map, FleckDefOf.PsycastSkipOuterRingExit, 1f);
-                            dataStatic2.rotationRate = (float)Rand.Range(-30, 30);
-                            dataStatic2.rotation = (float)(90 * Rand.RangeInclusive(0, 3));
-                            map.flecks.CreateFleck(dataStatic2);
-                            SoundDefOf.Psycast_Skip_Entry.PlayOneShot(new TargetInfo(intVec, map, false));
-                            if (pawn.stances != null && pawn.stances.stunner != null)
-                            {
-                                pawn.stances.stunner.StopStun();
-                            }
-                        }
-                        if (!this.Props.abilities.NullOrEmpty() && this.Pawn.abilities != null)
-                        {
-                            AbilityDef ad = this.Props.abilities.RandomElement();
-                            Ability ab = this.Pawn.abilities.GetAbility(ad);
-                            if (ab != null)
-                            {
-                                ab.ResetCooldown();
-                                LocalTargetInfo target = this.Pawn;
-                                if (!ab.CanApplyOn(target))
-                                {
-                                    target = this.Pawn.Position;
-                                }
-                                this.Pawn.jobs.StartJob(ab.GetJob(target, null), JobCondition.InterruptForced);
-                            }
-                        }
-                        MentalState ms = this.Pawn.MentalState;
-                        if (ms != null)
-                        {
-                            ms.RecoverFromState();
-                        }
+                        FloodFillerFog.FloodUnfog(pawn.Position, map);
                     }
+                    pawn.Notify_Teleported(true, true);
+                    CompAbilityEffect_Teleport.SendSkipUsedSignal(pawn.Position, pawn);
+                    GenClamor.DoClamor(pawn, intVec, (float)this.currentCycleEffect.clamorRadius, this.currentCycleEffect.clamorType);
+                    FleckCreationData dataStatic = FleckMaker.GetDataStatic(pawn.Position.ToVector3Shifted(), map, FleckDefOf.PsycastSkipInnerExit, 1f);
+                    dataStatic.rotationRate = (float)Rand.Range(-30, 30);
+                    dataStatic.rotation = (float)(90 * Rand.RangeInclusive(0, 3));
+                    map.flecks.CreateFleck(dataStatic);
+                    FleckCreationData dataStatic2 = FleckMaker.GetDataStatic(pawn.Position.ToVector3Shifted(), map, FleckDefOf.PsycastSkipOuterRingExit, 1f);
+                    dataStatic2.rotationRate = (float)Rand.Range(-30, 30);
+                    dataStatic2.rotation = (float)(90 * Rand.RangeInclusive(0, 3));
+                    map.flecks.CreateFleck(dataStatic2);
+                    SoundDefOf.Psycast_Skip_Entry.PlayOneShot(new TargetInfo(intVec, map, false));
                 }
             }
         }
         public override void CompExposeData()
         {
             base.CompExposeData();
+            Scribe_Values.Look<int>(ref this.cyclesRemaining, "cyclesRemaining", 1, false);
             Scribe_Values.Look<int>(ref this.timer, "timer", 600, false);
-            Scribe_Values.Look<float>(ref this.storedSeverity, "storedSeverity", 3f, false);
+            Scribe_Values.Look<int>(ref this.blastsLeftInCurrentCycle, "blastsLeftInCurrentCycle", 1, false);
+            Scribe_Defs.Look<CycleEffectDef>(ref this.currentCycleEffect, "currentCycleEffect");
         }
+        public int cyclesRemaining;
         public int timer;
-        public float storedSeverity;
+        public int blastsLeftInCurrentCycle;
+        public CycleEffectDef currentCycleEffect;
+    }
+    /*currently CycleEffects can either be explosions and/or radial AoE hediff applications, both of which are centered on self.
+     * delayTicks: once started, it takes this many ticks until the effect is performed, after which it is considered to end. If stunnedDuringCycle was true, pawn is stunned this entire time
+     * teleportRadius: once the effect is performed, teleport to a pathable space within this many cells
+     * clamorRadius, clamorType: do a clamor when the effect happens, and alos upon teleporting to the new spot
+     * radius: ewisott
+     * damageType: of explosion. must be specified for explosion to occur
+     * damageAmount, armorPen, explosionFireChance: explosion properties for same- or similarly-named arguments in GenExplosion.DoExplosion
+     * hediff: added to all pawns other than self w/in radius. 
+     * hediffSeverity: if upper end is positive, set hediff severity to this amount
+     * hediffDurationSecondsOverride: if upper end is positive, set HediffComp_Disappears remaining time to this amount
+     * hediffResistStat: if specified severity multiplied by [1 - however much of this stat a hediff recipient has]
+     * hediffSusceptibilityStat: if specified, chance for each potential hediff recipient to not receive the hediff = [1 - however much of this stat they have]
+     * replaceExistingHediff, toBrain: go read CompAbilityEffect_GiveHediff ionno why I gotta explain all this. spretty vanilla
+     * sound, effecter, fleck: play these at the location of the effect's instantiation, right before teleport
+     * graphicScale: affects size of effecter and fleck
+     * filth: gotta be IsFilth. added to location of the effect's instantiation, right before teleport
+     * pollute: if Biotech is active, pollute all terrain w/in pre-teleport radius*/
+    public class CycleEffectDef : Def {
+        public void UnleashEffect(Pawn pawn)
+        {
+            if (!pawn.Spawned)
+            {
+                return;
+            }
+            MentalState ms = pawn.MentalState;
+            if (ms != null)
+            {
+                ms.RecoverFromState();
+            }
+            this.DoClamor(pawn);
+            if (this.damageType != null)
+            {
+                GenExplosion.DoExplosion(pawn.Position,pawn.Map,this.radius,this.damageType,pawn,this.damageAmount,this.armorPen,this.sound??this.damageType.soundExplosion,chanceToStartFire:this.explosionFireChance,ignoredThings:new List<Thing>() { pawn });
+            }
+            if (this.hediff != null)
+            {
+                foreach (Pawn p in GenRadial.RadialDistinctThingsAround(pawn.Position, pawn.Map, this.radius, true).OfType<Pawn>().Distinct<Pawn>())
+                {
+                    Log.Message(p.Label);
+                    if (p != pawn && (this.hediffSusceptibilityStat == null || !Rand.Chance(1f - p.GetStatValue(this.hediffSusceptibilityStat))))
+                    {
+                        Hediff extantHediff = p.health.hediffSet.GetFirstHediffOfDef(this.hediff, false);
+                        if (this.replaceExistingHediff)
+                        {
+                            p.health.RemoveHediff(extantHediff);
+                        }
+                        Hediff h = HediffMaker.MakeHediff(this.hediff, p, this.toBrain ? p.health.hediffSet.GetBrain() : null);
+                        if (this.hediffSeverity.max > 0)
+                        {
+                            h.Severity = this.hediffSeverity.RandomInRange;
+                            if (this.hediffResistStat != null)
+                            {
+                                h.Severity *= (1f-p.GetStatValue(this.hediffResistStat));
+                            }
+                        }
+                        if (this.hediffDurationSecondsOverride.max > 0)
+                        {
+                            HediffComp_Disappears hcd = h.TryGetComp<HediffComp_Disappears>();
+                            if (hcd != null)
+                            {
+                                hcd.ticksToDisappear = this.hediffDurationSecondsOverride.RandomInRange*60;
+                                if (this.hediffResistStat != null)
+                                {
+                                    hcd.ticksToDisappear = (int)(hcd.ticksToDisappear * p.GetStatValue(this.hediffResistStat));
+                                }
+                            }
+                        }
+                        p.health.AddHediff(h);
+                    }
+                }
+            }
+            if (this.sound != null)
+            {
+                this.sound.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map, false));
+            }
+            if (this.effecter != null)
+            {
+                this.effecter.Spawn(pawn.Position, pawn.Map, this.graphicScale);
+            }
+            if (this.fleck != null)
+            {
+                FleckMaker.Static(pawn.Position, pawn.Map, this.fleck, this.graphicScale);
+            }
+            if (this.filth != null && this.filth.IsFilth)
+            {
+                FilthMaker.TryMakeFilth(pawn.Position, pawn.Map, this.filth, 1, FilthSourceFlags.None, true);
+            }
+            if (ModsConfig.BiotechActive && this.pollute)
+            {
+                int num = GenRadial.NumCellsInRadius(this.radius);
+                for (int i = 0; i < num; i++)
+                {
+                    IntVec3 intVec = pawn.Position + GenRadial.RadialPattern[i];
+                    if (!intVec.IsPolluted(pawn.Map) && intVec.CanPollute(pawn.Map))
+                    {
+                        intVec.Pollute(pawn.Map, false);
+                        pawn.Map.effecterMaintainer.AddEffecterToMaintain(EffecterDefOf.CellPollution.Spawn(intVec, pawn.Map, Vector3.zero, 1f), intVec, 45);
+                    }
+                }
+            }
+            this.DoClamor(pawn);
+        }
+        public void DoClamor(Pawn pawn)
+        {
+            if (this.clamorType != null)
+            {
+                GenClamor.DoClamor(pawn, pawn.Position, (float)this.clamorRadius, this.clamorType);
+            }
+        }
+        public int delayTicks;
+        public int teleportRadius;
+        public float clamorRadius;
+        public ClamorDef clamorType;
+        public float radius;
+        public DamageDef damageType;
+        public int damageAmount = -1;
+        public float armorPen = -1f;
+        public float explosionFireChance;
+        public HediffDef hediff;
+        public FloatRange hediffSeverity = new FloatRange(-1);
+        public IntRange hediffDurationSecondsOverride = new IntRange(-1);
+        public StatDef hediffResistStat;
+        public StatDef hediffSusceptibilityStat;
+        public bool replaceExistingHediff;
+        public bool toBrain;
+        public SoundDef sound;
+        public EffecterDef effecter;
+        public FleckDef fleck;
+        public float graphicScale;
+        public ThingDef filth;
+        public bool pollute;
     }
     /*wells3: Wetware Frankenstein grants three random entity-inspired buffs.
      * Chimera: near-identical to CompChimera's rage speed mechanics

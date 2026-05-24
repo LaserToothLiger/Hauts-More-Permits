@@ -41,6 +41,10 @@ namespace HautsPermits
         public bool cs1, cs2, cs3, ec1, ec2, ec3, fw1, fw2, fw3, hd1, hd2, hd3, ra1, ra2, ra3;
         public bool barker1, barker2, barker3, lc1, lc2, lc3, natali1, natali2, natali3, romero1, romero2, romero3, wells1, wells2, wells3;
         public bool fortX, intervX, mmX, researchX, transportX, bellumX, caelumX, machinaX, mundiX, voxX, atlasX, icarusX, laelapsX, odysseyX, theseusX, ethnogX, remnantX, replicaX, satX, shrineX, csX, ecX, fwX, hdX, raX, barkerX, lcX, nataliX, romeroX, wellsX;
+        public float minWunderQuestInterval = 30f;
+        public float maxWunderQuestInterval = 60f;
+        public float wunderQuestDifficulty = 1f;
+        public int wunderOptionCount = 3;
         public override void ExposeData()
         {
             Scribe_Values.Look(ref permitsScaleBySeniority, "permitsScaleBySeniority", false);
@@ -177,6 +181,14 @@ namespace HautsPermits
             Scribe_Values.Look(ref wells2, "wells2", false);
             Scribe_Values.Look(ref wells3, "wells3", false);
             Scribe_Values.Look(ref wellsX, "wellsX", false);
+            Scribe_Values.Look(ref minWunderQuestInterval, "minWunderQuestInterval", 30f);
+            if (maxWunderQuestInterval < minWunderQuestInterval)
+            {
+                maxWunderQuestInterval = minWunderQuestInterval;
+            }
+            Scribe_Values.Look(ref maxWunderQuestInterval, "maxWunderQuestInterval", 60f);
+            Scribe_Values.Look(ref wunderQuestDifficulty, "wunderQuestDifficulty", 1f);
+            Scribe_Values.Look(ref wunderOptionCount, "wunderOptionCount", 3);
             base.ExposeData();
         }
     }
@@ -214,6 +226,15 @@ namespace HautsPermits
                     this.WriteSettings();
                 }, this.PageIndex == 1)
             };
+            if (ModsConfig.OdysseyActive)
+            {
+                list.Add(
+                new TabRecord("HVMP_Label_WunderchipSettings".Translate(), delegate
+                {
+                    this.PageIndex = 2;
+                    this.WriteSettings();
+                }, this.PageIndex == 2));
+            }
             TabDrawer.DrawTabs<TabRecord>(rect2, list, 200f);
             switch (this.PageIndex)
             {
@@ -222,6 +243,14 @@ namespace HautsPermits
                     return;
                 case 1:
                     this.MutatorSettings(rect3.ContractedBy(15f));
+                    return;
+                case 2:
+                    if (ModsConfig.OdysseyActive)
+                    {
+                        this.WunderchipSettings(rect3.ContractedBy(15f));
+                    } else {
+                        this.MainSettings(rect3.ContractedBy(15f));
+                    }
                     return;
                 default:
                     base.DoSettingsWindowContents(inRect);
@@ -867,6 +896,90 @@ namespace HautsPermits
             Widgets.EndScrollView();
             base.DoSettingsWindowContents(inRect);
         }
+        private void WunderchipSettings(Rect inRect)
+        {
+            Rect rect = new Rect(inRect.xMin, inRect.yMin, inRect.width, inRect.height);
+            Rect rect2 = new Rect(inRect.xMin, inRect.yMin, inRect.width * 0.96f, 4500f);
+            float x = rect.xMin, y = rect.yMin, halfWidth = rect2.width * 0.5f;
+            displayMinW = ((int)settings.minWunderQuestInterval).ToString();
+            displayMaxW = ((int)settings.maxWunderQuestInterval).ToString();
+            float orig = settings.minWunderQuestInterval;
+            Rect questDaysMinRect = new Rect(x + 10, y, halfWidth - 15, 32);
+            settings.minWunderQuestInterval = Widgets.HorizontalSlider(questDaysMinRect, settings.minWunderQuestInterval, 5f, 180f, true, "HVMP_SettingMinDays_Wunder".Translate(), "5", "180", 1f);
+            TooltipHandler.TipRegion(questDaysMinRect.LeftPart(1f), "HVMP_TooltipMinDays_Wunder".Translate());
+            if (orig != settings.minWunderQuestInterval)
+            {
+                displayMinW = ((int)settings.minWunderQuestInterval).ToString();
+            }
+            y += 32;
+            string origString = displayMinW;
+            displayMinW = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayMinW);
+            if (!displayMinW.Equals(origString))
+            {
+                this.ParseInput(displayMinW, settings.minWunderQuestInterval, out settings.minWunderQuestInterval, 5f, 180f);
+            }
+            if (settings.minWunderQuestInterval > settings.maxWunderQuestInterval)
+            {
+                settings.maxWunderQuestInterval = settings.minWunderQuestInterval;
+                displayMaxW = ((int)settings.maxWunderQuestInterval).ToString();
+            }
+            y -= 32;
+            orig = settings.maxWunderQuestInterval;
+            Rect questDaysMaxRect = new Rect(x + 5 + halfWidth, y, halfWidth - 15, 32);
+            settings.maxWunderQuestInterval= Widgets.HorizontalSlider(questDaysMaxRect, settings.maxWunderQuestInterval, 5f, 180f, true, "HVMP_SettingMaxDays_Wunder".Translate(), "5", "180", 1f);
+            TooltipHandler.TipRegion(questDaysMaxRect.LeftPart(1f), "HVMP_TooltipMaxDays_Wunder".Translate());
+            if (orig != settings.maxWunderQuestInterval)
+            {
+                displayMaxW = ((int)settings.maxWunderQuestInterval).ToString();
+            }
+            y += 32;
+            origString = displayMaxW;
+            displayMaxW = Widgets.TextField(new Rect(x + 5 + halfWidth, y, 50, 32), displayMaxW);
+            if (!displayMaxW.Equals(origString))
+            {
+                this.ParseInput(displayMaxW, settings.maxWunderQuestInterval, out settings.maxWunderQuestInterval, 5f, 180f);
+            }
+            if (settings.maxWunderQuestInterval < settings.minWunderQuestInterval)
+            {
+                settings.minWunderQuestInterval = settings.maxWunderQuestInterval;
+                displayMinW = ((int)settings.minWunderQuestInterval).ToString();
+            }
+            //set how difficult you want wunderquests to be
+            y += 50;
+            displayDifficultyW = (settings.wunderQuestDifficulty).ToStringByStyle(ToStringStyle.FloatOne);
+            float origR = settings.wunderQuestDifficulty;
+            Rect diffFactorRect = new Rect(x + 10, y, halfWidth - 15, 32);
+            settings.wunderQuestDifficulty = Widgets.HorizontalSlider(diffFactorRect, settings.wunderQuestDifficulty, 0.5f, 3f, true, "HVMP_SettingWunderQuestDifficulty".Translate(), "low", "high", 0.1f);
+            TooltipHandler.TipRegion(diffFactorRect.LeftPart(1f), "HVMP_TooltipWunderQuestDifficulty".Translate());
+            if (origR != settings.wunderQuestDifficulty)
+            {
+                displayDifficultyW = settings.wunderQuestDifficulty.ToString() + "x";
+            }
+            y += 32;
+            string origStringR = displayDifficultyW;
+            displayDifficultyW = Widgets.TextField(new Rect(x + 10, y, 50, 32), displayDifficultyW);
+            if (!displayDifficultyW.Equals(origStringR))
+            {
+                this.ParseInput(displayDifficultyW, settings.wunderQuestDifficulty, out settings.wunderQuestDifficulty, 0.5f, 3f);
+            }
+            y -= 32;
+            displayOptionCountW = ((int)settings.wunderOptionCount).ToString();
+            orig = settings.wunderOptionCount;
+            Rect transformOptionRect = new Rect(x + 5 + halfWidth, y, halfWidth - 15, 32);
+            settings.wunderOptionCount = (int)Widgets.HorizontalSlider(transformOptionRect, settings.wunderOptionCount, 1f, 10f, true, "HVMP_SettingWunderTransformOptions".Translate(), "1", "10", 1f);
+            TooltipHandler.TipRegion(transformOptionRect.LeftPart(1f), "HVMP_TooltipWunderTransformOptions".Translate());
+            if (orig != settings.wunderOptionCount)
+            {
+                displayOptionCountW = ((int)settings.wunderOptionCount).ToString();
+            }
+            y += 32;
+            origString = displayOptionCountW;
+            displayOptionCountW = Widgets.TextField(new Rect(x + 5 + halfWidth, y, 50, 32), displayOptionCountW);
+            if (!displayOptionCountW.Equals(origString))
+            {
+                this.ParseInput(displayOptionCountW, settings.wunderOptionCount, out settings.wunderOptionCount, 1, 10);
+            }
+        }
         private void ExpectationLevelSelector(Rect rect)
         {
             if (Widgets.ButtonText(rect, "HVMP_TooltipMinExpectationLevel".Translate(bb1), true, true, true, null))
@@ -999,7 +1112,7 @@ namespace HautsPermits
             return "Hauts' Enterprise: More Permits";
         }
         public static HVMP_Settings settings;
-        public string displayMin, displayMax, displayQuestRewardFactor, refusalLoss, failureLoss, bb1, bb2, displayBPI, displayBPLimit, displayBPD;
+        public string displayMin, displayMax, displayQuestRewardFactor, refusalLoss, failureLoss, bb1, bb2, displayBPI, displayBPLimit, displayBPD, displayMinW, displayMaxW, displayDifficultyW, displayOptionCountW;
         public Vector2 scrollPosition = Vector2.zero;
         private int PageIndex;
     }

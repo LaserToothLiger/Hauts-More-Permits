@@ -175,7 +175,7 @@ namespace HautsPermits_Occult
         public int noctolCooldown;
         public PawnKindDef noctolDef;
         public EffecterDef effecter;
-        public QuestScriptDef darkness;
+        public IncidentDef darkness;
     }
     public class HediffComp_Umbranarch : HediffComp
     {
@@ -209,13 +209,23 @@ namespace HautsPermits_Occult
                     GameCondition gcud = this.Pawn.Map.gameConditionManager.GetActiveCondition(GameConditionDefOf.UnnaturalDarkness);
                     if (gcud == null)
                     {
-                        Slate slate = new Slate();
+                        /*Slate slate = new Slate();
                         slate.Set<TaggedString>("discoveryMethod", "QuestDiscoveredFromDebug".Translate(), false);
                         slate.Set<float>("points", StorytellerUtility.DefaultThreatPointsNow(this.Pawn.Map), false);
                         if (this.Props.darkness.CanRun(slate, this.Pawn.Map))
                         {
                             QuestUtility.GenerateQuestAndMakeAvailable(this.Props.darkness, slate);
                             EffecterDefOf.MonolithLevelChanged.Spawn().Trigger(new TargetInfo(this.Pawn.Position, this.Pawn.Map, false), new TargetInfo(this.Pawn.Position, this.Pawn.Map, false), -1);
+                        }*/
+                        IncidentParms incidentParms = new IncidentParms
+                        {
+                            target = this.Pawn.Map,
+                            forced = true,
+                            points = StorytellerUtility.DefaultThreatPointsNow(this.Pawn.Map),
+                        };
+                        if (this.Props.darkness.Worker.CanFireNow(incidentParms))
+                        {
+                            this.Props.darkness.Worker.TryExecute(incidentParms);
                         }
                     }
                 }

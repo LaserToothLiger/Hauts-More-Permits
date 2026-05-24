@@ -417,17 +417,6 @@
 						<range>23</range>
 					</value>
 				</li>
-				<li Class="PatchOperationFindMod">
-					<mods>
-						<li>Odyssey</li>
-					</mods>
-					<match Class="PatchOperationReplace">
-						<xpath>Defs/AbilityDef[defName="HVMP_SelfSkipnetAegis"]/verbProperties/range </xpath>
-						<value>
-							<range>28</range>
-						</value>
-					</match>
-				</li>
 				
 				
 				
@@ -624,6 +613,31 @@
 								<xpath>/Defs/HediffDef[defName="HVMP_UsherStats"]/stages/li/statOffsets/ArmorRating_Sharp</xpath>
 								<value>
 									<ArmorRating_Sharp>7</ArmorRating_Sharp>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+				
+				
+				
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Odyssey</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<!--damage and armor pen of orbital targeting game condition-->
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/ThingDef[defName="HVMP_OT_Bomb_1rad_1shot" or defName="HVMP_OT_Bomb_3rad_1shot" or defName="HVMP_OT_Bomb_3rad_5shot"]/comps/li[@Class="HVMP_Odyssey.CompProperties_CustomizableBombardment"]/explosionArmorPen</xpath>
+								<value>
+									<explosionAmount>125</explosionAmount>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/ThingDef[defName="HVMP_OT_Bomb_1rad_1shot" or defName="HVMP_OT_Bomb_3rad_1shot" or defName="HVMP_OT_Bomb_3rad_5shot"]/comps/li[@Class="HVMP_Odyssey.CompProperties_CustomizableBombardment"]/explosionAmount</xpath>
+								<value>
+									<explosionAmount>75</explosionAmount>
 								</value>
 							</li>
 						</operations>

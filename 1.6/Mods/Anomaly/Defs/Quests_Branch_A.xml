@@ -292,8 +292,8 @@
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription->The Occult Branch has detected alarming fluctuations in the psychic field which, if left unchecked, could ravage the material universe. It will take them a long time to calm the fluctuations down, but they will be able to do so much faster if they could foist a discharge of the psychic energy onto a population of living beings.\n\nIf you are willing, they will discharge that energy to you, causing an unpredictable psychic effect. This discharge has been known to take the form of psychic drones, weather disturbances, or even stranger events[mutator_NKNS_info]\n[mutatorSuffix]</li>
-		<li>mutatorSuffix->[mutator_EFT_info][mutator_TOTU_info]</li>
+        <li>questDescription->The Occult Branch has detected alarming fluctuations in the psychic field which, if left unchecked, could ravage the material universe. It will take them a long time to calm the fluctuations down, but they will be able to do so much faster if they could foist a discharge of the psychic energy onto a population of living beings.\n\nIf you are willing, they will discharge that energy to you, causing an unpredictable psychic effect. This discharge has been known to take the form of psychic drones, weather disturbances, or even stranger events, although there is also a small chance for nothing bad to happen whatsoever.\n[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_EFT_info][mutator_SOTG_info][mutator_TOTU_info]</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="HautsPermits_Occult.QuestNode_OccultIntermediary">
@@ -324,6 +324,14 @@
 					<possibleOkIncidents>
 					  <li>PsychicSoothe</li>
 					  <li>HVMP_LovecraftAlignment</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_AnimaBloom</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_AtmosphericAphrodisiac</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_AtmosphericExcitant</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_AtmosphericHallucinogen</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_DissipationEMP</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_MassInspiration</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_PsychicCalm</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_PsychicEcho</li>
 					  <li MayRequire="VanillaExpanded.VEE">VEE_PsychicBloom</li>
 					</possibleOkIncidents>
 					<possibleBadIncidents>
@@ -336,6 +344,13 @@
 					  <li>HVMP_LovecraftHypnoticLight</li>
 					  <li>HVMP_LovecraftManhunter</li>
 					  <li>HVMP_LovecraftSuppression</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_ArchotechPsychosis</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_DimensionalJitter</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_FeralNeurotoxin</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_MechaniteCloud</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_PsychicAggression</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_PsychicDeadzone</li>
+					  <li MayRequire="Leo.EventsExpanded">LE_SubatomicTurbulence</li>
 					  <li MayRequire="vanillaracesexpanded.archon">VREA_PsychicStorm</li>
 					  <li MayRequire="VanillaExpanded.VEE">VEE_PsychicRain</li>
 					</possibleBadIncidents>
@@ -347,8 +362,7 @@
 					  <li>HVMP_EFT_SuperGhoul</li>
 					</EFT_incidents>
 					<EFT_description>\nThe fluctuations resonate with a subdimension of the Void in which fearsome and violent entities have been long imprisoned. Discharging the psychic energy might let some of these creatures loose.</EFT_description>
-					<nonNKNS_description>, although there is also a small chance for nothing bad to happen whatsoever.</nonNKNS_description>
-					<NKNS_description>; the fluctuations are tinged with purposeful malice. The discharge is sure to be destructive in nature.</NKNS_description>
+					<SOTG_description>The psychic energy has a particular resonance with one of your colonists. If you choose to take the brunt of the discharge, one of your colonists will undergo a sudden mental break.</SOTG_description>
 					<TOTU_durationTicks>30000~300000</TOTU_durationTicks><!--0.5 to 5 days-->
 					<TOTU_conditions>
 					  <li>HVMP_TOTU_BloodBlight</li>

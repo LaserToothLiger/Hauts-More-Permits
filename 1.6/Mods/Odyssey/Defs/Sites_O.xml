@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  
+  <SitePartDef ParentName="GravcoreLocationBase" Name="HVMP_WunderchipLocationBase" Abstract="True">
+    <mainPartAllThreatsLabel>Contains: Wunderchip</mainPartAllThreatsLabel>
+    <siteTexture>World/WorldObjects/Sites/GravcoreLocation</siteTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/HVMP_WunderchipSite</expandingIconTexture>
+  </SitePartDef>
+  
+  <!--korhal-->
+  <SitePartDef ParentName="HVMP_WunderchipLocationBase">
+    <defName>HVMP_KorhalSite</defName>
+    <label>no man's land</label>
+    <description>An orbital targeting beacon is hidden within nearby ruins. Nearby creatures will be targeted by orbital weaponry, unless they are indoors and under a roof. Locate and disable the beacon to obtain a wunderchip and stop the weapon targeting.</description>
+    <tags>
+      <li>HVMP_KorhalSite</li>
+    </tags>
+  </SitePartDef>
+  <GenStepDef>
+    <defName>HVMP_KorhalSite</defName>
+    <linkWithSite>HVMP_KorhalSite</linkWithSite>
+    <order>740</order>
+    <genStep Class="HVMP_Odyssey.GenStep_KorhalSite" />
+    <preventsGenSteps> <!-- incompatible with these, they would just conflict -->
+      <li>AncientRuins_Scarlands</li>
+      <li>FrozenRuins</li>
+    </preventsGenSteps>
+  </GenStepDef>
+  <StructureLayoutDef>
+    <defName>HVMP_AncientRuins_KorhalSite</defName>
+    <workerClass>LayoutWorker_AncientRuins_Reactor</workerClass>
+    <canHaveMultipleLayoutsInRoom>true</canHaveMultipleLayoutsInRoom>
+    <clearRoomsEntirely>true</clearRoomsEntirely>
+    <minRoomWidth>8</minRoomWidth>
+    <minRoomHeight>8</minRoomHeight>
+    <!-- Structure -->
+    <importantRoomDef>HVMP_AncientRuinsOrbitalTargetingBeacon</importantRoomDef>
+    <corridorDef>AncientRuinsReactorCorridor</corridorDef>
+    <corridorShapes>Cross, T</corridorShapes>
+    <exteriorDoorDef>AncientBlastDoor</exteriorDoorDef>
+    <wallLampDef>AncientEmergencyLight_Red</wallLampDef>
+    <wallDef>AncientFortifiedWall</wallDef>
+    <doorStuffDef>Steel</doorStuffDef>
+    <roomDefs>
+      <!-- Special -->
+      <AncientRuinsReactorGravliteStoreRoom>
+        <countRange>1~1</countRange>
+      </AncientRuinsReactorGravliteStoreRoom>
+      <AncientOrbitalUplink>
+        <countRange>1~1</countRange>
+      </AncientOrbitalUplink>
+      <!-- Decorative -->
+      <AncientRuinsReactorToxicWaterRoom>0.15</AncientRuinsReactorToxicWaterRoom>
+      <AncientRuinsShelfRoom>1</AncientRuinsShelfRoom>
+      <AncientRuinsLockerRoom>1</AncientRuinsLockerRoom>
+      <!-- Smaller threats -->
+      <AncientRuinsChemfuelWorkshop>1</AncientRuinsChemfuelWorkshop>
+      <AncientComputerRoom>1</AncientComputerRoom>
+      <AncientRuinsSecureRoom>1</AncientRuinsSecureRoom>
+    </roomDefs>
+    <junkScaterrers>
+      <Filth_Trash>
+        <groupsPerHundredCells>0~3</groupsPerHundredCells>
+        <itemsPerGroup>2~4</itemsPerGroup>
+        <groupDistRange>3~5</groupDistRange>
+      </Filth_Trash>
+      <Filth_BlastMark>
+        <groupsPerHundredCells>-2~1</groupsPerHundredCells> <!-- ~66% to not appear -->
+        <itemsPerGroup>1~1</itemsPerGroup>
+      </Filth_BlastMark>
+      <Filth_MachineBits>
+        <groupsPerHundredCells>-1~1</groupsPerHundredCells> <!-- ~50% to not appear -->
+        <itemsPerGroup>2~4</itemsPerGroup>
+        <groupDistRange>2~4</groupDistRange>
+      </Filth_MachineBits>
+      <RubblePile>
+        <groupsPerHundredCells>1~3</groupsPerHundredCells>
+        <itemsPerGroup>2~4</itemsPerGroup>
+        <groupDistRange>3~5</groupDistRange>
+        <minGroups>1</minGroups>
+      </RubblePile>
+      <Filth_RubbleRock>
+        <groupsPerHundredCells>2~4</groupsPerHundredCells>
+        <itemsPerGroup>3~8</itemsPerGroup>
+        <groupDistRange>3~5</groupDistRange>
+        <minGroups>1</minGroups>
+      </Filth_RubbleRock>
+    </junkScaterrers>
+  </StructureLayoutDef>
+  <LayoutRoomDef>
+    <defName>HVMP_AncientRuinsOrbitalTargetingBeacon</defName>
+    <roomContentsWorkerType>HVMP_Odyssey.RoomContents_OrbitalTargetingBeacon</roomContentsWorkerType>
+    <dontPlaceRandomly>true</dontPlaceRandomly>
+    <isValidPlayerSpawnRoom>false</isValidPlayerSpawnRoom>
+    <minSingleRectWidth>7</minSingleRectWidth>
+    <minSingleRectHeight>7</minSingleRectHeight>
+    <floorTypes>
+      <li>PavedTile</li>
+    </floorTypes>
+    <edgeTerrain>MetalTile</edgeTerrain>
+    <scatter>
+      <AncientLargeCrate>
+        <groupsPerHundredCells>2~4</groupsPerHundredCells>
+        <itemsPerGroup>3~6</itemsPerGroup>
+        <groupDistRange>2~5</groupDistRange>
+      </AncientLargeCrate>
+    </scatter>
+    <scatterTerrain>
+      <Soil>
+        <groupsPerHundredCells>2~3</groupsPerHundredCells>
+        <itemsPerGroup>4~6</itemsPerGroup>
+        <groupDistRange>2~3</groupDistRange>
+      </Soil>
+    </scatterTerrain>
+    <parts>
+      <HunterDrone>0.5</HunterDrone>
+      <WaspDrone>0.5</WaspDrone>
+      <CornerArmoredTurret>
+        <countRange>4~4</countRange>
+      </CornerArmoredTurret>
+    </parts>
+  </LayoutRoomDef>
+  
+  <!--moria-->
+  <SitePartDef ParentName="HVMP_WunderchipLocationBase">
+    <defName>HVMP_MoriaSite</defName>
+    <label>ancient mineral extractor</label>
+    <description>The wunderchip energy signature is coming from an ancient mineral extraction platform here. Disassemble it to acquire the wunderchip.</description>
+    <workerClass>HVMP_Odyssey.SitePartWorker_MoriaSite</workerClass>
+    <tags>
+      <li>HVMP_MoriaSite</li>
+    </tags>
+  </SitePartDef>
+  <GenStepDef>
+    <defName>HVMP_MoriaSite</defName>
+    <linkWithSite>HVMP_MoriaSite</linkWithSite>
+    <order>1600</order>
+    <genStep Class="HVMP_Odyssey.GenStep_MoriaSite" />
+  </GenStepDef>
+</Defs>

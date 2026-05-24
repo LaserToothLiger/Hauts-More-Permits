@@ -183,6 +183,7 @@ namespace HautsPermits
                     defaultLabel = "DEV: Finish analysis",
                     action = delegate
                     {
+                        this.curProgress = this.reqProgress;
                         this.OnAnalyzed(Find.CurrentMap.mapPawns.FreeColonistsSpawned.First<Pawn>());
                     }
                 };
@@ -196,7 +197,7 @@ namespace HautsPermits
         public override string CompInspectStringExtra()
         {
             string text = "HVMP_CCProgress".Translate(this.curProgress.ToStringByStyle(ToStringStyle.FloatOne), this.RequiredProgress.ToStringByStyle(ToStringStyle.FloatOne));
-            if (!this.relevantSkills.NullOrEmpty())
+            if (!this.relevantSkills.NullOrEmpty() && this.Props.progressInspectStringSkills != null)
             {
                 text += "\n" + this.Props.progressInspectStringSkills.Translate();
                 for (int i = 0; i < this.relevantSkills.Count; i++)
@@ -208,7 +209,7 @@ namespace HautsPermits
                     }
                 }
             }
-            if (!this.relevantStats.NullOrEmpty())
+            if (!this.relevantStats.NullOrEmpty() && this.Props.progressInspectStringStats != null)
             {
                 text += "\n" + this.Props.progressInspectStringStats.Translate();
                 for (int i = 0; i < this.relevantStats.Count; i++)

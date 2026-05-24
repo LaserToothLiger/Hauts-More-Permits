@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{935D2802-3676-4A96-9BC2-833EBE5B0448}</ProjectGuid>
+    <ProjectGuid>{49CC8902-80FB-4BF0-93BB-7A02551C4314}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HautsPermits_Ideology</RootNamespace>
-    <AssemblyName>HautsPermits_Ideology</AssemblyName>
+    <RootNamespace>HVMP_Odyssey</RootNamespace>
+    <AssemblyName>HVMP_Odyssey</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -17,7 +17,7 @@
     <DebugSymbols>false</DebugSymbols>
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Assemblies\</OutputPath>
+    <OutputPath>..\..\..\Assemblies\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,24 +31,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\..\..\..\..\..\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="HautsFramework">
-      <HintPath>..\..\..\..\..\..\Hauts Framework\1.6\Assemblies\HautsFramework.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="HautsF_Ideology">
-      <HintPath>..\..\..\..\..\..\Hauts Framework\1.6\Mods\Ideology\Assemblies\HautsF_Ideology.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Hauts Framework\1.6\Assemblies\HautsFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="HautsPermits">
-      <HintPath>..\..\..\..\Assemblies\HautsPermits.dll</HintPath>
+      <HintPath>..\..\..\..\..\Assemblies\HautsPermits.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -60,26 +52,16 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BookOutcomeDoers.cs" />
-    <Compile Include="HarmonyPatch.cs" />
-    <Compile Include="Item_Ingressor.cs" />
-    <Compile Include="PermitWorkers_ItemAlterations.cs" />
-    <Compile Include="PermitWorker_DiscoverRelic.cs" />
-    <Compile Include="PermitWorkers_Scanners.cs" />
-    <Compile Include="PermitWorker_DropIdeoBook.cs" />
-    <Compile Include="Precept_AlliedFactions.cs" />
+    <Compile Include="DefsOf.cs" />
+    <Compile Include="ThingComp_WunderchipDefenders.cs" />
+    <Compile Include="WunderchipQuest_Moria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuestNode_BranchQuestBase.cs" />
-    <Compile Include="Quest_Archive_Ethnography.cs" />
-    <Compile Include="Quest_Archive_Remnant.cs" />
-    <Compile Include="Quest_Archive_Replica.cs" />
-    <Compile Include="Quest_Archive_Satellite.cs" />
-    <Compile Include="Quest_Archive_Shrine.cs" />
+    <Compile Include="WunderchipQuest_Korhal.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

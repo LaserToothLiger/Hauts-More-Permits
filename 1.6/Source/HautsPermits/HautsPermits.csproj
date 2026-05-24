@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbilityComps.cs" />
     <Compile Include="BranchQuestSetupUtility.cs" />
     <Compile Include="CosmopolitanMemeUtility.cs" />
     <Compile Include="HediffComps_Misc.cs" />

@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using HautsPermits;
+using RimWorld;
 using Verse;
 
 namespace HautsPermits_Ideology
@@ -23,7 +24,11 @@ namespace HautsPermits_Ideology
             int num = 0;
             if (p.Faction != null)
             {
-                Faction pawnFac = p.Faction;
+                Faction pawnFac = p.HomeFaction??p.Faction;
+                if (pawnFac.def.HasModExtension<EBranchQuests>())
+                {
+                    return 1;
+                }
                 foreach (Faction f in Find.FactionManager.AllFactionsVisible)
                 {
                     if (f != pawnFac)

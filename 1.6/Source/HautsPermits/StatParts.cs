@@ -49,9 +49,11 @@ namespace HautsPermits
             if (this.ShouldWork(req))
             {
                 string explanation = "";
-                if (this.offset != 0)
+                if (this.offset > 0)
                 {
                     explanation += this.requiredCondition.LabelCap + ": +" + this.offset.ToStringPercent() + "\n";
+                } else if (this.offset < 0) {
+                    explanation += this.requiredCondition.LabelCap + ": " + this.offset.ToStringPercent() + "\n";
                 }
                 if (this.factor != 1)
                 {
@@ -63,13 +65,10 @@ namespace HautsPermits
         }
         public bool ShouldWork(StatRequest req)
         {
-            return req.HasThing && req.Thing is Pawn p && Find.World.gameConditionManager.ConditionIsActive(this.requiredCondition) && (this.worksOnMechs || p.RaceProps.IsFlesh) && (!ModsConfig.AnomalyActive || ((this.worksOnMutants || !p.IsMutant) && (this.worksOnEntities || !p.IsEntity)));
+            return req.HasThing && req.Thing is Pawn p && Find.World.gameConditionManager.ConditionIsActive(this.requiredCondition);
         }
         public float offset;
         public float factor = 1f;
-        public bool worksOnMechs = true;
-        public bool worksOnMutants = true;
-        public bool worksOnEntities = true;
         public GameConditionDef requiredCondition;
     }
 }

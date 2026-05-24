@@ -71,6 +71,9 @@ namespace HautsPermits
         public static ThingDef HVMP_TunnelHiveSpawner;
         [MayRequireBiotech]
         public static ThingDef HVMP_BiofilmMedicine;
+        [MayRequireOdyssey]
+        public static ThingDef HVMP_Wunderchip;
+
         public static FleckDef HVMP_BribeGlow;
         public static FleckDef HVMP_ScalpelBLAST;
         public static FleckDef HVMP_RepairGlow;

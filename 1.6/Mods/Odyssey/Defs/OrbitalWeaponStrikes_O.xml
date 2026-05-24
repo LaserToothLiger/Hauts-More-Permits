@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!--roster of possible orbital targeting beacon attacks not yet fully implemented-->
+  <ThingDef ParentName="OrbitalStrikeBase">
+    <defName>HVMP_OT_Bomb_1rad_1shot</defName>
+    <label>antipersonnel round</label>
+    <thingClass>HVMP_Odyssey.CustomizableBombardment</thingClass>
+    <comps>
+      <li Class="CompProperties_OrbitalBeam">
+        <width>0.2</width>
+        <color>(255, 20, 20, 242)</color>
+      </li>
+      <li Class="HVMP_Odyssey.CompProperties_CustomizableBombardment">
+        <shots>1</shots>
+		<warmupTicks>300</warmupTicks>
+		<ticksBetweenShots>18</ticksBetweenShots>
+		<shotSpread>0</shotSpread>
+		<explosionRadiusRange>1</explosionRadiusRange>
+		<explosionType>Bomb</explosionType>
+		<explosionAmount>50</explosionAmount>
+		<explosionArmorPen>1</explosionArmorPen>
+		<preImpactSound>Bombardment_PreImpact</preImpactSound>
+		<thickRoofInterceptChance>0.5</thickRoofInterceptChance>
+      </li>
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="OrbitalStrikeBase">
+    <defName>HVMP_OT_Bomb_3rad_1shot</defName>
+    <label>explosive round</label>
+    <thingClass>HVMP_Odyssey.CustomizableBombardment</thingClass>
+    <comps>
+      <li Class="CompProperties_OrbitalBeam">
+        <width>0.2</width>
+        <color>(255, 20, 20, 242)</color>
+      </li>
+      <li Class="HVMP_Odyssey.CompProperties_CustomizableBombardment">
+        <shots>1</shots>
+		<warmupTicks>300</warmupTicks>
+		<ticksBetweenShots>18</ticksBetweenShots>
+		<shotSpread>0</shotSpread>
+		<explosionRadiusRange>1.9</explosionRadiusRange>
+		<explosionType>Bomb</explosionType>
+		<explosionAmount>50</explosionAmount>
+		<explosionArmorPen>1</explosionArmorPen>
+		<preImpactSound>Bombardment_PreImpact</preImpactSound>
+		<thickRoofInterceptChance>0.5</thickRoofInterceptChance>
+      </li>
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="OrbitalStrikeBase">
+    <defName>HVMP_OT_Bomb_3rad_5shot</defName>
+    <label>explosive volley</label>
+    <thingClass>HVMP_Odyssey.CustomizableBombardment</thingClass>
+    <comps>
+      <li Class="CompProperties_OrbitalBeam">
+        <width>0.2</width>
+        <color>(255, 20, 20, 242)</color>
+      </li>
+      <li Class="HVMP_Odyssey.CompProperties_CustomizableBombardment">
+        <shots>5</shots>
+		<warmupTicks>300</warmupTicks>
+		<ticksBetweenShots>18</ticksBetweenShots>
+		<shotSpread>0</shotSpread>
+		<explosionRadiusRange>1.9</explosionRadiusRange>
+		<explosionType>Bomb</explosionType>
+		<explosionAmount>50</explosionAmount>
+		<explosionArmorPen>1</explosionArmorPen>
+		<preImpactSound>Bombardment_PreImpact</preImpactSound>
+		<thickRoofInterceptChance>0.5</thickRoofInterceptChance>
+      </li>
+    </comps>
+  </ThingDef>
+  
+</Defs>

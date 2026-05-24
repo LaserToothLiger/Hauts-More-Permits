@@ -12,6 +12,7 @@ namespace HautsPermits
      * The configuration of this list is determined by these fields in the CompProperties.
      * maxNumOptions: the list can only have this many elements. Options are randomly picked from all possible Things meeting ValidateOption() and the various other fields in this CompProperties
      *   Books are specifically never eligible because their title and description generation is a fuck
+     * ---specificThingDefs: if specified, only these Things are options. Otherwise...
      * ---thingCategoryWhitelist: if specified, only Things that have this category can show up as options
      * ---allowedTradeTag: if specified, only Things that have this string as a tradeTag can show up as options
      * ---unitMarketValue|MassOutputCap: if positive, only Things whose per-unit market value|mass do not exceed this value can show up as options
@@ -27,6 +28,8 @@ namespace HautsPermits
         {
             this.compClass = typeof(CompUseEffect_MultipleChoicePallet);
         }
+        public string openingLabel = "HVMP_PalletOpeningLabel";
+        public List<ThingDefCountClass> specificThingDefs;
         public ThingCategoryDef thingCategoryWhitelist;
         public string allowedTradeTag;
         public int maxNumOptions = 10;
@@ -49,59 +52,76 @@ namespace HautsPermits
                 return (CompProperties_UseEffect_MultipleChoicePallet)this.props;
             }
         }
+        public virtual int MaxNumOptions
+        {
+            get
+            {
+                return this.Props.maxNumOptions;
+            }
+        }
         public override void PostPostMake()
         {
             base.PostPostMake();
             if (this.options.NullOrEmpty())
             {
                 List<ThingDefCountClass> tdccs = new List<ThingDefCountClass>();
-                int mno = this.Props.maxNumOptions;
-                ThingCategoryDef category = this.Props.thingCategoryWhitelist;
-                if (category != null)
+                int mno = this.MaxNumOptions;
+                if (!this.Props.specificThingDefs.NullOrEmpty())
                 {
-                    foreach (ThingDef td in DefDatabase<ThingDef>.AllDefsListForReading.InRandomOrder())
+                    foreach (ThingDefCountClass td in this.Props.specificThingDefs.InRandomOrder())
                     {
-                        if (td.thingCategories != null && td.thingCategories.Contains(category) && this.ValidateOption(td))
+                        if (!tdccs.ContainsAny((ThingDefCountClass countClass)=>countClass.thingDef == td.thingDef))
                         {
-                            tdccs.Add(this.CreateTDCC(td));
-                            if (mno > 0)
+                            tdccs.Add(this.CreateTDCC(td.thingDef, td.count));
+                            mno--;
+                            if (mno <= 0)
                             {
-                                mno--;
-                                if (mno <= 0)
-                                {
-                                    break;
-                                }
+                                break;
                             }
                         }
-                    }
-                } else if (this.Props.allowedTradeTag != null) {
-                    string tts = this.Props.allowedTradeTag;
-                    foreach (ThingDef td in DefDatabase<ThingDef>.AllDefsListForReading.InRandomOrder())
-                    {
-                        if (td.tradeTags != null && td.tradeTags.Contains(tts) && this.ValidateOption(td))
-                        {
-                            tdccs.Add(this.CreateTDCC(td));
-                            if (mno > 0)
-                            {
-                                mno--;
-                                if (mno <= 0)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                } else if (mno > 0) {
-                    List<ThingDef> usedTds = new List<ThingDef>();
-                    while (mno > 0)
-                    {
-                        ThingDef td = DefDatabase<ThingDef>.AllDefsListForReading.Where((ThingDef thing) => !usedTds.Contains(thing) && this.ValidateOption(thing)).RandomElement();
-                        usedTds.Add(td);
-                        tdccs.Add(this.CreateTDCC(td));
-                        mno--;
                     }
                 } else {
-                    this.parent.Destroy();
+                    ThingCategoryDef category = this.Props.thingCategoryWhitelist;
+                    if (category != null)
+                    {
+                        foreach (ThingDef td in DefDatabase<ThingDef>.AllDefsListForReading.InRandomOrder())
+                        {
+                            if (td.thingCategories != null && td.thingCategories.Contains(category) && this.ValidateOption(td))
+                            {
+                                tdccs.Add(this.CreateTDCC(td));
+                                mno--;
+                                if (mno <= 0)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    } else if (this.Props.allowedTradeTag != null) {
+                        string tts = this.Props.allowedTradeTag;
+                        foreach (ThingDef td in DefDatabase<ThingDef>.AllDefsListForReading.InRandomOrder())
+                        {
+                            if (td.tradeTags != null && td.tradeTags.Contains(tts) && this.ValidateOption(td))
+                            {
+                                tdccs.Add(this.CreateTDCC(td));
+                                mno--;
+                                if (mno <= 0)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    } else if (mno > 0) {
+                        List<ThingDef> usedTds = new List<ThingDef>();
+                        while (mno > 0)
+                        {
+                            ThingDef td = DefDatabase<ThingDef>.AllDefsListForReading.Where((ThingDef thing) => !usedTds.Contains(thing) && this.ValidateOption(thing)).RandomElement();
+                            usedTds.Add(td);
+                            tdccs.Add(this.CreateTDCC(td));
+                            mno--;
+                        }
+                    } else {
+                        this.parent.Destroy();
+                    }
                 }
                 this.options = tdccs;
             }
@@ -110,34 +130,39 @@ namespace HautsPermits
         {
             return thing.category == ThingCategory.Item && thing.BaseMarketValue > 0f && !thing.HasComp<CompBook>() && (this.Props.unitMarketValueOutputCap <= 0f || thing.BaseMarketValue <= this.Props.unitMarketValueOutputCap) && (this.Props.unitMassOutputCap <= 0f || thing.BaseMass <= this.Props.unitMassOutputCap) && ((this.Props.requiredTradeability == Tradeability.All && thing.tradeability != Tradeability.None) || thing.tradeability == this.Props.requiredTradeability) && (!this.Props.onlyHasStackableItems || thing.stackLimit > 1) && !thing.destroyOnDrop;
         }
-        public ThingDefCountClass CreateTDCC(ThingDef td)
+        public ThingDefCountClass CreateTDCC(ThingDef td, int count = -1)
         {
             ThingDefCountClass tdcc = new ThingDefCountClass();
             tdcc.thingDef = td;
             float mass = td.BaseMass;
             float mv = td.BaseMarketValue;
-            tdcc.count = Math.Max(1, this.Props.netCountOutputCap);
-            if (this.Props.netMarketValueOutputCap > 0f)
+            if (count > 0)
             {
-                int limit = Mathf.FloorToInt(this.Props.netMarketValueOutputCap / mv);
-                if (limit < tdcc.count)
+                tdcc.count = count;
+            } else {
+                tdcc.count = Math.Max(1, this.Props.netCountOutputCap);
+                if (this.Props.netMarketValueOutputCap > 0f)
                 {
-                    tdcc.count = limit;
+                    int limit = Mathf.FloorToInt(this.Props.netMarketValueOutputCap / mv);
+                    if (limit < tdcc.count)
+                    {
+                        tdcc.count = limit;
+                    }
                 }
-            }
-            if (this.Props.netMassOutputCap > 0f)
-            {
-                int limit = Mathf.FloorToInt(this.Props.netMassOutputCap / mass);
-                if (limit < tdcc.count)
+                if (this.Props.netMassOutputCap > 0f)
                 {
-                    tdcc.count = limit;
+                    int limit = Mathf.FloorToInt(this.Props.netMassOutputCap / mass);
+                    if (limit < tdcc.count)
+                    {
+                        tdcc.count = limit;
+                    }
                 }
+                if (!this.Props.countCantExceedStackSize && tdcc.count > td.stackLimit)
+                {
+                    tdcc.count = td.stackLimit;
+                }
+                tdcc.count = Math.Max(1, tdcc.count);
             }
-            if (!this.Props.countCantExceedStackSize && tdcc.count > td.stackLimit)
-            {
-                tdcc.count = td.stackLimit;
-            }
-            tdcc.count = Math.Max(1, tdcc.count);
             tdcc.quality = QualityUtility.GenerateQuality(this.Props.qualityGenerator);
             if (td.MadeFromStuff)
             {
@@ -198,6 +223,7 @@ namespace HautsPermits
             this.pawn = pawn;
             this.options.Clear();
             this.pallet = palletComp.parent;
+            this.openingLabel = palletComp.Props.openingLabel;
             this.options = palletComp.options;
         }
         public override void PreOpen()
@@ -226,7 +252,7 @@ namespace HautsPermits
             Rect viewRect = new Rect(inRect.x, inRect.y, inRect.width * 0.7f, this.scrollHeight);
             Widgets.BeginScrollView(inRect, ref this.scrollPosition, viewRect, true);
             float num = 0f;
-            Widgets.Label(0f, ref num, viewRect.width, "HVMP_PalletOpeningLabel".Translate().CapitalizeFirst().Formatted(this.pawn.Named("PAWN")).AdjustedFor(this.pawn, "PAWN", true).Resolve(), default(TipSignal));
+            Widgets.Label(0f, ref num, viewRect.width, this.openingLabel.Translate().CapitalizeFirst().Formatted(this.pawn.Named("PAWN")).AdjustedFor(this.pawn, "PAWN", true).Resolve(), default(TipSignal));
             num += 14f;
             Listing_Standard listing_Standard = new Listing_Standard();
             Rect rect = new Rect(0f, num, inRect.width - 30f, 99999f);
@@ -297,10 +323,25 @@ namespace HautsPermits
             return AcceptanceReport.WasAccepted;
         }
         private Pawn pawn;
+        private string openingLabel;
         private Thing pallet;
         private ThingDefCountClass chosenTDCC = null;
         private float scrollHeight;
         private Vector2 scrollPosition;
         private List<ThingDefCountClass> options = new List<ThingDefCountClass>();
+    }
+    //this derivative must be studied, as a quest item, before it can be used. Yeah, the wunderchip uses pallet tech too. Sue me.
+    public class CompUseEffect_Wunderchip : CompUseEffect_MultipleChoicePallet
+    {
+        public override int MaxNumOptions => HVMP_Mod.settings.wunderOptionCount;
+        public override AcceptanceReport CanBeUsedBy(Pawn p)
+        {
+            CompStudiableQuestItem csqi = this.parent.GetComp<CompStudiableQuestItem>();
+            if (csqi != null && !csqi.Completed)
+            {
+                return "HVMP_WunderchipMustBeStudied".Translate();
+            }
+            return true;
+        }
     }
 }

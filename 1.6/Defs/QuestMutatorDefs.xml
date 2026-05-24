@@ -37,20 +37,29 @@
     </stages>
   </ThoughtDef>
   <!--What's Bugging You?-->
-  <HediffDef ParentName="HVT_TraitHediffBase">
+  <HediffDef Name="DiseaseBase">
     <defName>HVMP_BugPheromones</defName>
-    <label>insectoid pheromones</label>
-    <description>Chemicals which may attract insectoid infestations. When such an infestation surfaces, the pheromones will be overwritten by the insectoids' own scents.</description>
+    <label>insectoid tracking parasites</label>
+    <description>Bloodborne pathogens which, upon reaching a critical concentration, will release pheromones that attract insectoid infestations.</description>
 	<hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(164, 196, 122)</defaultLabelColor>
-	<maxSeverity>18</maxSeverity>
-	<initialSeverity>18</initialSeverity>
+	<minSeverity>0.001</minSeverity>
+	<initialSeverity>0.001</initialSeverity>
+	<maxSeverity>4</maxSeverity>
+    <tendable>true</tendable>
     <comps>
+      <li Class="HediffCompProperties_TendDuration">
+        <severityPerDayTended>-1</severityPerDayTended>
+        <baseTendDurationHours>24</baseTendDurationHours>
+      </li>
 	  <li Class="HautsPermits.HediffCompProperties_SeverityPerDay_WBY">
-		<severityPerDay>-1</severityPerDay>
-		<showHoursToRecover>true</showHoursToRecover>
-		<infestationMTB>10</infestationMTB>
+		<severityPerDay>1</severityPerDay>
+		<infestationMTBhours>12</infestationMTBhours>
 	  </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>1080000~1320000</disappearsAfterTicks> <!-- 18~22 days -->
+        <showRemainingTime>true</showRemainingTime>
+      </li>
     </comps>
   </HediffDef>
   
@@ -401,6 +410,36 @@
       </li>
     </stages>
   </ThoughtDef>
+  <!--ROVER Theseus
+		Grave Goods-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_SkipnetAuthorization_NPC</defName>
+	<label>illicit skipnet authorization</label>
+    <defaultLabelColor>(0.6, 0.6, 1.0)</defaultLabelColor>
+	<description>Spoofed authorization for the Enterprise's teleportation network. Enables the use of Personal Netskip up to four times.</description>
+	<initialSeverity>4</initialSeverity>
+	<maxSeverity>4</maxSeverity>
+	<stages>
+	  <li>
+		<label>1 use</label>
+	  </li>
+	  <li>
+		<minSeverity>1.001</minSeverity>
+		<label>2 uses</label>
+	  </li>
+	  <li>
+		<minSeverity>2.001</minSeverity>
+		<label>3 uses</label>
+	  </li>
+	  <li>
+		<minSeverity>3.001</minSeverity>
+		<label>4 uses</label>
+	  </li>
+	</stages>
+    <abilities>
+      <li>HVMP_Skipnet_NPC</li>
+    </abilities>
+  </HediffDef>
   
   <!--ARCHIVE Ethnography
 		Sensitive Souls-->

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <QuestScriptDef>
+    <defName>HVMP_Wunderchip_Korhal</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>3</defaultChallengeRating>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <autoAccept>true</autoAccept>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->no man's land</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->You have detected the energy signature of wunderchip technology. In this case, it is some sort of beacon which attracts the attention of an orbit-to-surface weapons platform for the purposes of killing anything nearby.\n\nAnything out in the open, especially if moving, will attract the attention of orbital weapons. The beacon itself will be heavily guarded by ancient security systems.\n\nAbout wunderchips: fusions of ultratechnology and archotechnology built by the ancients, wunderchips are rare and highly sought-after by both the Empire and the various branches of the Enterprise.\nYou can obtain great honor by giving one to an Imperial tribute collector, or great standing by giving one to an e-branch donations office at the comms console.\nAlternatively, wunderchips can be permanently transformed into other rare artifacts, such as gravcores, psylinks, healer serums, or the like - but this requires the chip to be extensively studied first.</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <questAvailableLetterLabel>Wunderchip detected: No man's land</questAvailableLetterLabel>
+    <questAvailableLetterTextIsDescription>true</questAvailableLetterTextIsDescription>
+    <canOccurOnAllPlanetLayers>true</canOccurOnAllPlanetLayers>
+    <root Class="HVMP_Odyssey.QuestNode_Root_Wunderchip_Korhal">
+      <distanceFromColonyRange>10~60</distanceFromColonyRange>
+      <layer>Surface</layer>
+    </root>
+	<modExtensions>
+	  <li Class="HautsPermits.WunderQuest"/>
+	</modExtensions>
+  </QuestScriptDef>
+  
+  <QuestScriptDef>
+    <defName>HVMP_Wunderchip_Moria</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>3</defaultChallengeRating>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <autoAccept>true</autoAccept>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->ancient mineral extractor</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->You have detected the energy signature of wunderchip technology. In this case, it is a potent mining device which has recently reactivated.\n\nYou can disassemble the mineral extractor, but the process will take days to complete. The extractor's stabilizers are defended by mechanoids, and until they are all deactivated, its activity will agitate subterranean monsters and draw them to the surface.\n\nAbout wunderchips: fusions of ultratechnology and archotechnology built by the ancients, wunderchips are rare and highly sought-after by both the Empire and the various branches of the Enterprise.\nYou can obtain great honor by giving one to an Imperial tribute collector, or great standing by giving one to an e-branch donations office at the comms console.\nAlternatively, wunderchips can be permanently transformed into other rare artifacts, such as gravcores, psylinks, healer serums, or the like - but this requires the chip to be extensively studied first.</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <questContentRules>
+      <rulesStrings>
+        <li>letterLabelMapGenerated->Ancient mineral extractor</li> 
+        <li>letterTextMapGenerated->A mineral extractor is nearby, powered by a wunderchip.\n\nThe extractor is currently protected by nearby stabilizers. Obtain the extractor's wunderchip by first hacking or destroying all the stabilizers.\n\nDestroying a stabilizer will prompt a defensive response, while hacking will not; however, hacking is slower, and the longer the mineral extractor remains active, the more subterranean monsters will be provoked by its activity.</li>
+      </rulesStrings>
+    </questContentRules>
+    <questAvailableLetterLabel>Wunderchip detected: Ancient mineral extractor</questAvailableLetterLabel>
+    <questAvailableLetterTextIsDescription>true</questAvailableLetterTextIsDescription>
+    <canOccurOnAllPlanetLayers>true</canOccurOnAllPlanetLayers>
+    <root Class="HVMP_Odyssey.QuestNode_Root_Wunderchip_Moria">
+      <distanceFromColonyRange>10~60</distanceFromColonyRange>
+      <layer>Surface</layer>
+      <!--<allowedBiomes>
+        <li>LavaField</li>
+        <li>Glowforest</li>
+        <li>GlacialPlain</li>
+        <li>ExtremeDesert</li>
+        <li>TropicalSwamp</li>
+        <li>IceSheet</li>
+      </allowedBiomes>-->
+    </root>
+	<modExtensions>
+	  <li Class="HautsPermits.WunderQuest"/>
+	</modExtensions>
+  </QuestScriptDef>
+  
+</Defs>

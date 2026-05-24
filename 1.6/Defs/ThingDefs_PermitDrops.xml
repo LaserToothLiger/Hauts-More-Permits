@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--generally useful-->
+  <ThingDef ParentName="DropPodIncoming">
+    <defName>HVMP_DropPodOfFaction</defName>
+    <thingClass>HautsPermits.DropPodIncomingOfFaction</thingClass>
+    <graphicData>
+      <texPath>Things/Special/DropPodMechanoid</texPath>
+    </graphicData>
+    <skyfaller>
+      <anticipationSound>DropPod_Fall_Mechanoid</anticipationSound>
+    </skyfaller>
+  </ThingDef>
+  <ThingDef ParentName="MechSerumBase" Name="HVMP_PalletBase" Abstract="True">
+    <techLevel>Ultra</techLevel>
+    <tradeTags Inherit="False" />
+    <stackLimit>1</stackLimit>
+    <statBases>
+      <MarketValue>250</MarketValue>
+	  <Mass>35</Mass><!--something something ultratech-->
+      <MaxHitPoints>200</MaxHitPoints>
+      <DeteriorationRate>0</DeteriorationRate>
+      <Flammability>0</Flammability>
+	  <Bulk MayRequire="CETeam.CombatExtended">125</Bulk>
+    </statBases>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>None</tradeability>
+	<genericMarketSellable>false</genericMarketSellable>
+    <thingSetMakerTags Inherit="False" />
+    <comps>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Open {0_label}</useLabel>
+        <useDuration>10</useDuration>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+	  <li Class="CompProperties_UseEffectPlaySound">
+        <soundOnUsed>AncientHermeticCrate_Opened</soundOnUsed>
+      </li>
+    </comps>
+    <allowedArchonexusCount>10</allowedArchonexusCount>
+  </ThingDef>
+  
+  <!--commerce-->
+  <ThingDef ParentName="HVMP_PalletBase">
+    <defName>HVMP_MasonryPallet</defName>
+    <label>masonry pallet</label>
+    <description>A crate containing stone blocks. You can choose what type of stone is inside by opening it.</description>
+    <graphicData>
+      <texPath>Items/Pallets/HVMP_MasonryPallet</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <comps>
+      <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
+        <thingCategoryWhitelist>StoneBlocks</thingCategoryWhitelist><!--I never got around to making this a real list, it's just one category-->
+		<maxNumOptions>25</maxNumOptions>
+		<unitMarketValueOutputCap>1.5</unitMarketValueOutputCap>
+		<netMarketValueOutputCap>250</netMarketValueOutputCap>
+		<countCantExceedStackSize>true</countCantExceedStackSize>
+      </li>
+	</comps>
+  </ThingDef>
+  
+  <ThingDef ParentName="HVMP_PalletBase">
+    <defName>HVMP_TradeGoodsPallet</defName>
+    <label>trade goods pallet</label>
+    <description>A crate containing up to 5,000 silver worth of goods. You can choose what type of item is inside by opening it.</description>
+    <graphicData>
+      <texPath>Items/Pallets/HVMP_MysteryPallet</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <comps>
+      <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
+        <!--no specified thing category. Items only need to meet the following criteria, have a non-None tradeability, and be bona fide 'items' to be valid options-->
+		<maxNumOptions>10</maxNumOptions>
+		<netMarketValueOutputCap>5000</netMarketValueOutputCap>
+		<onlyHasStackableItems>false</onlyHasStackableItems>
+		<countCantExceedStackSize>true</countCantExceedStackSize>
+		<qualityGenerator>Reward</qualityGenerator>
+      </li>
+    </comps>
+    <allowedArchonexusCount>2</allowedArchonexusCount>
+  </ThingDef>
+  
+	  <ThingDef ParentName="HVMP_PalletBase" MayRequire="zylle.Gemstones">
+		<defName>HVMP_GemstonePallet</defName>
+		<label>gemstone pallet</label>
+		<description>A crate containing gemstones. You can choose what type of stone is inside by opening it.</description>
+		<graphicData>
+		  <texPath>Items/Pallets/HVMP_GemstonePallet</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<comps>
+		  <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
+			<thingCategoryWhitelist>Z_Gemstones</thingCategoryWhitelist>
+			<maxNumOptions>25</maxNumOptions>
+			<netMarketValueOutputCap>250</netMarketValueOutputCap>
+			<countCantExceedStackSize>true</countCantExceedStackSize>
+		  </li>
+		</comps>
+	  </ThingDef>
+	  
+	  <ThingDef ParentName="HVMP_PalletBase" MayRequire="sarg.alphacrafts">
+		<defName>HVMP_ArtisanPallet</defName>
+		<label>artisan pallet</label>
+		<description>A crate containing artisanal products. You can choose what type of product is inside by opening it.</description>
+		<graphicData>
+		  <texPath>Items/Pallets/HVMP_ArtisanPallet</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<comps>
+		  <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
+			<thingCategoryWhitelist>AC_ArtisanProducts</thingCategoryWhitelist>
+			<maxNumOptions>25</maxNumOptions>
+			<netMarketValueOutputCap>250</netMarketValueOutputCap>
+			<countCantExceedStackSize>true</countCantExceedStackSize>
+		  </li>
+		</comps>
+	  </ThingDef>
+	  
+	  <ThingDef ParentName="HVMP_PalletBase" MayRequire="VanillaExpanded.VCookE">
+		<defName>HVMP_CondimentPallet</defName>
+		<label>condiment pallet</label>
+		<description>A crate containing condiments. You can choose what type of condiment is inside by opening it.</description>
+		<graphicData>
+		  <texPath>Items/Pallets/HVMP_CondimentPallet</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<comps>
+		  <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
+			<thingCategoryWhitelist>VCE_Condiments</thingCategoryWhitelist>
+			<maxNumOptions>25</maxNumOptions>
+			<unitMarketValueOutputCap>50</unitMarketValueOutputCap>
+			<netMarketValueOutputCap>250</netMarketValueOutputCap>
+			<countCantExceedStackSize>true</countCantExceedStackSize>
+		  </li>
+		</comps>
+	  </ThingDef>
+  
+  
+  
+  <!--pax-->
+  <ThingDef ParentName="MechSerumBase">
+    <defName>HVMP_BSU</defName>
+    <label>blackbody shield unit</label>
+    <description>A one-use high-energy repulsor field generator. Unlike conventional personal shields, this field is reinforced enough to stop any kind of attack, is resistant to EMPs, and it can absorb immense amounts of damage before failing. However, the shield generator rapidly overheats, causing itself to irreparably burn out over time. Moreover, the intensity of the shield inhibits even the movements of the wearer, and it distorts incoming light, blinding them as well.</description>
+    <graphicData>
+      <texPath>Items/HVMP_BlackbodyShieldUnit</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+	  <drawSize>0.9</drawSize>
+    </graphicData>
+    <techLevel>Ultra</techLevel>
+    <tradeTags Inherit="False" />
+	<genericMarketSellable>false</genericMarketSellable>
+    <stackLimit>10</stackLimit>
+    <statBases>
+      <MarketValue>1000</MarketValue>
+	  <Bulk MayRequire="CETeam.CombatExtended">4</Bulk>
+    </statBases>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>Sellable</tradeability>
+    <thingSetMakerTags Inherit="False" />
+    <comps>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Use {0_label}</useLabel>
+        <useDuration>0</useDuration>
+        <warmupMote>Mote_ResurrectAbility</warmupMote>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+      <li Class="CompProperties_Targetable">
+        <compClass>CompTargetable_SinglePawn</compClass>
+      </li>
+      <li Class="HautsPermits.CompProperties_TargetEffectInstallBSU">
+        <hediffDef>HVMP_BShield</hediffDef>
+        <bodyPart>Brain</bodyPart>
+        <soundOnUsed>EnergyShield_Reset</soundOnUsed>
+      </li>
+    </comps>
+  </ThingDef>
+  
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>HVMP_DelayedPowerBeam</defName>
+    <label>incoming power beam</label>
+    <thingClass>HautsPermits.DelayedPowerBeam</thingClass>
+    <tickerType>Normal</tickerType>
+    <drawerType>RealtimeOnly</drawerType>
+    <drawOffscreen>true</drawOffscreen>
+    <seeThroughFog>true</seeThroughFog>
+    <comps>
+      <li Class="CompProperties_OrbitalBeam">
+        <width>0.2</width>
+        <color>(255, 20, 20, 242)</color>
+      </li>
+    </comps>
+  </ThingDef>
+  
+  
+  
+  <!--rover-->
+  <ThingDef ParentName="ApparelNoQualityBase">
+    <defName>HVMP_Apparel_SkipnetPack</defName>
+    <label>skipnet pack</label>
+    <description>A psionic beacon which serves as a link to a planetary skipnet. It boosts the range of skip abilities, and once every three days it can be used to teleport to a distant ally.</description>
+    <graphicData>
+      <texPath>Things/Pawn/Humanlike/Apparel/HVMP_SkipnetPack/HVMP_SkipnetPack</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <tickerType>Normal</tickerType>
+    <techLevel>Ultra</techLevel>
+    <smeltable>false</smeltable>
+    <destroyable>false</destroyable>
+    <useHitPoints>false</useHitPoints>
+    <statBases>
+      <Mass>5</Mass>
+      <Flammability>0</Flammability>
+      <EquipDelay>2</EquipDelay>
+      <MarketValue>5000</MarketValue>
+      <DeteriorationRate>0</DeteriorationRate>
+	  <Bulk MayRequire="CETeam.CombatExtended">8</Bulk>
+	  <WornBulk MayRequire="CETeam.CombatExtended">3</WornBulk>
+    </statBases>
+    <equippedStatOffsets>
+      <Hauts_SkipcastRangeFactor>0.15</Hauts_SkipcastRangeFactor>
+    </equippedStatOffsets>
+    <thingCategories>
+      <li>ApparelUtility</li>
+    </thingCategories>
+    <mergeVerbGizmos>false</mergeVerbGizmos>
+    <apparel>
+      <countsAsClothingForNudity>false</countsAsClothingForNudity>
+      <scoreOffset>4</scoreOffset>
+      <careIfWornByCorpse>false</careIfWornByCorpse>
+      <careIfDamaged>false</careIfDamaged>
+      <wearPerDay>0.2</wearPerDay>
+      <bodyPartGroups>
+        <li>Waist</li>
+      </bodyPartGroups>
+      <layers>
+        <li>Belt</li>
+      </layers>
+      <wornGraphicPath>Things/Pawn/Humanlike/Apparel/HVMP_SkipnetPack/HVMP_SkipnetPack</wornGraphicPath>
+      <wornGraphicData>
+        <renderUtilityAsPack>true</renderUtilityAsPack>
+        <north>
+          <offset>(0,-0.15)</offset>
+        </north>
+        <south>
+          <offset>(0,0.1)</offset>
+        </south>
+        <east>
+          <scale>(0.83,0.83)</scale>
+          <offset>(-0.3,-0.05)</offset>
+          <thin>
+            <offset>(0.05,0)</offset>
+          </thin>
+          <hulk>
+            <offset>(-0.1,0)</offset>
+          </hulk>
+          <fat>
+            <offset>(-0.15,0)</offset>
+          </fat>
+        </east>
+        <west>
+          <scale>(0.83,0.83)</scale>
+          <offset>(0.3,-0.05)</offset>
+          <thin>
+            <offset>(-0.05,0)</offset>
+          </thin>
+          <hulk>
+            <offset>(0.1,0)</offset>
+          </hulk>
+          <fat>
+            <offset>(0.15,0)</offset>
+          </fat>
+        </west>
+        <male>
+          <scale>(0.63,0.63)</scale>
+        </male>
+        <female>
+          <scale>(0.59,0.59)</scale>
+        </female>
+        <thin>
+          <scale>(0.59,0.59)</scale>
+        </thin>
+        <hulk>
+          <scale>(0.72,0.72)</scale>
+        </hulk>
+        <fat>
+          <scale>(0.72,0.72)</scale>
+        </fat>
+      </wornGraphicData>
+      <abilities>
+        <li>HVMP_FarSkipnetPack</li>
+      </abilities>
+    </apparel>
+    <tradeTags>
+      <li>Clothing</li>
+    </tradeTags>
+    <tradeability>Sellable</tradeability>
+    <allowedArchonexusCount>1</allowedArchonexusCount>
+  </ThingDef>
+  
+</Defs>

@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using HautsFramework;
+using RimWorld;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace HautsPermits
         public List<PawnKindDef> pawnKinds;
     }
     /*handles instantiation of all three mutators' effects
-     * fort1: Props To the Makeup Department - gives random hediff from PTTMD_hediffs to all the pawns you must take care of
+     * fort1: Greed is Good - creates the GIG_condition and puts it in the world game condition manager. Lasts for GIG_duration
      * fort2: Riches to Ruins - gives the R2R_hediff to all such pawns
      * fort3: What's Bugging You? - gives the WBY_hediff to all such pawns. Wow, these are pretty simple in comparison to some of the other mutators*/
     public class QuestNode_Fort_AllThreeMutators : QuestNode
@@ -38,21 +39,19 @@ namespace HautsPermits
                 return;
             }
             bool mayhemMode = HVMP_Mod.settings.fortX;
-            if (!this.PTTMD_hediffs.NullOrEmpty() && BranchQuestSetupUtility.MutatorEnabled(HVMP_Mod.settings.fort1, mayhemMode))
+            if (BranchQuestSetupUtility.MutatorEnabled(HVMP_Mod.settings.fort1, mayhemMode) && !this.IDHTGU_nodes.NullOrEmpty())
             {
-                List<Pawn> pawns = this.pawns.GetValue(slate).ToList();
-                for (int i = 0; i < pawns.Count; i++)
+                for (int i = 0; i < this.IDHTGU_nodes.Count; i++)
                 {
-                    Hediff h = HediffMaker.MakeHediff(this.PTTMD_hediffs.RandomElement(), pawns[i]);
-                    pawns[i].health.AddHediff(h);
+                    this.IDHTGU_nodes[i].Run();
                 }
                 QuestGen.AddQuestDescriptionRules(new List<Rule>
                 {
-                    new Rule_String("mutator_PTTMD_info_singular", this.PTTMD_description_singular.Formatted()),
-                    new Rule_String("mutator_PTTMD_info_plural", this.PTTMD_description_plural.Formatted())
+                    new Rule_String("mutator_IDHTGU_info_singular", this.IDHTGU_description_singular.Formatted()),
+                    new Rule_String("mutator_IDHTGU_info_plural", this.IDHTGU_description_plural.Formatted())
                 });
             } else {
-                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_PTTMD_info_singular", " "), new Rule_String("mutator_PTTMD_info_plural", " ") });
+                QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_IDHTGU_info_singular", " "), new Rule_String("mutator_IDHTGU_info_plural", " ") });
             }
             if (this.R2R_hediff != null && BranchQuestSetupUtility.MutatorEnabled(HVMP_Mod.settings.fort2, mayhemMode))
             {
@@ -94,11 +93,11 @@ namespace HautsPermits
         [NoTranslate]
         public SlateRef<string> inSignal;
         public SlateRef<IEnumerable<Pawn>> pawns;
-        public List<HediffDef> PTTMD_hediffs;
+        public List<QuestNode> IDHTGU_nodes = new List<QuestNode>();
         [MustTranslate]
-        public string PTTMD_description_singular;
+        public string IDHTGU_description_singular;
         [MustTranslate]
-        public string PTTMD_description_plural;
+        public string IDHTGU_description_plural;
         public HediffDef R2R_hediff;
         [MustTranslate]
         public string R2R_description_singular;
@@ -110,6 +109,40 @@ namespace HautsPermits
         [MustTranslate]
         public string WBY_description_plural;
     }
+    //GIG game condition adds spy points over time to hostile pawns
+    public class GameCondition_GreedIsGood : GameCondition
+    {
+        public override void GameConditionTick()
+        {
+            base.GameConditionTick();
+            if (Find.TickManager.TicksGame % 60000 == 0)
+            {
+                WorldComponent_HautsFactionComps WCFC = (WorldComponent_HautsFactionComps)Find.World.GetComponent(typeof(WorldComponent_HautsFactionComps));
+                if (WCFC != null)
+                {
+                    Faction p = Faction.OfPlayerSilentFail;
+                    if (p != null)
+                    {
+                        foreach (Faction f in Find.FactionManager.AllFactionsListForReading)
+                        {
+                            if (f != p && f.RelationKindWith(p) == FactionRelationKind.Hostile)
+                            {
+                                Hauts_FactionCompHolder fch = WCFC.FindCompsFor(f);
+                                if (fch != null)
+                                {
+                                    HautsFactionComp_SpyPoints spc = fch.TryGetComp<HautsFactionComp_SpyPoints>();
+                                    if (spc != null)
+                                    {
+                                        spc.spyPoints += 75;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     /*derivative of SeverityPerDay, which also intermittently causes infestations on the pawn's location.
      * Obviously, does not work if the pawn is despawned and thus has no location, but we don't need to care much about that since the game won't LET you despawn quest lodgers in many of the most common ways*/
     public class HediffCompProperties_SeverityPerDay_WBY : HediffCompProperties_SeverityPerDay
@@ -118,7 +151,7 @@ namespace HautsPermits
         {
             this.compClass = typeof(HediffComp_SeverityPerDay_WBY);
         }
-        public float infestationMTB;
+        public float infestationMTBhours;
     }
     public class HediffComp_SeverityPerDay_WBY : HediffComp_SeverityPerDay
     {
@@ -132,9 +165,9 @@ namespace HautsPermits
         public override void CompPostTickInterval(ref float severityAdjustment, int delta)
         {
             base.CompPostTickInterval(ref severityAdjustment, delta);
-            if (this.Pawn.SpawnedOrAnyParentSpawned && this.Pawn.IsHashIntervalTick(500, delta))
+            if (this.Pawn.SpawnedOrAnyParentSpawned && this.Pawn.IsHashIntervalTick(500, delta) && this.parent.Severity == this.parent.def.maxSeverity)
             {
-                if (this.Props.infestationMTB > 0f && Rand.MTBEventOccurs(this.Props.infestationMTB, 60000f, 500))
+                if (this.Props.infestationMTBhours > 0f && Rand.MTBEventOccurs(this.Props.infestationMTBhours, 2500f, 500))
                 {
                     IncidentParms incidentParms = new IncidentParms();
                     incidentParms.target = this.Pawn.MapHeld;
@@ -142,7 +175,6 @@ namespace HautsPermits
                     incidentParms.infestationLocOverride = new IntVec3?(this.Pawn.PositionHeld);
                     incidentParms.forced = true;
                     IncidentDefOf.Infestation.Worker.TryExecute(incidentParms);
-                    this.Pawn.health.RemoveHediff(this.parent);
                 }
             }
         }

@@ -45,8 +45,8 @@
         <li>joinerEnding->You'll be able to direct [lodgersDef] the same way you direct your own colonists.[specialNeedsExplanation][mutatorSuffix]</li>
         <li>specialNeedsExplanation(asker_royalInCurrentFaction==True,priority=1)-> You'll need to satisfy any special royal needs the [lodgersLabelPlural] may have.</li>
         <li>specialNeedsExplanation-></li>
-		<li>mutatorSuffix(lodgersCount==1)->[mutator_PTTMD_info_singular][mutator_R2R_info_singular][mutator_WBY_info_singular]</li>
-		<li>mutatorSuffix(lodgersCount>=2)->[mutator_PTTMD_info_plural][mutator_R2R_info_plural][mutator_WBY_info_plural]</li>
+		<li>mutatorSuffix(lodgersCount==1)->[mutator_IDHTGU_info_singular][mutator_R2R_info_singular][mutator_WBY_info_singular]</li>
+		<li>mutatorSuffix(lodgersCount>=2)->[mutator_IDHTGU_info_plural][mutator_R2R_info_plural][mutator_WBY_info_plural]</li>
         <li>theirHisHer(lodgersCount==1)->[lodgers0_possessive]</li>
         <li>theirHisHer(lodgersCount>=2)->their</li>
         <li>lodgersPronoun(lodgersCount==1)->[lodgers0_pronoun]</li>
@@ -183,26 +183,6 @@
             <li>lodgers.BecameMutant</li>
           </inSignalsRemovePawn>
         </li>
-        <li Class="HautsPermits.QuestNode_Fort_AllThreeMutators">
-          <pawns>$lodgers</pawns>
-		  <PTTMD_hediffs>
-		    <li>Flu</li>
-		    <li>Malaria</li>
-		    <li>Plague</li>
-		    <li>SleepingSickness</li>
-		    <li>ScariaInfection</li>
-		    <li MayRequire="sarg.alphaanimals">AA_SwarmlingImplantation</li>
-		    <li MayRequire="sarg.sarg.alphabiomes">AB_BacterialGangrene</li>
-		  </PTTMD_hediffs>
-		  <PTTMD_description_singular>\nThe trader, [lodgers0_nameDef], has caught a potentially fatal disease and will require medical treatment.</PTTMD_description_singular>
-		  <PTTMD_description_plural>\nThe traders will require medical treatment due to the conditions they suffered during their travels.</PTTMD_description_plural>
-		  <R2R_hediff>HVMP_LifeOfLuxury</R2R_hediff>
-		  <R2R_description_singular>\nUsed to luxurious standards, [lodgers0_nameDef] will be dissatisfied with your colony's living conditions.</R2R_description_singular>
-		  <R2R_description_plural>\nUsed to luxurious standards, the traders will be dissatisfied with your colony's living conditions.</R2R_description_plural>
-		  <WBY_hediff>HVMP_BugPheromones</WBY_hediff>
-		  <WBY_description_singular>\nHaving passed through an insectoid warren, [lodgers0_nameDef] is covered in pheromones that attract infestations. Pheromones last for up to 18 days, or until an infestation converges on them.</WBY_description_singular>
-		  <WBY_description_plural>\nThe traders passed through an insectoid warren, and are covered in pheromones that attract infestations. Pheromones last for up to 18 days, or until an infestation converges on them.</WBY_description_plural>
-        </li>
         <li Class="QuestNode_SetAllApparelLocked">
           <pawns>$lodgers</pawns>
         </li>
@@ -214,6 +194,38 @@
         </li>
         <li Class="QuestNode_SubScript">
           <def>HVMP_Hospitality_Util_Worker</def>
+        </li>
+        <li Class="HautsPermits.QuestNode_Fort_AllThreeMutators">
+          <pawns>$lodgers</pawns>
+		  <IDHTGU_nodes>
+			<li Class="QuestNode_GetRandomInRangeInt">
+			  <storeAs>raidCount</storeAs>
+			  <range>1</range>
+			</li>
+			<li Class="QuestNode_Set">
+			  <name>firstRaidDelayTicks</name>
+			  <value>$(roundToTicksRough(randFloat(0.5, 0.95)*$shuttleDelayTicks))</value>
+			</li>
+			<li Class="QuestNode_GetFaction">
+			  <allowEnemy>true</allowEnemy>
+			  <mustBePermanentEnemy>true</mustBePermanentEnemy>
+			  <storeAs>enemyFaction</storeAs>
+			</li>
+			<li Class="QuestNode_Subscript">
+			  <def>Util_RaidDelayRepeatable</def>
+			  <parms>
+				<points>$(1.25*$points)</points>
+			  </parms>
+			</li>
+		  </IDHTGU_nodes>
+		  <IDHTGU_description_singular>\nEnemies of [lodgers0_nameDef] are still on [lodgers0_possessive] trail. They will send a tougher-than-normal raid against you which will strike sometime during [lodgers0_possessive] stay, but the raid will be called off if you fail the quest before then.</IDHTGU_description_singular>
+		  <IDHTGU_description_plural>\nThe traders' enemies are still on their trail. They will send a tougher-than-normal raid against you which will strike sometime during [lodgers0_possessive] stay, but the raid will be called off if you fail the quest before then.</IDHTGU_description_plural>
+		  <R2R_hediff>HVMP_LifeOfLuxury</R2R_hediff>
+		  <R2R_description_singular>\nUsed to luxurious standards, [lodgers0_nameDef] will be dissatisfied with your colony's living conditions.</R2R_description_singular>
+		  <R2R_description_plural>\nUsed to luxurious standards, the traders will be dissatisfied with your colony's living conditions.</R2R_description_plural>
+		  <WBY_hediff>HVMP_BugPheromones</WBY_hediff>
+		  <WBY_description_singular>\nA routine scan conducted by the [asker_faction_name] has revealed that [lodgers0_nameDef] is infected with an insectoid-sourced bloodborne pathogen. Upon reaching a sufficient concentration, they will cause [lodgers0_possessive] body to produce infestation-attracting pheromones. While the pathogen can be suppressed by regular medical treatment, only the gradual adaptation of [lodgers0_possessive] immune system will be sufficient to fully clear it out.</WBY_description_singular>
+		  <WBY_description_plural>\nA routine scan conducted by the [asker_faction_name] has revealed that the traders are infected with an insectoid-sourced bloodborne pathogen. Upon reaching a sufficient concentration, these pathogens will cause them to produce infestation-attracting pheromones. While the pathogen can be suppressed by regular medical treatment, only the gradual adaptation of the traders' immune systems will be sufficient to fully clear it out.</WBY_description_plural>
         </li>
       </nodes>
     </root>

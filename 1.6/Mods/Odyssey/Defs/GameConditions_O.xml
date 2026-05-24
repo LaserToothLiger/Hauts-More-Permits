@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <GameConditionDef>
+    <defName>HVMP_OrbitalTargeting</defName>
+    <conditionClass>HVMP_Odyssey.GameCondition_OrbitalTargeting</conditionClass>
+    <label>orbital targeting</label>
+    <description>This region is monitored by an orbital weapons platform. Creatures will gradually attract the platform's attention unless they are indoors and under a roof; attention builds faster while moving, and faster still while in an unroofed outdoors space. Sufficient attention results in telegraphed bombardment of the creature's position.</description>
+	<modExtensions>
+		<li Class="HautsFramework.InflictedHediff"><hediff>HVMP_OrbitalTargeting</hediff></li>
+	</modExtensions>
+  </GameConditionDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_OrbitalTargeting</defName>
+		<label>orbital targeting</label>
+		<description>An orbital weapons platform is triangulating the position of this creature. This occurs faster while the creature is moving, and faster still if it is in an unroofed outdoors space. Once the platform is confident enough of the creature's location, it will begin shelling its position.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<isBad>true</isBad>
+		<everCurableByItem>false</everCurableByItem>
+		<defaultLabelColor>(1, 0.7, 0.7)</defaultLabelColor>
+		<initialSeverity>0.001</initialSeverity>
+		<maxSeverity>4</maxSeverity>
+		<comps>
+		  <li Class="HVMP_Odyssey.HediffCompProperties_ReliantOnOrbitalTargeting">
+			<gameCondition>HVMP_OrbitalTargeting</gameCondition>
+			<severityPerHourSafe>-0.25</severityPerHourSafe>
+			<severityPerHourUnroofedOrOutdoors>0.1</severityPerHourUnroofedOrOutdoors>
+			<severityPerHourMoving>1</severityPerHourMoving>
+			<severityPerHourUnroofedAndOutdoors>1</severityPerHourUnroofedAndOutdoors>
+			<blastShapes>
+			  <li>HVMP_OT_Bomb_1rad_1shot</li>
+			  <li>HVMP_OT_Bomb_1rad_1shot</li>
+			  <li>HVMP_OT_Bomb_1rad_1shot</li>
+			  <li>HVMP_OT_Bomb_3rad_1shot</li>
+			  <!--NYI, these would be small-radius power beams and drop pods that deliver drones (which is why orbital targeting does not apply to drones)
+			  <li>HVMP_OT_Beam_3rad</li>
+			  <li>HVMP_OT_Beam_5rad</li>
+			  <li>HVMP_OT_HunterDrone</li>
+			  <li>HVMP_OT_HunterDrone</li>-->
+			</blastShapes>
+			<blastShapesUnlockedAtFinalStage>
+			  <li>HVMP_OT_Bomb_3rad_5shot</li>
+			  <!--<li>HVMP_OT_Bomb_RandomSpray</li>
+			  <li>HVMP_OT_WaspDrones</li>-->
+			</blastShapesUnlockedAtFinalStage>
+			<blastFrequencyTicks>2300~2700</blastFrequencyTicks>
+			<maxBlastFrequencyFactor>3</maxBlastFrequencyFactor>
+		  </li>
+		</comps>
+		<stages>
+		  <li>
+			<minSeverity>0.001</minSeverity>
+			<label>triangulating</label>
+		  </li>
+		  <li>
+			<minSeverity>1</minSeverity>
+			<label>infrequent</label>
+		  </li>
+		  <li>
+			<minSeverity>2</minSeverity>
+			<label>frequent</label>
+		  </li>
+		  <li>
+			<minSeverity>3</minSeverity>
+			<label>incessant</label>
+		  </li>
+		</stages>
+	  </HediffDef>
+  
+</Defs>

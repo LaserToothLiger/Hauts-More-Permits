@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--korhal-->
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_OrbitalTargetingBeacon</defName>
+    <label>orbital targeting beacon</label>
+    <description>An ancient signal transmitter powered by a wunderchip. It directs orbit-to-surface weaponry to eradicate all potential threats within a given zone, and for unknown reasons it is currently targeting its own position. Any creature in the region will slowly draw the attention of orbital weaponry.\n\nHack or destroy the beacon to obtain a wunderchip. Be warned, it may explode if damaged.</description>
+    <statBases>
+      <MaxHitPoints>600</MaxHitPoints>
+      <Flammability>0</Flammability>
+    </statBases>
+    <graphicData>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <texPath>Things/Building/Ancient/GravReactor/AncientGravReactor</texPath>
+      <drawSize>(5, 5)</drawSize>
+    </graphicData>
+    <dontPrint>true</dontPrint> <!-- Printed onto map mesh by comp -->
+    <size>(5, 5)</size>
+    <tickerType>Normal</tickerType>
+    <fillPercent>0.6</fillPercent>
+    <canOverlapZones>false</canOverlapZones>
+    <passability>Impassable</passability>
+    <pathCost>20</pathCost>
+    <hasInteractionCell>true</hasInteractionCell>
+    <interactionCellOffset>(-2,0,3)</interactionCellOffset>
+    <killedLeavings>
+      <ChunkSlagSteel>4</ChunkSlagSteel>
+      <GravlitePanel>50</GravlitePanel>
+    </killedLeavings>
+    <building>
+      <claimable>false</claimable>
+      <deconstructible>false</deconstructible>
+      <repairable>false</repairable>
+    </building>
+    <comps>
+      <li Class="CompProperties_CausesGameCondition">
+        <compClass>CompCauseGameCondition_AncientReactor</compClass>
+        <conditionDef>HVMP_OrbitalTargeting</conditionDef>
+        <worldRange>0</worldRange>
+        <hideSource>true</hideSource>
+      </li>
+      <li Class="CompProperties_Hackable">
+        <defence>9000</defence>
+        <effectHacking>HackingTerminal</effectHacking>
+        <lockoutDurationHoursRange>12~18</lockoutDurationHoursRange>
+        <showProgressAfterHackCompletion>false</showProgressAfterHackCompletion>
+        <notHackedInspectString>Hack to obtain wunderchip.</notHackedInspectString>
+        <hackedMessage>{HACKER_labelShort} has finished hacking {SUBJECT_definite}.</hackedMessage>
+        <hackedLetterLabel>Wunderchip obtained</hackedLetterLabel> 
+        <hackedLetterText>You've obtained a wunderchip from the orbital targeting beacon.\n\nThe beacon's signal is fading and its subservient weapons systems will soon stop firing.</hackedLetterText>
+        <hackedLetterDef>PositiveEvent</hackedLetterDef>
+        <destroyedLetterLabel>Wunderchip obtained</destroyedLetterLabel>
+        <destroyedLetterText>You've obtained a wunderchip from the orbital targeting beacon.\n\nThe beacon's signal is fading and its subservient weapons systems will soon stop firing.</destroyedLetterText>
+        <destroyedLetterDef>PositiveEvent</destroyedLetterDef>
+        <unhackedGraphicData>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <texPath>Things/Building/Ancient/GravReactor/AncientGravReactor</texPath>
+          <drawSize>(5, 5)</drawSize>
+        </unhackedGraphicData>
+        <hackedGraphicData>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <texPath>Things/Building/Ancient/GravReactor/AncientGravReactor_Off</texPath>
+          <drawSize>(5, 5)</drawSize>
+        </hackedGraphicData>
+        <dropOnHacked>
+          <HVMP_Wunderchip />
+        </dropOnHacked>
+        <dropOnDestroyed>
+          <HVMP_Wunderchip />
+        </dropOnDestroyed>
+        <intellectualSkillPrerequisite>6</intellectualSkillPrerequisite>
+      </li>
+      <li Class="CompProperties_Explosive">
+        <explosiveRadius>9.9</explosiveRadius>
+        <explosiveDamageType>Bomb</explosiveDamageType>
+        <destroyThingOnExplosionSize>2</destroyThingOnExplosionSize>
+        <startWickHitPointsPercent>0.5</startWickHitPointsPercent>
+        <wickTicks>200~240</wickTicks>
+      </li>
+      <li Class="CompProperties_LetterOnRevealed">
+        <label>Orbital targeting beacon</label>
+        <text>You've discovered the orbital targeting beacon. Hack it or destroy it to obtain a wunderchip and end the orbital weapon attacks.\n\nBe warned, it may explode if damaged.</text>
+        <letterDef>NeutralEvent</letterDef>
+      </li>
+	  <li Class="HVMP_Odyssey.CompProperties_WunderchipDefenders">
+		<pointsPer1xDifficulty>1000</pointsPer1xDifficulty>
+		<pawnGroupMakers>
+		  <li>
+			<kindDef>Combat</kindDef>
+			<commonality>100</commonality>
+			<options>
+			  <Drone_Hunter>1</Drone_Hunter>
+			  <Drone_Wasp>1</Drone_Wasp>
+			  <Drone_Sentry>10</Drone_Sentry>
+			</options>
+		  </li>
+		  <li MayRequire="Ludeon.RimWorld.Biotech">
+			<kindDef>Combat</kindDef>
+			<commonality>100</commonality>
+			<options>
+			  <Mech_Militor>12</Mech_Militor>
+			  <Mech_Cyclops>2</Mech_Cyclops>
+			  <Mech_Scorcher>1</Mech_Scorcher>
+			  <Mech_Scyther>2</Mech_Scyther>
+			</options>
+		  </li>
+		</pawnGroupMakers>
+		<spawnByTheseInsteadOfThis>
+		  <li>HunterDroneTrap</li>
+		  <li>WaspDroneTrap</li>
+		  <li>Turret_AncientArmoredTurret</li>
+		  <li>Pallet_Medicine</li>
+		  <li>Pallet_SurvivalMeals</li>
+		  <li>AncientBox_ComponentIndustrial</li>
+		  <li>AncientBox_ComponentSpacer</li>
+		  <li>MalfunctioningTransportPod</li>
+		  <li>AncientSafe</li>
+		  <li>AncientSealedContainer</li>
+		  <li>AncientSealedContainer_GravshipUpgrade</li>
+		</spawnByTheseInsteadOfThis>
+	  </li>
+    </comps>
+  </ThingDef>
+  
+  <!--moria-->
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_MineralExtractor</defName>
+    <label>ancient mineral extractor</label>
+    <description>A hybrid ultratech-archotech device which somehow harvests valuable minerals from the planetary crust at great speed without the use of physical drills. Its behavior is regulated by nearby stabilizers, but over the course of centuries its behavior has become erratic, agitating underground monsters which will surface until it is disabled.</description>
+    <thingClass>Building</thingClass>
+    <rotatable>false</rotatable>
+    <graphicData>
+      <graphicClass>Graphic_Single</graphicClass>
+      <texPath>Things/Building/QuestFoci/HVMP_MineralExtractor</texPath>
+      <drawSize>(3.5, 3.5)</drawSize>
+      <addTopAltitudeBias>true</addTopAltitudeBias>
+    </graphicData>
+    <size>(3, 3)</size>
+    <drawerType>RealtimeOnly</drawerType>
+    <useHitPoints>false</useHitPoints>
+    <fillPercent>0.5</fillPercent>
+    <canOverlapZones>false</canOverlapZones>
+    <passability>Impassable</passability>
+    <pathCost>50</pathCost>
+    <tickerType>Normal</tickerType>
+    <building>
+      <deconstructible>false</deconstructible>
+      <repairable>false</repairable>
+      <isTargetable>false</isTargetable>
+      <isInert>true</isInert>
+      <claimable>false</claimable>
+      <expandHomeArea>false</expandHomeArea>
+    </building>
+    <placeWorkers>
+      <li>PlaceWorker_InvalidOverSubstructure</li>
+    </placeWorkers>
+    <comps>
+      <li Class="HVMP_Odyssey.CompProperties_WunderExtractor">
+        <activeInspectString>Hack or destroy relay stabilizers to obtain wunderchip.</activeInspectString>
+        <destabilizationMessage>The mineral extractor has begun to destabilize.</destabilizationMessage>
+        <crashedLetterLabel>Extractor crash</crashedLetterLabel>
+        <crashedLetterText>The mineral extractor has collapsed. Destroy it to obtain a wunderchip.</crashedLetterText>
+        <destabilizationInspectString>Destabilizing</destabilizationInspectString>
+        <crashedThingDef>HVMP_MineralExtractor_Crashed</crashedThingDef>
+		<pawnSpawnMTBhours>3</pawnSpawnMTBhours>
+		<maxConcurrentPawns>400</maxConcurrentPawns>
+		<pawnPointsGivenExistingPawns>
+		  <points>
+            <li>(0, 1000)</li>
+            <li>(20, 800)</li>
+            <li>(50, 300)</li>
+            <li>(350, 200)</li>
+          </points>
+		</pawnPointsGivenExistingPawns>
+		<pawnGroupMakers>
+		  <li>
+			<kindDef>Combat</kindDef>
+			<commonality>100</commonality>
+			<options>
+			  <HiveQueen>1</HiveQueen>
+			  <Megaspider>15</Megaspider>
+			  <Spelopede>25</Spelopede>
+			  <Megascarab>25</Megascarab>
+			</options>
+		  </li>
+		  <li MayRequire="Ludeon.RimWorld.Anomaly">
+			<kindDef>Fleshbeasts</kindDef>
+			<commonality>100</commonality>
+			<options>
+			  <Dreadmeld>1</Dreadmeld>
+			  <Bulbfreak>3</Bulbfreak>
+			  <Toughspike>15</Toughspike>
+			  <Trispike>15</Trispike>
+			  <Fingerspike>25</Fingerspike>
+			</options>
+		  </li>
+		  <li MayRequire="mustard1557.musc.zerg">
+			<kindDef>Combat</kindDef>
+			<commonality>100</commonality>
+			<options>
+			  <MUSC_Ulari>1</MUSC_Ulari>
+			  <MUSC_WalkingScourge>4</MUSC_WalkingScourge>
+			  <MUSC_WingedZergling>4</MUSC_WingedZergling>
+			  <MUSC_Hydralisk>10</MUSC_Hydralisk>
+			  <MUSC_Zergling>30</MUSC_Zergling>
+			  <MUSC_Broodling>30</MUSC_Broodling>
+			</options>
+		  </li>
+		</pawnGroupMakers>
+      </li>
+      <li Class="CompProperties_LeaveFilthOnDestroyed">
+        <filthDef>Filth_LooseGround</filthDef>
+        <thickness>2</thickness>
+      </li>
+      <li Class="CompProperties_AmbientSound">
+        <sound>ScannerGroundPenetrating_Ambience</sound>
+      </li>
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_MineralExtractor_Crashed</defName>
+    <label>crashed ancient mineral extractor</label>
+    <description>A hybrid ultratech-archotech device which somehow harvests valuable minerals from the planetary crust at great speed without the use of physical drills. Its behavior is regulated by nearby stabilizers, but over the course of centuries its behavior has become erratic, agitating underground monsters which will surface until it is disabled.</description>
+    <graphicData>
+      <graphicClass>Graphic_Single</graphicClass>
+      <texPath>Things/Building/QuestFoci/HVMP_MineralExtractor</texPath>
+      <drawSize>(3.5, 3.5)</drawSize>
+    </graphicData>
+	<tickerType>Normal</tickerType>
+    <statBases>
+      <MaxHitPoints>200</MaxHitPoints>
+    </statBases>
+    <killedLeavings>
+      <HVMP_Wunderchip>1</HVMP_Wunderchip>
+      <ChunkSlagSteel>4</ChunkSlagSteel>
+      <GravlitePanel>165</GravlitePanel>
+    </killedLeavings>
+    <size>(3, 3)</size>
+    <fillPercent>0.5</fillPercent>
+    <canOverlapZones>false</canOverlapZones>
+    <passability>Impassable</passability>
+    <pathCost>50</pathCost>
+    <defaultPlacingRot>South</defaultPlacingRot>
+    <building>
+      <deconstructible>false</deconstructible>
+      <repairable>false</repairable>
+      <claimable>false</claimable>
+      <expandHomeArea>false</expandHomeArea>
+      <displayAttackToDestroyOnInspectPane>true</displayAttackToDestroyOnInspectPane>
+    </building>
+    <comps>
+      <li Class="HVMP_Odyssey.CompProperties_YouShouldDeconstructYourselfNow" /><!--I just don't want to do a sprite for this thing tbh. Nor do I want to resort to reflection just to destabilize the mineral extractor directly into its killed leavings-->
+    </comps>
+  </ThingDef>
+  
+</Defs>

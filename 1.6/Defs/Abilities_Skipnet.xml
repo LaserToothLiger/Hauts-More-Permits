@@ -64,7 +64,7 @@
     </statBases>
     <warmupSound>PsycastCastLoop</warmupSound>
 	<cooldownTicksRange>60000</cooldownTicksRange>
-    <writeCombatLog>True</writeCombatLog>
+    <writeCombatLog>False</writeCombatLog>
     <showPsycastEffects>False</showPsycastEffects>
     <verbProperties>
       <verbClass>Verb_CastAbility</verbClass>
@@ -107,6 +107,48 @@
 	  </li>
     </comps>
   </AbilityDef>
+  
+  <!--from pack, which I guess makes this roundaboutly also from permit-->
+  <AbilityDef>
+    <defName>HVMP_FarSkipnetPack</defName>
+    <label>planetary netskip</label>
+    <description>Skip the caster to an ally at a distant location. This can send people far across the planet, but only works if there is a willing ally on the other side to use as a navigation beacon. The skipped people will always appear near a random ally on the target map.\n\nThe caster must be in a map to initiate teleportation.</description>
+    <statBases>
+      <Ability_Duration>0</Ability_Duration>
+	  <Ability_EffectRadius>0</Ability_EffectRadius>
+    </statBases>
+	<cooldownTicksRange>180000</cooldownTicksRange>
+    <warmupSound>PsycastCastLoop</warmupSound>
+    <verbProperties>
+      <verbClass>Verb_CastAbility</verbClass>
+	  <range>0</range>
+      <warmupTime>5</warmupTime>
+      <drawAimPie>False</drawAimPie>
+      <requireLineOfSight>False</requireLineOfSight>
+      <targetParams>
+        <canTargetBuildings>False</canTargetBuildings>
+        <canTargetAnimals>False</canTargetAnimals>
+        <thingCategory>Item</thingCategory>
+        <mapObjectTargetsMustBeAutoAttackable>False</mapObjectTargetsMustBeAutoAttackable>
+      </targetParams>
+    </verbProperties>
+    <iconPath>UI/Abilities/HVMP_PlanetaryNetskip</iconPath>
+    <targetWorldCell>True</targetWorldCell>
+    <showGizmoOnWorldView>True</showGizmoOnWorldView>
+	<displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+	<disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+    <hostile>false</hostile>
+    <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+    <comps>
+      <li Class="CompProperties_AbilityFarskip">
+        <compClass>HautsPermits.CompAbilityEffect_FarNetskip</compClass>
+		<stunTicks>18~60</stunTicks>
+        <clamorType>Ability</clamorType>
+        <clamorRadius>10</clamorRadius>
+      </li>
+    </comps>
+  </AbilityDef>
+  
   <!--for certain quest mutators-->
   <AbilityDef>
 	<defName>HVMP_Skipnet_NPC</defName>

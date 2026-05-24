@@ -65,6 +65,7 @@
       <Beauty>1</Beauty>
       <MarketValue>500</MarketValue>
       <DeteriorationRate>2.0</DeteriorationRate>
+	  <Bulk MayRequire="CETeam.CombatExtended">1</Bulk>
     </statBases>
     <tickerType>Normal</tickerType>
     <comps>
@@ -196,6 +197,7 @@
       <Flammability>1</Flammability>
       <DeteriorationRate>2</DeteriorationRate>
       <MaxHitPoints>50</MaxHitPoints>
+	  <Bulk MayRequire="CETeam.CombatExtended">1</Bulk>
     </statBases>
     <allowedArchonexusCount>100</allowedArchonexusCount>
     <stackLimit>50</stackLimit>
