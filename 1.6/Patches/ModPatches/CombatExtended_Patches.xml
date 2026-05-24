@@ -631,13 +631,13 @@
 							<li Class="PatchOperationReplace">
 								<xpath>/Defs/ThingDef[defName="HVMP_OT_Bomb_1rad_1shot" or defName="HVMP_OT_Bomb_3rad_1shot" or defName="HVMP_OT_Bomb_3rad_5shot"]/comps/li[@Class="HVMP_Odyssey.CompProperties_CustomizableBombardment"]/explosionArmorPen</xpath>
 								<value>
-									<explosionAmount>125</explosionAmount>
+									<explosionArmorPen>75</explosionArmorPen>
 								</value>
 							</li>
 							<li Class="PatchOperationReplace">
 								<xpath>/Defs/ThingDef[defName="HVMP_OT_Bomb_1rad_1shot" or defName="HVMP_OT_Bomb_3rad_1shot" or defName="HVMP_OT_Bomb_3rad_5shot"]/comps/li[@Class="HVMP_Odyssey.CompProperties_CustomizableBombardment"]/explosionAmount</xpath>
 								<value>
-									<explosionAmount>75</explosionAmount>
+									<explosionAmount>125</explosionAmount>
 								</value>
 							</li>
 						</operations>
