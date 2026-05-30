@@ -1,6 +1,7 @@
 ﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Verse;
 using Verse.Sound;
 
@@ -19,6 +20,8 @@ namespace HautsPermits_Biotech
         public float damageToPlant;
         public EffecterDef effecter;
         public SoundDef sound;
+        public float rotationPerTick = 0.24f;
+        public string rotatorTexPath;
     }
     public class CompBlightBlast : ThingComp
     {
@@ -33,11 +36,56 @@ namespace HautsPermits_Biotech
         {
             GenDraw.DrawRadiusRing(this.parent.Position, this.Props.radius);
         }
+        public override void DrawAt(Vector3 drawLoc, bool flip = false)
+        {
+            base.DrawAt(drawLoc, flip);
+            this.top.DrawTop(drawLoc);
+        }
+        public override void PostSpawnSetup(bool respawningAfterLoad)
+        {
+            base.PostSpawnSetup(respawningAfterLoad);
+            this.top = new RotatingTop(this, this.TopMaterial);
+        }
+        public override void CompTick()
+        {
+            base.CompTick();
+            this.CurRotation += this.Props.rotationPerTick;
+        }
+        public Material TopMaterial
+        {
+            get
+            {
+                return CompBlightBlast.RotateMat.Material;
+            }
+        }
+        public float CurRotation
+        {
+            get
+            {
+                return this.curRotationInt;
+            }
+            set
+            {
+                this.curRotationInt = value;
+                if (this.curRotationInt > 360f)
+                {
+                    this.curRotationInt -= 360f;
+                }
+                if (this.curRotationInt < 0f)
+                {
+                    this.curRotationInt += 360f;
+                }
+            }
+        }
         public override void CompTickInterval(int delta)
         {
             base.CompTickInterval(delta);
             if (this.parent.Spawned)
             {
+                if (this.top == null)
+                {
+                    this.top = new RotatingTop(this,this.TopMaterial);
+                }
                 this.ticksToNextBlast -= delta;
                 if (this.ticksToNextBlast <= 0)
                 {
@@ -62,8 +110,31 @@ namespace HautsPermits_Biotech
         {
             base.PostExposeData();
             Scribe_Values.Look<int>(ref this.ticksToNextBlast, "ticksToNextBlast", 0, false);
+            Scribe_Values.Look<float>(ref this.curRotationInt, "curRotationInt", 0f, false);
         }
         public int ticksToNextBlast = 0;
+        public RotatingTop top;
+        public float curRotationInt;
+        private static readonly CachedMaterial RotateMat = new CachedMaterial("Things/Building/HVMP_Blightsprayer_Top", ShaderDatabase.Cutout);
+    }
+    public class RotatingTop
+    {
+        public RotatingTop(CompBlightBlast parent, Material material)
+        {
+            this.parent = parent;
+            this.material = material;
+        }
+        public void DrawTop(Vector3 drawLoc)
+        {
+            Vector3 vector = new Vector3(this.parent.parent.def.building.turretTopOffset.x, 0f, this.parent.parent.def.building.turretTopOffset.y);
+            float turretTopDrawSize = this.parent.parent.def.building.turretTopDrawSize;
+            Vector3 vector2 = drawLoc + Altitudes.AltIncVect + vector;
+            Vector3 vector3 = new Vector3(turretTopDrawSize, 1f, turretTopDrawSize);
+            Graphics.DrawMesh(MeshPool.plane10, Matrix4x4.TRS(vector2, (-90f + this.parent.CurRotation).ToQuat(), vector3), this.material, 0);
+        }
+
+        private CompBlightBlast parent;
+        private Material material;
     }
     //every periodicity ticks, adds fishPerTrigger to the fish population of the water body which this thing is currently in
     public class CompProperties_FishGenerator : CompProperties

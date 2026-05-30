@@ -32,13 +32,13 @@
 			  <li>HVMP_OT_Bomb_1rad_1shot</li>
 			  <li>HVMP_OT_Bomb_1rad_1shot</li>
 			  <li>HVMP_OT_Bomb_3rad_1shot</li>
-			  <!--NYI, these would be small-radius power beams and drop pods that deliver drones (which is why orbital targeting does not apply to drones)
-			  <li>HVMP_OT_Beam_3rad</li>
-			  <li>HVMP_OT_Beam_5rad</li>
 			  <li>HVMP_OT_HunterDrone</li>
-			  <li>HVMP_OT_HunterDrone</li>-->
+			  <!--NYI, these would be small-radius power beams
+			  <li>HVMP_OT_Beam_3rad</li>
+			  <li>HVMP_OT_Beam_5rad</li>-->
 			</blastShapes>
 			<blastShapesUnlockedAtFinalStage>
+			  <li>HVMP_OT_HunterDrone</li>
 			  <li>HVMP_OT_Bomb_3rad_5shot</li>
 			  <!--<li>HVMP_OT_Bomb_RandomSpray</li>
 			  <li>HVMP_OT_WaspDrones</li>-->

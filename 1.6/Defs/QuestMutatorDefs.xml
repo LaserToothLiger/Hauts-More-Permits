@@ -37,7 +37,7 @@
     </stages>
   </ThoughtDef>
   <!--What's Bugging You?-->
-  <HediffDef Name="DiseaseBase">
+  <HediffDef ParentName="DiseaseBase">
     <defName>HVMP_BugPheromones</defName>
     <label>insectoid tracking parasites</label>
     <description>Bloodborne pathogens which, upon reaching a critical concentration, will release pheromones that attract insectoid infestations.</description>

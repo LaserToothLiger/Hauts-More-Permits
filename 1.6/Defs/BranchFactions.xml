@@ -384,8 +384,8 @@
       <li>HVMP_EcosphereTitle</li>
     </royalTitleTags>
 	<colorSpectrum>
-      <li>(11, 121, 222)</li>
-      <li>(64, 143, 80)</li>
+      <li>(135, 212, 112)</li>
+      <li>(2, 161, 78)</li>
     </colorSpectrum>
 	<requiredMemes>
 	  <li MayRequire="MortStrudel.MortIdeologyEnv">MI_Environmentalist</li>

@@ -7,6 +7,7 @@ using RimWorld.QuestGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
@@ -338,6 +339,7 @@ namespace HVMP_Odyssey
         public float thickRoofInterceptChance = 0.5f;
         public SoundDef preImpactSound;
     }
+    [StaticConstructorOnStartup]
     public class CompCustomizableBombardment : ThingComp
     {
         public CompProperties_CustomizableBombardment Props
@@ -358,7 +360,18 @@ namespace HVMP_Odyssey
         {
             get
             {
-                return (this.duration + this.warmupTicks) - this.TicksPassed;
+                return this.duration - this.TicksPassed;
+            }
+        }
+        public override void DrawAt(Vector3 drawLoc, bool flip = false)
+        {
+            base.DrawAt(drawLoc, flip);
+            if (!this.projectiles.NullOrEmpty<Bombardment.BombardmentProjectile>())
+            {
+                for (int i = 0; i < this.projectiles.Count; i++)
+                {
+                    this.projectiles[i].Draw(CompCustomizableBombardment.ProjectileMaterial);
+                }
             }
         }
         public override void PostPostMake()
@@ -415,7 +428,7 @@ namespace HVMP_Odyssey
                     this.StartStrike();
                 }
             } else {
-                if (this.TicksPassed > this.duration + this.warmupTicks)
+                if (this.TicksPassed > this.duration + this.warmupTicks && (this.projectiles == null || this.projectiles.Count == 0))
                 {
                     this.parent.Destroy();
                 }
@@ -433,9 +446,18 @@ namespace HVMP_Odyssey
             if (this.ticksToNextEffect <= 0 && this.TicksLeft >= this.Props.ticksBetweenShots)
             {
                 this.Props.preImpactSound.PlayOneShot(new TargetInfo(this.nextExplosionCell, this.parent.Map, false));
-                this.TryDoExplosion(new Bombardment.BombardmentProjectile(1, this.nextExplosionCell));
+                this.projectiles.Add(new Bombardment.BombardmentProjectile(60, this.nextExplosionCell));
                 this.ticksToNextEffect = this.Props.ticksBetweenShots;
                 this.GetNextExplosionCell();
+            }
+            for (int i = this.projectiles.Count - 1; i >= 0; i--)
+            {
+                this.projectiles[i].Tick();
+                if (this.projectiles[i].LifeTime <= 0)
+                {
+                    this.TryDoExplosion(this.projectiles[i]);
+                    this.projectiles.RemoveAt(i);
+                }
             }
         }
         public void TryDoExplosion(Bombardment.BombardmentProjectile proj)
@@ -452,6 +474,7 @@ namespace HVMP_Odyssey
             }
             if (this.parent is Bombardment bobby)
             {
+                Log.Error("yuh!");
                 List<Thing> list = this.parent.Map.listerThings.ThingsInGroup(ThingRequestGroup.ProjectileInterceptor);
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -473,11 +496,16 @@ namespace HVMP_Odyssey
             Scribe_Values.Look<int>(ref this.startTick, "startTick", 0, false);
             Scribe_Values.Look<int>(ref this.warmupTicks, "warmupTicks", 0, false);
             Scribe_Values.Look<int>(ref this.ticksToNextEffect, "ticksToNextEffect", 0, false);
+            Scribe_Collections.Look<Bombardment.BombardmentProjectile>(ref this.projectiles, "projectiles", LookMode.Deep, Array.Empty<object>());
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 if (!this.nextExplosionCell.IsValid)
                 {
                     this.GetNextExplosionCell();
+                }
+                if (this.projectiles == null)
+                {
+                    this.projectiles = new List<Bombardment.BombardmentProjectile>();
                 }
             }
         }
@@ -490,5 +518,83 @@ namespace HVMP_Odyssey
         public int warmupTicks = 60;
         public int ticksToNextEffect;
         protected static readonly FloatRange AngleRange = new FloatRange(-12f, 12f);
+        protected List<Bombardment.BombardmentProjectile> projectiles = new List<Bombardment.BombardmentProjectile>();
+        public static readonly Material ProjectileMaterial = MaterialPool.MatFrom("Things/Projectile/Bullet_Big", ShaderDatabase.Transparent, Color.white);
+    }
+    //I drop you a pod with pawnCount number of random pawn kinds drawn from pawnOptions in it. If overrideFaction is specified, they're of that faction instead of being their default faction
+    public class DroneDeployer : ThingWithComps
+    {
+        protected override void DrawAt(Vector3 drawLoc, bool flip = false)
+        {
+            base.Comps_PostDraw();
+        }
+    }
+    public class CompProperties_DroneDeployer : CompProperties
+    {
+        public CompProperties_DroneDeployer()
+        {
+            this.compClass = typeof(CompDroneDeployer);
+        }
+        public int warmupTicks = 60;
+        public int pawnCount;
+        public List<PawnKindDef> pawnOptions = new List<PawnKindDef>();
+        public FactionDef overrideFaction;
+        public float thickRoofInterceptChance = 0f;
+    }
+    public class CompDroneDeployer : ThingComp
+    {
+        public CompProperties_DroneDeployer Props
+        {
+            get
+            {
+                return (CompProperties_DroneDeployer)this.props;
+            }
+        }
+        protected int TicksPassed
+        {
+            get
+            {
+                return Find.TickManager.TicksGame - this.parent.TickSpawned;
+            }
+        }
+        public override void PostSpawnSetup(bool respawningAfterLoad)
+        {
+            base.PostSpawnSetup(respawningAfterLoad);
+            this.parent.GetComp<CompOrbitalBeam>().StartAnimation(this.Props.warmupTicks, 10, Rand.RangeInclusive(-15,15));
+        }
+        public override void CompTickInterval(int delta)
+        {
+            base.CompTickInterval(delta);
+            if (this.TicksPassed > this.Props.warmupTicks)
+            {
+                if (this.parent.Spawned)
+                {
+                    Map m = this.parent.Map;
+                    IntVec3 iv3 = this.parent.Position;
+                    List<Pawn> pawns = new List<Pawn>();
+                    int pawnCount = this.Props.pawnCount;
+                    Faction f = Find.FactionManager.FirstFactionOfDef(this.Props.overrideFaction);
+                    while (pawnCount > 0)
+                    {
+                        Pawn p = this.GeneratePawn(this.Props.pawnOptions.RandomElement(),f);
+                        CompMechPowerCell cmpc = p.GetComp<CompMechPowerCell>();
+                        if (cmpc != null)
+                        {
+                            cmpc.GetType().GetField("powerTicksLeft", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(cmpc, Math.Max(cmpc.Props.totalPowerTicks, 2500));
+                        }
+                        pawns.Add(p);
+                        pawnCount--;
+                    }
+                    RoofDef rd = iv3.GetRoof(m);
+                    DropPodUtility.DropThingsNear(iv3, m, pawns.Cast<Thing>(), 30, false, false, rd == null || !rd.isThickRoof || Rand.Chance(this.Props.thickRoofInterceptChance), true, true, f);
+                }
+                this.parent.Destroy();
+            }
+        }
+        public Pawn GeneratePawn(PawnKindDef kind, Faction f)
+        {
+            PawnGenerationRequest pawnGenerationRequest = new PawnGenerationRequest(kind, f, PawnGenerationContext.NonPlayer, this.parent.Tile, false, false, false, true, true, 1f, false, true, true, false, true, false, false, false, false, 0f, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null, false, false, false, false, null, null, null, null, null, 0f, DevelopmentalStage.Adult, null, null, null, false, false, false, -1, 0, false);
+            return PawnGenerator.GeneratePawn(pawnGenerationRequest);
+        }
     }
 }

@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Buildings_Helldrills.cs" />
+    <Compile Include="Buildings_Voidcairn.cs" />
     <Compile Include="HarmonyPatches.cs" />
     <Compile Include="DefsOf.cs" />
     <Compile Include="GameConditions_TouchOfTheUnfathomable.cs" />

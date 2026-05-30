@@ -27,7 +27,7 @@ namespace HautsPermits_Ideology
                 Faction pawnFac = p.HomeFaction??p.Faction;
                 if (pawnFac.def.HasModExtension<EBranchQuests>())
                 {
-                    return 1;
+                    return 0;
                 }
                 foreach (Faction f in Find.FactionManager.AllFactionsVisible)
                 {

@@ -12,7 +12,7 @@
       </li>
       <li Class="HVMP_Odyssey.CompProperties_CustomizableBombardment">
         <shots>1</shots>
-		<warmupTicks>300</warmupTicks>
+		<warmupTicks>240</warmupTicks>
 		<ticksBetweenShots>18</ticksBetweenShots>
 		<shotSpread>0</shotSpread>
 		<explosionRadiusRange>1</explosionRadiusRange>
@@ -35,7 +35,7 @@
       </li>
       <li Class="HVMP_Odyssey.CompProperties_CustomizableBombardment">
         <shots>1</shots>
-		<warmupTicks>300</warmupTicks>
+		<warmupTicks>240</warmupTicks>
 		<ticksBetweenShots>18</ticksBetweenShots>
 		<shotSpread>0</shotSpread>
 		<explosionRadiusRange>1.9</explosionRadiusRange>
@@ -58,7 +58,7 @@
       </li>
       <li Class="HVMP_Odyssey.CompProperties_CustomizableBombardment">
         <shots>5</shots>
-		<warmupTicks>300</warmupTicks>
+		<warmupTicks>240</warmupTicks>
 		<ticksBetweenShots>18</ticksBetweenShots>
 		<shotSpread>0</shotSpread>
 		<explosionRadiusRange>1.9</explosionRadiusRange>
@@ -67,6 +67,26 @@
 		<explosionArmorPen>1</explosionArmorPen>
 		<preImpactSound>Bombardment_PreImpact</preImpactSound>
 		<thickRoofInterceptChance>0.5</thickRoofInterceptChance>
+      </li>
+    </comps>
+  </ThingDef>
+  
+  <ThingDef ParentName="OrbitalStrikeBase">
+    <defName>HVMP_OT_HunterDrone</defName>
+    <label>orbital hunter drone</label>
+    <thingClass>HVMP_Odyssey.DroneDeployer</thingClass>
+    <comps>
+      <li Class="CompProperties_OrbitalBeam">
+        <width>0.2</width>
+        <color>(210, 210, 255, 242)</color>
+      </li>
+      <li Class="HVMP_Odyssey.CompProperties_DroneDeployer">
+		<warmupTicks>240</warmupTicks>
+        <pawnCount>1</pawnCount>
+		<pawnOptions>
+		  <li>Drone_Hunter</li>
+		</pawnOptions>
+		<overrideFaction>AncientsHostile</overrideFaction>
       </li>
     </comps>
   </ThingDef>

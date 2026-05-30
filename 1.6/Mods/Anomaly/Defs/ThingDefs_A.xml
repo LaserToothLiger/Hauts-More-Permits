@@ -26,6 +26,7 @@
     <graphicData>
       <texPath>Things/Building/HVMP_Voidcairn</texPath>
       <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>1.2</drawSize>
     </graphicData>
     <minifiedDef>MinifiedThing</minifiedDef>
     <thingCategories>
@@ -38,6 +39,7 @@
     <costList Inherit="False">
       <ComponentIndustrial>1</ComponentIndustrial>
       <Steel>25</Steel>
+	  <VPE_Eltex MayRequire="VanillaExpanded.VPsycastsE">1</VPE_Eltex>
     </costList>
     <placeWorkers>
       <li>PlaceWorker_ShowFacilitiesConnections</li>
@@ -53,7 +55,8 @@
     <resourcesFractionWhenDeconstructed>1</resourcesFractionWhenDeconstructed>
     <comps Inherit="False">
       <li Class="CompProperties_Facility">
-        <statOffsets>
+        <compClass>HautsPermits_Occult.CompVoidcairn</compClass>
+		<statOffsets>
           <PsychicRitualQuality>0.08</PsychicRitualQuality>
           <ContainmentStrength>10</ContainmentStrength>
         </statOffsets>

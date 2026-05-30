@@ -5,7 +5,7 @@
   <IssueDef>
     <defName>HVMP_Allies</defName>
     <label>allied factions</label>
-    <iconPath>UI/Issues/MiningYield</iconPath>
+    <iconPath>UI/Issues/HVMP_AlliedFactions</iconPath>
   </IssueDef>
 
   <!-- Precepts -->
