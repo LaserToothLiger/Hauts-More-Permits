@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Buildings_EcosphereDrops.cs" />
+    <Compile Include="PermitWorker_Vaccinate.cs" />
     <Compile Include="Quest_Ecosphere_RetroviralAgent.cs" />
     <Compile Include="DefsOf.cs" />
     <Compile Include="Hediffs_ScariaMutations.cs" />

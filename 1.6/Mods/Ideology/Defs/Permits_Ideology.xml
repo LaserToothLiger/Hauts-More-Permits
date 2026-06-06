@@ -104,13 +104,13 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropBookSeniorityScalingBase">
     <defName>HVMP_ObscureScriptureDrop</defName>
     <label>obscure scripture drop</label>
-    <description>Call for a random ideoligious tract, plus an additional tract per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic).\n\nTracts can be read to learn about an ideoligion from a distant world and time. Non-believers will slowly be converted while reading the scripture, while believers will gain certainty from reading it.</description>
+    <description>Call for an ideoligious scripture book, plus an additional scripture per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic). These scriptures describe an obscure ideoligion from another world and time.\n\nScriptures can be read to learn about their ideoligion. Non-believers will slowly be converted while reading the scripture (although this may upset them). Believers will gain certainty from reading it, as well as a random benefit that is listed in the book's Details tab.</description>
     <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBookSeniorityScaling</workerClass>
     <minTitle>HVMP_ArchiveI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>14</cooldownDays>
-    <uiPosition>(0,5)</uiPosition>
+    <uiPosition>(0,4)</uiPosition>
     <royalAid>
       <favorCost>2</favorCost>
     </royalAid>
@@ -118,25 +118,25 @@
 		<li Class="HautsFramework.PermitMoreEffects">
 			<extraNumber>0</extraNumber><!--in this case, this is the chance the generated book is of the caller's ideo-->
 			<phenomenonCount>1</phenomenonCount>
-			<bookDef>HVMP_ObscureScripture</bookDef>
-			<bookSuperQualityChance>0.1</bookSuperQualityChance>
+			<bookDef>HVMP_Scripture</bookDef>
+			<bookSuperQualityChance>0.02</bookSuperQualityChance>
 			<minPetness>200</minPetness><!--already using extraNumber for something else; this is being used as the permit-caller's seniority divisor for purposes of rank-scaling-->
         </li>
 		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for a random ideoligious tract.\n\nTracts can be read to learn about an ideoligion from a distant world and time. Non-believers will slowly be converted while reading the scripture, while believers will gain certainty from reading it.</extraString>
+			<extraString>Call for an ideoligious scripture book, which describes an obscure ideoligion from another world and time.\n\nNon-believers will slowly be converted while reading the scripture (although this may upset them). Believers will gain certainty from reading it, as well as a random benefit that is listed in the book's Details tab.</extraString>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropBookSeniorityScalingBase">
-    <defName>HVMP_IdeoPamphletDrop</defName>
-    <label>ideoligious pamphlet drop</label>
-    <description>Call for a pamphlet of the caller's ideoligion, plus an additional tract per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic).\n\nNon-believers will slowly be converted while reading the pamphlet, while believers will gain certainty from reading it.</description>
+    <defName>HVMP_FamiliarScriptureDrop</defName>
+    <label>familiar scripture drop</label>
+    <description>Call for an ideoligious scripture book, plus an additional scripture per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic). These scriptures describe the permit-caller's ideoligion.\n\nScriptures can be read to learn about their ideoligion. Non-believers will slowly be converted while reading the scripture (although this may upset them). Believers will gain certainty from reading it, as well as a random benefit that is listed in the book's Details tab.</description>
     <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBookSeniorityScaling</workerClass>
     <minTitle>HVMP_ArchiveI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>14</cooldownDays>
-    <uiPosition>(0,5.75)</uiPosition>
+    <uiPosition>(0,4.75)</uiPosition>
     <royalAid>
       <favorCost>2</favorCost>
     </royalAid>
@@ -144,12 +144,12 @@
 		<li Class="HautsFramework.PermitMoreEffects">
 			<extraNumber>1</extraNumber><!--in this case, this is the chance the generated book is of the caller's ideo-->
 			<phenomenonCount>1</phenomenonCount>
-			<bookDef>HVMP_IdeoPamphlet</bookDef>
-			<bookSuperQualityChance>0.1</bookSuperQualityChance>
-			<minPetness>200</minPetness>
+			<bookDef>HVMP_Scripture</bookDef>
+			<bookSuperQualityChance>0.02</bookSuperQualityChance>
+			<minPetness>200</minPetness><!--already using extraNumber for something else; this is being used as the permit-caller's seniority divisor for purposes of rank-scaling-->
         </li>
 		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for a pamphlet of the caller's ideoligion.\n\nNon-believers will slowly be converted while reading the pamphlet, while believers will gain certainty from reading it.</extraString>
+			<extraString>Call for an ideoligious scripture book, which describes the permit-caller's ideoligion.\n\nScriptures can be read to learn about their ideoligion. Non-believers will slowly be converted while reading the scripture (although this may upset them). Believers will gain certainty from reading it, as well as a random benefit that is listed in the book's Details tab.</extraString>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -161,7 +161,7 @@
 		<faction>HVMP_ArchiveBranch</faction>
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>15</cooldownDays>
-		<uiPosition>(0,6.5)</uiPosition>
+		<uiPosition>(0,5.5)</uiPosition>
 		<royalAid>
 		  <favorCost>3</favorCost>
 		</royalAid>
@@ -205,84 +205,6 @@
     <royalAid>
       <favorCost>1</favorCost>
     </royalAid>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_EsotericVerseDrop</defName>
-    <label>esoteric treatise drop</label>
-    <description>Call for a book relevant to the caller's ideoligion which teaches about its deeper mysteries, plus an additional such book per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic). Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that improves multiple ideoligious stats.</description>
-    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBookSeniorityScaling</workerClass>
-    <minTitle>HVMP_ArchiveII</minTitle>
-    <faction>HVMP_ArchiveBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>14</cooldownDays>
-    <uiPosition>(1,5)</uiPosition>
-    <royalAid>
-      <favorCost>2</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<extraNumber>1</extraNumber>
-			<phenomenonCount>1</phenomenonCount>
-			<bookDef>HVMP_EsotericTract</bookDef>
-			<bookSuperQualityChance>0.1</bookSuperQualityChance>
-			<minPetness>200</minPetness>
-        </li>
-		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for a book relevant to the caller's ideoligion which teaches about its deeper mysteries. Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that improves multiple ideoligious stats.</extraString>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_InspiringVerseDrop</defName>
-    <label>inspiring verses drop</label>
-    <description>Call for an inspirational book relevant to the caller's ideoligion, plus an additional such book per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic). Believers can read it to gain certainty and possibly also gain an inspiration.</description>
-    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBookSeniorityScaling</workerClass>
-    <minTitle>HVMP_ArchiveII</minTitle>
-    <faction>HVMP_ArchiveBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>14</cooldownDays>
-    <uiPosition>(1,5.75)</uiPosition>
-    <royalAid>
-      <favorCost>2</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<extraNumber>1</extraNumber>
-			<phenomenonCount>1</phenomenonCount>
-			<bookDef>HVMP_InspiringTract</bookDef>
-			<bookSuperQualityChance>0.1</bookSuperQualityChance>
-			<minPetness>200</minPetness>
-        </li>
-		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for an inspirational book relevant to the caller's ideoligion. Believers can read it to gain certainty and possibly also gain an inspiration.</extraString>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_MeditativeVerseDrop</defName>
-    <label>meditative mantra drop</label>
-    <description>Call for a meditation-assistive book relevant to the caller's ideoligion, plus an additional such book per every 2 ranks held with the Archive Branch (2 if the caller is a Lorekeeper or Antiquarian, or 3 if the caller is a Pangnostic). Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that lets them stay up longer, need recreation less often, resist stress, and meditate more effectively.</description>
-    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DropIdeoBookSeniorityScaling</workerClass>
-    <minTitle>HVMP_ArchiveII</minTitle>
-    <faction>HVMP_ArchiveBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>14</cooldownDays>
-    <uiPosition>(1,6.5)</uiPosition>
-    <royalAid>
-      <favorCost>2</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<extraNumber>1</extraNumber>
-			<phenomenonCount>1</phenomenonCount>
-			<bookDef>HVMP_MeditativeTract</bookDef>
-			<bookSuperQualityChance>0.1</bookSuperQualityChance>
-			<minPetness>200</minPetness>
-        </li>
-		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for a meditation-assistive book relevant to the caller's ideoligion. Believers can read it to gain certainty, as well as to gain temporary stacks of a buff that lets them stay up longer, need recreation less often, resist stress, and meditate more effectively.</extraString>
-        </li>
-	</modExtensions>
   </RoyalTitlePermitDef>
   <!--Archive level 3-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">

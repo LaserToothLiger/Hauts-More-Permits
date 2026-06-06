@@ -44,19 +44,12 @@ namespace HautsPermits_Biotech
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
-            this.top = new RotatingTop(this, this.TopMaterial);
+            this.top = new RotatingTop(this);
         }
         public override void CompTick()
         {
             base.CompTick();
             this.CurRotation += this.Props.rotationPerTick;
-        }
-        public Material TopMaterial
-        {
-            get
-            {
-                return CompBlightBlast.RotateMat.Material;
-            }
         }
         public float CurRotation
         {
@@ -84,7 +77,7 @@ namespace HautsPermits_Biotech
             {
                 if (this.top == null)
                 {
-                    this.top = new RotatingTop(this,this.TopMaterial);
+                    this.top = new RotatingTop(this);
                 }
                 this.ticksToNextBlast -= delta;
                 if (this.ticksToNextBlast <= 0)
@@ -115,14 +108,12 @@ namespace HautsPermits_Biotech
         public int ticksToNextBlast = 0;
         public RotatingTop top;
         public float curRotationInt;
-        private static readonly CachedMaterial RotateMat = new CachedMaterial("Things/Building/HVMP_Blightsprayer_Top", ShaderDatabase.Cutout);
     }
     public class RotatingTop
     {
-        public RotatingTop(CompBlightBlast parent, Material material)
+        public RotatingTop(CompBlightBlast parent)
         {
             this.parent = parent;
-            this.material = material;
         }
         public void DrawTop(Vector3 drawLoc)
         {
@@ -130,11 +121,11 @@ namespace HautsPermits_Biotech
             float turretTopDrawSize = this.parent.parent.def.building.turretTopDrawSize;
             Vector3 vector2 = drawLoc + Altitudes.AltIncVect + vector;
             Vector3 vector3 = new Vector3(turretTopDrawSize, 1f, turretTopDrawSize);
-            Graphics.DrawMesh(MeshPool.plane10, Matrix4x4.TRS(vector2, (-90f + this.parent.CurRotation).ToQuat(), vector3), this.material, 0);
+            Graphics.DrawMesh(MeshPool.plane10, Matrix4x4.TRS(vector2, (-90f + this.parent.CurRotation).ToQuat(), vector3), RotatingTop.RotateMat.Material, 0);
         }
 
         private CompBlightBlast parent;
-        private Material material;
+        private static readonly CachedMaterial RotateMat = new CachedMaterial("Things/Building/HVMP_Blightsprayer_Top", ShaderDatabase.Cutout);
     }
     //every periodicity ticks, adds fishPerTrigger to the fish population of the water body which this thing is currently in
     public class CompProperties_FishGenerator : CompProperties

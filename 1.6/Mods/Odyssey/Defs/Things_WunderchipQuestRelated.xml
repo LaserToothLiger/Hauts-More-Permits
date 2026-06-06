@@ -93,6 +93,12 @@
 			  <Drone_Hunter>1</Drone_Hunter>
 			  <Drone_Wasp>1</Drone_Wasp>
 			  <Drone_Sentry>10</Drone_Sentry>
+			  <VQE_BattleDrone MayRequire="vanillaquestsexpanded.dronefactory">5</VQE_BattleDrone>
+			  <VQE_HornetDrone MayRequire="vanillaquestsexpanded.dronefactory">3</VQE_HornetDrone>
+			  <VQE_TurretDrone MayRequire="vanillaquestsexpanded.dronefactory">2</VQE_TurretDrone>
+			  <VQE_RaiderDrone MayRequire="vanillaquestsexpanded.dronefactory">2</VQE_RaiderDrone>
+			  <VQE_Protolancer MayRequire="vanillaquestsexpanded.dronefactory">1</VQE_Protolancer>
+			  <VQE_StingrayDrone MayRequire="vanillaquestsexpanded.dronefactory">1</VQE_StingrayDrone>
 			</options>
 		  </li>
 		  <li MayRequire="Ludeon.RimWorld.Biotech">
@@ -103,6 +109,16 @@
 			  <Mech_Cyclops>2</Mech_Cyclops>
 			  <Mech_Scorcher>1</Mech_Scorcher>
 			  <Mech_Scyther>2</Mech_Scyther>
+			  <LFM_Mech_Arbiter MayRequire="GoGaTio.LostFactoryMechanoids">2</LFM_Mech_Arbiter>
+			  <IM_Mech_Aide MayRequire="EL.InvMech">2</IM_Mech_Aide>
+			  <IM_Mech_Ripper MayRequire="EL.InvMech">1</IM_Mech_Ripper>
+			  <IM_Mech_Constrictor MayRequire="EL.InvMech">1</IM_Mech_Constrictor>
+			  <IM_Mech_Berserker MayRequire="EL.InvMech">1</IM_Mech_Berserker>
+			  <AM_Aura MayRequire="sarg.alphamechs">2</AM_Aura>
+			  <AM_Mech_Bellicor MayRequire="sarg.alphamechs">3</AM_Mech_Bellicor>
+			  <AM_Blitzkrieg MayRequire="sarg.alphamechs">1</AM_Blitzkrieg>
+			  <AM_Daggersnout MayRequire="sarg.alphamechs">3</AM_Daggersnout>
+			  <AM_Phalanx MayRequire="sarg.alphamechs">2</AM_Phalanx>
 			</options>
 		  </li>
 		</pawnGroupMakers>
@@ -182,6 +198,7 @@
 			  <Megaspider>15</Megaspider>
 			  <Spelopede>25</Spelopede>
 			  <Megascarab>25</Megascarab>
+			  <VFEI2_Megapede MayRequire="OskarPotocki.VFE.Insectoid2">3</VFEI2_Megapede>
 			</options>
 		  </li>
 		  <li MayRequire="Ludeon.RimWorld.Anomaly">
@@ -205,6 +222,57 @@
 			  <MUSC_Hydralisk>10</MUSC_Hydralisk>
 			  <MUSC_Zergling>30</MUSC_Zergling>
 			  <MUSC_Broodling>30</MUSC_Broodling>
+			</options>
+		  </li>
+		  <li MayRequire="OskarPotocki.VFE.Insectoid2">
+			<kindDef>Combat</kindDef>
+			<commonality>100</commonality>
+			<options>
+			  <VFEI2_Boomtick>30</VFEI2_Boomtick>
+			  <VFEI2_Hellbeetle>15</VFEI2_Hellbeetle>
+			  <VFEI2_Fuelmite>5</VFEI2_Fuelmite>
+			  <VFEI2_Titantick>1</VFEI2_Titantick>
+			</options>
+		  </li>
+		  <li MayRequire="OskarPotocki.VFE.Insectoid2">
+			<kindDef>Combat</kindDef>
+			<commonality>100</commonality>
+			<options>
+			  <VFEI2_Macrofly>30</VFEI2_Macrofly>
+			  <VFEI2_Megawasp>10</VFEI2_Megawasp>
+			  <VFEI2_Gigalocust>5</VFEI2_Gigalocust>
+			  <VFEI2_Teramantis>1</VFEI2_Teramantis>
+			</options>
+		  </li>
+		  <li MayRequire="OskarPotocki.VFE.Insectoid2">
+			<kindDef>Combat</kindDef>
+			<commonality>100</commonality>
+			<options>
+			  <VFEI2_Megathrips>30</VFEI2_Megathrips>
+			  <VFEI2_Venomite>15</VFEI2_Venomite>
+			  <VFEI2_Acidspitter>3</VFEI2_Acidspitter>
+			  <VFEI2_Gigamite>1</VFEI2_Gigamite>
+			</options>
+		  </li>
+		  <li MayRequire="OskarPotocki.VFE.Insectoid2">
+			<kindDef>Combat</kindDef>
+			<commonality>100</commonality>
+			<options>
+			  <VFEI2_Durapod>30</VFEI2_Durapod>
+			  <VFEI2_Tankroach>15</VFEI2_Tankroach>
+			  <VFEI2_Ironclad>5</VFEI2_Ironclad>
+			  <VFEI2_Silverfish>1</VFEI2_Silverfish>
+			</options>
+		  </li>
+		  <li MayRequire="sarg.alphaanimals">
+			<kindDef>Combat</kindDef>
+			<commonality>100</commonality>
+			<options>
+			  <VFEI2_BlackQueen MayRequire="OskarPotocki.VFE.Insectoid2">1</VFEI2_BlackQueen>
+			  <AA_MammothWorm>4</AA_MammothWorm>
+			  <AA_BlackSpider>30</AA_BlackSpider>
+			  <AA_BlackSpelopede>50</AA_BlackSpelopede>
+			  <AA_BlackScarab>90</AA_BlackScarab>
 			</options>
 		  </li>
 		</pawnGroupMakers>

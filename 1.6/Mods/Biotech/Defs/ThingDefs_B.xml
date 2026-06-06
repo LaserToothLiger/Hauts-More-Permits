@@ -432,9 +432,9 @@
     </costList>
     <resourcesFractionWhenDeconstructed>1</resourcesFractionWhenDeconstructed>
     <graphicData>
-      <texPath>Things/Building/Mech/AncientMechGestatorIntact_Empty/AncientMechGestatorIntact_Empty</texPath>
+      <texPath>Things/Building/HVMP_BotanicalPylon</texPath>
       <graphicClass>Graphic_Multi</graphicClass>
-      <drawSize>(1,1)</drawSize>
+      <drawSize>1.25</drawSize>
       <shadowData>
         <volume>(0.6, 0.4, 0.6)</volume>
       </shadowData>
@@ -473,9 +473,6 @@
 		<periodicity>2000</periodicity>
 		<growthAmount>1</growthAmount>
       </li>
-	  <li Class="HautsFramework.CompProperties_FactionColored">
-		<colorFactor>0.85</colorFactor>
-	  </li>
     </comps>
 	<modExtensions>
 	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />

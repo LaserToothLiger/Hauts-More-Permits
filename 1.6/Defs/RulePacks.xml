@@ -239,9 +239,9 @@
 	</rulePack>
   </RulePackDef>
   
-  <!--Obscure Tracts (ideo books from Archive Branch)-->
+  <!--ideo books from Archive Branch-->
   <RulePackDef>
-    <defName>HVMP_Namer_ObscureTract</defName>
+    <defName>HVMP_Namer_Scripture</defName>
     <include>
       <li>ArtNameUtility</li>
     </include>
@@ -370,7 +370,7 @@
     </rulePack>
   </RulePackDef>
   <RulePackDef>
-    <defName>HVMP_ObscureTractDesc</defName>
+    <defName>HVMP_ScriptureDesc</defName>
     <include>
       <li>ArtDescriptionUtility_Global</li>
     </include>

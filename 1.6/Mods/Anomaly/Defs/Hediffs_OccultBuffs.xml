@@ -5,6 +5,13 @@
   <HediffDef Name="HVMP_OccultSuffusionBase" Abstract="True" ParentName="HVT_TraitHediffBase">
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(0.61,0.035,0.75)</defaultLabelColor>
+    <comps>
+	  <li Class="HediffCompProperties_DisappearsOnDeath">
+	    <compClass>HautsPermits_Occult.HediffComp_SuffusionsAreMutuallyExclusive</compClass>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef Name="HVMP_OccultSuffusionTemporaryBase" Abstract="True" ParentName="HVMP_OccultSuffusionBase">
 	<initialSeverity>72</initialSeverity>
 	<maxSeverity>72</maxSeverity>
     <comps>
@@ -12,7 +19,6 @@
 		<severityPerDay>-24</severityPerDay>
 		<showDaysToRecover>true</showDaysToRecover>
 	  </li>
-	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
     </comps>
   </HediffDef>
   
@@ -20,11 +26,11 @@
   <HediffDef ParentName="HVMP_OccultSuffusionBase">
     <defName>HVMP_EntitySubdual</defName>
     <label>entity subdual</label>
-    <description>A distant psychic influence is making this entity more docile.</description>
+    <description>A distant psychic influence is making this entity more docile.\n\nApplying another psychic suffusion will disrupt this effect.</description>
     <stages>
       <li>
 		<statFactors>
-		  <MinimumContainmentStrength>0.5</MinimumContainmentStrength>
+		  <MinimumContainmentStrength>0.75</MinimumContainmentStrength>
 		</statFactors>
       </li>
     </stages>
@@ -32,22 +38,22 @@
   <HediffDef ParentName="HVMP_OccultSuffusionBase">
     <defName>HVMP_SuffusedClosedMind</defName>
     <label>closed-mind suffusion</label>
-    <description>A distant psychic influence is suppressing certain brain functions.</description>
+    <description>A distant psychic influence is suppressing certain brain functions, including the ability to have inspirations.\n\nApplying another psychic suffusion will disrupt this effect.</description>
     <stages>
       <li>
 		<statOffsets>
 		  <PsychicSensitivity>-1</PsychicSensitivity>
 		  <MentalBreakThreshold>-0.25</MentalBreakThreshold>
 		  <CertaintyLossFactor MayRequire="Ludeon.RimWorld.Ideology">-0.5</CertaintyLossFactor>
-		  <GlobalLearningFactor>-0.35</GlobalLearningFactor>
 		</statOffsets>
+        <blocksInspirations>true</blocksInspirations>
       </li>
     </stages>
   </HediffDef>
   <HediffDef ParentName="HVMP_OccultSuffusionBase">
     <defName>HVMP_SuffusedOpenMind</defName>
     <label>open-mind suffusion</label>
-    <description>A distant psychic influence is enhancing certain brain functions, notably those pertaining to psychic sensitivity and emotional volatility.</description>
+    <description>A distant psychic influence is enhancing certain brain functions, notably those pertaining to psychic sensitivity and emotional volatility.\n\nApplying another psychic suffusion will disrupt this effect.</description>
     <stages>
       <li>
 		<statOffsets>
@@ -61,7 +67,7 @@
   <HediffDef ParentName="HVMP_OccultSuffusionBase">
     <defName>HVMP_SuffusedProfanity</defName>
     <label>profanity suffusion</label>
-    <description>A distant psychic influence is enhancing attunement towards the Void.</description>
+    <description>A distant psychic influence is enhancing attunement towards the Void.\n\nApplying another psychic suffusion will disrupt this effect.</description>
     <stages>
       <li>
 		<statOffsets>
@@ -74,7 +80,7 @@
   <HediffDef ParentName="HVMP_OccultSuffusionBase">
     <defName>HVMP_SuffusedSanctity</defName>
     <label>sanctity suffusion</label>
-    <description>A distant psychic influence grants enhanced abilities to rebuke the Void.</description>
+    <description>A distant psychic influence grants enhanced abilities to rebuke the Void.\n\nApplying another psychic suffusion will disrupt this effect.</description>
     <stages>
       <li>
 		<statOffsets>
@@ -86,10 +92,10 @@
   </HediffDef>
   
   <!--Level 2-->
-  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+  <HediffDef ParentName="HVMP_OccultSuffusionTemporaryBase">
     <defName>HVMP_SuffusedRehumanizer</defName>
     <label>rehumanizing suffusion</label>
-    <description>A distant psychic influence is deprogramming the "inhumanity" out of this individual.</description>
+    <description>A distant psychic influence is deprogramming the "inhumanity" out of this individual.\n\nApplying another psychic suffusion will disrupt this effect.</description>
     <hediffClass>HautsPermits_Occult.Hediff_Rehumanizer</hediffClass>
 	<minSeverity>0.001</minSeverity>
 	<initialSeverity>120</initialSeverity>
@@ -126,10 +132,10 @@
 	  </ThoughtDef>
   
   <!--Level 4-->
-  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+  <HediffDef ParentName="HVMP_OccultSuffusionTemporaryBase">
     <defName>HVMP_SuffusedInvisibility</defName>
     <label>invisibility suffusion</label>
-    <description>A distant psychic influence prevents others from noticing this individual.</description>
+    <description>A distant psychic influence prevents others from noticing this individual.\n\nApplying another psychic suffusion will disrupt this effect.</description>
 	<initialSeverity>0.5</initialSeverity>
 	<maxSeverity>0.5</maxSeverity>
 	<comps>
@@ -138,10 +144,10 @@
 	  </li>
     </comps>
   </HediffDef>
-  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+  <HediffDef ParentName="HVMP_OccultSuffusionTemporaryBase">
     <defName>HVMP_SuffusedPsyfocus</defName>
     <label>psyfocus suffusion</label>
-    <description>A distant psychic influence provides continual psyfocus at the expense of worsened mood.</description>
+    <description>A distant psychic influence provides continual psyfocus at the expense of worsened mood.\n\nApplying another psychic suffusion will disrupt this process.</description>
 	<initialSeverity>24</initialSeverity>
 	<maxSeverity>24</maxSeverity>
     <stages>
@@ -172,7 +178,7 @@
 	<defName>HVMP_SuffusedProbabilityFlux</defName>
 	<hediffClass>HautsPermits_Occult.Hediff_ProbabilityFlux</hediffClass>
 	<label>probability flux suffusion</label>
-	<description>A metaphysical construct which burns psychic sensitivity to cause good events over time. The construct ceases to function once the host's psychic sensitivity reaches 0%; the lost sensitivity never recovers.</description>
+	<description>A metaphysical construct which burns psychic sensitivity to cause good events over time. The construct ceases to function once the host's psychic sensitivity reaches 0%; the lost sensitivity never recovers.\n\nApplying another psychic suffusion will disrupt this process.</description>
 	<initialSeverity>0.001</initialSeverity>
 	<stages>
 	  <li>
@@ -189,15 +195,17 @@
 		<permanentLabel>probability flux scar</permanentLabel>
 		<postEventRecoveryPerHour>0</postEventRecoveryPerHour>
 	  </li>
-	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	  <li Class="HediffCompProperties_DisappearsOnDeath">
+	    <compClass>HautsPermits_Occult.HediffComp_SuffusionsAreMutuallyExclusive</compClass>
+	  </li>
 	</comps>
   </HediffDef>
   
   <!--Level 6-->
-  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+  <HediffDef ParentName="HVMP_OccultSuffusionTemporaryBase">
     <defName>HVMP_SuffusedPsylinker</defName>
     <label>psylink suffusion</label>
-    <description>A distant psychic influence is causing a psylink to gradually form.</description>
+    <description>A distant psychic influence is causing a psylink to gradually form.\n\nApplying another psychic suffusion will disrupt this process.</description>
     <hediffClass>HautsPermits_Occult.Hediff_Psylinker</hediffClass>
 	<minSeverity>0.001</minSeverity>
 	<initialSeverity>120</initialSeverity>
@@ -213,10 +221,10 @@
 	  </li>
     </stages>
   </HediffDef>
-  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+  <HediffDef ParentName="HVMP_OccultSuffusionTemporaryBase">
     <defName>HVMP_SuffusedDeghoulizer</defName>
     <label>deghoulizing suffusion</label>
-    <description>A distant psychic influence is reverting the ghoulizing changes done to this individual's body.</description>
+    <description>A distant psychic influence is reverting the ghoulizing changes done to this individual's body.\n\nApplying another psychic suffusion will disrupt this process.</description>
     <hediffClass>HautsPermits_Occult.Hediff_Deghoulizer</hediffClass>
 	<minSeverity>0.001</minSeverity>
     <stages>
@@ -234,10 +242,10 @@
 	  </li>
     </stages>
   </HediffDef>
-  <HediffDef ParentName="HVMP_OccultSuffusionBase" MayRequire="Hautarche.HautsTraits">
+  <HediffDef ParentName="HVMP_OccultSuffusionTemporaryBase" MayRequire="Hautarche.HautsTraits">
     <defName>HVMP_SuffusedAscender</defName>
     <label>ascension suffusion</label>
-    <description>A distant psychic influence is enriching the intrinsic psychic talents of this individual. This reshaping of psychic presence is both debilitating to the body and calorically intensive.</description>
+    <description>A distant psychic influence is enriching the intrinsic psychic talents of this individual. This reshaping of psychic presence is both debilitating to the body and calorically intensive.\n\nApplying another psychic suffusion will disrupt this process.</description>
     <hediffClass>HVMP_HAT.Hediff_Ascender</hediffClass>
 	<minSeverity>0.001</minSeverity>
 	<initialSeverity>168</initialSeverity>

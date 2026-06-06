@@ -651,35 +651,23 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_TameMechDisease</defName>
-    <label>tame mech disease</label>
-    <description>Correct the wayward programming of a mechanite disease, removing its downsides. However, its remaining duration will be halved and its bonuses will be slightly less potent.</description>
-    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_TMD</workerClass>
-    <minTitle>HVMP_EcosphereIV</minTitle>
-    <faction>HVMP_EcosphereBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>10</cooldownDays>
-    <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(5,2)</uiPosition>
-    <royalAid>
-      <favorCost>6</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<hediffs>
-			  <li>HVMP_FibrousMechanites</li>
-			  <li>HVMP_SensoryMechanites</li>
-			  <li MayRequire="lts.MSMD">HVMP_MedicalMechanites</li>
-			  <li MayRequire="lts.MSMD">HVMP_BerserkerMechanites</li>
-			  <li MayRequire="lts.MSMD">HVMP_TrainerMechanites</li>
-			</hediffs>
-			<soundDef>Coagulate_Cast</soundDef>
-			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>
-			<invalidTargetMessage>HVMP_TargetTMD</invalidTargetMessage>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
+	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="onofre150.me.vaccines">
+		<defName>HVMP_StimulateVaccination</defName>
+		<label>stimulate nano-vaccination</label>
+		<description>Activate mechanites in and around the target's body to nano-vaccinate them against a disease for 3 years. If they are suffering from a disease that can be vaccinated, they will be nano-vaccinated against that disease; otherwise, a random nano-vaccination will be applied.</description>
+		<workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_Vaccinate</workerClass>
+		<minTitle>HVMP_EcosphereIV</minTitle>
+		<faction>HVMP_EcosphereBranch</faction>
+		<permitPointCost>2</permitPointCost>
+		<cooldownDays>20</cooldownDays>
+		<uiPosition>(5,2)</uiPosition>
+		<royalAid>
+		  <favorCost>4</favorCost>
+		</royalAid>
+		<modExtensions>
+			<li Class="HautsFramework.PermitMoreEffects" />
+		</modExtensions>
+	  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_ChillingDisruption</defName>
     <label>cooling disruption</label>
@@ -839,6 +827,37 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_TameMechDisease</defName>
+    <label>tame mech disease</label>
+    <description>Correct the wayward programming of a mechanite disease, removing its downsides. However, its remaining duration will be halved and its bonuses will be slightly less potent.</description>
+    <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_TMD</workerClass>
+    <minTitle>HVMP_EcosphereIV</minTitle>
+    <faction>HVMP_EcosphereBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>10</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(5,6)</uiPosition>
+    <royalAid>
+      <favorCost>6</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs>
+			  <li>HVMP_FibrousMechanites</li>
+			  <li>HVMP_SensoryMechanites</li>
+			  <li MayRequire="lts.MSMD">HVMP_MedicalMechanites</li>
+			  <li MayRequire="lts.MSMD">HVMP_BerserkerMechanites</li>
+			  <li MayRequire="lts.MSMD">HVMP_TrainerMechanites</li>
+			  <li MayRequire="Snow.KraltechIndustries.Rebalanced">HVMP_ColdNullNanites</li>
+			  <li MayRequire="Snow.KraltechIndustries.Rebalanced">HVMP_HeatNullNanites</li>
+			</hediffs>
+			<soundDef>Coagulate_Cast</soundDef>
+			<onUseMessage>HVMP_MedicalAssistance</onUseMessage>
+			<invalidTargetMessage>HVMP_TargetTMD</invalidTargetMessage>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
   
   <!--Ecosphere level 5-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
@@ -988,11 +1007,11 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_GeothermalDrillDrop</defName>
     <label>geothermal drill drop</label>
-    <description>Call for a geothermal drill, which bores down into the ground to create a steam geyser.\n\nCannot be placed too close to another geothermal drill or existing steam geyser.\n\nCosts two permit points.</description>
+    <description>Call for a geothermal drill, which bores down into the ground to create a steam geyser.\n\nCannot be placed too close to another geothermal drill or existing steam geyser.</description>
     <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_DropGD</workerClass>
     <minTitle>HVMP_EcosphereVI</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
-    <permitPointCost>2</permitPointCost>
+    <permitPointCost>1</permitPointCost>
     <cooldownDays>80</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
     <uiPosition>(7,4)</uiPosition>
@@ -1003,7 +1022,7 @@
 		</HVMP_GTDrill>
       </itemsToDrop>
 	  <radius>25</radius><!--how far away it must be from other drills or existing geysers-->
-      <favorCost>10</favorCost>
+      <favorCost>7</favorCost>
     </royalAid>
   </RoyalTitlePermitDef>
   

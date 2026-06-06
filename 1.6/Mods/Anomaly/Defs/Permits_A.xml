@@ -88,8 +88,8 @@
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_EntitySubdual</defName>
-    <label>entity subdual</label>
-    <description>Stun the target unnatural entity for a quarter of an hour, and make it significantly easier to contain for five days afterwards.</description>
+    <label>subdual suffusion</label>
+    <description>Stun the target unnatural entity for a quarter of an hour, and suffuse it with psychic energies that make it easier to contain. This suffusion lasts indefinitely, or until a different psychic suffusion is applied to the entity.</description>
     <workerClass>HautsPermits_Occult.RoyalTitlePermitWorker_EntityStunner</workerClass>
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
@@ -114,7 +114,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_ClosedMindSuffusion</defName>
     <label>closed mind suffusion</label>
-    <description>Suffuse the target with psychic energies which numb the mind, reducing mental break threshold, psychic sensitivity, and learning speed. Lasts 3 days.</description>
+    <description>Suffuse the target with psychic energies which numb the mind, reducing mental break threshold and psychic sensitivity, while also preventing inspirations. This suffusion lasts indefinitely, or until a different psychic suffusion is applied to the target.</description>
     <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
@@ -137,7 +137,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_OpenMindSuffusion</defName>
     <label>open mind suffusion</label>
-    <description>Suffuse the target with psychic energies which increase the volatility of the mind, increasing mental break threshold and psychic sensitivity. Lasts 3 days.</description>
+    <description>Suffuse the target with psychic energies which increase the volatility of the mind, increasing mental break threshold and psychic sensitivity. This suffusion lasts indefinitely, or until a different psychic suffusion is applied to the target.</description>
     <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
@@ -160,7 +160,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_ProfanitySuffusion</defName>
     <label>profanity suffusion</label>
-    <description>Suffuse the target with psychic energies attuned to the Void, increasing the target's flow of insights into Void entities and their proficiency with psychic rituals. Lasts 3 days.</description>
+    <description>Suffuse the target with psychic energies attuned to the Void, increasing the target's flow of insights into Void entities and their proficiency with psychic rituals. This suffusion lasts indefinitely, or until a different psychic suffusion is applied to the target.</description>
     <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
@@ -183,7 +183,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_SanctitySuffusion</defName>
     <label>sanctity suffusion</label>
-    <description>Suffuse the target with psychic energies which repel those of the Void, increasing damage dealt to unnatural entities and suppression speed. Lasts 3 days.</description>
+    <description>Suffuse the target with psychic energies which repel those of the Void, increasing damage dealt to unnatural entities and suppression speed. This suffusion lasts indefinitely, or until a different psychic suffusion is applied to the target.</description>
     <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_OccultI</minTitle>
     <faction>HVMP_OccultBranch</faction>
@@ -267,7 +267,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_RehumanizingSuffusion</defName>
     <label>rehumanizing suffusion</label>
-    <description>Suffuse the target "inhumanized" individual with psychic energies which gradually overwrite the inhumanized patterns of thought. Though it has a severe negative impact on mood, after 5 days, the target will have their humanity restored.</description>
+    <description>Suffuse the target "inhumanized" individual with psychic energies which gradually overwrite the inhumanized patterns of thought. Though it has a severe negative impact on mood, after 5 days, the target will have their humanity restored.\n\nApplying another psychic suffusion to the target will destroy this suffusion, preventing its effect from triggering.</description>
     <workerClass>HautsPermits_Occult.RoyalTitlePermitWorker_Rehumanizer</workerClass>
     <minTitle>HVMP_OccultII</minTitle>
     <faction>HVMP_OccultBranch</faction>
@@ -447,7 +447,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_InvisibilitySuffusion</defName>
     <label>invisibility suffusion</label>
-    <description>Suffuse the target with a psychic invisibility field. Lasts for half an hour.</description>
+    <description>Suffuse the target with a psychic invisibility field. Lasts for half an hour. Ends early if a different psychic suffusion is applied to the target.</description>
     <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_OccultIV</minTitle>
     <faction>HVMP_OccultBranch</faction>
@@ -470,7 +470,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_PsyfocusSuffusion</defName>
     <label>psyfocus suffusion</label>
-    <description>Suffuse the target with a continuous inflow of psyfocus, at the expense of worsening their mood. Restores 50% psyfocus over 1 day.</description>
+    <description>Suffuse the target with a continuous inflow of psyfocus, at the expense of worsening their mood. Restores 50% psyfocus over 1 day. Ends early if a different psychic suffusion is applied to the target.</description>
     <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
     <minTitle>HVMP_OccultIV</minTitle>
     <faction>HVMP_OccultBranch</faction>
@@ -547,7 +547,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_ProbabilityFluxSuffusion</defName>
     <label>probability flux suffusion</label>
-    <description>Suffuse the target sapient with a multidimensional construct. The construct uses the target's psychic sensitivity to adjust causality in search of favorable outcomes; in more practical terms, it drains the target's psychic sensivitity until it's fully gone, but while this is happening it will sometimes create good events.\n\nCannot be used on a creature that has already hosted a probability flux.</description>
+    <description>Suffuse the target sapient with a multidimensional construct. The construct uses the target's psychic sensitivity to adjust causality in search of favorable outcomes; in more practical terms, it drains the target's psychic sensivitity until it's fully gone, but while this is happening it will sometimes create good events.\n\nCannot be used on a creature that has already hosted a probability flux.\n\nEnds early if a different psychic suffusion is applied to the target.</description>
     <workerClass>HautsPermits_Occult.RoyalTitlePermitWorker_ProbFlux</workerClass>
     <minTitle>HVMP_OccultV</minTitle>
     <faction>HVMP_OccultBranch</faction>
@@ -784,7 +784,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_PsylinkSuffusion</defName>
     <label>psylink suffusion</label>
-    <description>Suffuse the target with psychic energies which form a psylink over a long period of time. The process renders the victim unconscious, and takes at least 5 days, plus a further 5 days per psylink level the target already has.\n\nThe target must be psy-sensitive and not hostile to the caller.\n\nCosts two permit points.</description>
+    <description>Suffuse the target with psychic energies which form a psylink over a long period of time. The process renders the victim unconscious, and takes at least 5 days, plus a further 5 days per psylink level the target already has.\n\nThe target must be psy-sensitive and not hostile to the caller.\n\nApplying another psychic suffusion to the target will destroy this suffusion, preventing its effect from triggering.\n\nCosts two permit points.</description>
     <workerClass>HautsPermits_Occult.RoyalTitlePermitWorker_Psylinker</workerClass>
     <minTitle>HVMP_OccultVI</minTitle>
     <faction>HVMP_OccultBranch</faction>
@@ -807,7 +807,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_DeghoulizingSuffusion</defName>
     <label>deghoulizing suffusion</label>
-    <description>Suffuse the target ghoul with psychic energies which gradually revert the changes wrought by the archotech shard within it. The process immobilizes the victim. After 3 days, the ghoul will be restored to a normal, un-ghoulish state.\n\nCosts two permit points.</description>
+    <description>Suffuse the target ghoul with psychic energies which gradually revert the changes wrought by the archotech shard within it. The process immobilizes the victim. After 3 days, the ghoul will be restored to a normal, un-ghoulish state.\n\nApplying another psychic suffusion to the target will destroy this suffusion, preventing its effect from triggering.\n\nCosts two permit points.</description>
     <workerClass>HautsPermits_Occult.RoyalTitlePermitWorker_Deghoulizer</workerClass>
     <minTitle>HVMP_OccultVI</minTitle>
     <faction>HVMP_OccultBranch</faction>
@@ -830,7 +830,7 @@
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Hautarche.HautsTraits">
 		<defName>HVMP_AscensionSuffusion</defName>
 		<label>ascension suffusion</label>
-		<description>Suffuse the target with psychic energies which will grant the target the Latent Psychic trait after 7 days. The process renders the victim unconscious, as well as makes their body weaker and hungrier for its duration.\n\nCosts four permit points.</description>
+		<description>Suffuse the target with psychic energies which will grant the target the Latent Psychic trait after 7 days. The process renders the victim unconscious, as well as makes their body weaker and hungrier for its duration.\n\nApplying another psychic suffusion to the target will destroy this suffusion, preventing its effect from triggering.\n\nCosts four permit points.</description>
 		<workerClass>HVMP_HAT.RoyalTitlePermitWorker_Ascender</workerClass>
 		<minTitle>HVMP_OccultVI</minTitle>
 		<faction>HVMP_OccultBranch</faction>

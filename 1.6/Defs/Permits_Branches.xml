@@ -1190,6 +1190,26 @@
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_OrbitalStrike</defName>
+    <label>call orbital strike</label>
+    <description>Call for an explosive shot to be fired at a target position.</description>
+    <workerClass>RoyalTitlePermitWorker_OrbitalStrike</workerClass>
+    <minTitle>HVMP_PaxIV</minTitle>
+    <faction>HVMP_PaxBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(3,6)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+      <targetingRange>44.9</targetingRange>
+      <radius>2.9</radius>
+      <explosionRadiusRange>7.9</explosionRadiusRange>
+      <explosionCount>1</explosionCount>
+      <intervalTicks>60</intervalTicks>
+      <warmupTicks>120</warmupTicks>
+    </royalAid>
+  </RoyalTitlePermitDef>
   <!--Pax level 5-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_LowShieldDrop</defName>
@@ -1249,26 +1269,6 @@
 			<extraString>Call for a drop of 1 blackbody shield unit.</extraString>
         </li>
 	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef>
-    <defName>HVMP_OrbitalStrike</defName>
-    <label>call orbital strike</label>
-    <description>Call for an explosive shot to be fired at a target position.</description>
-    <workerClass>RoyalTitlePermitWorker_OrbitalStrike</workerClass>
-    <minTitle>HVMP_PaxV</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
-    <uiPosition>(3,6)</uiPosition>
-    <royalAid>
-      <favorCost>5</favorCost>
-      <targetingRange>44.9</targetingRange>
-      <radius>2.9</radius>
-      <explosionRadiusRange>7.9</explosionRadiusRange>
-      <explosionCount>1</explosionCount>
-      <intervalTicks>60</intervalTicks>
-      <warmupTicks>120</warmupTicks>
-    </royalAid>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_BaitInfestation</defName>
@@ -1385,6 +1385,45 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_OrbitalVolley</defName>
+    <label>call orbital volley</label>
+    <description>Call for 5 explosive shots to be fired around a target position.</description>
+    <workerClass>RoyalTitlePermitWorker_OrbitalStrike</workerClass>
+    <minTitle>HVMP_PaxV</minTitle>
+    <faction>HVMP_PaxBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <prerequisite>HVMP_OrbitalStrike</prerequisite>
+    <cooldownDays>40</cooldownDays>
+    <uiPosition>(4,6)</uiPosition>
+    <royalAid>
+      <favorCost>7</favorCost>
+      <targetingRange>44.9</targetingRange>
+      <radius>7.9</radius>
+      <explosionRadiusRange>5.9</explosionRadiusRange>
+      <explosionCount>5</explosionCount>
+      <intervalTicks>60</intervalTicks>
+      <warmupTicks>120</warmupTicks>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_OrbitalBeam</defName>
+    <label>call orbital beam</label>
+    <description>Call for a thermal beam to be fired on a target position.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_OrbitalBeam</workerClass>
+    <minTitle>HVMP_PaxV</minTitle>
+    <faction>HVMP_PaxBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <prerequisite>HVMP_OrbitalStrike</prerequisite>
+    <cooldownDays>46</cooldownDays>
+    <uiPosition>(4,7)</uiPosition>
+    <royalAid>
+      <favorCost>8</favorCost>
+      <radius>15</radius>
+      <targetingRange>44.9</targetingRange>
+      <explosionCount>600</explosionCount>
+    </royalAid>
+  </RoyalTitlePermitDef>
   <!--Pax level 6-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_MassSlugTurretDrop</defName>
@@ -1456,45 +1495,6 @@
 			<incidentPoints>3500~7000</incidentPoints>
 		</li>
 	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef>
-    <defName>HVMP_OrbitalVolley</defName>
-    <label>call orbital volley</label>
-    <description>Call for 5 explosive shots to be fired around a target position.</description>
-    <workerClass>RoyalTitlePermitWorker_OrbitalStrike</workerClass>
-    <minTitle>HVMP_PaxVI</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <prerequisite>HVMP_OrbitalStrike</prerequisite>
-    <cooldownDays>40</cooldownDays>
-    <uiPosition>(5,6)</uiPosition>
-    <royalAid>
-      <favorCost>7</favorCost>
-      <targetingRange>44.9</targetingRange>
-      <radius>7.9</radius>
-      <explosionRadiusRange>5.9</explosionRadiusRange>
-      <explosionCount>5</explosionCount>
-      <intervalTicks>60</intervalTicks>
-      <warmupTicks>120</warmupTicks>
-    </royalAid>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef>
-    <defName>HVMP_OrbitalBeam</defName>
-    <label>call orbital beam</label>
-    <description>Call for a thermal beam to be fired on a target position.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_OrbitalBeam</workerClass>
-    <minTitle>HVMP_PaxVI</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <prerequisite>HVMP_OrbitalStrike</prerequisite>
-    <cooldownDays>46</cooldownDays>
-    <uiPosition>(5,7)</uiPosition>
-    <royalAid>
-      <favorCost>8</favorCost>
-      <radius>15</radius>
-      <targetingRange>44.9</targetingRange>
-      <explosionCount>600</explosionCount>
-    </royalAid>
   </RoyalTitlePermitDef>
   
   <!--Rover level 1-->
@@ -1961,6 +1961,30 @@
 	  </RoyalTitlePermitDef>
   <!--Rover level 4-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_AuthorizeSkipnetUse</defName>
+    <label>Skipnet authorization</label>
+    <description>Link the target to the Enterprise skipnet system, authorizing them for four uses. Each use can be expended to teleport an object to a position not too far from its starting point; alternatively, all four uses can be expended to teleport oneself to a target location, not requiring line of sight.</description>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
+    <minTitle>HVMP_RoverIV</minTitle>
+    <faction>HVMP_RoverBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>12</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(4,0)</uiPosition>
+    <royalAid>
+      <favorCost>3</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_SkipnetAuthorization</li></hediffs>
+			<soundDef>CrateOpeningStarted</soundDef>
+			<onUseMessage>HVMP_AssistanceProgram</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+			<allowAnyNonflesh>true</allowAnyNonflesh>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_JumpPackDrop</defName>
     <label>jump pack drop</label>
     <description>Call for a drop of 1 jump pack.</description>
@@ -1969,7 +1993,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>28</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,0)</uiPosition>
+    <uiPosition>(4,1)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <Apparel_PackJump>1</Apparel_PackJump>
@@ -1986,7 +2010,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>36</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,1)</uiPosition>
+    <uiPosition>(4,2)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <Apparel_ArmorLocust>1</Apparel_ArmorLocust>
@@ -2003,7 +2027,7 @@
     <permitPointCost>2</permitPointCost>
     <cooldownDays>42</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,2)</uiPosition>
+    <uiPosition>(4,3)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <Apparel_Vacsuit>1</Apparel_Vacsuit>
@@ -2020,7 +2044,7 @@
 		<faction>HVMP_RoverBranch</faction>
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>20</cooldownDays>
-		<uiPosition>(4,3)</uiPosition>
+		<uiPosition>(4,4)</uiPosition>
 		<royalAid>
 		  <favorCost>3</favorCost>
 		</royalAid>
@@ -2151,7 +2175,7 @@
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>24</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(5,5)</uiPosition>
+		<uiPosition>(5,4)</uiPosition>
 		<royalAid>
 		  <favorCost>4</favorCost>
 		</royalAid>
@@ -2163,30 +2187,6 @@
 	  </RoyalTitlePermitDef>
   <!--Rover level 5-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_AuthorizeSkipnetUse</defName>
-    <label>Skipnet authorization</label>
-    <description>Link the target to the Enterprise skipnet system, authorizing them for four uses. Each use can be expended to teleport an object to a position not too far from its starting point; alternatively, all four uses can be expended to teleport oneself to a target location, not requiring line of sight.</description>
-    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
-    <minTitle>HVMP_RoverV</minTitle>
-    <faction>HVMP_RoverBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>12</cooldownDays>
-    <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(6,0)</uiPosition>
-    <royalAid>
-      <favorCost>3</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<hediffs><li>HVMP_SkipnetAuthorization</li></hediffs>
-			<soundDef>CrateOpeningStarted</soundDef>
-			<onUseMessage>HVMP_AssistanceProgram</onUseMessage>
-			<allowAnyFlesh>true</allowAnyFlesh>
-			<allowAnyNonflesh>true</allowAnyNonflesh>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_LocateSitesOfInterest</defName>
     <label>find noteworthy sites</label>
     <description>Learn about three random, interesting nearby locations.</description>
@@ -2196,7 +2196,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>30</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(6,1.5)</uiPosition>
+    <uiPosition>(6,0)</uiPosition>
     <royalAid>
       <favorCost>4</favorCost>
     </royalAid>
@@ -2248,7 +2248,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>36</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(6,2.5)</uiPosition>
+    <uiPosition>(6,1)</uiPosition>
     <royalAid>
       <favorCost>6</favorCost>
     </royalAid>
@@ -2268,7 +2268,7 @@
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>36</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(6,3.5)</uiPosition>
+		<uiPosition>(6,2)</uiPosition>
 		<royalAid>
 		  <favorCost>6</favorCost>
 		</royalAid>

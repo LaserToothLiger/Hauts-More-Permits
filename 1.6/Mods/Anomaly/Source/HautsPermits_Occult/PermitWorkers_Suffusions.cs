@@ -1,10 +1,25 @@
 ﻿using HautsFramework;
-using HautsPermits;
 using RimWorld;
 using Verse;
 
 namespace HautsPermits_Occult
 {
+    //pawns can only have one suffusion at a time. This lets you abort lengthy ones by adding a different one, and it permits (heh) the existence of indefinite-duration suffusions w/o also enabling permit refund abuse to stack multiple suffusions via a low-ranked permit-user
+    public class HediffComp_SuffusionsAreMutuallyExclusive : HediffComp_DisappearsOnDeath
+    {
+        public override void CompPostPostAdd(DamageInfo? dinfo)
+        {
+            base.CompPostPostAdd(dinfo);
+            for (int i = this.Pawn.health.hediffSet.hediffs.Count - 1; i >= 0; i--)
+            {
+                Hediff h = this.Pawn.health.hediffSet.hediffs[i];
+                if (h != this.parent && h.TryGetComp<HediffComp_SuffusionsAreMutuallyExclusive>() != null)
+                {
+                    this.Pawn.health.RemoveHediff(h);
+                }
+            }
+        }
+    }
     /*most suffusions do not need any bespoke code. A few of them are quirky and cute with it though.
      * When Hediff_Rehumanizer reaches minimum severity, it... rehumanizes... the pawn, then is removed. (the "wait til the end for the effect" suffusions all work like this to prevent cheese with at least some hediff removal effects)
      * Appropriately, its permit worker will only let you target inhumanized pawns.*/

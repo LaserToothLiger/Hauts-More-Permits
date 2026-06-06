@@ -40,6 +40,12 @@
 		  <Mashed_Ashlands_AshResistance MayRequire="SirMashedPotato.Ashlands">2</Mashed_Ashlands_AshResistance>
 		  <Radiation MayRequire="Dubwise.Rimatomics">-2</Radiation>
 		  <SmokeSensitivity MayRequire="CETeam.CombatExtended">-1</SmokeSensitivity>
+		  <HeatNullNaniteResistance MayRequire="Snow.KraltechIndustries.Rebalanced">1</HeatNullNaniteResistance>
+		  <ColdNullNaniteResistance MayRequire="Snow.KraltechIndustries.Rebalanced">1</ColdNullNaniteResistance>
+		  <AntiOrgToxinResistance MayRequire="Snow.KraltechIndustries.Rebalanced">1</AntiOrgToxinResistance>
+		  <RadiationResistance MayRequire="Snow.KraltechIndustries.Rebalanced">1</RadiationResistance>
+		  <RageVirusResistance MayRequire="Snow.KraltechIndustries.Rebalanced">1</RageVirusResistance>
+		  <NecrotionResistance MayRequire="zal.taofc">1</NecrotionResistance>
 		</statOffsets>
 		<statFactors>
 		  <IncomingDamageFactor>0.5</IncomingDamageFactor>
