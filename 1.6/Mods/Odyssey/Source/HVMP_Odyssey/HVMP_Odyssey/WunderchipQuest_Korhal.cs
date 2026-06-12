@@ -194,6 +194,38 @@ namespace HVMP_Odyssey
         private static readonly FloatRange DestroyedConsolesPer10EdgeCells = new FloatRange(1f, 3f);
         private static readonly IntRange DestroyedConsolesGroupSize = new IntRange(1);
     }
+    //orbital targeting building has a bobbing animation. as we all know, power floats and it does so in an oscillatory manner
+    public class CompHackableWithBobber : CompHackable
+    {
+        protected override void OnHacked(Pawn hacker = null, bool suppressMessages = false)
+        {
+            base.OnHacked(hacker, suppressMessages);
+            if (this.parent.Spawned)
+            {
+                PermitGlowVFXUtility.ThrowWunderFlash(this.parent.Position.ToVector3(), this.parent.Map, 1.5f);
+            }
+        }
+        public override void Notify_Killed(Map prevMap, DamageInfo? dinfo = null)
+        {
+            base.Notify_Killed(prevMap, dinfo);
+            if (this.parent.Spawned)
+            {
+                PermitGlowVFXUtility.ThrowWunderFlash(this.parent.Position.ToVector3(), this.parent.Map, 1.5f);
+            }
+        }
+        public override void DrawAt(Vector3 drawLoc, bool flip = false)
+        {
+            base.DrawAt(drawLoc, flip);
+            if (base.parent.Spawned && !this.parent.IsHacked())
+            {
+                drawLoc.z += 1.9f + ((1f + Mathf.Sin(10.2831855f * (float)GenTicks.TicksGame / 500f)) * 0.3f);
+                drawLoc.y += 0.03658537f;
+                Vector3 vector = new Vector3(this.parent.def.graphicData.drawSize.x * 0.5f, 1f, this.parent.def.graphicData.drawSize.y * 0.5f);
+                Graphics.DrawMesh(MeshPool.plane10Back, Matrix4x4.TRS(drawLoc, (0f).ToQuat(), vector), CompHackableWithBobber.OrbMat.Material, 0, null, 0);
+            }
+        }
+        private static readonly CachedMaterial OrbMat = new CachedMaterial("Things/Building/QuestFoci/HVMP_OrbitalTargetingBeacon_Top", ShaderDatabase.Cutout);
+    }
     //orbital targeting hediff gains or loses severity depending on whether or not the pawn is under a roof, in a room, and/or moving. At any stage past 1st, it begins spawning blastShapes at the victim's position (frequency linearly scales w severity to maxBlastFrequencyFactor), and at final stage it can create blast shapes it couldn't b4
     public class GameCondition_OrbitalTargeting : GameCondition_InflictHediff
     {
@@ -474,7 +506,6 @@ namespace HVMP_Odyssey
             }
             if (this.parent is Bombardment bobby)
             {
-                Log.Error("yuh!");
                 List<Thing> list = this.parent.Map.listerThings.ThingsInGroup(ThingRequestGroup.ProjectileInterceptor);
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -574,6 +605,10 @@ namespace HVMP_Odyssey
                     List<Pawn> pawns = new List<Pawn>();
                     int pawnCount = this.Props.pawnCount;
                     Faction f = Find.FactionManager.FirstFactionOfDef(this.Props.overrideFaction);
+                    if (f == null)
+                    {
+                        f = Faction.OfPlayerSilentFail;
+                    }
                     while (pawnCount > 0)
                     {
                         Pawn p = this.GeneratePawn(this.Props.pawnOptions.RandomElement(),f);

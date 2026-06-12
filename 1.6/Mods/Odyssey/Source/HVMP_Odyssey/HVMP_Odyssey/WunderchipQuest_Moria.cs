@@ -227,6 +227,10 @@ namespace HVMP_Odyssey
         public override void CompTick()
         {
             base.CompTick();
+            if (this.parent.Spawned)
+            {
+                PermitGlowVFXUtility.ThrowWunderFlash(this.parent.Position.ToVector3(), this.parent.Map, 1.5f);
+            }
             this.parent.Kill();
         }
     }

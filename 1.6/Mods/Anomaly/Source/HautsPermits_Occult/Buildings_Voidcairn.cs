@@ -12,7 +12,7 @@ namespace HautsPermits_Occult
             base.DrawAt(drawLoc, flip);
             if (base.parent.Spawned)
             {
-                drawLoc.z += 0.5f + ((1f + Mathf.Sin(3.2831855f * (float)GenTicks.TicksGame / 500f)) * 0.3f);
+                drawLoc.z += 0.5f + ((1f + Mathf.Sin(1.2831855f * (float)GenTicks.TicksGame / 500f)) * 0.1f);
                 drawLoc.y += 0.03658537f;
                 Vector3 vector = new Vector3(this.parent.def.graphicData.drawSize.x*0.75f, 1f, this.parent.def.graphicData.drawSize.y * 0.75f);
                 Graphics.DrawMesh(MeshPool.plane10Back, Matrix4x4.TRS(drawLoc, (0f).ToQuat(), vector), CompVoidcairn.OrbMat.Material, 0, null, 0);

@@ -11,13 +11,13 @@
       <Flammability>0</Flammability>
     </statBases>
     <graphicData>
-      <graphicClass>Graphic_Multi</graphicClass>
-      <texPath>Things/Building/Ancient/GravReactor/AncientGravReactor</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <texPath>Things/Building/QuestFoci/HVMP_OrbitalTargetingBeacon_Base</texPath>
       <drawSize>(5, 5)</drawSize>
     </graphicData>
-    <dontPrint>true</dontPrint> <!-- Printed onto map mesh by comp -->
     <size>(5, 5)</size>
     <tickerType>Normal</tickerType>
+    <drawerType>RealtimeOnly</drawerType>
     <fillPercent>0.6</fillPercent>
     <canOverlapZones>false</canOverlapZones>
     <passability>Impassable</passability>
@@ -34,16 +34,18 @@
       <repairable>false</repairable>
     </building>
     <comps>
-      <li Class="CompProperties_CausesGameCondition">
+	  <li Class="CompProperties_CausesGameCondition">
         <compClass>CompCauseGameCondition_AncientReactor</compClass>
         <conditionDef>HVMP_OrbitalTargeting</conditionDef>
         <worldRange>0</worldRange>
         <hideSource>true</hideSource>
       </li>
       <li Class="CompProperties_Hackable">
-        <defence>9000</defence>
+        <compClass>HVMP_Odyssey.CompHackableWithBobber</compClass>
+		<defence>9000</defence>
         <effectHacking>HackingTerminal</effectHacking>
-        <lockoutDurationHoursRange>12~18</lockoutDurationHoursRange>
+        <graphicDrawerType>RealtimeOnly</graphicDrawerType>
+		<lockoutDurationHoursRange>12~18</lockoutDurationHoursRange>
         <showProgressAfterHackCompletion>false</showProgressAfterHackCompletion>
         <notHackedInspectString>Hack to obtain wunderchip.</notHackedInspectString>
         <hackedMessage>{HACKER_labelShort} has finished hacking {SUBJECT_definite}.</hackedMessage>
@@ -55,12 +57,12 @@
         <destroyedLetterDef>PositiveEvent</destroyedLetterDef>
         <unhackedGraphicData>
           <graphicClass>Graphic_Multi</graphicClass>
-          <texPath>Things/Building/Ancient/GravReactor/AncientGravReactor</texPath>
+          <texPath>Things/Building/QuestFoci/HVMP_OrbitalTargetingBeacon_Base</texPath>
           <drawSize>(5, 5)</drawSize>
         </unhackedGraphicData>
         <hackedGraphicData>
           <graphicClass>Graphic_Multi</graphicClass>
-          <texPath>Things/Building/Ancient/GravReactor/AncientGravReactor_Off</texPath>
+          <texPath>Things/Building/QuestFoci/HVMP_OrbitalTargetingBeacon_Base_Off</texPath>
           <drawSize>(5, 5)</drawSize>
         </hackedGraphicData>
         <dropOnHacked>

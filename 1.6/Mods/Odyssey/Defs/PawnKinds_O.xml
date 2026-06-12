@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-  <PawnKindDef ParentName="BaseDroneKind" MayRequire="Ludeon.RimWorld.Odyssey">
+  <PawnKindDef ParentName="BaseDroneKind">
     <defaultFactionDef>HVMP_PaxBranch</defaultFactionDef>
     <defName>HVMP_WaspDrone</defName>
     <label>wasp</label>
@@ -21,6 +21,32 @@
         </bodyGraphicData>
       </li>
     </lifeStages>
+	<modExtensions>
+	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+	</modExtensions>
+  </PawnKindDef>
+  <PawnKindDef ParentName="BaseDroneKind">
+    <defaultFactionDef>HVMP_PaxBranch</defaultFactionDef>
+    <defName>HVMP_HunterDrone</defName>
+    <label>hunter drone</label>
+    <labelPlural>hunter drones</labelPlural>
+    <race>Drone_Hunter</race>
+    <combatPower>75</combatPower>
+    <canOpenDoors>true</canOpenDoors>
+    <canOpenAnyDoor>true</canOpenAnyDoor>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Things/Pawn/Drone/Hunter/HunterDrone</texPath>
+          <drawSize>1.2</drawSize>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+    <startingHediffs>
+      <li>
+        <def>HVMP_LiveDamnYou</def>
+      </li>
+    </startingHediffs>
 	<modExtensions>
 	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
 	</modExtensions>

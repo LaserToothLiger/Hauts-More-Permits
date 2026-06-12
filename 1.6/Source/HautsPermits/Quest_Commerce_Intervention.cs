@@ -75,6 +75,12 @@ namespace HautsPermits
             } else {
                 QuestGen.AddQuestDescriptionRules(new List<Rule> { new Rule_String("mutator_JB_info", " ") });
             }
+            List<PawnGenOption> pgos = this.spawnablePawnKinds.RandomElement().options;
+            qpa3.spawnablePawnKinds = new List<PawnKindDef>();
+            foreach (PawnGenOption pgo in pgos)
+            {
+                qpa3.spawnablePawnKinds.Add(pgo.kind);
+            }
             quest.AddPart(qpa3);
         }
         [NoTranslate]
@@ -84,6 +90,7 @@ namespace HautsPermits
         [NoTranslate]
         public SlateRef<string> tag;
         public IncidentDef incidentDef;
+        public List<PawnGroupMaker> spawnablePawnKinds = new List<PawnGroupMaker>();
         public HediffDef II_hediff;
         [MustTranslate]
         public string II_description;
@@ -184,9 +191,11 @@ namespace HautsPermits
         public override void ExposeData()
         {
             base.ExposeData();
+            Scribe_Collections.Look<PawnKindDef>(ref this.spawnablePawnKinds, "spawnablePawnKinds", LookMode.Undefined, LookMode.Undefined);
             Scribe_Defs.Look<HediffDef>(ref this.II_hediff, "II_hediff");
             Scribe_Defs.Look<HediffDef>(ref this.JB_hediff, "JB_hediff");
         }
+        public List<PawnKindDef> spawnablePawnKinds = Hive.spawnablePawnKinds;
         public HediffDef II_hediff;
         public HediffDef JB_hediff;
     }
@@ -257,11 +266,14 @@ namespace HautsPermits
                 }
             }
             loc = intVec;
+            QuestPart_OtherTwoInterventionMutators qpOTIM= parms.quest.GetFirstPartOfType<QuestPart_OtherTwoInterventionMutators>();
+            List<PawnKindDef> spawnablePawnKinds = qpOTIM.spawnablePawnKinds;
             TunnelHiveSpawner_Intervention tunnelHiveSpawner = (TunnelHiveSpawner_Intervention)ThingMaker.MakeThing(HVMPDefOf.HVMP_TunnelHiveSpawner, null);
             tunnelHiveSpawner.spawnHive = false;
             tunnelHiveSpawner.quest = parms.quest;
             tunnelHiveSpawner.insectsPoints = parms.points * Rand.Range(0.3f, 0.6f);
             tunnelHiveSpawner.spawnedByInfestationThingComp = true;
+            tunnelHiveSpawner.spawnablePawnKinds = spawnablePawnKinds;
             GenSpawn.Spawn(tunnelHiveSpawner, loc, map, WipeMode.FullRefund);
             base.SendStandardLetter(parms, new TargetInfo(tunnelHiveSpawner.Position, map, false), Array.Empty<NamedArgument>());
             return true;
@@ -278,7 +290,7 @@ namespace HautsPermits
             }
             if (this.insectsPoints > 0f)
             {
-                this.insectsPoints = Mathf.Max(this.insectsPoints, Hive.spawnablePawnKinds.Min((PawnKindDef x) => x.combatPower));
+                this.insectsPoints = Mathf.Max(this.insectsPoints, this.spawnablePawnKinds.Min((PawnKindDef x) => x.combatPower));
                 float pointsLeft = this.insectsPoints;
                 List<Pawn> list = new List<Pawn>();
                 int num = 0;
@@ -297,8 +309,7 @@ namespace HautsPermits
                         Log.Error("Too many iterations.");
                         break;
                     }
-                    IEnumerable<PawnKindDef> spawnablePawnKinds = Hive.spawnablePawnKinds;
-                    if (!spawnablePawnKinds.Where((PawnKindDef x) => x.combatPower <= pointsLeft).TryRandomElement(out PawnKindDef pawnKindDef))
+                    if (!this.spawnablePawnKinds.Where((PawnKindDef x) => x.combatPower <= pointsLeft).TryRandomElement(out PawnKindDef pawnKindDef))
                     {
                         break;
                     }
@@ -330,8 +341,10 @@ namespace HautsPermits
         {
             base.ExposeData();
             Scribe_References.Look<Quest>(ref this.quest, "quest", false);
+            Scribe_Collections.Look<PawnKindDef>(ref this.spawnablePawnKinds, "spawnablePawnKinds", LookMode.Undefined, LookMode.Undefined);
         }
         public Quest quest;
+        public List<PawnKindDef> spawnablePawnKinds = Hive.spawnablePawnKinds;
     }
     /*the Infestation Infection hediff uses this class so that any damage the pawn does can inflict scaria infection.
      * (Ostensibly. This is the same mechanism scaria uses to inflict scaria infection, just not reliant on bites or scratches specifically;

@@ -75,5 +75,15 @@ namespace HautsPermits
             dataStatic.velocitySpeed = 0.6f;
             map.flecks.CreateFleck(dataStatic);
         }
+        public static void ThrowWunderFlash(Vector3 loc, Map map, float size)
+        {
+            if (!loc.ShouldSpawnMotesAt(map, true))
+            {
+                return;
+            }
+            FleckCreationData dataStatic = FleckMaker.GetDataStatic(loc + new Vector3(0.5f, 0f, 0.5f), map, HVMPDefOf.HVMI_WunderFlash, size);
+            dataStatic.rotationRate = Rand.Range(-3f, 3f);
+            map.flecks.CreateFleck(dataStatic);
+        }
     }
 }

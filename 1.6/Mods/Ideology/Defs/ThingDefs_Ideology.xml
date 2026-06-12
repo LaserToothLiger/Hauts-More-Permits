@@ -79,6 +79,7 @@
 			</conversionPerHour>
 			<conversionIfNoBelieversExistFactor>3</conversionIfNoBelieversExistFactor>
 			<upsetOnFailedConversionThought>Hauts_FailedConversionByBook</upsetOnFailedConversionThought>
+			<upsetOnFailedConversionHediff>HVMP_FailedConversionByBook</upsetOnFailedConversionHediff>
 			<upsetLikelihood>
 			  <points>
 				<li>0, 0.1</li>

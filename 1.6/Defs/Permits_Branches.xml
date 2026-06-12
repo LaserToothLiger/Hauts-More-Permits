@@ -883,7 +883,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_OrbitalScalpel</defName>
     <label>orbital scalpel</label>
-    <description>Call for a high-velocity antipersonnel round to be fired from orbit at the target building or creature, dealing 100 concussive damage instantly.</description>
+    <description>Call for a high-velocity antipersonnel round to be fired from orbit at the target building or creature, dealing concussive damage nigh-instantly.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_OrbitalScalpel</workerClass>
     <minTitle>HVMP_PaxI</minTitle>
     <faction>HVMP_PaxBranch</faction>
@@ -901,6 +901,23 @@
 			<allowAnyNonflesh>true</allowAnyNonflesh>
         </li>
 	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef MayRequire="Ludeon.RimWorld.Odyssey">
+    <defName>HVMP_OrbitalHunterSeeker</defName>
+    <label>orbital hunter-seeker</label>
+    <description>Call for 1 hunter drone to aid you in battle.</description>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <minTitle>HVMP_PaxI</minTitle>
+    <faction>HVMP_PaxBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>2</cooldownDays>
+    <uiPosition>(0,6)</uiPosition>
+    <royalAid>
+      <favorCost>1</favorCost>
+      <pawnKindDef>HVMP_HunterDrone</pawnKindDef>
+      <pawnCount>1</pawnCount>
+      <targetingRange>39.9</targetingRange>
+    </royalAid>
   </RoyalTitlePermitDef>
   <!--Pax level 2-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">

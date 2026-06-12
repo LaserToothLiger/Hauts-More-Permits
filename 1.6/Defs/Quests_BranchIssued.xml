@@ -1386,6 +1386,76 @@
           <tag>$tag</tag>
 		  <incidentDef>HVMP_InterventionInfestation</incidentDef>
           <inSignalLeave>EndRaid</inSignalLeave>
+		  <spawnablePawnKinds>
+			  <li>
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <Megaspider>1</Megaspider><!--weightings are irrelevant for the purpose of this quest.-->
+				  <Spelopede>1</Spelopede>
+				  <Megascarab>1</Megascarab>
+				  <Locust MayRequire="Ludeon.RimWorld.Odyssey">1</Locust>
+				</options>
+			  </li>
+			  <li>
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <Megaspider>1</Megaspider>
+				  <Spelopede>1</Spelopede>
+				  <Megascarab>1</Megascarab>
+				  <Locust MayRequire="Ludeon.RimWorld.Odyssey">1</Locust>
+				</options>
+			  </li>
+			  <li>
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <Megaspider>1</Megaspider>
+				  <Spelopede>1</Spelopede>
+				  <Megascarab>1</Megascarab>
+				  <Locust MayRequire="Ludeon.RimWorld.Odyssey">1</Locust>
+				</options>
+			  </li><!--repetition ensures they remain the likeliest picks even if you have other mods installed-->
+			  <li MayRequire="OskarPotocki.VFE.Insectoid2">
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <VFEI2_Boomtick>1</VFEI2_Boomtick>
+				  <VFEI2_Hellbeetle>1</VFEI2_Hellbeetle>
+				  <VFEI2_Fuelmite>1</VFEI2_Fuelmite>
+				</options>
+			  </li>
+			  <li MayRequire="OskarPotocki.VFE.Insectoid2">
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <VFEI2_Macrofly>1</VFEI2_Macrofly>
+				  <VFEI2_Megawasp>1</VFEI2_Megawasp>
+				  <VFEI2_Gigalocust>1</VFEI2_Gigalocust>
+				</options>
+			  </li>
+			  <li MayRequire="OskarPotocki.VFE.Insectoid2">
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <VFEI2_Megathrips>1</VFEI2_Megathrips>
+				  <VFEI2_Venomite>1</VFEI2_Venomite>
+				  <VFEI2_Acidspitter>1</VFEI2_Acidspitter>
+				</options>
+			  </li>
+			  <li MayRequire="OskarPotocki.VFE.Insectoid2">
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <VFEI2_Durapod>1</VFEI2_Durapod>
+				  <VFEI2_Tankroach>1</VFEI2_Tankroach>
+				  <VFEI2_Ironclad>1</VFEI2_Ironclad>
+				</options>
+			  </li>
+			  <li MayRequire="sarg.alphaanimals">
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <AA_MammothWorm>1</AA_MammothWorm>
+				  <AA_BlackSpider>1</AA_BlackSpider>
+				  <AA_BlackSpelopede>1</AA_BlackSpelopede>
+				  <AA_BlackScarab>1</AA_BlackScarab>
+				</options>
+			  </li>
+		  </spawnablePawnKinds>
 		  <II_hediff>HVMP_ScariaVector</II_hediff>
 		  <II_description>\n\nThe insectoids carry scaria. It doesn't drive them to madness and won't kill them, but they can pass it on via cuts or bites.</II_description>
 		  <JB_hediff>HVMP_Jitterbug</JB_hediff>

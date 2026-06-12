@@ -20,6 +20,22 @@
 	  </li>
 	</comps>
   </HediffDef>
+  <!--Pax hunter drones need to start on full battery-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_LiveDamnYou</defName>
+	<label>by the power of gaming</label>
+	<description>my daughter will fucking live</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+	    <becomeVisible>false</becomeVisible>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HautsPermits.HediffCompProperties_LiveDamnYou" />
+	</comps>
+  </HediffDef>
   
   <!--Pawns given to you for safekeeping get this temporary implant so that you can receive them in any conditions-->
   <HediffDef ParentName="ImplantHediffBase">

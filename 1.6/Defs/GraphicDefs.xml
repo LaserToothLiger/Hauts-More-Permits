@@ -95,4 +95,17 @@
     <fadeOutTime>0.35</fadeOutTime>
   </FleckDef>
   
+  <FleckDef ParentName="FleckBase">
+    <defName>HVMI_WunderFlash</defName>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <solidTime>2</solidTime>
+    <fadeOutTime>0.3</fadeOutTime>
+    <growthRate>5.7</growthRate>
+    <graphicData>
+      <texPath>Things/Mote/PlainFlash</texPath>
+      <shaderType>MoteGlow</shaderType>
+	  <color>(0.83921,0.86667,0.23529,1)</color>
+    </graphicData>
+  </FleckDef>
+  
 </Defs>

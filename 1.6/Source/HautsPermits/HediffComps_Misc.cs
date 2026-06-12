@@ -1,7 +1,9 @@
 ﻿using HautsFramework;
 using RimWorld;
 using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
@@ -125,5 +127,32 @@ namespace HautsPermits
         }
         public int timer;
         public Faction faction;
+    }
+    //when a hunter drone spawns, it starts out with 0 battery for some reason. This is fatal, and therefore stupid.
+    public class HediffCompProperties_LiveDamnYou : HediffCompProperties
+    {
+        public HediffCompProperties_LiveDamnYou()
+        {
+            this.compClass = typeof(HediffComp_LiveDamnYou);
+        }
+    }
+    public class HediffComp_LiveDamnYou : HediffComp
+    {
+        public HediffCompProperties_LiveDamnYou Props
+        {
+            get
+            {
+                return (HediffCompProperties_LiveDamnYou)this.props;
+            }
+        }
+        public override void CompPostPostAdd(DamageInfo? dinfo)
+        {
+            base.CompPostPostAdd(dinfo);
+            CompMechPowerCell cmpc = this.Pawn.TryGetComp<CompMechPowerCell>();
+            if (cmpc != null)
+            {
+                cmpc.GetType().GetField("powerTicksLeft", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(cmpc, Math.Max(cmpc.Props.totalPowerTicks, 2500));
+            }
+        }
     }
 }

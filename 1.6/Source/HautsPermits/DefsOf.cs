@@ -80,6 +80,7 @@ namespace HautsPermits
         public static FleckDef HVMP_DecryptGlow;
         public static FleckDef HVMP_QualityGlow;
         public static FleckDef HVMP_VaalOrNoBaals;
+        public static FleckDef HVMI_WunderFlash;
 
         [MayRequireIdeology]
         public static ThoughtDef HVMP_AnthroAnnoyance;

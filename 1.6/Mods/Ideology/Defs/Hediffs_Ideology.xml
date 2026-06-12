@@ -5,7 +5,7 @@
   <HediffDef ParentName="HVT_TraitHediffBase">
     <defName>HVMP_EsotericBookBuff</defName>
     <label>ideoligious esoterica</label>
-    <description>A state of increased faith in one's ideoligion.\n\nCaused by reading an "ideoligious esoterica" book.</description>
+    <description>A state of increased faith in one's ideoligion.\n\nCaused by reading an ideoligious scripture.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(1,1,1)</defaultLabelColor>
 	<initialSeverity>0.001</initialSeverity>
@@ -58,7 +58,7 @@
   <HediffDef ParentName="HVT_TraitHediffBase">
     <defName>HVMP_MeditativeBookBuff</defName>
     <label>ideoligious mantra</label>
-    <description>A calmer, more focused mental state.\n\nCaused by reading an "ideoligious meditations" book.</description>
+    <description>A calmer, more focused mental state.\n\nCaused by reading an ideoligious scripture.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(1,1,1)</defaultLabelColor>
 	<initialSeverity>0.001</initialSeverity>
@@ -106,6 +106,46 @@
         <disappearsAfterTicks>300</disappearsAfterTicks>
         <showRemainingTime>true</showRemainingTime>
       </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_FailedConversionByBook</defName>
+    <label>literary conversion resentment</label>
+    <description>A refusal to entertain different philosophies.\n\nCaused by taking offense to the ideoligious scripture of a different ideoligion.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(244,109,108)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>5</maxSeverity>
+    <stages>
+      <li>
+		<statFactors>
+		  <CertaintyLossFactor>0.75</CertaintyLossFactor>
+		</statFactors>
+      </li>
+      <li>
+		<minSeverity>1</minSeverity>
+		<statFactors>
+		  <CertaintyLossFactor>0.5</CertaintyLossFactor>
+		</statFactors>
+      </li>
+      <li>
+		<minSeverity>2</minSeverity>
+		<statFactors>
+		  <CertaintyLossFactor>0.25</CertaintyLossFactor>
+		</statFactors>
+      </li>
+      <li>
+		<minSeverity>3</minSeverity>
+		<statFactors>
+		  <CertaintyLossFactor>0</CertaintyLossFactor>
+		</statFactors>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-1</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
     </comps>
   </HediffDef>
   
