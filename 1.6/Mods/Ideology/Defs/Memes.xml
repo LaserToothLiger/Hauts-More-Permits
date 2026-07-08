@@ -5,7 +5,7 @@
     <defName>HVMP_Cosmopolitan</defName>
     <label>cosmopolitan</label>
     <description>People should be willing to help each other, regardless of divisions of nation or creed.\n\nImproves relations with all factions.</description>
-    <iconPath>UI/Memes/Guilty</iconPath>
+    <iconPath>UI/Memes/HVMP_Cosmopolitan</iconPath>
     <groupDef>GroupRelation</groupDef>
     <impact>2</impact>
     <exclusionTags>
