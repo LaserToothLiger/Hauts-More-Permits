@@ -153,12 +153,6 @@
 						<turretBurstCooldownTime>2.0</turretBurstCooldownTime>
 					</value>
 				</li>
-				<li Class="PatchOperationReplace">
-					<xpath>Defs/ThingDef[defName="HVMP_SlugTurret"]/building/turretGunDef</xpath>
-					<value>
-						<turretGunDef>Gun_AutoBlasterTurret</turretGunDef>
-					</value>
-				</li>
 				<!--	Charge Turret Drop-->
 				<li Class="PatchOperationReplace">
 					<xpath>Defs/ThingDef[defName="HVMP_ChargeTurret"]/thingClass</xpath>
