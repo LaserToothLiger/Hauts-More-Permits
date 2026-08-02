@@ -184,6 +184,7 @@ namespace HautsPermits
                 if (!usedBy.IsPlayerControlled)
                 {
                     CompUseEffect_MultipleChoicePallet.OpenPallet(usedBy, this.parent, this.options.RandomElement());
+                    return;
                 }
                 MultipleChoicePalletWindow window = new MultipleChoicePalletWindow(usedBy, this);
                 Find.WindowStack.Add(window);
