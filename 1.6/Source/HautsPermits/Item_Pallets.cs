@@ -157,7 +157,7 @@ namespace HautsPermits
                         tdcc.count = limit;
                     }
                 }
-                if (!this.Props.countCantExceedStackSize && tdcc.count > td.stackLimit)
+                if (this.Props.countCantExceedStackSize && tdcc.count > td.stackLimit)
                 {
                     tdcc.count = td.stackLimit;
                 }
