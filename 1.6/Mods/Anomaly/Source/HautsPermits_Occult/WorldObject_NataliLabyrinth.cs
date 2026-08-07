@@ -308,8 +308,8 @@ namespace HautsPermits_Occult
             Scribe_Values.Look<int>(ref this.nextTeleportTick, "nextTeleportTick", 0, false);
             Scribe_References.Look<Building>(ref this.labyrinthObelisk, "labyrinthObelisk", false);
             Scribe_Deep.Look<LayoutStructureSketch>(ref this.structureSketch, "structureSketch", Array.Empty<object>());
-            Scribe_Collections.Look<LayoutRoom>(ref this.spawnableRooms, "spawnableRects", LookMode.Deep, Array.Empty<object>());
             Scribe_References.Look<WorldObject>(ref this.spatialAnomaly, "spatialAnomaly", false);
+            //Scribe_Collections.Look<LayoutRoom>(ref this.spawnableRooms, "spawnableRects", LookMode.Deep, Array.Empty<object>());
         }
         public Building labyrinthObelisk;
         private LayoutStructureSketch structureSketch;
@@ -317,7 +317,6 @@ namespace HautsPermits_Occult
         private bool closing;
         private int nextTeleportTick;
         private static readonly IntRange TeleportDelayTicks = new IntRange(6, 60);
-        private const int IntervalCheckCloseTicks = 300;
         private static readonly List<IntVec3> tmpCells = new List<IntVec3>();
         public WorldObject spatialAnomaly;
     }

@@ -157,7 +157,7 @@ namespace HautsPermits
                         tdcc.count = limit;
                     }
                 }
-                if (!this.Props.countCantExceedStackSize && tdcc.count > td.stackLimit)
+                if (this.Props.countCantExceedStackSize && tdcc.count > td.stackLimit)
                 {
                     tdcc.count = td.stackLimit;
                 }
@@ -184,6 +184,7 @@ namespace HautsPermits
                 if (!usedBy.IsPlayerControlled)
                 {
                     CompUseEffect_MultipleChoicePallet.OpenPallet(usedBy, this.parent, this.options.RandomElement());
+                    return;
                 }
                 MultipleChoicePalletWindow window = new MultipleChoicePalletWindow(usedBy, this);
                 Find.WindowStack.Add(window);

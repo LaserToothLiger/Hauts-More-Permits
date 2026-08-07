@@ -17,6 +17,7 @@
         <Seertusk MayRequire="biotexpans.mammalia">0.075</Seertusk>
         <DV_Avaloi MayRequire="det.avaloi">0.05</DV_Avaloi>
         <RE_Elve MayRequire="VexedTrees980.RimElvesBiotech">0.075</RE_Elve>
+        <AV_Kosmian MayRequire="Veltaris.Kosmian">0.03</AV_Kosmian>
       </xenotypeChances>
     </xenotypeSet>
     <apparelColor>(155,19,191)</apparelColor>

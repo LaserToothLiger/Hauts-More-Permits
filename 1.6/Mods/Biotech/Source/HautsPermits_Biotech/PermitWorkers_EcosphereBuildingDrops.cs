@@ -135,34 +135,15 @@ namespace HautsPermits_Biotech
             {
                 GenDraw.DrawRadiusRing(target.Cell, this.def.royalAid.radius, Color.red, null);
             }
-            if (target.IsValid)
-            {
-                GenDraw.DrawTargetHighlight(target);
-            }
+            RoyalTitlePermitWorker_DropGD.DrawDrillGhost(target, this.map, this.def, this.def.royalAid.itemsToDrop[0].thingDef);
         }
         public override void OrderForceTarget(LocalTargetInfo target)
         {
             if (target.IsValid)
             {
-                foreach (IntVec3 intVec in GenRadial.RadialCellsAround(target.Cell, 4f, true))
+                if (!RoyalTitlePermitWorker_DropGD.DrillCanDropHere(target,this.map,this.def,true, this.def.royalAid.itemsToDrop[0].thingDef))
                 {
-                    if (intVec.InBounds(map))
-                    {
-                        TerrainDef td = intVec.GetTerrain(this.map);
-                        if (td != null && !td.affordances.NullOrEmpty() && (!td.affordances.Contains(TerrainAffordanceDefOf.Heavy) || !td.affordances.Contains(DefDatabase<TerrainAffordanceDef>.GetNamedSilentFail("Diggable"))))
-                        {
-                            Messages.Message(this.def.LabelCap + ": " + "HVMP_PoorTerrainForGeyser".Translate(), MessageTypeDefOf.RejectInput, true);
-                            return;
-                        }
-                    }
-                }
-                foreach (Building b in GenRadial.RadialDistinctThingsAround(target.Cell, this.map, this.def.royalAid.radius, true).OfType<Building>().Distinct<Building>())
-                {
-                    if (b.def == ThingDefOf.SteamGeyser || this.def.royalAid.itemsToDrop[0].thingDef == b.def)
-                    {
-                        Messages.Message(this.def.LabelCap + ": " + "HVMP_TooCloseToGeyser".Translate(), MessageTypeDefOf.RejectInput, true);
-                        return;
-                    }
+                    return;
                 }
                 this.CallResources(target.Cell);
             }
@@ -195,6 +176,41 @@ namespace HautsPermits_Biotech
             }
             yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
             yield break;
+        }
+        public static bool DrillCanDropHere(LocalTargetInfo target, Map map, RoyalTitlePermitDef permitDef, bool allowMessages, ThingDef drillDef = null, Rot4? rot = null)
+        {
+            foreach (IntVec3 intVec in GenRadial.RadialCellsAround(target.Cell, 4f, true))
+            {
+                if (intVec.InBounds(map))
+                {
+                    TerrainDef td = intVec.GetTerrain(map);
+                    if (td != null && !td.affordances.NullOrEmpty() && (!td.affordances.Contains(TerrainAffordanceDefOf.Heavy) || !td.affordances.Contains(DefDatabase<TerrainAffordanceDef>.GetNamedSilentFail("Diggable"))))
+                    {
+                        if (allowMessages)
+                        {
+                            Messages.Message(permitDef.LabelCap + ": " + "HVMP_PoorTerrainForGeyser".Translate(), MessageTypeDefOf.RejectInput, true);
+                        }
+                        return false;
+                    }
+                }
+            }
+            foreach (Building b in GenRadial.RadialDistinctThingsAround(target.Cell, map, permitDef.royalAid.radius, true).OfType<Building>().Distinct<Building>())
+            {
+                if (b.def == ThingDefOf.SteamGeyser || drillDef == b.def)
+                {
+                    if (allowMessages)
+                    {
+                        Messages.Message(permitDef.LabelCap + ": " + "HVMP_TooCloseToGeyser".Translate(), MessageTypeDefOf.RejectInput, true);
+                    }
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static void DrawDrillGhost(LocalTargetInfo target, Map map, RoyalTitlePermitDef def, ThingDef drillDef)
+        {
+            Color color = (RoyalTitlePermitWorker_DropGD.DrillCanDropHere(target, map, def, false, drillDef) ? Designator_Place.CanPlaceColor : Designator_Place.CannotPlaceColor);
+            GhostDrawer.DrawGhostThing(target.Cell, Rot4.North, drillDef, drillDef.graphic, color, AltitudeLayer.Blueprint, null, true, null);
         }
         public override IEnumerable<Gizmo> GetCaravanGizmos(Pawn pawn, Faction faction)
         {

@@ -8,11 +8,11 @@
     <description>A book which describes the principles of a particular ideoligion. Non-believers who read this book are gradually converted towards its ideoligion, but it can sometimes make them upset (which makes them temporarily immune to conversion by ideoligious books in addition to lowering mood). Believers instead gain certainty, as well as one of three possible buffs:\n-A small chance to be inspired\n-Stacks of an ideoligious stat buff\n-Stacks of a mental stat buff</description>
     <tradeability>Sellable</tradeability>
     <graphicData>
-      <texPath>Things/Item/Book/Schematic/Schematic</texPath>
+      <texPath>Items/Book/HVMP_Scripture/HVMP_Scripture</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>0.8</drawSize>
     </graphicData>
-    <uiIconPath>Things/Item/Book/Schematic/Schematic</uiIconPath>
+    <uiIconPath>Items/Book/HVMP_Scripture/HVMP_Scripture</uiIconPath>
     <statBases>
       <MarketValue>150</MarketValue>
     </statBases>
@@ -53,12 +53,12 @@
         <descriptionMaker>HVMP_ScriptureDesc</descriptionMaker>
         <ageYearsRange>100~500</ageYearsRange>
         <openGraphic>
-          <texPath>Things/Item/Book/Schematic/Schematic_Open</texPath>
+          <texPath>Items/Book/HVMP_Scripture/HVMP_Scripture_Open</texPath>
           <graphicClass>Graphic_Multi</graphicClass>
           <drawSize>0.7</drawSize>
         </openGraphic>
         <verticalGraphic>
-          <texPath>Things/Item/Book/Schematic/Schematic_Vertical</texPath>
+          <texPath>Items/Book/HVMP_Scripture/HVMP_Scripture_Vertical</texPath>
           <graphicClass>Graphic_Multi</graphicClass>
           <addTopAltitudeBias>true</addTopAltitudeBias>
         </verticalGraphic>

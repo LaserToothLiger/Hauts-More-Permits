@@ -59,7 +59,7 @@
 		<maxNumOptions>25</maxNumOptions>
 		<unitMarketValueOutputCap>1.5</unitMarketValueOutputCap>
 		<netMarketValueOutputCap>250</netMarketValueOutputCap>
-		<countCantExceedStackSize>true</countCantExceedStackSize>
+		<countCantExceedStackSize>false</countCantExceedStackSize>
       </li>
 	</comps>
   </ThingDef>
@@ -78,7 +78,7 @@
 		<maxNumOptions>10</maxNumOptions>
 		<netMarketValueOutputCap>5000</netMarketValueOutputCap>
 		<onlyHasStackableItems>false</onlyHasStackableItems>
-		<countCantExceedStackSize>true</countCantExceedStackSize>
+		<countCantExceedStackSize>false</countCantExceedStackSize>
 		<qualityGenerator>Reward</qualityGenerator>
       </li>
     </comps>
@@ -98,7 +98,7 @@
 			<thingCategoryWhitelist>Z_Gemstones</thingCategoryWhitelist>
 			<maxNumOptions>25</maxNumOptions>
 			<netMarketValueOutputCap>250</netMarketValueOutputCap>
-			<countCantExceedStackSize>true</countCantExceedStackSize>
+			<countCantExceedStackSize>false</countCantExceedStackSize>
 		  </li>
 		</comps>
 	  </ThingDef>
@@ -116,7 +116,7 @@
 			<thingCategoryWhitelist>AC_ArtisanProducts</thingCategoryWhitelist>
 			<maxNumOptions>25</maxNumOptions>
 			<netMarketValueOutputCap>250</netMarketValueOutputCap>
-			<countCantExceedStackSize>true</countCantExceedStackSize>
+			<countCantExceedStackSize>false</countCantExceedStackSize>
 		  </li>
 		</comps>
 	  </ThingDef>
@@ -135,7 +135,7 @@
 			<maxNumOptions>25</maxNumOptions>
 			<unitMarketValueOutputCap>50</unitMarketValueOutputCap>
 			<netMarketValueOutputCap>250</netMarketValueOutputCap>
-			<countCantExceedStackSize>true</countCantExceedStackSize>
+			<countCantExceedStackSize>false</countCantExceedStackSize>
 		  </li>
 		</comps>
 	  </ThingDef>
