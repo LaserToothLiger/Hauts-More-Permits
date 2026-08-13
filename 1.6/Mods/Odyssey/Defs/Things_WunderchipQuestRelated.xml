@@ -121,6 +121,9 @@
 			  <AM_Blitzkrieg MayRequire="sarg.alphamechs">1</AM_Blitzkrieg>
 			  <AM_Daggersnout MayRequire="sarg.alphamechs">3</AM_Daggersnout>
 			  <AM_Phalanx MayRequire="sarg.alphamechs">2</AM_Phalanx>
+			  <Mech_Skullywag MayRequire="zal.moremechanoids">2</Mech_Skullywag>
+			  <Mech_Flamebot MayRequire="zal.moremechanoids">2</Mech_Flamebot>
+			  <Mech_Assaulter MayRequire="zal.moremechanoids">1</Mech_Assaulter>
 			</options>
 		  </li>
 		</pawnGroupMakers>

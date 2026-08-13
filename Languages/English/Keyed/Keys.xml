@@ -268,7 +268,7 @@
 <HVMP_HardMode_Label_Transportation_1>Pukis</HVMP_HardMode_Label_Transportation_1>
 <HVMP_HardMode_Tooltip_Transportation_1>An ambush lies in wait around the trade point. Caravans close to the trade point may trigger the ambush early.</HVMP_HardMode_Tooltip_Transportation_1>
 <HVMP_HardMode_Label_Transportation_2>Neither Snow Nor Rain Nor...</HVMP_HardMode_Label_Transportation_2>
-<HVMP_HardMode_Tooltip_Transportation_2>Trade points can generate at any distance, and the deadline is 4-7 days shorter.</HVMP_HardMode_Tooltip_Transportation_2>
+<HVMP_HardMode_Tooltip_Transportation_2>Trade points can generate at any distance from player colonies, and the deadline is 4-7 days shorter.</HVMP_HardMode_Tooltip_Transportation_2>
 <HVMP_HardMode_Label_Transportation_3>That Gucci, the Louis</HVMP_HardMode_Label_Transportation_3>
 <HVMP_HardMode_Tooltip_Transportation_3>The minimum acceptable quality of requested items has a 70% chance to be good, a 25% chance to be excellent, or a 5% chance to be masterwork.</HVMP_HardMode_Tooltip_Transportation_3>
 <HVMP_Label_Pax>PAX BRANCH</HVMP_Label_Pax>
