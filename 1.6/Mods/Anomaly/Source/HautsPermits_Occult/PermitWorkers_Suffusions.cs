@@ -189,4 +189,29 @@ namespace HautsPermits_Occult
             return !pawn.HostileTo(this.caller) && pawn.RaceProps.Humanlike && pawn.GetStatValue(StatDefOf.PsychicSensitivity) > float.Epsilon && base.IsGoodPawn(pawn);
         }
     }
+    //if the pawn has a mental break, remove this hediff and stop that mental break. Permit can't target someone currently mentally broken
+    public class Hediff_UnMentalBreaker : HediffWithComps
+    {
+        public override void PostTickInterval(int delta)
+        {
+            base.PostTickInterval(delta);
+            if (this.pawn.InMentalState)
+            {
+                TaggedString letterLabel = this.LabelCap + ": " + this.pawn.Name.ToStringShort;
+                TaggedString letterText = "HVMP_UnMentalBreakerText".Translate().Formatted(this.pawn.Named("PAWN")).AdjustedFor(this.pawn, "PAWN", true).Resolve();
+                ChoiceLetter notification = LetterMaker.MakeLetter(
+                letterLabel, letterText, LetterDefOf.PositiveEvent, null, null, null, null);
+                Find.LetterStack.ReceiveLetter(notification, null);
+                this.pawn.MentalState.RecoverFromState();
+                this.pawn.health.RemoveHediff(this);
+            }
+        }
+    }
+    public class RoyalTitlePermitWorker_UnMentalBreaker : RoyalTitlePermitWorker_GiveHediffs
+    {
+        public override bool IsGoodPawn(Pawn pawn)
+        {
+            return !pawn.InMentalState && base.IsGoodPawn(pawn);
+        }
+    }
 }

@@ -544,4 +544,172 @@ namespace HautsPermits_Ideology
         }
         private Faction calledFaction;
     }
+    //what if i liked an item so much i made a copy of it. what then
+    public class RoyalTitlePermitWorker_CopyItem : RoyalTitlePermitWorker_Targeted, ITargetingSource
+    {
+        public AcceptanceReport IsValidThing(LocalTargetInfo lti)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                TaggedString error = pme.invalidTargetMessage.Translate();
+                if (!lti.IsValid)
+                {
+                    return new AcceptanceReport(error);
+                } else {
+                    if (lti.Thing != null)
+                    {
+                        Thing t = lti.Thing;
+                        if (t.def.stackLimit == 1 && t.def.category == ThingCategory.Item && !t.def.IsWithinCategory(ThingCategoryDefOf.Foods))
+                        {
+                            foreach (RecipeDef r in DefDatabase<RecipeDef>.AllDefs)
+                            {
+                                if (r.products != null && r.products.ContainsAny((ThingDefCountClass tdcc) => tdcc.thingDef == t.def))
+                                {
+                                    return AcceptanceReport.WasAccepted;
+                                }
+                            }
+                        }
+                    }
+                }
+                return new AcceptanceReport(error);
+            }
+            return new AcceptanceReport("Hauts_PMEMisconfig".Translate());
+        }
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            if (!base.CanHitTarget(target))
+            {
+                if (target.IsValid && showMessages)
+                {
+                    Messages.Message(this.def.LabelCap + ": " + "AbilityCannotHitTarget".Translate(), MessageTypeDefOf.RejectInput, true);
+                }
+                return false;
+            }
+            AcceptanceReport acceptanceReport = this.IsValidThing(target);
+            if (!acceptanceReport.Accepted)
+            {
+                Messages.Message(acceptanceReport.Reason, new LookTargets(target.Cell, this.map), MessageTypeDefOf.RejectInput, false);
+            }
+            return acceptanceReport.Accepted;
+        }
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null && pme.extraNumber != null && target.Thing != null)
+            {
+                this.CopyItem(target.Thing, this.calledFaction);
+            }
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (map.generatorDef.isUnderground)
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                yield return new FloatMenuOption("CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            Action action = null;
+            string text = this.def.LabelCap + ": ";
+            if (base.FillAidOption(pawn, faction, ref text, out bool free))
+            {
+                action = delegate
+                {
+                    this.BeginCopyItem(pawn, map, faction, free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        private void BeginCopyItem(Pawn pawn, Map map, Faction faction, bool free)
+        {
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                return;
+            }
+            this.targetingParameters = new TargetingParameters
+            {
+                canTargetLocations = false,
+                canTargetSelf = false,
+                canTargetPawns = false,
+                canTargetFires = false,
+                canTargetBuildings = false,
+                canTargetItems = true,
+                mapObjectTargetsMustBeAutoAttackable = false,
+                validator = (TargetInfo target) => this.def.royalAid.targetingRange <= 0f || target.Cell.DistanceTo(this.caller.Position) <= this.def.royalAid.targetingRange
+            };
+            this.caller = pawn;
+            this.map = map;
+            this.calledFaction = faction;
+            this.free = free;
+            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+        }
+        private void CopyItem(Thing thing, Faction faction)
+        {
+            if (thing.Spawned || this.caller.Spawned)
+            {
+                IntVec3 cell = thing.Position;
+                if (!cell.IsValid)
+                {
+                    cell = this.caller.Position;
+                }
+                Thing newThing = ThingMaker.MakeThing(thing.def,thing.Stuff);
+                newThing.Notify_DebugSpawned();
+                CompQuality cq = newThing.TryGetComp<CompQuality>();
+                thing.TryGetQuality(out QualityCategory qc);
+                if (cq != null)
+                {
+                    cq.SetQuality(qc,ArtGenerationContext.Outsider);
+                }
+                newThing.StyleDef = thing.StyleDef;
+                if (this.calledFaction.leader != null)
+                {
+                    CompArt ca = newThing.TryGetComp<CompArt>();
+                    if (ca != null)
+                    {
+                        ca.JustCreatedBy(this.calledFaction.leader);
+                    }
+                }
+                CompColorable cc = newThing.TryGetComp<CompColorable>();
+                CompColorable cc2 = thing.TryGetComp<CompColorable>();
+                if (cc != null && cc2 != null)
+                {
+                    cc.SetColor(cc2.Color);
+                }
+                if (ModsConfig.OdysseyActive)
+                {
+                    CompUniqueWeapon cuw = newThing.TryGetComp<CompUniqueWeapon>();
+                    CompUniqueWeapon cuw2 = thing.TryGetComp<CompUniqueWeapon>();
+                    if (cuw != null && !cuw.TraitsListForReading.NullOrEmpty())
+                    {
+                        for (int i = cuw.TraitsListForReading.Count - 1; i >= 0; i--)
+                        {
+                            cuw.TraitsListForReading.RemoveAt(i);
+                        }
+                    }
+                    if (cuw2 != null && !cuw2.TraitsListForReading.NullOrEmpty())
+                    {
+                        foreach (WeaponTraitDef wtd in cuw2.TraitsListForReading)
+                        {
+                            cuw.AddTrait(wtd);
+                        }
+                    }
+                }
+                ActiveTransporterInfo activeDropPodInfo = new ActiveTransporterInfo();
+                activeDropPodInfo.innerContainer.TryAddRangeOrTransfer(new List<Thing> { newThing }, true, false);
+                DropPodUtility.MakeDropPodAt(cell, this.map, activeDropPodInfo, null);
+                Messages.Message("MessagePermitTransportDrop".Translate(this.calledFaction.Named("FACTION")), new LookTargets(cell, this.map), MessageTypeDefOf.NeutralEvent, true);
+                this.caller.royalty.GetPermit(this.def, this.calledFaction).Notify_Used();
+                if (!this.free)
+                {
+                    this.caller.royalty.TryRemoveFavor(this.calledFaction, this.def.royalAid.favorCost);
+                }
+            }
+        }
+        private Faction calledFaction;
+    }
 }

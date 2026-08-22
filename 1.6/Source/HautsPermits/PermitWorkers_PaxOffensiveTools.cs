@@ -210,31 +210,7 @@ namespace HautsPermits
         public Thing victim;
     }
     /*|||||ALL THE OTHER PAX OFFENSIVE PERMITS WITH UNIQUE WORKERS|||||
-     * EMI doesn't just cause an electrical grid-disabling effect, it also stuns all hostile buildings on the map*/
-    [StaticConstructorOnStartup]
-    public class RoyalTitlePermitWorker_EMI : RoyalTitlePermitWorker_CauseCondition
-    {
-        protected override void MakeCondition(Pawn caller, Faction faction, IncidentParms parms, bool free)
-        {
-            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
-            base.MakeCondition(caller, faction, parms, free);
-            if (caller.MapHeld != null && pme != null && pme.extraNumber != null)
-            {
-                foreach (Building b in caller.MapHeld.listerBuildings.allBuildingsNonColonist)
-                {
-                    if (b.Faction == null || b.Faction.RelationKindWith(Faction.OfPlayerSilentFail) == FactionRelationKind.Hostile)
-                    {
-                        CompStunnable stunComp = b.GetComp<CompStunnable>();
-                        if (stunComp != null)
-                        {
-                            stunComp.StunHandler.StunFor((int)pme.extraNumber.RandomInRange, null, false);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    //target a location. Infestation spawn there.
+     * target a location. Infestation spawn there.*/
     [StaticConstructorOnStartup]
     public class RoyalTitlePermitWorker_Infestation : RoyalTitlePermitWorker_Targeted
     {
@@ -506,6 +482,135 @@ namespace HautsPermits
         public Thing instigator;
         private float angle;
         private static readonly FloatRange AngleRange = new FloatRange(-12f, 12f);
+    }
+    //target a location. create a boom, using the PME's DamageDef. Royal aid's explosionCount and radius fields do exactly what you think they do to the explosion behavior
+    public class RoyalTitlePermitWorker_Explosion : RoyalTitlePermitWorker_Targeted
+    {
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            if (!base.CanHitTarget(target))
+            {
+                if (target.IsValid && showMessages)
+                {
+                    Messages.Message(this.def.LabelCap + ": " + "AbilityCannotHitTarget".Translate(), MessageTypeDefOf.RejectInput, true);
+                }
+                return false;
+            }
+            return true;
+        }
+        public override void DrawHighlight(LocalTargetInfo target)
+        {
+            GenDraw.DrawRadiusRing(this.caller.Position, this.def.royalAid.targetingRange, Color.white, null);
+            GenDraw.DrawRadiusRing(target.Cell, this.def.royalAid.radius + this.def.royalAid.explosionRadiusRange.max, Color.white, null);
+            if (target.IsValid)
+            {
+                GenDraw.DrawTargetHighlight(target);
+            }
+        }
+        public override void OrderForceTarget(LocalTargetInfo target)
+        {
+            this.CallBombardment(target.Cell);
+        }
+        public override IEnumerable<FloatMenuOption> GetRoyalAidOptions(Map map, Pawn pawn, Faction faction)
+        {
+            if (map.generatorDef.isUnderground)
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidMapUnreachable".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            if (faction.HostileTo(Faction.OfPlayer))
+            {
+                yield return new FloatMenuOption(this.def.LabelCap + ": " + "CommandCallRoyalAidFactionHostile".Translate(faction.Named("FACTION")), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
+            }
+            string text = this.def.LabelCap + ": ";
+            Action action = null;
+            bool free;
+            if (base.FillAidOption(pawn, faction, ref text, out free))
+            {
+                action = delegate
+                {
+                    this.BeginCallBombardment(pawn, faction, map, free);
+                };
+            }
+            yield return new FloatMenuOption(text, action, faction.def.FactionIcon, faction.Color, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0, HorizontalJustification.Left, false);
+            yield break;
+        }
+        private void BeginCallBombardment(Pawn caller, Faction faction, Map map, bool free)
+        {
+            this.targetingParameters = new TargetingParameters
+            {
+                canTargetLocations = true,
+                canTargetSelf = true,
+                canTargetFires = true,
+                canTargetItems = true
+            };
+            this.caller = caller;
+            this.map = map;
+            this.faction = faction;
+            this.free = free;
+            this.targetingParameters.validator = delegate (TargetInfo target)
+            {
+                if (this.def.royalAid.targetingRange > 0f && target.Cell.DistanceTo(caller.Position) > this.def.royalAid.targetingRange)
+                {
+                    return false;
+                }
+                if (target.Cell.Fogged(map))
+                {
+                    return false;
+                }
+                RoofDef roof = target.Cell.GetRoof(map);
+                return roof == null || !roof.isThickRoof;
+            };
+            Find.Targeter.BeginTargeting(this, null, false, null, null, true);
+        }
+        private void CallBombardment(IntVec3 targetCell)
+        {
+            PermitMoreEffects pme = this.def.GetModExtension<PermitMoreEffects>();
+            if (pme != null)
+            {
+                DamageDef dd = pme.damageType ?? DamageDefOf.Bomb;
+                for (int i = 0; i < this.def.royalAid.explosionCount; i++)
+                {
+                    GenExplosion.DoExplosion(targetCell, this.map, this.def.royalAid.radius, dd, null);
+                    this.DoExtraEffect(pme);
+                }
+            }
+            this.caller.royalty.GetPermit(this.def, this.faction).Notify_Used();
+            if (!this.free)
+            {
+                this.caller.royalty.TryRemoveFavor(this.faction, this.def.royalAid.favorCost);
+            }
+        }
+        public virtual void DoExtraEffect(PermitMoreEffects pme)
+        {
+
+        }
+        private Faction faction;
+    }
+    public class RoyalTitlePermitWorker_WeightOfTheWorld : RoyalTitlePermitWorker_Explosion
+    {
+        public override void DoExtraEffect(PermitMoreEffects pme)
+        {
+            if (pme.hediffs != null)
+            {
+                foreach (HediffDef hd in pme.hediffs)
+                {
+                    foreach (Pawn p in this.map.mapPawns.AllPawnsSpawned)
+                    {
+                        if (p.HostileTo(this.caller))
+                        {
+                            Hediff h = HediffMaker.MakeHediff(hd,p);
+                            if (pme.extraNumber != null)
+                            {
+                                h.Severity = pme.extraNumber.RandomInRange;
+                            }
+                            p.health.AddHediff(h);
+                        }
+                    }
+                }
+            }
+        }
     }
     //target a location. Dora the Explorer wants to know if you can tell what this one does
     public class RoyalTitlePermitWorker_MechCluster : RoyalTitlePermitWorker_Targeted

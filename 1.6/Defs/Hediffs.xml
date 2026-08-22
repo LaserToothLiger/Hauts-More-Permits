@@ -327,12 +327,9 @@
 		<stages>
 		  <li>
 			<statFactors>
-			  <JoyFallRateFactor>0.5</JoyFallRateFactor>
+			  <JoyFallRateFactor>0</JoyFallRateFactor>
 			  <RestRateMultiplier>1.25</RestRateMultiplier>
 			</statFactors>
-			<statOffsets>
-			  <Hauts_BoredomDropPerDay>0.04</Hauts_BoredomDropPerDay>
-			</statOffsets>
 		  </li>
 		</stages>
 		<comps>
@@ -410,6 +407,28 @@
 	  </li>
 	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
 	</comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase" MayRequire="Ludeon.RimWorld.Odyssey">
+    <defName>HVMP_PilotAssistProgram</defName>
+    <label>rover pilot assist</label>
+    <description>A radio link to an automated aerospace piloting program.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(150,139,114)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statOffsets>
+		  <PilotingAbility>0.2</PilotingAbility>
+		</statOffsets>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-3</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
   </HediffDef>
   <HediffDef ParentName="HVT_TraitHediffBase">
 	<defName>HVMP_SkipnetAuthorization</defName>

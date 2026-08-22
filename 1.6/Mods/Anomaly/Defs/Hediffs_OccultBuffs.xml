@@ -132,6 +132,12 @@
 	  </ThoughtDef>
   
   <!--Level 4-->
+  <HediffDef ParentName="HVMP_OccultSuffusionBase">
+    <defName>HVMP_SuffusedComposure</defName>
+    <label>composure suffusion</label>
+    <description>A distant psychic influence is maintaining a packet of unnatural composure within this indiviudal's psyche. It will be expended to prematurely end the next mental break this individual would undergo.\n\nApplying another psychic suffusion will disrupt this effect.</description>
+    <hediffClass>HautsPermits_Occult.Hediff_UnMentalBreaker</hediffClass>
+  </HediffDef>
   <HediffDef ParentName="HVMP_OccultSuffusionTemporaryBase">
     <defName>HVMP_SuffusedInvisibility</defName>
     <label>invisibility suffusion</label>

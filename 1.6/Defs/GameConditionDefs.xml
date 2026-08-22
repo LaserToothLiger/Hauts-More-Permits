@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <GameConditionDef>
+    <defName>HVMP_EMIFieldPlusBuildingStun</defName>
+    <conditionClass>HautsPermits.GameCondition_DisableElectricityPlusBuildingStun</conditionClass>
+    <label>Disruptor EMI field</label>
+    <description>An electromagnetic interference dynamo is projecting an EM interference field, disabling electrical devices. For the first hour, buildings such as turrets will be stunned.</description>
+    <descriptionFuture>a distant EMI dynamo will blast [map_definite] with an EMI field, shutting down electrical devices for [gameConditionDuration_duration]</descriptionFuture>
+    <endMessage>The EMI field has disappeared.</endMessage>
+    <letterText>An EMI field has been generated. It is disabling electrical devices.</letterText>
+    <letterDef>NegativeEvent</letterDef>
+    <canBePermanent>true</canBePermanent>
+    <natural>false</natural>
+  </GameConditionDef>
+  
+</Defs>

@@ -143,6 +143,24 @@
   
   
   <!--pax-->
+  <ThingDef ParentName="HVMP_PalletBase">
+    <defName>HVMP_ShellPallet</defName>
+    <label>mortar shell pallet</label>
+    <description>A crate containing mortar shells. You can choose what type of shell is inside by opening it.</description>
+    <graphicData>
+      <texPath>Items/Pallets/HVMP_ShellPallet</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <comps>
+      <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
+        <thingCategoryWhitelist>MortarShells</thingCategoryWhitelist>
+		<maxNumOptions>25</maxNumOptions>
+		<unitMarketValueOutputCap>260</unitMarketValueOutputCap>
+		<netMarketValueOutputCap>260</netMarketValueOutputCap>
+		<countCantExceedStackSize>false</countCantExceedStackSize>
+      </li>
+	</comps>
+  </ThingDef>
   <ThingDef ParentName="MechSerumBase">
     <defName>HVMP_BSU</defName>
     <label>blackbody shield unit</label>
@@ -180,6 +198,54 @@
         <hediffDef>HVMP_BShield</hediffDef>
         <bodyPart>Brain</bodyPart>
         <soundOnUsed>EnergyShield_Reset</soundOnUsed>
+      </li>
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="ResourceBase">
+    <defName>HVMP_RegionalDisruptionTargeter</defName>
+    <label>regional disruptor</label>
+    <description>A single-use remote control unit for a network of environmental attack satellites. It can be utilized to induce a three-day adverse alteration in the local environment, such as temperature shifts, electromagnetic interference, sun blocking, or toxic emissions.</description>
+    <thingClass>ThingWithComps</thingClass>
+    <techLevel>Spacer</techLevel>
+    <tradeability>Sellable</tradeability>
+    <smeltable>false</smeltable>
+    <soundInteract>Standard_Pickup</soundInteract>
+    <graphicData>
+      <texPath>Things/Item/Equipment/WeaponSpecial/OrbitalTargeter</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+	<statBases>
+      <MarketValue>800</MarketValue>
+      <Mass>0.5</Mass>
+	  <Flammability>0</Flammability>
+    </statBases>
+    <tradeTags>
+      <li>ExoticMisc</li>
+    </tradeTags>
+    <thingSetMakerTags Inherit="False"/>
+    <allowedArchonexusCount>5</allowedArchonexusCount>
+    <comps>
+      <li Class="CompProperties_Usable">
+        <useJob>UseArtifact</useJob>
+        <useLabel>Activate {0_label}</useLabel>
+        <showUseGizmo>true</showUseGizmo>
+        <useDuration>132</useDuration>
+      </li>
+      <li Class="HautsPermits.CompProperties_UseEffect_RegionalDisruptorMenu">
+        <duration>180000</duration>
+		<gameConditions>
+		  <li>ColdSnap</li>
+		  <li>HVMP_EMIFieldPlusBuildingStun</li>
+		  <li>HeatWave</li>
+		  <li>SunBlocker</li>
+		  <li>ToxicSpewer</li>
+		  <li MayRequire="Leo.EventsExpanded">LE_EmberFallout</li>
+		  <li MayRequire="Leo.EventsExpanded">LE_GravityHigh</li>
+		  <li MayRequire="Leo.EventsExpanded">LE_InfrasonicTremor</li>
+		  <li MayRequire="Leo.EventsExpanded">LE_SubatomicTurbulence</li>
+		  <li MayRequire="Leo.EventsExpanded">LE_SubspaceNoise</li>
+		</gameConditions>
+		<sound>ShipTakeoff</sound>
       </li>
     </comps>
   </ThingDef>

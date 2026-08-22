@@ -57,40 +57,11 @@
 						<baseMaxEnergy>600</baseMaxEnergy>
 					</value>
 				</li>
-				<!--shells dropped by permits are 81mm, so descriptions need to state this-->
+				<!--shells dropped by permits are 81mm, so descriptions need to state this. Also shell pallets need to use the correct thing category, since CE empties the normal shell category-->
 				<li Class="PatchOperationReplace">
-					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_FirefoamShellDrop"]/label</xpath>
+					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_ShellDrop"]/label</xpath>
 					<value>
-						<label>81mm firefoam shell drop</label>
-					</value>
-				</li>
-				<li Class="PatchOperationReplace">
-					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_SmokeShellDrop"]/label</xpath>
-					<value>
-						<label>81mm smoke shell drop</label>
-					</value>
-				</li>
-				<li Class="PatchOperationFindMod">
-					<mods>
-						<li>Alpha Biomes</li>
-					</mods>
-					<match Class="PatchOperationReplace">
-						<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_TarShellDrop"]/label</xpath>
-						<value>
-							<label>81mm tar shell drop</label>
-						</value>
-					</match>
-				</li>
-				<li Class="PatchOperationReplace">
-					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_EMPShellDrop"]/label</xpath>
-					<value>
-						<label>81mm EMP shell drop</label>
-					</value>
-				</li>
-				<li Class="PatchOperationReplace">
-					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_HEShellDrop"]/label</xpath>
-					<value>
-						<label>81mm HE shell drop</label>
+						<label>81mm mortar shell drop</label>
 					</value>
 				</li>
 				<li Class="PatchOperationReplace">
@@ -99,14 +70,17 @@
 						<label>81mm antigrain shell drop</label>
 					</value>
 				</li>
-				<!--VFE Deserters shells do not exist in CE-->
-				<li Class="PatchOperationFindMod">
-					<mods>
-						<li>Vanilla Factions Expanded - Deserters</li>
-					</mods>
-					<match Class="PatchOperationRemove">
-						<xpath>Defs/RoyalTitlePermitDef[defName="HVMP_ShrapnelShellDrop" or defName="HVMP_PiercingShellDrop" or defName="HVMP_ClusterShellDrop"]</xpath>
-					</match>
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/ThingDef[defName="HVMP_ShellPallet"]/label</xpath>
+					<value>
+						<label>81mm mortar shell pallet</label>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/ThingDef[defName="HVMP_ShellPallet"]/comps/li[@Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet"]/thingCategoryWhitelist</xpath>
+					<value>
+						<thingCategoryWhitelist>Ammo81mmMortarShells</thingCategoryWhitelist>
+					</value>
 				</li>
 				<!--turret drop permits need the same changes CE makes to their normal counterparts
 						Mini-turret-->
@@ -500,13 +474,6 @@
 					</mods>
 					<match Class="PatchOperationSequence">
 						<operations>
-							<!--81mm shells-->
-							<li Class="PatchOperationReplace">
-								<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_ToxShellDrop"]/label</xpath>
-								<value>
-									<label>81mm tox shell drop</label>
-								</value>
-							</li>
 							<!--scaria mutations-->
 							<li Class="PatchOperationReplace">
 								<xpath>/Defs/HediffDef[defName="HVMP_ScariaAblativeTissues"]/stages/li/statOffsets/ArmorRating_Blunt</xpath>
@@ -589,13 +556,6 @@
 					</mods>
 					<match Class="PatchOperationSequence">
 						<operations>
-							<!--shell naming-->
-							<li Class="PatchOperationReplace">
-								<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_DeadlifeShellDrop"]/label</xpath>
-								<value>
-									<label>81mm deadlife shell drop</label>
-								</value>
-							</li>
 							<!--quest stuff-->
 							<li Class="PatchOperationReplace">
 								<xpath>/Defs/HediffDef[defName="HVMP_UsherStats"]/stages/li/statOffsets/ArmorRating_Blunt</xpath>

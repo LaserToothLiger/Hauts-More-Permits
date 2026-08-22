@@ -668,54 +668,6 @@
 			<li Class="HautsFramework.PermitMoreEffects" />
 		</modExtensions>
 	  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_ChillingDisruption</defName>
-    <label>cooling disruption</label>
-    <description>Activate a targeted climate controller, inducing a cold snap for 3 days.</description>
-    <workerClass>HautsFramework.RoyalTitlePermitWorker_CauseCondition</workerClass>
-    <minTitle>HVMP_EcosphereIV</minTitle>
-    <faction>HVMP_EcosphereBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,3)</uiPosition>
-    <royalAid>
-      <favorCost>3</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<conditionDefs><li>ColdSnap</li></conditionDefs>
-			<conditionDuration>180000</conditionDuration>
-			<onUseMessage>HVMP_MessagePermitChiller</onUseMessage>
-			<screenShake>true</screenShake>
-			<soundDef>ShipTakeoff</soundDef>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_ScorchingDisruption</defName>
-    <label>heating disruption</label>
-    <description>Activate a targeted climate controller, inducing a heat wave for 3 days.</description>
-    <workerClass>HautsFramework.RoyalTitlePermitWorker_CauseCondition</workerClass>
-    <minTitle>HVMP_EcosphereIV</minTitle>
-    <faction>HVMP_EcosphereBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(5,3)</uiPosition>
-    <royalAid>
-      <favorCost>3</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<conditionDefs><li>HeatWave</li></conditionDefs>
-			<conditionDuration>180000</conditionDuration>
-			<onUseMessage>HVMP_MessagePermitScorcher</onUseMessage>
-			<screenShake>true</screenShake>
-			<soundDef>ShipTakeoff</soundDef>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef>
     <defName>HVMP_PollutionScoop</defName>
     <label>pollution scoop</label>
@@ -725,7 +677,7 @@
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
-    <uiPosition>(4,4)</uiPosition>
+    <uiPosition>(4,3)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
       <targetingRange>44.9</targetingRange>
@@ -751,7 +703,7 @@
     <faction>HVMP_EcosphereBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
-    <uiPosition>(5,4)</uiPosition>
+    <uiPosition>(5,3)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
       <targetingRange>44.9</targetingRange>
@@ -778,7 +730,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>30</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,5)</uiPosition>
+    <uiPosition>(4,4)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <Genepack>1</Genepack>
@@ -796,7 +748,7 @@
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>30</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(5,5)</uiPosition>
+		<uiPosition>(5,4)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
 			<AG_Alphapack>1</AG_Alphapack>
@@ -814,7 +766,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>36</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(4,6)</uiPosition>
+    <uiPosition>(4,5)</uiPosition>
     <royalAid>
       <favorCost>4</favorCost>
     </royalAid>
@@ -837,7 +789,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>10</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(5,6)</uiPosition>
+    <uiPosition>(5,5)</uiPosition>
     <royalAid>
       <favorCost>6</favorCost>
     </royalAid>

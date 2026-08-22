@@ -192,20 +192,6 @@
 	  <targetingRequireLOS>false</targetingRequireLOS>
     </royalAid>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_ScannerDeep</defName>
-    <label>crust deepscan</label>
-    <description>Finds a node of resources hidden beneath the ground, which can be excavated via deep drills.\n\nA ground-penetrating scanner will still be necessary to more directly view the node.</description>
-	<workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_ScannerDeep</workerClass>
-    <minTitle>HVMP_ArchiveII</minTitle>
-    <faction>HVMP_ArchiveBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>3</cooldownDays>
-    <uiPosition>(1,4)</uiPosition>
-    <royalAid>
-      <favorCost>1</favorCost>
-    </royalAid>
-  </RoyalTitlePermitDef>
   <!--Archive level 3-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_RefineToExc</defName>
@@ -376,6 +362,69 @@
 			</li>
 		</modExtensions>
 	  </RoyalTitlePermitDef>
+  <!--Archive level 4-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_DiscoverRelic</defName>
+    <label>discover relic</label>
+    <description>Plumb the records of the Archive Branch to find hints of an item on this world important to the caller's ideoligion.</description>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DiscoverRelic</workerClass>
+    <minTitle>HVMP_ArchiveIV</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>45</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(3,1)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ScannerReveal</defName>
+    <label>anti-invisibility scan</label>
+    <description>Disrupt all invisibility on the map for 2 hours.</description>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_CauseCondition</workerClass>
+    <minTitle>HVMP_ArchiveIV</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <usableOnWorldMap>true</usableOnWorldMap>
+    <uiPosition>(3,3)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<conditionDefs><li>HVMP_RevealingScanEffect</li></conditionDefs>
+			<conditionDuration>5000</conditionDuration>
+			<onUseMessage>HVMP_MessagePermitRScan</onUseMessage>
+			<screenShake>false</screenShake>
+			<soundDef>MortarShieldGenerator_Reactivate</soundDef>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ScannerUpgrade</defName>
+    <label>scanner upgrade</label>
+    <description>Wirelessly connects the targeted scanner to the Archive Branch's own satellite network, improving its survey speed by +50%.</description>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_ScannerUpgrade</workerClass>
+    <minTitle>HVMP_ArchiveIV</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>10</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(3,4)</uiPosition>
+    <royalAid>
+      <favorCost>1</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<invalidTargetMessage>HVMP_MustBeScanner</invalidTargetMessage>
+			<soundDef>NeuralSupercharger_Injection</soundDef>
+			<extraNumber>0.5</extraNumber><!--magnitude of offset-->
+			<onUseMessage>HVMP_ScannerUpgraded</onUseMessage>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
   <!--Archive level 5-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_RefineToMaster</defName>
@@ -387,7 +436,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>40</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(3,0)</uiPosition>
+    <uiPosition>(4,0)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
     </royalAid>
@@ -407,42 +456,42 @@
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_DiscoverRelic</defName>
-    <label>discover relic</label>
-    <description>Plumb the records of the Archive Branch to find hints of an item on this world important to the caller's ideoligion.</description>
-    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_DiscoverRelic</workerClass>
+	<defName>HVMP_ArtifactDrop</defName>
+	<label>artifact drop</label>
+	<description>Call for a drop of 1 pallet containing an archotech artifact of your choice.</description>
     <minTitle>HVMP_ArchiveV</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>45</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,1)</uiPosition>
+	<permitPointCost>1</permitPointCost>
+	<cooldownDays>30</cooldownDays>
+	<uiPosition>(4,1)</uiPosition>
     <royalAid>
+      <itemsToDrop>
+        <HVMP_ArtifactPallet>1</HVMP_ArtifactPallet>
+      </itemsToDrop>
       <favorCost>5</favorCost>
     </royalAid>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_ScannerReveal</defName>
-    <label>anti-invisibility scan</label>
-    <description>Disrupt all invisibility on the map for 2 hours.</description>
-    <workerClass>HautsFramework.RoyalTitlePermitWorker_CauseCondition</workerClass>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Odyssey">
+	<defName>HVMP_UniqueWeaponDrop</defName>
+	<label>unique weapon drop</label>
+	<description>Call for a drop of 1 random good-quality unique weapon.\n\nCosts two permit points.</description>
+	<workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesOfCategory</workerClass>
     <minTitle>HVMP_ArchiveV</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,3)</uiPosition>
-    <royalAid>
-      <favorCost>5</favorCost>
-    </royalAid>
+	<permitPointCost>2</permitPointCost>
+	<cooldownDays>40</cooldownDays>
+	<uiPosition>(4,2)</uiPosition>
+	<royalAid>
+	  <favorCost>5</favorCost>
+	</royalAid>
 	<modExtensions>
 		<li Class="HautsFramework.PermitMoreEffects">
-			<conditionDefs><li>HVMP_RevealingScanEffect</li></conditionDefs>
-			<conditionDuration>5000</conditionDuration>
-			<onUseMessage>HVMP_MessagePermitRScan</onUseMessage>
-			<screenShake>false</screenShake>
-			<soundDef>MortarShieldGenerator_Reactivate</soundDef>
-        </li>
+			<thingCategories>
+			  <li>WeaponsUnique</li>
+			</thingCategories>
+			<numFromCategory>1</numFromCategory>
+			<extraNumber>3</extraNumber><!--can create items of Good quality-->
+		</li>
 	</modExtensions>
   </RoyalTitlePermitDef>
   <!--Archive level 6-->
@@ -456,7 +505,7 @@
     <permitPointCost>2</permitPointCost>
     <cooldownDays>40</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(4,0)</uiPosition>
+    <uiPosition>(5,0)</uiPosition>
     <royalAid>
       <favorCost>8</favorCost>
     </royalAid>
@@ -476,6 +525,26 @@
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ReplicateItem</defName>
+    <label>replicate item</label>
+    <description>Order a remote facility to print a pristine recreation of the target craftable non-stackable non-food item, then send it down in a drop pod. It will have the same quality, color, style, and unique weapon traits of the original (if applicable), but any other properties are subject to vary.\n\nCosts three permit points.</description>
+    <workerClass>HautsPermits_Ideology.RoyalTitlePermitWorker_CopyItem</workerClass>
+    <minTitle>HVMP_ArchiveVI</minTitle>
+    <faction>HVMP_ArchiveBranch</faction>
+    <permitPointCost>3</permitPointCost>
+    <cooldownDays>60</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(5,1)</uiPosition>
+    <royalAid>
+      <favorCost>10</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<invalidTargetMessage>HVMP_ItemReplicationLimits</invalidTargetMessage>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
 	<defName>HVMP_TechprintDrop</defName>
 	<label>techprint drop</label>
 	<description>Call for a drop of 1 random techprint.</description>
@@ -484,7 +553,7 @@
     <faction>HVMP_ArchiveBranch</faction>
 	<permitPointCost>1</permitPointCost>
 	<cooldownDays>36</cooldownDays>
-	<uiPosition>(4,1)</uiPosition>
+	<uiPosition>(5,2)</uiPosition>
 	<royalAid>
 	  <favorCost>5</favorCost>
 	</royalAid>
@@ -506,7 +575,7 @@
     <faction>HVMP_ArchiveBranch</faction>
 	<permitPointCost>1</permitPointCost>
 	<cooldownDays>30</cooldownDays>
-	<uiPosition>(4,2)</uiPosition>
+	<uiPosition>(5,3)</uiPosition>
 	<royalAid>
 	  <favorCost>5</favorCost>
 	</royalAid>
@@ -522,13 +591,13 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
 	<defName>HVMP_PsytrainerDrop</defName>
 	<label>psytrainer drop</label>
-	<description>Call for a drop of 1 random psytrainer.\n\nCosts two permit points.</description>
+	<description>Call for a drop of 1 random psytrainer.</description>
 	<workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesOfCategory</workerClass>
     <minTitle>HVMP_ArchiveVI</minTitle>
     <faction>HVMP_ArchiveBranch</faction>
-	<permitPointCost>2</permitPointCost>
+	<permitPointCost>1</permitPointCost>
 	<cooldownDays>30</cooldownDays>
-	<uiPosition>(4,3)</uiPosition>
+	<uiPosition>(5,4)</uiPosition>
 	<royalAid>
 	  <favorCost>5</favorCost>
 	</royalAid>
@@ -542,30 +611,6 @@
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-	<defName>HVMP_ArtifactDrop</defName>
-	<label>artifact drop</label>
-	<description>Call for a drop of 1 random archotech artifact.</description>
-	<workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesOfCategory</workerClass>
-    <minTitle>HVMP_ArchiveVI</minTitle>
-    <faction>HVMP_ArchiveBranch</faction>
-	<permitPointCost>1</permitPointCost>
-	<cooldownDays>30</cooldownDays>
-	<uiPosition>(4,4)</uiPosition>
-	<royalAid>
-	  <favorCost>5</favorCost>
-	</royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<thingCategories>
-			  <li>Artifacts</li>
-			</thingCategories>
-				<minTechLevelInCategory>Archotech</minTechLevelInCategory>
-				<maxTechLevelInCategory>Archotech</maxTechLevelInCategory>
-			<numFromCategory>1</numFromCategory>
-		</li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
 	<defName>HVMP_PersonaWeaponDrop</defName>
 	<label>persona weapon drop</label>
 	<description>Call for a drop of 1 random normal-quality persona weapon.\n\nCosts two permit points.</description>
@@ -574,7 +619,7 @@
     <faction>HVMP_ArchiveBranch</faction>
 	<permitPointCost>2</permitPointCost>
 	<cooldownDays>40</cooldownDays>
-	<uiPosition>(4,5)</uiPosition>
+	<uiPosition>(5,5)</uiPosition>
 	<royalAid>
 	  <favorCost>5</favorCost>
 	</royalAid>
@@ -588,29 +633,6 @@
 		</li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Odyssey">
-	<defName>HVMP_UniqueWeaponDrop</defName>
-	<label>unique weapon drop</label>
-	<description>Call for a drop of 1 random good-quality unique weapon.\n\nCosts two permit points.</description>
-	<workerClass>HautsFramework.RoyalTitlePermitWorker_DropResourcesOfCategory</workerClass>
-    <minTitle>HVMP_ArchiveVI</minTitle>
-    <faction>HVMP_ArchiveBranch</faction>
-	<permitPointCost>2</permitPointCost>
-	<cooldownDays>40</cooldownDays>
-	<uiPosition>(4,6)</uiPosition>
-	<royalAid>
-	  <favorCost>5</favorCost>
-	</royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<thingCategories>
-			  <li>WeaponsUnique</li>
-			</thingCategories>
-			<numFromCategory>1</numFromCategory>
-			<extraNumber>3</extraNumber><!--can create items of Good quality-->
-		</li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_AnimusStone</defName>
     <label>animus stone drop</label>
@@ -621,7 +643,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>40</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,7)</uiPosition>
+    <uiPosition>(5,6)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <AnimusStone>
@@ -640,7 +662,7 @@
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>30</cooldownDays>
 		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(4,8)</uiPosition>
+		<uiPosition>(5,7)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
 			<InfusedAmplifier>1</InfusedAmplifier>

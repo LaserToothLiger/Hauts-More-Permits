@@ -567,7 +567,7 @@
     <tickerType>Rare</tickerType>
     <altitudeLayer>Building</altitudeLayer>
     <statBases>
-      <MaxHitPoints>550</MaxHitPoints>
+      <MaxHitPoints>1800</MaxHitPoints>
       <Flammability>0.1</Flammability>
       <Beauty>-20</Beauty>
       <MarketValue>100</MarketValue>

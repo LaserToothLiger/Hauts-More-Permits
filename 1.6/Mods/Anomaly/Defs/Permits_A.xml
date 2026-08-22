@@ -376,7 +376,6 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <uiPosition>(2,6)</uiPosition>
-	<prerequisite>HVMP_CallGhoul</prerequisite>
     <royalAid>
       <favorCost>3</favorCost>
       <pawnKindDef>HVMP_GhoulCyber</pawnKindDef>
@@ -394,7 +393,6 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <uiPosition>(2,7)</uiPosition>
-	<prerequisite>HVMP_CallGhoul</prerequisite>
     <royalAid>
       <favorCost>3</favorCost>
       <pawnKindDef>HVMP_GhoulBasic</pawnKindDef>
@@ -436,13 +434,36 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>12</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,1)</uiPosition>
+    <uiPosition>(3,0.75)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <SentienceCatalyst>1</SentienceCatalyst>
       </itemsToDrop>
       <favorCost>3</favorCost>
     </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_ComposureSuffusion</defName>
+    <label>composure suffusion</label>
+    <description>Suffuse the target with a psychic packet of unnatural composure. When the target would next experience a mental break, the packet breaks open and helps them regain control, ending the mental break almost immediately.</description>
+    <workerClass>HautsPermits_Occult.RoyalTitlePermitWorker_UnMentalBreaker</workerClass>
+    <minTitle>HVMP_OccultIV</minTitle>
+    <faction>HVMP_OccultBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>15</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(3,1.75)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_SuffusedComposure</li></hediffs>
+			<soundDef>AgonyPulse_Cast</soundDef>
+			<onUseMessage>HVMP_PsychicAssistance</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_InvisibilitySuffusion</defName>
@@ -454,7 +475,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>15</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(3,2)</uiPosition>
+    <uiPosition>(3,2.5)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
     </royalAid>
@@ -477,7 +498,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>15</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(3,3)</uiPosition>
+    <uiPosition>(3,3.25)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
     </royalAid>
@@ -498,7 +519,7 @@
 		<minTitle>HVMP_OccultIV</minTitle>
 		<faction>HVMP_OccultBranch</faction>
 		<permitPointCost>1</permitPointCost>
-		<uiPosition>(3,4)</uiPosition>
+		<uiPosition>(3,4.25)</uiPosition>
 		<royalAid>
 		  <favorCost>4</favorCost>
 		  <pawnKindDef>HVMP_Psion</pawnKindDef>
@@ -595,7 +616,7 @@
 		<minTitle>HVMP_OccultV</minTitle>
 		<faction>HVMP_OccultBranch</faction>
 		<permitPointCost>1</permitPointCost>
-		<uiPosition>(4,1)</uiPosition>
+		<uiPosition>(4,0.75)</uiPosition>
 		<prerequisite>HVMP_CallPsion</prerequisite>
 		<royalAid>
 		  <favorCost>8</favorCost>
@@ -615,7 +636,7 @@
 		<minTitle>HVMP_OccultV</minTitle>
 		<faction>HVMP_OccultBranch</faction>
 		<permitPointCost>1</permitPointCost>
-		<uiPosition>(4,3)</uiPosition>
+		<uiPosition>(4,3.25)</uiPosition>
 		<prerequisite>HVMP_CallBattlePsion</prerequisite>
 		<royalAid>
 		  <favorCost>8</favorCost>
@@ -652,7 +673,7 @@
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>25</cooldownDays>
-    <uiPosition>(4,5)</uiPosition>
+    <uiPosition>(4,5.75)</uiPosition>
 	<prerequisite>HVMP_CallGhoulCyber</prerequisite>
     <royalAid>
       <favorCost>3</favorCost>
@@ -670,7 +691,7 @@
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>25</cooldownDays>
-    <uiPosition>(4,6)</uiPosition>
+    <uiPosition>(4,6.5)</uiPosition>
 	<prerequisite>HVMP_CallGhoulCyber</prerequisite>
     <royalAid>
       <favorCost>3</favorCost>
@@ -688,7 +709,7 @@
     <faction>HVMP_OccultBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>25</cooldownDays>
-    <uiPosition>(4,7)</uiPosition>
+    <uiPosition>(4,7.25)</uiPosition>
 	<prerequisite>HVMP_CallGhoulPack</prerequisite>
     <royalAid>
       <favorCost>3</favorCost>

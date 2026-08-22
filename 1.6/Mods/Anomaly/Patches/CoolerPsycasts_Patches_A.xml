@@ -6,13 +6,14 @@
 		</mods>
 		<match Class="PatchOperationSequence">
 			<operations>
-				<!--psychic unveiler disrupts ghoul psychic invisibility-->
+				<!--psychic unveiler disrupts invisibility suffusion and ghoul invis-->
 				<li Class="PatchOperationConditional">
 					<xpath>/Defs/HediffDef[defName="CoolPsycasts_PsychicUnveilerHD"]/comps/li[@Class="CoolPsycasts.HediffCompProperties_NegateHediffs"]/hediffs</xpath>
 					<match Class="PatchOperationAdd">
 						<xpath>/Defs/HediffDef[defName="CoolPsycasts_PsychicUnveilerHD"]/comps/li[@Class="CoolPsycasts.HediffCompProperties_NegateHediffs"]/hediffs</xpath>
 						<value>
 							<li>HVMP_OccultInvisibility</li>
+							<li>HVMP_SuffusedInvisibility</li>
 						</value>
 					</match>
 				</li>

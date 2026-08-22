@@ -737,6 +737,7 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
+			<!--leave a (6,1) space for VFEC Senatorial Bribe-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_TradeGoodsDrop</defName>
     <label>trade goods drop</label>
@@ -791,71 +792,27 @@
     </royalAid>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
-    <defName>HVMP_FirefoamShellDrop</defName>
-    <label>firefoam shell drop</label>
-    <description>Call for a drop of 3 firefoam shells per rank held with the Pax Branch (6 if the caller is an Adarga; 9 if the caller is an Aspis; and so on and so forth).</description>
+    <defName>HVMP_ShellDrop</defName>
+    <label>mortar shell drop</label>
+    <description>Call for a drop of 1 mortar shell pallet per rank held with the Pax Branch (2 if the caller is an Adarga; 9 if the caller is an Aspis; and so on and so forth).\n\nEach pallet contains 260 silver's worth (rounded down) of a type of mortar shell of your choice.</description>
     <minTitle>HVMP_PaxI</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>12</cooldownDays>
+    <cooldownDays>14</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
     <uiPosition>(0,1)</uiPosition>
     <royalAid>
       <itemsToDrop>
-        <Shell_Firefoam>3</Shell_Firefoam>
+        <HVMP_ShellPallet>1</HVMP_ShellPallet>
       </itemsToDrop>
-      <favorCost>2</favorCost>
+      <favorCost>3</favorCost>
     </royalAid>
 	<modExtensions>
 		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for a drop of 3 firefoam shells.</extraString>
+			<extraString>Call for a drop of 1 mortar shell pallet. Each pallet contains 260 silver's worth (rounded down) of a type of mortar shell of your choice.</extraString>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
-    <defName>HVMP_SmokeShellDrop</defName>
-    <label>smoke shell drop</label>
-    <description>Call for a drop of 3 smoke shells per rank held with the Pax Branch (6 if the caller is an Adarga; 9 if the caller is an Aspis; and so on and so forth).</description>
-    <minTitle>HVMP_PaxI</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>12</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(0,2)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <Shell_Smoke>3</Shell_Smoke>
-      </itemsToDrop>
-      <favorCost>2</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for a drop of 3 smoke shells.</extraString>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="sarg.alphabiomes">
-		<defName>HVMP_TarShellDrop</defName>
-		<label>tar shell drop</label>
-		<description>Call for a drop of 3 tar shells per rank held with the Pax Branch (6 if the caller is an Adarga; 9 if the caller is an Aspis; and so on and so forth).</description>
-		<minTitle>HVMP_PaxI</minTitle>
-		<faction>HVMP_PaxBranch</faction>
-		<permitPointCost>1</permitPointCost>
-		<cooldownDays>12</cooldownDays>
-		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(0,3)</uiPosition>
-		<royalAid>
-		  <itemsToDrop>
-			<AB_Shell_Tar>3</AB_Shell_Tar>
-		  </itemsToDrop>
-		  <favorCost>2</favorCost>
-		</royalAid>
-		<modExtensions>
-			<li Class="HautsPermits.ScalingDisabledDescription">
-				<extraString>Call for a drop of 3 tar shells.</extraString>
-			</li>
-		</modExtensions>
-	  </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_CombatAssist</defName>
     <label>combat assist</label>
@@ -866,7 +823,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>10</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(0,4)</uiPosition>
+    <uiPosition>(0,2)</uiPosition>
     <royalAid>
       <favorCost>1</favorCost>
     </royalAid>
@@ -890,7 +847,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>2</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(0,5)</uiPosition>
+    <uiPosition>(0,3)</uiPosition>
     <royalAid>
       <favorCost>1</favorCost>
     </royalAid>
@@ -911,7 +868,7 @@
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>2</cooldownDays>
-    <uiPosition>(0,6)</uiPosition>
+    <uiPosition>(0,4)</uiPosition>
     <royalAid>
       <favorCost>1</favorCost>
       <pawnKindDef>HVMP_HunterDrone</pawnKindDef>
@@ -1016,6 +973,40 @@
 	</modExtensions>
   </RoyalTitlePermitDef>
   <!--Pax level 4-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_LowShieldDrop</defName>
+    <label>low-shield drop</label>
+    <description>Call for a friendly low-shield, which lasts for 2 hours.\n\nCosts two permit points.</description>
+	<workerClass>HautsPermits.RoyalTitlePermitWorker_DropFactionThing</workerClass>
+    <minTitle>HVMP_PaxIV</minTitle>
+    <faction>HVMP_PaxBranch</faction>
+    <permitPointCost>2</permitPointCost>
+    <cooldownDays>16</cooldownDays>
+    <uiPosition>(2,0)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_LowShield>1</HVMP_LowShield>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+    <defName>HVMP_HighShieldDrop</defName>
+    <label>high-shield drop</label>
+    <description>Call for a friendly high-shield, which lasts for 1 day.\n\nCosts two permit points.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropFactionThing</workerClass>
+    <minTitle>HVMP_PaxIV</minTitle>
+    <faction>HVMP_PaxBranch</faction>
+    <permitPointCost>2</permitPointCost>
+    <cooldownDays>16</cooldownDays>
+    <uiPosition>(2,1)</uiPosition>
+    <royalAid>
+      <itemsToDrop>
+        <HVMP_HighShield>1</HVMP_HighShield>
+      </itemsToDrop>
+      <favorCost>3</favorCost>
+    </royalAid>
+  </RoyalTitlePermitDef>
 	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="GoGaTio.LostFactoryMechanoids">
 		<defName>HVMP_ChainTurretDrop</defName>
 		<label>chain turret drop</label>
@@ -1025,7 +1016,7 @@
 		<faction>HVMP_PaxBranch</faction>
 		<permitPointCost>1</permitPointCost>
 		<cooldownDays>16</cooldownDays>
-		<uiPosition>(2,0)</uiPosition>
+		<uiPosition>(2,2)</uiPosition>
 		<royalAid>
 		  <itemsToDrop>
 			<HVMP_ChainTurret>1</HVMP_ChainTurret>
@@ -1042,7 +1033,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>32</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(2,1)</uiPosition>
+    <uiPosition>(2,3)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <ReinforcedBarrel>1</ReinforcedBarrel>
@@ -1051,227 +1042,15 @@
     </royalAid>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
-    <defName>HVMP_EMPShellDrop</defName>
-    <label>EMP shell drop</label>
-    <description>Call for a drop of 4 EMP shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Citadel).</description>
-    <minTitle>HVMP_PaxIV</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>24</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(2,2)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <Shell_EMP>1</Shell_EMP>
-      </itemsToDrop>
-      <favorCost>4</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for a drop of 4 EMP shells.</extraString>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
-    <defName>HVMP_HEShellDrop</defName>
-    <label>HE shell drop</label>
-    <description>Call for a drop of 4 high-explosive shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Citadel).</description>
-    <minTitle>HVMP_PaxIV</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>24</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(2,3)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <Shell_HighExplosive>1</Shell_HighExplosive>
-      </itemsToDrop>
-      <favorCost>4</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for a drop of 4 high-explosive shells.</extraString>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="Ludeon.RimWorld.Biotech">
-    <defName>HVMP_ToxShellDrop</defName>
-    <label>tox shell drop</label>
-    <description>Call for a drop of 4 tox shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Citadel).</description>
-    <minTitle>HVMP_PaxIV</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>24</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(2,4)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <Shell_Toxic>1</Shell_Toxic>
-      </itemsToDrop>
-      <favorCost>4</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for a drop of 4 tox shells.</extraString>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="Ludeon.RimWorld.Anomaly">
-    <defName>HVMP_DeadlifeShellDrop</defName>
-    <label>deadlife shell drop</label>
-    <description>Call for a drop of 4 deadlife shells per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Citadel).</description>
-    <minTitle>HVMP_PaxIV</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>24</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(2,5)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <Shell_Deadlife>1</Shell_Deadlife>
-      </itemsToDrop>
-      <favorCost>4</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsPermits.ScalingDisabledDescription">
-			<extraString>Call for a drop of 4 deadlife shells.</extraString>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="OskarPotocki.VFE.Deserters">
-		<defName>HVMP_ClusterShellDrop</defName>
-		<label>cluster shell drop</label>
-		<description>Call for a drop of 2 cluster shells, or 3 if the caller has achieved the rank of Citadel.</description>
-		<minTitle>HVMP_PaxIV</minTitle>
-		<faction>HVMP_PaxBranch</faction>
-		<permitPointCost>1</permitPointCost>
-		<cooldownDays>24</cooldownDays>
-		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(2,6)</uiPosition>
-		<royalAid>
-		  <itemsToDrop>
-			<VFED_Shell_Cluster>1</VFED_Shell_Cluster>
-		  </itemsToDrop>
-		  <favorCost>4</favorCost>
-		</royalAid>
-		<modExtensions>
-			<li Class="HautsFramework.PermitMoreEffects">
-				<phenomenonCount>200</phenomenonCount><!--seniority is divided by this much for purposes of scaling, as opposed to the 100 default-->
-			</li>
-			<li Class="HautsPermits.ScalingDisabledDescription">
-				<extraString>Call for a drop of 2 cluster shells.</extraString>
-			</li>
-		</modExtensions>
-	  </RoyalTitlePermitDef>
-	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="OskarPotocki.VFE.Deserters">
-		<defName>HVMP_PiercingShellDrop</defName>
-		<label>piercing shell drop</label>
-		<description>Call for a drop of 4 armor-piercing shells, plus 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Citadel).</description>
-		<minTitle>HVMP_PaxIV</minTitle>
-		<faction>HVMP_PaxBranch</faction>
-		<permitPointCost>1</permitPointCost>
-		<cooldownDays>24</cooldownDays>
-		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(2,7)</uiPosition>
-		<royalAid>
-		  <itemsToDrop>
-			<VFED_Shell_ArmorPiercing>1</VFED_Shell_ArmorPiercing>
-		  </itemsToDrop>
-		  <favorCost>4</favorCost>
-		</royalAid>
-		<modExtensions>
-			<li Class="HautsPermits.ScalingDisabledDescription">
-				<extraString>Call for a drop of 4 armor-piercing shells.</extraString>
-			</li>
-		</modExtensions>
-	  </RoyalTitlePermitDef>
-	  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase" MayRequire="OskarPotocki.VFE.Deserters">
-		<defName>HVMP_ShrapnelShellDrop</defName>
-		<label>shrapnel shell drop</label>
-		<description>Call for a drop of 4 shrapnel shells, plus 1 per rank held with the Pax Branch past Ishilangu (5 if the caller is a Pavise; 6 if the caller is a Citadel).</description>
-		<minTitle>HVMP_PaxIV</minTitle>
-		<faction>HVMP_PaxBranch</faction>
-		<permitPointCost>1</permitPointCost>
-		<cooldownDays>24</cooldownDays>
-		<usableOnWorldMap>true</usableOnWorldMap>
-		<uiPosition>(2,8)</uiPosition>
-		<royalAid>
-		  <itemsToDrop>
-			<VFED_Shell_Shrapnel>1</VFED_Shell_Shrapnel>
-		  </itemsToDrop>
-		  <favorCost>4</favorCost>
-		</royalAid>
-		<modExtensions>
-			<li Class="HautsPermits.ScalingDisabledDescription">
-				<extraString>Call for a drop of 4 shrapnel shells.</extraString>
-			</li>
-		</modExtensions>
-	  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef>
-    <defName>HVMP_OrbitalStrike</defName>
-    <label>call orbital strike</label>
-    <description>Call for an explosive shot to be fired at a target position.</description>
-    <workerClass>RoyalTitlePermitWorker_OrbitalStrike</workerClass>
-    <minTitle>HVMP_PaxIV</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
-    <uiPosition>(3,6)</uiPosition>
-    <royalAid>
-      <favorCost>5</favorCost>
-      <targetingRange>44.9</targetingRange>
-      <radius>2.9</radius>
-      <explosionRadiusRange>7.9</explosionRadiusRange>
-      <explosionCount>1</explosionCount>
-      <intervalTicks>60</intervalTicks>
-      <warmupTicks>120</warmupTicks>
-    </royalAid>
-  </RoyalTitlePermitDef>
-  <!--Pax level 5-->
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_LowShieldDrop</defName>
-    <label>low-shield drop</label>
-    <description>Call for a friendly low-shield, which lasts for 2 hours.\n\nCosts two permit points.</description>
-	<workerClass>HautsPermits.RoyalTitlePermitWorker_DropFactionThing</workerClass>
-    <minTitle>HVMP_PaxV</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>2</permitPointCost>
-    <cooldownDays>16</cooldownDays>
-    <uiPosition>(3,0)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <HVMP_LowShield>1</HVMP_LowShield>
-      </itemsToDrop>
-      <favorCost>3</favorCost>
-    </royalAid>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_HighShieldDrop</defName>
-    <label>high-shield drop</label>
-    <description>Call for a friendly high-shield, which lasts for 1 day.\n\nCosts two permit points.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_DropFactionThing</workerClass>
-    <minTitle>HVMP_PaxV</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>2</permitPointCost>
-    <cooldownDays>16</cooldownDays>
-    <uiPosition>(3,1)</uiPosition>
-    <royalAid>
-      <itemsToDrop>
-        <HVMP_HighShield>1</HVMP_HighShield>
-      </itemsToDrop>
-      <favorCost>3</favorCost>
-    </royalAid>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_BlackbodyShieldDrop</defName>
     <label>blackbody shield drop</label>
     <description>Call for a drop of 1 blackbody shield unit, or 2 if the caller is a Citadel.</description>
-    <minTitle>HVMP_PaxV</minTitle>
+    <minTitle>HVMP_PaxIV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>12</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(3,2)</uiPosition>
+    <uiPosition>(2,4)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <HVMP_BSU>1</HVMP_BSU>
@@ -1288,36 +1067,16 @@
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_BaitInfestation</defName>
-    <label>bait infestation</label>
-    <description>Send antagonizing signals deep into the earth, provoking an infestation of moderate size.\nThe insects will refuse to surface if the target location is too cold (lower than -17 degrees Celsius).</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_Infestation</workerClass>
-    <minTitle>HVMP_PaxV</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,0.5)</uiPosition>
-    <royalAid>
-      <favorCost>3</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<incidentPoints>1000~3000</incidentPoints>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_AnimalDisruption</defName>
-    <label>animal disruption</label>
+    <label>manhunter signal</label>
     <description>Activate a remote animal pulser weapon, driving all animals in the region into a manhunting rage. Animals currently under your control will not be affected.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_ManhunterPulse</workerClass>
-    <minTitle>HVMP_PaxV</minTitle>
+    <minTitle>HVMP_PaxIV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
+    <cooldownDays>6</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,1.5)</uiPosition>
+    <uiPosition>(2,5)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
@@ -1329,90 +1088,74 @@
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_EMIDisruption</defName>
-    <label>EMI disruption</label>
-    <description>Activate a targeted EMI dynamo, shutting down all electronic devices in the region for 1 day, and stunning hostile buildings for the first hour.</description>
-    <workerClass>HautsPermits.RoyalTitlePermitWorker_EMI</workerClass>
-    <minTitle>HVMP_PaxV</minTitle>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_OrbitalStrike</defName>
+    <label>orbital strike</label>
+    <description>Call for an explosive shot to be fired at a target position.</description>
+    <workerClass>RoyalTitlePermitWorker_OrbitalStrike</workerClass>
+    <minTitle>HVMP_PaxIV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,2.5)</uiPosition>
+    <cooldownDays>8</cooldownDays>
+    <uiPosition>(2,6)</uiPosition>
     <royalAid>
-      <favorCost>3</favorCost>
+      <favorCost>4</favorCost>
+      <targetingRange>44.9</targetingRange>
+      <radius>2.9</radius>
+      <explosionRadiusRange>7.9</explosionRadiusRange>
+      <explosionCount>1</explosionCount>
+      <intervalTicks>60</intervalTicks>
+      <warmupTicks>120</warmupTicks>
     </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<conditionDefs><li>EMIField</li></conditionDefs>
-			<conditionDuration>60000</conditionDuration>
-			<extraNumber>2500</extraNumber>
-			<onUseMessage>HVMP_MessagePermitEMI</onUseMessage>
-			<screenShake>true</screenShake>
-			<soundDef>ShipTakeoff</soundDef>
-        </li>
-	</modExtensions>
+  </RoyalTitlePermitDef>
+  <!--Pax level 5-->
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
+	<defName>HVMP_RegionalDisruptorDrop</defName>
+	<label>regional disruptor drop</label>
+	<description>Call for a drop of 1 single-use regional disruptor, which an operator can use to cause a three-day adverse alteration in the local environment (such as temperature shifts, electromagnetic interference, sun blocking, or toxic emissions).</description>
+	<minTitle>HVMP_PaxV</minTitle>
+	<faction>HVMP_PaxBranch</faction>
+	<permitPointCost>1</permitPointCost>
+	<cooldownDays>30</cooldownDays>
+	<usableOnWorldMap>true</usableOnWorldMap>
+	<uiPosition>(3,3)</uiPosition>
+	<royalAid>
+	  <itemsToDrop>
+		<HVMP_RegionalDisruptionTargeter>1</HVMP_RegionalDisruptionTargeter>
+	  </itemsToDrop>
+	  <favorCost>7</favorCost>
+	</royalAid>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_SunlightDisruption</defName>
-    <label>sunlight disruption</label>
-    <description>Activate a targeted sun blocker, obstructing daylight for 3 days.</description>
-    <workerClass>HautsFramework.RoyalTitlePermitWorker_CauseCondition</workerClass>
+    <defName>HVMP_BaitInfestation</defName>
+    <label>bait infestation</label>
+    <description>Send antagonizing signals deep into the earth, provoking an infestation of moderate size.\nThe insects will refuse to surface if the target location is too cold (lower than -17 degrees Celsius).</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_Infestation</workerClass>
     <minTitle>HVMP_PaxV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,3.5)</uiPosition>
+    <uiPosition>(3,4)</uiPosition>
     <royalAid>
       <favorCost>3</favorCost>
     </royalAid>
 	<modExtensions>
 		<li Class="HautsFramework.PermitMoreEffects">
-			<conditionDefs><li>SunBlocker</li></conditionDefs>
-			<conditionDuration>180000</conditionDuration>
-			<onUseMessage>HVMP_MessagePermitSunBlocker</onUseMessage>
-			<screenShake>true</screenShake>
-			<soundDef>ShipTakeoff</soundDef>
-        </li>
-	</modExtensions>
-  </RoyalTitlePermitDef>
-  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
-    <defName>HVMP_ToxicDisruption</defName>
-    <label>toxic disruption</label>
-    <description>Activate a targeted toxic spewer, inducing a toxic fallout for 3 days.</description>
-    <workerClass>HautsFramework.RoyalTitlePermitWorker_CauseCondition</workerClass>
-    <minTitle>HVMP_PaxV</minTitle>
-    <faction>HVMP_PaxBranch</faction>
-    <permitPointCost>1</permitPointCost>
-    <cooldownDays>20</cooldownDays>
-    <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(4,4.5)</uiPosition>
-    <royalAid>
-      <favorCost>3</favorCost>
-    </royalAid>
-	<modExtensions>
-		<li Class="HautsFramework.PermitMoreEffects">
-			<conditionDefs><li>ToxicSpewer</li></conditionDefs>
-			<conditionDuration>180000</conditionDuration>
-			<onUseMessage>HVMP_MessagePermitFallout</onUseMessage>
-			<screenShake>true</screenShake>
-			<soundDef>ToxicShellLanded</soundDef>
+			<incidentPoints>1000~3000</incidentPoints>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef>
     <defName>HVMP_OrbitalVolley</defName>
-    <label>call orbital volley</label>
+    <label>orbital volley</label>
     <description>Call for 5 explosive shots to be fired around a target position.</description>
     <workerClass>RoyalTitlePermitWorker_OrbitalStrike</workerClass>
     <minTitle>HVMP_PaxV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <prerequisite>HVMP_OrbitalStrike</prerequisite>
-    <cooldownDays>40</cooldownDays>
-    <uiPosition>(4,6)</uiPosition>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(3,5)</uiPosition>
     <royalAid>
       <favorCost>7</favorCost>
       <targetingRange>44.9</targetingRange>
@@ -1425,21 +1168,42 @@
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef>
     <defName>HVMP_OrbitalBeam</defName>
-    <label>call orbital beam</label>
+    <label>orbital beam</label>
     <description>Call for a thermal beam to be fired on a target position.</description>
     <workerClass>HautsPermits.RoyalTitlePermitWorker_OrbitalBeam</workerClass>
     <minTitle>HVMP_PaxV</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
-    <prerequisite>HVMP_OrbitalStrike</prerequisite>
-    <cooldownDays>46</cooldownDays>
-    <uiPosition>(4,7)</uiPosition>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(3,6)</uiPosition>
     <royalAid>
-      <favorCost>8</favorCost>
+      <favorCost>7</favorCost>
       <radius>15</radius>
       <targetingRange>44.9</targetingRange>
       <explosionCount>600</explosionCount>
     </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_OrbitalCrush</defName>
+    <label>orbital crush</label>
+    <description>Call for a gravitic impulse to be fired on a target position. The shockwave deals damage and also heavily slows anyone it hits.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_Explosion</workerClass>
+    <minTitle>HVMP_PaxV</minTitle>
+    <faction>HVMP_PaxBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>20</cooldownDays>
+    <uiPosition>(3,7)</uiPosition>
+    <royalAid>
+      <favorCost>7</favorCost>
+      <radius>11</radius>
+      <targetingRange>44.9</targetingRange>
+      <explosionCount>2</explosionCount>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<damageType>Hauts_GravPulverization</damageType>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <!--Pax level 6-->
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
@@ -1451,7 +1215,7 @@
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>10</cooldownDays>
-    <uiPosition>(5,0)</uiPosition>
+    <uiPosition>(4,0)</uiPosition>
     <royalAid>
       <itemsToDrop>
         <HVMP_SlugTurret>10</HVMP_SlugTurret>
@@ -1468,7 +1232,7 @@
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
     <cooldownDays>20</cooldownDays>
-    <uiPosition>(5,1)</uiPosition>
+    <uiPosition>(4,1)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
       <pawnKindDef>HVMP_WaspDrone</pawnKindDef>
@@ -1479,16 +1243,16 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase">
     <defName>HVMP_AntigrainShellDrop</defName>
     <label>Antigrain shell drop</label>
-    <description>Call for a drop of 1 antigrain shell.\n\nCosts two permit points.</description>
+    <description>Call for a drop of 2 antigrain shells.\n\nCosts two permit points.</description>
     <minTitle>HVMP_PaxVI</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>2</permitPointCost>
     <cooldownDays>30</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(5,2)</uiPosition>
+    <uiPosition>(4,2)</uiPosition>
     <royalAid>
       <itemsToDrop>
-        <Shell_AntigrainWarhead>1</Shell_AntigrainWarhead>
+        <Shell_AntigrainWarhead>2</Shell_AntigrainWarhead>
       </itemsToDrop>
       <favorCost>5</favorCost>
     </royalAid>
@@ -1503,7 +1267,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>30</cooldownDays>
     <usableOnWorldMap>true</usableOnWorldMap>
-    <uiPosition>(5,3)</uiPosition>
+    <uiPosition>(4,3)</uiPosition>
     <royalAid>
       <favorCost>5</favorCost>
     </royalAid>
@@ -1513,12 +1277,78 @@
 		</li>
 	</modExtensions>
   </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_OrbitalFusillade</defName>
+    <label>orbital fusillade</label>
+    <description>Call for 80 explosive shots to be fired around a target position.</description>
+    <workerClass>RoyalTitlePermitWorker_OrbitalStrike</workerClass>
+    <minTitle>HVMP_PaxVI</minTitle>
+    <faction>HVMP_PaxBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <prerequisite>HVMP_OrbitalVolley</prerequisite>
+    <cooldownDays>45</cooldownDays>
+    <uiPosition>(4,5)</uiPosition>
+    <royalAid>
+      <favorCost>10</favorCost>
+      <targetingRange>44.9</targetingRange>
+      <radius>7.9</radius>
+      <explosionRadiusRange>5.9</explosionRadiusRange>
+      <explosionCount>80</explosionCount>
+      <intervalTicks>60</intervalTicks>
+      <warmupTicks>120</warmupTicks>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_OrbitalEffulgence</defName>
+    <label>orbital effulgence</label>
+    <description>Call for a thermal beam to be fired on a target position for 24 hours.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_OrbitalBeam</workerClass>
+    <minTitle>HVMP_PaxVI</minTitle>
+    <faction>HVMP_PaxBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <prerequisite>HVMP_OrbitalBeam</prerequisite>
+    <cooldownDays>45</cooldownDays>
+    <uiPosition>(4,6)</uiPosition>
+    <royalAid>
+      <favorCost>10</favorCost>
+      <radius>15</radius>
+      <targetingRange>44.9</targetingRange>
+      <explosionCount>60000</explosionCount>
+    </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef>
+    <defName>HVMP_OrbitalFlattening</defName>
+    <label>orbital flattening</label>
+    <description>Call for a monumental gravitic impulse to be fired on a target position. The shockwave deals damage and also heavily slows anyone it hits; spacetime fluctuations resulting from the blast will also heavily slow every hostile creature on the same map.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_WeightOfTheWorld</workerClass>
+    <minTitle>HVMP_PaxVI</minTitle>
+    <faction>HVMP_PaxBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <prerequisite>HVMP_OrbitalCrush</prerequisite>
+    <cooldownDays>45</cooldownDays>
+    <uiPosition>(4,7)</uiPosition>
+    <royalAid>
+      <favorCost>10</favorCost>
+      <radius>11</radius>
+      <targetingRange>44.9</targetingRange>
+      <explosionCount>4</explosionCount>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<damageType>Hauts_GravPulverization</damageType>
+			<extraNumber>15</extraNumber><!--severity of universally applied hediff, which is applied per explosion for a total of -60 move speed and minus All Of The Dodge Chance. all of it-->
+			<hediffs>
+			  <li>Hauts_AmplifiedGraviticPull</li>
+			</hediffs>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
   
   <!--Rover level 1-->
   <RoyalTitlePermitDef ParentName="HVMP_DropBookSeniorityScalingBase">
     <defName>HVMP_TravelNovelDrop</defName>
     <label>travelogue drop</label>
-    <description>Call for a random travelogue per rank held with the Rover Branch (2 if the caller is an Itinerant; 3 if the caller is a Wayfarer; and so on and so forth).\n\nTravelogues have some value as recreational reading.</description>
+    <description>Call for a random 'travelogue' novel per rank held with the Rover Branch (2 if the caller is an Itinerant; 3 if the caller is a Wayfarer; and so on and so forth).\n\nNovels have some value as recreational reading.</description>
     <minTitle>HVMP_RoverI</minTitle>
     <faction>HVMP_RoverBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1828,6 +1658,30 @@
 			<numFromCategory>1</numFromCategory>
 			<allowedPawnKinds><li>Horse</li></allowedPawnKinds>
 			<startsTamed>true</startsTamed>
+        </li>
+	</modExtensions>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Odyssey">
+    <defName>HVMP_PilotAssist</defName>
+    <label>piloting assist</label>
+    <description>Link the target to an automated aerospace piloting assistance program for 8 hours, improving piloting ability.</description>
+    <workerClass>HautsFramework.RoyalTitlePermitWorker_GiveHediffs</workerClass>
+    <minTitle>HVMP_RoverII</minTitle>
+    <faction>HVMP_RoverBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>10</cooldownDays>
+    <usableOnWorldMap>false</usableOnWorldMap>
+    <uiPosition>(2,4)</uiPosition>
+    <royalAid>
+      <favorCost>1</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<hediffs><li>HVMP_PilotAssistProgram</li></hediffs>
+			<soundDef>CrateOpeningStarted</soundDef>
+			<onUseMessage>HVMP_AssistanceProgram</onUseMessage>
+			<allowAnyFlesh>true</allowAnyFlesh>
+			<allowAnyNonflesh>true</allowAnyNonflesh>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>
@@ -2331,6 +2185,27 @@
       </itemsToDrop>
       <favorCost>5</favorCost>
     </royalAid>
+  </RoyalTitlePermitDef>
+  <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Odyssey">
+    <defName>HVMP_RefreshGravEngine</defName>
+    <label>refresh grav engine</label>
+    <description>Use a modulated electro-gravitic pulse to refresh the cooldown of a nearby grav engine.</description>
+    <workerClass>HautsPermits.RoyalTitlePermitWorker_RefreshGravEngine</workerClass>
+    <minTitle>HVMP_RoverVI</minTitle>
+    <faction>HVMP_RoverBranch</faction>
+    <permitPointCost>1</permitPointCost>
+    <cooldownDays>30</cooldownDays>
+    <uiPosition>(8,1)</uiPosition>
+    <royalAid>
+      <favorCost>5</favorCost>
+    </royalAid>
+	<modExtensions>
+		<li Class="HautsFramework.PermitMoreEffects">
+			<onUseMessage>HVMP_GravEngineRefresh</onUseMessage>
+			<screenShake>true</screenShake>
+			<soundDef>ShipTakeoff</soundDef>
+        </li>
+	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesBase" MayRequire="Ludeon.RimWorld.Odyssey">
     <defName>HVMP_LocateGravcore</defName>

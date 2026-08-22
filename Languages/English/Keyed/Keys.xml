@@ -67,6 +67,7 @@
 <HVMP_CommandCallRoyalAidTradersBlocked>The {FACTION_name} is preventing you from receiving traders. Remaining blocks: {0}</HVMP_CommandCallRoyalAidTradersBlocked>
 <HVMP_NoFactionCanSendTraders>There are no factions that can send trading caravans</HVMP_NoFactionCanSendTraders>
 <HVMP_NoSenatorsLeftToBribe>You have the favor of all current senators</HVMP_NoSenatorsLeftToBribe>
+<HVMP_NoRefreshableGravEngineFound>No grav engine on the map needs its cooldown refreshed.</HVMP_NoRefreshableGravEngineFound>
 <HVMP_MustBeBiocoded>Only usable on biocoded items.</HVMP_MustBeBiocoded>
 <HVMP_TargetToGood>Only usable on non-artifact, non-artwork, non-building items below good-quality</HVMP_TargetToGood>
 <HVMP_TargetToExc>Only usable on non-artifact, non-artwork, non-building items below excellent-quality</HVMP_TargetToExc>
@@ -74,6 +75,8 @@
 <HVMP_TargetToLegendary>Only usable on masterwork, non-artifact, non-artwork, non-building items of masterwork quality</HVMP_TargetToLegendary>
 <HVMP_TargetDamaged>Only usable on damaged items or buildings</HVMP_TargetDamaged>
 <HVMP_TargetDamagedOrTainted>Only uasble on damaged, tainted, or broken-down items or buildings</HVMP_TargetDamagedOrTainted>
+<HVMP_MustBeScanner>Only usable on buildings whose operation speed scales with survey speed and which haven't already been upgraded</HVMP_MustBeScanner>
+<HVMP_ItemReplicationLimits>Only usable on a non-stackable, non-food item that can be crafted.</HVMP_ItemReplicationLimits>
 <HVMP_RepopLimits>Target must be an animal and within the permit's size limit.</HVMP_RepopLimits>
 <HVMP_TargetTMD>Target must be suffering from a mechanite disease</HVMP_TargetTMD>
 <HVMP_CommandCallRoyalAidMapTooWatery>Cannot drill a geothermal vent in this area.</HVMP_CommandCallRoyalAidMapTooWatery>
@@ -101,18 +104,20 @@
 <HVMP_Ingratiation>The bribe offered by the {FACTION_name} to the faction of {PAWN_nameDef} has gone through, improving your goodwill with them.</HVMP_Ingratiation>
 <HVMP_Peacemaking>All present hostiles have taken the bribe offered by the {FACTION_name} and will now retreat.</HVMP_Peacemaking>
 <HVMP_SenatorBribed>The {FACTION_name} has bribed a senator on your behalf.</HVMP_SenatorBribed>
+<HVMP_GravEngineRefresh>The grav engine's cooldown has been refreshed.</HVMP_GravEngineRefresh>
 <HVMP_QualityBoost>Item quality improved.</HVMP_QualityBoost>
 <HVMP_UnBioCoded>Item biocoding decrypted.</HVMP_UnBioCoded>
 <HVMP_QualityBoostRisky>The {FACTION_name} has made its attempt to improve the item's quality to legendary.</HVMP_QualityBoostRisky>
 <HVMP_RestoredItem>Item repaired.</HVMP_RestoredItem>
 <HVMP_MassRestoredStructure>Structures in target area repaired.</HVMP_MassRestoredStructure>
 <HVMP_ScannerSweep>The {FACTION_name}'s penetrative scanning technology has provided an image of the targeted area.</HVMP_ScannerSweep>
-<HVMP_ScannerDeep>The {FACTION_name}'s penetrative scanning technology has found a lump of buried {0}!</HVMP_ScannerDeep>
+<HVMP_ScannerUpgraded>Scanner upgraded.</HVMP_ScannerUpgraded>
 <HVMP_RelicDiscovered>Analyzing the contents of their libraries, the {0} has discovered the existence of a relic of {1}.</HVMP_RelicDiscovered>
 <HVMP_MedicalAssistance>The {FACTION_name} has rendered medical assistance.</HVMP_MedicalAssistance>
 <HVMP_PsychicAssistance>The {FACTION_name} has rendered psychic assistance.</HVMP_PsychicAssistance>
 <HVMP_TerrainChange>The {FACTION_name} has altered the terrain.</HVMP_TerrainChange>
 <HVMP_MechOptimized>Mechanoid optimized.</HVMP_MechOptimized>
+<HVMP_UnMentalBreakerText>The composure suffusion affecting {PAWN_nameDef} has expended itself to prematurely end {PAWN_possessive} mental break!</HVMP_UnMentalBreakerText>
 <!--Quest generique-->
 <HVMP_CCProgress>Progress: {0}/{1}</HVMP_CCProgress>
 <HVMP_GoodwillLoss>some amount</HVMP_GoodwillLoss>
@@ -213,12 +218,15 @@
 <HVMP_IdeoBookInspireChance>Chance to inspire believers: {0}%</HVMP_IdeoBookInspireChance>
 <HVMP_IdeoBookHediffGain>Per hour of reading: grants {0} stacks of the "{1}" buff to believers, lasting for {2} hours</HVMP_IdeoBookHediffGain>
 <!--other items-->
-<HVMP_ChargecellIsForMechs>Target must have an energy meter</HVMP_ChargecellIsForMechs>
 <HVMP_PalletOpeningLabel>Upon opening the pallet, {PAWN_nameDef} finds...</HVMP_PalletOpeningLabel>
 <HVMP_Choose>Select an option.</HVMP_Choose>
+<HVMP_DisruptorFiringLabel>{PAWN_nameDef} chooses for the disruptor to instigate a three-day...</HVMP_DisruptorFiringLabel>
+<HVMP_ChargecellIsForMechs>Target must have an energy meter</HVMP_ChargecellIsForMechs>
 <HVMP_ProbabilityFluxProc>The probability flux within {PAWN_nameDef} has created a good event.</HVMP_ProbabilityFluxProc>
 <HVMP_WunderchipOpeningLabel>The wunderchip transforms into...</HVMP_WunderchipOpeningLabel>
 <HVMP_WunderchipMustBeStudied>must be studied at a research bench</HVMP_WunderchipMustBeStudied>
+<!--scanner upgrade-->
+<HVMP_StatsReport_FromScannerUpgrade>Scanner upgrade</HVMP_StatsReport_FromScannerUpgrade>
 <!--wunderchip quests-->
 <HVMP_MineralExtractorRaidLetterLabel>extractor-agitated insects</HVMP_MineralExtractorRaidLetterLabel>
 <HVMP_MineralExtractorRaidLetterText>Insectoids have been attracted to shifts in the mineral extractor's activity!\n\nThey will attack immediately.</HVMP_MineralExtractorRaidLetterText>
