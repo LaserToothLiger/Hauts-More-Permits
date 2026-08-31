@@ -794,7 +794,7 @@
   <RoyalTitlePermitDef ParentName="HVMP_DropResourcesSeniorityScalingBase">
     <defName>HVMP_ShellDrop</defName>
     <label>mortar shell drop</label>
-    <description>Call for a drop of 1 mortar shell pallet per rank held with the Pax Branch (2 if the caller is an Adarga; 9 if the caller is an Aspis; and so on and so forth).\n\nEach pallet contains 260 silver's worth (rounded down) of a type of mortar shell of your choice.</description>
+    <description>Call for a drop of 1 mortar shell pallet per rank held with the Pax Branch (2 if the caller is an Adarga; 3 if the caller is an Aspis; and so on and so forth).\n\nEach pallet contains 260 silver's worth (rounded down) of a type of mortar shell of your choice.</description>
     <minTitle>HVMP_PaxI</minTitle>
     <faction>HVMP_PaxBranch</faction>
     <permitPointCost>1</permitPointCost>
@@ -1116,7 +1116,7 @@
 	<minTitle>HVMP_PaxV</minTitle>
 	<faction>HVMP_PaxBranch</faction>
 	<permitPointCost>1</permitPointCost>
-	<cooldownDays>30</cooldownDays>
+	<cooldownDays>20</cooldownDays>
 	<usableOnWorldMap>true</usableOnWorldMap>
 	<uiPosition>(3,3)</uiPosition>
 	<royalAid>
@@ -1340,6 +1340,7 @@
 			<hediffs>
 			  <li>Hauts_AmplifiedGraviticPull</li>
 			</hediffs>
+			<extraStat>Hauts_GravityDamageFactor</extraStat>
         </li>
 	</modExtensions>
   </RoyalTitlePermitDef>

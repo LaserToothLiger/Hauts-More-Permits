@@ -32,6 +32,17 @@ namespace HautsPermits
             base.DoEffect(usedBy);
             if (usedBy.Spawned)
             {
+                Map m = usedBy.Map;
+                if (m.generatorDef.isUnderground || (m.IsPocketMap && m.generatorDef.disableCallAid))
+                {
+                    Messages.Message("HVMP_DisruptorUnusable_Underground".Translate(), null, MessageTypeDefOf.RejectInput, false);
+                    return;
+                }
+                if (m.weatherManager.CurWeatherMaxRangeCap >= 0f)
+                {
+                    Messages.Message("HVMP_DisruptorUnusable_PoorWeather".Translate(m.weatherManager.curWeather.LabelCap), null, MessageTypeDefOf.RejectInput, false);
+                    return;
+                }
                 if (!usedBy.IsPlayerControlled)
                 {
                     CompUseEffect_RegionalDisruptorMenu.GenerateCondition(usedBy, this.parent, this.Props.duration, this.Props.gameConditions.RandomElement(), this.Props.sound);
@@ -65,8 +76,26 @@ namespace HautsPermits
             this.duration = disruptorComp.Props.duration;
             this.disruptor = disruptorComp.parent;
             this.openingLabel = disruptorComp.Props.openingLabel;
-            this.options = disruptorComp.Props.gameConditions;
+            if (pawn.Map != null)
+            {
+                GameConditionManager gcm = pawn.Map.gameConditionManager;
+                foreach (GameConditionDef gcd in disruptorComp.Props.gameConditions)
+                {
+                    this.options.Add(new RegionalDisruptorWindow.PotentialGameCondition(gcd, !GameCondition.MapExcludedByFilter(gcd,pawn.Map), this.GameConditionCanCoexistWithAllActiveConditions(gcd,gcm)));
+                }
+            }
             this.sound = disruptorComp.Props.sound;
+        }
+        public bool GameConditionCanCoexistWithAllActiveConditions(GameConditionDef gcd, GameConditionManager gcm)
+        {
+            /*foreach (GameCondition gc in gcm.ActiveConditions)
+            {
+                if (!gcd.CanCoexistWith(gc.def) && gcd != gc.def)
+                {
+                    return false;
+                }
+            }*/
+            return true;
         }
         public override void PreOpen()
         {
@@ -99,17 +128,26 @@ namespace HautsPermits
             Listing_Standard listing_Standard = new Listing_Standard();
             Rect rect = new Rect(0f, num, inRect.width - 30f, 99999f);
             listing_Standard.Begin(rect);
-            foreach (GameConditionDef gcd in this.options)
+            foreach (RegionalDisruptorWindow.PotentialGameCondition gcd in this.options)
             {
-                bool flag = this.chosenGCD == gcd;
+                bool flag = this.chosenGCD == gcd.condition;
                 bool flag2 = flag;
-                string descString = gcd.LabelCap;
-                listing_Standard.CheckboxLabeled(descString, ref flag, gcd.description);
-                if (flag != flag2)
+                string labelString = gcd.condition.LabelCap;
+                string descString = gcd.condition.description;
+                if (!gcd.layerIsPermitted)
+                {
+                    labelString += " (" + "HVMP_DisruptorInvalidOptionLabel".Translate() + ")";
+                    descString += "\n\n" + "HVMP_DisruptorInvalidOption_LayerText".Translate();
+                } else if (!gcd.noCoexistenceConflicts) {
+                    labelString += " (" + "HVMP_DisruptorInvalidOptionLabel".Translate() + ")";
+                    descString += "\n\n" + "HVMP_DisruptorInvalidOption_CoexistenceText".Translate();
+                }
+                listing_Standard.CheckboxLabeled(labelString, ref flag, descString);
+                if (flag != flag2 && gcd.layerIsPermitted && gcd.noCoexistenceConflicts)
                 {
                     if (flag)
                     {
-                        this.chosenGCD = gcd;
+                        this.chosenGCD = gcd.condition;
                     }
                 }
             }
@@ -153,6 +191,18 @@ namespace HautsPermits
             }
             return AcceptanceReport.WasAccepted;
         }
+        public class PotentialGameCondition
+        {
+            public PotentialGameCondition(GameConditionDef condition, bool layerIsPermitted, bool noCoexistenceConflicts)
+            {
+                this.condition = condition;
+                this.layerIsPermitted = layerIsPermitted;
+                this.noCoexistenceConflicts = noCoexistenceConflicts;
+            }
+            public GameConditionDef condition;
+            public bool layerIsPermitted;
+            public bool noCoexistenceConflicts;
+        }
         private Pawn pawn;
         private string openingLabel;
         private Thing disruptor;
@@ -161,7 +211,7 @@ namespace HautsPermits
         private Vector2 scrollPosition;
         private int duration;
         private SoundDef sound;
-        private List<GameConditionDef> options = new List<GameConditionDef>();
+        private List<RegionalDisruptorWindow.PotentialGameCondition> options = new List<RegionalDisruptorWindow.PotentialGameCondition>();
     }
 
     //it's a solar flare/emi dynamo, but it also stuns buildings for an hour when it starts out

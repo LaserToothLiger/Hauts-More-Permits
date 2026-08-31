@@ -220,6 +220,11 @@
 <!--other items-->
 <HVMP_PalletOpeningLabel>Upon opening the pallet, {PAWN_nameDef} finds...</HVMP_PalletOpeningLabel>
 <HVMP_Choose>Select an option.</HVMP_Choose>
+<HVMP_DisruptorUnusable_Underground>regional disruptor is unusable in current region</HVMP_DisruptorUnusable_Underground>
+<HVMP_DisruptorUnusable_PoorWeather>regional disruptor is unusable due to signal-blocking weather</HVMP_DisruptorUnusable_PoorWeather>
+<HVMP_DisruptorInvalidOptionLabel>unusable in current circumstances</HVMP_DisruptorInvalidOptionLabel>
+<HVMP_DisruptorInvalidOption_CoexistenceText>&lt;color=#FF5252&gt;Another condition currently affecting this region prevents the inducement of this particular disruption.&lt;/color&gt;</HVMP_DisruptorInvalidOption_CoexistenceText>
+<HVMP_DisruptorInvalidOption_LayerText>&lt;color=#FF5252&gt;This condition cannot ever be induced in this environment.&lt;/color&gt;</HVMP_DisruptorInvalidOption_LayerText>
 <HVMP_DisruptorFiringLabel>{PAWN_nameDef} chooses for the disruptor to instigate a three-day...</HVMP_DisruptorFiringLabel>
 <HVMP_ChargecellIsForMechs>Target must have an energy meter</HVMP_ChargecellIsForMechs>
 <HVMP_ProbabilityFluxProc>The probability flux within {PAWN_nameDef} has created a good event.</HVMP_ProbabilityFluxProc>

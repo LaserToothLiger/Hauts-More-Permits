@@ -1,4 +1,5 @@
 ﻿using HautsFramework;
+using HautsPermits;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -94,16 +95,29 @@ namespace HautsPermits_Biotech
             if (pme != null)
             {
                 List<Thing> thingsToDestroy = new List<Thing>();
+                int thingCount = 0;
                 foreach (Thing thing in GenRadial.RadialDistinctThingsAround(targetCell, this.map, 6, true))
                 {
                     if (thing.def == ThingDefOf.Wastepack || (!thing.def.thingCategories.NullOrEmpty() && !pme.thingCategories.NullOrEmpty() && thing.def.thingCategories.ContainsAny((ThingCategoryDef tcd) => pme.thingCategories.Contains(tcd))))
                     {
                         thingsToDestroy.Add(thing);
+                        thingCount += thing.stackCount;
                     }
                 }
-                for (int i = thingsToDestroy.Count - 1; i >= 0; i--)
+                float maxPacksToDestroy = (HVMP_Mod.settings.permitsScaleBySeniority ? caller.royalty.GetCurrentTitleInFaction(this.faction).def.seniority : this.def.minTitle.seniority) * pme.extraNumber.max / 100f;
+                int packsToDestroy = Math.Min((int)maxPacksToDestroy,thingCount);
+                while (packsToDestroy > 0)
                 {
-                    thingsToDestroy[i].Destroy();
+                    Thing t = thingsToDestroy.RandomElement();
+                    if (t.stackCount > packsToDestroy)
+                    {
+                        t.stackCount -= packsToDestroy;
+                        break;
+                    } else {
+                        packsToDestroy -= t.stackCount;
+                        t.Destroy();
+                        thingsToDestroy.Remove(t);
+                    }
                 }
                 int cells = GenRadial.NumCellsInRadius(this.def.royalAid.radius);
                 for (int i = 0; i < cells; i++)

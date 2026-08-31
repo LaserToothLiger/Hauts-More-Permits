@@ -210,8 +210,9 @@
     <tradeability>Sellable</tradeability>
     <smeltable>false</smeltable>
     <soundInteract>Standard_Pickup</soundInteract>
+    <stackLimit>10</stackLimit>
     <graphicData>
-      <texPath>Things/Item/Equipment/WeaponSpecial/OrbitalTargeter</texPath>
+      <texPath>Items/HVMP_RegionalDisruptor</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
 	<statBases>

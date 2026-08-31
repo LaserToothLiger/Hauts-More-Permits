@@ -12,6 +12,7 @@
     <letterDef>NegativeEvent</letterDef>
     <canBePermanent>true</canBePermanent>
     <natural>false</natural>
+	<canAffectAllPlanetLayers>true</canAffectAllPlanetLayers>
   </GameConditionDef>
   
 </Defs>

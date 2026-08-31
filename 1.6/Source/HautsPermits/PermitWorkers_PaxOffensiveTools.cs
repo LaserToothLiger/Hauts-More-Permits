@@ -603,7 +603,8 @@ namespace HautsPermits
                             Hediff h = HediffMaker.MakeHediff(hd,p);
                             if (pme.extraNumber != null)
                             {
-                                h.Severity = pme.extraNumber.RandomInRange;
+                                float multi = pme.extraStat != null ? p.GetStatValue(pme.extraStat) : 1f;
+                                h.Severity = pme.extraNumber.RandomInRange*multi;
                             }
                             p.health.AddHediff(h);
                         }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
   
-  <!--Ghouls that get downed and then regenerate just... stick around indefinitely. We need them to leave.-->
+  <!--Ghouls that get downed and then regenerate just... stick around indefinitely. We need them to leave. This doesn't work most of the time, but "sometimes" is better than "FUCKING NEVER GET OFF OF MY LAWN"-->
   <HediffDef ParentName="HVT_TraitHediffBase">
 	<defName>HVMP_KickForAFK</defName>
 	<label>eviction notice</label>

@@ -5,7 +5,7 @@
   <ThingDef ParentName="BookBase">
     <defName>HVMP_Scripture</defName>
     <label>scripture</label>
-    <description>A book which describes the principles of a particular ideoligion. Non-believers who read this book are gradually converted towards its ideoligion, but it can sometimes make them upset (which makes them temporarily immune to conversion by ideoligious books in addition to lowering mood). Believers instead gain certainty, as well as one of three possible buffs:\n-A small chance to be inspired\n-Stacks of an ideoligious stat buff\n-Stacks of a mental stat buff</description>
+    <description>A book which describes the principles of a particular ideoligion. Non-believers who read this book are gradually converted towards its ideoligion, but it can sometimes make them upset (which temporarily reduces their mood and certainty loss factor). Believers instead gain certainty, as well as one of three possible buffs:\n-A small chance to be inspired\n-Stacks of an ideoligious stat buff\n-Stacks of a mental stat buff</description>
     <tradeability>Sellable</tradeability>
     <graphicData>
       <texPath>Items/Book/HVMP_Scripture/HVMP_Scripture</texPath>

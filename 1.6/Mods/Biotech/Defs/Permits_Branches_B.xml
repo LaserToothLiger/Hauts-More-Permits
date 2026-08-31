@@ -671,7 +671,7 @@
   <RoyalTitlePermitDef>
     <defName>HVMP_PollutionScoop</defName>
     <label>pollution scoop</label>
-    <description>Use orbital trade matter-transmission technology to extract stationary toxic particles from the target area, unpolluting the terrain and causing any toxic wastepacks in the area to disappear.\n\nAlso creates a smoke blast in a smaller radius.</description>
+    <description>Use orbital trade matter-transmission technology to extract stationary toxic particles from the target area, unpolluting the terrain and removing up to 20 toxic wastepacks from the area, plus 5 per rank held with the Ecosphere Branch past Edenite (25 if the caller is a Gaean; 30 if the caller is a Worldshaper).\n\nAlso creates a smoke blast in a smaller radius.</description>
     <workerClass>HautsPermits_Biotech.RoyalTitlePermitWorker_PollutionScoop</workerClass>
     <minTitle>HVMP_EcosphereIV</minTitle>
     <faction>HVMP_EcosphereBranch</faction>
@@ -691,7 +691,11 @@
 			<thingCategories>
 			  <li MayRequire="VanillaExpanded.Recycling">VRecyclingE_SpecializedPacks</li>
 			</thingCategories>
+			<extraNumber>5</extraNumber><!--wastepacks to remove per 100 seniority w faction (each rank is 100 seniority)-->
         </li>
+		<li Class="HautsPermits.ScalingDisabledDescription">
+			<extraString>Use orbital trade matter-transmission technology to extract stationary toxic particles from the target area, unpolluting the terrain and removing up to 20 toxic wastepacks from the area.\n\nAlso creates a smoke blast in a smaller radius.</extraString>
+		</li>
 	</modExtensions>
   </RoyalTitlePermitDef>
   <RoyalTitlePermitDef>
