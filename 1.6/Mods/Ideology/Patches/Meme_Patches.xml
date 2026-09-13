@@ -83,6 +83,23 @@
 						</value>
 					</match>
 				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/MemeDef[defName="AM_PainIsDivine"]/exclusionTags</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="AM_PainIsDivine"]</xpath>
+						<value>
+							<exclusionTags>
+							  <li>HVMP_Cosmotag1</li>
+							</exclusionTags>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="AM_PainIsDivine"]/exclusionTags</xpath>
+						<value>
+							<li>HVMP_Cosmotag1</li>
+						</value>
+					</match>
+				</li>
 				<li Class="PatchOperationFindMod">
 					<mods>
 						<li>Anomaly</li>
