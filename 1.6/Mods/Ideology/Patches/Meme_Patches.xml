@@ -200,6 +200,23 @@
 						</value>
 					</match>
 				</li>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/MemeDef[defName="VFEA_Isolationist"]/exclusionTags</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="VFEA_Isolationist"]</xpath>
+						<value>
+							<exclusionTags>
+							  <li>HVMP_Cosmotag7</li>
+							</exclusionTags>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationAdd">
+						<xpath>/Defs/MemeDef[defName="VFEA_Isolationist"]/exclusionTags</xpath>
+						<value>
+							<li>HVMP_Cosmotag7</li>
+						</value>
+					</match>
+				</li>
 			</operations>
 		</match>
 	</Operation>
