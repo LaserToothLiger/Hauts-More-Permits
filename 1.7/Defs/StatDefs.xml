@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <StatDef>
+    <defName>HVMP_StandingValue</defName>
+    <label>standing value</label>
+    <description>The amount of standing your trader will earn for giving this to a Branch faction's donations office.</description>
+    <category>BasicsImportant</category>
+    <defaultBaseValue>0</defaultBaseValue>
+    <minValue>0</minValue>
+    <toStringStyle>FloatMaxThree</toStringStyle>
+    <showIfUndefined>false</showIfUndefined>
+    <displayPriorityInCategory>2508</displayPriorityInCategory><!--literally should be right next to favor value-->
+  </StatDef>
+  
+</Defs>

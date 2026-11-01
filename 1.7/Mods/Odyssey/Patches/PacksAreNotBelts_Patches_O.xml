@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Patch>
+
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+		  <li>Packs Are Not Belts</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+		  <operations>
+			<li Class="PatchOperationReplace">
+				<xpath>Defs/ThingDef[defName="HVMP_Apparel_SkipnetPack"]/apparel/bodyPartGroups</xpath>
+				<value>
+					<bodyPartGroups>
+						<li>Torso</li>
+					</bodyPartGroups>
+				</value>
+			</li>
+		  </operations>
+		</match>
+	</Operation>
+
+</Patch>

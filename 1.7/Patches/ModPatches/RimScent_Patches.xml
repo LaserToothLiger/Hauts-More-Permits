@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>RimScent</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Biotech</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<li Class="PatchOperationAddModExtension">
+								<xpath>/Defs/ThingDef[defName="HVMP_AntiBlightDispenser"]</xpath>
+								<value>
+									<li Class="RimScentReworked.ModExtension_Scent">
+										<thought>HVMP_PesticideScent</thought>
+									</li>
+								</value>
+							</li>
+							<li Class="PatchOperationAddModExtension">
+								<xpath>/Defs/ThingDef[defName="HVMP_GTDrill"]</xpath>
+								<value>
+									<li Class="RimScentReworked.ModExtension_Scent">
+										<thought>RimScent_DirtScent</thought>
+									</li>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Anomaly</li>
+					</mods>
+					<match Class="PatchOperationAddModExtension">
+						<xpath>/Defs/ThingDef[defName="HVMP_LivingCloudkill"]</xpath>
+						<value>
+							<li Class="RimScentReworked.ModExtension_Scent">
+								<thought>RimScent_ToxicScent</thought>
+							</li>
+						</value>
+					</match>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+</Patch>

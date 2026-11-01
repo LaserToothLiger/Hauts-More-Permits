@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Patch>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+		  <li>Vanilla Skills Expanded</li>
+		</mods>
+		<match Class="PatchOperationReplace">
+			<xpath>/Defs/WorldObjectDef[defName="HVMP_PaxTalks"]/comps/li[@Class="HautsPermits.WorldObjectCompProperties_PaxTalks"]/negotiationStat</xpath>
+			<value>
+				<negotiationStat>VSE_PeaceTalksChance</negotiationStat>
+			</value>
+		</match>
+	</Operation>
+</Patch>

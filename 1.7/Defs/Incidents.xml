@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <IncidentDef>
+    <defName>HVMP_InterventionInfestation</defName>
+    <label>orbital scan infestation</label>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+      <li>Map_TempIncident</li>
+      <li>Map_Misc</li>
+      <li>Map_RaidBeacon</li>
+    </targetTags>
+    <workerClass>HautsPermits.IncidentWorker_InterventionInfestation</workerClass>
+    <letterLabel>Scan-provoked infestation</letterLabel>
+    <letterText>Vibrations from the Commerce Branch's geological scans have angered some underground insects. Now they're tunneling upwards to seek revenge!\n\nBeware - the insects have been angered and will try to destroy your base.</letterText>
+    <letterDef>ThreatBig</letterDef>
+    <baseChance>0</baseChance>
+    <category>Special</category>
+    <pointsScaleable>true</pointsScaleable>
+    <tale>Infestation</tale>
+  </IncidentDef>
+  
+</Defs>

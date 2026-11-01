@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationAdd">
+		<xpath>/Defs/HautsFramework.Hauts_FactionCompDef[defName="Hauts_FCHolder"]/comps</xpath>
+		<value>
+			<li Class="HautsPermits.HautsFactionCompProperties_PeriodicBranchQuests">
+				<initDelay>60000~600000</initDelay><!--1-10 days until first quest from each branch-->
+			</li>
+		</value>
+	</Operation>
+</Patch>

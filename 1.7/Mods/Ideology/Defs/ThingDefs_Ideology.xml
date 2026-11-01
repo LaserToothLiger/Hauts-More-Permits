@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--archive books-->
+  <ThingDef ParentName="BookBase">
+    <defName>HVMP_Scripture</defName>
+    <label>scripture</label>
+    <description>A book which describes the principles of a particular ideoligion. Non-believers who read this book are gradually converted towards its ideoligion, but it can sometimes make them upset (which temporarily reduces their mood and certainty loss factor). Believers instead gain certainty, as well as one of three possible buffs:\n-A small chance to be inspired\n-Stacks of an ideoligious stat buff\n-Stacks of a mental stat buff</description>
+    <tradeability>Sellable</tradeability>
+    <graphicData>
+      <texPath>Items/Book/HVMP_Scripture/HVMP_Scripture</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.8</drawSize>
+    </graphicData>
+    <uiIconPath>Items/Book/HVMP_Scripture/HVMP_Scripture</uiIconPath>
+    <statBases>
+      <MarketValue>150</MarketValue>
+    </statBases>
+    <comps>
+      <li Class="HautsPermits_Ideology.CompProperties_ChooseScriptureBuff">
+		<inspireChancePerHour>
+		  <points>
+			<li>0, 0.004</li>
+			<li>1, 0.008</li>
+			<li>2, 0.012</li>
+			<li>3, 0.016</li>
+			<li>4, 0.021</li>
+			<li>5, 0.026</li>
+			<li>6, 0.031</li>
+		  </points>
+		</inspireChancePerHour>
+		<benefitRoster>
+		  <li>HVMP_EsotericBookBuff</li>
+		  <li>HVMP_MeditativeBookBuff</li>
+		</benefitRoster>
+		<durationPerHour>45000</durationPerHour><!--if you read continuously for 1 hour, you should get 18 hours of the buff. accrues faster w higher reading speed-->
+		<maxDuration>120000</maxDuration><!--2 days-->
+		<severityPerHour>1.1</severityPerHour><!--and each hour should elevate the buff by a little over 1 stage. also scales up w reading speed-->
+		<hediffGainPerHour>
+		  <points>
+			<li>0, 0.9</li>
+			<li>1, 0.95</li>
+			<li>2, 1</li>
+			<li>3, 1.05</li>
+			<li>4, 1.1</li>
+			<li>5, 1.2</li>
+			<li>6, 1.3</li>
+		  </points>
+		</hediffGainPerHour>
+	  </li>
+      <li Class="CompProperties_Book">
+        <nameMaker>HVMP_Namer_Scripture</nameMaker>
+        <descriptionMaker>HVMP_ScriptureDesc</descriptionMaker>
+        <ageYearsRange>100~500</ageYearsRange>
+        <openGraphic>
+          <texPath>Items/Book/HVMP_Scripture/HVMP_Scripture_Open</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>0.7</drawSize>
+        </openGraphic>
+        <verticalGraphic>
+          <texPath>Items/Book/HVMP_Scripture/HVMP_Scripture_Vertical</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <addTopAltitudeBias>true</addTopAltitudeBias>
+        </verticalGraphic>
+        <doers>
+          <li Class="HautsPermits_Ideology.BookOutcomeProperties_ChooseScriptureBuff">
+            <newIdeoChance>1</newIdeoChance>
+			<chanceForPlayerFaction>0.5</chanceForPlayerFaction>
+			<conversionPerHour>
+			  <points>
+				<li>0, 0.01</li>
+				<li>1, 0.02</li>
+				<li>2, 0.03</li>
+				<li>3, 0.04</li>
+				<li>4, 0.05</li>
+				<li>5, 0.065</li>
+				<li>6, 0.08</li>
+			  </points>
+			</conversionPerHour>
+			<conversionIfNoBelieversExistFactor>3</conversionIfNoBelieversExistFactor>
+			<upsetOnFailedConversionThought>Hauts_FailedConversionByBook</upsetOnFailedConversionThought>
+			<upsetOnFailedConversionHediff>HVMP_FailedConversionByBook</upsetOnFailedConversionHediff>
+			<upsetLikelihood>
+			  <points>
+				<li>0, 0.1</li>
+				<li>1, 0.09</li>
+				<li>2, 0.08</li>
+				<li>3, 0.07</li>
+				<li>4, 0.06</li>
+				<li>5, 0.05</li>
+				<li>6, 0.04</li>
+			  </points>
+			</upsetLikelihood>
+			<reassurePerHour>
+			  <points>
+				<li>0, 0.06</li>
+				<li>1, 0.08</li>
+				<li>2, 0.1</li>
+				<li>3, 0.12</li>
+				<li>4, 0.14</li>
+				<li>5, 0.17</li>
+				<li>6, 0.2</li>
+			  </points>
+			</reassurePerHour>
+          </li>
+        </doers>
+      </li>
+    </comps>
+  </ThingDef>
+  
+  <!--other archive items-->
+  <ThingDef ParentName="MechSerumBase">
+    <defName>HVMP_Ingressor</defName>
+    <label>ingressor</label>
+    <description>A one-use sabotage device. Once clamped onto a building, its subpersona core infiltrates and subverts any hackable digital system it can find. If the building is not hackable, the ingressor instead activates its powerful directional explosive, dealing 500 damage to the building.</description>
+    <graphicData>
+      <texPath>Items/HVMP_Ingressor</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+	  <drawSize>0.9</drawSize>
+    </graphicData>
+    <techLevel>Ultra</techLevel>
+    <tradeTags Inherit="False" />
+	<genericMarketSellable>false</genericMarketSellable>
+    <stackLimit>10</stackLimit>
+    <statBases>
+      <MarketValue>1000</MarketValue>
+	  <Bulk MayRequire="CETeam.CombatExtended">2</Bulk>
+    </statBases>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>Sellable</tradeability>
+    <thingSetMakerTags Inherit="False" />
+    <comps>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Use {0_label}</useLabel>
+        <useDuration>0</useDuration>
+        <warmupMote>Mote_ResurrectAbility</warmupMote>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+      <li Class="CompProperties_Targetable">
+        <compClass>HautsPermits_Ideology.CompTargetable_DamageableBuildingOrHackableItem</compClass>
+      </li>
+      <li Class="HautsPermits_Ideology.CompProperties_TargetEffectIngression">
+        <damageType>Thump</damageType>
+		<damageAmount>500</damageAmount>
+		<hackingPower>12000</hackingPower>
+      </li>
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="HVMP_PalletBase">
+    <defName>HVMP_ArtifactPallet</defName>
+    <label>artifact pallet</label>
+    <description>A crate containing an archotech artifact worth less than 5000 silver apiece. You can choose what type of artifact is inside by opening it.</description>
+    <graphicData>
+      <texPath>Items/Pallets/HVMP_ArtifactPallet</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <comps>
+      <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
+        <thingCategoryWhitelist>Artifacts</thingCategoryWhitelist>
+		<maxNumOptions>25</maxNumOptions>
+		<onlyHasStackableItems>false</onlyHasStackableItems>
+		<unitMarketValueOutputCap>4999</unitMarketValueOutputCap>
+      </li>
+	</comps>
+  </ThingDef>
+  
+  <!--archive quests: shrine-->
+  <ThingDef ParentName="TrapIEDBase">
+    <defName>HVMP_TrapTTWSD</defName>
+    <label>antigrain warhead trap</label>
+    <description>An antimatter-powered antigrain bomb.</description>
+    <graphicData>
+      <texPath>Things/Building/Security/IEDAntigrainWarhead</texPath>
+    </graphicData>
+    <costList>
+      <Shell_AntigrainWarhead>1</Shell_AntigrainWarhead>
+    </costList>
+    <designationHotKey>Misc11</designationHotKey>
+    <comps>
+      <li Class="CompProperties_Explosive">
+        <explosiveRadius>14.9</explosiveRadius>
+        <explosiveDamageType>BombSuper</explosiveDamageType>
+        <startWickHitPointsPercent>0.2</startWickHitPointsPercent>
+        <chanceToStartFire>0.22</chanceToStartFire>
+        <damageFalloff>true</damageFalloff>
+        <explosionEffect>GiantExplosion</explosionEffect>
+        <explosionSound>Explosion_GiantBomb</explosionSound>
+        <wickTicks>2300~2700</wickTicks>
+        <startWickOnDamageTaken>
+          <li>Bullet</li>
+          <li>Arrow</li>
+          <li>ArrowHighVelocity</li>
+        </startWickOnDamageTaken>
+        <preExplosionSpawnSingleThingDef>CraterMedium</preExplosionSpawnSingleThingDef>
+      </li>
+    </comps>
+    <specialDisplayRadius>14.9</specialDisplayRadius>
+	<building>
+      <claimable>false</claimable>
+	  <deconstructible>true</deconstructible>
+	</building>
+  </ThingDef>
+  
+  <!--archive quests: remnant-->
+  <ThingDef ParentName="ResourceBase">
+    <defName>HVMP_StrangeArtifact</defName>
+    <label>hermetic artifact container</label>
+    <description>A containment unit harboring a strange object, which the Archive Branch wants you to study on their behalf.</description>
+    <graphicData>
+      <texPath>Items/QuestItems/HVMP_Remnant</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <soundInteract>Metal_Drop</soundInteract>
+    <soundDrop>Standard_Drop</soundDrop>
+    <stackLimit>1</stackLimit>
+	<tradeability>None</tradeability>
+	<tickerType>Rare</tickerType>
+    <statBases>
+      <Flammability>0</Flammability>
+      <Mass>1.5</Mass>
+      <MaxHitPoints>200</MaxHitPoints>
+      <Beauty>1</Beauty>
+      <MarketValue>500</MarketValue>
+      <DeteriorationRate>2.0</DeteriorationRate>
+	  <Bulk MayRequire="CETeam.CombatExtended">1</Bulk>
+    </statBases>
+    <comps>
+      <li Class="HautsPermits_Ideology.CompProperties_StudiableRemnant">
+        <totalRequiredProgressHours>288~720</totalRequiredProgressHours><!--12d to 30d-->
+        <activateTexPath>UI/Icons/Study</activateTexPath>
+        <activateLabelString>Study...</activateLabelString>
+        <activateDescString>Study the strange artifact.</activateDescString>
+        <jobString>Study strange artifact</jobString>
+        <guiLabelString>Choose who should study this</guiLabelString>
+        <inspectString>Can be studied by a colonist.</inspectString>
+        <targetingParameters>
+          <canTargetBuildings>false</canTargetBuildings>
+          <canTargetAnimals>false</canTargetAnimals>
+          <canTargetMechs>false</canTargetMechs>
+          <onlyTargetControlledPawns>true</onlyTargetControlledPawns>
+        </targetingParameters>
+		<requiredSkillDefs><li>Intellectual</li></requiredSkillDefs>
+		<requiredStatDefs><li>ResearchSpeed</li></requiredStatDefs>
+		<extraStat>true</extraStat>
+		<possibleExtraStatDefsLikely><!--60% chance for one of these. NOTE: if you add more stats to these lists, they will also need a flavorful description string in the Remnant quest-->
+		  <li>PsychicSensitivity</li>
+		  <li>ReadingSpeed</li>
+		  <li>HackingSpeed</li>
+		</possibleExtraStatDefsLikely>
+		<possibleExtraStatDefsProbable><!--30% chance for one of these-->
+		  <li>CleaningSpeed</li>
+		  <li>Hauts_SkillGainFromRecreation</li>
+		  <li>FixBrokenDownBuildingSuccessChance</li>
+		</possibleExtraStatDefsProbable>
+		<possibleExtraStatDefsUnlikely><!--10% chance for one of these-->
+		  <li>Hauts_IdeoThoughtFactor</li>
+		  <li MayRequire="Ludeon.RimWorld.Biotech">Hauts_InstructiveAbility</li>
+		  <li>Hauts_BreachDamageFactor</li>
+		  <li>MiningSpeed</li>
+		  <li>EatingSpeed</li>
+		  <li>NegotiationAbility</li>
+		  <li>TrainAnimalChance</li>
+		  <li>MeleeHitChance</li>
+		</possibleExtraStatDefsUnlikely>
+		<progressInspectStringSkills>HVMP_RemnantSkills</progressInspectStringSkills>
+		<progressInspectStringStats>HVMP_RemnantStats</progressInspectStringStats>
+		<CD_damagePerDay>2.5</CD_damagePerDay>
+		<PI_maxCooldown>2500</PI_maxCooldown>
+		<PI_progressLossPerDay>6</PI_progressLossPerDay>
+      </li>
+    </comps>
+  </ThingDef>
+  
+  <!--archive quests: satellite-->
+  <ThingDef ParentName="BuildingBase" Name="HVMP_Spacedrone">
+    <defName>HVMP_Spacedrone</defName>
+    <label>spacedrone</label>
+    <description>An ancient ultratech spacedrone containing valuable information.</description>
+    <altitudeLayer>Building</altitudeLayer>
+    <pathCost>50</pathCost>
+    <blockWind>true</blockWind>
+    <passability>Impassable</passability>
+    <canOverlapZones>true</canOverlapZones>
+    <fillPercent>1.0</fillPercent>
+    <size>(5,3)</size>
+    <graphicData>
+      <texPath>Things/Building/Misc/Spacedrone</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(6,3)</drawSize>
+      <color>(158,158,158)</color>
+      <shadowData>
+        <volume>(4.1, 1.0, 1.8)</volume>
+        <offset>(0, 0, -0.1)</offset>
+      </shadowData>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>1000</MaxHitPoints>
+      <Flammability>0</Flammability>
+    </statBases>
+    <tickerType>Normal</tickerType>
+    <costList>
+      <Uranium>10</Uranium>
+      <ChunkSlagSteel>4</ChunkSlagSteel>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <rotatable>false</rotatable>
+    <selectable>true</selectable>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+    <drawerType>MapMeshOnly</drawerType>
+    <repairEffect>ConstructMetal</repairEffect>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <uiIconScale>1.4</uiIconScale>
+    <hasInteractionCell>true</hasInteractionCell>
+    <interactionCellOffset>(0,0,-2)</interactionCellOffset>
+    <building>
+      <claimable>false</claimable>
+	  <alwaysDeconstructible>true</alwaysDeconstructible>
+      <destroySound>BuildingDestroyed_Metal_Big</destroySound>
+    </building>
+    <comps>
+      <li Class="HautsPermits_Ideology.CompProperties_HackableQuestLink">
+        <defence>9000</defence>  <!-- ~ 3.6 hrs for 10 intellect hacker -->
+        <effectHacking>HackingTerminal</effectHacking>
+      </li>
+      <li Class="CompProperties_AmbientSound">
+        <sound>SpacedroneIdle_Ambience</sound>
+        <disableOnHacked>true</disableOnHacked>
+      </li>
+      <li Class="HautsPermits_Ideology.CompProperties_HB">
+        <periodicity>20000</periodicity>
+		<pointFactor>0.4</pointFactor>
+      </li>
+    </comps><!--does not explode because non-Flame explosions would harm the mech guards, making the risk/reward of preemptive hacking vs hacking later even MORE stacked in the former's favor, and bc it creates an awkward spot where you can finish hacking in time for the guards
+				to wake up and down your hacker, THEN the explosion removes all hope of recovery. Technically that'd be an "issue" w the normal spacedrone quest too, but the hostiles don't spawn directly around the drone in that one, so-->
+  </ThingDef>
+  <ThingDef ParentName="HVMP_Spacedrone">
+    <defName>HVMP_SpacedroneWithTurret</defName>
+	<label>spacedrone</label>
+    <description>An ancient ultratech spacedrone containing valuable information.</description>
+    <thingClass>Building_TurretGun</thingClass>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <statBases>
+      <MaxHitPoints>1500</MaxHitPoints>
+      <ShootingAccuracyTurret>0.96</ShootingAccuracyTurret>
+    </statBases>
+    <damageMultipliers>
+      <li>
+        <damageDef>Flame</damageDef>
+        <multiplier>0</multiplier>
+      </li>
+    </damageMultipliers>
+    <fillPercent>0.5</fillPercent>
+    <building>
+      <combatPower>150</combatPower>
+      <ai_combatDangerous>true</ai_combatDangerous>
+      <turretGunDef>Gun_ChargeBlasterHeavyTurret</turretGunDef>
+      <turretBurstCooldownTime>5.5</turretBurstCooldownTime>
+      <turretTopDrawSize>1.75</turretTopDrawSize>
+      <turretTopOffset>(0, 0.05)</turretTopOffset>
+    </building>
+    <comps>
+      <li Class="CompProperties_Stunnable">
+        <affectedDamageDefs>
+          <li>Stun</li>
+          <li>EMP</li>
+        </affectedDamageDefs>
+        <adaptableDamageDefs>
+          <li>EMP</li>
+        </adaptableDamageDefs>
+      </li>
+    </comps>
+  </ThingDef>
+  
+</Defs>

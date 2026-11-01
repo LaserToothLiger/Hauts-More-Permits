@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  
+	  <GameConditionDef>
+		<defName>HVMP_RevealingScanEffect</defName>
+		<conditionClass>HautsPermits_Ideology.GameCondition_RevealingScan</conditionClass>
+		<label>revealing scan</label>
+		<description>An orbital scanner is bathing this region in low-intensity disruption pulses, temporarily suppressing most forms of invisibility.</description>
+		<endMessage>The revealing scan is ending.</endMessage>
+		<letterText>An orbital scanner will bathe this region in low-intensity disruption pulses, temporarily suppressing most forms of invisibility.</letterText>
+		<letterDef>NeutralEvent</letterDef>
+		<canBePermanent>true</canBePermanent>
+		<allowUnderground>true</allowUnderground>
+	  </GameConditionDef>
+  
+</Defs>

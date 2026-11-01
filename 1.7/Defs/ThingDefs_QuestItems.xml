@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--commerce-->
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_ChainComputer</defName>
+    <label>commmerce chaincomputer</label>
+    <description>A miniaturized supercomputer that somehow makes money by doing mathematical operations. This digitized currency is only usable on developed worlds, making it practically useless on the Rim.\n\nIt has an internal generator, allowing it to slowly perform calculations even without being connected to a power grid, but it will operate much faster while plugged in and drawing a large amount of power.\n\nWhile plugged into a power grid, it will emit a detectable signal, occasionally luring raiders.</description>
+	<graphicData>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <texPath>Things/Building/QuestFoci/HVMP_Chaincomputer</texPath>
+      <drawSize>1.3</drawSize><!--2.46875-->
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+      </damageData>
+      <drawRotated>false</drawRotated>
+      <shadowData>
+        <volume>(0.55, 0.30, 0.40)</volume>
+      </shadowData>
+    </graphicData>
+    <size>(1,1)</size>
+    <fillPercent>0.20</fillPercent>
+    <altitudeLayer>Building</altitudeLayer>
+    <defaultPlacingRot>South</defaultPlacingRot>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <building>
+      <uninstallWork>600</uninstallWork>
+      <destroySound>BuildingDestroyed_Metal_Small</destroySound>
+    </building>
+    <killedLeavings>
+      <ChunkSlagSteel>1</ChunkSlagSteel>
+      <ComponentIndustrial>1</ComponentIndustrial>
+    </killedLeavings>
+    <statBases>
+      <MaxHitPoints>200</MaxHitPoints>
+      <WorkToBuild>1000</WorkToBuild>
+      <Flammability>0.75</Flammability>
+      <Beauty>-10</Beauty>
+      <Mass>35</Mass>
+    </statBases>
+    <thingCategories>
+      <li>BuildingsSpecial</li>
+    </thingCategories>
+	<thingSetMakerTags Inherit="False"/>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <comps>
+      <li Class="CompProperties_Glower">
+        <glowRadius>4</glowRadius>
+        <glowColor>(174,175,19,0)</glowColor>
+      </li>
+      <li Class="HautsPermits.CompProperties_ChainComputer">
+	    <compClass>HautsPermits.CompChainComputer</compClass>
+		<maxProgress>100</maxProgress>
+		<baseProgressPerTick>0.00004</baseProgressPerTick>
+		<powerInterval>100</powerInterval>
+		<maxExternalPower>5000</maxExternalPower>
+		<bonusProgressPerInterval>0.00004</bonusProgressPerInterval>
+		<raidMTBdays>5</raidMTBdays>
+		<minTimeBetweenRaids>180000</minTimeBetweenRaids>
+		<raidPointFactor>0.4</raidPointFactor>
+		<BD_hediff>HVMP_BrainDrain</BD_hediff>
+		<glowIfHacked>true</glowIfHacked><!--keep glowing the whole time-->
+		<BD_targetingParameters>
+			<onlyTargetColonists>True</onlyTargetColonists>
+			<neverTargetIncapacitated>True</neverTargetIncapacitated>
+			<canTargetAnimals>False</canTargetAnimals>
+		</BD_targetingParameters>
+		<PVYAH_captchaAtPctProgress>0.25~0.97</PVYAH_captchaAtPctProgress>
+		<PVYAH_messageLabel>Chaincomputer progress paused</PVYAH_messageLabel>
+		<PVYAH_messageText>The chaincomputer has hit some kind of firewall. It will not make further progress until it has been hacked. Beware - a poor hacker may trigger further security systems, such as weather controllers or mech cluster deployments.</PVYAH_messageText>
+		<PVYAH_mustHackColor>(255,95,95,0)</PVYAH_mustHackColor>
+        <defence>60000</defence>
+        <effectHacking>HackingTerminal</effectHacking>
+        <lockoutDurationHoursRange>12~18</lockoutDurationHoursRange>
+        <notHackedInspectString> </notHackedInspectString>
+        <hackedInspectString>Firewall bypassed.</hackedInspectString>
+        <showProgressAfterHackCompletion>false</showProgressAfterHackCompletion>
+        <hackedMessage>{HACKER_labelShort} has bypassed the {SUBJECT_labelNoParenthesisDef} firewall.</hackedMessage>
+	  </li>
+      <li Class="HautsPermits.CompProperties_HeatPusher_OI">
+        <compClass>HautsPermits.CompHeatPusher_OI</compClass>
+        <heatPerSecond>21</heatPerSecond>
+		<OI_heatRatePerHour>0.905</OI_heatRatePerHour>
+		<OI_heatRateMax>200</OI_heatRateMax>
+        <heatPushMaxTemperature>28</heatPushMaxTemperature>
+		<OI_heatLimitPerHour>10.12</OI_heatLimitPerHour>
+		<OI_heatLimitMax>250</OI_heatLimitMax>
+		<OI_hoursUntilHaywireRisk>600~840</OI_hoursUntilHaywireRisk><!--25 to 35 days-->
+		<OI_effecterDef>Hauts_ConstructMetal</OI_effecterDef>
+		<OI_haywireChancePerHour_CompBreak>0.025</OI_haywireChancePerHour_CompBreak><!--approx a 38.5% chance of happening at least once a day-->
+		<OI_haywireExplosionRadius>2.4</OI_haywireExplosionRadius>
+		<OI_haywireExplosionDamage>5~18</OI_haywireExplosionDamage>
+		<OI_haywireChancePerHour_Explosion>0.01</OI_haywireChancePerHour_Explosion><!--approx 21.5% chance of happening at least once a day-->
+		<OI_haywireChancePerHour_EMI>0.001</OI_haywireChancePerHour_EMI><!--approx a 2.4% chance of happening at least once a day-->
+		<OI_EMIduration>30000~90000</OI_EMIduration>
+		<OI_haywireCooldownTicks>10000</OI_haywireCooldownTicks>
+		<OI_haywireMessageLabel>Chaincomputer breaking down</OI_haywireMessageLabel>
+		<OI_haywireMessageText>The internal heat of the chaincomputer has gotten out of control! It might belch out fire at random times (which could destroy it), send power surges through any connected power grid which break down components in other electrical devices, or even expel an electromagnetic field that temporarily disables all electronics in the region.\n\nThere is no cure - simply make sure the device lives long enough to finish its computations.</OI_haywireMessageText>
+      </li>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>200</basePowerConsumption>
+      </li>
+    </comps>
+    <tickerType>Normal</tickerType>
+  </ThingDef>
+  
+  <!--rover-->
+  <ThingDef ParentName="ResourceBase">
+    <defName>HVMP_DatedAtlas</defName>
+    <label>dated atlas</label>
+	<thingClass>ThingWithComps</thingClass>
+    <description>A collection of maps and notes describing a broad geographical region. This one is in need of severe revisions.</description>
+    <graphicData>
+      <texPath>Items/QuestItems/HVMP_Atlas</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>1</drawSize>
+    </graphicData>
+    <stackLimit>1</stackLimit>
+	<tradeability>None</tradeability>
+    <uiIconPath>Items/QuestItems/HVMP_Atlas</uiIconPath>
+    <statBases>
+      <MarketValue>0</MarketValue>
+      <MaxHitPoints>60</MaxHitPoints>
+      <DeteriorationRate>2</DeteriorationRate>
+      <Mass>0.50</Mass>
+      <Flammability>1</Flammability>
+      <Beauty>1</Beauty>
+	  <Bulk MayRequire="CETeam.CombatExtended">1</Bulk>
+    </statBases>
+	<genericMarketSellable>false</genericMarketSellable>
+	<thingSetMakerTags Inherit="False"/>
+    <comps>
+      <li Class="HautsPermits.CompProperties_StudiableAtlas">
+        <totalRequiredProgressHours>240~600</totalRequiredProgressHours><!--10d to 25d-->
+        <activateTexPath>UI/Designators/Study</activateTexPath>
+        <activateLabelString>Revise...</activateLabelString>
+        <activateDescString>Revise the atlas.</activateDescString>
+        <jobString>Revise dated atlas</jobString>
+        <guiLabelString>Choose who should revise this</guiLabelString>
+        <inspectString>Can be revised by a colonist.</inspectString>
+        <targetingParameters>
+          <canTargetBuildings>false</canTargetBuildings>
+          <canTargetAnimals>false</canTargetAnimals>
+          <canTargetMechs>false</canTargetMechs>
+          <onlyTargetControlledPawns>true</onlyTargetControlledPawns>
+        </targetingParameters>
+		<requiredSkillDefs><li>Intellectual</li></requiredSkillDefs>
+		<requiredStatDefs><li>ReadingSpeed</li></requiredStatDefs>
+		<possibleExtraSkillDefs>
+		  <li>Animals</li>
+		  <li>Construction</li>
+		  <li>Mining</li>
+		  <li>Plants</li>
+		</possibleExtraSkillDefs>
+		<mustBeOnList>true</mustBeOnList><!--only pawns who've been to the linked site can study this-->
+		<notOnListstring>HVMP_NeverBeenToAtlasPoint</notOnListstring>
+		<progressInspectStringSkills>HVMP_BookProgress1</progressInspectStringSkills>
+		<progressInspectStringStats>HVMP_BookProgress2</progressInspectStringStats>
+		<DTS_boredomPerHour>0.1</DTS_boredomPerHour>
+		<DTS_thoughtToGive>HVMP_DTS_Thought</DTS_thoughtToGive>
+		<DTS_thoughtGiverCooldown>750</DTS_thoughtGiverCooldown>
+      </li>
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="ShuttleCrashedBase">
+    <defName>HVMP_ShuttleCrashedIcarus</defName>
+    <costList Inherit="False">
+      <Steel>40</Steel>
+      <Plasteel>70</Plasteel>
+      <ComponentIndustrial>10</ComponentIndustrial>
+    </costList>
+    <building Inherit="False">
+      <destroySound>BuildingDestroyed_Metal_Big</destroySound>
+      <claimable>false</claimable>
+      <alwaysDeconstructible>true</alwaysDeconstructible>
+    </building>
+  </ThingDef>
+  
+</Defs>

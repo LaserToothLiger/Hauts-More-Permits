@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!--super-ghoul invisibility-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_OccultInvisibility</defName>
+	<label>occult invisibility</label>
+	<description>A temporary state of psychic invisibility, specially devised for use by ghouls.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<isBad>false</isBad>
+	<initialSeverity>0.35</initialSeverity>
+	<comps>
+	  <li Class="HediffCompProperties_Invisibility">
+		<visibleToPlayer>true</visibleToPlayer>
+	  </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-24</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	</comps>
+  </HediffDef>
+  
+  <!--usher stats-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_UsherStats</defName>
+	<label>Usher vitality</label>
+	<description>Empowerment of the body due to an unknown mechanism. After enough time, or on death, this mechanism will induce a radical one-time metamorphosis into a ghoul.</description>
+	<hediffClass>HautsPermits_Occult.Hediff_SpontaneousGhoulization</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+		<statOffsets>
+		  <ToxicResistance>0.5</ToxicResistance>
+		  <ArmorRating_Blunt>0.55</ArmorRating_Blunt>
+		  <ArmorRating_Sharp>0.75</ArmorRating_Sharp>
+		  <ArmorRating_Heat>0.45</ArmorRating_Heat>
+		  <VacuumResistance MayRequire="Ludeon.RimWorld.Odyssey">1</VacuumResistance>
+		  <P42_AllergicSensitivity MayRequire="phil42.allergies">-1</P42_AllergicSensitivity>
+		  <SmokeSensitivity MayRequire="CETeam.CombatExtended">-0.5</SmokeSensitivity>
+		  <Radiation MayRequire="Dubwise.Rimatomics">-1</Radiation>
+		  <Mashed_Ashlands_AshResistance MayRequire="SirMashedPotato.Ashlands">0.5</Mashed_Ashlands_AshResistance>
+		</statOffsets>
+		<statFactors>
+		  <PawnTrapSpringChance>0.3</PawnTrapSpringChance>
+		  <Suppressability MayRequire="CETeam.CombatExtended">0</Suppressability>
+		</statFactors>
+		<regeneration>70</regeneration>
+		<painFactor>0</painFactor>
+		<damageFactors>
+		  <NociosphereVaporize>0.05</NociosphereVaporize>
+		</damageFactors>
+	  </li>
+	</stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>360000</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+	  <li Class="HautsFramework.HediffCompProperties_GiveTrait">
+		<traitDef>BodyMastery</traitDef>
+	  </li>
+    </comps>
+  </HediffDef>
+  <!--nociosphere instantly activates-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_ArentYouTiredOfBeingNice</defName>
+	<label>aren't you tired of being nice?</label>
+	<description>don't you just want to go apeshit?</description><!--internal timer of 5s to activate-->
+	<hediffClass>HautsPermits_Occult.Hediff_InstantKillMode</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+	    <becomeVisible>false</becomeVisible>
+	  </li>
+	</stages>
+  </HediffDef>
+  <!--nucleus dislikes taking damage-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_Owwwwww</defName>
+	<label>owwwwww</label>
+	<description>stop poking me!</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+	    <becomeVisible>false</becomeVisible>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HautsPermits_Occult.HediffCompProperties_LGTH">
+		<activityPerDamage>0.04</activityPerDamage>
+	  </li>
+	</comps>
+  </HediffDef>
+  
+</Defs>

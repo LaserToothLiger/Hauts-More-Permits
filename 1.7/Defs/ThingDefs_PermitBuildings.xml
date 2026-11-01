@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_SlugTurret</defName>
+    <label>pax mini turret</label>
+    <description>A self-powered defense turret mounted with a weak but long-ranged slug-thrower. May explode when damaged. Self-destructs after 4 days.</description>
+    <thingClass>Building_TurretGun</thingClass>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <graphicData>
+      <texPath>Things/Building/Mech/TurretMechMini_Base</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <drawOffset>(0,0,-0.11)</drawOffset>
+      <damageData>
+        <rect>(0.2,0.2,0.6,0.6)</rect>
+      </damageData>
+      <shadowData>
+        <volume>(0.27,0.25,0.27)</volume>
+        <offset>(0,0,0)</offset>
+      </shadowData>
+	  <color>(24,54,211)</color>
+    </graphicData>
+    <receivesSignals>true</receivesSignals>
+    <altitudeLayer>Building</altitudeLayer>
+    <stealable>false</stealable>
+    <rotatable>false</rotatable>
+    <statBases>
+      <MaxHitPoints>100</MaxHitPoints>
+      <Flammability>0</Flammability>
+      <Mass>10</Mass>
+      <ShootingAccuracyTurret>0.96</ShootingAccuracyTurret>
+      <Beauty>-20</Beauty>
+    </statBases>
+    <damageMultipliers>
+      <li>
+        <damageDef>Flame</damageDef>
+        <multiplier>0</multiplier>
+      </li>
+    </damageMultipliers>
+    <tickerType>Normal</tickerType>
+    <comps>
+      <li Class="CompProperties_Explosive">
+        <wickTicks>240</wickTicks>
+        <explosiveRadius>3.9</explosiveRadius>
+        <explosiveDamageType>Bomb</explosiveDamageType>
+        <chanceNeverExplodeFromDamage>0.5</chanceNeverExplodeFromDamage>
+      </li>
+      <li Class="CompProperties_Stunnable">
+        <affectedDamageDefs>
+          <li>Stun</li>
+          <li>EMP</li>
+        </affectedDamageDefs>
+        <adaptableDamageDefs>
+          <li>EMP</li>
+        </adaptableDamageDefs>
+      </li>
+      <li Class="CompProperties_DestroyAfterDelay">
+        <delayTicks>240000</delayTicks>
+        <destroyMode>KillFinalize</destroyMode>
+        <countdownLabel>Self-destruct in</countdownLabel>
+      </li>
+	  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
+		<colorFactor>0.75</colorFactor>
+	  </li>
+      <li Class="CompProperties_AmbientSound">
+        <sound>MechTurretSmall_Call</sound>
+      </li>
+    </comps>
+	<modExtensions>
+	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+	</modExtensions>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <fillPercent>0.4</fillPercent>
+    <hasTooltip>true</hasTooltip>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <building>
+      <combatPower>45</combatPower>
+      <ai_combatDangerous>true</ai_combatDangerous>
+      <turretGunDef>Gun_MiniTurretMech</turretGunDef>
+      <turretBurstCooldownTime>2.5</turretBurstCooldownTime>
+      <claimable>false</claimable>
+    </building>
+  </ThingDef>
+  
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_ChargeTurret</defName>
+    <label>pax charge turret</label>
+    <description>A self-powered turret mounted with a charge blaster. It cannot sense targets at very short ranges. Self-destructs after 2 days.</description>
+    <thingClass>Building_TurretGun</thingClass>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <graphicData>
+      <texPath>Things/Building/Mech/TurretMechLarge_Base</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2, 2)</drawSize>
+      <drawOffset>(0,0,-0.16)</drawOffset>
+      <damageData>
+        <rect>(0.3,0.3,1.4,1.4)</rect>
+      </damageData>
+      <shadowData>
+        <volume>(1.5,0.35,1.4)</volume>
+        <offset>(0,0,-0.05)</offset>
+      </shadowData>
+    </graphicData>
+    <receivesSignals>true</receivesSignals>
+    <altitudeLayer>Building</altitudeLayer>
+    <stealable>false</stealable>
+    <rotatable>true</rotatable>
+    <size>(2,2)</size>
+    <statBases>
+      <MaxHitPoints>180</MaxHitPoints>
+      <Flammability>0</Flammability>
+      <Mass>100</Mass>
+      <ShootingAccuracyTurret>0.96</ShootingAccuracyTurret>
+      <Beauty>-20</Beauty>
+    </statBases>
+    <damageMultipliers>
+      <li>
+        <damageDef>Flame</damageDef>
+        <multiplier>0</multiplier>
+      </li>
+    </damageMultipliers>
+    <tickerType>Normal</tickerType>
+    <comps>
+      <li Class="CompProperties_Explosive">
+        <wickTicks>240</wickTicks>
+        <explosiveRadius>5.9</explosiveRadius>
+        <explosiveDamageType>Bomb</explosiveDamageType>
+        <chanceNeverExplodeFromDamage>0.5</chanceNeverExplodeFromDamage>
+      </li>
+      <li Class="CompProperties_Stunnable">
+        <affectedDamageDefs>
+          <li>Stun</li>
+          <li>EMP</li>
+        </affectedDamageDefs>
+        <adaptableDamageDefs>
+          <li>EMP</li>
+        </adaptableDamageDefs>
+      </li>
+      <li Class="CompProperties_DestroyAfterDelay">
+        <delayTicks>120000</delayTicks>
+        <destroyMode>KillFinalize</destroyMode>
+        <countdownLabel>Self-destruct in</countdownLabel>
+      </li>
+	  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
+		<colorFactor>0.75</colorFactor>
+	  </li>
+      <li Class="CompProperties_AmbientSound">
+        <sound>MechTurretBig_Call</sound>
+      </li>
+    </comps>
+	<modExtensions>
+	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+	</modExtensions>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <fillPercent>0.5</fillPercent>
+    <hasTooltip>true</hasTooltip>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <building>
+      <combatPower>150</combatPower>
+      <ai_combatDangerous>true</ai_combatDangerous>
+      <turretGunDef>Gun_ChargeBlasterHeavyTurret</turretGunDef>
+      <turretBurstCooldownTime>5.5</turretBurstCooldownTime>
+      <turretTopDrawSize>1.75</turretTopDrawSize>
+      <turretTopOffset>(0, 0.05)</turretTopOffset>
+      <claimable>false</claimable>
+    </building>
+    <uiIconScale>0.95</uiIconScale>
+  </ThingDef>
+  
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_InfernoTurret</defName>
+    <label>pax inferno turret</label>
+    <description>A self-powered turret mounted with an inferno cannon. It cannot sense targets at very short ranges. Self-destructs after 2 days.</description>
+    <thingClass>Building_TurretGun</thingClass>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <graphicData>
+      <texPath>Things/Building/Mech/TurretMechLarge_Base</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(2, 2)</drawSize>
+      <drawOffset>(0,0,-0.16)</drawOffset>
+      <damageData>
+        <rect>(0.3,0.3,1.4,1.4)</rect>
+      </damageData>
+      <shadowData>
+        <volume>(1.5,0.35,1.4)</volume>
+        <offset>(0,0,-0.05)</offset>
+      </shadowData>
+    </graphicData>
+    <receivesSignals>true</receivesSignals>
+    <altitudeLayer>Building</altitudeLayer>
+    <stealable>false</stealable>
+    <rotatable>true</rotatable>
+    <size>(2,2)</size>
+    <statBases>
+      <MaxHitPoints>180</MaxHitPoints>
+      <Flammability>0</Flammability>
+      <Mass>100</Mass>
+      <ShootingAccuracyTurret>0.96</ShootingAccuracyTurret>
+      <Beauty>-20</Beauty>
+    </statBases>
+    <damageMultipliers>
+      <li>
+        <damageDef>Flame</damageDef>
+        <multiplier>0</multiplier>
+      </li>
+    </damageMultipliers>
+    <tickerType>Normal</tickerType>
+    <comps>
+      <li Class="CompProperties_Explosive">
+        <wickTicks>240</wickTicks>
+        <explosiveRadius>5.9</explosiveRadius>
+        <explosiveDamageType>Bomb</explosiveDamageType>
+        <chanceNeverExplodeFromDamage>0.5</chanceNeverExplodeFromDamage>
+      </li>
+      <li Class="CompProperties_Stunnable">
+        <affectedDamageDefs>
+          <li>Stun</li>
+          <li>EMP</li>
+        </affectedDamageDefs>
+        <adaptableDamageDefs>
+          <li>EMP</li>
+        </adaptableDamageDefs>
+      </li>
+      <li Class="CompProperties_DestroyAfterDelay">
+        <delayTicks>120000</delayTicks>
+        <destroyMode>KillFinalize</destroyMode>
+        <countdownLabel>Self-destruct in</countdownLabel>
+      </li>
+	  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
+		<colorFactor>0.75</colorFactor>
+	  </li>
+      <li Class="CompProperties_AmbientSound">
+        <sound>MechTurretBig_Call</sound>
+      </li>
+    </comps>
+	<modExtensions>
+	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+	</modExtensions>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <fillPercent>0.5</fillPercent>
+    <hasTooltip>true</hasTooltip>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <building>
+      <combatPower>190</combatPower>
+      <ai_combatDangerous>true</ai_combatDangerous>
+      <turretGunDef>Gun_InfernoCannonTurret</turretGunDef>
+      <turretBurstCooldownTime>17.0</turretBurstCooldownTime>
+      <turretTopDrawSize>1.75</turretTopDrawSize>
+      <turretTopOffset>(0, 0.05)</turretTopOffset>
+      <claimable>false</claimable>
+    </building>
+    <uiIconScale>0.95</uiIconScale>
+  </ThingDef>
+  
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_Mortar</defName>
+    <label>pax mortar</label>
+    <description>A self-powered, self-loading, automatic mortar. It can hit targets at any distance, over walls, but is quite inaccurate. Self-destructs after 2 days.</description>
+    <thingClass>Building_TurretGun</thingClass>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <graphicData>
+      <texPath>Things/Building/Mech/TurretMechLarge_Base</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+      <drawOffset>(0,0,-0.16)</drawOffset>
+      <damageData>
+        <rect>(0.3,0.3,1.4,1.4)</rect>
+      </damageData>
+      <shadowData>
+        <offset>(-0.13,-0.87,-0.1)</offset>
+        <volume>(0.5,0.4,1.05)</volume>
+      </shadowData>
+    </graphicData>
+    <receivesSignals>true</receivesSignals>
+    <altitudeLayer>Building</altitudeLayer>
+    <stealable>false</stealable>
+    <size>(2,2)</size>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <fillPercent>0.4</fillPercent>
+    <tickerType>Normal</tickerType>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <comps>
+      <li Class="CompProperties_Forbiddable"/>
+      <li Class="CompProperties_Explosive">
+        <wickTicks>240</wickTicks>
+        <explosiveRadius>4.9</explosiveRadius>
+        <explosiveDamageType>Bomb</explosiveDamageType>
+      </li>
+      <li Class="CompProperties_Stunnable">
+        <affectedDamageDefs>
+          <li>Stun</li>
+          <li>EMP</li>
+        </affectedDamageDefs>
+        <adaptableDamageDefs>
+          <li>EMP</li>
+        </adaptableDamageDefs>
+      </li>
+      <li Class="CompProperties_DestroyAfterDelay">
+        <delayTicks>120000</delayTicks>
+        <destroyMode>KillFinalize</destroyMode>
+        <countdownLabel>Self-destruct in</countdownLabel>
+      </li>
+	  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
+		<colorFactor>0.75</colorFactor>
+	  </li>
+      <li Class="CompProperties_AmbientSound">
+        <sound>MechTurretBig_Call</sound>
+      </li>
+    </comps>
+	<modExtensions>
+	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+	</modExtensions>
+    <statBases>
+      <MaxHitPoints>260</MaxHitPoints>
+      <Flammability>0</Flammability>
+      <Mass>30</Mass>
+      <ShootingAccuracyTurret>0.9</ShootingAccuracyTurret>
+      <Beauty>-20</Beauty>
+    </statBases>
+    <damageMultipliers>
+      <li>
+        <damageDef>Flame</damageDef>
+        <multiplier>0</multiplier>
+      </li>
+    </damageMultipliers>
+    <building>
+      <combatPower>220</combatPower>
+      <turretGunDef>Artillery_AutoMortar</turretGunDef>
+      <turretBurstWarmupTime>4.0</turretBurstWarmupTime>
+      <turretBurstCooldownTime>80.0</turretBurstCooldownTime>
+      <turretInitialCooldownTime>120</turretInitialCooldownTime>
+      <claimable>false</claimable>
+    </building>
+    <uiIconPath>Things/Building/Security/TurretMortar_MenuIcon</uiIconPath>
+  </ThingDef>
+	  
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_LowShield</defName>
+    <label>pax low-shield</label>
+    <description>A shielding device which projects a momentum repulsor field. Shots can go out, but not in. Self-destructs after 2 hours.\n\nThis one is tuned to low angles, so it will block ground-level projectiles like bullets.\n\nThe unit can be temporarily disabled by EMP attacks, either by shocking the projector unit itself, or using EMP munitions on the shield.</description>
+    <size>(1,1)</size>
+    <receivesSignals>true</receivesSignals>
+    <statBases>
+      <MaxHitPoints>200</MaxHitPoints>
+      <Flammability>0</Flammability>
+      <MarketValue>1000</MarketValue>
+      <WorkToBuild>300</WorkToBuild>
+      <Beauty>-20</Beauty>
+    </statBases>
+    <graphicData>
+      <texPath>Things/Building/Mech/ShieldGeneratorBullet</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <shadowData>
+        <volume>(0.6, 0.4, 0.6)</volume>
+      </shadowData>
+      <damageData>
+        <rect>(0.2, 0.2, 0.6, 0.6)</rect>
+      </damageData>
+    </graphicData>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Small</destroySound>
+      <roofCollapseDamageMultiplier>0.2</roofCollapseDamageMultiplier>
+      <claimable>false</claimable>
+    </building>
+    <repairEffect>ConstructMetal</repairEffect>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <placeWorkers>
+      <li>PlaceWorker_ShowProjectileInterceptorRadius</li>
+    </placeWorkers>
+    <altitudeLayer>Building</altitudeLayer>
+    <pathCost>50</pathCost>
+    <blockWind>true</blockWind>
+    <passability>PassThroughOnly</passability>
+    <fillPercent>1.0</fillPercent>
+    <tickerType>Normal</tickerType>
+    <rotatable>true</rotatable>
+    <selectable>true</selectable>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+    <damageMultipliers>
+      <li>
+        <damageDef>Flame</damageDef>
+        <multiplier>0</multiplier>
+      </li>
+    </damageMultipliers>
+    <comps>
+      <li Class="CompProperties_ProjectileInterceptor">
+        <radius>20</radius>
+        <interceptGroundProjectiles>true</interceptGroundProjectiles>
+        <color>(0.4, 0.4, 0.4)</color>
+        <reactivateEffect>BulletShieldGenerator_Reactivate</reactivateEffect>
+        <activeSound>BulletShield_Ambience</activeSound>
+        <disarmedByEmpForTicks>1080</disarmedByEmpForTicks>
+        <chargeIntervalTicks>600000</chargeIntervalTicks>
+        <chargeDurationTicks>60000</chargeDurationTicks>
+      </li>
+      <li Class="CompProperties_DestroyAfterDelay">
+        <delayTicks>5000</delayTicks>
+        <destroyMode>KillFinalize</destroyMode>
+        <countdownLabel>Self-destruct in</countdownLabel>
+      </li>
+	  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
+		<colorFactor>0.75</colorFactor>
+	  </li>
+    </comps>
+	<modExtensions>
+	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+	</modExtensions>
+  </ThingDef>
+  
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_HighShield</defName>
+    <label>pax high-shield</label>
+    <description>A shielding device which projects a momentum repulsor field. Shots can go out, but not in. Self-destructs after 1 day.\n\nThis one is tuned to high angles, so it will block mortar rounds.\n\nThe unit can be temporarily disabled by EMP attacks, either by shocking the projector unit itself, or using EMP munitions on the shield.</description>
+    <size>(1,1)</size>
+    <receivesSignals>true</receivesSignals>
+    <statBases>
+      <MaxHitPoints>200</MaxHitPoints>
+      <Flammability>0</Flammability>
+      <MarketValue>1000</MarketValue>
+      <WorkToBuild>300</WorkToBuild>
+      <Beauty>-20</Beauty>
+    </statBases>
+    <graphicData>
+      <texPath>Things/Building/Mech/ShieldGeneratorBullet</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <shadowData>
+        <volume>(0.6, 0.4, 0.6)</volume>
+      </shadowData>
+      <damageData>
+        <rect>(0.2, 0.2, 0.6, 0.6)</rect>
+      </damageData>
+    </graphicData>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Small</destroySound>
+      <roofCollapseDamageMultiplier>0.2</roofCollapseDamageMultiplier>
+      <claimable>false</claimable>
+    </building>
+    <repairEffect>ConstructMetal</repairEffect>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <placeWorkers>
+      <li>PlaceWorker_ShowProjectileInterceptorRadius</li>
+    </placeWorkers>
+    <altitudeLayer>Building</altitudeLayer>
+    <pathCost>50</pathCost>
+    <blockWind>true</blockWind>
+    <passability>PassThroughOnly</passability>
+    <fillPercent>1.0</fillPercent>
+    <tickerType>Normal</tickerType>
+    <rotatable>true</rotatable>
+    <selectable>true</selectable>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+    <damageMultipliers>
+      <li>
+        <damageDef>Flame</damageDef>
+        <multiplier>0</multiplier>
+      </li>
+    </damageMultipliers>
+    <comps>
+      <li Class="CompProperties_ProjectileInterceptor">
+        <radius>20</radius>
+        <interceptAirProjectiles>true</interceptAirProjectiles>
+        <color>(0.4, 0.4, 0.4)</color>
+        <reactivateEffect>BulletShieldGenerator_Reactivate</reactivateEffect>
+        <activeSound>BulletShield_Ambience</activeSound>
+        <disarmedByEmpForTicks>1080</disarmedByEmpForTicks>
+        <chargeIntervalTicks>600000</chargeIntervalTicks>
+        <chargeDurationTicks>60000</chargeDurationTicks>
+      </li>
+      <li Class="CompProperties_DestroyAfterDelay">
+        <delayTicks>60000</delayTicks>
+        <destroyMode>KillFinalize</destroyMode>
+        <countdownLabel>Self-destruct in</countdownLabel>
+      </li>
+	  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
+		<colorFactor>0.75</colorFactor>
+	  </li>
+    </comps>
+	<modExtensions>
+	  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+	</modExtensions>
+  </ThingDef>
+  
+  
+	  <ThingDef ParentName="BuildingBase" MayRequire="GoGaTio.LostFactoryMechanoids">
+		<defName>HVMP_ChainTurret</defName>
+		<label>pax chain turret</label>
+		<description>A self-powered turret mounted with a charge blaster. It cannot sense targets at very short ranges. Self-destructs after 2 days.</description>
+		<thingClass>Building_TurretGun</thingClass>
+		<drawerType>MapMeshAndRealTime</drawerType>
+		<graphicData>
+		  <texPath>Things/Building/Mech/TurretMechLarge_Base</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		  <drawSize>(2, 2)</drawSize>
+		  <drawOffset>(0,0,-0.16)</drawOffset>
+		  <damageData>
+			<rect>(0.3,0.3,1.4,1.4)</rect>
+		  </damageData>
+		  <shadowData>
+			<volume>(1.5,0.35,1.4)</volume>
+			<offset>(0,0,-0.05)</offset>
+		  </shadowData>
+		</graphicData>
+		<receivesSignals>true</receivesSignals>
+		<altitudeLayer>Building</altitudeLayer>
+		<stealable>false</stealable>
+		<rotatable>true</rotatable>
+		<size>(2,2)</size>
+		<statBases>
+		  <MaxHitPoints>180</MaxHitPoints>
+		  <Flammability>0</Flammability>
+		  <Mass>100</Mass>
+		  <ShootingAccuracyTurret>0.96</ShootingAccuracyTurret>
+		  <Beauty>-20</Beauty>
+		</statBases>
+		<damageMultipliers>
+		  <li>
+			<damageDef>Flame</damageDef>
+			<multiplier>0</multiplier>
+		  </li>
+		</damageMultipliers>
+		<tickerType>Normal</tickerType>
+		<comps>
+		  <li Class="CompProperties_Explosive">
+			<wickTicks>240</wickTicks>
+			<explosiveRadius>5.9</explosiveRadius>
+			<explosiveDamageType>Bomb</explosiveDamageType>
+			<chanceNeverExplodeFromDamage>0.5</chanceNeverExplodeFromDamage>
+		  </li>
+		  <li Class="CompProperties_Stunnable">
+			<affectedDamageDefs>
+			  <li>Stun</li>
+			  <li>EMP</li>
+			</affectedDamageDefs>
+			<adaptableDamageDefs>
+			  <li>EMP</li>
+			</adaptableDamageDefs>
+		  </li>
+		  <li Class="CompProperties_DestroyAfterDelay">
+			<delayTicks>120000</delayTicks>
+			<destroyMode>KillFinalize</destroyMode>
+			<countdownLabel>Self-destruct in</countdownLabel>
+		  </li>
+		  <li Class="HautsPermits.CompProperties_FactionColoredTeamJimmy">
+			<colorFactor>0.75</colorFactor>
+		  </li>
+		  <li Class="CompProperties_AmbientSound">
+			<sound>MechTurretBig_Call</sound>
+		  </li>
+		</comps>
+		<modExtensions>
+		  <li Class="HautsPermits.HVMP_ItsOkToHarmThis" />
+		</modExtensions>
+		<passability>PassThroughOnly</passability>
+		<pathCost>50</pathCost>
+		<fillPercent>0.5</fillPercent>
+		<hasTooltip>true</hasTooltip>
+		<terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+		<building>
+		  <combatPower>250</combatPower>
+		  <ai_combatDangerous>true</ai_combatDangerous>
+		  <turretGunDef>LFM_Gun_ChainCannonTurret</turretGunDef>
+		  <turretBurstCooldownTime>5.5</turretBurstCooldownTime>
+		  <turretTopDrawSize>1.75</turretTopDrawSize>
+		  <turretTopOffset>(0, 0.05)</turretTopOffset>
+		</building>
+		<uiIconScale>0.95</uiIconScale>
+	  </ThingDef>
+  
+</Defs>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <TipSetDef>
+    <defName>HVMP_Tipset</defName>
+    <tips>
+      <li TKey="HVMP_CommsConsole1">If you want to gain standing with Branch factions faster, contact them on the comms console. You can donate certain goods for standing, or ask for new quests.</li>
+      <li TKey="HVMP_CommsConsole2">Branch permits' cooldowns can be refreshed by spending goodwill at the comms console. Since this affects all permits belonging to that Branch faction, it's more efficient for colonists with more permits.</li>
+      <li TKey="HVMP_CuttingTies">Want to stop receiving quests from a Branch faction? Accept their Cutting Ties quest in the quest tab. This will make them hostile - but they don't send raids, so the only consequence of hostility is an inability to use their permits.</li>
+      <li TKey="HVMP_CommerceDesertion">The Desertion Bribe permit from the Commerce Branch forces a single sapient foe to flee. Use it on powerful enemies, such as rocket launcher wielders.</li>
+      <li TKey="HVMP_PaxTurrets">Certain permits from the Pax Branch summon defensive turrets. Like regular turrets, they can explode when destroyed - and since enemies attack them, it might be best to place them very close to your foes.</li>
+      <li TKey="HVMP_RoverRescues">The Find Rescuee permit from the Rover Branch locates potential new recruits for the colony. Unlike regular rescuees, you can see all of their traits, skills, and health conditions through the quest tab.</li>
+    </tips>
+  </TipSetDef>
+
+</Defs>

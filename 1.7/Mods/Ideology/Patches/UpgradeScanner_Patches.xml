@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/ThingDef[defName="GroundPenetratingScanner"]/comps</xpath>
+		<value>
+			<li Class="HautsPermits_Ideology.CompProperties_UpgradeableScanner"/>
+		</value>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/ThingDef[defName="LongRangeMineralScanner"]/comps</xpath>
+		<value>
+			<li Class="HautsPermits_Ideology.CompProperties_UpgradeableScanner"/>
+		</value>
+	</Operation>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+		  <li>Asteroid Mineral Scanner</li>
+		</mods>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/ThingDef[defName="AsteroidMineralScanner"]/comps</xpath>
+			<value>
+				<li Class="HautsPermits_Ideology.CompProperties_UpgradeableScanner"/>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+		  <li>Complementary Odyssey</li>
+		</mods>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/ThingDef[defName="CO_TerrainScanner"]/comps</xpath>
+			<value>
+				<li Class="HautsPermits_Ideology.CompProperties_UpgradeableScanner"/>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+		  <li>Mythical ores</li>
+		</mods>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/ThingDef[defName="Bart_DeepScanner"]/comps</xpath>
+			<value>
+				<li Class="HautsPermits_Ideology.CompProperties_UpgradeableScanner"/>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+		  <li>Vanilla Gravship Expanded - Chapter 1</li>
+		</mods>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/ThingDef[defName="VGE_GravshipScannerCluster"]/comps</xpath>
+			<value>
+				<li Class="HautsPermits_Ideology.CompProperties_UpgradeableScanner"/>
+			</value>
+		</match>
+	</Operation>
+</Patch>

@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--Ghouls that get downed and then regenerate just... stick around indefinitely. We need them to leave. This doesn't work most of the time, but "sometimes" is better than "FUCKING NEVER GET OFF OF MY LAWN"-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_KickForAFK</defName>
+	<label>eviction notice</label>
+	<description>Get out of my (temperate) swamp!</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+	    <becomeVisible>false</becomeVisible>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HautsPermits.HediffCompProperties_GetOffMyMap">
+		<minDuration>120000</minDuration><!--doesn't start trying to get them to leave until 2d has elapsed-->
+		<periodicity>2500</periodicity>
+	  </li>
+	</comps>
+  </HediffDef>
+  <!--Pax hunter drones need to start on full battery-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_LiveDamnYou</defName>
+	<label>by the power of gaming</label>
+	<description>my daughter will fucking live</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<isBad>false</isBad>
+	<stages>
+	  <li>
+	    <becomeVisible>false</becomeVisible>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HautsPermits.HediffCompProperties_LiveDamnYou" />
+	</comps>
+  </HediffDef>
+  
+  <!--Pawns given to you for safekeeping get this temporary implant so that you can receive them in any conditions-->
+  <HediffDef ParentName="ImplantHediffBase">
+    <defName>HVMP_HostileEnvironmentFilm</defName>
+    <label>hostile environment film</label>
+	<hediffClass>HediffWithComps</hediffClass>
+    <description>A biodegradable ultratech film that protects against all manner of environmental conditions, including temperature extremes, toxic fallout, and vacuum. It breaks down after a while.</description>
+	<initialSeverity>5</initialSeverity>
+	<maxSeverity>5</maxSeverity>
+    <stages>
+      <li>
+		<statOffsets>
+		  <ToxicEnvironmentResistance>2</ToxicEnvironmentResistance>
+		  <VacuumResistance MayRequire="Ludeon.RimWorld.Odyssey">2</VacuumResistance>
+		  <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+		  <ComfyTemperatureMax>100</ComfyTemperatureMax>
+		  <P42_AllergicSensitivity MayRequire="phil42.allergies">-2</P42_AllergicSensitivity>
+		  <Mashed_Ashlands_AshResistance MayRequire="SirMashedPotato.Ashlands">2</Mashed_Ashlands_AshResistance>
+		  <Radiation MayRequire="Dubwise.Rimatomics">-2</Radiation>
+		  <SmokeSensitivity MayRequire="CETeam.CombatExtended">-1</SmokeSensitivity>
+		  <HeatNullNaniteResistance MayRequire="Snow.KraltechIndustries.Rebalanced">1</HeatNullNaniteResistance>
+		  <ColdNullNaniteResistance MayRequire="Snow.KraltechIndustries.Rebalanced">1</ColdNullNaniteResistance>
+		  <AntiOrgToxinResistance MayRequire="Snow.KraltechIndustries.Rebalanced">1</AntiOrgToxinResistance>
+		  <RadiationResistance MayRequire="Snow.KraltechIndustries.Rebalanced">1</RadiationResistance>
+		  <RageVirusResistance MayRequire="Snow.KraltechIndustries.Rebalanced">1</RageVirusResistance>
+		  <NecrotionResistance MayRequire="zal.taofc">1</NecrotionResistance>
+		</statOffsets>
+		<statFactors>
+		  <IncomingDamageFactor>0.5</IncomingDamageFactor>
+		  <RimScent_SmellSensitivity MayRequire="reo.RimScent">0</RimScent_SmellSensitivity>
+		</statFactors>
+        <totalBleedFactor>0.025</totalBleedFactor>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-1</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  
+  <!--Pax hediffs-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CombatAssistProgram</defName>
+    <label>pax combat assist</label>
+    <description>A radio link to an automated live combat assistance program.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.9333,0.5961,0.5961)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statOffsets>
+		  <ShootingAccuracyPawn>3</ShootingAccuracyPawn>
+		  <AimingAccuracy MayRequire="CETeam.CombatExtended">0.1</AimingAccuracy>
+		  <MeleeHitChance>3</MeleeHitChance>
+		  <MeleeDodgeChance>3</MeleeDodgeChance>
+		  <VEF_VerbRangeFactor>0.2</VEF_VerbRangeFactor>
+		  <Suppressability MayRequire="CETeam.CombatExtended">-0.5</Suppressability>
+		</statOffsets>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-3</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_ScalpelTracker</defName>
+    <label>Call down the thunder</label>
+    <description>and reap the whirldwind (sic).</description>
+    <hediffClass>HautsPermits.ScalpelTracker</hediffClass>
+    <stages>
+      <li>
+		<becomeVisible>false</becomeVisible>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HautsPermits.HediffCompProperties_BoomHeadshot">
+        <damageType>Bomb</damageType>
+		<damageAmount>75</damageAmount>
+		<armorPen>1</armorPen>
+		<soundDef>Shot_TurretSniper</soundDef>
+      </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>60</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_BShield</defName>
+	<hediffClass>HautsFramework.Hediff_PreDamageModification</hediffClass>
+	<label>blackbody shield</label>
+	<description>A projectile-repulsion field generated by a very powerful one-use shield generator. Its own energy depletes over time, and it inhibits the user's movement and sight, but it can block any kind of damage and resists EMPs.</description>
+	<initialSeverity>0.001</initialSeverity>
+	<stages>
+	  <li>
+		<capMods>
+          <li>
+            <capacity>Moving</capacity>
+            <postFactor>0.85</postFactor>
+          </li>
+          <li>
+            <capacity>Sight</capacity>
+            <postFactor>0.85</postFactor>
+          </li>
+          <li>
+            <capacity>Hearing</capacity>
+            <postFactor>0.85</postFactor>
+          </li>
+        </capMods>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HautsFramework.HediffCompProperties_DamageNegationShield">
+		<chance>1</chance>
+		<severityOnHit>-1</severityOnHit>
+		<minSeverityToWork>0.001</minSeverityToWork>
+		<damageScalesSeverityLoss>true</damageScalesSeverityLoss>
+		<soundOnBlock>EnergyShield_AbsorbDamage</soundOnBlock>
+		<fleckOnBlock>ExplosionFlash</fleckOnBlock>
+		<destroyIfOverwhelmed>true</destroyIfOverwhelmed><!--once depleted, it's gone-->
+		<energyOnReset>400</energyOnReset><!--however, it should start at full strength-->
+		<baseEnergyRechargeRate>-1</baseEnergyRechargeRate>
+		<baseMaxEnergy>400</baseMaxEnergy>
+		<maxEnergyScalar>VEF_EnergyShieldEnergyMaxFactor</maxEnergyScalar>
+		<breakEffect>Shield_Break</breakEffect>
+		<reactsToShieldBypassers>true</reactsToShieldBypassers>
+		<visualRange>1.2~1.5</visualRange>
+		<priority>9995</priority>
+		<reactsToOther>true</reactsToOther>
+		<shouldUseIncomingDamageFactor>false</shouldUseIncomingDamageFactor>
+		<noCostIfInvincible>false</noCostIfInvincible>
+	  </li>
+	  <li Class="HautsFramework.HediffCompProperties_MoteConditionalShield">
+		<mote>HVMP_BShieldGraphic</mote>
+		<scale>1.25</scale>
+		<scaleWithBodySize>true</scaleWithBodySize>
+		<minDrawFactor>1.3</minDrawFactor>
+		<maxDrawFactor>1.6</maxDrawFactor>
+		<randomRotation>true</randomRotation>
+		<validRange>0.001~9999999</validRange>
+	  </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	</comps>
+  </HediffDef>
+	  <ThingDef ParentName="MoteGlowDistorted">
+		<defName>HVMP_BShieldGraphic</defName>
+		<thingClass>MoteAttached</thingClass>
+		<altitudeLayer>Projectile</altitudeLayer>
+		<mote>
+		  <fadeInTime>0.001</fadeInTime>
+		  <fadeOutTime>0.001</fadeOutTime>
+		  <solidTime>9999</solidTime>
+		  <!--<realTime>true</realTime>-->
+		  <needsMaintenance>true</needsMaintenance>
+		</mote>
+		<graphicData>
+		  <graphicClass>Graphic_Mote</graphicClass>
+		  <texPath>Other/ForceField</texPath>
+		  <shaderType>Transparent</shaderType>
+		  <color>(1,0.65,0.68,1)</color>
+		  <drawSize>1</drawSize>
+		  <shaderParameters>
+			<_DistortionTex>/Other/Ripples</_DistortionTex>
+			<_distortionIntensity>0.7</_distortionIntensity>
+			<_DistortionScale>0.5</_DistortionScale>
+			<_distortionScrollSpeed>(0.17, 0.17, 0.0)</_distortionScrollSpeed>
+		  </shaderParameters>
+		</graphicData>
+	  </ThingDef>
+  
+  <!--Rover caravan buffs-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CaravanForageAura</defName>
+    <label>rover route assist (foraging)</label>
+    <description>While on a caravan, everyone in the caravan forages twice the amount of food.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <comps>
+      <li Class="HautsPermits.HediffCompProperties_CaravanHediffAura">
+        <hediffs>
+		  <li>HVMP_CaravanForage</li>
+		</hediffs>
+		<affectsSelf>true</affectsSelf>
+		<affectsAllies>true</affectsAllies>
+		<affectsHostiles>true</affectsHostiles>
+      </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+    </comps>
+  </HediffDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_CaravanForage</defName>
+		<label>foraging route assist</label>
+		<description>Information on best spots and practices for foraging, courtesy of real-time advisement from Rover Branch navigational services.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(1,1,1)</defaultLabelColor>
+		<initialSeverity>0.1001</initialSeverity>
+		<maxSeverity>0.1001</maxSeverity>
+		<stages>
+		  <li>
+			<statFactors>
+			  <ForagedNutritionPerDay>2</ForagedNutritionPerDay>
+			</statFactors>
+		  </li>
+		</stages>
+		<comps>
+		  <li Class="HediffCompProperties_SeverityPerDay">
+			<severityPerDay>-24</severityPerDay>
+		  </li>
+		  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+		</comps>
+	  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_CaravanPilfering</defName>
+	<label>rover route assist (burglary)</label>
+	<description>While on a caravan, this character's pilfering stealth is increased.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<minSeverity>0.001</minSeverity>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+	<stages>
+	  <li>
+		<label>inactive</label>
+	  </li>
+	  <li>
+		<minSeverity>1</minSeverity>
+		<statOffsets>
+		  <Hauts_PilferingStealth>0.25</Hauts_PilferingStealth>
+		</statOffsets>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HautsFramework.HediffCompProperties_OnCaravanSeverity">
+		<whileOnCaravan>1</whileOnCaravan>
+		<whileInMap>0.001</whileInMap>
+	  </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>300000</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	</comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CaravanComfortAura</defName>
+    <label>rover route assist (comfort)</label>
+    <description>While on a caravan, everyone in the caravan rests easier, feels better, and gets bored slower.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <comps>
+      <li Class="HautsPermits.HediffCompProperties_CaravanHediffAura">
+        <hediffs>
+		  <li>HVMP_CaravanComfort</li>
+		</hediffs>
+		<affectsSelf>true</affectsSelf>
+		<affectsAllies>true</affectsAllies>
+		<affectsHostiles>true</affectsHostiles>
+      </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+    </comps>
+  </HediffDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_CaravanComfort</defName>
+		<label>comforting route assist</label>
+		<description>Access to a plethora of radio chanenls for the road, courtesy of Rover Branch navigational services.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(1,1,1)</defaultLabelColor>
+		<initialSeverity>0.1001</initialSeverity>
+		<maxSeverity>0.1001</maxSeverity>
+		<stages>
+		  <li>
+			<statFactors>
+			  <JoyFallRateFactor>0</JoyFallRateFactor>
+			  <RestRateMultiplier>1.25</RestRateMultiplier>
+			</statFactors>
+		  </li>
+		</stages>
+		<comps>
+		  <li Class="HediffCompProperties_SeverityPerDay">
+			<severityPerDay>-24</severityPerDay>
+		  </li>
+		  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+		</comps>
+	  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_CaravanStealthAura</defName>
+    <label>rover route assist (stealth)</label>
+    <description>While on a caravan, its visibility is reduced to a twentieth its normal value.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <comps>
+      <li Class="HautsPermits.HediffCompProperties_CaravanHediffAura">
+        <hediffs>
+		  <li>HVMP_CaravanStealth</li>
+		</hediffs>
+		<affectsSelf>true</affectsSelf>
+		<affectsAllies>true</affectsAllies>
+		<affectsHostiles>true</affectsHostiles>
+      </li>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+    </comps>
+  </HediffDef>
+	  <HediffDef ParentName="HVT_TraitHediffBase">
+		<defName>HVMP_CaravanStealth</defName>
+		<label>concealing route assist</label>
+		<description>Following a route optimized for evading detection, courtesy of real-time advisement from Rover Branch navigational services.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<defaultLabelColor>(1,1,1)</defaultLabelColor>
+		<initialSeverity>0.1001</initialSeverity>
+		<maxSeverity>0.1001</maxSeverity>
+		<stages>
+		  <li>
+			<statOffsets>
+			  <Hauts_PersonalCaravanVisibilityFactor>-0.95</Hauts_PersonalCaravanVisibilityFactor>
+			</statOffsets>
+		  </li>
+		</stages>
+		<comps>
+		  <li Class="HediffCompProperties_SeverityPerDay">
+			<severityPerDay>-24</severityPerDay>
+		  </li>
+		  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+		</comps>
+	  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_CaravanSpeed</defName>
+	<label>rover route assist (speed)</label>
+	<description>While on a caravan, this character's speed is increased.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+	<defaultLabelColor>(1,1,1)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+	<stages>
+	  <li>
+		<statOffsets>
+		  <CaravanBonusSpeedFactor>0.2</CaravanBonusSpeedFactor>
+		</statOffsets>
+	  </li>
+	</stages>
+	<comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-0.2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	</comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase" MayRequire="Ludeon.RimWorld.Odyssey">
+    <defName>HVMP_PilotAssistProgram</defName>
+    <label>rover pilot assist</label>
+    <description>A radio link to an automated aerospace piloting program.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(150,139,114)</defaultLabelColor>
+	<initialSeverity>1</initialSeverity>
+	<maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+		<statOffsets>
+		  <PilotingAbility>0.2</PilotingAbility>
+		</statOffsets>
+      </li>
+    </stages>
+    <comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-3</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_SkipnetAuthorization</defName>
+	<label>skipnet authorization</label>
+    <defaultLabelColor>(0.6, 0.6, 1.0)</defaultLabelColor>
+	<description>Limited-use authorization for the Enterprise's teleportation network. Enables the use of Netskip up to four times, or Emergency Personal Netskip up to once.</description>
+	<initialSeverity>4</initialSeverity>
+	<maxSeverity>4</maxSeverity>
+	<stages>
+	  <li>
+		<label>1 use</label>
+	  </li>
+	  <li>
+		<minSeverity>1.001</minSeverity>
+		<label>2 uses</label>
+	  </li>
+	  <li>
+		<minSeverity>2.001</minSeverity>
+		<label>3 uses</label>
+	  </li>
+	  <li>
+		<minSeverity>3.001</minSeverity>
+		<label>4 uses</label>
+	  </li>
+	</stages>
+    <abilities>
+      <li>HVMP_Skipnet</li>
+      <li>HVMP_SelfSkipnet</li>
+    </abilities>
+  </HediffDef>
+  
+</Defs>

@@ -1,0 +1,3495 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--commerce: fortification-->
+  <QuestScriptDef>
+    <defName>HVMP_CommerceFortification</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questDescriptionAndNameRules>
+      <rulesStrings>
+        <li>lodgersLabel->trader</li>
+        <li>lodgersLabelPlural->[asker_faction_pawnsPlural]</li>
+      </rulesStrings>
+    </questDescriptionAndNameRules>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->shelter for [lodgerIndef]</li>
+        <li>questName->hospitality for [lodgerIndef]</li>
+        <li>questName->hosting [lodgerIndef]</li>
+        <li>questName->recuperation for [lodgerIndef]</li>
+        <li>questName->[lodgerIndef] needing help</li>
+        <li>questName(generateThreats==true,priority=1)->protecting [lodgerIndef]</li>
+        <li>questName(generateThreats==true,priority=1)->safeguarding [lodgerIndef]</li>
+        <li>questName(generateThreats==true,priority=1)->security for [lodgerIndef]</li>
+        <li>questName(generateThreats==true,priority=1)->saving [lodgerIndef]</li>
+        <li>questName(generateThreats==true,priority=1)->salvation for [lodgerIndef]</li>
+		
+		<li>lodgerIndef(lodgersCount==1)->[lodgers0_label]</li>
+        <li>lodgerIndef(lodgersCount>=1)->a [lodgers0_title]</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <include>
+        <li>QuestHospitalityCommon</li>
+      </include>
+      <rulesStrings>
+        <!-- General use -->
+        <li>lodgersDef(lodgersCount==1)->[lodgers0_nameDef]</li>
+        <li>lodgersDef(lodgersCount>=2)->the [lodgersLabelPlural]</li>
+        <li>joinerEnding(priority=1)->[mutatorSuffix]</li> <!-- disable joinerEnding since it's just noise, but I don't want to delete it everywhere yet in case we bring it back -->
+        <li>joinerEnding->You'll be able to direct [lodgersDef] the same way you direct your own colonists.[specialNeedsExplanation][mutatorSuffix]</li>
+        <li>specialNeedsExplanation(asker_royalInCurrentFaction==True,priority=1)-> You'll need to satisfy any special royal needs the [lodgersLabelPlural] may have.</li>
+        <li>specialNeedsExplanation-></li>
+		<li>mutatorSuffix(lodgersCount==1)->[mutator_IDHTGU_info_singular][mutator_R2R_info_singular][mutator_WBY_info_singular]</li>
+		<li>mutatorSuffix(lodgersCount>=2)->[mutator_IDHTGU_info_plural][mutator_R2R_info_plural][mutator_WBY_info_plural]</li>
+        <li>theirHisHer(lodgersCount==1)->[lodgers0_possessive]</li>
+        <li>theirHisHer(lodgersCount>=2)->their</li>
+        <li>lodgersPronoun(lodgersCount==1)->[lodgers0_pronoun]</li>
+        <li>lodgersPronoun(lodgersCount>=2)->they</li>
+        <li>lodgersWasWere(lodgersCount==1)->was</li>
+        <li>lodgersWasWere(lodgersCount>=2)->were</li>
+        <li>appreciateAppreciates(lodgersCount==1)->appreciates</li>
+        <li>appreciateAppreciates(lodgersCount>=2)->appreciate</li>
+        <!-- Asker is faction leader, single joiner -->
+        <li>questDescription(generateThreats==false,lodgersCount==1,priority=1)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name] is requesting that you shelter a trader whose caravan was lost to [hospitalityReason], [lodgers0_nameFull], for [shuttleDelayTicks_duration]. [allLodgerInfo]\n\n[joinerEnding]</li>
+        <li>questDescription(generateThreats==true,lodgersCount==1,priority=1)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name] is requesting that you shelter a trader whose caravan was lost to [hospitalityReason], [lodgers0_nameDef], for [shuttleDelayTicks_duration]. [lodgers0_pronoun] is being pursued by hostiles.\n\n[threatDescriptionParagraph][allLodgerInfo]\n\n[joinerEnding]</li>
+        <!-- Asker is faction leader, multiple joiners -->
+        <li>questDescription(asker_factionLeader==True,lodgersCount>=2,generateThreats==false,priority=1)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], is requesting that you shelter [lodgersCount] traders whose caravan was lost to [hospitalityReason] for [shuttleDelayTicks_duration]. [allLodgerInfo]\n\n[joinerEnding]</li>
+        <li>questDescription(asker_factionLeader==True,lodgersCount>=2,generateThreats==true,priority=1)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], is requesting that you shelter [lodgersCount] traders whose caravan was lost to [hospitalityReason] for [shuttleDelayTicks_duration]. They are being pursued by hostiles.\n\n[threatDescriptionParagraph][allLodgerInfo]\n\n[joinerEnding]</li>
+		
+		<li>hospitalityReason(p=3)->a band of raiders</li>
+		<li>hospitalityReason->a series of unfortunate events</li>
+		<li>hospitalityReason->a freak flashstorm</li>
+		<li>hospitalityReason->random orbital bombardment</li>
+		<li>hospitalityReason->an angry insectoid swarm</li>
+		<li>hospitalityReason->betrayal by a formerly friendly settlement</li>
+		<li>hospitalityReason->a deadly heat wave</li>
+		<li>hospitalityReason->hidden landmines</li>
+		<li>hospitalityReason->a meteor strike</li>
+		<li>hospitalityReason->manhunting thrumbos</li>
+		<li>hospitalityReason->manhunting tortoises</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits.QuestNode_CommerceFortification">
+      <storePawnKindAs>lodgersPawnKind</storePawnKindAs>
+	  <pawnKinds>
+		<!--<li>Grenadier_Destructive</li><li>Mercenary_Heavy</li><li>Mercenary_Slasher</li><li>Villager</li><li>Town_Guard</li><li>Refugee</li>-->
+		<li>Town_Trader</li>
+	  </pawnKinds>
+	  <nodes>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+          <parms>
+            <pointsFactorTwoStar>1</pointsFactorTwoStar>
+            <pointsFactorThreeStar>1</pointsFactorThreeStar>
+            <selectionWeightOneStar>0.5</selectionWeightOneStar>
+            <selectionWeightTwoStar>0.3</selectionWeightTwoStar>
+            <selectionWeightThreeStar>0.2</selectionWeightThreeStar>
+            <peacefulChallengeRating>1</peacefulChallengeRating> <!-- Restrict to 1 star rating for peaceful difficulty since 1-star quests are non-violent -->
+            <minPointsTwoStar>250</minPointsTwoStar>
+            <minPointsThreeStar>350</minPointsThreeStar>
+          </parms>
+        </li>
+		<li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		</li>
+        <!-- Decide random lodger conditions -->
+        <li Class="QuestNode_SubScript">
+          <def>Util_DecideRandomLodgerConditions</def>
+          <parms>
+            <noConditionsWeight>0</noConditionsWeight>
+            <noWorkWeight>1</noWorkWeight>
+            <paralysisWeight>0</paralysisWeight>
+            <bloodRotWeight>0</bloodRotWeight>
+            <bloodRotAndParalysisWeight>0</bloodRotAndParalysisWeight>
+            <moodThresholdWeight>0</moodThresholdWeight>
+          </parms>
+        </li>
+	    <li Class="QuestNode_Set">
+		  <name>lodgersHaveMoodThreshold</name>
+		  <value>true</value>  
+	    </li>
+		<li Class="QuestNode_Set">
+		  <name>lodgersWillNotWork</name>
+		  <value>true</value>
+		</li>
+		<li Class="QuestNode_GetPawnCountByPointsWeighted">
+          <storeAs>lodgersCount</storeAs>
+          <challengeRating>$challengeRating</challengeRating>
+          <maxCountOneStar>20</maxCountOneStar>
+          <maxCountTwoStar>20</maxCountTwoStar>
+          <maxCountThreeStar>20</maxCountThreeStar>
+          <roundRandom>True</roundRandom>
+          <pointsCurve>
+            <points>
+              <li>(100, 1)</li>
+              <li>(200, 2)</li>
+              <li>(1000, 8)</li>
+              <li>(2000, 12)</li>
+              <li>(4000, 20)</li>
+            </points>
+          </pointsCurve>
+          <chancesCurve>
+            <points>
+              <li>(0, 0)</li>
+              <li>(1, 7)</li>
+              <li>(2, 1)</li>
+              <li>(5, 0.75)</li>
+              <li>(10, 0.3)</li>
+              <li>(20, 0.1)</li>
+            </points>
+          </chancesCurve>
+        </li>
+        <li Class="QuestNode_IsNull">
+          <value>$asker</value>
+          <elseNode Class="QuestNode_GetFactionOf">
+            <thing>$asker</thing>
+            <storeAs>askerFaction</storeAs>
+          </elseNode>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>lodgersCountToGenerate</name>
+          <value>$lodgersCount</value>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>lodgersCountMinusOne</name>
+          <value>$($lodgersCount-1)</value>
+        </li>
+        <li Class="QuestNode_LoopCount">
+          <loopCount>$lodgersCountToGenerate</loopCount>
+          <node Class="QuestNode_GeneratePawn">
+            <kindDef>$lodgersPawnKind</kindDef>
+            <faction>$askerFaction</faction>
+            <addToList>lodgers</addToList>
+            <allowAddictions>false</allowAddictions>
+            <biocodeWeaponChance>1</biocodeWeaponChance>
+            <biocodeApparelChance>1</biocodeApparelChance>
+            <allowPregnant>false</allowPregnant>
+            <isChild>false</isChild>
+            <giveDependentDrugs>true</giveDependentDrugs>
+          </node>
+        </li>
+        <li Class="QuestNode_ExtraFaction">
+          <factionOf>$asker</factionOf>
+          <pawns>$lodgers</pawns>
+          <factionType>HomeFaction</factionType>
+          <inSignalsRemovePawn>
+            <li>lodgers.RanWild</li>
+            <li>lodgers.BecameMutant</li>
+          </inSignalsRemovePawn>
+        </li>
+        <li Class="QuestNode_SetAllApparelLocked">
+          <pawns>$lodgers</pawns>
+        </li>
+        <li Class="HautsPermits.QuestNode_GiveHostileEnvironmentFilm">
+          <pawns>$lodgers</pawns>
+        </li>
+        <li Class="QuestNode_SubScript">
+          <def>Util_ApplyLodgerConditions</def>
+        </li>
+        <li Class="QuestNode_SubScript">
+          <def>HVMP_Hospitality_Util_Worker</def>
+        </li>
+        <li Class="HautsPermits.QuestNode_Fort_AllThreeMutators">
+          <pawns>$lodgers</pawns>
+		  <IDHTGU_nodes>
+			<li Class="QuestNode_GetRandomInRangeInt">
+			  <storeAs>raidCount</storeAs>
+			  <range>1</range>
+			</li>
+			<li Class="QuestNode_Set">
+			  <name>firstRaidDelayTicks</name>
+			  <value>$(roundToTicksRough(randFloat(0.5, 0.95)*$shuttleDelayTicks))</value>
+			</li>
+			<li Class="QuestNode_GetFaction">
+			  <allowEnemy>true</allowEnemy>
+			  <mustBePermanentEnemy>true</mustBePermanentEnemy>
+			  <storeAs>enemyFaction</storeAs>
+			</li>
+			<li Class="QuestNode_Subscript">
+			  <def>Util_RaidDelayRepeatable</def>
+			  <parms>
+				<points>$(1.25*$points)</points>
+			  </parms>
+			</li>
+		  </IDHTGU_nodes>
+		  <IDHTGU_description_singular>\nEnemies of [lodgers0_nameDef] are still on [lodgers0_possessive] trail. They will send a tougher-than-normal raid against you which will strike sometime during [lodgers0_possessive] stay, but the raid will be called off if you fail the quest before then.</IDHTGU_description_singular>
+		  <IDHTGU_description_plural>\nThe traders' enemies are still on their trail. They will send a tougher-than-normal raid against you which will strike sometime during [lodgers0_possessive] stay, but the raid will be called off if you fail the quest before then.</IDHTGU_description_plural>
+		  <R2R_hediff>HVMP_LifeOfLuxury</R2R_hediff>
+		  <R2R_description_singular>\nUsed to luxurious standards, [lodgers0_nameDef] will be dissatisfied with your colony's living conditions.</R2R_description_singular>
+		  <R2R_description_plural>\nUsed to luxurious standards, the traders will be dissatisfied with your colony's living conditions.</R2R_description_plural>
+		  <WBY_hediff>HVMP_BugPheromones</WBY_hediff>
+		  <WBY_description_singular>\nA routine scan conducted by the [asker_faction_name] has revealed that [lodgers0_nameDef] is infected with an insectoid-sourced bloodborne pathogen. Upon reaching a sufficient concentration, they will cause [lodgers0_possessive] body to produce infestation-attracting pheromones. While the pathogen can be suppressed by regular medical treatment, only the gradual adaptation of [lodgers0_possessive] immune system will be sufficient to fully clear it out.</WBY_description_singular>
+		  <WBY_description_plural>\nA routine scan conducted by the [asker_faction_name] has revealed that the traders are infected with an insectoid-sourced bloodborne pathogen. Upon reaching a sufficient concentration, these pathogens will cause them to produce infestation-attracting pheromones. While the pathogen can be suppressed by regular medical treatment, only the gradual adaptation of the traders' immune systems will be sufficient to fully clear it out.</WBY_description_plural>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  <QuestScriptDef>
+    <defName>HVMP_Hospitality_Util_Worker</defName>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+        <li Class="QuestNode_GreaterOrEqual">
+          <value1>$challengeRating</value1>
+          <value2>2</value2>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Set">
+                <name>generateThreats</name>
+                <value>true</value>
+              </li>
+              <li Class="QuestNode_Set">
+                <name>helpersChance</name>
+                <value>0</value>
+              </li>
+            </nodes>
+          </node>
+          <elseNode Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Set">
+                <name>generateThreats</name>
+                <value>false</value>    <!-- must define as false for explicit check in text gen -->
+              </li>
+              <li Class="QuestNode_Set">
+                <name>helpersChance</name>
+                <value>0</value>
+              </li>
+              <li Class="QuestNode_Set">
+                <name>shuttleDelayTicks</name>
+                <value>$(roundToTicksRough(randInt(5, 25)*60000))</value> <!-- 5~25 days to shuttle -->
+              </li>
+            </nodes>
+          </elseNode>
+        </li>
+        <li Class="QuestNode_Equal">
+          <value1>$challengeRating</value1>
+          <value2>2</value2>
+          <!-- Random 2-star threat -->
+          <node Class="QuestNode_RandomNode">
+            <nodes>
+              <!-- 1 raid, 5~25 days -->
+              <li Class="QuestNode_Sequence">
+                <nodes>
+                  <li Class="QuestNode_Set">
+                    <name>shuttleDelayTicks</name>
+                    <value>$(roundToTicksRough(randInt(5, 25)*60000))</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatCount</name>
+                    <value>1</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatFactor</name>
+                    <value>1</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatPoints</name>
+                    <value>$($points * $threatFactor / $threatCount)</value>
+                  </li>
+                  <li Class="QuestNode_GetFaction">
+                    <storeAs>enemyFaction</storeAs>
+                    <allowEnemy>true</allowEnemy>
+                    <mustBeHostileToFactionOf>$asker</mustBeHostileToFactionOf>
+                    <mustBePermanentEnemy>true</mustBePermanentEnemy>
+                    <allowedHiddenFactions>Mechanoid</allowedHiddenFactions>
+                  </li>
+                  <li Class="QuestNode_CreateIncidents">
+                    <incidentDef>RaidEnemy</incidentDef>
+                    <randomIncidents>$threatCount</randomIncidents>
+                    <startOffsetTicks>$(2.5 * 60000)</startOffsetTicks>
+                    <duration>$shuttleDelayTicks</duration>
+                    <points>$threatPoints</points>
+                    <faction>$enemyFaction</faction>
+                    <inSignalDisable>ShuttleArrived</inSignalDisable>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatType</name>
+                    <value>Raids</value>
+                  </li>
+                </nodes>
+              </li>
+              <!-- 2 raids, 5~15 days -->
+              <li Class="QuestNode_Sequence">
+                <nodes>
+                  <li Class="QuestNode_Set">
+                    <name>shuttleDelayTicks</name>
+                    <value>$(roundToTicksRough(randInt(5, 15)*60000))</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatCount</name>
+                    <value>2</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatFactor</name>
+                    <value>1</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatPoints</name>
+                    <value>$($points * $threatFactor / $threatCount)</value>
+                  </li>
+                  <li Class="QuestNode_GetFaction">
+                    <storeAs>enemyFaction</storeAs>
+                    <allowEnemy>true</allowEnemy>
+                    <mustBeHostileToFactionOf>$asker</mustBeHostileToFactionOf>
+                    <mustBePermanentEnemy>true</mustBePermanentEnemy>
+                    <allowedHiddenFactions>Mechanoid</allowedHiddenFactions>
+                  </li>
+                  <li Class="QuestNode_CreateIncidents">
+                    <incidentDef>RaidEnemy</incidentDef>
+                    <randomIncidents>$threatCount</randomIncidents>
+                    <startOffsetTicks>$(2.5 * 60000)</startOffsetTicks>
+                    <duration>$shuttleDelayTicks</duration>
+                    <points>$threatPoints</points>
+                    <faction>$enemyFaction</faction>
+                    <inSignalDisable>ShuttleArrived</inSignalDisable>
+                  </li> 
+                  <li Class="QuestNode_Set">
+                    <name>threatType</name>
+                    <value>Raids</value>
+                  </li>
+                </nodes>
+              </li>
+              <!-- 3 raids, 10~25 days -->
+              <li Class="QuestNode_Sequence">
+                <nodes>
+                  <li Class="QuestNode_Set">
+                    <name>shuttleDelayTicks</name>
+                    <value>$(roundToTicksRough(randInt(10, 25)*60000))</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatCount</name>
+                    <value>3</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatFactor</name>
+                    <value>1</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatPoints</name>
+                    <value>$($points * $threatFactor / $threatCount)</value>
+                  </li>
+                  <li Class="QuestNode_GetFaction">
+                    <storeAs>enemyFaction</storeAs>
+                    <allowEnemy>true</allowEnemy>
+                    <mustBeHostileToFactionOf>$asker</mustBeHostileToFactionOf>
+                    <mustBePermanentEnemy>true</mustBePermanentEnemy>
+                    <allowedHiddenFactions>Mechanoid</allowedHiddenFactions>
+                  </li>
+                  <li Class="QuestNode_CreateIncidents">
+                    <incidentDef>RaidEnemy</incidentDef>
+                    <randomIncidents>$threatCount</randomIncidents>
+                    <startOffsetTicks>$(5 * 60000)</startOffsetTicks>
+                    <duration>$shuttleDelayTicks</duration>
+                    <points>$threatPoints</points>
+                    <faction>$enemyFaction</faction>
+                    <inSignalDisable>ShuttleArrived</inSignalDisable>
+                  </li> 
+                  <li Class="QuestNode_Set">
+                    <name>threatType</name>
+                    <value>Raids</value>
+                  </li>
+                </nodes>
+              </li>
+              <!-- 2 raids, 0.5~1.5 days -->
+              <li Class="QuestNode_Sequence">
+                <nodes>
+                  <li Class="QuestNode_Set">
+                    <name>shuttleDelayTicks</name>
+                    <value>$(roundToTicksRough(randFloat(0.5, 1.5)*60000))</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatCount</name>
+                    <value>2</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatFactor</name>
+                    <value>1</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatPoints</name>
+                    <value>$($points * $threatFactor / $threatCount)</value>
+                  </li>
+                  <li Class="QuestNode_GetFaction">
+                    <storeAs>enemyFaction</storeAs>
+                    <allowEnemy>true</allowEnemy>
+                    <mustBeHostileToFactionOf>$asker</mustBeHostileToFactionOf>
+                    <mustBePermanentEnemy>true</mustBePermanentEnemy>
+                    <allowedHiddenFactions>Mechanoid</allowedHiddenFactions>
+                  </li>
+                  <li Class="QuestNode_CreateIncidents">
+                    <incidentDef>RaidEnemy</incidentDef>
+                    <randomIncidents>$threatCount</randomIncidents>
+                    <startOffsetTicks>$(0.25 * 60000)</startOffsetTicks>
+                    <duration>$shuttleDelayTicks</duration>
+                    <points>$threatPoints</points>
+                    <faction>$enemyFaction</faction>
+                    <inSignalDisable>ShuttleArrived</inSignalDisable>
+                  </li> 
+                  <li Class="QuestNode_Set">
+                    <name>threatType</name>
+                    <value>Raids</value>
+                  </li>
+                </nodes>
+              </li>
+              <!-- 1 raid, double points, 5~25 days -->
+              <li Class="QuestNode_Sequence">
+                <nodes>
+                  <li Class="QuestNode_Set">
+                    <name>shuttleDelayTicks</name>
+                    <value>$(roundToTicksRough(randInt(5, 25)*60000))</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatCount</name>
+                    <value>1</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatFactor</name>
+                    <value>2</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatPoints</name>
+                    <value>$($points * $threatFactor / $threatCount)</value>
+                  </li>
+                  <li Class="QuestNode_GetFaction">
+                    <storeAs>enemyFaction</storeAs>
+                    <allowEnemy>true</allowEnemy>
+                    <mustBeHostileToFactionOf>$asker</mustBeHostileToFactionOf>
+                    <mustBePermanentEnemy>true</mustBePermanentEnemy>
+                    <allowedHiddenFactions>Mechanoid</allowedHiddenFactions>
+                  </li>
+                  <li Class="QuestNode_CreateIncidents">
+                    <incidentDef>RaidEnemy</incidentDef>
+                    <randomIncidents>$threatCount</randomIncidents>
+                    <startOffsetTicks>$(2.5 * 60000)</startOffsetTicks>
+                    <duration>$shuttleDelayTicks</duration>
+                    <points>$threatPoints</points>
+                    <faction>$enemyFaction</faction>
+                    <inSignalDisable>ShuttleArrived</inSignalDisable>
+                  </li> 
+                  <li Class="QuestNode_Set">
+                    <name>threatType</name>
+                    <value>Raids</value>
+                  </li>
+                </nodes>
+              </li>
+              <!-- 1 mech cluster, 5~25 days -->
+              <li Class="QuestNode_Sequence">
+                <nodes>
+                  <li Class="QuestNode_Set">
+                    <name>shuttleDelayTicks</name>
+                    <value>$(roundToTicksRough(randInt(5, 25)*60000))</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatCount</name>
+                    <value>1</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatFactor</name>
+                    <value>1</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatPoints</name>
+                    <value>$($points * $threatFactor / $threatCount)</value>
+                  </li>
+                  <li Class="QuestNode_CreateIncidents">
+                    <incidentDef>MechCluster</incidentDef>
+                    <randomIncidents>$threatCount</randomIncidents>
+                    <startOffsetTicks>$(4 * 60000)</startOffsetTicks>
+                    <duration>$shuttleDelayTicks</duration>
+                    <points>$threatPoints</points>
+                    <inSignalDisable>ShuttleArrived</inSignalDisable>
+                  </li> 
+                  <li Class="QuestNode_Set">
+                    <name>threatType</name>
+                    <value>MechClusters</value>
+                  </li>
+                </nodes>
+              </li>
+              <!-- 2 mech clusters, 5~25 days -->
+              <li Class="QuestNode_Sequence">
+                <nodes>
+                  <li Class="QuestNode_Set">
+                    <name>shuttleDelayTicks</name>
+                    <value>$(roundToTicksRough(randInt(5, 25)*60000))</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatCount</name>
+                    <value>2</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatFactor</name>
+                    <value>1</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatPoints</name>
+                    <value>$($points * $threatFactor / $threatCount)</value>
+                  </li>
+                  <li Class="QuestNode_CreateIncidents">
+                    <incidentDef>MechCluster</incidentDef>
+                    <randomIncidents>$threatCount</randomIncidents>
+                    <startOffsetTicks>$(4 * 60000)</startOffsetTicks>
+                    <duration>$shuttleDelayTicks</duration>
+                    <points>$threatPoints</points>
+                    <inSignalDisable>ShuttleArrived</inSignalDisable>
+                  </li> 
+                  <li Class="QuestNode_Set">
+                    <name>threatType</name>
+                    <value>MechClusters</value>
+                  </li>
+                </nodes>
+              </li>
+              <!-- 1 mech cluster, double strength, 5~25 days -->
+              <li Class="QuestNode_Sequence">
+                <nodes>
+                  <li Class="QuestNode_Set">
+                    <name>shuttleDelayTicks</name>
+                    <value>$(roundToTicksRough(randInt(5, 25)*60000))</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatCount</name>
+                    <value>1</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatFactor</name>
+                    <value>2</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatPoints</name>
+                    <value>$($points * $threatFactor / $threatCount)</value>
+                  </li>
+                  <li Class="QuestNode_CreateIncidents">
+                    <incidentDef>MechCluster</incidentDef>
+                    <randomIncidents>$threatCount</randomIncidents>
+                    <startOffsetTicks>$(4 * 60000)</startOffsetTicks>
+                    <duration>$shuttleDelayTicks</duration>
+                    <points>$threatPoints</points>
+                    <inSignalDisable>ShuttleArrived</inSignalDisable>
+                  </li> 
+                  <li Class="QuestNode_Set">
+                    <name>threatType</name>
+                    <value>MechClusters</value>
+                  </li>
+                </nodes>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Equal">
+          <value1>$challengeRating</value1>
+          <value2>3</value2>
+          <!-- Random 3-star threat -->
+          <node Class="QuestNode_RandomNode">
+            <nodes>
+              <!-- 2 raids, double points, 5~25 days -->
+              <li Class="QuestNode_Sequence">
+                <nodes>
+                  <li Class="QuestNode_Set">
+                    <name>shuttleDelayTicks</name>
+                    <value>$(roundToTicksRough(randInt(5, 25)*60000))</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatCount</name>
+                    <value>2</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatFactor</name>
+                    <value>2</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatPoints</name>
+                    <value>$($points * $threatFactor / $threatCount)</value>
+                  </li>
+                  <li Class="QuestNode_GetFaction">
+                    <storeAs>enemyFaction</storeAs>
+                    <allowEnemy>true</allowEnemy>
+                    <mustBeHostileToFactionOf>$asker</mustBeHostileToFactionOf>
+                    <mustBePermanentEnemy>true</mustBePermanentEnemy>
+                    <allowedHiddenFactions>Mechanoid</allowedHiddenFactions>
+                  </li>
+                  <li Class="QuestNode_CreateIncidents">
+                    <incidentDef>RaidEnemy</incidentDef>
+                    <randomIncidents>$threatCount</randomIncidents>
+                    <startOffsetTicks>$(2.5 * 60000)</startOffsetTicks>
+                    <duration>$shuttleDelayTicks</duration>
+                    <points>$threatPoints</points>
+                    <faction>$enemyFaction</faction>
+                    <inSignalDisable>ShuttleArrived</inSignalDisable>
+                  </li> 
+                  <li Class="QuestNode_Set">
+                    <name>threatType</name>
+                    <value>Raids</value>
+                  </li>
+                </nodes>
+              </li>
+              <!-- 1 raid, triple points, 5~25 days -->
+              <li Class="QuestNode_Sequence">
+                <nodes>
+                  <li Class="QuestNode_Set">
+                    <name>shuttleDelayTicks</name>
+                    <value>$(roundToTicksRough(randInt(5, 25)*60000))</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatCount</name>
+                    <value>2</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatFactor</name>
+                    <value>2</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatPoints</name>
+                    <value>$($points * $threatFactor / $threatCount)</value>
+                  </li>
+                  <li Class="QuestNode_GetFaction">
+                    <storeAs>enemyFaction</storeAs>
+                    <allowEnemy>true</allowEnemy>
+                    <mustBeHostileToFactionOf>$asker</mustBeHostileToFactionOf>
+                    <mustBePermanentEnemy>true</mustBePermanentEnemy>
+                    <allowedHiddenFactions>Mechanoid</allowedHiddenFactions>
+                  </li>
+                  <li Class="QuestNode_CreateIncidents">
+                    <incidentDef>RaidEnemy</incidentDef>
+                    <randomIncidents>$threatCount</randomIncidents>
+                    <startOffsetTicks>$(2.5 * 60000)</startOffsetTicks>
+                    <duration>$shuttleDelayTicks</duration>
+                    <points>$threatPoints</points>
+                    <faction>$enemyFaction</faction>
+                    <inSignalDisable>ShuttleArrived</inSignalDisable>
+                  </li> 
+                  <li Class="QuestNode_Set">
+                    <name>threatType</name>
+                    <value>Raids</value>
+                  </li>
+                </nodes>
+              </li>
+              <!-- 3 raids, 0.5~1.5 days -->
+              <li Class="QuestNode_Sequence">
+                <nodes>
+                  <li Class="QuestNode_Set">
+                    <name>shuttleDelayTicks</name>
+                    <value>$(roundToTicksRough(randFloat(0.5, 1.5)*60000))</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatCount</name>
+                    <value>3</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatFactor</name>
+                    <value>1</value>  
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatPoints</name>
+                    <value>$($points * $threatFactor / $threatCount)</value>
+                  </li>
+                  <li Class="QuestNode_GetFaction">
+                    <storeAs>enemyFaction</storeAs>
+                    <allowEnemy>true</allowEnemy>
+                    <mustBeHostileToFactionOf>$asker</mustBeHostileToFactionOf>
+                    <mustBePermanentEnemy>true</mustBePermanentEnemy>
+                    <allowedHiddenFactions>Mechanoid</allowedHiddenFactions>
+                  </li>
+                  <li Class="QuestNode_CreateIncidents">
+                    <incidentDef>RaidEnemy</incidentDef>
+                    <randomIncidents>$threatCount</randomIncidents>
+                    <startOffsetTicks>$(0.25 * 60000)</startOffsetTicks>
+                    <duration>$shuttleDelayTicks</duration>
+                    <points>$threatPoints</points>
+                    <faction>$enemyFaction</faction>
+                    <inSignalDisable>ShuttleArrived</inSignalDisable>
+                  </li> 
+                  <li Class="QuestNode_Set">
+                    <name>threatType</name>
+                    <value>Raids</value>
+                  </li>
+                </nodes>
+              </li>
+              <!-- 2 mech clusters double-strength, 5~25 days -->
+              <li Class="QuestNode_Sequence">
+                <nodes>
+                  <li Class="QuestNode_Set">
+                    <name>shuttleDelayTicks</name>
+                    <value>$(roundToTicksRough(randInt(5, 25)*60000))</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatCount</name>
+                    <value>2</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatFactor</name>
+                    <value>2</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatPoints</name>
+                    <value>$($points * $threatFactor / $threatCount)</value>
+                  </li>
+                  <li Class="QuestNode_CreateIncidents">
+                    <incidentDef>MechCluster</incidentDef>
+                    <randomIncidents>$threatCount</randomIncidents>
+                    <startOffsetTicks>$(4 * 60000)</startOffsetTicks>
+                    <duration>$shuttleDelayTicks</duration>
+                    <points>$threatPoints</points>
+                    <inSignalDisable>ShuttleArrived</inSignalDisable>
+                  </li> 
+                  <li Class="QuestNode_Set">
+                    <name>threatType</name>
+                    <value>MechClusters</value>
+                  </li>
+                </nodes>
+              </li>
+              <!-- 1 mech cluster triple-strength, 5~25 days -->
+              <li Class="QuestNode_Sequence">
+                <nodes>
+                  <li Class="QuestNode_Set">
+                    <name>shuttleDelayTicks</name>
+                    <value>$(roundToTicksRough(randInt(5, 25)*60000))</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatCount</name>
+                    <value>1</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatFactor</name>
+                    <value>3</value>
+                  </li>
+                  <li Class="QuestNode_Set">
+                    <name>threatPoints</name>
+                    <value>$($points * $threatFactor / $threatCount)</value>
+                  </li>
+                  <li Class="QuestNode_CreateIncidents">
+                    <incidentDef>MechCluster</incidentDef>
+                    <randomIncidents>$threatCount</randomIncidents>
+                    <startOffsetTicks>$(4 * 60000)</startOffsetTicks>
+                    <duration>$shuttleDelayTicks</duration>
+                    <points>$threatPoints</points>
+                    <inSignalDisable>ShuttleArrived</inSignalDisable>
+                  </li> 
+                  <li Class="QuestNode_Set">
+                    <name>threatType</name>
+                    <value>MechClusters</value>
+                  </li>
+                </nodes>
+              </li>
+
+            </nodes>
+          </node>
+        </li>
+        <!-- allowedThreats set to stop translations breaking, otherwise obsolete -->
+        <li Class="QuestNode_IsSet">
+          <name>threatType</name>
+          <node Class="QuestNode_Set">
+            <name>allowedThreats</name>
+            <value>$threatType</value>
+          </node>
+        </li>
+        <!-- Final threat factor  -->
+        <li Class="QuestNode_IsSet">
+          <name>threatFactor</name>
+          <node Class="QuestNode_Set">
+            <name>threatSize</name>
+            <value>$(roundToDigits($threatFactor, 1))</value>
+          </node>
+        </li>
+        <!-- Example threat only for raids -->
+        <li Class="QuestNode_Equal">
+          <value1>$threatType</value1>
+          <value2>Raids</value2>
+          <node Class="QuestNode_GetExampleRaid">
+            <storeAs>threatExample</storeAs>
+            <points>$threatPoints</points>
+            <faction>$enemyFaction</faction>
+          </node>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>shuttleLeaveDelayTicks</name>
+          <value>$(3*60000)</value>
+        </li>
+        <!-- Lodger(s) leave on cleanup -->
+        <li Class="QuestNode_LeaveOnCleanup">
+          <pawns>$lodgers</pawns>
+          <sendStandardLetter>false</sendStandardLetter>
+          <inSignalRemovePawn>lodgers.RanWild</inSignalRemovePawn>
+        </li>
+        <!-- Create a list of all arriving pawns -->
+        <li Class="QuestNode_Unset">
+          <name>arrivingPawns</name>
+        </li>
+        <li Class="QuestNode_AddRangeToList">
+          <name>arrivingPawns</name>
+          <value>$lodgers</value>
+        </li>
+        <!-- Lodger(s) arrive -->
+        <li Class="QuestNode_Set">
+           <name>lodgersArePrisoners</name>
+           <value>false</value>
+        </li>
+        <li Class="QuestNode_Set">
+           <name>lodgersAreNotPrisoners</name>
+           <value>true</value>
+        </li>
+        <li Class="QuestNode_SubScript">
+          <def>Util_ArriveByDropPodsOrShuttle</def>
+          <parms>
+            <arrivingPawns>$arrivingPawns</arrivingPawns>
+            <joiningPawns>$lodgers</joiningPawns>
+            <joinPlayer>$lodgersAreNotPrisoners</joinPlayer>
+            <makePrisoners>$lodgersArePrisoners</makePrisoners>
+            <customLetterLabel TKey="LetterLabelLodgersArrived">[lodgersLabelSingOrPlural] arrived</customLetterLabel>
+            <customLetterText TKey="LetterTextLodgersArrived">[lodgersLabelSingOrPluralDef] [lodgersHasHave] arrived. Protect [lodgersObjective] until the shuttle arrives in [shuttleDelayTicks_duration].</customLetterText>
+            <arrivingPawnsLabelDef TKey="ArrivingPawnsDefiniteLabel">[lodgersLabelSingOrPluralDef]</arrivingPawnsLabelDef>
+          </parms>
+        </li>
+        <!-- Shuttle -->
+        <li Class="QuestNode_ShuttleDelay">
+          <delayTicks>$shuttleDelayTicks</delayTicks>
+          <lodgers>$lodgers</lodgers>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_SubScript">
+                <def>Util_TransportShip_Pickup</def>
+                <parms>
+                  <leaveDelayTicks>$shuttleLeaveDelayTicks</leaveDelayTicks>
+                  <requiredPawns>$lodgers</requiredPawns>
+                  <sendAwayIfAllDespawned>$lodgers</sendAwayIfAllDespawned>
+                </parms>
+              </li>
+              <li Class="QuestNode_SendSignals">
+                <outSignals>ShuttleArrived</outSignals>
+              </li>
+              <li Class="QuestNode_InspectString">
+                <targets>$lodgers</targets>
+                <inspectString TKey="InspectStringDepartShuttle">Should depart on shuttle</inspectString>
+              </li>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelShuttleArrived">Shuttle arrived</label>
+                <text TKey="LetterTextShuttleArrived">The shuttle has arrived to collect [lodgersLabelSingOrPluralDef]. Be sure to have these people on the shuttle before it leaves in [shuttleLeaveDelayTicks_duration]:\n\n[lodgers]</text>
+                <lookTargets>$pickupShipThing</lookTargets>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger type reward factor -->
+        <li Class="QuestNode_IsAnimal">
+          <value>$lodgers</value>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <!-- Animals -->
+              <li Class="QuestNode_GetBodySize">
+                <pawnKind>$lodgersPawnKind</pawnKind>
+                <storeAs>lodgersBodySize</storeAs>
+              </li>
+              <li Class="QuestNode_Set">
+                <name>lodgerRewardFactor</name>
+                <value>$(0.5 + 0.1 * $lodgersBodySize)</value>
+              </li>
+            </nodes>
+          </node>
+          <elseNode Class="QuestNode_Sequence">
+            <nodes>
+              <!-- Humanlikes -->
+              <li Class="QuestNode_Set">
+                <name>lodgerRewardFactor</name>
+                <value>1</value>
+              </li>
+            </nodes>
+          </elseNode>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>lodgerRewardFromCountAndDelay</name>
+          <value>$($lodgersCount * $lodgerRewardFactor * ($shuttleDelayTicks / 60000))</value>
+        </li>
+
+        <!-- Reward from remaining conditions -->
+        <li Class="QuestNode_IsTrue">
+          <value>$lodgersHaveNoConditions</value>
+          <node Class="QuestNode_Set">
+            <name>rewardValue</name>
+            <value>$($rewardValue + $lodgerRewardFromCountAndDelay * 2)</value>
+          </node>
+        </li>
+        <li Class="QuestNode_IsTrue">
+          <value>$lodgersWillNotWork</value>
+          <node Class="QuestNode_Set">
+            <name>rewardValue</name>
+            <value>$($rewardValue + $lodgerRewardFromCountAndDelay * 4)</value>
+          </node>
+        </li>
+        <li Class="QuestNode_IsTrue">
+          <value>$lodgersAreParalyzed</value>
+          <node Class="QuestNode_Set">
+            <name>rewardValue</name>
+            <value>$($rewardValue + $lodgerRewardFromCountAndDelay * 6)</value>
+          </node>
+        </li>
+        <li Class="QuestNode_IsTrue">
+          <value>$lodgersHaveBloodRot</value>
+          <node Class="QuestNode_Set">
+            <name>rewardValue</name>
+            <value>$($rewardValue + $lodgerRewardFromCountAndDelay * 7)</value>
+          </node>
+        </li>
+        <li Class="QuestNode_IsTrue">
+          <value>$lodgersHaveBloodRotAndParalysis</value>
+          <node Class="QuestNode_Set">
+            <name>rewardValue</name>
+            <value>$($rewardValue + $lodgerRewardFromCountAndDelay * 9)</value>
+          </node>
+        </li>
+        <!-- Lodger died -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.Destroyed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelGuestDied">Guest died: {SUBJECT_definite}</label>
+                <text TKey="LetterTextGuestDied">[letterSubject], who you were charged to protect, has died. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
+				<faction>HVMP_CommerceBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger arrested -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.Arrested</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelGuestCapture">Guest captured: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextGuestCapture">[letterSubject], who you were charged to protect, has been arrested. [remainingWillNowLeave][failLetterEndingQuest]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
+				<faction>HVMP_CommerceBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger recruited -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.Recruited</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LabelLabelPrisonerRecruited">Prisoner recruited: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LabelTextPrisonerRecruited">You have recruited {SUBJECT_definite}, who you were charged to guard. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>QuestPrisonerRecruited</goodwillChangeReason>
+				<faction>HVMP_CommerceBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger enslaved -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.Enslaved</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LabelLabelPrisonerEnslaved">Prisoner enslaved: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LabelTextPrisonerEnslaved">You have enslaved {SUBJECT_definite}, who you were charged to guard. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>QuestPrisonerEnslaved</goodwillChangeReason>
+				<faction>HVMP_CommerceBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Surgery violation -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.SurgeryViolation</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelUnauthorizedSurgery">Unauthorized surgery: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextUnauthorizedSurgery">Unauthorized, violating surgery has been performed on [letterSubject]. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>PerformedHarmfulSurgery</goodwillChangeReason>
+				<faction>HVMP_CommerceBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger's xenogerm absorbed -->
+        <li Class="QuestNode_Signal" MayRequire="Ludeon.RimWorld.Biotech">
+          <inSignal>lodgers.XenogermAbsorbed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label>Xenogerm absorbed: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text>{SUBJECT_definite}, who you were charged to protect, has had {SUBJECT_possessive} xenogerm forcibly absorbed. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>XenogermAbsorbed</goodwillChangeReason>
+				<faction>HVMP_CommerceBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger left map -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.LeftMap</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelGuestLost">Guest lost: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextGuestLost">[letterSubject], who you were charged to protect, is gone. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
+				<faction>HVMP_CommerceBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger ran wild -->
+        <li Class="QuestNode_Signal">
+          <inSignal>lodgers.RanWild</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelLodgerRanWild">Guest lost: {SUBJECT_definite}</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextLodgerRanWild">[letterSubject], who you were charged to protect, has run wild. [remainingWillNowLeave][failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
+				<faction>HVMP_CommerceBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Lodger changed faction (e.g. sold to trader) -->
+        <li Class="QuestNode_AnySignal">
+          <inSignals>
+            <li>lodgers.ChangedFaction</li>
+            <li>lodgers.ChangedHostFaction</li>
+          </inSignals>
+          <node Class="QuestNode_Filter_FactionNonPlayer">
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_Letter">
+                  <label TKey="LetterLabelGuestJoinedOtherFaction">Guest lost: {SUBJECT_definite}</label>
+                  <letterDef>NegativeEvent</letterDef>
+                  <text TKey="LetterTextGuestJoinedOtherFaction">[letterSubject], who you were charged to protect, has joined another faction. [remainingWillNowLeave][failLetterEndingCommon]</text>
+                </li>
+                <li Class="HautsPermits.QuestNode_EndBranch">
+                  <outcome>Fail</outcome>
+                  <goodwillChangeReason>QuestPawnLost</goodwillChangeReason>
+				  <faction>HVMP_CommerceBranch</faction>
+                </li>
+              </nodes>
+            </node>
+          </node>
+        </li>
+        <!-- Asker faction became hostile -->
+        <li Class="QuestNode_GetFactionOf">
+          <thing>$asker</thing>
+          <storeAs>askerFaction</storeAs>
+        </li>
+        <li Class="QuestNode_End">
+          <inSignal>askerFaction.BecameHostileToPlayer</inSignal>
+          <outcome>InvalidPreAcceptance</outcome>
+          <signalListenMode>NotYetAcceptedOnly</signalListenMode>
+        </li>
+        <li Class="QuestNode_IsNull">
+          <value>$askerFaction</value>
+          <elseNode Class="QuestNode_Signal">
+            <inSignal>askerFaction.BecameHostileToPlayer</inSignal>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_Letter">
+                  <label TKey="LetterLabelAskerFactionHostile">Quest failed: [resolvedQuestName]</label>
+                  <letterDef>NegativeEvent</letterDef>
+                  <text TKey="LetterTextAskerFactionHostile">[asker_faction_name] are now hostile towards you. [failLetterEndingQuest]</text>
+                </li>
+                <li Class="QuestNode_End">
+                  <outcome>Fail</outcome>
+                </li>
+              </nodes>
+            </node>
+          </elseNode>
+        </li>
+        <!-- Shuttle destroyed -->
+        <li Class="QuestNode_Signal">
+          <inSignal>pickupShipThing.Destroyed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelShuttleDestroyed">Shuttle destroyed</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextShuttleDestroyed">The shuttle sent to collect [lodgersLabelSingOrPluralDef] has been destroyed. [lodgersLabelSingOrPluralDef] will now leave on foot. [failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>ShuttleDestroyed</goodwillChangeReason>
+				<faction>HVMP_CommerceBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Shuttle sent -->
+        <li Class="QuestNode_Signal">
+          <inSignal>pickupShipThing.SentSatisfied</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <!-- Goodwill for mood will send a different quest end letter -->
+              <li Class="QuestNode_Set">
+                <name>sendStandardLetter</name>
+                <value>true</value>
+              </li>
+              <!-- End quest -->
+			  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				<faction>$askerFaction</faction>
+				<customLetterLabel TKey="LetterLabelPaymentArrived">Branch relations improved</customLetterLabel>
+				<customLetterText TKey="LetterTextPaymentArrived">You have taken care of the refugees for the requested time. As such, The [asker_faction_name]'s respect for you has increased.</customLetterText>
+			  </li>
+              <li Class="QuestNode_End">
+                <outcome>Success</outcome>
+                <sendStandardLetter>$sendStandardLetter</sendStandardLetter>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>pickupShipThing.SentUnsatisfied</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestFailed">Quest failed: [resolvedQuestName]</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextQuestFailed">The shuttle sent to collect [lodgersLabelSingOrPluralDef] has departed. [lodgersLabelSingOrPluralDef] will now leave on foot. [failLetterEndingCommon]</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>MemberMissedShuttle</goodwillChangeReason>
+				<faction>HVMP_CommerceBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--commerce: intervention-->
+  <QuestScriptDef>
+    <defName>HVMP_CommerceIntervention</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[dangerous] [geology]</li>
+        <li>questName->[attacking] [insectoids]</li>
+		
+		<li>dangerous->Dangerous</li>
+		<li>dangerous->Risky</li>
+		<li>dangerous->Upsetting</li>
+		<li>dangerous->Provocative</li>
+		<li>dangerous->Harmful</li>
+		<li>dangerous->Hazardous</li>
+		
+		<li>geology->Geology</li>
+		<li>geology->Scans</li>
+		<li>geology->Scanning</li>
+		<li>geology->Geophysics</li>
+		<li>geology->Survey</li>
+		<li>geology->Plotting</li>
+        
+		<li>attacking->Attacking</li>
+        <li>attacking->Violent</li>
+        <li>attacking->Lurking</li>
+        <li>attacking->Slumbering</li>
+        <li>attacking->Fighting-mad</li>
+        <li>attacking->Vicious</li>
+        <li>attacking->Hostile</li>
+		
+		<li>violence->Insectoids</li>
+		<li>violence->Insects</li>
+		<li>violence->Bugs</li>
+		<li>violence->Chitin</li>
+		<li>violence->Carapaces</li>
+
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->The [asker_faction_name] is making a request of you. They would like to perform deepcrust resource scans of the region around [map_definite]. Doing so would disturb [raidCount] insectoid warrens belowground, which will emerge shortly thereafter in multiple different locations. The [asker_faction_name] would therefore like your permission before proceeding.[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_BUB_info][raid0/mutator_II_info][raid0/mutator_JB_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits.QuestNode_CommerceIntermediary">
+      <nodes>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+        </li>
+        <li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		  <!--<mustBeInfestable>true</mustBeInfestable>-->
+		</li>
+        <!-- Raid(s) -->
+        <li Class="QuestNode_GetRandomInRangeInt">
+          <storeAs>raidCount</storeAs>
+          <range>3~6</range>
+        </li>
+		<li Class="HautsPermits.QuestNode_Intervention_BUB">
+		  <BUB_hediff>HVMP_BUB</BUB_hediff>
+		  <BUB_description>\n\nThe deepscan will use high-frequency radiation which has a negative but temporary effect on the nervous systems of living non-insectoid creatures. It will cause pain and irritability for up to a day (though creatures with toxic resistance recover quicker); wild animals will flee from the scan.</BUB_description>
+		</li>
+        <li Class="QuestNode_Set">
+          <name>firstRaidDelayTicks</name>
+          <value>$(roundToTicksRough(randInt(600, 3000)))</value>
+        </li>
+        <li Class="QuestNode_Subscript">
+          <def>HVMP_BugsDelayRepeatable</def>
+          <parms>
+            <points>$points</points>
+          </parms>
+        </li>
+        <!-- End -->
+        <li Class="QuestNode_AllSignals">
+          <inSignals>
+            <li>AllRaidsSent</li>
+          </inSignals>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Delay">
+                <delayTicks>300</delayTicks>
+                <node Class="QuestNode_Sequence">
+                  <nodes>
+					<li Class="QuestNode_Set">
+					  <name>sendStandardLetter</name>
+					  <value>true</value>
+					</li>
+					<li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+					  <faction>$faction</faction>
+					  <customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+					  <customLetterText TKey="LetterTextPaymentArrived">For giving them permission to perform geological scans, The [asker_faction_name]'s respect for you has increased.</customLetterText>
+					</li>
+					<li Class="QuestNode_End">
+						<outcome>Success</outcome>
+						<!--<sendStandardLetter>$sendStandardLetter</sendStandardLetter>-->
+					</li>
+                  </nodes>
+                </node>
+              </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  <QuestScriptDef>
+    <defName>HVMP_BugsDelayRepeatable</defName>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+        <li Class="QuestNode_Set">
+          <name>nextRaidDelayTicks</name>
+          <value>$firstRaidDelayTicks</value>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>raidCountMinusOne</name>
+          <value>$raidCount</value>
+        </li>
+        <li Class="QuestNode_Subtract">
+          <value1>$raidCountMinusOne</value1>
+          <value2>1</value2>
+          <storeAs>raidCountMinusOne</storeAs>
+        </li>
+        <li Class="QuestNode_LoopCount">
+          <loopCount>$raidCount</loopCount>
+          <storeLoopCounterAs>raidLoopCounter</storeLoopCounterAs>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <!-- Try using specific delay -->
+              <li Class="QuestNode_IsNull">
+                <value>$raid(($raidLoopCounter))/raidDelayTicks</value>
+                <elseNode Class="QuestNode_Set">
+                  <name>nextRaidDelayTicks</name>
+                  <value>$raid(($raidLoopCounter))/raidDelayTicks</value>
+                </elseNode>
+              </li>
+              <li Class="QuestNode_Delay">
+                <delayTicks>$nextRaidDelayTicks</delayTicks>
+                <node Class="QuestNode_Sequence">
+                  <nodes>
+                    <li Class="QuestNode_SubScript">
+                      <prefix>raid$raidLoopCounter</prefix>
+                      <def>HVMP_Util_Infest</def>
+                      <parms>
+                        <tag>lord</tag>
+                        <inSignal>$inSignal</inSignal>
+                        <map>$map</map>
+                        <enemyFaction>$enemyFaction</enemyFaction>
+                        <points>$points</points>
+                        <walkInSpot>$walkInSpot</walkInSpot>
+                        <customLetterLabel>$customLetterLabel</customLetterLabel>
+                        <customLetterText>$customLetterText</customLetterText>
+                        <customLetterLabelRules>$customLetterLabelRules</customLetterLabelRules>
+                        <customLetterTextRules>$customLetterTextRules</customLetterTextRules>
+                      </parms>
+                    </li>
+                    <li Class="QuestNode_Equal">
+                      <value1>$raidLoopCounter</value1>
+                      <value2>$($raidCount - 1)</value2>
+                      <compareAs>int</compareAs>
+                      <node Class="QuestNode_SendSignals">
+                        <outSignals>AllRaidsSent</outSignals>
+                      </node>
+                    </li>
+                  </nodes>
+                </node>
+              </li>
+              <li Class="QuestNode_Add"> <!-- next raid comes 9000 ticks after the previous -->
+                <value1>$nextRaidDelayTicks</value1>
+                <value2>$(roundToTicksRough(randInt(30, 2800)))</value2>
+                <storeAs>nextRaidDelayTicks</storeAs>
+              </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  <QuestScriptDef>
+    <defName>HVMP_Util_Infest</defName>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+        <li Class="HautsPermits.QuestNode_InterventionInner">
+          <tag>$tag</tag>
+		  <incidentDef>HVMP_InterventionInfestation</incidentDef>
+          <inSignalLeave>EndRaid</inSignalLeave>
+		  <spawnablePawnKinds>
+			  <li>
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <Megaspider>1</Megaspider><!--weightings are irrelevant for the purpose of this quest.-->
+				  <Spelopede>1</Spelopede>
+				  <Megascarab>1</Megascarab>
+				  <Locust MayRequire="Ludeon.RimWorld.Odyssey">1</Locust>
+				</options>
+			  </li>
+			  <li>
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <Megaspider>1</Megaspider>
+				  <Spelopede>1</Spelopede>
+				  <Megascarab>1</Megascarab>
+				  <Locust MayRequire="Ludeon.RimWorld.Odyssey">1</Locust>
+				</options>
+			  </li>
+			  <li>
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <Megaspider>1</Megaspider>
+				  <Spelopede>1</Spelopede>
+				  <Megascarab>1</Megascarab>
+				  <Locust MayRequire="Ludeon.RimWorld.Odyssey">1</Locust>
+				</options>
+			  </li><!--repetition ensures they remain the likeliest picks even if you have other mods installed-->
+			  <li MayRequire="OskarPotocki.VFE.Insectoid2">
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <VFEI2_Boomtick>1</VFEI2_Boomtick>
+				  <VFEI2_Hellbeetle>1</VFEI2_Hellbeetle>
+				  <VFEI2_Fuelmite>1</VFEI2_Fuelmite>
+				</options>
+			  </li>
+			  <li MayRequire="OskarPotocki.VFE.Insectoid2">
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <VFEI2_Macrofly>1</VFEI2_Macrofly>
+				  <VFEI2_Megawasp>1</VFEI2_Megawasp>
+				  <VFEI2_Gigalocust>1</VFEI2_Gigalocust>
+				</options>
+			  </li>
+			  <li MayRequire="OskarPotocki.VFE.Insectoid2">
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <VFEI2_Megathrips>1</VFEI2_Megathrips>
+				  <VFEI2_Venomite>1</VFEI2_Venomite>
+				  <VFEI2_Acidspitter>1</VFEI2_Acidspitter>
+				</options>
+			  </li>
+			  <li MayRequire="OskarPotocki.VFE.Insectoid2">
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <VFEI2_Durapod>1</VFEI2_Durapod>
+				  <VFEI2_Tankroach>1</VFEI2_Tankroach>
+				  <VFEI2_Ironclad>1</VFEI2_Ironclad>
+				</options>
+			  </li>
+			  <li MayRequire="sarg.alphaanimals">
+				<kindDef>Combat</kindDef><commonality>1</commonality>
+				<options>
+				  <AA_MammothWorm>1</AA_MammothWorm>
+				  <AA_BlackSpider>1</AA_BlackSpider>
+				  <AA_BlackSpelopede>1</AA_BlackSpelopede>
+				  <AA_BlackScarab>1</AA_BlackScarab>
+				</options>
+			  </li>
+		  </spawnablePawnKinds>
+		  <II_hediff>HVMP_ScariaVector</II_hediff>
+		  <II_description>\n\nThe insectoids carry scaria. It doesn't drive them to madness and won't kill them, but they can pass it on via cuts or bites.</II_description>
+		  <JB_hediff>HVMP_Jitterbug</JB_hediff>
+		  <JB_description>\n\nThe deepscan will use a particular kind of radiation that stimulates insectoid nervous systems, causing the attacking insectoids to move faster and feel less pain.</JB_description>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--commerce: mastermind-->
+  <QuestScriptDef>
+    <defName>HVMP_CommerceMastermind</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[market] [manipulation]</li>
+        <li>questName->[manipulating] the [market]</li>
+        <li>questName->[baffling] [play]</li>
+        <li>market->Market</li>
+        <li>market->Economy</li>
+        <li>market->Trade Network</li>
+        <li>market->Silver</li>
+        <li>manipulation->Manipulation</li>
+        <li>manipulation->Shenanigans</li>
+        <li>manipulation->Wizardry</li>
+        <li>manipulation->Exploitation</li>
+        <li>manipulation->Curation</li>
+        <li>manipulating->Gaming</li>
+        <li>manipulating->Manipulating</li>
+        <li>manipulating->Disrupting</li>
+        <li>manipulating->Hacking</li>
+        <li>manipulating->Pressuring</li>
+        <li>baffling->Baffling</li>
+        <li>baffling->Advanced</li>
+        <li>baffling->Disruptive</li>
+        <li>baffling->Strange</li>
+        <li>baffling->Curious</li>
+        <li>baffling->Odd</li>
+        <li>baffling->Daring</li>
+        <li>baffling->Innovative</li>
+        <li>baffling->Visionary</li>
+        <li>baffling->Quixotic</li>
+        <li>baffling->Bold</li>
+        <li>play->Financial Move</li>
+        <li>play->Trader [manipulation]</li>
+        <li>play->Enterprise</li>
+        <li>play->Embargo</li>
+        <li>play->Trade Blockade</li>
+        <li>play->Fiscal Dam</li>
+        <li>play->Interdiction</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->The Commerce Branch has a plan to alter the market conditions for long-term synergistic gains. The technical details are unimportant, but the plan involves temporarily removing you from the flow of trade. If you accept, the next trade caravan or orbital trader that would make contact with you will be diverted, preventing you from interacting with them.\nWARNING: multiple quests of this type can stack their effects. As of issuing this quest, the Commerce Branch has [tradeBlockCount] remaining traders left to block.[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_CB_info][mutator_IIP_info][mutator_UU_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits.QuestNode_CommerceIntermediary">
+      <nodes>
+        <li Class="HautsPermits.QuestNode_SetRewardValue_BranchSettingScaling">
+          <rewardFactor>0.55</rewardFactor><!--since you don't actually have to DO anything to succeed, and you can eventually burn some method of calling a trader on it, it gives WAY less-->
+        </li>
+        <li Class="QuestNode_GetFactionOf">
+          <thing>$asker</thing>
+          <storeAs>faction</storeAs>
+        </li>
+		<li Class="QuestNode_Delay">
+			<delayTicks>$120</delayTicks>
+			<node Class="QuestNode_Sequence">
+			  <nodes>
+				  <li Class="QuestNode_Set">
+					<name>sendStandardLetter</name>
+					<value>true</value>
+				  </li>
+				  <li Class="HautsPermits.QuestNode_GiveRewardsMastermind">
+					<faction>$faction</faction>
+					<tradeBlocksRemaining>tradeBlockCount</tradeBlocksRemaining>
+					<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+					<customLetterText TKey="LetterTextPaymentArrived">Because you agreed to lose out on the opportunity to trade with the next trader, The [asker_faction_name]'s respect for you has increased.\n\nAs of making this agreement, the Commerce Branch has yet to block {0} traders.</customLetterText>
+					<CB_conditionDef>HVMP_CommsBlackout</CB_conditionDef>
+					<CB_duration>600000</CB_duration>
+					<CB_description>\n\nIn addition, the Commerce Branch will institute a total communications blackout. For the next 10 days, you will not be able to trade with other settlements, no traders will visit you, and you will not be able to contact factions other than the Enterprise Branches on the comms console.</CB_description>
+					<IIP_pointFactor>0.5</IIP_pointFactor>
+					<IIP_description>\n\nHostile factions will see this maneuver as a sign of weakness on your part. The next raids of each such faction will be 50% stronger if you agree to this plan.</IIP_description>
+					<UU_goodwillPenaltyAlly>-10</UU_goodwillPenaltyAlly>
+					<UU_goodwillPenaltyNeutral>-5</UU_goodwillPenaltyNeutral>
+					<UU_goodwillPenaltyHostile>0</UU_goodwillPenaltyHostile>
+					<UU_description>\n\nAs the planetary economy is in a dire state, other factions will look unfavorably upon you for agreeing to this plan. You will lose 10 goodwill with allied non-branch factions, and 5 with neutral ones.</UU_description>
+				  </li>
+				  <li Class="QuestNode_End">
+					<outcome>Success</outcome>
+					<!--<sendStandardLetter>$sendStandardLetter</sendStandardLetter>-->
+				  </li>
+			  </nodes>
+			</node>
+		</li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--commerce: research-->
+  <QuestScriptDef>
+    <defName>HVMP_CommerceResearch</defName><!--does crypto mining work this way in real life? no. however, things are weird in the 6th millennium-->
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[protecting] a [cc]</li>
+        <li>questName->[digital] [currency]</li>
+        <li>questName->the [pecuniary] [cc]</li>
+		
+        <li>protecting->Protecting</li>
+        <li>protecting->Safeguarding</li>
+        <li>protecting->Guarding</li>
+        <li>protecting->Defending</li>
+        <li>protecting->Hosting</li>
+        <li>protecting->Rooming</li>
+        <li>protecting->Housing</li>
+        <li>protecting->Accommodating</li>
+		
+        <li>cc->Moneymaker</li>
+        <li>cc->Supercomputer</li>
+        <li>cc->Number-cruncher</li>
+        <li>cc->Goober</li>
+        <li>cc->Calculator</li>
+        <li>cc->Investment</li>
+        <li>cc->Asset</li>
+        <li>cc->Silver Mine</li>
+		
+        <li>currency->Currency</li>
+        <li>currency(p=2)->Silver</li>
+        <li>currency->Coinage</li>
+        <li>currency->Money</li>
+        <li>currency->Capital</li>
+        <li>currency->Finance</li>
+		
+        <li>pecuniary->Pecuniary</li>
+        <li>pecuniary->Fiscal</li>
+        <li>pecuniary->Numismatic</li>
+        <li>pecuniary->Monetary</li>
+        <li>pecuniary->Economic</li>
+		
+        <li>digital->Digital</li>
+        <li>digital->Crypto</li>
+        <li>digital->Miracle</li>
+        <li>digital->Electronic</li>
+        <li>digital->Digitalized</li>
+        <li>digital->Mechanized</li>
+        <li>digital->Techno</li>
+        <li>digital->Ethereal</li>
+        <li>digital->Immaterial</li>
+        <li>digital->Silicon</li>
+        <li>digital->Mining</li>
+        <li>digital->Farming</li>
+        <li>digital->Harvesting</li>
+        <li>digital->Inventing</li>
+        <li>digital->Devising</li>
+		
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription(asker_factionLeader==True)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], wants you to help "mine" digital currency, which will aid them in attaining economic supremacy on a more developed world. If you accept, they'll send you a chaincomputer; you must allow it to finish its [reqProgressAs] calculations.\n\nIt will compute very slowly even while unpowered, but you can link it to a power grid and adjust how much power it uses, allowing you to speed up or slow down its progress. While linked to a power grid, it will emit a signal that attracts raids.[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_BD_info][mutator_OI_info][mutator_PVYAH_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits.QuestNode_CommerceIntermediary">
+      <nodes>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+        </li>
+        <li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		</li>
+        <li Class="HautsPermits.QuestNode_GenerateChainComputer">
+          <storeAs>ccomp</storeAs>
+          <thingDef>HVMP_ChainComputer</thingDef>
+		  <storeReqProgressAs>reqProgressAs</storeReqProgressAs>
+		  <BD_description>\n\nThe chaincomputer is keyed to an economic system that uses an ultratech "psycho-digital connection" to facilitate its financial transactions. You will need to keep a willing colonist psychically linked to the computer in order for it to run. The link inhibits the colonist's consciousness, and it persists until the colonist dies or the computer finishes. Some progress is lost if the linked individual dies.</BD_description>
+		  <OI_description>\n\nThe chaincomputer must perform a staggering and ever-increasing number of calculations. It will gradually overheat; if it takes too long to finish, it may begin erupting into flame or short-circuiting other electronic devices in the same power grid.</OI_description>
+		  <PVYAH_description>\n\nThe chaincomputer is keyed to an economic system with strong firewalls. A hacker may eventually be required to complete the calculations. If verification fails due to low hacking stealth, a remote security system will be triggered, possibly deploying a mech cluster or inciting forced weather as retaliation.</PVYAH_description>
+        </li>
+        <li Class="QuestNode_DestroyOrPassToWorldOnCleanup">
+          <things>$ccomp</things>
+        </li>
+        <li Class="QuestNode_MakeMinified">
+          <storeAs>ccompMinified</storeAs>
+          <thing>$ccomp</thing>
+        </li>
+        <li Class="QuestNode_AddToList">
+          <name>thingsToDrop</name>
+          <value>$ccompMinified</value>
+        </li>
+        <li Class="QuestNode_DropPods">
+          <contents>$thingsToDrop</contents>
+          <useTradeDropSpot>true</useTradeDropSpot>
+          <thingsToExcludeFromHyperlinks>$ccompMinified</thingsToExcludeFromHyperlinks>
+        </li>
+		<li Class="QuestNode_Signal">
+		  <inSignal>ccomp.FinishedChainComp</inSignal>
+		    <node Class="QuestNode_Sequence">
+			  <nodes>
+				<li Class="QuestNode_Set">
+				  <name>sendStandardLetter</name>
+				  <value>true</value>
+				</li>
+				<li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				  <faction>$faction</faction>
+				  <customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+				  <customLetterText TKey="LetterTextPaymentArrived">Under your care, the chaincomputer has finished its currency-creating calculations!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
+				</li>
+				<li Class="QuestNode_End">
+					<outcome>Success</outcome>
+					<!--<sendStandardLetter>$sendStandardLetter</sendStandardLetter>-->
+				</li>
+			  </nodes>
+			</node>
+		</li>
+		<li Class="QuestNode_Signal">
+		  <inSignal>ccomp.DestroyedChainComp</inSignal>
+		    <node Class="QuestNode_Sequence">
+			  <nodes>
+				  <li Class="QuestNode_Letter">
+					<label TKey="LetterLabelShuttleDestroyed">Chaincomputer destroyed</label>
+					<letterDef>NegativeEvent</letterDef>
+					<text TKey="LetterTextShuttleDestroyed">The chaincomputer you were tasked with safeguarding has been destroyed.</text>
+				  </li>
+				  <li Class="HautsPermits.QuestNode_EndBranch">
+					<outcome>Fail</outcome>
+					<goodwillChangeReason>HVMP_ChaincomputerDestroyed</goodwillChangeReason>
+					<faction>HVMP_CommerceBranch</faction>
+				  </li>
+			  </nodes>
+			</node>
+		</li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--commerce: transportation-->
+  <QuestScriptDef>
+    <defName>HVMP_CommerceTransportation</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->Caravan to [settlement_label]</li>
+        <li>questName->Trade with [settlement_label]</li>
+        <li>questName->Selling to [settlement_label]</li>
+        <li>questName->Supplies for [settlement_label]</li>
+        <li>questName->A [special] [trade]</li>
+        <li>special->Special</li>
+        <li>special->Unique</li>
+        <li>special->Non-traditional</li>
+        <li>trade->Trade</li>
+        <li>trade->Exchange</li>
+        <li>trade->Deal</li>
+        <li>trade->Offer</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->The Commerce Branch would like you to fulfill an anonymous trade request by delivering the following to a temporary drop point:
+\n  [requestedThingCount]x [requestedThing_label] [qualityInfo](worth [requestedThingMarketValue_money])
+\nIf you want to make the trade, send a caravan with the requested items.[mutatorSuffix]</li>
+        <li>qualityInfo(requestedThingHasQuality==True,priority=1)->of [requestedQualityLabel]+ quality </li>
+        <li>qualityInfo-></li>
+		<li>mutatorSuffix->[mutator_PUKIS_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits.QuestNode_CommerceIntermediary">
+      <nodes>
+        <li Class="HautsPermits.QuestNode_NRNSN">
+          <name>siteDistRange</name>
+          <value>2~20</value>
+		  <valueIfNRNSN>2~99999</valueIfNRNSN>
+          <NRNSN_timeName>TAAH_tradeTimerMalus</NRNSN_timeName>
+          <NRNSN_timeValue>$(randInt(4,7)*60000)</NRNSN_timeValue>
+        </li>
+        <!--<li Class="HautsPermits.QuestNode_SetRewardValue_BranchSettingScaling">
+          <rewardFactor>0.625</rewardFactor>
+        </li>-->
+        <li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		</li>
+        <li Class="QuestNode_GetPlayerFaction">
+          <storeAs>playerFaction</storeAs>
+        </li>
+        <li Class="QuestNode_GetSiteTile">
+          <storeAs>tile</storeAs>
+        </li>
+        <li Class="QuestNode_TradeRequest_GetRequestedThing">
+          <storeThingAs>requestedThing</storeThingAs>
+          <storeThingCountAs>requestedThingCount</storeThingCountAs>
+          <storeMarketValueAs>requestedThingMarketValue</storeMarketValueAs>
+          <storeHasQualityAs>requestedThingHasQuality</storeHasQualityAs>
+          <dontRequest>
+            <li>Leather_Patch</li>
+            <li MayRequire="Ludeon.RimWorld.Odyssey">Gravcore</li>
+          </dontRequest>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>tradeTimer</name>
+          <value>$(randInt(12,28)*60000)</value>
+        </li>
+        <li Class="QuestNode_Subtract">
+          <value1>$tradeTimer</value1>
+          <value2>$TAAH_tradeTimerMalus</value2>
+          <storeAs>tradeTimer</storeAs>
+        </li>
+        <li Class="HautsPermits.QuestNode_PUKIS_TGTL">
+          <def>HVMP_CommerceTradePoint</def>
+          <tile>$tile</tile>
+          <faction>$faction</faction>
+          <storeAs>tradePoint</storeAs>
+          <requestedThingDef>$requestedThing</requestedThingDef>
+          <requestedThingCount>$requestedThingCount</requestedThingCount>
+          <duration>$tradeTimer</duration>
+		  <PUKIS_pointsFactor>0.15</PUKIS_pointsFactor>
+		  <PUKIS_description>\n\nDespite the security measures taken, radio chatter indicates that bandits are aware of this trade request and are looking to take advantage of it. Be vigilant when approaching the drop point.</PUKIS_description>
+		  <TGTL_qualityChances>
+			<li><key>Good</key><value>0.75</value></li>
+			<li><key>Excellent</key><value>0.20</value></li>
+			<li><key>Masterwork</key><value>0.05</value></li>
+		  </TGTL_qualityChances>
+        </li>
+        <li Class="QuestNode_SpawnWorldObjects">
+          <worldObjects>$tradePoint</worldObjects>
+          <tile>$tile</tile>
+        </li>
+        <li Class="HautsPermits.QuestNode_LookOverHere">
+          <worldObjects>$tradePoint</worldObjects>
+        </li>
+        <li Class="QuestNode_WorldObjectTimeout">
+          <worldObject>$tradePoint</worldObject>
+          <delayTicks>$tradeTimer</delayTicks>
+          <isQuestTimeout>true</isQuestTimeout>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
+                <text TKey="LetterTextQuestExpired">The trade request expired. The [asker_faction_name]'s respect for you has slightly diminished.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>HVMP_QuestExpired</goodwillChangeReason>
+				<faction>HVMP_CommerceBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+		<li Class="QuestNode_Signal">
+          <inSignal>tradePoint.TradeRequestFulfilled</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Set">
+                <name>sendStandardLetter</name>
+                <value>true</value>
+              </li>
+              <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				<faction>$faction</faction>
+                <customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+                <customLetterText TKey="LetterTextPaymentArrived">You have fulfilled the trade request!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
+              </li>
+			  <li Class="QuestNode_End">
+				<outcome>Success</outcome>
+				<sendStandardLetter>$sendStandardLetter</sendStandardLetter>
+			  </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--pax: bellum-->
+  <QuestScriptDef>
+    <defName>HVMP_PaxBellum</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[enemyFaction_pawnsPlural] of [banditSuffix]</li>
+        <li>questName->[eliminate] the [bandits]</li>
+        <li>questName->[bandits] of [banditSuffix]</li>
+		<li>questName->The [banditPrefix] [bandits]</li>
+		
+		<li>eliminate->Deal with</li>
+		<li>eliminate->Divert</li>
+		<li>eliminate->Defeat</li>
+		<li>eliminate->Eradicate</li>
+		<li>eliminate->Vanquish</li>
+		<li>eliminate->Dominate</li>
+		<li>eliminate->Crush</li>
+		<li>eliminate->Rout</li>
+		
+        <li>bandits->Bandits</li>
+        <li>bandits->Scum</li>
+        <li>bandits->Warriors</li>
+        <li>bandits->Scourges</li>
+        <li>bandits->Muggers</li>
+        <li>bandits->Despoilers</li>
+        <li>bandits->Brigands</li>
+        <li>bandits->Ruffians</li>
+        <li>bandits->Highwaymen</li>
+        <li>bandits->Ransackers</li>
+        <li>bandits->Malcontents</li>
+        <li>bandits->Hounds</li>
+		
+        <li>banditSuffix->Terror</li>
+        <li>banditSuffix->Duplicity</li>
+        <li>banditSuffix->Savagery</li>
+        <li>banditSuffix->Anarchy</li>
+        <li>banditSuffix->Destruction</li>
+        <li>banditSuffix->Barbarity</li>
+        <li>banditSuffix->Misfortune</li>
+		
+        <li>banditPrefix->Loathsome</li>
+        <li>banditPrefix->Disruptive</li>
+        <li>banditPrefix->Savage</li>
+        <li>banditPrefix->Fearsome</li>
+        <li>banditPrefix->Despicable</li>
+        <li>banditPrefix->Foolish</li>
+        <li>banditPrefix->Selfish</li>
+        <li>banditPrefix->Irredeemable</li>
+        <li>banditPrefix->Barbaric</li>
+
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription(asker_factionLeader==True)->[asker_nameFull], [asker_faction_leaderTitle] of the [asker_faction_name], wants you to clear the area near [map_definite] of a band of belligerents. [asker_nameDef] wants you to signal (*Threat)[numGroupsOf] [enemyFaction_pawnsPlural](/Threat) from [enemyFaction_name] to draw them away from the caravan - and towards you.[endingCommon]</li>
+        <li>groupsOf(raidCount==1,priority=1)->[enemyFaction_pawnsPlural]</li>
+        <li>groupsOf->[numGroupsOf] [enemyFaction_pawnsPlural]</li>        
+        <li>endingCommon->\n\n[pawnKindsParagraph]\n\nIf you accept, the [enemyFaction_pawnsPlural] will arrive in [firstRaidDelayTicks_duration].</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits.QuestNode_PaxIntermediary">
+      <nodes>
+        <li Class="QuestNode_GetFactionOf">
+          <thing>$asker</thing>
+          <storeAs>faction</storeAs>
+        </li>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+        </li>
+        <li Class="QuestNode_GetMap" />
+        <!-- Raid(s) -->
+        <li Class="QuestNode_GetRandomInRangeInt">
+          <storeAs>raidCount</storeAs>
+          <range>1~2</range>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>firstRaidDelayTicks</name>
+		  <value>$(roundToTicksRough(randInt(60000, 300000)))</value>
+        </li>
+        <li Class="QuestNode_GetFaction">
+          <allowEnemy>true</allowEnemy>
+          <mustBePermanentEnemy>true</mustBePermanentEnemy>
+          <storeAs>enemyFaction</storeAs>
+        </li>
+        <li Class="QuestNode_Subscript">
+          <def>HVMP_RaidDelayRepeatable</def>
+          <parms>
+            <points>$($points * 0.7)</points>
+          </parms>
+        </li>
+        <li Class="QuestNode_AllSignals">
+          <inSignals>
+            <li>AllRaidsSent</li>
+            <li>raid$($raidCountMinusOne)/lord.AllEnemiesDefeated</li>
+          </inSignals>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Delay">
+                <delayTicks>300</delayTicks>
+                <node Class="QuestNode_Sequence">
+                  <nodes>
+					  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+						<faction>$faction</faction>
+						<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+						<customLetterText TKey="LetterTextPaymentArrived">You have defeated the bandits!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
+					  </li>
+					<li Class="QuestNode_End">
+						<outcome>Success</outcome>
+					</li>
+                  </nodes>
+                </node>
+              </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  <QuestScriptDef>
+    <defName>HVMP_RaidDelayRepeatable</defName>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>pawnKindsParagraph(raidCount==1)->The group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\n[raid0/raidArrivalModeInfo][mutatorSuffix]</li>
+        <li>pawnKindsParagraph(raidCount==2)->The first group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\nThe second similar-sized group will follow soon after.[mutatorSuffix]</li>
+        <li>pawnKindsParagraph(raidCount==3)->The first group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\nTwo similar-sized groups will follow soon after.[mutatorSuffix]</li>
+        <li>pawnKindsParagraph(raidCount>=4)->The first group of [enemyFaction_pawnsPlural] is composed of: \n\n[raid0/raidPawnKinds]\n\n[raidCountMinusOne] similar-sized groups will follow soon after.[mutatorSuffix]</li>
+        <li>numGroupsOf(raidCount==1)-></li>
+        <li>numGroupsOf(raidCount==2)->two groups of</li>
+        <li>numGroupsOf(raidCount==3)->three groups of</li>
+        <li>numGroupsOf(raidCount>=4)->[raidCount] groups of</li>
+		<li>mutatorSuffix->[raid0/mutator_AW_info][raid0/mutator_DRTNT_info][raid0/mutator_TG_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+        <li Class="QuestNode_GetFaction">
+          <allowEnemy>true</allowEnemy>
+          <mustBePermanentEnemy>true</mustBePermanentEnemy>
+          <storeAs>enemyFaction</storeAs>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>nextRaidDelayTicks</name>
+          <value>$firstRaidDelayTicks</value>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>raidCountMinusOne</name>
+          <value>$raidCount</value>
+        </li>
+        <li Class="QuestNode_Subtract">
+          <value1>$raidCountMinusOne</value1>
+          <value2>1</value2>
+          <storeAs>raidCountMinusOne</storeAs>
+        </li>
+        <li Class="QuestNode_LoopCount">
+          <loopCount>$raidCount</loopCount>
+          <storeLoopCounterAs>raidLoopCounter</storeLoopCounterAs>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_IsNull">
+                <value>$raid(($raidLoopCounter))/raidDelayTicks</value>
+                <elseNode Class="QuestNode_Set">
+                  <name>nextRaidDelayTicks</name>
+                  <value>$raid(($raidLoopCounter))/raidDelayTicks</value>
+                </elseNode>
+              </li>
+              <li Class="QuestNode_Delay">
+                <delayTicks>$nextRaidDelayTicks</delayTicks>
+                <waitUntilPlayerHasHomeMap>true</waitUntilPlayerHasHomeMap>
+                <node Class="QuestNode_Sequence">
+                  <nodes>
+                    <li Class="QuestNode_SubScript">
+                      <prefix>raid$raidLoopCounter</prefix>
+                      <def>HVMP_Raid</def>
+                      <parms>
+                        <tag>lord</tag>
+                        <inSignal>$inSignal</inSignal>
+                        <map>$map</map>
+                        <enemyFaction>$enemyFaction</enemyFaction>
+                        <points>$points</points>
+                        <walkInSpot>$walkInSpot</walkInSpot>
+                        <customLetterLabel>$customLetterLabel</customLetterLabel>
+                        <customLetterText>$customLetterText</customLetterText>
+                        <customLetterLabelRules>$customLetterLabelRules</customLetterLabelRules>
+                        <customLetterTextRules>$customLetterTextRules</customLetterTextRules>
+                      </parms>
+                    </li>
+                    <li Class="QuestNode_Equal">
+                      <value1>$raidLoopCounter</value1>
+                      <value2>$($raidCount - 1)</value2>
+                      <compareAs>int</compareAs>
+                      <node Class="QuestNode_SendSignals">
+                        <outSignals>AllRaidsSent</outSignals>
+                      </node>
+                    </li>
+                  </nodes>
+                </node>
+              </li>
+              <li Class="QuestNode_Add"> <!-- next raid comes 9000 ticks after the previous -->
+                <value1>$nextRaidDelayTicks</value1>
+                <value2>9000</value2>
+                <storeAs>nextRaidDelayTicks</storeAs>
+              </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  <QuestScriptDef>
+    <defName>HVMP_Raid</defName>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>threatDescription->[enemyFaction_pawnsPlural] from [enemyFaction_name] will attack you. Their group is composed of:\n\n[raidPawnKinds]\n\n[raidArrivalModeInfo]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+        <li Class="HautsPermits.QuestNode_AllThreeBellumMutators"><!--behaves like a QuestNode_Raid, but has additional functions if any of the Bellum mutators are active-->
+          <tag>$tag</tag>
+          <customLetterLabel>$customLetterLabel</customLetterLabel>
+          <customLetterText>$customLetterText</customLetterText>
+          <customLetterLabelRules>$customLetterLabelRules</customLetterLabelRules>
+          <customLetterTextRules>$customLetterTextRules</customLetterTextRules>
+          <arrivalMode>$arrivalMode</arrivalMode>
+          <canTimeoutOrFlee>$canTimeoutOrFlee</canTimeoutOrFlee>
+          <raidPawnKind>$raidPawnKind</raidPawnKind>
+          <inSignalLeave>EndRaid</inSignalLeave>
+		  <!--Advanced Weaponry: either causes one of the following incidents when a raid spawns, or adds certain kinds of pawns to it.-->
+		  <AW_conditionChance>0.6</AW_conditionChance>
+		  <AW_conditions>
+			<li>EMIField</li>
+			<li>HVMP_TargetedPsychicSuppression</li>
+			<li>PsychicDrone</li>
+		  </AW_conditions>
+		  <AW_conditionHours>2~5</AW_conditionHours>
+		  <AW_pawnRosterOtherwise>
+			  <li>
+				<kindDef>HVMP_BonusQeustPawns</kindDef>
+				<options>
+				  <Mech_CentipedeBlaster>4</Mech_CentipedeBlaster>
+				  <Mech_CentipedeGunner>4</Mech_CentipedeGunner>
+				  <Mech_CentipedeBurner>4</Mech_CentipedeBurner>
+				  <Mech_Centurion MayRequire="Ludeon.RimWorld.Biotech">4</Mech_Centurion>
+				  <AM_Mech_Polychoron MayRequire="Ludeon.RimWorld.Biotech,sarg.alphamechs">3</AM_Mech_Polychoron>
+				  <Mech_Diabolus MayRequire="Ludeon.RimWorld.Biotech">2</Mech_Diabolus>
+				  <Mech_Warqueen MayRequire="Ludeon.RimWorld.Biotech">2</Mech_Warqueen>
+				  <AM_Starfire MayRequire="Ludeon.RimWorld.Biotech,sarg.alphamechs">1</AM_Starfire>
+				  <AM_Siegebreaker MayRequire="sarg.alphamechs">1</AM_Siegebreaker>
+				  <AV_Mech_Tarantula MayRequire="Veltaris.Mechtech">1</AV_Mech_Tarantula>
+				</options>
+			  </li>
+			  <li>
+				<kindDef>HVMP_BonusQeustPawns</kindDef>
+				<options>
+				  <Drone_Wasp MayRequire="Ludeon.RimWorld.Odyssey">8</Drone_Wasp>
+				  <Mech_Lancer>2</Mech_Lancer>
+				  <Mech_Legionary MayRequire="Ludeon.RimWorld.Biotech">3</Mech_Legionary>
+				  <AM_Mech_Optio MayRequire="Ludeon.RimWorld.Biotech,sarg.alphamechs">1</AM_Mech_Optio>
+				</options>
+			  </li>
+		  </AW_pawnRosterOtherwise>
+		  <AW_bonusPoints>$($points * 0.2)</AW_bonusPoints>
+		  <AW_description>\n\n{0_pawnsPluralDef} are making use of ill-gotten advanced technology. They may be accompanied by robotic combatants, or strike in tandem with the activation of an electronics-disabling field or wide-area psychic affector.</AW_description>
+		  <!--Dead Raiders Tell No Tales: gives some of the pawns this hediff-->
+		  <DRTNT_spyChance>0.18</DRTNT_spyChance>
+		  <DRTNT_hediff>HVMP_DRTNT</DRTNT_hediff>
+		  <DRTNT_description>\n\n{0_pawnsPluralDef} are career raiders. Some among them make a living by selling information about colonies they've encountered to other interested parties - if allowed to escape, they'll empower future raids from hostile factions. These scouts have been visually marked for easy identification.</DRTNT_description>
+		  <!--Traitor Guard: some pawns gain these hediffs, and a bonus amount of mercs are added to the raid-->
+		  <TG_hediffChances>
+			<li><key>HVMP_BShield</key><value>0.04</value></li>
+			<li><key>HVMP_HostileEnvironmentFilm</key><value>0.08</value></li>
+		  </TG_hediffChances>
+		  <TG_pawnRoster>
+			  <li>
+				<kindDef>Combat</kindDef>
+				<options>
+				  <Mercenary_Gunner_Acidifier>12</Mercenary_Gunner_Acidifier>
+				  <Grenadier_Destructive>4</Grenadier_Destructive>
+				  <Mercenary_Slasher>4</Mercenary_Slasher>
+				  <Mercenary_Sniper_Acidifier>3</Mercenary_Sniper_Acidifier>
+				  <Mercenary_Heavy>3</Mercenary_Heavy>
+				  <Grenadier_Smoke>1</Grenadier_Smoke>
+				</options>
+			  </li>
+		  </TG_pawnRoster>
+		  <TG_bonusPoints>$($points * 0.25)</TG_bonusPoints>
+		  <TG_description>\n\n{0_pawnsPluralDef} are assisted by former guards who defected to the raiders. These mercenaries will fight alongside them, and have distributed defensive technology to some of the [enemyFaction_pawnsPlural].</TG_description>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--pax: caelum-->
+  <QuestScriptDef>
+    <defName>HVMP_PaxCaelum</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->Pax [gameCondition_label] [testing]</li>
+        <li>questName->[gameCondition_indefinite] for the Pax</li>
+        <li>questName->[gameCondition_label] [testing]</li>
+		
+        <li>testing->testing</li>
+        <li>testing->weapons test</li>
+        <li>testing->readiness test</li>
+        <li>testing->exercise</li>
+        <li>testing->drill</li>
+        <li>testing->readiness</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->The Pax Branch is seeking to test one of its orbital weapons and has deemed your location suitable for a test. However, they need your permission to proceed, as once the weapon is used, [gameConditionDescriptionFuture].[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_MK_info][mutator_SO_info][mutator_TE_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits.QuestNode_PaxIntermediary">
+      <nodes>
+        <li Class="QuestNode_GetMap" />
+        <li Class="QuestNode_Delay">
+          <delayTicks>600</delayTicks>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_SubScript">
+                <def>HVMP_GameConditionNegativeRandom</def>
+              </li>
+              <li Class="QuestNode_SendSignals">
+                <outSignals>GameConditionStarted</outSignals>
+              </li>
+            </nodes>
+          </node>
+      </li>
+        <li Class="QuestNode_Delay">
+          <delayTicks>1200</delayTicks>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+			  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				<faction>$faction</faction>
+				<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+				<customLetterText TKey="LetterTextPaymentArrived">Due to your accommodation of their weapons testing, The [asker_faction_name]'s respect for you has increased.</customLetterText>
+			  </li>
+              <li Class="QuestNode_SendSignals">
+                <outSignals>RewardGiven</outSignals>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_AllSignals">
+          <inSignals>
+            <li>RewardGiven</li>
+            <li>GameConditionStarted</li>
+          </inSignals>
+          <node Class="QuestNode_End">
+            <outcome>Success</outcome>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  <QuestScriptDef>
+    <defName>HVMP_GameConditionNegativeRandom</defName>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>threatDescription->[gameConditionDescriptionFuture].</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+        <li Class="QuestNode_GetRandomNegativeGameCondition">
+          <storeGameConditionAs>gameCondition</storeGameConditionAs>
+          <storeGameConditionDurationAs>gameConditionDuration</storeGameConditionDurationAs>
+          <storeGameConditionDifficultyAs>gameConditionDifficulty</storeGameConditionDifficultyAs>
+        </li>
+        <li Class="QuestNode_GetRandomNegativeGameCondition">
+          <storeGameConditionAs>gameCondition2</storeGameConditionAs>
+          <storeGameConditionDurationAs>gameConditionDuration2</storeGameConditionDurationAs>
+          <storeGameConditionDifficultyAs>gameConditionDifficulty2</storeGameConditionDifficultyAs>
+        </li>
+        <li Class="HautsPermits.QuestNode_AllThreeCaelumMutators">
+          <gameCondition>$gameCondition</gameCondition>
+          <duration>$gameConditionDuration</duration>
+          <storeGameConditionDescriptionFutureAs>gameConditionDescriptionFuture</storeGameConditionDescriptionFutureAs>
+		  <MK_condition>HVMP_MoodKiller</MK_condition>
+		  <MK_description>\n\nThe weapon emits a form of lingering radiation which will worsen the mood of your colonists.</MK_description>
+		  <SO_hediff>HVMP_SensoryOverload</SO_hediff>
+		  <SO_stunDuration>180</SO_stunDuration>
+		  <SO_description>\n\nWhen the weapon fires, it will briefly overwhelm the senses of all living creatures, stunning them, as well as inflicting lowered sight and hearing for 5 days.</SO_description>
+		  <TE_gameCondition>$gameCondition2</TE_gameCondition>
+          <TE_duration>$gameConditionDuration2</TE_duration>
+		  <TE_durationPct>0.25~0.5</TE_durationPct>
+		  <TE_description>\n\nThe weapon is in an experimental prototyping phase. It will cause an unpredictable additional effect that lasts for a shorter duration.</TE_description>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--pax: machina-->
+  <QuestScriptDef>
+    <defName>HVMP_PaxMachina</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[menace] cluster</li>
+        <li>questName->[menace] pods</li>
+        <li>questName->mechs to [destroy]</li>
+        <li>questName->[dangerous] mechanoids</li>
+        <li>questName->[dangerous] mech cluster</li>
+        <li>questName->mech [menace]</li>
+		
+        <li>destroy->destroy</li>
+        <li>destroy->scrap</li>
+        <li>destroy->wreck</li>
+        <li>destroy->demolish</li>
+        <li>destroy->break down</li>
+        <li>destroy->obliterate</li>
+		
+        <li>dangerous->dangerous</li>
+        <li>dangerous->hazardous</li>
+        <li>dangerous->unsafe</li>
+        <li>dangerous->harmful</li>
+        <li>dangerous->rampant</li>
+        <li>dangerous->hostile</li>
+        <li>dangerous->maleficent</li>
+
+        <li>menace->threat</li>
+        <li>menace->menace</li>
+        <li>menace->scourge</li>
+        <li>menace->danger</li>
+        <li>menace->terror</li>
+        <li>menace->fear</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>dangersDescription(priority=1)->\n\nThe pods contain these dangers:
+\n[allThreats]</li>
+        <li>dangersDescription-></li>
+        <li>questDescription->The Pax Branch is making a request. A dangerous but dormant mechanoid cluster has been recently identified. They want you to issue its deployment signal and deal with it once it lands. If you do, (*Threat)the mechanoid cluster(/Threat) will land at [map_definite].[dangersDescription][mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_RS_info][mutator_OTC_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits.QuestNode_PaxIntermediary">
+      <nodes>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+        </li>
+        <li Class="QuestNode_GetMap" />
+        <li Class="QuestNode_Delay">
+          <delayTicks>600</delayTicks>
+          <node Class="HautsPermits.QuestNode_RS_THTF">
+            <tag>cluster</tag>
+            <points>$($points * 0.7)</points>
+			<THTF_multi>3</THTF_multi>
+			<RS_description>\nThe mechanoid cluster will activate immediately upon landing.</RS_description>
+			<nonRS_description>\nThe mechanoid cluster will be initially dormant. It may have a countdown activator, or it may stay dormant forever until disturbed.</nonRS_description>
+          </node>
+        </li>
+        <li Class="QuestNode_AllSignals">
+          <inSignals>
+            <li>cluster.AllEnemiesDefeated</li>
+          </inSignals>
+          <node Class="QuestNode_Delay">
+            <delayTicks>300</delayTicks>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+				<li Class="HautsPermits.QuestNode_MachinaOTC">
+					<storeAs>enemyFaction</storeAs>
+					<OTC_description>\n\nOnce the cluster is defeated, a retaliatory mechanoid force will strike.</OTC_description>
+					<node Class="QuestNode_Raid">
+						  <tag>$tag</tag>
+						  <customLetterLabel>$customLetterLabel</customLetterLabel>
+						  <customLetterText>$customLetterText</customLetterText>
+						  <customLetterLabelRules>$customLetterLabelRules</customLetterLabelRules>
+						  <customLetterTextRules>$customLetterTextRules</customLetterTextRules>
+						  <arrivalMode>$arrivalMode</arrivalMode>
+						  <canTimeoutOrFlee>$canTimeoutOrFlee</canTimeoutOrFlee>
+						  <raidPawnKind>$raidPawnKind</raidPawnKind>
+						  <inSignalLeave>EndRaid</inSignalLeave>
+					</node>
+				</li>
+				<li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+					<faction>$faction</faction>
+					<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+					<customLetterText TKey="LetterTextPaymentArrived">Due to your defeat of the mech cluster, The [asker_faction_name]'s respect for you has increased.</customLetterText>
+				</li>
+                <li Class="QuestNode_End">
+					<outcome>Success</outcome>
+                </li>
+              </nodes>
+            </node>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--pax: mundi-->
+  <QuestScriptDef>
+    <defName>HVMP_PaxMundi</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[desiring] [peace]</li>
+        <li>questName->The [peace] [suffix]</li>
+		
+        <li>desiring->Push for</li>
+        <li>desiring->Commitment to</li>
+        <li>desiring->Achieving</li>
+        <li>desiring->Spirit of</li>
+        <li>desiring->Fostering</li>
+        <li>desiring->Advancing</li>
+        <li>desiring->The Need For</li>
+
+        <li>peace->Peace</li>
+        <li>peace->Cousinhood</li>
+        <li>peace->Unity</li>
+        <li>peace->Goodwill</li>
+        <li>peace->Utopia</li>
+        <li>peace->Alliance</li>
+        <li>peace->Accordance</li>
+        <li>peace->Concord</li>
+        <li>peace->Amity</li>
+        <li>peace->Paradise</li>
+        <li>peace->Brighter Times</li>
+		
+        <li>suffix->Agenda</li>
+        <li>suffix->Initiative</li>
+        <li>suffix->Proposal</li>
+        <li>suffix->Incentive</li>
+        <li>suffix->Drive</li>
+        <li>suffix->Mission</li>
+        <li>suffix->Undertaking</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription(noGoodwillableFactions==True)->The Pax Branch would like to celebrate your commitment to peace by strengthening their ties with you.</li>
+        <li>questDescription(noGoodwillableFactions==False)->The Pax Branch wants you to further commit to the ideal of peace by strengthening your ties with other factions. If you agree, you'll need to improve your goodwill with other factions by [goodwillAmount].\n\nGoodwill earned with e-branches does not count, nor does goodwill earned or lost due to movement towards natural goodwill.[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_MTEOP_info][mutator_PIOL_info][mutator_TWOS_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits.QuestNode_PaxIntermediary">
+	  <nodes>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+        </li>
+        <li Class="HautsPermits.QuestNode_PaxMundi">
+		  <goodwillOneStarRange>20~30</goodwillOneStarRange>
+		  <goodwillTwoStarRange>31~60</goodwillTwoStarRange>
+		  <goodwillThreeStarRange>61~100</goodwillThreeStarRange>
+		  <!--if there are no factions you can possibly improve goodwill with, this quest auto succeeds... otherwise, you gotta put in WORK-->
+		  <noGoodwillableFactionsNode Class="QuestNode_Delay">
+            <delayTicks>$1</delayTicks>
+			<node Class="QuestNode_Sequence">
+			  <nodes>
+				  <li Class="QuestNode_Set">
+					<name>sendStandardLetter</name>
+					<value>true</value>
+				  </li>
+				  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+					<faction>$faction</faction>
+					<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+					<customLetterText TKey="LetterTextPaymentArrived">The Pax Branch celebrates your commitment to peace.</customLetterText>
+				  </li>
+				  <li Class="QuestNode_End">
+					<outcome>Success</outcome>
+					<sendStandardLetter>$sendStandardLetter</sendStandardLetter>
+				  </li>
+			  </nodes>
+			</node>
+          </noGoodwillableFactionsNode>
+          <elseNode Class="QuestNode_Sequence">
+		    <nodes>
+			  <li Class="HautsPermits.QuestNode_PaxMundiTracker">
+			    <MTEOP_pointFactor>1</MTEOP_pointFactor>
+				<MTEOP_description>\n\nPirates - and other factions that are so hostile they refuse to engage in diplomacy - will take offense to your accepting this quest. The next raid from each such faction will be stronger.</MTEOP_description>
+				<TWOS_description>\n\nThis is a fraught time for the dream of global unity. Goodwill losses will be weighted twice as heavily.</TWOS_description>
+			  </li>
+			  <li Class="HautsPermits.QuestNode_MundiPIOL">
+				<PIOL_description>\n\nYou will have [timeout_duration] to complete this undertaking.</PIOL_description>
+				<node Class="QuestNode_Sequence">
+					  <nodes>
+						  <li Class="QuestNode_Set">
+							  <name>timeout</name>
+							  <value>$(randInt(12,20)*60000)</value>
+						  </li>
+						  <li Class="QuestNode_Delay">
+							  <delayTicks>$timeout</delayTicks>
+							  <isQuestTimeout>true</isQuestTimeout>
+							  <outSignalComplete>FailPIOL</outSignalComplete>
+						  </li>
+						  <li Class="HautsPermits.QuestNode_EndBranch">
+							<outcome>Fail</outcome>
+							  <inSignal>FailPIOL</inSignal>
+							<goodwillChangeReason>HVMP_QuestExpired</goodwillChangeReason>
+							<faction>HVMP_PaxBranch</faction>
+						  </li>
+					  </nodes>
+				</node>
+			  </li>
+			  <li Class="QuestNode_Signal">
+				  <inSignal>desiredGoodwillReached</inSignal>
+				  <node Class="QuestNode_Sequence">
+					<nodes>
+					  <li Class="QuestNode_Set">
+						<name>sendStandardLetter</name>
+						<value>true</value>
+					  </li>
+					  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+						<faction>$faction</faction>
+						<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+						<customLetterText TKey="LetterTextPaymentArrived">Due to the goodwill you have cultivated with other factions, The [asker_faction_name]'s respect for you has increased.</customLetterText>
+					  </li>
+					  <li Class="QuestNode_End">
+						<outcome>Success</outcome>
+						<sendStandardLetter>$sendStandardLetter</sendStandardLetter>
+					  </li>
+					</nodes>
+				  </node>
+			  </li>
+		    </nodes>
+          </elseNode>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--pax: vox-->
+  <QuestScriptDef>
+    <defName>HVMP_PaxVox</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[clan] [peaceTalks]</li>
+        <li>questName->[peaceTalks] with [clan]</li>
+        <li>questName->The [hidden] [clan]</li>
+        <li>questName->The [peaceTalks]</li>
+        <li>questName->[demonym] [peaceTalks]</li>
+        <li>questName->Arranged [peaceTalks]</li>
+        <li>clan->Clan</li>
+        <li>clan->Encampment</li>
+        <li>clan->Hamlet</li>
+        <li>clan->Enclave</li>
+        <li>clan->Village</li>
+        <li>clan->Tribe</li>
+        <li>clan->People</li>
+        <li>peaceTalks->Peace-making</li>
+        <li>peaceTalks->Negotiation</li>
+        <li>peaceTalks->Diplomacy</li>
+        <li>peaceTalks->Meeting</li>
+        <li>demonym->Outcast</li>
+        <li>demonym->Nomad</li>
+        <li>demonym->Settler</li>
+        <li>demonym->Wanderer</li>
+        <li>hidden->Hidden</li>
+        <li>hidden->Concealed</li>
+        <li>hidden->Insular</li>
+        <li>hidden->Reclusive</li>
+        <li>hidden->Secretive</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->The Pax Branch wants to build relationships and trust among the people of the Rim. As such, they want us to negotiate with a recently discovered minor society in a nearby location.
+\nIf you are interested, make sure to send a good negotiator. If left uncontacted, the society will move or otherwise become unavailable for contact after [paxTalkTimer_duration].[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_AAA_info][mutator_ST_info][mutator_TTFTIO_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits.QuestNode_PaxIntermediary">
+      <nodes>
+        <li Class="QuestNode_Set">
+          <name>siteDistRange</name>
+          <value>2~13</value>
+        </li>
+        <li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		</li>
+        <li Class="QuestNode_GetPlayerFaction">
+          <storeAs>playerFaction</storeAs>
+        </li>
+        <li Class="QuestNode_GetSiteTile">
+          <storeAs>tile</storeAs>
+        </li>
+        <li Class="HautsPermits.QuestNode_GenerateVox">
+          <def>HVMP_PaxTalks</def>
+          <tile>$tile</tile>
+          <faction>$faction</faction>
+          <storeAs>peaceTalks</storeAs>
+		  <AAA_difficultyFactor>2</AAA_difficultyFactor>
+		  <AAA_description>\n\nThis society is untrusting, but would like to ally themselves to a major power. Securing a good outcome to the talks will be difficult, but the more non-Branch factions you are already allied with, the lower this added difficulty will be (if you are allied with every non-Branch, goodwill-having faction, the negotiation will be only as difficult as normal).</AAA_description>
+		  <ST_difficultyFactor>2</ST_difficultyFactor>
+		  <ST_giftCountRange>1000~10000</ST_giftCountRange>
+		  <ST_description>\n\nThis society has a strong interest in financial prosperity. Securing a good outcome to the talks will be difficult, unless you bring along [moneyAmount] silver as a gift.</ST_description>
+		  <TTFTIO_chance>0.5</TTFTIO_chance>
+		  <TTFTIO_pointsFactor>0.15</TTFTIO_pointsFactor>
+		  <TTFTIO_description>\n\nThis society is warlike and prone to raiding. There is a chance that this offer of peace talks is a false pretext, or that they may take offense towards your negotiator and decide to attack. Be prepared for violence.</TTFTIO_description>
+        </li>
+        <li Class="QuestNode_SpawnWorldObjects">
+          <worldObjects>$peaceTalks</worldObjects>
+          <tile>$tile</tile>
+        </li>
+        <li Class="HautsPermits.QuestNode_LookOverHere">
+          <worldObjects>$peaceTalks</worldObjects>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>paxTalkTimer</name>
+          <value>$(randInt(12,28)*60000)</value>
+        </li>
+        <li Class="QuestNode_WorldObjectTimeout">
+          <worldObject>$peaceTalks</worldObject>
+          <delayTicks>$paxTalkTimer</delayTicks>
+          <isQuestTimeout>true</isQuestTimeout>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
+                <text TKey="LetterTextQuestExpired">The offer of e-branch-arranged peace talks has expired. The [asker_faction_name]'s respect for you has slightly diminished.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>HVMP_QuestExpired</goodwillChangeReason>
+				<faction>HVMP_PaxBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>peaceTalks.Failed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestExpired">Quest failed: [resolvedQuestName]</label>
+                <text TKey="LetterTextQuestExpired">The e-branch-arranged peace talks fell through. The [asker_faction_name]'s respect for you has slightly diminished.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>HVMP_PaxTalksFailed</goodwillChangeReason>
+				<faction>HVMP_PaxBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>peaceTalks.TTFTIO_Ambush</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestExpired">Quest negated: [resolvedQuestName]</label>
+                <text TKey="LetterTextQuestExpired">There was no way to salvage the peace talks. The quest has ended.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch" />
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>peaceTalks.Resolved</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+			  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				<faction>$faction</faction>
+				<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+				<customLetterText TKey="LetterTextPaymentArrived">You have successfully negotiated for peace!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
+			  </li>
+              <li Class="QuestNode_End">
+                <outcome>Success</outcome>
+              </li>
+            </nodes>
+          </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--rover: atlas-->
+  <QuestScriptDef>
+    <defName>HVMP_RoverAtlas</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[atlasAdj] [atlasName] Needs [helpWord]</li>
+        <li>questName->[atlasName] Needs [helpWord]</li>
+        <li>questName->[atlasName] Requires [helpWord]</li>
+        <li>questName->[helpVerb] a [atlasAdj] [atlasName]</li>
+
+        <li>atlasAdj->Outdated</li>
+        <li>atlasAdj->Incomplete</li>
+        <li>atlasAdj->Misleading</li>
+        <li>atlasAdj->Damaged</li>
+        <li>atlasAdj->Ancient</li>
+        <li>atlasAdj->Musty</li>
+        <li>atlasAdj->Obsolete</li>
+        <li>atlasAdj->Erroneous</li>
+        <li>atlasAdj->Inaccurate</li>
+
+        <li>atlasName->Atlas</li>
+        <li>atlasName->Travelogue</li>
+        <li>atlasName->Chart</li>
+        <li>atlasName->Map</li>
+        <li>atlasName->Gazetteer</li>
+
+        <li>helpWord->Revision</li>
+        <li>helpWord->Updating</li>
+        <li>helpWord->Editing</li>
+        <li>helpWord->Rewrite</li>
+        <li>helpWord->Correction</li>
+        <li>helpWord->Adaptation</li>
+		
+        <li>helpVerb->Fix</li>
+        <li>helpVerb->Revise</li>
+        <li>helpVerb->Modernize</li>
+        <li>helpVerb->Edit</li>
+        <li>helpVerb->Rewrite</li>
+        <li>helpVerb->Correct</li>
+        <li>helpVerb->Adapt</li>
+
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->The Rover Branch publishes an atlas that details a region near you. However, it has come to their attention that it is in need of revision. They would be quite grateful if you were to perform that revision for them.\n\nSince the atlas deals with [skillString], a proofreader with high [extraSkill] skill would be ideal.\n\nThe atlas must be revised within [timeout_duration]. Only those who have visited the location discussed by the atlas can revise it.[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_DTS_info][mutator_TPBU_info]</li>
+		
+		<li>skillString(extraSkill==Animals)->the fauna which live in that region</li>
+		<li>skillString(extraSkill==Construction)->ruins and contemporary civilizations in that region</li>
+		<li>skillString(extraSkill==Mining)->matters of geology as well</li>
+		<li>skillString(extraSkill==Plants)->regional flora and their uses</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <questContentRules>
+      <rulesStrings></rulesStrings>
+    </questContentRules>
+    <root Class="HautsPermits.QuestNode_Root_Atlas">
+	  <storeBookAs>bookObject</storeBookAs>
+	  <storeExtraSkillAs>extraSkill</storeExtraSkillAs>
+	  <DTS_description>\n\nThe atlas is written in an extremely dry, technical format that is immensely frustrating to revise. Anyone attempting to revise it will gradually lose joy and mood.</DTS_description>
+	  <ID_multi>1.25</ID_multi>
+	  <TPBU_description>\n\nThe location the atlas discusses has recently been occupied by some kind of territorial, technologically advanced hostile party. Should you visit it, they will activate an ultratech device to harass you.</TPBU_description>
+	  <nodes>
+        <li Class="QuestNode_DropPods">
+          <contents>$thingsToDrop</contents>
+          <useTradeDropSpot>true</useTradeDropSpot>
+        </li>
+        <li Class="HautsPermits.QuestNode_LookOverHere">
+          <worldObjects>$worldObject</worldObjects>
+        </li>
+		<li Class="QuestNode_Signal">
+          <inSignal>bookObject.StudiableItemFinished</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Set">
+                <name>sendStandardLetter</name>
+                <value>true</value>
+              </li>
+              <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				<faction>$faction</faction>
+                <customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+                <customLetterText TKey="LetterTextPaymentArrived">You have revised the atlas!\n\nThe Rover Branch's respect for you has increased.</customLetterText>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndAndDestroySite">
+                <outcome>Success</outcome>
+				<siteToDestroy>$worldObject</siteToDestroy>
+                <sendStandardLetter>$sendStandardLetter</sendStandardLetter>
+				<faction>HVMP_RoverBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_DestroyOrPassToWorldOnCleanup">
+          <things>$bookObject</things>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>bookObject.StudiableItemDestroyed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelShuttleDestroyed">Atlas destroyed</label>
+                <letterDef>NegativeEvent</letterDef>
+                <text TKey="LetterTextShuttleDestroyed">The atlas you were tasked with revising has been destroyed.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndAndDestroySite">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>HVMP_AtlasDestroyed</goodwillChangeReason>
+				<siteToDestroy>$worldObject</siteToDestroy>
+				<faction>HVMP_RoverBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Set">
+          <name>timeout</name>
+          <value>$(3600000)</value>
+        </li>
+        <li Class="QuestNode_WorldObjectTimeout">
+          <worldObject>$worldObject</worldObject>
+          <delayTicks>$timeout</delayTicks>
+          <isQuestTimeout>true</isQuestTimeout>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
+                <text TKey="LetterTextQuestExpired">The window of time to revise the regional atlas has expired. The Rover Branch's respect for you has slightly diminished.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>HVMP_QuestExpired</goodwillChangeReason>
+				<faction>HVMP_RoverBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>worldObject.Destroyed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
+                <text TKey="LetterTextQuestExpired">The window of time to revise the regional atlas has expired. The Rover Branch's respect for you has slightly diminished.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>HVMP_QuestExpired</goodwillChangeReason>
+				<faction>HVMP_RoverBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+	  </nodes>
+	</root>
+  </QuestScriptDef>
+  
+  <!--rover: icarus-->
+  <QuestScriptDef>
+    <defName>HVMP_RoverIcarus</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>0.6~1</expireDaysRange>
+    <everAcceptableInSpace>true</everAcceptableInSpace>
+    <defaultCharity>true</defaultCharity>
+    <successHistoryEvent MayRequire="Ludeon.RimWorld.Ideology">CharityFulfilled_ShuttleCrashRescue</successHistoryEvent>
+    <failedOrExpiredHistoryEvent MayRequire="Ludeon.RimWorld.Ideology">CharityRefused_ShuttleCrashRescue</failedOrExpiredHistoryEvent>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[ship] [crash]</li>
+        <li>questName->[damaged] [ship]</li>
+        <li>questName->[asker_nameDef]'s [damaged] [ship]</li>
+        <li>questName->[emergency] [landing]</li>
+        <li>questName->[asker_nameDef]'s [emergency] [landing]</li>
+		
+        <li>ship->spaceship</li>
+        <li>ship->transporter</li>
+        <li>ship->ship</li>
+        <li>ship->barge</li>
+        <li>ship->shuttle</li>
+        <li>ship->skimmer</li>
+        <li>ship->flightcraft</li>
+
+        <li>crash->crash</li>
+        <li>crash->down</li>
+        <li>crash->earthbound</li>
+        <li>crash->[landing]</li>
+        
+        <li>damaged->damaged</li>
+        <li>damaged->busted</li>
+        <li>damaged->failing</li>
+        <li>damaged->wounded</li>
+        <li>damaged->sputtering</li>
+        <li>damaged->spiraling</li>
+        <li>damaged->falling</li>
+        <li>damaged->plummeting</li>
+        <li>damaged->injured</li>
+        <li>damaged->clipped</li>
+        <li>damaged->trashed</li>
+        <li>damaged->wrecked</li>
+        
+        <li>emergency->emergency</li>
+        <li>emergency->forced</li>
+        <li>emergency->desperate</li>
+        <li>emergency->rapid</li>
+        <li>emergency->sudden</li>
+        <li>emergency->catastrophic</li>
+        <li>emergency->unplanned</li>
+        <li>emergency->hectic</li>
+        
+        <li>landing->landing</li>
+        <li>landing->descent</li>
+        <li>landing->approach</li>
+        <li>landing->landfall</li>
+        <li>landing->crash</li>
+        <li>landing->crash-landing</li>
+        <li>landing->fall</li>
+        <li>landing->touchdown</li>
+        <li>landing->nosedive</li>
+
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionAndNameRules>
+      <rulesStrings>
+        <li>pawnLabel->non-combatant</li>
+        <li>pawnLabelPlural->non-combatants</li>
+      </rulesStrings>
+    </questDescriptionAndNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->A traveling shuttle with the [asker_faction_name] has taken damage and part of its crew are seeking a place to land. Its commander [asker_nameDef] wants to land at [map_definite].\n\n[enemyFaction_pawnsPlural] from [enemyFaction_name] will attack the crashed shuttle site in an attempt to kill its occupants. You must defend them.\n\nThe shuttle contains [asker_nameDef][andOtherCivilians] [soldierCountKinds]. The commander [andCivilians] must be rescued[soldiersAreFodder].\n\nAfter [rescueDelay_duration], a rescue shuttle will come to pick up the survivors. You'll need to get them all on board within [leaveDelay_duration], and you'll lose goodwill with the [asker_faction_name] if any of them are dead or were left behind.\n[mutatorSuffix]</li>
+        
+        <li>pawnLabelSingleOrPlural(civilians_count==1)->[pawnLabel]</li>
+        <li>pawnLabelSingleOrPlural(civilians_count>=2)->[pawnLabelPlural]</li>
+        <li>andOtherCivilians(civilians_count==1)-></li>
+        <li>andOtherCivilians(civilians_count==2)->, as well as another [pawnLabel],</li>
+        <li>andOtherCivilians(civilians_count>=3)->, as well as [civilianCountMinusOne] other [pawnLabelSingleOrPlural],</li>
+        <li>andCivilians(civilians_count==1)-></li>
+        <li>andCivilians(civilians_count==2)->and [pawnLabel]</li>
+        <li>andCivilians(civilians_count>=3)->and [pawnLabelPlural]</li>
+        <li>soldierCountKinds(soldiers_count==0)->but no combatants</li>
+        <li>soldierCountKinds(soldiers_count==1)->and [soldiers_count] mercenary soldier</li>
+        <li>soldierCountKinds(soldiers_count>1)->and [soldiers_count] mercenary soldiers</li>
+		<li>soldiersAreFodder(soldiers_count==0)-></li>
+		<li>soldiersAreFodder(soldiers_count>0)->, but the [soldiers0_kindPlural] may be sacrificed</li>
+		
+		<li>mutatorSuffix->[mutator_HOTH_info][mutator_ROTSJ_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <questContentRules>
+      <rulesStrings>
+        <li>failLetterEndingCommon->You have failed the quest '[resolvedQuestName]'.</li>
+        <li>successLetterEndingCommon->You have successfully completed the quest '[resolvedQuestName]'.</li>
+        <li>goodwillSomeCiviliansLost->Not all the people could be rescued. [goodwillNegativelyAffected]</li>
+        <li>goodwillAllCiviliansLost->None of the people could be rescued. [goodwillNegativelyAffected]</li>
+        <li>goodwillNegativelyAffected->Your goodwill with [asker_faction_name] has been negatively affected for every crash-lander left.</li>
+        <li>commanderLandingDesc->[asker_nameDef], the commander who asked to land [asker_possessive] shuttle at [map_definite]</li>
+        <li>raidArrivedLetterLabel->Raid: [enemyFaction_name]</li>
+        <li>raidArrivedLetterText->[enemyFaction_pawnsPlural] from the [enemyFaction_name] have arrived. They will attack the people who crashed at [map_definite].\n\nDefend them until their rescue shuttle arrives in [rescueShuttleAfterRaidDelay_duration].</li>
+        <li>rescueShuttleArrivedLetterLabel->Rescue shuttle arrived</li>
+        <li>rescueShuttleArrivedLetterText->The rescue shuttle has arrived to collect the crash survivors. Make sure to have these people on the shuttle before it leaves in [leaveDelay_duration]:\n\n[civilians]</li>
+        <li>questCompletedSuccessLetterLabel->Quest completed: [resolvedQuestName]</li>
+        <li>questCompletedSuccessLetterText->[commanderLandingDesc], has escaped. [asker_pronoun] is grateful for the help [asker_pronoun] received at [map_definite].\n\n[successLetterEndingCommon]</li>
+        <li>questCompletedCiviliansLostSuccessLetterLabel->Quest completed: [resolvedQuestName]</li>
+        <li>questCompletedCiviliansLostSuccessLetterText->[commanderLandingDesc], has escaped.\n\n[goodwillSomeCiviliansLost]\n\n[successLetterEndingCommon]</li>
+        <li>askerLostLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>askerLostLetterText->[commanderLandingDesc] was not on board when the shuttle departed.\n\n[goodwillSomeCiviliansLost]\n\n[failLetterEndingCommon]</li>
+        <li>allLostLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>allLostLetterText->The rescue shuttle for the crash survivors has departed without anyone on board.\n\n[goodwillAllCiviliansLost]\n\n[failLetterEndingCommon]</li>
+        <li>askerDiedLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>askerDiedLetterText->[commanderLandingDesc] has died.\n\n[failLetterEndingCommon]</li>
+        <li>civilianDiedLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>civilianDiedLetterText->a non-combatant has died.\n\n[failLetterEndingCommon]</li>
+        <li>shuttleDestroyedLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>shuttleDestroyedLetterText->The shuttle sent to collect the crash survivors has been destroyed. They will now leave on foot.\n\n[failLetterEndingCommon]</li>
+        <li>shuttleLeftBehindLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>shuttleLeftBehindLetterText->The shuttle sent to collect the crash survivors has been left behind. They will now leave on foot.\n\n[failLetterEndingCommon]</li>
+        <li>mapRemovedLetterLabel->Quest failed: [resolvedQuestName]</li>
+        <li>mapRemovedLetterText->The map was left behind before the crash survivors could be collected. They will now leave on foot.\n\n[failLetterEndingCommon]</li>
+      </rulesStrings>
+    </questContentRules>
+    <root Class="HautsPermits.QuestNode_RoverIntermediary">
+      <nodes>
+        <li Class="QuestNode_GetMap">
+		  <canBeSpace>true</canBeSpace>
+		</li>
+        <li Class="QuestNode_GetPlayerFaction">
+          <storeAs>playerFaction</storeAs>
+        </li>
+        <li Class="HautsPermits.QuestNode_Icarus">
+          <maxCiviliansByPointsCurve>
+            <points>
+              <li>(0, 1)</li>
+              <li>(100, 3)</li>
+              <li>(500, 6)</li>
+            </points>
+		  </maxCiviliansByPointsCurve>
+		  <soldierDefs>
+		    <li>Grenadier_Destructive</li>
+		    <li>Mercenary_Gunner_Acidifier</li>
+		    <li>Mercenary_Sniper_Acidifier</li>
+		    <li>Mercenary_Slasher_Acidifier</li>
+		    <li>Mercenary_Heavy</li>
+		  </soldierDefs>
+		  <maxSoldiersByPointsCurve>
+            <points>
+              <li>(0, 1)</li>
+              <li>(100, 3)</li>
+              <li>(500, 6)</li>
+            </points>
+		  </maxSoldiersByPointsCurve>
+		  <shuttleDef>HVMP_ShuttleCrashedIcarus</shuttleDef>
+		  <HOTH_raidScalar_on>2</HOTH_raidScalar_on>
+		  <HOTH_raidScalar_off>1</HOTH_raidScalar_off>
+		  <HOTH_delay_on>900~2000</HOTH_delay_on>
+		  <HOTH_delay_off>8000~12000</HOTH_delay_off>
+		  <HOTH_description>\nThe large horde of enemies pursuing [asker_nameDef] is already close by. They are likely to attack within an hour of the shuttle's crashing.</HOTH_description>
+		  <ROTSJ_allowedIncidentTag>MechanoidShip</ROTSJ_allowedIncidentTag>
+		  <ROTSJ_description>\nThere's a low-hanging derelict ship in the shuttle's path. If you allow the shuttle to land at [map_definite], it'll bring down a dangerous mechanoid ship part with it.</ROTSJ_description>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>QuestSuccess</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+			  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+				<faction>$faction</faction>
+				<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+				<customLetterText TKey="LetterTextPaymentArrived">You have successfully protected the crash survivors!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
+			  </li>
+              <li Class="QuestNode_End">
+                <outcome>Success</outcome>
+              </li>
+            </nodes>
+          </node>
+        </li>
+	  </nodes>
+	</root>
+  </QuestScriptDef>
+  
+  <!--rover: laelaps-->
+  <QuestScriptDef>
+    <defName>HVMP_RoverLaelaps</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[worker] Outsourcing</li>
+        <li>questName->Temporary Hires</li>
+        <li>questName->[worker] Lending</li>
+        <li>questName->[worker]s for the [asker_faction_name]</li>
+        <li>questName->Provisional [worker]s</li>
+        <li>questName->Requesting [worker]s</li>
+
+        <li>worker->Local</li>
+        <li>worker->Escort</li>
+        <li>worker->Personnel</li>
+        <li>worker->Scout</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <!-- Asker is faction leader -->
+        <li>questDescription->[asker_faction_leaderTitle] [asker_nameFull] of the [asker_faction_name] needs extra hands to help [dutyDescription].\n\n[asker_pronoun] is asking you to lend [asker_objective] [colonistCountToLend] for [lendForDays] days.\n\n[willSendShuttle][mutatorSuffix]\nLent colonists will return to the colony they left from, so do not abandon that colony's map until they return!</li>
+        <li>naturalDisaster->an earthquake</li>
+        <li>naturalDisaster->a wildfire</li>
+        <li>naturalDisaster->a flood</li>
+        <li>naturalDisaster->a tornado</li>
+        <li>naturalDisaster->a hurricane</li>
+        <li>naturalDisaster->an orbital ship crash</li>
+        <li>naturalDisaster->a volcanic eruption</li>
+		<li>colonistCountToLend(colonistsToLendCount==1)->1 colonist[minAgeOrOlder]</li>
+        <li>colonistCountToLend(colonistsToLendCount>1)->[colonistsToLendCount] colonists[minAgeOrOlder]</li>
+        <li>willSendShuttle->[asker_pronoun] will send a shuttle to pick up the [colonists].</li>
+        <li>colonists(colonistsToLendCount==1)->colonist</li>
+        <li>colonists(colonistsToLendCount>1)->colonists</li>
+        <li>minAgeOrOlder(minAge==0)-></li>
+        <li>minAgeOrOlder(minAge>0)-> [minAge] years old or older</li>
+        <li>pawnListHaveConjugation(colonistsToLendCount==1)->has</li>
+        <li>pawnListHaveConjugation(colonistsToLendCount>1)->have</li>
+		<li>mutatorSuffix->[mutator_EMMO_info][mutator_SSTSS_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits.QuestNode_RoverIntermediary">
+      <nodes>
+        <li Class="QuestNode_SubScript">
+          <def>Util_RandomizePointsChallengeRating</def>
+        </li>
+        <!-- Calculate colonist count to lend -->
+        <li Class="QuestNode_GetRandomInRangeForChallengeRating">
+          <storeAs>colonyPercentageToLend</storeAs>
+          <oneStarRange>0.0~0.35</oneStarRange>
+          <twoStarRange>0.36~0.6</twoStarRange>
+          <threeStarRange>0.61~0.75</threeStarRange>
+        </li>
+        <li Class="QuestNode_ExpansionActive">
+          <modID>Ludeon.RimWorld.Biotech</modID>
+          <node Class="QuestNode_Set">
+            <name>minAge</name>
+            <value>13</value>
+          </node>
+          <elseNode Class="QuestNode_Set">
+            <name>minAge</name>
+            <value>0</value>
+          </elseNode>
+        </li>
+		<li Class="HautsPermits.QuestNode_SSTSS">
+		  <node Class="QuestNode_Sequence">
+			  <nodes>
+				<li Class="QuestNode_GetRandomInRangeInt">
+				  <storeAs>raidCount</storeAs>
+				  <range>1</range>
+				</li>
+				<li Class="QuestNode_Set">
+				  <name>firstRaidDelayTicks</name>
+				  <value>$(60000+roundToTicksRough(randInt(6000, 300000)))</value>
+				</li>
+				<li Class="QuestNode_GetFaction">
+				  <allowEnemy>true</allowEnemy>
+				  <mustBePermanentEnemy>true</mustBePermanentEnemy>
+				  <storeAs>enemyFaction</storeAs>
+				</li>
+				<li Class="QuestNode_Subscript">
+				  <def>Util_RaidDelayRepeatable</def>
+				  <parms>
+					<points>$($points*0.75)</points>
+				  </parms>
+				</li>
+			  </nodes>
+		  </node>
+		  <SSTSS_description>\n\nThe [asker_faction_name] warns that [enemyFaction_pawnsPlural] from [enemyFaction_name] are surveiling [map_definite]. If you accept, the [enemyFaction_pawnsPlural] will take advantage of your temporary decrease in manpower to attack.
+		  \n\nIf you accept, the [enemyFaction_pawnsPlural] will arrive in [firstRaidDelayTicks_duration].</SSTSS_description>
+		</li>
+        <li Class="QuestNode_GetColonistCountFromColonyPercentage">
+          <storeAs>colonistsToLendCount</storeAs>
+          <colonyPercentage>$colonyPercentageToLend</colonyPercentage>
+          <mustHaveFreeColonistsAvailableCount>2</mustHaveFreeColonistsAvailableCount>
+          <minAge>$minAge</minAge>
+        </li>
+        <li Class="QuestNode_GetMap">
+          <preferMapWithMinFreeColonists>$colonistsToLendCount</preferMapWithMinFreeColonists>
+		  <canBeSpace>true</canBeSpace>
+        </li>
+        <!-- End if map removed before the quest is accepted -->
+        <li Class="QuestNode_End">
+          <inSignal>map.MapRemoved</inSignal>
+          <outcome>Fail</outcome>
+          <signalListenMode>NotYetAcceptedOnly</signalListenMode>
+        </li>
+        <!-- Get asker and assign some related text-->
+		<li Class="QuestNode_Sequence">
+		  <nodes>
+			<li Class="QuestNode_GetFactionOf">
+			  <thing>$asker</thing>
+			  <storeAs>faction</storeAs>
+			</li>
+			<li Class="QuestNode_ResolveTextNow">
+			  <root>dutyDescription</root>
+			  <storeAs>dutyDescription</storeAs>
+			  <rules TKey="DutyRulesAny">
+				<rulesStrings>
+				  <li>dutyDescription->unearth a ruin</li>
+				  <li>dutyDescription->scout out unfamiliar terrain</li>
+				  <li>dutyDescription->confirm a report on local natural phenomena</li>
+				  <li>dutyDescription->chart new routes</li>
+				  <li>dutyDescription->investigate the aftermath of [naturalDisaster]</li>
+				  <li>dutyDescription->retrieve records from a recently lost survey team</li>
+				  <li>dutyDescription->escort some travelers</li>
+				</rulesStrings>
+			  </rules>
+			</li>
+			<li Class="QuestNode_Set">
+			  <name>returnLetterText</name>
+			  <value TKey="LetterTextReturnAfterHelping">{PAWNS} [pawnListHaveConjugation] returned after helping [asker_nameFull] of the [asker_faction_name] to [dutyDescription].</value>
+			</li>
+		  </nodes>
+		</li>
+        <!-- Calculate days to lend colonists for -->
+        <li Class="QuestNode_GetRandomInRangeForChallengeRating">
+          <storeAs>lendForDays</storeAs>
+          <oneStarRange>5~10</oneStarRange>
+          <twoStarRange>10~20</twoStarRange>
+          <threeStarRange>20~30</threeStarRange>
+          <roundRandom>true</roundRandom>
+        </li>
+        <!-- Reward has to be set again here since one of the prior steps overrides it-->
+        <li Class="HautsPermits.QuestNode_SetRewardValue_BranchSettingScaling">
+          <rewardFactor>1</rewardFactor>
+        </li>
+        <!-- Shuttle -->
+        <li Class="QuestNode_ShuttleDelay">
+          <delayTicks>3500</delayTicks>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_SubScript">
+                  <def>HVMP_TransportShip_Pickup</def>
+                  <parms>
+                    <leaveDelayTicks>60000</leaveDelayTicks>
+                    <leaveImmediatelyWhenSatisfied>true</leaveImmediatelyWhenSatisfied>
+                    <acceptColonists>true</acceptColonists>
+                    <acceptChildren>false</acceptChildren>
+                    <onlyAcceptColonists>true</onlyAcceptColonists>
+                    <onlyAcceptHealthy>true</onlyAcceptHealthy>
+                    <requireColonistCount>$colonistsToLendCount</requireColonistCount>
+                    <minAge>$minAge</minAge>
+                  </parms>
+                </li>
+                <li Class="QuestNode_Letter">
+                  <label TKey="LetterLabelShuttleArrived">Shuttle arrived</label>
+                  <text TKey="LetterTextShuttleArrived">The shuttle has arrived to collect [colonistsToLendCount] of your colonists.</text>
+                  <lookTargets>$pickupShipThing</lookTargets>
+                </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Shuttle destroyed -->
+        <li Class="QuestNode_Signal">
+          <inSignal>pickupShipThing.Destroyed</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelShuttleDestroyed">Shuttle destroyed</label>
+                <text TKey="LetterTextShuttleDestroyed">The shuttle sent to collect colonists has been destroyed.</text>
+              </li>
+              <li Class="HautsPermits.QuestNode_EndBranch">
+                <outcome>Fail</outcome>
+                <goodwillChangeReason>ShuttleDestroyed</goodwillChangeReason>
+				<faction>HVMP_RoverBranch</faction>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <!-- Shuttle sent away -->
+        <li Class="QuestNode_Signal">
+          <inSignal>pickupShipThing.SentSatisfied</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+			  <li Class="HautsPermits.QuestNode_Multiply_TLWR">
+				  <value1>$lendForDays</value1>
+				  <TLWR_factor>1.25</TLWR_factor>
+				  <storeAs>lendForDays</storeAs>
+			  </li>
+			  <li Class="QuestNode_LendColonistsToFaction">
+                <shuttle>$pickupShipThing</shuttle>
+                <lendColonistsToFactionOf>$asker</lendColonistsToFactionOf>
+                <returnLentColonistsInTicks>$($lendForDays*60000)</returnLentColonistsInTicks>
+                <outSignalComplete>ColonistsReturned</outSignalComplete>
+                <outSignalColonistsDied>ColonistsDied</outSignalColonistsDied>
+              </li>
+              <li Class="QuestNode_Delay">
+                <delayTicks>$(randInt(300,600))</delayTicks>
+                <node Class="QuestNode_Sequence">
+                  <nodes>
+					  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+						<faction>$faction</faction>
+						<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+						<customLetterText TKey="LetterTextPaymentArrived">The [asker_faction_name]'s respect for you has increased.</customLetterText>
+					  </li>
+                  </nodes>
+                </node>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>ColonistsReturned</inSignal>
+          <node Class="QuestNode_Sequence">
+            <nodes>
+              <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelColonistsReturned">Colonists returned</label>
+                <text>$returnLetterText</text>
+                <letterDef>PositiveEvent</letterDef>
+              </li>
+              <li Class="QuestNode_End">
+                <outcome>Success</outcome>
+              </li>
+            </nodes>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>ColonistsDied</inSignal>
+          <node Class="QuestNode_End">
+            <outcome>Success</outcome>
+          </node>
+        </li>
+        <li Class="QuestNode_Signal">
+          <inSignal>pickupShipThing.SentUnsatisfied</inSignal>
+		  <node Class="HautsPermits.QuestNode_EndBranch">
+			<outcome>Fail</outcome>
+			<goodwillChangeReason>HVG_MissedShuttle</goodwillChangeReason>
+			<faction>HVMP_RoverBranch</faction>
+		  </node>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  <QuestScriptDef>
+    <defName>HVMP_TransportShip_Pickup</defName>
+    <root Class="QuestNode_Sequence">
+      <nodes>
+        <!-- Generate the shuttle -->
+        <li Class="HautsPermits.QuestNode_GenerateShuttle_EMMM">
+          <storeAs>pickupShipThing</storeAs>
+          <requiredPawns>$requiredPawns</requiredPawns>
+          <requiredItems>$requiredItems</requiredItems>
+          <requireColonistCount>$requireColonistCount</requireColonistCount>
+          <acceptColonists>$acceptColonists</acceptColonists>
+          <acceptChildren>$acceptChildren</acceptChildren>
+          <onlyAcceptColonists>$onlyAcceptColonists</onlyAcceptColonists>
+          <onlyAcceptHealthy>$onlyAcceptHealthy</onlyAcceptHealthy>
+          <owningFaction>$owningFaction</owningFaction>
+          <permitShuttle>$permitShuttle</permitShuttle>
+          <overrideMass>$overrideMass</overrideMass>
+          <minAge>$minAge</minAge>
+		  <EMMO_description>\n\nThe Rover Branch is looking to make use of the talents of one of your colonists in particular. [EMMO_target_nameFull] must be loaded onto the shuttle.</EMMO_description>
+        </li>
+
+        <!-- Generate the transport ship -->
+        <li Class="QuestNode_GenerateTransportShip">
+          <def>Ship_Shuttle</def>
+          <shipThing>$pickupShipThing</shipThing>
+          <storeAs>pickUpShip</storeAs>
+        </li>
+
+        <!-- Add jobs -->
+        <li Class="QuestNode_AddShipJob_Arrive">
+          <transportShip>$pickUpShip</transportShip>
+          <shipJobStartMode>Instant</shipJobStartMode>
+          <forPawns>$requiredPawns</forPawns>
+        </li>
+        <li Class="QuestNode_AddShipJob_Wait">
+          <jobDef>WaitTime</jobDef>
+          <ticks>$leaveDelayTicks</ticks>
+          <transportShip>$pickUpShip</transportShip>
+          <leaveImmediatelyWhenSatisfied>$leaveImmediatelyWhenSatisfied</leaveImmediatelyWhenSatisfied>
+          <sendAwayIfAllDespawned>$sendAwayIfAllDespawned</sendAwayIfAllDespawned>
+        </li>
+        <li Class="QuestNode_AddShipJob_FlyAway">
+          <transportShip>$pickUpShip</transportShip>
+        </li>
+
+        <!-- Send away on cleanup -->
+        <li Class="QuestNode_SendTransportShipAwayOnCleanup">
+          <transportShip>$pickUpShip</transportShip>
+          <unsatisfiedDropMode>All</unsatisfiedDropMode>
+        </li>
+      </nodes>
+    </root>
+  </QuestScriptDef>
+  
+  <!--rover: odyssey-->
+  <QuestScriptDef>
+    <defName>HVMP_RoverOdyssey</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[surveyAdj] [surveyName]</li>
+        <li>questName->[surveyName] Across the [landWord]</li>
+        <li>questName->[landWord] [surveyName]</li>
+
+        <li>surveyAdj->Far</li>
+        <li>surveyAdj->Roaming</li>
+        <li>surveyAdj->Winding</li>
+        <li>surveyAdj->Trek</li>
+        <li>surveyAdj->Journey</li>
+        <li>surveyAdj->Hike</li>
+
+        <li>surveyName->Expedition</li>
+        <li>surveyName->Safari</li>
+        <li>surveyName->Survey</li>
+        <li>surveyName->Journey</li>
+        <li>surveyName->Travels</li>
+        <li>surveyName->Enterprise</li>
+        <li>surveyName->Sightseeing</li>
+        <li>surveyName->Voyage</li>
+        <li>surveyName->Mapping</li>
+        <li>surveyName->Scouting</li>
+
+        <li>landWord->Country</li>
+        <li>landWord->Landscape</li>
+        <li>landWord->Hinterlands</li>
+        <li>landWord->Reaches</li>
+        <li>landWord->Outback</li>
+        <li>landWord->Land</li>
+        <li>landWord->Realm</li>
+        <li>landWord->Territory</li>
+        <li>landWord->Surroundings</li>
+        <li>landWord->Countryside</li>
+
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->The Rover Branch needs to keep their maps frequently updated, and as such, they want you to survey the surrounding countryside.\n\nTo do so, you'll need to visit [numSites] different locations within [timeoutDays] days.[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_RE_info][mutator_SG_info]</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <questContentRules>
+      <rulesStrings></rulesStrings>
+    </questContentRules>
+    <root Class="HautsPermits.QuestNode_Root_Odyssey">
+	    <storeSitesAs>allSites</storeSitesAs><!--unnecessary-->
+		<ticksPerSite>180000</ticksPerSite>
+		<normal_maxDist>20</normal_maxDist>
+		<normal_siteCount>3~5</normal_siteCount>
+		<LI_extraSites>2</LI_extraSites>
+		<LI_extraDays>2</LI_extraDays>
+		<LI_maxDist>25</LI_maxDist>
+		<RE_chance>0.5</RE_chance>
+		<RE_maxAmbushes>2</RE_maxAmbushes>
+		<RE_pointsFactor>0.15</RE_pointsFactor>
+		<RE_description>\n\nSome of these sites may be occupied by brigands. Be vigilant when approaching them.</RE_description>
+		<SG_levelBase>10</SG_levelBase>
+		<SG_levelReductionPerExtraSite>2</SG_levelReductionPerExtraSite>
+		<SG_description>\n\nThe Rover Branch wants individuals with a particular knowledge base to handle this task. A traveler must have at least [SG_levelDesc] [SG_nameDesc] skill to visit any of the locations.</SG_description>
+		<nodes>
+			<li Class="QuestNode_Signal">
+			  <inSignal>allSites.Finished</inSignal>
+			  <node Class="QuestNode_Sequence">
+				<nodes>
+				  <li Class="QuestNode_Set">
+					<name>sendStandardLetter</name>
+					<value>true</value>
+				  </li>
+				  <li Class="HautsPermits.QuestNode_GiveRewardsBranch">
+					<faction>$faction</faction>
+					<customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+					<customLetterText TKey="LetterTextPaymentArrived">You have completed the mapping request!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
+				  </li>
+				  <li Class="QuestNode_End">
+					<outcome>Success</outcome>
+					<sendStandardLetter>$sendStandardLetter</sendStandardLetter>
+				  </li>
+				</nodes>
+			  </node>
+			</li>
+			<li Class="HautsPermits.QuestNode_LookOverHere">
+			  <worldObjects>$worldObject</worldObjects>
+			</li>
+			<li Class="QuestNode_Delay">
+			  <delayTicks>$timeout</delayTicks>
+			  <isQuestTimeout>true</isQuestTimeout>
+			  <outSignalComplete>QuestTimeout</outSignalComplete>
+			</li>
+			<li Class="HautsPermits.QuestNode_EndAndDestroySite">
+				<inSignal>QuestTimeout</inSignal>
+				<outcome>Fail</outcome>
+				<goodwillChangeReason>HVMP_QuestExpired</goodwillChangeReason>
+				<siteToDestroy>$worldObject</siteToDestroy>
+				<faction>HVMP_RoverBranch</faction>
+			</li>
+		</nodes>
+	</root>
+  </QuestScriptDef>
+  
+  <!--rover: theseus-->
+  <QuestScriptDef>
+    <defName>HVMP_RoverTheseus</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>1</defaultChallengeRating>
+    <expireDaysRange>4~8</expireDaysRange>
+    <affectedByPopulation>true</affectedByPopulation>
+    <everAcceptableInSpace>true</everAcceptableInSpace>
+    <successHistoryEvent MayRequire="Ludeon.RimWorld.Ideology">Raided_BanditCamp</successHistoryEvent>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->[questNameInner]</li>
+        <li>questName->[asker_nameDef]'s [questNameInner]</li>
+
+        <li>questNameInner->[aerial] [attack]</li>
+        <li>questNameInner->[target] [attack]</li>
+        <li>questNameInner->[ruffian] [target]</li>
+        <li>questNameInner->[attack] [work]</li>
+
+        <li>target->Camp</li>
+        <li>target->Base</li>
+        <li>target->Fort</li>
+        <li>target->Encampment</li>
+        <li>target->Barracks</li>
+        <li>target->Post</li>
+        <li>target->Watchpoint</li>
+        <li>target->Hideout</li>
+        <li>target->Lair</li>
+		
+        <li>ruffian->Ruffian</li>
+        <li>ruffian->Bandit</li>
+        <li>ruffian->Brigand</li>
+        <li>ruffian->Raider</li>
+        <li>ruffian->Highwayman</li>
+        <li>ruffian->Robber</li>
+        <li>ruffian->Marauder</li>
+        <li>ruffian->Malcontent</li><!--vorici.mp4. hey be thankful I don't put old-style vorici quests in here could you imagine-->
+
+        <li>aerial->Aerial</li>
+        <li>aerial->Air</li>
+        <li>aerial->Shuttle-borne</li>
+        <li>aerial->Skyborne</li>
+        <li>aerial->Flying</li>
+        <li>aerial->Sudden</li>
+        <li>aerial->Deadly</li>
+        <li>aerial->Total</li>
+        <li>aerial->Mercenary</li>
+
+        <li>attack->Attack</li>
+        <li>attack->Assault</li>
+        <li>attack->Strike</li>
+        <li>attack->Combat</li>
+        <li>attack->Fight</li>
+
+        <li>work->Work</li>
+        <li>work->Job</li>
+        <li>work->Task</li>
+        <li>work->Venture</li>
+        <li>work->Errand</li>
+        <li>work->Enterprise</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->[enemiesLabel] have set up a camp and are harassing travelers in the region. [asker_nameDef] of the Rover Branch is planning an aerial assault on the camp, which is guarded by [enemiesCount] [enemiesLabel]. [asker_pronoun] wants you to provide [soldiers] to carry out the attack.\n\n[asker_pronoun] will send a shuttle to pick up your fighters, bring them to the attack site, and take them home afterward. They will be fed and medically tended en-route.\n\nOnce the attack begins, you must defeat all enemies and turrets within [timeoutTicks_duration].[mutatorSuffix]</li>
+		<li>mutatorSuffix->[mutator_GG_info][mutator_SD_info]</li>
+        <li>soldiers(requiredPawnCount>1)->[requiredPawnCount] soldiers</li>
+        <li>soldiers(requiredPawnCount==1)->[requiredPawnCount] soldier</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="HautsPermits.QuestNode_Theseus">
+	  <customLetterLabel TKey="LetterLabelPaymentArrived">E-branch relations improved</customLetterLabel>
+	  <customLetterText TKey="LetterTextPaymentArrived">You have vanquished the malcontents!\n\nThe [asker_faction_name]'s respect for you has increased.</customLetterText>
+	  <AQAIO_pointFactor>5~10</AQAIO_pointFactor>
+	  <GG_description>\n\nThe [enemiesLabel] have stolen potent technologies from the Rover Branch and are likely to be using them. This tech might include potent defensive shields that slow the user but block heavy amounts of any form of damage, biofilm coatings that provide environmental protection and damage resistance, or even limited teleportation capabilities.</GG_description>
+	  <SD_description>\n\nThe [enemiesLabel] are using stolen mechanoid defensive technology. They may be protected by automated turrets or wide-radius shields.</SD_description>
+    </root>
+  </QuestScriptDef>
+  
+</Defs>

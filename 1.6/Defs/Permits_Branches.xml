@@ -1672,7 +1672,7 @@
     <permitPointCost>1</permitPointCost>
     <cooldownDays>10</cooldownDays>
     <usableOnWorldMap>false</usableOnWorldMap>
-    <uiPosition>(2,4)</uiPosition>
+    <uiPosition>(2,5)</uiPosition>
     <royalAid>
       <favorCost>1</favorCost>
     </royalAid>

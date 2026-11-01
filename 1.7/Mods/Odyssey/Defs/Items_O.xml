@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef>
+    <defName>HVMP_Wunderchip</defName>
+    <label>wunderchip</label>
+    <description>A strange archotech fragment with a crude human-made interface. The ancients of this rimworld built these in an attempt to harness the powers of the archotechs, although they had little to show for it by the time their civilization collapsed. Nevertheless, sufficiently advanced factions such as the Empire and the Enterprise are quite interested in wunderchips, and will gladly bestow honor or standing upon anyone who furnishes them with one.</description>
+    <thingClass>ThingWithComps</thingClass>
+    <category>Item</category>
+    <drawerType>MapMeshOnly</drawerType>
+    <techLevel>Archotech</techLevel>
+    <pathCost>14</pathCost>
+    <selectable>true</selectable>
+    <altitudeLayer>Item</altitudeLayer>
+    <tickerType>Never</tickerType>
+    <alwaysHaulable>true</alwaysHaulable>
+    <resourceReadoutPriority>Middle</resourceReadoutPriority>
+	<tradeability>Sellable</tradeability>
+    <statBases>
+      <MaxHitPoints>100</MaxHitPoints>
+      <Beauty>-4</Beauty>
+      <Mass>1</Mass>
+      <MarketValue>5000</MarketValue>
+      <DeteriorationRate>0</DeteriorationRate>
+	  <HVMP_StandingValue>12</HVMP_StandingValue>
+	  <RoyalFavorValue>12</RoyalFavorValue>
+	  <Bulk MayRequire="CETeam.CombatExtended">3</Bulk>
+    </statBases>
+    <thingCategories>
+      <li>Artifacts</li>
+    </thingCategories>
+    <graphicData>
+      <texPath>Items/HVMP_Wunderchip</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.8</drawSize>
+    </graphicData>
+    <comps>
+      <li Class="CompProperties_Forbiddable"/>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Reprogram {0_label}</useLabel>
+        <useDuration>10</useDuration>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+	  <li Class="CompProperties_UseEffectPlaySound">
+        <soundOnUsed>MechSerumUsed</soundOnUsed>
+      </li>
+      <li Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet">
+        <compClass>HautsPermits.CompUseEffect_Wunderchip</compClass>
+		<openingLabel>HVMP_WunderchipOpeningLabel</openingLabel>
+		<netCountOutputCap>1</netCountOutputCap>
+		<specificThingDefs>
+		  <PsychicAmplifier>1</PsychicAmplifier>
+		  <PsychicAmplifier>1</PsychicAmplifier>
+		  <PsychicAmplifier>1</PsychicAmplifier>
+		  <TechprofSubpersonaCore>1</TechprofSubpersonaCore>
+		  <TechprofSubpersonaCore>1</TechprofSubpersonaCore>
+		  <AIPersonaCore>1</AIPersonaCore>
+		  <MechSerumHealer>1</MechSerumHealer>
+		  <MechSerumHealer>1</MechSerumHealer>
+		  <MechSerumHealer>1</MechSerumHealer>
+		  <MechSerumResurrector>1</MechSerumResurrector>
+		  <Gravcore>1</Gravcore>
+		  <Gravcore>1</Gravcore>
+		  <Gravcore>1</Gravcore>
+		  <Apparel_CerebrexNode>1</Apparel_CerebrexNode>
+		  <ArchiteCapsule MayRequire="Ludeon.RimWorld.Biotech">2</ArchiteCapsule>
+		  <ArchiteCapsule MayRequire="Ludeon.RimWorld.Biotech">2</ArchiteCapsule>
+		  <SignalChip MayRequire="Ludeon.RimWorld.Biotech">2</SignalChip>
+		  <PowerfocusChip MayRequire="Ludeon.RimWorld.Biotech">2</PowerfocusChip>
+		  <NanostructuringChip MayRequire="Ludeon.RimWorld.Biotech">1</NanostructuringChip>
+		  <USH_Glitterheart MayRequire="Ushanka.GlittertechExpansion">1</USH_Glitterheart>
+		</specificThingDefs>
+		<maxNumOptions>3</maxNumOptions>
+		<unitMarketValueOutputCap>1.5</unitMarketValueOutputCap>
+		<netMarketValueOutputCap>250</netMarketValueOutputCap>
+		<countCantExceedStackSize>true</countCantExceedStackSize>
+      </li>
+      <li Class="HautsPermits.CompProperties_StudiableQuestItem">
+        <totalRequiredProgressHours>144~240</totalRequiredProgressHours><!--6d to 10d-->
+        <activateTexPath>UI/Icons/Study</activateTexPath>
+        <activateLabelString>Study...</activateLabelString>
+        <activateDescString>Study the wunderchip.</activateDescString>
+        <jobString>Study wunderchip</jobString>
+        <guiLabelString>Choose who should study this</guiLabelString>
+        <inspectString>Can be studied by a colonist.</inspectString>
+        <targetingParameters>
+          <canTargetBuildings>false</canTargetBuildings>
+          <canTargetAnimals>false</canTargetAnimals>
+          <canTargetMechs>false</canTargetMechs>
+          <onlyTargetControlledPawns>true</onlyTargetControlledPawns>
+        </targetingParameters>
+		<requiredSkillDefs><li>Intellectual</li></requiredSkillDefs>
+		<requiredStatDefs><li>ResearchSpeed</li></requiredStatDefs>
+		<extraStat>true</extraStat>
+      </li>
+    </comps>
+  </ThingDef>
+  
+  
+</Defs>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Abhorrent"]/conflictingMemes</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Abhorrent"]</xpath>
+			<value>
+				<conflictingMemes>
+				  <li>HVMP_Cosmopolitan</li>
+				</conflictingMemes>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Abhorrent"]/conflictingMemes</xpath>
+			<value>
+				<li>HVMP_Cosmopolitan</li>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Horrible"]/conflictingMemes</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Horrible"]</xpath>
+			<value>
+				<conflictingMemes>
+				  <li>HVMP_Cosmopolitan</li>
+				</conflictingMemes>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Horrible"]/conflictingMemes</xpath>
+			<value>
+				<li>HVMP_Cosmopolitan</li>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Disapproved"]/conflictingMemes</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Disapproved"]</xpath>
+			<value>
+				<conflictingMemes>
+				  <li>HVMP_Cosmopolitan</li>
+				</conflictingMemes>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Disapproved"]/conflictingMemes</xpath>
+			<value>
+				<li>HVMP_Cosmopolitan</li>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Standard"]/associatedMemes</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Standard"]</xpath>
+			<value>
+				<associatedMemes>
+				  <li>HVMP_Cosmopolitan</li>
+				</associatedMemes>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Standard"]/associatedMemes</xpath>
+			<value>
+				<li>HVMP_Cosmopolitan</li>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Approved"]/associatedMemes</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Approved"]</xpath>
+			<value>
+				<associatedMemes>
+				  <li>HVMP_Cosmopolitan</li>
+				</associatedMemes>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Approved"]/associatedMemes</xpath>
+			<value>
+				<li>HVMP_Cosmopolitan</li>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Respected"]/associatedMemes</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Respected"]</xpath>
+			<value>
+				<associatedMemes>
+				  <li>HVMP_Cosmopolitan</li>
+				</associatedMemes>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Respected"]/associatedMemes</xpath>
+			<value>
+				<li>HVMP_Cosmopolitan</li>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Exalted"]/associatedMemes</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Exalted"]</xpath>
+			<value>
+				<associatedMemes>
+				  <li>HVMP_Cosmopolitan</li>
+				</associatedMemes>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Exalted"]/associatedMemes</xpath>
+			<value>
+				<li>HVMP_Cosmopolitan</li>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Respected"]/requiredMemes</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Respected"]</xpath>
+			<value>
+				<requiredMemes>
+				  <li>HVMP_Cosmopolitan</li>
+				</requiredMemes>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Respected"]/requiredMemes</xpath>
+			<value>
+				<li>HVMP_Cosmopolitan</li>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Exalted"]/requiredMemes</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Exalted"]</xpath>
+			<value>
+				<requiredMemes>
+				  <li>HVMP_Cosmopolitan</li>
+				</requiredMemes>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/PreceptDef[defName="IdeoDiversity_Exalted"]/requiredMemes</xpath>
+			<value>
+				<li>HVMP_Cosmopolitan</li>
+			</value>
+		</match>
+	</Operation>
+</Patch>

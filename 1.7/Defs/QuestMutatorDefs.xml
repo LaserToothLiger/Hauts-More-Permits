@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!--using this instead of Combat as a pawngroupkinddef lets me get silly with raid compositions-->
+  <PawnGroupKindDef>
+    <defName>HVMP_BonusQeustPawns</defName>
+    <workerClass>PawnGroupKindWorker_Normal</workerClass>
+  </PawnGroupKindDef>
+  
+  <!--COMMERCE Fortification
+		Riches to Ruins-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_LifeOfLuxury</defName>
+    <label>pampered</label>
+    <description>This character is used to the luxurious life of a wealthy trader. Even the grandest colony on the Rim pales in comparison.</description>
+    <defaultLabelColor>(1.0, 1.0, 1.0)</defaultLabelColor>
+	<maxSeverity>1</maxSeverity>
+	<initialSeverity>1</initialSeverity>
+    <stages>
+      <li>
+		<becomeVisible>false</becomeVisible>
+	  </li>
+    </stages>
+  </HediffDef>
+  <ThoughtDef>
+    <defName>HVMP_LOLmood</defName>
+    <workerClass>ThoughtWorker_Hediff</workerClass>
+    <hediff>HVMP_LifeOfLuxury</hediff>
+    <validWhileDespawned>true</validWhileDespawned>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <stages>
+      <li>
+        <label>life of luxury</label>
+        <description>Even the grandest colony on this backwater planet is squalor, compared to the comforts a merchant of my station is entitled to.</description>
+        <baseMoodEffect>-12</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  <!--What's Bugging You?-->
+  <HediffDef ParentName="DiseaseBase">
+    <defName>HVMP_BugPheromones</defName>
+    <label>insectoid tracking parasites</label>
+    <description>Bloodborne pathogens which, upon reaching a critical concentration, will release pheromones that attract insectoid infestations.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(164, 196, 122)</defaultLabelColor>
+	<minSeverity>0.001</minSeverity>
+	<initialSeverity>0.001</initialSeverity>
+	<maxSeverity>4</maxSeverity>
+    <tendable>true</tendable>
+    <comps>
+      <li Class="HediffCompProperties_TendDuration">
+        <severityPerDayTended>-1</severityPerDayTended>
+        <baseTendDurationHours>24</baseTendDurationHours>
+      </li>
+	  <li Class="HautsPermits.HediffCompProperties_SeverityPerDay_WBY">
+		<severityPerDay>1</severityPerDay>
+		<infestationMTBhours>12</infestationMTBhours>
+	  </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>1080000~1320000</disappearsAfterTicks> <!-- 18~22 days -->
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+  </HediffDef>
+  
+  <!--COMMERCE Intervention
+		Burning, Unadulterated Burning-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_BUB</defName>
+    <label>deepscan burn</label>
+    <description>Exposure to high-frequency energy, which interferes with nervous systems.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.7, 1.0, 0.7)</defaultLabelColor>
+	<maxSeverity>1</maxSeverity>
+	<initialSeverity>1</initialSeverity>
+    <comps>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	  <li Class="HautsPermits.HediffCompProperties_SeverityPerDay_BUB">
+		<severityPerDay>-1</severityPerDay>
+		<showHoursToRecover>true</showHoursToRecover>
+		<adjustingStat>ToxicEnvironmentResistance</adjustingStat>
+	  </li>
+    </comps>
+    <stages>
+      <li>
+        <painOffset>0.3</painOffset>
+      </li>
+    </stages>
+  </HediffDef>
+  <ThoughtDef>
+    <defName>HVMP_BUBmood</defName>
+    <workerClass>ThoughtWorker_Hediff</workerClass>
+    <hediff>HVMP_BUB</hediff>
+    <validWhileDespawned>true</validWhileDespawned>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <stages>
+      <li>
+        <label>deepscan burn</label>
+        <description>My entire body is prickling.</description>
+        <baseMoodEffect>-6</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  <!--used for the other two-->
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>HVMP_TunnelHiveSpawner</defName>
+    <label>tunnel</label>
+    <thingClass>HautsPermits.TunnelHiveSpawner_Intervention</thingClass>
+    <tickerType>Normal</tickerType>
+    <drawerType>RealtimeOnly</drawerType>
+    <alwaysFlee>true</alwaysFlee>
+    <building>
+      <groundSpawnerSustainedEffecter>EmergencePointSustained2X2</groundSpawnerSustainedEffecter>
+      <groundSpawnerCompleteEffecter>EmergencePointComplete2X2</groundSpawnerCompleteEffecter>
+    </building>
+  </ThingDef>
+  <!--	Infestation Infection-->
+  <HediffDef>
+    <defName>HVMP_ScariaVector</defName>
+    <label>scaria vector</label>
+    <description>This creature carries a strain of scaria. Although its behavior is unaffected by the disease, it may transmit scaria through bites or cuts.</description>
+    <hediffClass>HautsPermits.Hediff_ScariaVector</hediffClass>
+    <forceRenderTreeRecache>true</forceRenderTreeRecache>
+    <inspectString>Scaria carrier.</inspectString>
+    <renderNodeProperties>
+      <li Class="PawnRenderNodeProperties_Overlay">
+        <debugLabel>Scaria sores</debugLabel>
+        <workerClass>PawnRenderNodeWorker_OverlayScaria</workerClass>
+        <overlayLayer>Body</overlayLayer>
+        <baseLayer>20</baseLayer>
+        <pawnType>HumanlikeOnly</pawnType>
+      </li>
+      <li>
+        <debugLabel>Scaria sores</debugLabel>
+        <nodeClass>PawnRenderNode_AnimalPart</nodeClass>
+        <workerClass>PawnRenderNodeWorker_OverlayScaria</workerClass>
+        <overlayLayer>Body</overlayLayer>
+        <baseLayer>20</baseLayer>
+        <pawnType>NonHumanlikeOnly</pawnType>
+      </li>
+    </renderNodeProperties>
+  </HediffDef>
+  <!--	Jitterbugs-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_Jitterbug</defName>
+    <label>deepscan stimulus</label>
+    <description>This creature has been energized by exposure to exotic scanning radiation.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.7, 1.0, 0.7)</defaultLabelColor>
+    <skinColorTint>(0.72, 0.95, 1)</skinColorTint>
+    <skinColorTintStrength>0.4</skinColorTintStrength>
+    <forceRenderTreeRecache>true</forceRenderTreeRecache>
+	<maxSeverity>1</maxSeverity>
+	<initialSeverity>1</initialSeverity>
+    <comps>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-2</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+    <stages>
+      <li>
+        <painOffset>-0.25</painOffset>
+        <statFactors>
+          <MoveSpeed>1.2</MoveSpeed>
+        </statFactors>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>0.1</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+  
+  <!--COMMERCE Mastermind
+		Communications Blackout-->
+  <GameConditionDef>
+    <defName>HVMP_CommsBlackout</defName>
+    <label>communications blackout</label>
+    <description>Machinations of the Commerce Branch. You cannot contact non-Branch factions on the comms console, you cannot trade with settlements, and traders will avoid your colonies.</description>
+  </GameConditionDef>
+  
+  <!--COMMERCE Research
+		Brain Drain-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_BrainDrain</defName>
+    <label>psychodigital connection</label>
+    <description>A psychically connected chaincomputer is utilizing this character's consciousness to perform calculations.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <comps>
+      <li Class="HediffCompProperties_DisappearsOnDeath"/>
+      <li Class="HautsPermits.HediffCompProperties_BrainDrain">
+        <requireLinkOnOtherPawn>false</requireLinkOnOtherPawn>
+		<BD_progressLossOnDeath>10~20</BD_progressLossOnDeath>
+      </li>
+    </comps>
+    <stages>
+      <li>
+		<capMods>
+		  <li>
+			<capacity>Consciousness</capacity>
+			<postFactor>0.5</postFactor>
+		  </li>
+          <li>
+            <capacity>Consciousness</capacity>
+            <setMax>1</setMax>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+    <isBad>false</isBad>
+  </HediffDef>
+  
+  <!--PAX Bellum
+		pertinent to all three-->
+  <IncidentDef>
+    <defName>HVMP_RaidBellum</defName>
+    <label>enemy raid</label>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>HautsPermits.IncidentWorker_RaidBellum</workerClass>
+    <baseChance>0</baseChance>
+    <category>ThreatBig</category>
+    <pointsScaleable>true</pointsScaleable>
+    <tale>Raid</tale>
+    <ignoreRecentSelectionWeighting>true</ignoreRecentSelectionWeighting>
+    <canOccurOnAllPlanetLayers>true</canOccurOnAllPlanetLayers>
+  </IncidentDef>
+  <!--	Advanced Weaponry-->
+  <GameConditionDef>
+    <defName>HVMP_TargetedPsychicSuppression</defName>
+    <conditionClass>HautsPermits.HVMP_GameCondition_TargetedPsychicSuppression</conditionClass>
+    <label>lesser psychic suppression</label>
+    <description>A targeted psychic suppression field is affecting {0}s and slightly reducing their consciousness. The effect is modulated by an individual's psychic sensitivity.</description>
+    <descriptionFuture>a targeted psychic suppression wave will slightly reduce the consciousness of all [psychicSuppressorGender]s around [map_definite] for [gameConditionDuration_duration]</descriptionFuture>
+    <endMessage>The targeted psychic suppressor field has dissipated.</endMessage>
+    <letterText>A targeted psychic suppressor field has begun slightly reducing the consciousness of {0}s across the whole region. The effect is modulated by an individual's psychic sensitivity.</letterText>
+    <letterDef>NegativeEvent</letterDef>
+    <canBePermanent>false</canBePermanent>
+    <natural>false</natural>
+  </GameConditionDef>
+	  <HediffDef ParentName="DiseaseBase">
+		<defName>HVMP_TargetedPsychicSuppression</defName>
+		<label>lesser psychic suppression</label>
+		<description>The effect of a targeted psychic suppression field. Coordination and reasoning are muddled.</description>
+		<isBad>true</isBad>
+		<everCurableByItem>false</everCurableByItem>
+		<comps>
+		  <li Class="HediffCompProperties">
+			<compClass>HautsPermits.HediffComp_TargetedPsychicSuppression</compClass>
+		  </li>
+		</comps>
+		<stages>
+		  <li>
+			<capMods>
+			  <li>
+				<capacity>Consciousness</capacity>
+				<setMaxCurveOverride>
+				  <points>
+					<li>0, 1</li>
+					<li>1, 0.75</li>
+				  </points>
+				</setMaxCurveOverride>
+				<setMaxCurveEvaluateStat>PsychicSensitivity</setMaxCurveEvaluateStat>
+			  </li>
+			</capMods>
+		  </li>
+		</stages>
+	  </HediffDef>
+  <!--	Dead Raiders Tell No Tales-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_DRTNT</defName>
+    <hediffClass>HediffWithComps</hediffClass>
+    <label>raiding scout</label>
+    <description>This raider collects information on your colony. Should they escape, they will sell that information to interested parties, granting a temporary reserve of extra 'raid power' to four random hostile factions. This effect scales with sight, hearing, Construction skill, and Intellectual skill.</description>
+	<comps>
+	  <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	  <li Class="HautsFramework.HediffCompProperties_Espionage">
+		<unscalableFlatSpyPoints>40</unscalableFlatSpyPoints>
+		<baseSpyPoints>18</baseSpyPoints>
+		<relevantSkills>
+			<li>Construction</li>
+			<li>Intellectual</li>
+		</relevantSkills>
+		<fallbackIfNoSkillLevel>1</fallbackIfNoSkillLevel>
+		<relevantCapacities>
+			<li>Sight</li>
+			<li>Hearing</li>
+		</relevantCapacities>
+		<spyPointAttribution>RandomHostileFactions</spyPointAttribution>
+		<randomFactionCount>4</randomFactionCount>
+	  </li>
+	  <li Class="HautsFramework.HediffCompProperties_MoteConditional">
+		<mote>HVMP_EyeSpy</mote>
+		<scale>1</scale>
+		<useHeadOffsetAboveOneBodySize>true</useHeadOffsetAboveOneBodySize>
+	  </li>
+	</comps>
+  </HediffDef>
+  
+  <!--PAX Caelum
+		Mood Killer-->
+  <GameConditionDef>
+    <defName>HVMP_MoodKiller</defName>
+    <conditionClass>GameCondition</conditionClass>
+    <label>synaptic irritation</label>
+    <description>Exotic particles saturate the atmosphere. They suppress certain pathways in the nervous system, worsening mood.</description>
+  </GameConditionDef>
+  <ThoughtDef>
+    <defName>HVMP_MoodKillerThought</defName>
+    <workerClass>HautsPermits.ThoughtWorker_MoodKiller</workerClass>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <stages>
+      <li>
+        <label>synaptic irritation</label>
+        <description>Exotic particles in the atmosphere worsen the mood.</description>
+        <baseMoodEffect>-8</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  <!--	Sensory Overload-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+    <defName>HVMP_SensoryOverload</defName>
+    <label>sensory overload</label>
+    <description>Lingering effects of exposure to the overwhelming sensation of a powerful orbital weapon.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <initialSeverity>5</initialSeverity>
+    <maxSeverity>5</maxSeverity>
+    <stages>
+      <li>
+        <capMods>
+          <li><capacity>Sight</capacity><offset>-0.15</offset></li>
+          <li><capacity>Hearing</capacity><offset>-0.15</offset></li>
+        </capMods>
+		<statOffsets>
+		  <RimScent_SmellSensitivity MayRequire="reo.RimScent">-0.15</RimScent_SmellSensitivity>
+		</statOffsets>
+      </li>
+      <li>
+        <minSeverity>1</minSeverity>
+        <capMods>
+          <li><capacity>Sight</capacity><offset>-0.3</offset></li>
+          <li><capacity>Hearing</capacity><offset>-0.3</offset></li>
+        </capMods>
+		<statOffsets>
+		  <RimScent_SmellSensitivity MayRequire="reo.RimScent">-0.3</RimScent_SmellSensitivity>
+		</statOffsets>
+      </li>
+      <li>
+        <minSeverity>2</minSeverity>
+        <capMods>
+          <li><capacity>Sight</capacity><offset>-0.45</offset></li>
+          <li><capacity>Hearing</capacity><offset>-0.45</offset></li>
+        </capMods>
+		<statOffsets>
+		  <RimScent_SmellSensitivity MayRequire="reo.RimScent">-0.45</RimScent_SmellSensitivity>
+		</statOffsets>
+      </li>
+      <li>
+        <minSeverity>3</minSeverity>
+        <capMods>
+          <li><capacity>Sight</capacity><offset>-0.6</offset></li>
+          <li><capacity>Hearing</capacity><offset>-0.6</offset></li>
+        </capMods>
+		<statOffsets>
+		  <RimScent_SmellSensitivity MayRequire="reo.RimScent">-0.6</RimScent_SmellSensitivity>
+		</statOffsets>
+      </li>
+      <li>
+        <minSeverity>4</minSeverity>
+        <capMods>
+          <li><capacity>Sight</capacity><offset>-0.75</offset></li>
+          <li><capacity>Hearing</capacity><offset>-0.75</offset></li>
+        </capMods>
+		<statOffsets>
+		  <RimScent_SmellSensitivity MayRequire="reo.RimScent">-0.75</RimScent_SmellSensitivity>
+		</statOffsets>
+      </li>
+    </stages>
+	<comps>
+	  <li Class="HediffCompProperties_SeverityPerDay">
+		<severityPerDay>-1</severityPerDay>
+		<showDaysToRecover>true</showDaysToRecover>
+	  </li>
+    </comps>
+  </HediffDef>
+  
+  <!--ROVER Atlas
+		Drier Than Salt-->
+  <ThoughtDef>
+    <defName>HVMP_DTS_Thought</defName>
+    <durationDays>0.5</durationDays>
+    <stackLimit>12</stackLimit>
+    <stackedEffectMultiplier>1.0</stackedEffectMultiplier>
+    <validWhileDespawned>true</validWhileDespawned>
+    <nullifyingTraits>
+      <li>Ascetic</li>
+      <li MayRequire="Hautarche.HautsTraits">HVT_Drudge</li>
+      <li MayRequire="Hautarche.HautsTraits">HVT_Staid</li>
+    </nullifyingTraits>
+    <stages>
+      <li>
+        <label>frustrating revision</label>
+        <description>This atlas I've been revising is so dull. I have to adhere to all these weird, nonsensical formatting rules, too.</description>
+        <baseMoodEffect>-1</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  <!--ROVER Theseus
+		Grave Goods-->
+  <HediffDef ParentName="HVT_TraitHediffBase">
+	<defName>HVMP_SkipnetAuthorization_NPC</defName>
+	<label>illicit skipnet authorization</label>
+    <defaultLabelColor>(0.6, 0.6, 1.0)</defaultLabelColor>
+	<description>Spoofed authorization for the Enterprise's teleportation network. Enables the use of Personal Netskip up to four times.</description>
+	<initialSeverity>4</initialSeverity>
+	<maxSeverity>4</maxSeverity>
+	<stages>
+	  <li>
+		<label>1 use</label>
+	  </li>
+	  <li>
+		<minSeverity>1.001</minSeverity>
+		<label>2 uses</label>
+	  </li>
+	  <li>
+		<minSeverity>2.001</minSeverity>
+		<label>3 uses</label>
+	  </li>
+	  <li>
+		<minSeverity>3.001</minSeverity>
+		<label>4 uses</label>
+	  </li>
+	</stages>
+    <abilities>
+      <li>HVMP_Skipnet_NPC</li>
+    </abilities>
+  </HediffDef>
+  
+  <!--ARCHIVE Ethnography
+		Sensitive Souls-->
+  <HediffDef ParentName="HVT_TraitHediffBase" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>HVMP_SensitiveSoul</defName>
+    <label>weak will</label>
+    <description>This character struggles with processing upsetting feelings, as well as with resisting basic temptations.</description>
+	<hediffClass>HediffWithComps</hediffClass>
+    <stages>
+      <li>
+        <hungerRateFactor>1.2</hungerRateFactor>
+        <statFactors>
+          <RestFallRateFactor>1.2</RestFallRateFactor>
+          <JoyFallRateFactor>1.25</JoyFallRateFactor>
+        </statFactors>
+        <statOffsets>
+          <VEF_NegativeThoughtDurationFactor>0.2</VEF_NegativeThoughtDurationFactor>
+        </statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+
+</Defs>

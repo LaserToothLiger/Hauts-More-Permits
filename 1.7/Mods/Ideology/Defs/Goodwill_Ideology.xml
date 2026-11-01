@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <GoodwillSituationDef>
+    <defName>HVMP_Cosmopolitan_Cosmopolitan</defName>
+    <label>cosmopolitan agreement</label>
+    <workerClass>GoodwillSituationWorker_MemeCompatibility</workerClass>
+    <meme>HVMP_Cosmopolitan</meme>
+    <otherMeme>HVMP_Cosmopolitan</otherMeme>
+    <naturalGoodwillOffset>10</naturalGoodwillOffset>
+  </GoodwillSituationDef>
+  <GoodwillSituationDef>
+    <defName>HVMP_Cosmopolitan_All</defName>
+    <label>cosmopolitan</label>
+    <workerClass>GoodwillSituationWorker_MemeCompatibility</workerClass>
+    <meme>HVMP_Cosmopolitan</meme>
+    <versusAll>true</versusAll>
+    <naturalGoodwillOffset>10</naturalGoodwillOffset>
+  </GoodwillSituationDef>
+  
+</Defs>

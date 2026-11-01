@@ -33,7 +33,7 @@
         <RF_Rotfish MayRequire="Gene.Rotfish">0.075</RF_Rotfish>
         <DV_Bogleg MayRequire="det.boglegs">0.075</DV_Bogleg>
         <DV_Keshig MayRequire="det.keshig">0.075</DV_Keshig>
-        <RBM_Minotaur MayRequire="Rooboid.Minotaur">0.075</RBM_Minotaur>
+        <RBM_Minotaur MayRequireAnyOf="Rooboid.Minotaur,tug.Minotaur">0.075</RBM_Minotaur>
       </xenotypeChances>
     </xenotypeSet>
     <startingHediffs>

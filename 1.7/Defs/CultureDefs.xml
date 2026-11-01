@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <CultureDef>
+    <defName>HVMP_Ventrish</defName>
+    <label>ventrish</label>
+    <description>A family of cultures particular to the Enterprise, its branches, and its creators.</description>
+    <ideoNameMaker MayRequire="Ludeon.RimWorld.Ideology">NamerIdeoAstropolitan</ideoNameMaker>
+    <deityNameMaker MayRequire="Ludeon.RimWorld.Ideology">NamerDeityAstropolitan</deityNameMaker>
+    <deityTypeMaker MayRequire="Ludeon.RimWorld.Ideology">DeityTypeMakerAstropolitan</deityTypeMaker>
+    <leaderTitleMaker MayRequire="Ludeon.RimWorld.Ideology">HVMP_LeaderTitleMaker_Ventrish</leaderTitleMaker>
+    <festivalNameMaker MayRequire="Ludeon.RimWorld.Ideology">NamerFestivalAstropolitan</festivalNameMaker>
+    <allowedPlaceTags>
+      <li>OriginTribal</li>
+      <li>OriginSpacer</li>
+    </allowedPlaceTags>
+    <iconPath>UI/Cultures/Astropolitan</iconPath><!--remember to replace this with the "branch standing" icon-->
+    <styleItemTags>
+      <li>
+        <tag>Urban</tag>
+        <baseWeight>1</baseWeight>
+        <weightFactor>1</weightFactor>
+      </li>
+      <li>
+        <tag>NoBeard</tag>
+        <baseWeight>0.4</baseWeight>
+        <weightFactor>1</weightFactor>
+      </li>
+      <li>
+        <tag>BeardRural</tag>
+        <baseWeight>0.1</baseWeight>
+        <weightFactor>1</weightFactor>
+      </li>
+      <li>
+        <tag>BeardUrban</tag>
+        <baseWeight>0.4</baseWeight>
+        <weightFactor>1</weightFactor>
+      </li>
+      <li>
+        <tag>NoTattoo</tag>
+        <baseWeight>1</baseWeight>
+        <weightFactor>1</weightFactor>
+      </li>
+      <li MayRequire="Ludeon.RimWorld.Biotech">
+        <tag>Furskin</tag>
+        <baseWeight>1</baseWeight>
+        <weightFactor>1</weightFactor>
+      </li>
+    </styleItemTags>
+  </CultureDef>
+  
+  <RulePackDef>
+    <defName>HVMP_LeaderTitleMaker_Structure</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_leaderTitle(p=1)->[cultureLeaderAdjective] [cultureLeaderNoun]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+  <RulePackDef>
+    <defName>HVMP_LeaderTitleMaker_Content</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>cultureLeaderAdjective->ranking</li>
+        <li>cultureLeaderAdjective->acting</li>
+        <li>cultureLeaderAdjective->prime</li>
+        <li>cultureLeaderAdjective->venture</li>
+        <li>cultureLeaderAdjective->seniormost</li>
+        <li>cultureLeaderAdjective->head</li>
+        <li>cultureLeaderAdjective->committee</li>
+        <li>cultureLeaderAdjective->ruling</li>
+        <li>cultureLeaderAdjective->provisional</li>
+        <li>cultureLeaderAdjective->lord</li>
+        <li>cultureLeaderAdjective->arch</li>
+
+        <li>cultureLeaderNoun->executive</li>
+        <li>cultureLeaderNoun->representative</li>
+        <li>cultureLeaderNoun->officer</li>
+        <li>cultureLeaderNoun->chair</li>
+        <li>cultureLeaderNoun->administrator</li>
+        <li>cultureLeaderNoun->executor</li>
+        <li>cultureLeaderNoun->explorator</li>
+        <li>cultureLeaderNoun->steward</li>
+        <li>cultureLeaderNoun->fleet-captain</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+  <RulePackDef>
+    <defName>HVMP_LeaderTitleMaker_Ventrish</defName>
+    <include>
+      <li>HVMP_LeaderTitleMaker_Structure</li>
+      <li>HVMP_LeaderTitleMaker_Content</li>
+    </include>
+  </RulePackDef>
+  
+</Defs>

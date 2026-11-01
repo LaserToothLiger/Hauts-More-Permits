@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Cybranian - Ideology Virtues</li>
+		</mods>
+		<match Class="PatchOperationAddModExtension">
+			<xpath>*/MemeDef[defName="HVMP_Cosmopolitan"]</xpath>
+			<value>
+				<li Class="IdeologyVirtues.DefModExtension_MemeDefVirtues">
+					<associatedPreferredTraits>
+						<li>Kind</li>
+						<li MayRequire="Hautarche.HautsTraits">HVT_Tolerant</li>
+					</associatedPreferredTraits>
+					<associatedDisapprovedTraits>
+						<li>Jealous</li>
+						<li>Psychopath</li>
+						<li MayRequire="Hautarche.HautsTraits">HVT_Intolerant</li>
+					</associatedDisapprovedTraits>
+				</li>
+			</value>
+		</match>
+	</Operation>
+</Patch>

@@ -348,7 +348,7 @@
   <ThingDef ParentName="BuildingBase" MayRequire="Ludeon.RimWorld.Odyssey">
     <defName>HVMP_AutoHatchery</defName>
     <label>auto-hatchery</label>
-    <description>A stationary device which generates fertilized fish eggs from semi-randomized DNA samples, selecting species and strains best adapted to the local water.</description>
+    <description>A stationary device which generates fertilized fish eggs from semi-randomized DNA samples, selecting species and strains best adapted to the local water.\n\nIncreases the local fish population by 1 per hour.</description>
     <size>(1,1)</size>
     <receivesSignals>true</receivesSignals>
     <statBases>

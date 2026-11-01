@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--interactions w nosy anthropologists-->
+  <ThoughtDef>
+    <defName>HVMP_AnthroAnnoyance</defName>
+    <thoughtClass>Thought_MemorySocial</thoughtClass>
+    <durationDays>3</durationDays>
+    <stackLimit>10</stackLimit>
+    <stackLimitForSameOtherPawn>10</stackLimitForSameOtherPawn>
+    <stackedEffectMultiplier>1</stackedEffectMultiplier>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <socialTargetDevelopmentalStageFilter>Baby, Child, Adult</socialTargetDevelopmentalStageFilter>
+    <nullifyingTraits>
+      <li>Kind</li>
+      <li MayRequire="Hautarche.HautsTraits">HVT_Asocial</li>
+    </nullifyingTraits>
+    <stages>
+      <li>
+        <label>annoyed by anthropologist</label>
+        <baseOpinionOffset>-7</baseOpinionOffset>
+      </li>
+    </stages>
+    <thoughtToMake>HVMP_AnthroAnnoyanceMood</thoughtToMake>
+  </ThoughtDef>
+  <ThoughtDef>
+    <defName>HVMP_AnthroAnnoyanceMood</defName>
+    <durationDays>3</durationDays>
+    <stackLimit>10</stackLimit>
+    <stackedEffectMultiplier>1</stackedEffectMultiplier>
+    <nullifyingTraits>
+      <li>Kind</li>
+      <li MayRequire="Hautarche.HautsTraits">HVT_Asocial</li>
+    </nullifyingTraits>
+    <stages>
+      <li>
+        <label>annoyed by anthropologist</label>
+        <description>What an annoying person. What's up with all these stupid, ignorant questions?</description>
+        <baseMoodEffect>-4</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+</Defs>

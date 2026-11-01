@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Combat Extended</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<!--QUEST MUTATOR PATCHES
+					Chaincomputers with optimization issues have wider thermal explosion radius-->
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/ThingDef[defName="HVMP_ChainComputer"]/comps/li[@Class="HautsPermits.CompProperties_HeatPusher_OI"]/OI_haywireExplosionRadius</xpath>
+					<value>
+						<OI_haywireExplosionRadius>3.9</OI_haywireExplosionRadius>
+					</value>
+				</li>
+				<!--Sites benefitting from the Static Defense mutator only have 1 added mech structure per 6.67 pawns-->
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/WorldObjectDef[defName="Site"]/comps/li[@Class="HautsPermits.WorldObjectCompProperties_Mutator_GG_SD"]/SD_turretsPerPawn</xpath>
+					<value>
+						<SD_turretsPerPawn>0.15</SD_turretsPerPawn>
+					</value>
+				</li>
+				<!--PERMIT PATCHES
+					Combat Assist's description in the selection menu indicates its added CE-exclusive function-->
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_CombatAssist"]/description</xpath>
+					<value>
+						<description>Link the target to an automated combat assistance program for 8 hours, improving attack accuracy, range, and resistance to suppression.</description>
+					</value>
+				</li>
+				<li Class="PatchOperationRemove">
+					<xpath>/Defs/HediffDef[defName="HVMP_CombatAssistProgram"]/stages/li/statOffsets/ShootingAccuracyPawn</xpath>
+				</li>
+				<!--Orbital Scalpel does 1.5x default bomb damage, and in CE's system it should have armor penetration of "Yes". Centipedes have a blunt armor rating of up to 45, so 50 is gucci-->
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/HediffDef[defName="HVMP_ScalpelTracker"]/comps/li[@Class="HautsPermits.HediffCompProperties_BoomHeadshot"]/damageAmount</xpath>
+					<value>
+						<damageAmount>234</damageAmount>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/HediffDef[defName="HVMP_ScalpelTracker"]/comps/li[@Class="HautsPermits.HediffCompProperties_BoomHeadshot"]/armorPen</xpath>
+					<value>
+						<armorPen>50</armorPen>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/HediffDef[defName="HVMP_BShield"]/comps/li[@Class="HautsFramework.HediffCompProperties_DamageNegationShield"]/energyOnReset</xpath>
+					<value>
+						<energyOnReset>600</energyOnReset>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/HediffDef[defName="HVMP_BShield"]/comps/li[@Class="HautsFramework.HediffCompProperties_DamageNegationShield"]/baseMaxEnergy</xpath>
+					<value>
+						<baseMaxEnergy>600</baseMaxEnergy>
+					</value>
+				</li>
+				<!--shells dropped by permits are 81mm, so descriptions need to state this. Also shell pallets need to use the correct thing category, since CE empties the normal shell category-->
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_ShellDrop"]/label</xpath>
+					<value>
+						<label>81mm mortar shell drop</label>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/RoyalTitlePermitDef[defName="HVMP_AntigrainShellDrop"]/label</xpath>
+					<value>
+						<label>81mm antigrain shell drop</label>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/ThingDef[defName="HVMP_ShellPallet"]/label</xpath>
+					<value>
+						<label>81mm mortar shell pallet</label>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>/Defs/ThingDef[defName="HVMP_ShellPallet"]/comps/li[@Class="HautsPermits.CompProperties_UseEffect_MultipleChoicePallet"]/thingCategoryWhitelist</xpath>
+					<value>
+						<thingCategoryWhitelist>Ammo81mmMortarShells</thingCategoryWhitelist>
+					</value>
+				</li>
+				<!--turret drop permits need the same changes CE makes to their normal counterparts
+						Mini-turret-->
+				<li Class="PatchOperationRemove">
+					<xpath>Defs/ThingDef[defName="HVMP_SlugTurret"]/comps/li[@Class="CompProperties_Stunnable"]/affectedDamageDefs/li[.="Stun"]</xpath>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_SlugTurret"]/thingClass</xpath>
+					<value>
+						<thingClass>CombatExtended.Building_TurretGunCE</thingClass>
+					</value>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>Defs/ThingDef[defName="HVMP_SlugTurret"]/statBases</xpath>
+					<value>
+						<AimingAccuracy>0.75</AimingAccuracy>
+						<NightVisionEfficiency>0.6</NightVisionEfficiency>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_SlugTurret"]/statBases/ShootingAccuracyTurret</xpath>
+					<value>
+						<ShootingAccuracyTurret>1.25</ShootingAccuracyTurret>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_SlugTurret"]/statBases/Mass</xpath>
+					<value>
+						<Mass>35</Mass>
+					</value>
+				</li>
+				<li Class="PatchOperationRemove">
+					<xpath>Defs/ThingDef[defName="HVMP_SlugTurret"]/comps/li[@Class="CompProperties_Explosive"]</xpath>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_SlugTurret"]/fillPercent</xpath>
+					<value>
+						<fillPercent>0.85</fillPercent>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_SlugTurret"]/building/turretBurstCooldownTime</xpath>
+					<value>
+						<turretBurstCooldownTime>2.0</turretBurstCooldownTime>
+					</value>
+				</li>
+				<!--	Charge Turret Drop-->
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_ChargeTurret"]/thingClass</xpath>
+					<value>
+						<thingClass>CombatExtended.Building_CIWS_CE</thingClass>
+					</value>
+				</li>
+				<li Class="PatchOperationRemove">
+					<xpath>Defs/ThingDef[defName="HVMP_ChargeTurret"]/comps/li[@Class="CompProperties_Stunnable"]/affectedDamageDefs/li[.="Stun"]</xpath>
+				</li>
+				<li Class="PatchOperationRemove">
+					<xpath>Defs/ThingDef[defName="HVMP_ChargeTurret"]/comps/li[@Class="CompProperties_Explosive"]</xpath>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>Defs/ThingDef[defName="HVMP_ChargeTurret"]/statBases</xpath>
+					<value>
+						<AimingAccuracy>0.5</AimingAccuracy>
+						<NightVisionEfficiency>0.6</NightVisionEfficiency>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_ChargeTurret"]/statBases/ShootingAccuracyTurret</xpath>
+					<value>
+						<ShootingAccuracyTurret>1.0</ShootingAccuracyTurret>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_ChargeTurret"]/statBases/Mass</xpath>
+					<value>
+						<Mass>100</Mass>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_ChargeTurret"]/fillPercent</xpath>
+					<value>
+						<fillPercent>0.85</fillPercent>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_ChargeTurret"]/building/turretBurstCooldownTime</xpath>
+					<value>
+						<turretBurstCooldownTime>2.0</turretBurstCooldownTime>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_ChargeTurret"]/building/turretGunDef</xpath>
+					<value>
+						<turretGunDef>Gun_ChargeBlasterHeavyTurret</turretGunDef>
+					</value>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>Defs/ThingDef[defName="HVMP_ChargeTurret"]/comps</xpath>
+					<value>
+						<li>
+							<compClass>CombatExtended.CompVerbDisabler</compClass>
+						</li>
+					</value>
+				</li>
+				<!--	Inferno Turret-->
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_InfernoTurret"]/thingClass</xpath>
+					<value>
+						<thingClass>CombatExtended.Building_TurretGunCE</thingClass>
+					</value>
+				</li>
+				<li Class="PatchOperationRemove">
+					<xpath>Defs/ThingDef[defName="HVMP_InfernoTurret"]/comps/li[@Class="CompProperties_Stunnable"]/affectedDamageDefs/li[.="Stun"]</xpath>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>Defs/ThingDef[defName="HVMP_InfernoTurret"]/statBases</xpath>
+					<value>
+						<AimingAccuracy>0.5</AimingAccuracy>
+						<NightVisionEfficiency>0.6</NightVisionEfficiency>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_InfernoTurret"]/statBases/ShootingAccuracyTurret</xpath>
+					<value>
+						<ShootingAccuracyTurret>1.0</ShootingAccuracyTurret>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_InfernoTurret"]/statBases/Mass</xpath>
+					<value>
+						<Mass>400</Mass>
+					</value>
+				</li>
+				<li Class="PatchOperationRemove">
+					<xpath>Defs/ThingDef[defName="HVMP_InfernoTurret"]/comps/li[@Class="CompProperties_Explosive"]</xpath>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_InfernoTurret"]/fillPercent</xpath>
+					<value>
+						<fillPercent>0.85</fillPercent>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_InfernoTurret"]/building/turretBurstCooldownTime</xpath>
+					<value>
+						<turretBurstCooldownTime>2.52</turretBurstCooldownTime>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_InfernoTurret"]/building/turretGunDef</xpath>
+					<value>
+						<turretGunDef>Gun_InfernoCannonTurret</turretGunDef>
+					</value>
+				</li>
+				<!--	Auto-mortar-->
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_Mortar"]/thingClass</xpath>
+					<value>
+						<thingClass>CombatExtended.Building_TurretGunCE</thingClass>
+					</value>
+				</li>
+				<li Class="PatchOperationRemove">
+					<xpath>Defs/ThingDef[defName="HVMP_Mortar"]/comps/li[@Class="CompProperties_Stunnable"]/affectedDamageDefs/li[.="Stun"]</xpath>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_Mortar"]/statBases/MaxHitPoints</xpath>
+					<value>
+						<MaxHitPoints>250</MaxHitPoints>
+					</value>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>Defs/ThingDef[defName="HVMP_Mortar"]/statBases</xpath>
+					<value>
+						<AimingAccuracy>0.25</AimingAccuracy>
+						<NightVisionEfficiency>0.6</NightVisionEfficiency>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_Mortar"]/statBases/ShootingAccuracyTurret</xpath>
+					<value>
+						<ShootingAccuracyTurret>0.5</ShootingAccuracyTurret>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/ThingDef[defName="HVMP_Mortar"]/fillPercent</xpath>
+					<value>
+						<fillPercent>0.85</fillPercent>
+					</value>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>Defs/ThingDef[defName="HVMP_Mortar"]/comps</xpath>
+					<value>
+						<li Class="CombatExtended.CompProperties_Fragments">
+							<fragments>
+								<Fragment_Large>5</Fragment_Large>
+								<Fragment_Small>20</Fragment_Small>
+							</fragments>
+						</li>
+					</value>
+				</li>
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Lost Factory Mechanoids</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_ChainTurret"]/thingClass</xpath>
+								<value>
+									<thingClass>CombatExtended.Building_TurretGunCE</thingClass>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_ChainTurret"]/statBases/ShootingAccuracyTurret</xpath>
+								<value>
+									<ShootingAccuracyTurret>0.5</ShootingAccuracyTurret>
+								</value>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>Defs/ThingDef[defName="HVMP_ChainTurret" or defName="LFM_Turret_AutoGraser"]/statBases</xpath>
+								<value>
+									<AimingAccuracy>0.5</AimingAccuracy>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_ChainTurret"]/statBases/Mass</xpath>
+								<value>
+									<Mass>600</Mass>
+								</value>
+							</li>
+							<li Class="PatchOperationRemove">
+								<xpath>Defs/ThingDef[defName="HVMP_ChainTurret" or defName="LFM_Turret_AutoGraser"]/comps/li[@Class = "CompProperties_Explosive"]</xpath>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_ChainTurret" or defName="LFM_Turret_AutoGraser"]/fillPercent</xpath>
+								<value>
+									<fillPercent>0.85</fillPercent>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_ChainTurret"]/building/turretBurstCooldownTime</xpath>
+								<value>
+									<turretBurstCooldownTime>12.0</turretBurstCooldownTime>
+								</value>
+							</li>
+							<li Class="PatchOperationFindMod">
+								<mods>
+									<li>Biotech</li>
+								</mods>
+								<match Class="PatchOperationSequence">
+									<operations>
+										<li Class="PatchOperationReplace">
+											<xpath>Defs/ThingDef[defName="HVMP_GraserTurret"]/statBases/RangedWeapon_Cooldown</xpath>
+											<value>
+												<RangedWeapon_Cooldown>0.56</RangedWeapon_Cooldown>
+											</value>
+										</li>
+
+										<li Class="PatchOperationReplace">
+											<xpath>Defs/ThingDef[defName="HVMP_GraserTurret"]/verbs/li/warmupTime</xpath>
+											<value>
+												<warmupTime>1.3</warmupTime>
+											</value>
+										</li>
+
+										<li Class="PatchOperationReplace">
+											<xpath>Defs/ThingDef[defName="HVMP_GraserTurret"]/verbs/li/range</xpath>
+											<value>
+												<range>60</range>
+											</value>
+										</li>
+
+										<li Class="PatchOperationReplace">
+											<xpath>Defs/ThingDef[defName="HVMP_GraserTurret"]/verbs/li/burstShotCount</xpath>
+											<value>
+												<burstShotCount>10</burstShotCount>
+											</value>
+										</li>
+
+										<li Class="PatchOperationReplace">
+											<xpath>Defs/ThingDef[defName="HVMP_GraserTurret"]/verbs/li/ticksBetweenBurstShots</xpath>
+											<value>
+												<ticksBetweenBurstShots>10</ticksBetweenBurstShots>
+											</value>
+										</li>
+									</operations>
+								</match>
+							</li>
+						</operations>
+					</match>
+				</li>
+				<!--cast range scaling for netskips-->
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/AbilityDef[defName="HVMP_Skipnet"]/verbProperties/range </xpath>
+					<value>
+						<range>32</range>
+					</value>
+				</li>
+				<li Class="PatchOperationReplace">
+					<xpath>Defs/AbilityDef[defName="HVMP_SelfSkipnet" or defName="HVMP_Skipnet_NPC"]/verbProperties/range </xpath>
+					<value>
+						<range>23</range>
+					</value>
+				</li>
+				
+				
+				
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Ideology</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<!--spacedrones need more durability, and the turret needs to be able to shoot-->
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/ThingDef[@Name="HVMP_Spacedrone"]/statBases/MaxHitPoints</xpath>
+								<value>
+									<MaxHitPoints>2500</MaxHitPoints>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/statBases/MaxHitPoints</xpath>
+								<value>
+									<MaxHitPoints>3000</MaxHitPoints>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/thingClass</xpath>
+								<value>
+									<thingClass>CombatExtended.Building_CIWS_CE</thingClass>
+								</value>
+							</li>
+							<li Class="PatchOperationRemove">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/comps/li[@Class="CompProperties_Stunnable"]/affectedDamageDefs/li[.="Stun"]</xpath>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/statBases</xpath>
+								<value>
+									<AimingAccuracy>0.5</AimingAccuracy>
+									<NightVisionEfficiency>0.6</NightVisionEfficiency>
+									<Mass>500</Mass>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/statBases/ShootingAccuracyTurret</xpath>
+								<value>
+									<ShootingAccuracyTurret>1.0</ShootingAccuracyTurret>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/fillPercent</xpath>
+								<value>
+									<fillPercent>0.85</fillPercent>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/building/turretBurstCooldownTime</xpath>
+								<value>
+									<turretBurstCooldownTime>2.0</turretBurstCooldownTime>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/building/turretGunDef</xpath>
+								<value>
+									<turretGunDef>Gun_ChargeBlasterHeavyTurret</turretGunDef>
+								</value>
+							</li>
+							<li Class="PatchOperationAdd">
+								<xpath>Defs/ThingDef[defName="HVMP_SpacedroneWithTurret"]/comps</xpath>
+								<value>
+									<li>
+										<compClass>CombatExtended.CompVerbDisabler</compClass>
+									</li>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace"><!--thump damage vs walls is nerfed in Combat Extended, but we want it to still PUNCH right through them-->
+								<xpath>/Defs/ThingDef[defName="HVMP_Ingressor"]/comps/li[@Class="HautsPermits_Ideology.CompProperties_TargetEffectIngression"]/damageAmount</xpath>
+								<value>
+									<damageAmount>1500</damageAmount>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+				
+				
+				
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Biotech</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<!--scaria mutations-->
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/HediffDef[defName="HVMP_ScariaAblativeTissues"]/stages/li/statOffsets/ArmorRating_Blunt</xpath>
+								<value>
+									<ArmorRating_Blunt>3.25</ArmorRating_Blunt>
+								</value>
+							</li>
+							<li Class="PatchOperationRemove">
+								<xpath>Defs/ThingDef[defName="HVMP_Proj_Acid"]/projectile/stoppingPower</xpath>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/HediffDef[defName="HVMP_ScariaBioelectricJolt"]/comps/li[@Class="HautsFramework.HediffCompProperties_ExtraDamageOnHit"]/extraDamages/li[def="EMP"]/amount</xpath>
+								<value>
+									<amount>24</amount>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/HediffDef[defName="HVMP_ScariaEvasive"]/stages/li/statOffsets/MeleeDodgeChance</xpath>
+								<value>
+									<MeleeDodgeChance>0.14</MeleeDodgeChance>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/HediffDef[defName="HVMP_ScariaFrenzy"]/stages/li/statOffsets/MeleeDodgeChance</xpath>
+								<value>
+									<MeleeDodgeChance>-0.03</MeleeDodgeChance>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/HediffDef[defName="HVMP_ScariaFrenzy"]/stages/li/statFactors/MeleeCooldownFactor</xpath>
+								<value>
+									<MeleeCooldownFactor>0.8</MeleeCooldownFactor>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/HediffDef[defName="HVMP_ScariaMucusLayer"]/stages/li/statOffsets/ArmorRating_Blunt</xpath>
+								<value>
+									<ArmorRating_Blunt>1.5</ArmorRating_Blunt>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/HediffDef[defName="HVMP_ScariaMucusLayer"]/stages/li/statOffsets/ArmorRating_Sharp</xpath>
+								<value>
+									<ArmorRating_Sharp>0.5</ArmorRating_Sharp>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/HediffDef[defName="HVMP_ScariaResilience"]/stages/li/statFactors/IncomingDamageFactor</xpath>
+								<value>
+									<IncomingDamageFactor>0.83</IncomingDamageFactor>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/HediffDef[defName="HVMP_ScariaSavagery"]/stages/li/statOffsets/MeleeDamageFactor</xpath>
+								<value>
+									<MeleeDamageFactor>0.2</MeleeDamageFactor>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/HediffDef[defName="HVMP_ScariaTunneling"]/stages/li/statOffsets/ArmorRating_Blunt</xpath>
+								<value>
+									<ArmorRating_Blunt>1.9</ArmorRating_Blunt>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/HediffDef[defName="HVMP_ScariaTunneling"]/stages/li/statOffsets/ArmorRating_Sharp</xpath>
+								<value>
+									<ArmorRating_Sharp>0.8</ArmorRating_Sharp>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+				
+				
+				
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Anomaly</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<!--quest stuff-->
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/HediffDef[defName="HVMP_UsherStats"]/stages/li/statOffsets/ArmorRating_Blunt</xpath>
+								<value>
+									<ArmorRating_Blunt>8.5</ArmorRating_Blunt>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/HediffDef[defName="HVMP_UsherStats"]/stages/li/statOffsets/ArmorRating_Sharp</xpath>
+								<value>
+									<ArmorRating_Sharp>7</ArmorRating_Sharp>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+				
+				
+				
+				<li Class="PatchOperationFindMod">
+					<mods>
+						<li>Odyssey</li>
+					</mods>
+					<match Class="PatchOperationSequence">
+						<operations>
+							<!--damage and armor pen of orbital targeting game condition-->
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/ThingDef[defName="HVMP_OT_Bomb_1rad_1shot" or defName="HVMP_OT_Bomb_3rad_1shot" or defName="HVMP_OT_Bomb_3rad_5shot"]/comps/li[@Class="HVMP_Odyssey.CompProperties_CustomizableBombardment"]/explosionArmorPen</xpath>
+								<value>
+									<explosionArmorPen>75</explosionArmorPen>
+								</value>
+							</li>
+							<li Class="PatchOperationReplace">
+								<xpath>/Defs/ThingDef[defName="HVMP_OT_Bomb_1rad_1shot" or defName="HVMP_OT_Bomb_3rad_1shot" or defName="HVMP_OT_Bomb_3rad_5shot"]/comps/li[@Class="HVMP_Odyssey.CompProperties_CustomizableBombardment"]/explosionAmount</xpath>
+								<value>
+									<explosionAmount>125</explosionAmount>
+								</value>
+							</li>
+						</operations>
+					</match>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+
+</Patch>

@@ -6,6 +6,8 @@
     <defName>HVMP_OrbitalTargetingBeacon</defName>
     <label>orbital targeting beacon</label>
     <description>An ancient signal transmitter powered by a wunderchip. It directs orbit-to-surface weaponry to eradicate all potential threats within a given zone, and for unknown reasons it is currently targeting its own position. Any creature in the region will slowly draw the attention of orbital weaponry.\n\nHack or destroy the beacon to obtain a wunderchip. Be warned, it may explode if damaged.</description>
+    <rotatable>false</rotatable>
+    <defaultPlacingRot>North</defaultPlacingRot>
     <statBases>
       <MaxHitPoints>600</MaxHitPoints>
       <Flammability>0</Flammability>

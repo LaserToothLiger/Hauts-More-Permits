@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Patch>
+	<Operation Class="PatchOperationConditional">
+		<xpath>/Defs/StatDef[defName="PsychicRitualQualityOffset"]/parts</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>/Defs/StatDef[defName="PsychicRitualQualityOffset"]</xpath>
+			<value>
+				<parts>
+				  <li Class="HautsPermits_Occult.StatPart_PsychicAlignment">
+					<offset>0.1</offset>
+				  </li>
+				</parts>
+			</value>
+		</nomatch>
+		<match Class="PatchOperationAdd">
+			<xpath>/Defs/StatDef[defName="PsychicRitualQualityOffset"]/parts</xpath>
+			<value>
+			  <li Class="HautsPermits_Occult.StatPart_PsychicAlignment">
+			    <offset>0.1</offset>
+			  </li>
+			</value>
+		</match>
+	</Operation>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+		  <li>Biotech</li>
+		  <li>Royalty</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationConditional">
+					<xpath>/Defs/StatDef[defName="MeditationFocusGain"]/parts</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>/Defs/StatDef[defName="MeditationFocusGain"]</xpath>
+						<value>
+							<parts>
+							  <li Class="HautsPermits_Occult.StatPart_PsychicAlignment">
+								<offset>0.1</offset>
+							  </li>
+							</parts>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationAdd">
+						<xpath>/Defs/StatDef[defName="MeditationFocusGain"]/parts</xpath>
+						<value>
+						  <li Class="HautsPermits_Occult.StatPart_PsychicAlignment">
+							<offset>0.1</offset>
+						  </li>
+						</value>
+					</match>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+</Patch>
