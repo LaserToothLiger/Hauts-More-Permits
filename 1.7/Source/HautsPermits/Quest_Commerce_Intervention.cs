@@ -220,24 +220,13 @@ namespace HautsPermits
         protected override bool TryExecuteWorker(IncidentParms parms)
         {
             Map map = (Map)parms.target;
-            IntVec3 intVec;
-            Func<IntVec3, bool> validator = delegate (IntVec3 x)
-            {
-                if (!x.Standable(map) || x.Fogged(map))
-                {
-                    return false;
-                }
-                return true;
-            };
-            IntVec3 loc;
+            IntVec3 intVec, loc;
             Faction hostFaction = map.ParentFaction ?? Faction.OfPlayer;
             IEnumerable<Thing> enumerable = map.mapPawns.FreeHumanlikesSpawnedOfFaction(hostFaction).Cast<Thing>();
             if (hostFaction == Faction.OfPlayer)
             {
                 enumerable = enumerable.Concat(map.listerBuildings.allBuildingsColonist.Cast<Thing>());
-            }
-            else
-            {
+            } else {
                 enumerable = enumerable.Concat(from x in map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial)
                                                where x.Faction == hostFaction
                                                select x);

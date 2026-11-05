@@ -75,4 +75,40 @@
 	</modExtensions>
   </QuestScriptDef>
   
+  <QuestScriptDef>
+    <defName>HVMP_Wunderchip_Redstone</defName>
+	<isRootSpecial>true</isRootSpecial>
+    <rootSelectionWeight>0</rootSelectionWeight>
+    <rootMinPoints>350</rootMinPoints>
+    <defaultChallengeRating>3</defaultChallengeRating>
+	<everAcceptableInSpace>true</everAcceptableInSpace>
+    <autoAccept>true</autoAccept>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->ancient magmaformer</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->You have detected the energy signature of wunderchip technology. In this case, it is a terraforming spire which stretches deep into the planet's crust.\n\nThe wunderchip is located in the subterranean "head" of the spire, so obtaining it will involve hacking the spire to retract its head towards the surface, with a poor hacker risking the attention of raiders. Once hacked, retraction will take about three days (although a skilled miner can interface with the spire to speed up this process) - during this time, hazardous volcanic disruptions will strike the local area, and hostile parties may be attracted to its location.\n\nAbout wunderchips: fusions of ultratechnology and archotechnology built by the ancients, wunderchips are rare and highly sought-after by both the Empire and the various branches of the Enterprise.\nYou can obtain great honor by giving one to an Imperial tribute collector, or great standing by giving one to an e-branch donations office at the comms console.\nAlternatively, wunderchips can be permanently transformed into other rare artifacts, such as gravcores, psylinks, healer serums, or the like - but this requires the chip to be extensively studied first.</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <questContentRules>
+      <rulesStrings>
+        <li>letterLabelMapGenerated->Ancient magmaformer spire</li> 
+        <li>letterTextMapGenerated->A magmaformer spire is nearby, powered by a wunderchip.\n\nThe magmaformer's wunderchip is deep underground. Obtain it by hacking the spire, then waiting for the wunderchip to reach the surface.\n\nAfter being hacked, the magmaformer will infrequently cause dangerous volcanic activity, and it might attract raiders or agitate subterranean insectoids. A skilled miner can guide the magmaformer, speeding up the wunderchip's retrieval.</li>
+      </rulesStrings>
+    </questContentRules>
+    <questAvailableLetterLabel>Wunderchip detected: Ancient magmaformer</questAvailableLetterLabel>
+    <questAvailableLetterTextIsDescription>true</questAvailableLetterTextIsDescription>
+    <canOccurOnAllPlanetLayers>true</canOccurOnAllPlanetLayers>
+    <root Class="HVMP_Odyssey.QuestNode_Root_Wunderchip_Redstone">
+      <distanceFromColonyRange>10~60</distanceFromColonyRange>
+      <layer>Surface</layer>
+    </root>
+	<modExtensions>
+	  <li Class="HautsPermits.WunderQuest"/>
+	</modExtensions>
+  </QuestScriptDef>
+  
 </Defs>

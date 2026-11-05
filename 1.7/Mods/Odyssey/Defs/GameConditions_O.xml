@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
   
+  <!--Korhal-->
   <GameConditionDef>
     <defName>HVMP_OrbitalTargeting</defName>
     <conditionClass>HVMP_Odyssey.GameCondition_OrbitalTargeting</conditionClass>
@@ -67,4 +68,14 @@
 		</stages>
 	  </HediffDef>
   
+  <!--Redstone-->
+  <GameConditionDef>
+    <defName>HVMP_LavaFlowAnyEdge</defName>
+    <conditionClass>HVMP_Odyssey.GameCondition_LavaFlowAnyEdge</conditionClass>
+    <label>lava surge</label>
+    <description>Lava has begun to pour into the area. It will flow over open terrain, but not through water, walls, or foundations such as heavy bridges. Keep your colonists out of harm's way!</description>
+    <causesTraderCaravanExit>true</causesTraderCaravanExit>
+    <preventNeutralVisitors>true</preventNeutralVisitors>
+    <showPermanentInTooltip>false</showPermanentInTooltip>
+  </GameConditionDef>
 </Defs>

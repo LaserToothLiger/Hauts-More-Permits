@@ -137,4 +137,21 @@
     <order>1600</order>
     <genStep Class="HVMP_Odyssey.GenStep_MoriaSite" />
   </GenStepDef>
+  
+  <!--redstone-->
+  <SitePartDef ParentName="HVMP_WunderchipLocationBase">
+    <defName>HVMP_RedstoneSite</defName>
+    <label>ancient magmaformer</label>
+    <description>The wunderchip energy signature is coming from an ancient magmaformer spire here. Initiate, and then finish, its retraction process to acquire the wunderchip.</description>
+    <workerClass>HVMP_Odyssey.SitePartWorker_RedstoneSite</workerClass>
+    <tags>
+      <li>HVMP_RedstoneSite</li>
+    </tags>
+  </SitePartDef>
+  <GenStepDef>
+    <defName>HVMP_RedstoneSite</defName>
+    <linkWithSite>HVMP_RedstoneSite</linkWithSite>
+    <order>1600</order>
+    <genStep Class="HVMP_Odyssey.GenStep_RedstoneSite" />
+  </GenStepDef>
 </Defs>

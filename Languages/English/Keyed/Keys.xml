@@ -237,6 +237,14 @@
 <HVMP_MineralExtractorRaidLetterText>Insectoids have been attracted to shifts in the mineral extractor's activity!\n\nThey will attack immediately.</HVMP_MineralExtractorRaidLetterText>
 <HVMP_KorhalSiteArrivedLetter>no man's land</HVMP_KorhalSiteArrivedLetter>
 <HVMP_KorhalSiteArrivedLetterText>An orbital targeting beacon is hidden within nearby ruins. Nearby creatures will be targeted by orbital weaponry, unless they are indoors and under a roof. Locate and disable the beacon to obtain a wunderchip and stop the weapon targeting.</HVMP_KorhalSiteArrivedLetterText>
+<HVMP_RedstoneGuideRetractionLabel>Guide retraction</HVMP_RedstoneGuideRetractionLabel>
+<HVMP_RedstoneGuideRetractionDesc>Choose a colonist to speed up the magmaformer's retraction. Colonists with high deep drilling speed are ideal.</HVMP_RedstoneGuideRetractionDesc>
+<HVMP_RedstoneCannotChooseGuide>Cannot guide retraction</HVMP_RedstoneCannotChooseGuide>
+<HVMP_RedstoneCommandChooseGuide>Choose retraction guide</HVMP_RedstoneCommandChooseGuide>
+<HVMP_RedstoneRetractionFinished>Retraction already finished</HVMP_RedstoneRetractionFinished>
+<HVMP_RedstoneDisplayWhileRetracting>Remaining time to retract: {0}\nRetraction attracts hostile parties and may result in volcanic catastrophes.</HVMP_RedstoneDisplayWhileRetracting>
+<HVMP_RedstoneDisplayWhenFinished>Retraction finished.</HVMP_RedstoneDisplayWhenFinished>
+<!--<HVMP_RedstoneMessageSuccess>The magmaformer has finished retracting and its wunderchip has automatically ejected.</HVMP_RedstoneMessageSuccess>-->
 
 <!--Mod settings for quest mutators-->
 <HVMP_Label_MutatorSettings>Quest Mutators</HVMP_Label_MutatorSettings>

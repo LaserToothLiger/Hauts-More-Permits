@@ -51,9 +51,7 @@ namespace HVMP_Odyssey
                 if (thing.def == ThingDefOf.MechStabilizer)
                 {
                     this.AddStabilizer(thing, site, quest, slate, text2, list, list2);
-                }
-                else if (thing.def == HVMPDefOf_Odyssey.HVMP_MineralExtractor)
-                {
+                } else if (thing.def == HVMPDefOf_Odyssey.HVMP_MineralExtractor) {
                     slate.Set<Thing>("relay", thing, false);
                 }
             }

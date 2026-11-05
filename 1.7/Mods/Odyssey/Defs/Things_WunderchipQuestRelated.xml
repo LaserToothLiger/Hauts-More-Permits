@@ -329,4 +329,86 @@
     </comps>
   </ThingDef>
   
+  <!--redstone-->
+  <ThingDef ParentName="BuildingBase">
+    <defName>HVMP_Magmaformer</defName>
+    <label>ancient magmaformer spire</label>
+    <description>The aboveground portion of a hybrid ultratech-archotech device which stretches far, far down into the planetary crust. It projects titanic forces into the mantle for some unknown purpose.</description>
+    <rotatable>false</rotatable>
+    <defaultPlacingRot>North</defaultPlacingRot>
+	<thingClass>Building_SteamGeyser</thingClass>
+    <rotatable>false</rotatable>
+    <graphicData>
+      <graphicClass>Graphic_Single</graphicClass>
+      <texPath>Things/Building/QuestFoci/HVMP_Magmaformer</texPath>
+      <drawSize>(4, 4)</drawSize>
+	  <!--<drawOffset>(-0.4,0,0)</drawOffset>-->
+      <addTopAltitudeBias>true</addTopAltitudeBias>
+    </graphicData>
+    <size>(4, 4)</size>
+    <drawerType>RealtimeOnly</drawerType>
+    <useHitPoints>false</useHitPoints>
+    <fillPercent>0.8</fillPercent>
+    <canOverlapZones>false</canOverlapZones>
+    <passability>Impassable</passability>
+    <pathCost>50</pathCost>
+    <tickerType>Normal</tickerType>
+    <hasInteractionCell>true</hasInteractionCell>
+    <interactionCellOffset>(-1,0,-2)</interactionCellOffset>
+    <building>
+      <deconstructible>false</deconstructible>
+      <repairable>false</repairable>
+      <isTargetable>false</isTargetable>
+      <isInert>true</isInert>
+      <claimable>false</claimable>
+      <expandHomeArea>false</expandHomeArea>
+    </building>
+    <placeWorkers>
+      <li>PlaceWorker_InvalidOverSubstructure</li>
+    </placeWorkers>
+    <comps>
+      <li Class="CompProperties_Hackable">
+        <compClass>HVMP_Odyssey.CompHackable_RetaliationOnLockout</compClass>
+		<defence>9000</defence>
+        <effectHacking>HackingTerminal</effectHacking>
+        <graphicDrawerType>RealtimeOnly</graphicDrawerType>
+		<lockoutDurationHoursRange>6</lockoutDurationHoursRange>
+        <showProgressAfterHackCompletion>false</showProgressAfterHackCompletion>
+        <notHackedInspectString>Hack to begin process of obtaining wunderchip.</notHackedInspectString>
+        <hackedMessage>{HACKER_labelShort} has finished hacking {SUBJECT_definite}.</hackedMessage>
+        <hackedLetterLabel>Magmaformer retracting</hackedLetterLabel> 
+        <hackedLetterText>The magmaformer's head is unburrowing towards the surface, bringing its wunderchip along with it. This process is expected to take about three days, but a skilled miner can work the magmaformer's controls to speed up the process.\n\nRetraction will cause extensive tectonic stress and is easily detectable by other parties. Be prepared for volcanic phenomena, agitated insectoids, and opportunistic raiders.</hackedLetterText>
+        <hackedLetterDef>NeutralEvent</hackedLetterDef>
+        <destroyedLetterLabel>Wunderchip lost</destroyedLetterLabel>
+        <destroyedLetterText>With the destruction of the magmaformer spire, its head remains buried deep in the planetary crust. The wunderchip could not be retrieved.</destroyedLetterText>
+        <destroyedLetterDef>NegativeEvent</destroyedLetterDef>
+        <intellectualSkillPrerequisite>6</intellectualSkillPrerequisite>
+      </li>
+      <li Class="HVMP_Odyssey.CompProperties_MagmaformerRetraction">
+		<ticksToRetract>180000</ticksToRetract>
+		<deepDrillSpeedEffectiveness>0.2</deepDrillSpeedEffectiveness>
+		<raidMTBdays>1.35</raidMTBdays>
+		<tectonicIncidents>
+		  <li>HVMP_VolcanicAsh</li>
+		  <li>HVMP_LavaEmergence</li>
+		  <li>HVMP_VolcanicDebris</li>
+		  <li>HVMP_LavaFlow</li>
+		  <li MayRequire="Leo.EventsExpanded">LE_EmberFallout</li>
+		</tectonicIncidents>
+		<tectonicIncidentMTBdays>0.55</tectonicIncidentMTBdays>
+		<finishedLetterLabel>Magmaformer spire retracted</finishedLetterLabel>
+		<finishedLetterText>The magmaformer's head has finished unburrowing towards the surface, and you have obtained its wunderchip.</finishedLetterText>
+		<finishedLetterDef>PositiveEvent</finishedLetterDef>
+		<spawnOnFinish>
+          <HVMP_Wunderchip />
+		</spawnOnFinish>
+		<displayWhileRetracting>HVMP_RedstoneDisplayWhileRetracting</displayWhileRetracting>
+		<displayWhenFinished>HVMP_RedstoneDisplayWhenFinished</displayWhenFinished>
+      </li>
+      <li Class="CompProperties_AmbientSound">
+        <sound>ScannerGroundPenetrating_Ambience</sound>
+      </li>
+    </comps>
+  </ThingDef>
+  
 </Defs>

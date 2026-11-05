@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <!--Redstone incidents should not be restricted by biome, days into run, or extreme weather disabling-->
+  <IncidentDef>
+    <defName>HVMP_VolcanicAsh</defName>
+    <label>volcanic ash</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_Misc</li>
+    </targetTags>
+    <workerClass>IncidentWorker_MakeGameCondition</workerClass>
+    <gameCondition>VolcanicAsh</gameCondition>
+    <letterLabel>Volcanic ash</letterLabel>
+    <letterDef>ThreatSmall</letterDef>
+    <baseChance>0</baseChance>
+    <durationDays>2~4</durationDays>
+  </IncidentDef>
+  <IncidentDef>
+    <defName>HVMP_LavaEmergence</defName>
+    <label>lava emergence</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_Misc</li>
+    </targetTags>
+    <workerClass>IncidentWorker_LavaEmergence</workerClass>
+    <baseChance>0</baseChance>
+  </IncidentDef>
+  <IncidentDef>
+    <defName>HVMP_LavaFlow</defName>
+    <label>lava surge</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_Misc</li>
+    </targetTags>
+    <workerClass>HVMP_Odyssey.IncidentWorker_LavaFlowAnyEdge</workerClass>
+    <baseChance>0</baseChance>
+  </IncidentDef>
+  <IncidentDef>
+    <defName>HVMP_VolcanicDebris</defName>
+    <label>volcanic debris</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_Misc</li>
+    </targetTags>
+    <workerClass>IncidentWorker_MakeGameCondition</workerClass>
+    <gameCondition>VolcanicDebris</gameCondition>
+    <letterLabel>Volcanic debris</letterLabel>
+    <letterText>A nearby volcanic eruption is showering the region with molten lava!</letterText>
+    <letterDef>ThreatSmall</letterDef>
+    <baseChance>0</baseChance>
+  </IncidentDef>
+  
+</Defs>
