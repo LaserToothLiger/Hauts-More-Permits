@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Patch>
-	<Operation Class="PatchOperationAdd">
+	<li Class="PatchOperationAdd">
 		<xpath>/Defs/WorldObjectDef[defName="Site"]/comps</xpath>
 		<value>
 			<li Class="HautsPermits.WorldObjectCompProperties_Mutator_GG_SD">
@@ -24,5 +24,16 @@
 			  </SD_turrets>
 			</li>
 		</value>
+	</li>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Combat Extended</li>
+		</mods>
+		<match Class="PatchOperationReplace">
+			<xpath>/Defs/WorldObjectDef[defName="Site"]/comps/li[@Class="HautsPermits.WorldObjectCompProperties_Mutator_GG_SD"]/SD_turretsPerPawn</xpath>
+			<value>
+				<SD_turretsPerPawn>0.15</SD_turretsPerPawn>
+			</value>
+		</match>
 	</Operation>
 </Patch>

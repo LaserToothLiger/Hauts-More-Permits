@@ -128,7 +128,7 @@ namespace HVMP_Odyssey
             {
                 int tries = 100;
                 Map map = this.parent.Map;
-                IEnumerable<IntVec3> iv3s = map.AllCells.Where((IntVec3 iv3) => iv3.IsValid && !iv3.Fogged(map) && iv3.GetEdifice(map) == null && (!iv3.GetTerrain(map).IsWater || Rand.Chance(0.1f)));
+                IEnumerable<IntVec3> iv3s = map.AllCells.Where((IntVec3 iv3) => iv3.IsValid && !iv3.Fogged(map) && iv3.GetEdifice(map) == null && map.terrainGrid.FoundationAt(iv3) == null && (!iv3.GetTerrain(map).IsWater || Rand.Chance(0.1f)));
                 while (tries > 0)
                 {
                     IntVec3 lavaSpot = iv3s.RandomElement();

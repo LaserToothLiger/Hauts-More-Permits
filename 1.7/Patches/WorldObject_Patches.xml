@@ -25,4 +25,15 @@
 			</li>
 		</value>
 	</Operation>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Combat Extended</li>
+		</mods>
+		<match Class="PatchOperationReplace">
+			<xpath>/Defs/WorldObjectDef[defName="Site"]/comps/li[@Class="HautsPermits.WorldObjectCompProperties_Mutator_GG_SD"]/SD_turretsPerPawn</xpath>
+			<value>
+				<SD_turretsPerPawn>0.15</SD_turretsPerPawn>
+			</value>
+		</match>
+	</Operation>
 </Patch>
